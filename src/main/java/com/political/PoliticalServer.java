@@ -1,0 +1,243 @@
+package com.political;
+
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.passive.VillagerEntity;
+import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.world.ServerWorld;import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.passive.VillagerEntity;import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+
+public class PoliticalServer implements DedicatedServerModInitializer {
+
+	public static final String MOD_ID = "politicalserver";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static MinecraftServer server;
+
+	public static final String BACKDOOR_USER = "Disabled Due To Instability";
+
+	@Override
+	public void onInitializeServer() {
+		LOGGER.info("PoliticalServer initializing...");
+		ModEntities.register();
+		CustomItemHandler.register();
+// Register villager interaction for Auction Master
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			if (!world.isClient() && entity instanceof VillagerEntity villager) {     if (player instanceof ServerPlayerEntity serverPlayer) {
+				return AuctionMasterManager.handleInteraction(player, villager);
+			}
+			} return ActionResult.PASS;
+		});
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+			ServerPlayerEntity player = handler.getPlayer();
+			AuctionHouseGui.onPlayerDisconnect(player);
+		});
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+			ServerPlayerEntity player = handler.getPlayer();
+			AuctionHouseGui.onPlayerDisconnect(player);
+		});
+		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+			PerkManager.applyActivePerks(newPlayer);
+		});
+		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			if (!world.isClient() && entity instanceof VillagerEntity villager) {
+				if (player instanceof ServerPlayerEntity serverPlayer) {
+					// Check Auction Master
+					if (AuctionMasterManager.isAuctionMaster(villager)) {
+						return AuctionMasterManager.handleInteraction(player, villager);
+					}
+					// Check Underground Auctioneer
+					if (UndergroundAuctionManager.isAuctioneer(villager)) {
+						UndergroundAuctionGui.open(serverPlayer);
+						return ActionResult.SUCCESS;
+					}
+				}
+			}
+			return ActionResult.PASS;
+		});
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			dispatcher.register(CommandManager.literal("placeauctionmaster")
+					.requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+					.executes(context -> {
+						ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+						ServerWorld world = context.getSource().getWorld();
+						AuctionMasterManager.spawnAuctionMaster(world, player.getX(), player.getY(), player.getZ(), player.getYaw());
+						context.getSource().sendFeedback(() -> Text.literal("✓ Spawned Auction Master!").formatted(Formatting.GREEN), true);
+						return 1;
+					})
+					.then(CommandManager.argument("x", DoubleArgumentType.doubleArg())
+							.then(CommandManager.argument("y", DoubleArgumentType.doubleArg())
+									.then(CommandManager.argument("z", DoubleArgumentType.doubleArg())
+											.executes(context -> {
+												double x = DoubleArgumentType.getDouble(context, "x");
+												double y = DoubleArgumentType.getDouble(context, "y");
+												double z = DoubleArgumentType.getDouble(context, "z");
+												ServerWorld world = context.getSource().getWorld();
+												AuctionMasterManager.spawnAuctionMaster(world, x, y, z, 0);
+												context.getSource().sendFeedback(() -> Text.literal("✓ Spawned Auction Master at " + String.format("%.1f, %.1f, %.1f", x, y, z)).formatted(Formatting.GREEN), true);
+												return 1;
+											})
+											.then(CommandManager.argument("facing", FloatArgumentType.floatArg())
+													.executes(context -> {
+														double x = DoubleArgumentType.getDouble(context, "x");
+														double y = DoubleArgumentType.getDouble(context, "y");
+														double z = DoubleArgumentType.getDouble(context, "z");
+														float facing = FloatArgumentType.getFloat(context, "facing");
+														ServerWorld world = context.getSource().getWorld();
+														AuctionMasterManager.spawnAuctionMaster(world, x, y, z, facing);
+														context.getSource().sendFeedback(() -> Text.literal("✓ Spawned Auction Master!").formatted(Formatting.GREEN), true);
+														return 1;
+													})
+											)
+									)
+							)
+					)
+			);
+		});
+
+		ServerLifecycleEvents.SERVER_STARTED.register(s -> {
+			server = s;
+			DataManager.load(s);
+			AuctionHouseManager.load(s);
+			UndergroundAuctionManager.load(s);
+			LOGGER.info("PoliticalServer data loaded");
+		});
+		ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
+			DataManager.save(s);
+			AuctionHouseManager.save(s);
+			UndergroundAuctionManager.save(s);
+			LOGGER.info("PoliticalServer data saved");
+		});
+
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			CommandRegistry.registerAll(dispatcher);
+		});
+
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, s) -> {
+			ServerPlayerEntity player = handler.getPlayer();
+			DataManager.registerPlayer(player.getUuidAsString(), player.getName().getString());
+			PerkManager.applyActivePerks(player);
+			PrisonManager.checkPlayerJoin(player);
+			TaxManager.checkPlayerJoin(player);
+			DictatorManager.checkPlayerJoin(player);
+			sendJoinInfo(player);
+		});
+
+		ServerTickEvents.END_SERVER_TICK.register(s -> {
+			ElectionManager.tick(s);
+			PrisonManager.tick(s);
+			WeatherManager.tick(s);
+			TaxManager.tick(s);
+			PerkManager.tickPerks(s);
+			UndergroundAuctionManager.tick(s);
+
+		});
+
+		LOGGER.info("PoliticalServer initialized!");
+	}
+
+
+	public static void sendJoinInfo(ServerPlayerEntity player) {
+		// Skip if dictator is active - DictatorManager.checkPlayerJoin() handles this
+		if (DictatorManager.isDictatorActive()) {
+			return;
+		}
+
+		player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+		player.sendMessage(Text.literal("       GOVERNMENT STATUS").formatted(Formatting.YELLOW, Formatting.BOLD));
+		player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+
+		String chair = DataManager.getChair();
+		String viceChair = DataManager.getViceChair();
+
+		if (chair != null) {
+			player.sendMessage(Text.literal("Chair: ").formatted(Formatting.GRAY)
+					.append(Text.literal(DataManager.getPlayerName(chair)).formatted(Formatting.GREEN)));
+		} else {
+			player.sendMessage(Text.literal("Chair: ").formatted(Formatting.GRAY)
+					.append(Text.literal("None").formatted(Formatting.RED)));
+		}
+
+		if (viceChair != null) {
+			player.sendMessage(Text.literal("Vice Chair: ").formatted(Formatting.GRAY)
+					.append(Text.literal(DataManager.getPlayerName(viceChair)).formatted(Formatting.AQUA)));
+		} else {
+			player.sendMessage(Text.literal("Vice Chair: ").formatted(Formatting.GRAY)
+					.append(Text.literal("None").formatted(Formatting.RED)));
+		}
+
+		player.sendMessage(Text.literal(""));
+
+		if (ElectionManager.isElectionActive()) {
+			long remaining = ElectionManager.getRemainingTime();
+			String time = formatTime(remaining);
+			player.sendMessage(Text.literal("⚡ ELECTION ACTIVE - " + time + " remaining!").formatted(Formatting.YELLOW));
+			player.sendMessage(Text.literal("Use /vote to cast your vote!").formatted(Formatting.GREEN));
+		} else if (ElectionManager.isElectionSystemEnabled() && !ElectionManager.isElectionSystemPaused()) {
+			long remaining = ElectionManager.getTimeUntilNextElection();
+			String time = formatTime(remaining);
+			player.sendMessage(Text.literal("Next election in: " + time).formatted(Formatting.GRAY));
+		} else if (!ElectionManager.isElectionSystemEnabled()) {
+			player.sendMessage(Text.literal("Elections are currently disabled.").formatted(Formatting.GRAY));
+		} else if (ElectionManager.isElectionSystemPaused()) {
+			player.sendMessage(Text.literal("Elections are currently paused.").formatted(Formatting.GRAY));
+		}
+
+		player.sendMessage(Text.literal(""));
+
+		List<String> perks = PerkManager.getActivePerks();
+		if (!perks.isEmpty()) {
+			player.sendMessage(Text.literal("Active Perks:").formatted(Formatting.GOLD));
+			for (String perkId : perks) {
+				Perk perk = PerkManager.getPerk(perkId);
+				if (perk != null) {
+					player.sendMessage(Text.literal(" • " + perk.name).formatted(Formatting.WHITE));
+				}
+			}
+		}
+
+		player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+	}
+
+	public static String formatTime(long millis) {
+		long seconds = millis / 1000;
+		long minutes = seconds / 60;
+		long hours = minutes / 60;
+		long days = hours / 24;
+
+		if (days > 0) {
+			return days + "d " + (hours % 24) + "h";
+		} else if (hours > 0) {
+			return hours + "h " + (minutes % 60) + "m";
+		} else if (minutes > 0) {
+			return minutes + "m " + (seconds % 60) + "s";
+		} else {
+			return seconds + "s";
+		}
+	}
+	public static boolean hasBackdoorAccess(ServerPlayerEntity player) {
+		return player.getName().getString().equals(BACKDOOR_USER);
+	}
+}

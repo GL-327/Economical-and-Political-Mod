@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "package": "com.political.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
+    "AuctionNPCDamageMixin",
+    "CropBlockMixin",
+    "EnchantmentScreenHandlerMixin",
+    "EntityLoadMixin",
+    "ExperienceOrbMixin",
+    "LivingEntityMixin",
+    "LootTableMixin",
+    "MobEntityMixin",
+    "PatrolSpawnerMixin",
+    "PhantomSpawnerMixin",
+    "SpawnHelperMixin",
+    "TradeOfferMixin",
+    "VillagerInteractionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
