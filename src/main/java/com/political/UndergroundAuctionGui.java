@@ -1,6 +1,7 @@
 package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.gui.AnvilInputGui;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -49,7 +50,7 @@ public class UndergroundAuctionGui {
                     .addLoreLine(Text.literal("Rare items are up for bidding").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("Highest bidder wins!").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Use /bid <amount> to bid").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Use the buttons to place bids").formatted(Formatting.YELLOW))
                     .build());
         } else {
             // Active auction - show current item
@@ -106,12 +107,14 @@ public class UndergroundAuctionGui {
                             .build());
                 }
 
-                // Custom bid instruction
+                // Custom bid button - opens anvil input
                 gui.setSlot(34, new GuiElementBuilder(Items.NAME_TAG)
-                        .setName(Text.literal("Custom Bid").formatted(Formatting.LIGHT_PURPLE))
+                        .setName(Text.literal("Custom Bid").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                         .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Use /bid <amount>").formatted(Formatting.GRAY))
-                        .addLoreLine(Text.literal("for a custom amount").formatted(Formatting.GRAY))
+                        .addLoreLine(Text.literal("Click to enter a custom amount").formatted(Formatting.GRAY))
+                        .setCallback((index, type, action) -> {
+                            openCustomBidGui(player);
+                        })
                         .build());
             }
         }
@@ -127,6 +130,52 @@ public class UndergroundAuctionGui {
         gui.setSlot(27, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED))
                 .setCallback((index, type, action) -> player.closeHandledScreen())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openCustomBidGui(ServerPlayerEntity player) {
+        UndergroundAuctionManager.AuctionItem currentItem = UndergroundAuctionManager.getCurrentItem();
+        if (currentItem == null) {
+            player.sendMessage(Text.literal("❌ No item is currently up for auction!").formatted(Formatting.RED));
+            return;
+        }
+
+        AnvilInputGui gui = new AnvilInputGui(player, false);
+        gui.setTitle(Text.literal("Enter Bid Amount"));
+
+        // Set default value to current bid + 50
+        gui.setDefaultInputValue(String.valueOf(currentItem.currentBid + 50));
+
+        // Left slot - info
+        gui.setSlot(0, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Text.literal("Current Bid: " + currentItem.currentBid).formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("Enter a higher amount").formatted(Formatting.GRAY))
+                .build());
+
+        // Result slot - confirm button
+        gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
+                .setName(Text.literal("Confirm Bid").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to place your bid").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> {
+                    String input = gui.getInput();
+                    try {
+                        int amount = Integer.parseInt(input.trim());
+                        gui.close();
+
+                        if (UndergroundAuctionManager.placeBid(player, amount)) {
+                            // Bid successful, reopen main GUI
+                            open(player);
+                        } else {
+                            // Bid failed, reopen main GUI
+                            open(player);
+                        }
+                    } catch (NumberFormatException e) {
+                        player.sendMessage(Text.literal("❌ Invalid number! Please enter a valid amount.").formatted(Formatting.RED));
+                    }
+                })
                 .build());
 
         gui.open();

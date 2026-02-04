@@ -22,7 +22,8 @@ public class AdminGui {
         GOVERNMENT,
         PLAYERS,
         ECONOMY,
-        WORLD
+        WORLD,
+        UNDERGROUND_AUCTION
     }
     public static void open(ServerPlayerEntity player) {
         openPage(player, AdminPage.MAIN);
@@ -36,6 +37,7 @@ public class AdminGui {
             case PLAYERS -> openPlayersPage(player);
             case ECONOMY -> openEconomyPage(player);
             case WORLD -> openWorldPage(player);
+            case UNDERGROUND_AUCTION -> openUndergroundAuctionPage(player);
         }
     }
 
@@ -128,7 +130,15 @@ public class AdminGui {
                 .addLoreLine(Text.literal("Election: " + (ElectionManager.isElectionActive() ? "ACTIVE" : "Waiting")).formatted(ElectionManager.isElectionActive() ? Formatting.GREEN : Formatting.GRAY))
                 .addLoreLine(Text.literal("Dictator: " + (dictatorActive ? DictatorManager.getDictatorName() : "None")).formatted(dictatorActive ? Formatting.RED : Formatting.GRAY))
                 .build());
-
+        gui.setSlot(34, new GuiElementBuilder(Items.ENDER_CHEST)
+                .setName(Text.literal("Underground Auction").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Force start auction").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Get auction items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPage(player, AdminPage.UNDERGROUND_AUCTION))
+                .build());
         // Close button
         gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED))
@@ -231,6 +241,108 @@ public class AdminGui {
 
         // Back button
         addBackButton(gui, player);
+
+        gui.open();
+    }
+// ═══════════════════════════════════════════════════════════════
+// UNDERGROUND AUCTION PAGE
+// ═══════════════════════════════════════════════════════════════
+
+    private static void openUndergroundAuctionPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("Underground Auction Admin"));
+
+        fillBackground(gui);
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.ENDER_CHEST)
+                .setName(Text.literal("Underground Auction").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .glow()
+                .build());
+
+        boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
+        long timeUntil = UndergroundAuctionManager.getTimeUntilNextAuction();
+        String timeStr = PoliticalServer.formatTime(timeUntil);
+
+        // Status display
+        gui.setSlot(10, new GuiElementBuilder(auctionActive ? Items.LIME_CONCRETE : Items.RED_CONCRETE)
+                .setName(Text.literal("Auction Status").formatted(auctionActive ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Status: " + (auctionActive ? "ACTIVE" : "Waiting")).formatted(auctionActive ? Formatting.GREEN : Formatting.RED))
+                .addLoreLine(Text.literal("Next auction: " + timeStr).formatted(Formatting.GRAY))
+                .build());
+
+        // Force Start Auction
+        gui.setSlot(12, new GuiElementBuilder(Items.CLOCK)
+                .setName(Text.literal("Force Start Auction").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Immediately starts an auction").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Resets the 6-hour timer").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to start").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> {
+                    UndergroundAuctionManager.forceStartAuction(PoliticalServer.server);
+                    player.sendMessage(Text.literal("✓ Underground auction started!").formatted(Formatting.LIGHT_PURPLE));
+                    gui.close();
+                })
+                .build());
+
+        // End Current Auction
+        gui.setSlot(14, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("End Current Auction").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Force ends the current auction").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to end").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> {
+                    UndergroundAuctionManager.forceEndAuction();
+                    player.sendMessage(Text.literal("✓ Auction ended!").formatted(Formatting.RED));
+                    openPage(player, AdminPage.UNDERGROUND_AUCTION);
+                })
+                .build());
+
+        // Section header for items
+        gui.setSlot(22, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("§d§lAuction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click items below to receive them").formatted(Formatting.GRAY))
+                .build());
+
+        // Get all possible auction items and display them
+        List<UndergroundAuctionManager.AuctionItem> items = UndergroundAuctionManager.getAllPossibleItems();
+        int[] itemSlots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+
+        for (int i = 0; i < Math.min(items.size(), itemSlots.length); i++) {
+            UndergroundAuctionManager.AuctionItem item = items.get(i);
+            final int itemIndex = i;
+
+            if (item != null && item.itemStack != null) {
+                gui.setSlot(itemSlots[i], new GuiElementBuilder(item.itemStack.getItem())
+                        .setName(Text.literal(item.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("Starting bid: " + item.startingBid + " credits").formatted(Formatting.GOLD))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                        .glow()
+                        .setCallback((index, type, action) -> {
+                            UndergroundAuctionManager.giveAuctionItem(player, itemIndex);
+                            openPage(player, AdminPage.UNDERGROUND_AUCTION);
+                        })
+                        .build());
+            }
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> openPage(player, AdminPage.MAIN))
+                .build());
+
+        // Close button
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((index, type, action) -> gui.close())
+                .build());
 
         gui.open();
     }

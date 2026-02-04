@@ -6,8 +6,8 @@ import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -37,12 +37,13 @@ public class UndergroundAuctionManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    // Timing constants - longer durations for stability
+    // Timing constants
     private static final long AUCTION_INTERVAL_MS = 6L * 60L * 60L * 1000L; // 6 hours
     private static final long BID_TIMEOUT_MS = 30L * 1000L; // 30 seconds after last bid
     private static final long NO_BID_TIMEOUT_MS = 60L * 1000L; // 60 seconds with no bids
     private static final long MIN_ITEM_DURATION_MS = 20L * 1000L; // Minimum 20 seconds per item
     private static final int MAX_ITEMS_PER_AUCTION = 5;
+    private static final double BROADCAST_RADIUS_SQUARED = 625.0; // 25^2 = 625
 
     // State variables
     private static long nextAuctionTime = 0;
@@ -66,7 +67,8 @@ public class UndergroundAuctionManager {
         public boolean sold;
         public transient ItemStack itemStack;
 
-        public AuctionItem() {}
+        public AuctionItem() {
+        }
 
         public AuctionItem(String name, String itemType, int startingBid, ItemStack stack) {
             this.name = name;
@@ -85,6 +87,51 @@ public class UndergroundAuctionManager {
         List<String> auctioneerIds = new ArrayList<>();
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // PROXIMITY BROADCAST - Only within 25 blocks of auctioneer
+    // ═══════════════════════════════════════════════════════════════
+
+    private static void broadcastNearAuctioneers(MinecraftServer server, Text... messages) {
+        if (server == null) return;
+
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            ServerWorld world = player.getEntityWorld();
+
+            boolean nearAuctioneer = false;
+            for (UUID auctioneerId : auctioneerIds) {
+                var entity = world.getEntity(auctioneerId);
+                if (entity != null && entity.squaredDistanceTo(player) <= 625) {
+                    nearAuctioneer = true;
+                    break;
+                }
+            }
+
+            if (nearAuctioneer) {
+                for (Text message : messages) {
+                    player.sendMessage(message);
+                }
+            }
+        }
+    }
+
+    public static boolean isPlayerNearAuctioneer(ServerPlayerEntity player) {
+        if (player == null) return false;
+
+        ServerWorld world = player.getEntityWorld();
+
+        for (UUID auctioneerId : auctioneerIds) {
+            Entity entity = world.getEntity(auctioneerId);
+            if (entity != null && entity.squaredDistanceTo(player) <= BROADCAST_RADIUS_SQUARED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // LOAD / SAVE
+    // ═══════════════════════════════════════════════════════════════
+
     public static void load(MinecraftServer server) {
         Path path = server.getSavePath(WorldSavePath.ROOT).resolve("underground_auction.json");
         if (Files.exists(path)) {
@@ -97,7 +144,8 @@ public class UndergroundAuctionManager {
                         for (String id : data.auctioneerIds) {
                             try {
                                 auctioneerIds.add(UUID.fromString(id));
-                            } catch (Exception ignored) {}
+                            } catch (Exception ignored) {
+                            }
                         }
                     }
                 }
@@ -131,6 +179,10 @@ public class UndergroundAuctionManager {
             PoliticalServer.LOGGER.error("Failed to save underground auction data", e);
         }
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // AUCTIONEER NPC
+    // ═══════════════════════════════════════════════════════════════
 
     public static VillagerEntity spawnAuctioneer(ServerWorld world, double x, double y, double z, float yaw) {
         VillagerEntity villager = new VillagerEntity(EntityType.VILLAGER, world);
@@ -173,6 +225,10 @@ public class UndergroundAuctionManager {
         }
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // TICK
+    // ═══════════════════════════════════════════════════════════════
+
     public static void tick(MinecraftServer server) {
         if (!initialized) return;
 
@@ -207,7 +263,6 @@ public class UndergroundAuctionManager {
 
         long itemDuration = now - itemStartTime;
 
-        // Enforce minimum duration
         if (itemDuration < MIN_ITEM_DURATION_MS) {
             return;
         }
@@ -222,6 +277,10 @@ public class UndergroundAuctionManager {
             }
         }
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // AUCTION LIFECYCLE
+    // ═══════════════════════════════════════════════════════════════
 
     public static void startAuction(MinecraftServer server) {
         if (server == null) return;
@@ -240,15 +299,14 @@ public class UndergroundAuctionManager {
         lastBidTime = now;
         itemStartTime = now;
 
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE));
-            player.sendMessage(Text.literal("  🌙 UNDERGROUND AUCTION STARTING! 🌙").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE));
-            player.sendMessage(Text.literal("Find the Underground Auctioneer to participate!").formatted(Formatting.GRAY));
-            player.sendMessage(Text.literal(currentItems.size() + " rare items up for bidding!").formatted(Formatting.YELLOW));
-            player.sendMessage(Text.literal("Use /bid <amount> to place bids").formatted(Formatting.AQUA));
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE));
-        }
+        broadcastNearAuctioneers(server,
+                Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE),
+                Text.literal("  🌙 UNDERGROUND AUCTION STARTING! 🌙").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE),
+                Text.literal("Interact with the Auctioneer to bid!").formatted(Formatting.GRAY),
+                Text.literal(currentItems.size() + " rare items up for bidding!").formatted(Formatting.YELLOW),
+                Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE)
+        );
 
         announceCurrentItem(server);
         nextAuctionTime = System.currentTimeMillis() + AUCTION_INTERVAL_MS;
@@ -276,16 +334,15 @@ public class UndergroundAuctionManager {
         itemStartTime = now;
         lastBidTime = now;
 
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            player.sendMessage(Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE));
-            player.sendMessage(Text.literal("📦 NOW BIDDING: " + item.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-            player.sendMessage(Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE));
-            player.sendMessage(Text.literal("💰 Starting Bid: " + item.startingBid + " credits").formatted(Formatting.GOLD));
-            player.sendMessage(Text.literal("📋 Item " + (currentItemIndex + 1) + " of " + currentItems.size()).formatted(Formatting.GRAY));
-            player.sendMessage(Text.literal("⏱ " + (NO_BID_TIMEOUT_MS / 1000) + " seconds to bid!").formatted(Formatting.YELLOW));
-            player.sendMessage(Text.literal("Use /bid <amount> to place a bid!").formatted(Formatting.AQUA));
-            player.sendMessage(Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE));
-        }
+        broadcastNearAuctioneers(server,
+                Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE),
+                Text.literal("📦 NOW BIDDING: " + item.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE),
+                Text.literal("💰 Starting Bid: " + item.startingBid + " credits").formatted(Formatting.GOLD),
+                Text.literal("📋 Item " + (currentItemIndex + 1) + " of " + currentItems.size()).formatted(Formatting.GRAY),
+                Text.literal("⏱ " + (NO_BID_TIMEOUT_MS / 1000) + " seconds to bid!").formatted(Formatting.YELLOW),
+                Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE)
+        );
     }
 
     private static void sellCurrentItem(MinecraftServer server) {
@@ -307,10 +364,10 @@ public class UndergroundAuctionManager {
             try {
                 ServerPlayerEntity winner = server.getPlayerManager().getPlayer(UUID.fromString(item.highestBidderUuid));
 
-                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                    player.sendMessage(Text.literal("🔨 SOLD! " + item.name).formatted(Formatting.GREEN, Formatting.BOLD));
-                    player.sendMessage(Text.literal("   Winner: " + item.highestBidderName + " for " + item.currentBid + " credits").formatted(Formatting.YELLOW));
-                }
+                broadcastNearAuctioneers(server,
+                        Text.literal("🔨 SOLD! " + item.name).formatted(Formatting.GREEN, Formatting.BOLD),
+                        Text.literal("   Winner: " + item.highestBidderName + " for " + item.currentBid + " credits").formatted(Formatting.YELLOW)
+                );
 
                 if (winner != null && item.itemStack != null && !item.itemStack.isEmpty()) {
                     ItemStack itemToGive = item.itemStack.copy();
@@ -337,9 +394,7 @@ public class UndergroundAuctionManager {
         AuctionItem item = currentItems.get(currentItemIndex);
         String itemName = item != null ? item.name : "Unknown Item";
 
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            player.sendMessage(Text.literal("❌ NO BIDS - " + itemName + " skipped!").formatted(Formatting.RED));
-        }
+        broadcastNearAuctioneers(server, Text.literal("❌ NO BIDS - " + itemName + " skipped!").formatted(Formatting.RED));
 
         currentItemIndex++;
         advanceToNextItem(server);
@@ -347,9 +402,7 @@ public class UndergroundAuctionManager {
 
     private static void advanceToNextItem(MinecraftServer server) {
         if (currentItemIndex < currentItems.size()) {
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                player.sendMessage(Text.literal("⏳ Next item coming up...").formatted(Formatting.GRAY));
-            }
+            broadcastNearAuctioneers(server, Text.literal("⏳ Next item coming up...").formatted(Formatting.GRAY));
             announceCurrentItem(server);
         } else {
             endAuction(server);
@@ -373,17 +426,22 @@ public class UndergroundAuctionManager {
         currentItems = new ArrayList<>();
         currentItemIndex = 0;
 
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE));
-            player.sendMessage(Text.literal("  🌙 UNDERGROUND AUCTION ENDED 🌙").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE));
-            player.sendMessage(Text.literal("Items sold: " + soldCount).formatted(Formatting.YELLOW));
-            player.sendMessage(Text.literal("Next auction in: " + PoliticalServer.formatTime(getTimeUntilNextAuction())).formatted(Formatting.GRAY));
-            player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE));
-        }
+        int finalSoldCount = soldCount;
+        broadcastNearAuctioneers(server,
+                Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE),
+                Text.literal("  🌙 UNDERGROUND AUCTION ENDED 🌙").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE),
+                Text.literal("Items sold: " + finalSoldCount).formatted(Formatting.YELLOW),
+                Text.literal("Next auction in: " + PoliticalServer.formatTime(getTimeUntilNextAuction())).formatted(Formatting.GRAY),
+                Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_PURPLE)
+        );
 
         save(server);
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BIDDING
+    // ═══════════════════════════════════════════════════════════════
 
     public static boolean placeBid(ServerPlayerEntity player, int amount) {
         if (player == null) return false;
@@ -406,7 +464,6 @@ public class UndergroundAuctionManager {
 
         if (amount <= item.currentBid) {
             player.sendMessage(Text.literal("❌ Bid must be higher than " + item.currentBid + " credits!").formatted(Formatting.RED));
-            player.sendMessage(Text.literal("   Try: /bid " + (item.currentBid + 50)).formatted(Formatting.GRAY));
             return false;
         }
 
@@ -439,14 +496,19 @@ public class UndergroundAuctionManager {
         item.highestBidderName = player.getName().getString();
         lastBidTime = System.currentTimeMillis();
 
-        for (ServerPlayerEntity p : PoliticalServer.server.getPlayerManager().getPlayerList()) {
-            p.sendMessage(Text.literal("💰 NEW BID: " + amount + " credits by " + player.getName().getString()).formatted(Formatting.GOLD, Formatting.BOLD));
-            p.sendMessage(Text.literal("   ⏱ " + (BID_TIMEOUT_MS / 1000) + "s until sold!").formatted(Formatting.RED));
-        }
+        // Broadcast only to players near auctioneers
+        broadcastNearAuctioneers(PoliticalServer.server,
+                Text.literal("💰 NEW BID: " + amount + " credits by " + player.getName().getString()).formatted(Formatting.GOLD, Formatting.BOLD),
+                Text.literal("   ⏱ " + (BID_TIMEOUT_MS / 1000) + "s until sold!").formatted(Formatting.RED)
+        );
 
         player.sendMessage(Text.literal("✓ Bid placed successfully!").formatted(Formatting.GREEN));
         return true;
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ITEM GENERATION
+    // ═══════════════════════════════════════════════════════════════
 
     private static List<AuctionItem> generateAuctionItems() {
         List<AuctionItem> allPossible = new ArrayList<>();
@@ -486,10 +548,22 @@ public class UndergroundAuctionManager {
 
         int piece = random.nextInt(4);
         switch (piece) {
-            case 0 -> { stack = new ItemStack(Items.NETHERITE_HELMET); name = "Enchanted Netherite Helmet"; }
-            case 1 -> { stack = new ItemStack(Items.NETHERITE_CHESTPLATE); name = "Enchanted Netherite Chestplate"; }
-            case 2 -> { stack = new ItemStack(Items.NETHERITE_LEGGINGS); name = "Enchanted Netherite Leggings"; }
-            default -> { stack = new ItemStack(Items.NETHERITE_BOOTS); name = "Enchanted Netherite Boots"; }
+            case 0 -> {
+                stack = new ItemStack(Items.NETHERITE_HELMET);
+                name = "Enchanted Netherite Helmet";
+            }
+            case 1 -> {
+                stack = new ItemStack(Items.NETHERITE_CHESTPLATE);
+                name = "Enchanted Netherite Chestplate";
+            }
+            case 2 -> {
+                stack = new ItemStack(Items.NETHERITE_LEGGINGS);
+                name = "Enchanted Netherite Leggings";
+            }
+            default -> {
+                stack = new ItemStack(Items.NETHERITE_BOOTS);
+                name = "Enchanted Netherite Boots";
+            }
         }
 
         int protLevel = 5 + random.nextInt(6);
@@ -777,30 +851,55 @@ public class UndergroundAuctionManager {
                 return (int) Math.max(0, remaining / 1000);
             }
         }
+        return 0;
+    }
+        public static void skipCooldown () {
+            nextAuctionTime = System.currentTimeMillis();
+            save(PoliticalServer.server);
+        }
 
-        if (current != null && current.highestBidderUuid != null && !current.highestBidderUuid.isEmpty()) {
-            long elapsed = now - lastBidTime;
-            return (int) Math.max(0, (BID_TIMEOUT_MS - elapsed) / 1000);
-        } else {
-            long elapsed = now - itemStartTime;
-            return (int) Math.max(0, (NO_BID_TIMEOUT_MS - elapsed) / 1000);
+        public static void forceStartAuction () {
+            if (PoliticalServer.server != null) {
+                startAuction(PoliticalServer.server);
+            }
+        }
+
+        public static void forceStartAuction (MinecraftServer server){
+            if (auctionActive) {
+                endAuction(server);
+            }
+            nextAuctionTime = System.currentTimeMillis();
+            startAuction(server);
+        }
+
+        public static List<AuctionItem> getAllPossibleItems () {
+            return generateAuctionItems();
+        }
+
+        public static void giveAuctionItem (ServerPlayerEntity player,int itemIndex){
+            List<AuctionItem> items = generateAuctionItems();
+            if (itemIndex >= 0 && itemIndex < items.size()) {
+                AuctionItem item = items.get(itemIndex);
+                if (item.itemStack != null) {
+                    player.getInventory().insertStack(item.itemStack.copy());
+                    player.sendMessage(Text.literal("✓ Received: " + item.name).formatted(Formatting.GREEN));
+                }
+            }
+        }
+
+        public static List<String> getAuctionItemNames () {
+            List<String> names = new ArrayList<>();
+            List<AuctionItem> items = generateAuctionItems();
+            for (AuctionItem item : items) {
+                names.add(item.name);
+            }
+            return names;
+        }
+
+        public static void forceEndAuction () {
+            if (PoliticalServer.server != null && auctionActive) {
+                endAuction(PoliticalServer.server);
+            }
         }
     }
 
-    public static void skipCooldown() {
-        nextAuctionTime = System.currentTimeMillis();
-        save(PoliticalServer.server);
-    }
-
-    public static void forceStartAuction() {
-        if (PoliticalServer.server != null) {
-            startAuction(PoliticalServer.server);
-        }
-    }
-
-    public static void forceEndAuction() {
-        if (PoliticalServer.server != null && auctionActive) {
-            endAuction(PoliticalServer.server);
-        }
-    }
-}

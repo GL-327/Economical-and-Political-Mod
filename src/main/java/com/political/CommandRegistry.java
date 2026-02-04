@@ -50,11 +50,13 @@ public class CommandRegistry {
         registerCoins(dispatcher);
         registerSecretCommand(dispatcher);
         registerSpawn(dispatcher);
+        registerForceUndergroundAuction(dispatcher);
 
     }
 
     // Rest of your methods stay the same...
     // I'm including the full file to avoid confusion:
+
 
     private static void registerVote(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("vote")
@@ -72,7 +74,28 @@ public class CommandRegistry {
                     return 1;
                 }));
     }
+    private static void registerForceUndergroundAuction(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("forceundergroundauction")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(context -> {
+                    UndergroundAuctionManager.forceStartAuction(PoliticalServer.server);
+                    context.getSource().sendFeedback(() ->
+                            Text.literal("✓ Underground auction started!").formatted(Formatting.LIGHT_PURPLE), true);
+                    return 1;
+                })
+        );
 
+        // Shorter alias
+        dispatcher.register(CommandManager.literal("forceauction")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(context -> {
+                    UndergroundAuctionManager.forceStartAuction(PoliticalServer.server);
+                    context.getSource().sendFeedback(() ->
+                            Text.literal("✓ Underground auction started!").formatted(Formatting.LIGHT_PURPLE), true);
+                    return 1;
+                })
+        );
+    }
     private static void registerAuctionHouse(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("ah")
                 .executes(context -> {

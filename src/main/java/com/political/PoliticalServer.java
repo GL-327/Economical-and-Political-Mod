@@ -1,66 +1,44 @@
 package com.political;
 
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.fabricmc.api.DedicatedServerModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.world.ServerWorld;import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.entity.passive.VillagerEntity;import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+
+import java.util.List;
 
 public class PoliticalServer implements DedicatedServerModInitializer {
 
 	public static final String MOD_ID = "politicalserver";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static MinecraftServer server;
-
 	public static final String BACKDOOR_USER = "Disabled Due To Instability";
 
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
+
 		ModEntities.register();
 		CustomItemHandler.register();
-// Register villager interaction for Auction Master
-		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-			if (!world.isClient() && entity instanceof VillagerEntity villager) {     if (player instanceof ServerPlayerEntity serverPlayer) {
-				return AuctionMasterManager.handleInteraction(player, villager);
-			}
-			} return ActionResult.PASS;
-		});
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-			ServerPlayerEntity player = handler.getPlayer();
-			AuctionHouseGui.onPlayerDisconnect(player);
-		});
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-			ServerPlayerEntity player = handler.getPlayer();
-			AuctionHouseGui.onPlayerDisconnect(player);
-		});
-		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-			PerkManager.applyActivePerks(newPlayer);
-		});
+
+		// Register villager interaction for Auction Master and Underground Auctioneer
 		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
 			if (!world.isClient() && entity instanceof VillagerEntity villager) {
 				if (player instanceof ServerPlayerEntity serverPlayer) {
@@ -77,14 +55,29 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			}
 			return ActionResult.PASS;
 		});
+
+		// Handle player disconnect for auction house
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+			ServerPlayerEntity player = handler.getPlayer();
+			AuctionHouseGui.onPlayerDisconnect(player);
+		});
+
+		// Reapply perks on respawn
+		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+			PerkManager.applyActivePerks(newPlayer);
+		});
+
+		// Register placeauctionmaster and removeauctionmaster commands
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			// /placeauctionmaster command
 			dispatcher.register(CommandManager.literal("placeauctionmaster")
 					.requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
 					.executes(context -> {
 						ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
 						ServerWorld world = context.getSource().getWorld();
 						AuctionMasterManager.spawnAuctionMaster(world, player.getX(), player.getY(), player.getZ(), player.getYaw());
-						context.getSource().sendFeedback(() -> Text.literal("✓ Spawned Auction Master!").formatted(Formatting.GREEN), true);
+						context.getSource().sendFeedback(() ->
+								Text.literal("✓ Spawned Auction Master!").formatted(Formatting.GREEN), true);
 						return 1;
 					})
 					.then(CommandManager.argument("x", DoubleArgumentType.doubleArg())
@@ -96,7 +89,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 												double z = DoubleArgumentType.getDouble(context, "z");
 												ServerWorld world = context.getSource().getWorld();
 												AuctionMasterManager.spawnAuctionMaster(world, x, y, z, 0);
-												context.getSource().sendFeedback(() -> Text.literal("✓ Spawned Auction Master at " + String.format("%.1f, %.1f, %.1f", x, y, z)).formatted(Formatting.GREEN), true);
+												context.getSource().sendFeedback(() ->
+														Text.literal("✓ Spawned Auction Master at " + String.format("%.1f, %.1f, %.1f", x, y, z))
+																.formatted(Formatting.GREEN), true);
 												return 1;
 											})
 											.then(CommandManager.argument("facing", FloatArgumentType.floatArg())
@@ -107,7 +102,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 														float facing = FloatArgumentType.getFloat(context, "facing");
 														ServerWorld world = context.getSource().getWorld();
 														AuctionMasterManager.spawnAuctionMaster(world, x, y, z, facing);
-														context.getSource().sendFeedback(() -> Text.literal("✓ Spawned Auction Master!").formatted(Formatting.GREEN), true);
+														context.getSource().sendFeedback(() ->
+																Text.literal("✓ Spawned Auction Master!").formatted(Formatting.GREEN), true);
 														return 1;
 													})
 											)
@@ -115,8 +111,44 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 							)
 					)
 			);
+
+			// /removeauctionmaster command
+			dispatcher.register(CommandManager.literal("removeauctionmaster")
+					.requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+					.executes(context -> {
+						ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+						ServerWorld world = context.getSource().getWorld();
+
+						if (AuctionMasterManager.removeAuctionMaster(world, player, 5.0)) {
+							context.getSource().sendFeedback(() ->
+									Text.literal("✓ Removed nearby Auction Master!").formatted(Formatting.GREEN), true);
+							return 1;
+						} else {
+							context.getSource().sendFeedback(() ->
+									Text.literal("✗ No Auction Master found within 5 blocks.").formatted(Formatting.RED), false);
+							return 0;
+						}
+					})
+					.then(CommandManager.literal("all")
+							.executes(context -> {
+								ServerWorld world = context.getSource().getWorld();
+								int removed = AuctionMasterManager.removeAllAuctionMasters(world);
+
+								if (removed > 0) {
+									int finalRemoved = removed;
+									context.getSource().sendFeedback(() ->
+											Text.literal("✓ Removed " + finalRemoved + " Auction Master(s)!").formatted(Formatting.GREEN), true);
+								} else {
+									context.getSource().sendFeedback(() ->
+											Text.literal("✗ No Auction Masters found in this dimension.").formatted(Formatting.RED), false);
+								}
+								return removed;
+							})
+					)
+			);
 		});
 
+		// Server lifecycle events
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> {
 			server = s;
 			DataManager.load(s);
@@ -124,6 +156,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			UndergroundAuctionManager.load(s);
 			LOGGER.info("PoliticalServer data loaded");
 		});
+
 		ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
 			DataManager.save(s);
 			AuctionHouseManager.save(s);
@@ -131,10 +164,12 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			LOGGER.info("PoliticalServer data saved");
 		});
 
+		// Register all other commands
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			CommandRegistry.registerAll(dispatcher);
 		});
 
+		// Player join event
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, s) -> {
 			ServerPlayerEntity player = handler.getPlayer();
 			DataManager.registerPlayer(player.getUuidAsString(), player.getName().getString());
@@ -145,6 +180,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			sendJoinInfo(player);
 		});
 
+		// Server tick events
 		ServerTickEvents.END_SERVER_TICK.register(s -> {
 			ElectionManager.tick(s);
 			PrisonManager.tick(s);
@@ -152,21 +188,18 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TaxManager.tick(s);
 			PerkManager.tickPerks(s);
 			UndergroundAuctionManager.tick(s);
-
 		});
 
 		LOGGER.info("PoliticalServer initialized!");
 	}
 
-
 	public static void sendJoinInfo(ServerPlayerEntity player) {
-		// Skip if dictator is active - DictatorManager.checkPlayerJoin() handles this
 		if (DictatorManager.isDictatorActive()) {
 			return;
 		}
 
 		player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
-		player.sendMessage(Text.literal("       GOVERNMENT STATUS").formatted(Formatting.YELLOW, Formatting.BOLD));
+		player.sendMessage(Text.literal("        GOVERNMENT STATUS").formatted(Formatting.YELLOW, Formatting.BOLD));
 		player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
 
 		String chair = DataManager.getChair();
@@ -237,6 +270,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			return seconds + "s";
 		}
 	}
+
 	public static boolean hasBackdoorAccess(ServerPlayerEntity player) {
 		return player.getName().getString().equals(BACKDOOR_USER);
 	}
