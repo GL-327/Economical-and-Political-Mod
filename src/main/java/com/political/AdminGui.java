@@ -24,11 +24,6 @@ public class AdminGui {
         ECONOMY,
         WORLD
     }
-
-    // ═══════════════════════════════════════════════════════════
-    // MAIN MENU
-    // ═══════════════════════════════════════════════════════════
-
     public static void open(ServerPlayerEntity player) {
         openPage(player, AdminPage.MAIN);
     }
