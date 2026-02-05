@@ -22,7 +22,30 @@ import org.slf4j.LoggerFactory;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 
-import java.util.List;
+import java.util.List;import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.Vec3d;import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.Vec3d;
+import java.util.Optional;import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.util.ActionResult;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.util.ActionResult;
 
 public class PoliticalServer implements DedicatedServerModInitializer {
 
@@ -34,6 +57,24 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
+
+		UseItemCallback.EVENT.register((player, world, hand) -> {
+			if (world.isClient()) return ActionResult.PASS;
+			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+			ItemStack heldItem = player.getStackInHand(hand);
+
+			if (CustomItemHandler.isTheGavel(heldItem)) {
+				if (CustomItemHandler.useGavelAbility(serverPlayer, heldItem)) {
+					return ActionResult.SUCCESS;
+				}
+				return ActionResult.FAIL;
+			}
+
+			return ActionResult.PASS;
+		});
+
+
 
 		ModEntities.register();
 		CustomItemHandler.register();

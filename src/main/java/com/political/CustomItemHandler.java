@@ -26,10 +26,25 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
 import java.util.List;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
+import net.minecraft.entity.projectile.WindChargeEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvents;import net.minecraft.entity.projectile.WindChargeEntity;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.nbt.NbtCompound;
 
 public class CustomItemHandler {
+
+    private static final Map<UUID, Long> gavelCooldowns = new HashMap<>();
+    private static final long GAVEL_COOLDOWN_MS = 3000; // 3 seconds
+    private static final int GAVEL_COOLDOWN_TICKS = 60; // 3 seconds = 60 ticks
 
     public static void register() {
         // Harvey's Stick - Lightning on attack
@@ -50,6 +65,22 @@ public class CustomItemHandler {
 
             return ActionResult.PASS;
         });
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+            ItemStack heldItem = player.getStackInHand(hand);
+
+            if (CustomItemHandler.isTheGavel(heldItem)) {
+                // Pass the ItemStack so we can set cooldown on it
+                if (CustomItemHandler.useGavelAbility(serverPlayer, heldItem)) {
+                    return ActionResult.SUCCESS;
+                }
+                return ActionResult.FAIL;
+            }
+
+            return ActionResult.PASS;
+        });
 
         // The Gavel AND HPEBM
         UseItemCallback.EVENT.register((player, world, hand) -> {
@@ -58,16 +89,6 @@ public class CustomItemHandler {
 
             ItemStack held = player.getStackInHand(hand);
 
-            // The Gavel - Wind charge launch
-            if (isTheGavel(held)) {
-                int windChargeSlot = findWindCharge(player);
-                if (windChargeSlot >= 0) {
-                    player.getInventory().getStack(windChargeSlot).decrement(1);
-                    player.setVelocity(player.getVelocity().add(0, 1.2, 0));
-                    player.velocityDirty = true;
-                    return ActionResult.SUCCESS;
-                }
-            }
 
             // HPEBM - Energy Beam
             if (isHPEBM(held)) {
@@ -118,6 +139,63 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
     }
+    public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
+        UUID uuid = player.getUuid();
+        long now = System.currentTimeMillis();
+
+        // Check cooldown
+        if (gavelCooldowns.containsKey(uuid)) {
+            long remaining = (gavelCooldowns.get(uuid) + GAVEL_COOLDOWN_MS) - now;
+            if (remaining > 0) {
+                // Don't send message - the visual cooldown is enough
+                return false;
+            }
+        }
+
+        // Check & consume wind charge
+        boolean found = false;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            if (player.getInventory().getStack(i).isOf(Items.WIND_CHARGE)) {
+                player.getInventory().getStack(i).decrement(1);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            player.sendMessage(Text.literal("Requires 1 Wind Charge!")
+                    .formatted(Formatting.RED), true);
+            return false;
+        }
+
+        // Set internal cooldown
+        gavelCooldowns.put(uuid, now);
+
+        // Set VISUAL cooldown on the item (like ender pearl)
+        player.getItemCooldownManager().set(gavelStack, GAVEL_COOLDOWN_TICKS);
+
+        // Effects
+        ServerWorld world = player.getEntityWorld();
+
+        world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER,
+                player.getX(), player.getY() + 1, player.getZ(),
+                3, 2.0, 1.0, 2.0, 0.0);
+
+        world.playSoundFromEntity(null, player, SoundEvents.ENTITY_GENERIC_EXPLODE.value(),
+                SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+        // Damage in 5x5 area
+        Box box = new Box(
+                player.getX() - 4.5, player.getY() - 4.5, player.getZ() - 4.5,
+                player.getX() + 4.5, player.getY() + 4.5, player.getZ() + 4.5);
+
+        for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, box, ent -> ent != player)) {
+            e.damage(world, player.getDamageSources().playerAttack(player), 25.0f);
+        }
+
+        player.sendMessage(Text.literal("⚡ GAVEL STRIKE! ⚡")
+                .formatted(Formatting.GOLD, Formatting.BOLD), true);
+        return true;
+    }
 
     public static void tickHermesShoes(ServerPlayerEntity player) {
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
@@ -145,7 +223,7 @@ public class CustomItemHandler {
         return stack.isOf(Items.STICK) && hasCustomTag(stack, "harveys_stick");
     }
 
-    private static boolean isTheGavel(ItemStack stack) {
+    public static boolean isTheGavel(ItemStack stack) {
         return stack.isOf(Items.MACE) && hasCustomTag(stack, "the_gavel");
     }
 
@@ -191,5 +269,7 @@ public class CustomItemHandler {
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(displayName).formatted(color, Formatting.BOLD));
         return stack;
+
     }
+
 }
