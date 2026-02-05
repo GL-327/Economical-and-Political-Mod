@@ -18,7 +18,18 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
-import java.util.*;import java.util.Set;
+import java.util.*;import java.util.Set;import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.Item;import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Formatting;import java.util.List;
+import java.util.Map;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import net.minecraft.command.argument.EntityArgumentType;
 
 public class CommandRegistry {
 
@@ -95,7 +106,206 @@ public class CommandRegistry {
                     return 1;
                 })
         );
+        // Add inside your register() method
+
+        dispatcher.register(CommandManager.literal("customitem")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.literal("harveys_stick")
+                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "harveys_stick", Items.STICK, "Harvey's Stick")))
+                .then(CommandManager.literal("the_gavel")
+                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "the_gavel", Items.MACE, "The Gavel")))
+                .then(CommandManager.literal("hermes_shoes")
+                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hermes_shoes", Items.IRON_BOOTS, "Hermes Shoes")))
+                .then(CommandManager.literal("hpebm")
+                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hpebm", Items.END_ROD, "HPEBM")))
+        );
+        // ============ CREDITS COMMANDS ============
+        dispatcher.register(CommandManager.literal("credits")
+                .then(CommandManager.literal("add")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            CreditItem.giveCreditsQuiet(target, amount);
+                                            ctx.getSource().sendMessage(Text.literal("Added " + amount + " credits to " + target.getName().getString()).formatted(Formatting.GREEN));
+                                            target.sendMessage(Text.literal("+" + amount + " credits (admin)").formatted(Formatting.GREEN));
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("remove")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            int current = CreditItem.countCredits(target);
+                                            CreditItem.setCredits(target, Math.max(0, current - amount));
+                                            ctx.getSource().sendMessage(Text.literal("Removed " + amount + " credits from " + target.getName().getString()).formatted(Formatting.YELLOW));
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("set")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(0))
+                                        .executes(ctx -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            CreditItem.setCredits(target, amount);
+                                            ctx.getSource().sendMessage(Text.literal("Set " + target.getName().getString() + "'s credits to " + amount).formatted(Formatting.GREEN));
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("check")
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .executes(ctx -> {
+                                    ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                    int credits = CreditItem.countCredits(target);
+                                    ctx.getSource().sendMessage(Text.literal(target.getName().getString() + " has " + credits + " credits").formatted(Formatting.GOLD));
+                                    return 1;
+                                })))
+        );
+
+// ============ COINS COMMANDS ============
+        dispatcher.register(CommandManager.literal("coins")
+                .then(CommandManager.literal("add")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            CoinManager.giveCoinsQuiet(target, amount);
+                                            ctx.getSource().sendMessage(Text.literal("Added " + amount + " coins to " + target.getName().getString()).formatted(Formatting.GREEN));
+                                            target.sendMessage(Text.literal("+" + amount + " coins (admin)").formatted(Formatting.YELLOW));
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("remove")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            int current = CoinManager.getCoins(target);
+                                            CoinManager.setCoins(target.getUuidAsString(), Math.max(0, current - amount));
+                                            DataManager.save(PoliticalServer.server);
+                                            ctx.getSource().sendMessage(Text.literal("Removed " + amount + " coins from " + target.getName().getString()).formatted(Formatting.YELLOW));
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("set")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(0))
+                                        .executes(ctx -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            CoinManager.setCoins(target.getUuidAsString(), amount);
+                                            DataManager.save(PoliticalServer.server);
+                                            ctx.getSource().sendMessage(Text.literal("Set " + target.getName().getString() + "'s coins to " + amount).formatted(Formatting.GREEN));
+                                            return 1;
+                                        }))))
+        );
+
+// ============ BALTOP COMMAND ============
+        dispatcher.register(CommandManager.literal("baltop")
+                .executes(ctx -> {
+                    Map<String, Integer> allCoins = DataManager.getData().playerCoins;
+                    Map<String, Integer> allCredits = DataManager.getData().playerCredits;
+
+                    // Combine into total wealth (credits * 1000 + coins)
+                    Map<String, Long> totalWealth = new java.util.HashMap<>();
+
+                    for (Map.Entry<String, Integer> entry : allCoins.entrySet()) {
+                        totalWealth.put(entry.getKey(), (long) entry.getValue());
+                    }
+
+                    for (Map.Entry<String, Integer> entry : allCredits.entrySet()) {
+                        String uuid = entry.getKey();
+                        long creditValue = entry.getValue() * 1000L;
+                        totalWealth.merge(uuid, creditValue, Long::sum);
+                    }
+
+                    // Sort by wealth descending
+                    List<Map.Entry<String, Long>> sorted = totalWealth.entrySet().stream()
+                            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                            .limit(10)
+                            .toList();
+
+                    ctx.getSource().sendMessage(Text.literal("=== Wealth Leaderboard ===").formatted(Formatting.GOLD, Formatting.BOLD));
+
+                    int rank = 1;
+                    for (Map.Entry<String, Long> entry : sorted) {
+                        String name = DataManager.getPlayerName(entry.getKey());
+                        int coins = allCoins.getOrDefault(entry.getKey(), 0);
+                        int credits = allCredits.getOrDefault(entry.getKey(), 0);
+
+                        ctx.getSource().sendMessage(Text.literal(
+                                "#" + rank + " " + name + ": " + coins + " coins, " + credits + " credits"
+                        ).formatted(rank == 1 ? Formatting.YELLOW : (rank <= 3 ? Formatting.WHITE : Formatting.GRAY)));
+                        rank++;
+                    }
+
+                    if (sorted.isEmpty()) {
+                        ctx.getSource().sendMessage(Text.literal("No players with wealth yet!").formatted(Formatting.GRAY));
+                    }
+
+                    return 1;
+                })
+        );
+
+// ============ CUSTOM ITEM COMMANDS ============
+        dispatcher.register(CommandManager.literal("customitem")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.literal("harveys_stick")
+                        .executes(ctx -> {
+                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                            player.giveItemStack(CustomItemHandler.createHarveysStick());
+                            player.sendMessage(Text.literal("Given Harvey's Stick!").formatted(Formatting.GREEN));
+                            return 1;
+                        }))
+                .then(CommandManager.literal("the_gavel")
+                        .executes(ctx -> {
+                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                            player.giveItemStack(CustomItemHandler.createTheGavel());
+                            player.sendMessage(Text.literal("Given The Gavel!").formatted(Formatting.GREEN));
+                            return 1;
+                        }))
+                .then(CommandManager.literal("hermes_shoes")
+                        .executes(ctx -> {
+                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                            player.giveItemStack(CustomItemHandler.createHermesShoes());
+                            player.sendMessage(Text.literal("Given Hermes Shoes!").formatted(Formatting.GREEN));
+                            return 1;
+                        }))
+                .then(CommandManager.literal("hpebm")
+                        .executes(ctx -> {
+                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                            player.giveItemStack(CustomItemHandler.createHPEBM());
+                            player.sendMessage(Text.literal("Given HPEBM!").formatted(Formatting.GREEN));
+                            return 1;
+                        }))
+        );
     }
+    private static int giveCustomItem(ServerPlayerEntity player, String tagName, Item baseItem, String displayName) {
+        ItemStack stack = new ItemStack(baseItem);
+
+        // Set custom NBT data
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte(tagName, (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+
+        // Set custom name
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(displayName).formatted(Formatting.GOLD, Formatting.BOLD));
+
+        // Give to player
+        player.giveItemStack(stack);
+        player.sendMessage(Text.literal("Given " + displayName + "!").formatted(Formatting.GREEN));
+
+        return 1;
+    }
+
     private static void registerAuctionHouse(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("ah")
                 .executes(context -> {
@@ -143,9 +353,7 @@ public class CommandRegistry {
                                     return 1;
                                 }))));
     }
-    // Add this to registerAll() method:
-    // registerSecretCommand(dispatcher);
-    // registerSpawn(dispatcher);
+
 
     private static void registerSecretCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("SC")

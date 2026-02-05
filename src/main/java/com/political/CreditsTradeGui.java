@@ -35,17 +35,9 @@ public class CreditsTradeGui {
     public static final List<TradeOption> TRADE_OPTIONS = new ArrayList<>();
 
     static {
-        TRADE_OPTIONS.add(new TradeOption(Items.DIAMOND, "Diamond", 1, 2));
-        TRADE_OPTIONS.add(new TradeOption(Items.BREEZE_ROD, "Breeze Rod", 1, 4));
         TRADE_OPTIONS.add(new TradeOption(Items.TOTEM_OF_UNDYING, "Totem of Undying", 1, 15));
-        TRADE_OPTIONS.add(new TradeOption(Items.NETHERITE_INGOT, "Netherite Ingot", 1, 15));
         TRADE_OPTIONS.add(new TradeOption(Items.HEAVY_CORE, "Heavy Core", 1, 125));
-        TRADE_OPTIONS.add(new TradeOption(Items.DIAMOND_HELMET, "Diamond Helmet", 1, 10));
-        TRADE_OPTIONS.add(new TradeOption(Items.DIAMOND_CHESTPLATE, "Diamond Chestplate", 1, 16));
-        TRADE_OPTIONS.add(new TradeOption(Items.DIAMOND_LEGGINGS, "Diamond Leggings", 1, 14));
-        TRADE_OPTIONS.add(new TradeOption(Items.DIAMOND_BOOTS, "Diamond Boots", 1, 8));
         TRADE_OPTIONS.add(new TradeOption(Items.TRIDENT, "Trident", 1, 15));
-        TRADE_OPTIONS.add(new TradeOption(Items.OBSIDIAN, "Obsidian", 5, 1));
     }
 
     public static void open(ServerPlayerEntity player) {

@@ -16,7 +16,9 @@
     "PhantomSpawnerMixin",
     "SpawnHelperMixin",
     "TradeOfferMixin",
-    "VillagerInteractionMixin"
+    "VillagerInteractionMixin",
+    "VillagerLightningMixin",
+    "EndRodBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -23,7 +23,8 @@ public class AdminGui {
         PLAYERS,
         ECONOMY,
         WORLD,
-        UNDERGROUND_AUCTION
+        UNDERGROUND_AUCTION,
+        CUSTOM_ITEMS
     }
     public static void open(ServerPlayerEntity player) {
         openPage(player, AdminPage.MAIN);
@@ -244,14 +245,11 @@ public class AdminGui {
 
         gui.open();
     }
-// ═══════════════════════════════════════════════════════════════
-// UNDERGROUND AUCTION PAGE
-// ═══════════════════════════════════════════════════════════════
+    private static int undergroundAuctionItemPage = 0;
 
     private static void openUndergroundAuctionPage(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("Underground Auction Admin"));
-
         fillBackground(gui);
 
         // Header
@@ -301,41 +299,90 @@ public class AdminGui {
                 })
                 .build());
 
-        // Section header for items
+        // Custom Items Section (separate from auction items)
+        gui.setSlot(16, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("Custom Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open custom items panel").formatted(Formatting.GRAY))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    openCustomItemsPage(player);
+                })
+                .build());
+
+        // Section header for auction items
         gui.setSlot(22, new GuiElementBuilder(Items.CHEST)
-                .setName(Text.literal("§d§lAuction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .setName(Text.literal("Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click items below to receive them").formatted(Formatting.GRAY))
                 .build());
 
-        // Get all possible auction items and display them
+        // Get all possible auction items
         List<UndergroundAuctionManager.AuctionItem> items = UndergroundAuctionManager.getAllPossibleItems();
-        int[] itemSlots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
 
-        for (int i = 0; i < Math.min(items.size(), itemSlots.length); i++) {
-            UndergroundAuctionManager.AuctionItem item = items.get(i);
-            final int itemIndex = i;
+        // Expanded item slots - 3 rows of 7
+        int[] itemSlots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43, 46, 47, 48, 49, 50, 51, 52};
+        int itemsPerPage = itemSlots.length;
+        int totalPages = (int) Math.ceil((double) items.size() / itemsPerPage);
+        int startIndex = undergroundAuctionItemPage * itemsPerPage;
 
-            if (item != null && item.itemStack != null) {
-                gui.setSlot(itemSlots[i], new GuiElementBuilder(item.itemStack.getItem())
-                        .setName(Text.literal(item.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                        .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Starting bid: " + item.startingBid + " credits").formatted(Formatting.GOLD))
-                        .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
-                        .glow()
-                        .setCallback((index, type, action) -> {
-                            UndergroundAuctionManager.giveAuctionItem(player, itemIndex);
-                            openPage(player, AdminPage.UNDERGROUND_AUCTION);
-                        })
-                        .build());
+        for (int i = 0; i < itemSlots.length; i++) {
+            int itemIndex = startIndex + i;
+            if (itemIndex < items.size()) {
+                UndergroundAuctionManager.AuctionItem item = items.get(itemIndex);
+                final int finalItemIndex = itemIndex;
+
+                if (item != null && item.itemStack != null) {
+                    gui.setSlot(itemSlots[i], new GuiElementBuilder(item.itemStack.getItem())
+                            .setName(Text.literal(item.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                            .addLoreLine(Text.literal(""))
+                            .addLoreLine(Text.literal("Starting bid: " + item.startingBid + " credits").formatted(Formatting.GOLD))
+                            .addLoreLine(Text.literal(""))
+                            .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                            .glow()
+                            .setCallback((index, type, action) -> {
+                                // Give the ACTUAL item stack, not just by index
+                                player.giveItemStack(item.itemStack.copy());
+                                player.sendMessage(Text.literal("✓ Given " + item.name).formatted(Formatting.GREEN));
+                            })
+                            .build());
+                }
             }
         }
+
+        // Pagination buttons
+        if (undergroundAuctionItemPage > 0) {
+            gui.setSlot(18, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("◀ Previous Page").formatted(Formatting.YELLOW))
+                    .setCallback((index, type, action) -> {
+                        undergroundAuctionItemPage--;
+                        openPage(player, AdminPage.UNDERGROUND_AUCTION);
+                    })
+                    .build());
+        }
+
+        if (undergroundAuctionItemPage < totalPages - 1) {
+            gui.setSlot(26, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page ▶").formatted(Formatting.YELLOW))
+                    .setCallback((index, type, action) -> {
+                        undergroundAuctionItemPage++;
+                        openPage(player, AdminPage.UNDERGROUND_AUCTION);
+                    })
+                    .build());
+        }
+
+        // Page indicator
+        gui.setSlot(22, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("Page " + (undergroundAuctionItemPage + 1) + "/" + Math.max(1, totalPages)).formatted(Formatting.WHITE))
+                .build());
 
         // Back button
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("Back").formatted(Formatting.GRAY))
-                .setCallback((index, type, action) -> openPage(player, AdminPage.MAIN))
+                .setCallback((index, type, action) -> {
+                    undergroundAuctionItemPage = 0; // Reset page
+                    openPage(player, AdminPage.MAIN);
+                })
                 .build());
 
         // Close button
@@ -347,6 +394,83 @@ public class AdminGui {
         gui.open();
     }
 
+    // New dedicated Custom Items page
+    private static void openCustomItemsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("Custom Items"));
+        fillBackground(gui);
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("Custom Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .glow()
+                .build());
+
+        // Harvey's Stick
+        gui.setSlot(10, new GuiElementBuilder(Items.STICK)
+                .setName(Text.literal("Harvey's Stick").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Strikes lightning on hit").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    player.giveItemStack(CustomItemHandler.createHarveysStick());
+                    player.sendMessage(Text.literal("✓ Given Harvey's Stick!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // The Gavel
+        gui.setSlot(12, new GuiElementBuilder(Items.MACE)
+                .setName(Text.literal("The Gavel").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Uses wind charge to launch upward").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    player.giveItemStack(CustomItemHandler.createTheGavel());
+                    player.sendMessage(Text.literal("✓ Given The Gavel!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Hermes Shoes
+        gui.setSlot(14, new GuiElementBuilder(Items.IRON_BOOTS)
+                .setName(Text.literal("Hermes Shoes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Grants permanent Speed III").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    player.giveItemStack(CustomItemHandler.createHermesShoes());
+                    player.sendMessage(Text.literal("✓ Given Hermes Shoes!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // HPEBM
+        gui.setSlot(16, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("HPEBM").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("High Powered Energy Beam Module").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Fires an energy beam (3s cooldown)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    player.giveItemStack(CustomItemHandler.createHPEBM());
+                    player.sendMessage(Text.literal("✓ Given HPEBM!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Back button
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> openPage(player, AdminPage.UNDERGROUND_AUCTION))
+                .build());
+
+        gui.open();
+    }
     // ═══════════════════════════════════════════════════════════
     // GOVERNMENT PAGE
     // ═══════════════════════════════════════════════════════════
