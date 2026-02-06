@@ -18,7 +18,9 @@
     "TradeOfferMixin",
     "VillagerInteractionMixin",
     "VillagerLightningMixin",
-    "EndRodBlockMixin"
+    "EndRodBlockMixin",
+    "WardenDropMixin",
+    "CraftingResultMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,8 +1,10 @@
 package com.political;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -20,34 +22,33 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import java.util.List;
-import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
-import net.minecraft.entity.projectile.WindChargeEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvents;import net.minecraft.entity.projectile.WindChargeEntity;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.nbt.NbtCompound;
 
 public class CustomItemHandler {
 
     private static final Map<UUID, Long> gavelCooldowns = new HashMap<>();
-    private static final long GAVEL_COOLDOWN_MS = 3000; // 3 seconds
-    private static final int GAVEL_COOLDOWN_TICKS = 60; // 3 seconds = 60 ticks
+    private static final long GAVEL_COOLDOWN_MS = 3000;
+    private static final int GAVEL_COOLDOWN_TICKS = 60;
+    private static final Map<UUID, Integer> hpebmUseTicks = new HashMap<>();
+    private static final Map<UUID, Long> hpebmLastRightClick = new HashMap<>();
 
     public static void register() {
+
         // Harvey's Stick - Lightning on attack
+
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (world.isClient()) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity)) return ActionResult.PASS;
@@ -62,97 +63,55 @@ public class CustomItemHandler {
                     }
                 }
             }
-
             return ActionResult.PASS;
         });
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity)) return ActionResult.PASS;
+
+            ItemStack held = player.getStackInHand(hand);
+            if (isAnyBeamWeapon(held)) {
+                hpebmLastRightClick.put(player.getUuid(), System.currentTimeMillis());
+                return ActionResult.CONSUME;
+            }
+            return ActionResult.PASS;
+        });
+        // The Gavel
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClient()) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
 
             ItemStack heldItem = player.getStackInHand(hand);
 
-            if (CustomItemHandler.isTheGavel(heldItem)) {
-                // Pass the ItemStack so we can set cooldown on it
-                if (CustomItemHandler.useGavelAbility(serverPlayer, heldItem)) {
+            if (isTheGavel(heldItem)) {
+                if (useGavelAbility(serverPlayer, heldItem)) {
                     return ActionResult.SUCCESS;
                 }
                 return ActionResult.FAIL;
             }
-
             return ActionResult.PASS;
         });
 
-        // The Gavel AND HPEBM
-        UseItemCallback.EVENT.register((player, world, hand) -> {
+        // Prevent beam weapon placement
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
-
             ItemStack held = player.getStackInHand(hand);
-
-
-            // HPEBM - Energy Beam
-            if (isHPEBM(held)) {
-                if (player.getItemCooldownManager().isCoolingDown(held)) {
-                    return ActionResult.FAIL;
-                }
-
-                ServerWorld serverWorld = (ServerWorld) world;
-                Vec3d start = player.getEyePos();
-                Vec3d direction = player.getRotationVec(1.0f);
-
-                Box searchBox = new Box(
-                        start.x - 30, start.y - 30, start.z - 30,
-                        start.x + 30, start.y + 30, start.z + 30
-                );
-                List<Entity> entities = world.getOtherEntities(player, searchBox, e -> e instanceof LivingEntity && e != player);
-
-                for (Entity entity : entities) {
-                    if (!(entity instanceof LivingEntity livingEntity)) continue;
-
-                    Vec3d entityPos = new Vec3d(livingEntity.getX(), livingEntity.getY() + livingEntity.getHeight() / 2, livingEntity.getZ());
-                    Vec3d toEntity = entityPos.subtract(start);
-                    double distance = toEntity.length();
-                    if (distance > 30) continue;
-
-                    Vec3d projected = direction.multiply(toEntity.dotProduct(direction));
-                    double perpendicularDist = toEntity.subtract(projected).length();
-
-                    if (perpendicularDist < 1.5 && toEntity.dotProduct(direction) > 0) {
-                        livingEntity.damage(serverWorld, player.getDamageSources().magic(), 8.0f);
-                        serverWorld.spawnParticles(ParticleTypes.END_ROD,
-                                livingEntity.getX(), livingEntity.getY() + livingEntity.getHeight() / 2, livingEntity.getZ(),
-                                10, 0.3, 0.3, 0.3, 0.1);
-                    }
-                }
-
-                // Visual beam
-                for (int i = 0; i < 30; i++) {
-                    Vec3d particlePos = start.add(direction.multiply(i));
-                    serverWorld.spawnParticles(ParticleTypes.END_ROD,
-                            particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);
-                }
-
-                player.getItemCooldownManager().set(held, 60);
-                return ActionResult.SUCCESS;
+            if (isAnyBeamWeapon(held)) {
+                return ActionResult.FAIL;
             }
-
             return ActionResult.PASS;
         });
     }
+
     public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
         UUID uuid = player.getUuid();
         long now = System.currentTimeMillis();
 
-        // Check cooldown
         if (gavelCooldowns.containsKey(uuid)) {
             long remaining = (gavelCooldowns.get(uuid) + GAVEL_COOLDOWN_MS) - now;
-            if (remaining > 0) {
-                // Don't send message - the visual cooldown is enough
-                return false;
-            }
+            if (remaining > 0) return false;
         }
 
-        // Check & consume wind charge
         boolean found = false;
         for (int i = 0; i < player.getInventory().size(); i++) {
             if (player.getInventory().getStack(i).isOf(Items.WIND_CHARGE)) {
@@ -162,18 +121,13 @@ public class CustomItemHandler {
             }
         }
         if (!found) {
-            player.sendMessage(Text.literal("Requires 1 Wind Charge!")
-                    .formatted(Formatting.RED), true);
+            player.sendMessage(Text.literal("Requires 1 Wind Charge!").formatted(Formatting.RED), true);
             return false;
         }
 
-        // Set internal cooldown
         gavelCooldowns.put(uuid, now);
-
-        // Set VISUAL cooldown on the item (like ender pearl)
         player.getItemCooldownManager().set(gavelStack, GAVEL_COOLDOWN_TICKS);
 
-        // Effects
         ServerWorld world = player.getEntityWorld();
 
         world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER,
@@ -183,7 +137,6 @@ public class CustomItemHandler {
         world.playSoundFromEntity(null, player, SoundEvents.ENTITY_GENERIC_EXPLODE.value(),
                 SoundCategory.PLAYERS, 1.0f, 1.0f);
 
-        // Damage in 5x5 area
         Box box = new Box(
                 player.getX() - 4.5, player.getY() - 4.5, player.getZ() - 4.5,
                 player.getX() + 4.5, player.getY() + 4.5, player.getZ() + 4.5);
@@ -192,8 +145,7 @@ public class CustomItemHandler {
             e.damage(world, player.getDamageSources().playerAttack(player), 25.0f);
         }
 
-        player.sendMessage(Text.literal("⚡ GAVEL STRIKE! ⚡")
-                .formatted(Formatting.GOLD, Formatting.BOLD), true);
+        player.sendMessage(Text.literal("⚡ GAVEL STRIKE! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
         return true;
     }
 
@@ -204,7 +156,234 @@ public class CustomItemHandler {
         }
     }
 
-    // ============ ITEM DETECTION - Works in 1.21.11 ============
+    // ═══════════════════════════════════════════════════════════════
+    // HPEBM TICK SYSTEM
+    // ═══════════════════════════════════════════════════════════════
+
+    public static void tickHPEBM(ServerPlayerEntity player) {
+        ItemStack mainHand = player.getStackInHand(Hand.MAIN_HAND);
+        ItemStack offHand = player.getStackInHand(Hand.OFF_HAND);
+
+        boolean holdingBeam = isAnyBeamWeapon(mainHand) || isAnyBeamWeapon(offHand);
+        UUID uuid = player.getUuid();
+
+        // Check if right-click held (pressed within last 200ms)
+        long lastClick = hpebmLastRightClick.getOrDefault(uuid, 0L);
+        boolean rightClickHeld = (System.currentTimeMillis() - lastClick) < 200;
+
+        if (!holdingBeam || !rightClickHeld) {
+            hpebmUseTicks.remove(uuid);
+            return;
+        }
+
+        if (player.experienceLevel < 1) {
+            player.sendMessage(Text.literal("⚡ Not enough XP!").formatted(Formatting.RED), true);
+            hpebmUseTicks.remove(uuid);
+            return;
+        }
+
+        int ticks = hpebmUseTicks.getOrDefault(uuid, 0) + 1;
+        hpebmUseTicks.put(uuid, ticks);
+
+        if (ticks == 1) {
+            player.addExperienceLevels(-1);
+            player.sendMessage(Text.literal("⚡ Beam Activated! -1 XP Level").formatted(Formatting.YELLOW), true);
+        } else if (ticks % 20 == 0) {
+            player.addExperienceLevels(-1);
+            player.sendMessage(Text.literal("⚡ -1 XP Level").formatted(Formatting.YELLOW), true);
+        }
+
+        fireHPEBMBeam(player, ticks);
+    }
+
+    private static void fireHPEBMBeam(ServerPlayerEntity player, int ticks) {
+        ServerWorld world = player.getEntityWorld();
+
+        ItemStack mainHand = player.getStackInHand(Hand.MAIN_HAND);
+        ItemStack offHand = player.getStackInHand(Hand.OFF_HAND);
+        ItemStack beamItem = isAnyBeamWeapon(mainHand) ? mainHand : offHand;
+        int tier = getBeamTier(beamItem);
+
+        float baseDamage = switch (tier) {
+            case 1 -> 1.0f;
+            case 2 -> 3.0f;
+            case 3 -> 3.6f;
+            case 4 -> 4.2f;
+            case 5 -> 4.8f;
+            case 6 -> 5.4f;
+            case 7 -> 6.0f;
+            default -> 1.0f;
+        };
+
+        Vec3d eyePos = player.getEyePos();
+        Vec3d lookDir = player.getRotationVec(1.0f);
+        Vec3d sideOffset = lookDir.crossProduct(new Vec3d(0, 1, 0)).normalize().multiply(0.4);
+        Vec3d start = eyePos.add(sideOffset).add(0, -0.4, 0);
+        Vec3d direction = lookDir;
+
+        Box searchBox = new Box(
+                start.x - 30, start.y - 30, start.z - 30,
+                start.x + 30, start.y + 30, start.z + 30);
+
+        for (Entity entity : world.getOtherEntities(player, searchBox, e -> e instanceof LivingEntity && e != player)) {
+            if (!(entity instanceof LivingEntity living)) continue;
+
+            Vec3d entityPos = new Vec3d(living.getX(), living.getY() + living.getHeight() / 2, living.getZ());
+            Vec3d toEntity = entityPos.subtract(start);
+            double distance = toEntity.length();
+            if (distance > 30) continue;
+
+            Vec3d projected = direction.multiply(toEntity.dotProduct(direction));
+            double perpendicularDist = toEntity.subtract(projected).length();
+
+            if (perpendicularDist < 1.5 && toEntity.dotProduct(direction) > 0) {
+                living.timeUntilRegen = 0;
+                living.damage(world, player.getDamageSources().magic(), baseDamage);
+
+                // Fast hit particles
+                world.spawnParticles(ParticleTypes.CRIT,
+                        living.getX(), living.getY() + living.getHeight() / 2, living.getZ(),
+                        3, 0.2, 0.2, 0.2, 0.2);
+            }
+        }
+
+        if (tier >= 2) {
+            fireUpgradedBeam(world, start, direction, ticks, tier, player);
+        } else {
+            fireOriginalBeam(world, start, direction, ticks);
+        }
+
+        if (ticks % 10 == 0) {
+            float pitch = tier >= 2 ? 0.5f + (tier * 0.15f) : 1.5f;
+            world.playSound(null, player.getBlockPos(),
+                    SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.PLAYERS, 0.5f, pitch);
+        }
+    }
+
+    private static void fireOriginalBeam(ServerWorld world, Vec3d start, Vec3d direction, int ticks) {
+        double spiralRadius = 0.25;
+        double spiralSpeed = 0.6;
+
+        for (double i = 0; i < 30; i += 1.5) {
+            Vec3d basePos = start.add(direction.multiply(i));
+            Vec3d up = new Vec3d(0, 1, 0);
+            if (Math.abs(direction.dotProduct(up)) > 0.99) up = new Vec3d(1, 0, 0);
+            Vec3d perp1 = direction.crossProduct(up).normalize();
+            Vec3d perp2 = direction.crossProduct(perp1).normalize();
+            double angle = (ticks * spiralSpeed + i * 2) % (Math.PI * 2);
+
+            world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
+
+            Vec3d spiral1 = basePos.add(perp1.multiply(Math.cos(angle) * spiralRadius)).add(perp2.multiply(Math.sin(angle) * spiralRadius));
+            world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral1.x, spiral1.y, spiral1.z, 1, 0, 0, 0, 0.25);
+
+            Vec3d spiral2 = basePos.add(perp1.multiply(Math.cos(angle + Math.PI) * spiralRadius)).add(perp2.multiply(Math.sin(angle + Math.PI) * spiralRadius));
+            world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral2.x, spiral2.y, spiral2.z, 1, 0, 0, 0, 0.25);
+        }
+    }
+
+    // Upgraded beam (Tiers 2-7) - unique particles per tier, fast dissipating
+    private static void fireUpgradedBeam(ServerWorld world, Vec3d start, Vec3d direction, int ticks, int tier, ServerPlayerEntity player) {
+        double spiralSpeed = 0.6 + (tier * 0.08);
+        double spiralRadius = 0.2 + (tier * 0.03);
+        int helixCount = Math.min(tier, 3);
+
+        for (double i = 0; i < 30; i += 1.2) {
+            Vec3d basePos = start.add(direction.multiply(i));
+            Vec3d up = new Vec3d(0, 1, 0);
+            if (Math.abs(direction.dotProduct(up)) > 0.99) up = new Vec3d(1, 0, 0);
+            Vec3d perp1 = direction.crossProduct(up).normalize();
+            Vec3d perp2 = direction.crossProduct(perp1).normalize();
+            double angle = (ticks * spiralSpeed + i * 2) % (Math.PI * 2);
+
+            // Core particles per tier (fast-dissipating, no drop)
+            switch (tier) {
+                case 2 -> world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
+                case 3 -> {
+                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
+                    world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
+                }
+                case 4 -> {
+                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.15);
+                    world.spawnParticles(ParticleTypes.GLOW, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.1);
+                }
+                case 5 -> {
+                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
+                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.2);
+                }
+                case 6 -> {
+                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.15);
+                    world.spawnParticles(ParticleTypes.SCULK_SOUL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.1);
+                }
+                case 7 -> {
+                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
+                    world.spawnParticles(ParticleTypes.GLOW,basePos.x, basePos.y, basePos.z, 1, 0.02, 0.02, 0.02, 0.2);
+                }
+            }
+
+            // Spiral helixes
+            for (int h = 0; h < helixCount; h++) {
+                double helixAngle = angle + (h * Math.PI * 2 / helixCount);
+                Vec3d spiral = basePos
+                        .add(perp1.multiply(Math.cos(helixAngle) * spiralRadius))
+                        .add(perp2.multiply(Math.sin(helixAngle) * spiralRadius));
+                world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral.x, spiral.y, spiral.z, 1, 0, 0, 0, 0.2);
+            }
+
+            if (tier >= 5) {
+                double outerRadius = spiralRadius * 1.5;
+                double outerAngle = -angle * 0.5;
+                Vec3d outer = basePos
+                        .add(perp1.multiply(Math.cos(outerAngle) * outerRadius))
+                        .add(perp2.multiply(Math.sin(outerAngle) * outerRadius));
+                world.spawnParticles(ParticleTypes.CRIT, outer.x, outer.y, outer.z, 1, 0, 0, 0, 0.15);
+            }
+        }
+
+        // EXPLOSION AT END POINT - Mk3 (tier 5) and above
+        if (tier >= 5 && ticks % 5 == 0) {
+            Vec3d endPoint = start.add(direction.multiply(30));
+
+            double explosionRadius = switch (tier) {
+                case 5 -> 2.0;
+                case 6 -> 2.5;
+                case 7 -> 3.0;
+                default -> 2.0;
+            };
+
+            float explosionDamage = switch (tier) {
+                case 5 -> 4.0f;
+                case 6 -> 6.0f;
+                case 7 -> 10.0f;
+                default -> 4.0f;
+            };
+
+            world.spawnParticles(ParticleTypes.EXPLOSION, endPoint.x, endPoint.y, endPoint.z, 1, 0, 0, 0, 0);
+
+            if (tier >= 7) {
+                world.spawnParticles(ParticleTypes.GLOW, endPoint.x, endPoint.y, endPoint.z, 10, 0.5, 0.5, 0.5, 0.3);
+            }
+
+            Box explosionBox = new Box(
+                    endPoint.x - explosionRadius, endPoint.y - explosionRadius, endPoint.z - explosionRadius,
+                    endPoint.x + explosionRadius, endPoint.y + explosionRadius, endPoint.z + explosionRadius);
+
+            for (Entity entity : world.getOtherEntities(player, explosionBox, e -> e instanceof LivingEntity)) {
+                if (entity instanceof LivingEntity living) {
+                    Vec3d livingPos = new Vec3d(living.getX(), living.getY(), living.getZ());
+                    double dist = livingPos.distanceTo(endPoint);
+                    if (dist <= explosionRadius) {
+                        living.timeUntilRegen = 0;
+                        living.damage(world, player.getDamageSources().magic(), explosionDamage);
+                    }
+                }
+            }
+        }
+    }
+
+// ═══════════════════════════════════════════════════════════════
+// ITEM DETECTION - Works in 1.21.11
+// ═══════════════════════════════════════════════════════════════
 
     private static boolean hasCustomTag(ItemStack stack, String tagName) {
         var customData = stack.get(DataComponentTypes.CUSTOM_DATA);
@@ -212,7 +391,6 @@ public class CustomItemHandler {
         NbtCompound nbt = customData.copyNbt();
         if (!nbt.contains(tagName)) return false;
         try {
-            // getByte returns Optional<Byte> in 1.21.11
             return nbt.getByte(tagName).orElse((byte) 0) != 0;
         } catch (Exception e) {
             return false;
@@ -235,16 +413,13 @@ public class CustomItemHandler {
         return stack.isOf(Items.END_ROD) && hasCustomTag(stack, "hpebm");
     }
 
-    private static int findWindCharge(PlayerEntity player) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            if (player.getInventory().getStack(i).isOf(Items.WIND_CHARGE)) {
-                return i;
-            }
-        }
-        return -1;
+    public static boolean isWardenCore(ItemStack stack) {
+        return stack.isOf(Items.ECHO_SHARD) && hasCustomTag(stack, "warden_core");
     }
 
-    // ============ ITEM CREATION ============
+// ═══════════════════════════════════════════════════════════════
+// ITEM CREATION
+// ═══════════════════════════════════════════════════════════════
 
     public static ItemStack createHarveysStick() {
         return createCustomItem(Items.STICK, "harveys_stick", "Harvey's Stick", Formatting.GOLD);
@@ -259,7 +434,84 @@ public class CustomItemHandler {
     }
 
     public static ItemStack createHPEBM() {
-        return createCustomItem(Items.END_ROD, "hpebm", "HPEBM", Formatting.RED);
+        ItemStack stack = new ItemStack(Items.END_ROD);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("hpebm", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("H.P.E.B.M.").formatted(Formatting.GREEN, Formatting.BOLD));
+        return stack;
+    }
+
+    public static ItemStack createWardenCore() {
+        ItemStack stack = new ItemStack(Items.ECHO_SHARD);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("warden_core", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Warden's Core").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal("A pulsing core of sonic energy").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("0.1% drop from Wardens").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Used to craft Ultra Beam weapons").formatted(Formatting.LIGHT_PURPLE));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        return stack;
+    }
+
+    public static ItemStack createUltraBeam() {
+        ItemStack stack = new ItemStack(Items.END_ROD);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("ultra_beam", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Ultra Beam Emitter").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal("Ultra High Powered Energy Beam").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("Hold right click to fire a continuous beam").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Costs 1 XP level per second").formatted(Formatting.RED));
+        lore.add(Text.literal("Tier: ULTRA").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("Damage: +50%").formatted(Formatting.GREEN));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        return stack;
+    }
+
+    public static ItemStack createUltraBeamMk(int mk) {
+        if (mk < 1 || mk > 5) return createUltraBeam();
+
+        ItemStack stack = new ItemStack(Items.END_ROD);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("ultra_beam_mk" + mk, (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+
+        Formatting color = switch (mk) {
+            case 1 -> Formatting.LIGHT_PURPLE;
+            case 2 -> Formatting.DARK_PURPLE;
+            case 3 -> Formatting.BLUE;
+            case 4 -> Formatting.DARK_BLUE;
+            case 5 -> Formatting.GOLD;
+            default -> Formatting.LIGHT_PURPLE;
+        };
+
+        int damageBonus = 50 + (mk * 20);
+        String suffix = mk == 5 ? " ✦ MAX ✦" : "";
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Ultra Beam Emitter Mk" + mk + suffix).formatted(color, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal("Overclocked Energy Beam").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("Hold right click to fire a continuous beam").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Costs 1 XP level per second").formatted(Formatting.RED));
+        lore.add(Text.literal("Tier: OVERCLOCKED Mk" + mk).formatted(color));
+        lore.add(Text.literal("Damage: +" + damageBonus + "%").formatted(Formatting.GREEN));
+        if (mk == 5) {
+            lore.add(Text.literal("MAXIMUM POWER!").formatted(Formatting.GOLD, Formatting.BOLD));
+        }
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        return stack;
     }
 
     private static ItemStack createCustomItem(Item baseItem, String tagName, String displayName, Formatting color) {
@@ -269,7 +521,38 @@ public class CustomItemHandler {
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(displayName).formatted(color, Formatting.BOLD));
         return stack;
+    }
+// ═══════════════════════════════════════════════════════════════
+// BEAM TIER SYSTEM
+// ═══════════════════════════════════════════════════════════════
 
+    public static int getBeamTier(ItemStack stack) {
+        if (!stack.isOf(Items.END_ROD)) return -1;
+        var customData = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (customData == null) return -1;
+        NbtCompound nbt = customData.copyNbt();
+
+        // Check tiers from highest to lowest
+        if (nbt.contains("ultra_beam_mk5")) return 7;
+        if (nbt.contains("ultra_beam_mk4")) return 6;
+        if (nbt.contains("ultra_beam_mk3")) return 5;
+        if (nbt.contains("ultra_beam_mk2")) return 4;
+        if (nbt.contains("ultra_beam_mk1")) return 3;
+        if (nbt.contains("ultra_beam")) return 2;
+        if (nbt.contains("hpebm")) return 1;
+
+        return -1;
     }
 
+    public static boolean isAnyBeamWeapon(ItemStack stack) {
+        return getBeamTier(stack) >= 1;
+    }
+    private static int findWindCharge(PlayerEntity player) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            if (player.getInventory().getStack(i).isOf(Items.WIND_CHARGE)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

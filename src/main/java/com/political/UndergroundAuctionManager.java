@@ -31,7 +31,10 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.*;import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;import com.mojang.authlib.properties.PropertyMap;
+import com.mojang.authlib.properties.Property;
+
 
 public class UndergroundAuctionManager {
 
@@ -524,7 +527,7 @@ public class UndergroundAuctionManager {
             allPossible.add(createEnchantedElytra());
             allPossible.add(createSuperBow());
             allPossible.add(createFortunePick());
-
+            allPossible.add(createWardenCore());
             allPossible.removeIf(Objects::isNull);
             Collections.shuffle(allPossible);
 
@@ -538,10 +541,29 @@ public class UndergroundAuctionManager {
 
     private static NbtCompound createCustomNbt(String key, boolean value) {
         NbtCompound nbt = new NbtCompound();
-        nbt.putBoolean(key, value);
+        nbt.putByte(key, (byte) (value ? 1 : 0));  // Changed from putBoolean
         return nbt;
     }
+    private static AuctionItem createWardenCore() {
+        ItemStack stack = new ItemStack(Items.ECHO_SHARD);
 
+        String name = "Warden's Core";
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("warden_core", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA,
+                net.minecraft.component.type.NbtComponent.of(nbt));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal("A pulsing core of sonic energy").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("0.1% drop from Wardens").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Used to craft Ultra Beam weapons").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        return new AuctionItem(name, "special", 10000, stack);
+    }
     private static AuctionItem createNetheriteArmor() {
         ItemStack stack;
         String name;
@@ -706,13 +728,17 @@ public class UndergroundAuctionManager {
         String name = "H.P.E.B.M.";
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.GREEN, Formatting.BOLD));
 
+        // Use putByte to match hasCustomTag
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("hpebm", (byte) 1);
         stack.set(DataComponentTypes.CUSTOM_DATA,
-                net.minecraft.component.type.NbtComponent.of(createCustomNbt("hpebm", true)));
+                net.minecraft.component.type.NbtComponent.of(nbt));
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal("High Powered Energy Beam Manipulator").formatted(Formatting.GREEN));
-        lore.add(Text.literal("Hold right-click to fire guardian laser").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Hold right click to fire a continuous beam").formatted(Formatting.GRAY));
         lore.add(Text.literal("Costs 1 XP level per second").formatted(Formatting.RED));
+        lore.add(Text.literal("Upgradeable with Warden's Core").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 

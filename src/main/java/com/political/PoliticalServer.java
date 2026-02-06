@@ -221,7 +221,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			sendJoinInfo(player);
 		});
 
-		// Server tick events
+
 		ServerTickEvents.END_SERVER_TICK.register(s -> {
 			ElectionManager.tick(s);
 			PrisonManager.tick(s);
@@ -229,6 +229,12 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TaxManager.tick(s);
 			PerkManager.tickPerks(s);
 			UndergroundAuctionManager.tick(s);
+
+			// ADD THIS - without it the beam never fires!
+			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
+				CustomItemHandler.tickHPEBM(player);
+				CustomItemHandler.tickHermesShoes(player);
+			}
 		});
 
 		LOGGER.info("PoliticalServer initialized!");
