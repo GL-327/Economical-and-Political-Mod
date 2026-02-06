@@ -867,17 +867,20 @@ public class UndergroundAuctionManager {
 
         long now = System.currentTimeMillis();
         AuctionItem current = getCurrentItem();
+        if (current == null) return 0;
+
         long itemDuration = now - itemStartTime;
 
-        if (itemDuration < MIN_ITEM_DURATION_MS) {
-            if (current != null && current.highestBidderUuid != null) {
-                return (int) (BID_TIMEOUT_MS / 1000);
-            } else {
-                long remaining = NO_BID_TIMEOUT_MS - itemDuration;
-                return (int) Math.max(0, remaining / 1000);
-            }
+        if (current.highestBidderUuid != null && !current.highestBidderUuid.isEmpty()) {
+            // Someone has bid - countdown from last bid time
+            long timeSinceLastBid = now - lastBidTime;
+            long remaining = BID_TIMEOUT_MS - timeSinceLastBid;
+            return (int) Math.max(0, remaining / 1000);
+        } else {
+            // No bids yet - countdown from item start
+            long remaining = NO_BID_TIMEOUT_MS - itemDuration;
+            return (int) Math.max(0, remaining / 1000);
         }
-        return 0;
     }
         public static void skipCooldown () {
             nextAuctionTime = System.currentTimeMillis();

@@ -221,6 +221,11 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			sendJoinInfo(player);
 		});
 
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+			ServerPlayerEntity player = handler.getPlayer();
+			AuctionHouseGui.onPlayerDisconnect(player);
+			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
+		});
 
 		ServerTickEvents.END_SERVER_TICK.register(s -> {
 			ElectionManager.tick(s);
@@ -229,6 +234,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TaxManager.tick(s);
 			PerkManager.tickPerks(s);
 			UndergroundAuctionManager.tick(s);
+			UndergroundAuctionGui.tick();
 
 			// ADD THIS - without it the beam never fires!
 			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {

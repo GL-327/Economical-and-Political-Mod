@@ -9,11 +9,49 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class UndergroundAuctionGui {
 
+    // Track open GUIs for auto-refresh
+    private static final Map<UUID, SimpleGui> openGuis = new ConcurrentHashMap<>();
+
+    // Call this from ServerTickEvents.END_SERVER_TICK
+    public static void tick() {
+        openGuis.entrySet().removeIf(entry -> {
+            SimpleGui gui = entry.getValue();
+            if (gui.isOpen()) {
+                refreshGui(gui);
+                return false;
+            }
+            return true; // Remove closed GUIs
+        });
+    }
+
     public static void open(ServerPlayerEntity player) {
+        // Close existing GUI if open
+        SimpleGui existingGui = openGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
+
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal("🌙 Underground Auction 🌙"));
+
+        // Track this GUI
+        openGuis.put(player.getUuid(), gui);
+
+        // Initial population
+        refreshGui(gui);
+
+        gui.open();
+    }
+
+    private static void refreshGui(SimpleGui gui) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
 
         // Fill with dark glass
         for (int i = 0; i < 36; i++) {
@@ -52,6 +90,13 @@ public class UndergroundAuctionGui {
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("Use the buttons to place bids").formatted(Formatting.YELLOW))
                     .build());
+
+            // Clear bid slots when no auction
+            for (int slot : new int[]{28, 29, 30, 31, 32, 34}) {
+                gui.setSlot(slot, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                        .setName(Text.literal(""))
+                        .build());
+            }
         } else {
             // Active auction - show current item
             UndergroundAuctionManager.AuctionItem currentItem = UndergroundAuctionManager.getCurrentItem();
@@ -66,6 +111,9 @@ public class UndergroundAuctionGui {
                         .setName(Text.literal("Item " + (currentIndex + 1) + " of " + totalItems).formatted(Formatting.GRAY))
                         .build());
 
+                // Timer color based on urgency
+                Formatting timerColor = timeout <= 5 ? Formatting.RED : (timeout <= 15 ? Formatting.GOLD : Formatting.YELLOW);
+
                 // Display current item
                 gui.setSlot(13, new GuiElementBuilder(currentItem.itemStack.getItem())
                         .setName(Text.literal(currentItem.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
@@ -75,7 +123,7 @@ public class UndergroundAuctionGui {
                                 ? Text.literal("Highest Bidder: " + currentItem.highestBidderName).formatted(Formatting.GREEN)
                                 : Text.literal("No bids yet!").formatted(Formatting.GRAY))
                         .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Time remaining: " + timeout + "s").formatted(timeout <= 5 ? Formatting.RED : Formatting.YELLOW))
+                        .addLoreLine(Text.literal("⏱ " + timeout + "s remaining").formatted(timerColor, Formatting.BOLD))
                         .glow()
                         .build());
 
@@ -99,7 +147,7 @@ public class UndergroundAuctionGui {
                             .setCallback((index, type, action) -> {
                                 if (canAfford) {
                                     UndergroundAuctionManager.placeBid(player, finalBid);
-                                    open(player); // Refresh
+                                    // No need to manually refresh - tick() handles it
                                 } else {
                                     player.sendMessage(Text.literal("You don't have enough credits!").formatted(Formatting.RED));
                                 }
@@ -107,7 +155,7 @@ public class UndergroundAuctionGui {
                             .build());
                 }
 
-                // Custom bid button - opens anvil input
+                // Custom bid button
                 gui.setSlot(34, new GuiElementBuilder(Items.NAME_TAG)
                         .setName(Text.literal("Custom Bid").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                         .addLoreLine(Text.literal(""))
@@ -119,23 +167,27 @@ public class UndergroundAuctionGui {
             }
         }
 
-        // Refresh button
-        gui.setSlot(35, new GuiElementBuilder(Items.ENDER_EYE)
-                .setName(Text.literal("Refresh").formatted(Formatting.AQUA))
-                .addLoreLine(Text.literal("Click to update").formatted(Formatting.GRAY))
-                .setCallback((index, type, action) -> open(player))
-                .build());
-
-        // Close button
+        // Close button (no refresh button needed anymore!)
         gui.setSlot(27, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED))
-                .setCallback((index, type, action) -> player.closeHandledScreen())
+                .setCallback((index, type, action) -> {
+                    openGuis.remove(player.getUuid());
+                    player.closeHandledScreen();
+                })
                 .build());
 
-        gui.open();
+        // Info indicator that GUI auto-updates
+        gui.setSlot(35, new GuiElementBuilder(Items.ENDER_EYE)
+                .setName(Text.literal("Live Updates").formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal("This display updates automatically").formatted(Formatting.GRAY))
+                .glow()
+                .build());
     }
 
     private static void openCustomBidGui(ServerPlayerEntity player) {
+        // Remove from tracking while in anvil GUI
+        openGuis.remove(player.getUuid());
+
         UndergroundAuctionManager.AuctionItem currentItem = UndergroundAuctionManager.getCurrentItem();
         if (currentItem == null) {
             player.sendMessage(Text.literal("❌ No item is currently up for auction!").formatted(Formatting.RED));
@@ -145,16 +197,13 @@ public class UndergroundAuctionGui {
         AnvilInputGui gui = new AnvilInputGui(player, false);
         gui.setTitle(Text.literal("Enter Bid Amount"));
 
-        // Set default value to current bid + 50
         gui.setDefaultInputValue(String.valueOf(currentItem.currentBid + 50));
 
-        // Left slot - info
         gui.setSlot(0, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("Current Bid: " + currentItem.currentBid).formatted(Formatting.GOLD))
                 .addLoreLine(Text.literal("Enter a higher amount").formatted(Formatting.GRAY))
                 .build());
 
-        // Result slot - confirm button
         gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
                 .setName(Text.literal("Confirm Bid").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -164,14 +213,8 @@ public class UndergroundAuctionGui {
                     try {
                         int amount = Integer.parseInt(input.trim());
                         gui.close();
-
-                        if (UndergroundAuctionManager.placeBid(player, amount)) {
-                            // Bid successful, reopen main GUI
-                            open(player);
-                        } else {
-                            // Bid failed, reopen main GUI
-                            open(player);
-                        }
+                        UndergroundAuctionManager.placeBid(player, amount);
+                        open(player); // Reopen main GUI
                     } catch (NumberFormatException e) {
                         player.sendMessage(Text.literal("❌ Invalid number! Please enter a valid amount.").formatted(Formatting.RED));
                     }
@@ -179,5 +222,10 @@ public class UndergroundAuctionGui {
                 .build());
 
         gui.open();
+    }
+
+    // Call when player disconnects
+    public static void onPlayerDisconnect(ServerPlayerEntity player) {
+        openGuis.remove(player.getUuid());
     }
 }

@@ -167,7 +167,6 @@ public class CustomItemHandler {
         boolean holdingBeam = isAnyBeamWeapon(mainHand) || isAnyBeamWeapon(offHand);
         UUID uuid = player.getUuid();
 
-        // Check if right-click held (pressed within last 200ms)
         long lastClick = hpebmLastRightClick.getOrDefault(uuid, 0L);
         boolean rightClickHeld = (System.currentTimeMillis() - lastClick) < 200;
 
@@ -176,8 +175,16 @@ public class CustomItemHandler {
             return;
         }
 
-        if (player.experienceLevel < 1) {
-            player.sendMessage(Text.literal("⚡ Not enough XP!").formatted(Formatting.RED), true);
+        // Get tier for XP scaling
+        ItemStack beamItem = isAnyBeamWeapon(mainHand) ? mainHand : offHand;
+        int tier = getBeamTier(beamItem);
+
+        // XP cost: Mk1=1, Mk2=2, Mk3=3, Mk4=4, Mk5=5 (tiers 3-7)
+        // Base HPEBM and Ultra Beam cost 1
+        int xpCostPerSecond = Math.max(1, tier - 2);
+
+        if (player.experienceLevel < xpCostPerSecond) {
+            player.sendMessage(Text.literal("⚡ Not enough XP! Need " + xpCostPerSecond + " level(s)").formatted(Formatting.RED), true);
             hpebmUseTicks.remove(uuid);
             return;
         }
@@ -186,11 +193,11 @@ public class CustomItemHandler {
         hpebmUseTicks.put(uuid, ticks);
 
         if (ticks == 1) {
-            player.addExperienceLevels(-1);
-            player.sendMessage(Text.literal("⚡ Beam Activated! -1 XP Level").formatted(Formatting.YELLOW), true);
+            player.addExperienceLevels(-xpCostPerSecond);
+            player.sendMessage(Text.literal("⚡ Beam Activated! -" + xpCostPerSecond + " XP Level(s)").formatted(Formatting.YELLOW), true);
         } else if (ticks % 20 == 0) {
-            player.addExperienceLevels(-1);
-            player.sendMessage(Text.literal("⚡ -1 XP Level").formatted(Formatting.YELLOW), true);
+            player.addExperienceLevels(-xpCostPerSecond);
+            player.sendMessage(Text.literal("⚡ -" + xpCostPerSecond + " XP Level(s)").formatted(Formatting.YELLOW), true);
         }
 
         fireHPEBMBeam(player, ticks);
@@ -217,9 +224,13 @@ public class CustomItemHandler {
 
         Vec3d eyePos = player.getEyePos();
         Vec3d lookDir = player.getRotationVec(1.0f);
-        Vec3d sideOffset = lookDir.crossProduct(new Vec3d(0, 1, 0)).normalize().multiply(0.4);
-        Vec3d start = eyePos.add(sideOffset).add(0, -0.4, 0);
+        Vec3d sideOffset = lookDir.crossProduct(new Vec3d(0, 1, 0)).normalize().multiply(0.7);  // Was 0.4, now further right
+        Vec3d start = eyePos.add(sideOffset).add(0, -0.7, 0);  // Was -0.4, now further down
         Vec3d direction = lookDir;
+
+        Vec3d endPoint = findBeamEndpoint(world, player, start, direction, 30.0);
+        double beamLength = start.distanceTo(endPoint);
+
 
         Box searchBox = new Box(
                 start.x - 30, start.y - 30, start.z - 30,
@@ -240,7 +251,6 @@ public class CustomItemHandler {
                 living.timeUntilRegen = 0;
                 living.damage(world, player.getDamageSources().magic(), baseDamage);
 
-                // Fast hit particles
                 world.spawnParticles(ParticleTypes.CRIT,
                         living.getX(), living.getY() + living.getHeight() / 2, living.getZ(),
                         3, 0.2, 0.2, 0.2, 0.2);
@@ -248,9 +258,9 @@ public class CustomItemHandler {
         }
 
         if (tier >= 2) {
-            fireUpgradedBeam(world, start, direction, ticks, tier, player);
+            fireUpgradedBeam(world, start, endPoint, ticks, tier, player);
         } else {
-            fireOriginalBeam(world, start, direction, ticks);
+            fireOriginalBeam(world, start, direction, ticks, player);  // Added player parameter
         }
 
         if (ticks % 10 == 0) {
@@ -260,11 +270,42 @@ public class CustomItemHandler {
         }
     }
 
-    private static void fireOriginalBeam(ServerWorld world, Vec3d start, Vec3d direction, int ticks) {
+    private static Vec3d findBeamEndpoint(ServerWorld world, ServerPlayerEntity player, Vec3d start, Vec3d direction, double maxRange) {
+        Vec3d end = start.add(direction.multiply(maxRange));
+
+        net.minecraft.util.hit.BlockHitResult blockHit = world.raycast(new net.minecraft.world.RaycastContext(
+                start, end,
+                net.minecraft.world.RaycastContext.ShapeType.COLLIDER,
+                net.minecraft.world.RaycastContext.FluidHandling.NONE,
+                player
+        ));
+
+        if (blockHit.getType() == net.minecraft.util.hit.HitResult.Type.BLOCK) {
+            return blockHit.getPos();
+        }
+        return end;
+    }
+
+    private static void fireOriginalBeam(ServerWorld world, Vec3d start, Vec3d direction, int ticks, ServerPlayerEntity player) {
+        // Calculate actual endpoint via raycast
+        Vec3d maxEnd = start.add(direction.multiply(30));
+        net.minecraft.util.hit.BlockHitResult blockHit = world.raycast(new net.minecraft.world.RaycastContext(
+                start, maxEnd,
+                net.minecraft.world.RaycastContext.ShapeType.COLLIDER,
+                net.minecraft.world.RaycastContext.FluidHandling.NONE,
+                player
+        ));
+
+        Vec3d endPoint = maxEnd;
+        if (blockHit.getType() == net.minecraft.util.hit.HitResult.Type.BLOCK) {
+            endPoint = blockHit.getPos();
+        }
+        double beamLength = start.distanceTo(endPoint);
+
         double spiralRadius = 0.25;
         double spiralSpeed = 0.6;
 
-        for (double i = 0; i < 30; i += 1.5) {
+        for (double i = 0; i < beamLength; i += 1.5) {
             Vec3d basePos = start.add(direction.multiply(i));
             Vec3d up = new Vec3d(0, 1, 0);
             if (Math.abs(direction.dotProduct(up)) > 0.99) up = new Vec3d(1, 0, 0);
@@ -283,12 +324,15 @@ public class CustomItemHandler {
     }
 
     // Upgraded beam (Tiers 2-7) - unique particles per tier, fast dissipating
-    private static void fireUpgradedBeam(ServerWorld world, Vec3d start, Vec3d direction, int ticks, int tier, ServerPlayerEntity player) {
+    private static void fireUpgradedBeam(ServerWorld world, Vec3d start, Vec3d endPoint, int ticks, int tier, ServerPlayerEntity player) {
+        Vec3d direction = endPoint.subtract(start).normalize();
+        double beamLength = start.distanceTo(endPoint);
+
         double spiralSpeed = 0.6 + (tier * 0.08);
         double spiralRadius = 0.2 + (tier * 0.03);
         int helixCount = Math.min(tier, 3);
 
-        for (double i = 0; i < 30; i += 1.2) {
+        for (double i = 0; i < beamLength; i += 1.2) {
             Vec3d basePos = start.add(direction.multiply(i));
             Vec3d up = new Vec3d(0, 1, 0);
             if (Math.abs(direction.dotProduct(up)) > 0.99) up = new Vec3d(1, 0, 0);
@@ -308,16 +352,19 @@ public class CustomItemHandler {
                     world.spawnParticles(ParticleTypes.GLOW, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.1);
                 }
                 case 5 -> {
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
+                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.025);
                     world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.2);
                 }
                 case 6 -> {
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.15);
-                    world.spawnParticles(ParticleTypes.SCULK_SOUL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.1);
+                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.025);
+                    world.spawnParticles(ParticleTypes.SCULK_SOUL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.025);
                 }
                 case 7 -> {
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
-                    world.spawnParticles(ParticleTypes.GLOW,basePos.x, basePos.y, basePos.z, 1, 0.02, 0.02, 0.02, 0.2);
+                    // Reduced speed: 0.15 -> 0.05 (less movement = tighter beam)
+                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.005);
+                    // Reduced delta (0.02 -> 0.0) and speed (0.2 -> 0.05)
+                    world.spawnParticles(ParticleTypes.GLOW, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.005);
+                    world.spawnParticles(ParticleTypes.SCULK_SOUL, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.025);
                 }
             }
 
@@ -342,8 +389,6 @@ public class CustomItemHandler {
 
         // EXPLOSION AT END POINT - Mk3 (tier 5) and above
         if (tier >= 5 && ticks % 5 == 0) {
-            Vec3d endPoint = start.add(direction.multiply(30));
-
             double explosionRadius = switch (tier) {
                 case 5 -> 2.0;
                 case 6 -> 2.5;
