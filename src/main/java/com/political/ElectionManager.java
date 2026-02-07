@@ -142,17 +142,9 @@ public class ElectionManager {
         DataManager.save(server);
     }
     public static void startEmergencyElection() {
-        // Clear any existing election state
-        votes.clear();
-        votedPlayers.clear();
-        candidates.clear();
-
-        // Start the election
-        electionActive = true;
-        electionEndTime = System.currentTimeMillis() + ELECTION_DURATION_MS;  // Use your existing duration constant
-
-        DataManager.save(PoliticalServer.server);
+        startEmergencyElection(PoliticalServer.server);
     }
+
     public static void endElection(MinecraftServer server) {
         electionActive = false;
 
@@ -230,7 +222,6 @@ public class ElectionManager {
         DataManager.setViceChair(null);
         PerkManager.clearAllPerks();
         PerkManager.onNewTermStart(); // ADDED: Allow perk selection after emergency election
-        startElection(server);
         broadcast(server, Text.literal("⚠ EMERGENCY ELECTION CALLED ⚠").formatted(Formatting.RED, Formatting.BOLD));
     }
 

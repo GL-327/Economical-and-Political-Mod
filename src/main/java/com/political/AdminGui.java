@@ -449,7 +449,7 @@ public class AdminGui {
                 .build());
 
         // HPEBM
-        gui.setSlot(16, new GuiElementBuilder(Items.END_ROD)
+        gui.setSlot(16, new GuiElementBuilder(Items.IRON_SHOVEL)
                 .setName(Text.literal("HPEBM").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("High Powered Energy Beam Module").formatted(Formatting.GRAY))

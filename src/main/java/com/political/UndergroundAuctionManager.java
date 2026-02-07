@@ -723,7 +723,7 @@ public class UndergroundAuctionManager {
     }
 
     private static AuctionItem createHPEBM() {
-        ItemStack stack = new ItemStack(Items.END_ROD);
+        ItemStack stack = new ItemStack(Items.IRON_SHOVEL);
 
         String name = "H.P.E.B.M.";
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.GREEN, Formatting.BOLD));

@@ -13,7 +13,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.world.ServerWorld;import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 public class PerkManager {
 
@@ -23,7 +24,7 @@ public class PerkManager {
     private static List<String> lastChairPerks = new ArrayList<>();
     private static List<String> chairSelectedPerks = new ArrayList<>();
     private static String viceChairPerk = null;
-
+    private static final Identifier VOID_TOUCHED_MODIFIER_ID = Identifier.of("political", "void_touched");
     // CHANGED: Split into two separate flags
     private static boolean chairPerksSetThisTerm = false;
     private static boolean viceChairPerksSetThisTerm = false;
@@ -38,6 +39,10 @@ public class PerkManager {
     private static final Identifier SCALE_MODIFIER_ID = Identifier.of("political", "bigger_isnt_always_better");
     private static final Identifier SPEED_MODIFIER_ID = Identifier.of("political", "public_works");
     private static final Identifier ATTACK_MODIFIER_ID = Identifier.of("political", "national_unity_attack");
+    private static final Identifier ARMOR_TOUGH_MODIFIER_ID = Identifier.of("political", "fortified_shields");
+    private static final Identifier ABSORPTION_MODIFIER_ID = Identifier.of("political", "battle_hardened");
+    private static final Identifier SCALE_UP_MODIFIER_ID = Identifier.of("political", "tall_order");
+    private static final Identifier GRAVITY_MODIFIER_ID = Identifier.of("political", "heavy_gravity");
 
     private static int tickCounter = 0;
     private static final Random random = new Random();
@@ -58,6 +63,34 @@ public class PerkManager {
         registerPerk("RESOURCE_SUBSIDY", "Resource Subsidy", "Furnaces smelt 50% faster", 1, Perk.PerkType.POSITIVE);
         registerPerk("MONSTER_CONTROL", "Monster Control", "Hostile mob spawns reduced by 30%", 2, Perk.PerkType.POSITIVE);
         registerPerk("PROSPERITY_SURGE", "Prosperity Surge", "Rare drops chance increased", 2, Perk.PerkType.POSITIVE);
+        registerPerk("FORTIFIED_SHIELDS", "Fortified Shields",
+                "All players gain +4 armor toughness", 2, Perk.PerkType.POSITIVE);
+
+        registerPerk("SWIFT_HARVEST", "Swift Harvest",
+                "Mining speed increased by 20%", 1, Perk.PerkType.POSITIVE);
+
+        registerPerk("IRON_STOMACH", "Iron Stomach",
+                "Food restores 50% more hunger", 1, Perk.PerkType.POSITIVE);
+
+        registerPerk("LUCKY_FISHERMAN", "Lucky Fisherman",
+                "Fishing treasure chance doubled", 1, Perk.PerkType.POSITIVE);
+
+        registerPerk("BATTLE_HARDENED", "Battle Hardened",
+                "+4 max absorption hearts permanently", 2, Perk.PerkType.POSITIVE);
+
+        registerPerk("MERCHANTS_FAVOUR", "Merchant's Favour",
+                "Villager trades cost 25% less", 2, Perk.PerkType.POSITIVE);
+        registerPerk("PHOENIX_BLESSING", "Phoenix Blessing",
+                "Respawn with full health + 5 sec fire resistance", 2, Perk.PerkType.POSITIVE);
+
+        registerPerk("TREASURE_HUNTER", "Treasure Hunter",
+                "Ores drop 25% more raw resources", 2, Perk.PerkType.POSITIVE);
+
+        registerPerk("DIPLOMATIC_IMMUNITY", "Diplomatic Immunity",
+                "Players take 50% less damage from other players", 3, Perk.PerkType.POSITIVE);
+
+        registerPerk("NIGHTVISION_DECREE", "Nightvision Decree",
+                "All players have permanent night vision", 1, Perk.PerkType.POSITIVE);
 
         registerPerk("ETERNAL_FOG", "Eternal Fog", "Permanent rain and night time", 0, Perk.PerkType.NEUTRAL);
         registerPerk("BIGGER_ISNT_ALWAYS_BETTER", "Bigger Isn't Always Better", "All players are *average size* (50% smaller)", 0, Perk.PerkType.NEUTRAL);
@@ -65,6 +98,28 @@ public class PerkManager {
         registerPerk("WILDLIFE_PROTECTION", "Wildlife Protection", "Passive mobs spawn more, hostiles less", 0, Perk.PerkType.NEUTRAL);
         registerPerk("BALANCED_BUDGET", "Balanced Budget", "No special effects (cosmetic fireworks)", 0, Perk.PerkType.NEUTRAL);
         registerPerk("CULTURAL_FESTIVAL", "Cultural Festival", "Occasional particle effects for all", 0, Perk.PerkType.NEUTRAL);
+        registerPerk("TALL_ORDER", "Tall Order",
+                "All players are 30% larger", 0, Perk.PerkType.NEUTRAL);
+
+        registerPerk("ETERNAL_DAWN", "Eternal Dawn",
+                "Time is locked to sunrise (clear weather)", 0, Perk.PerkType.NEUTRAL);
+
+        registerPerk("CHAOS_LOTTERY", "Chaos Lottery",
+                "Random player gets a diamond every 10 minutes", 0, Perk.PerkType.NEUTRAL);
+
+        registerPerk("SILENT_WORLD", "Silent World",
+                "No ambient mob sounds (peaceful atmosphere)", 0, Perk.PerkType.NEUTRAL);
+        registerPerk("MIRROR_WORLD", "Mirror World",
+                "Day/night cycle runs backwards", 0, Perk.PerkType.NEUTRAL);
+
+        registerPerk("TRADERS_GAMBIT", "Trader's Gambit",
+                "Villagers randomly offer 1 trade at 90% off, 1 at 200% markup", 0, Perk.PerkType.NEUTRAL);
+
+        registerPerk("BLOOD_MOON", "Blood Moon",
+                "Permanent night, but hostile mobs drop double XP", 0, Perk.PerkType.NEUTRAL);
+
+        registerPerk("GIANTS_PLAYGROUND", "Giant's Playground",
+                "All mobs are 50% larger (more health but slower)", 0, Perk.PerkType.NEUTRAL);
 
         registerPerk("CIVIL_UNREST", "Civil Unrest", "Random debuffs applied to players", -2, Perk.PerkType.NEGATIVE);
         registerPerk("CRIME_WAVE", "Crime Wave", "Hostile mob spawns increased by 30%", -2, Perk.PerkType.NEGATIVE);
@@ -75,6 +130,34 @@ public class PerkManager {
         registerPerk("REDUCED_PATROLS", "Reduced Patrols", "Pillager patrols spawn more frequently", -1, Perk.PerkType.NEGATIVE);
         registerPerk("MONSTER_UPRISING", "Monster Uprising", "Hostile mobs have +25% health", -2, Perk.PerkType.NEGATIVE);
         registerPerk("MINOR_CORRUPTION", "Minor Corruption", "10% XP loss from all sources", -1, Perk.PerkType.NEGATIVE);
+        registerPerk("GLASS_CANNON", "Glass Cannon",
+                "Deal +30% damage but take +20% damage", -2, Perk.PerkType.NEGATIVE);
+
+        registerPerk("HEAVY_GRAVITY", "Heavy Gravity",
+                "Jump height reduced, fall damage +25%", -1, Perk.PerkType.NEGATIVE);
+
+        registerPerk("FAMINE", "Famine",
+                "Hunger depletes 30% faster", -1, Perk.PerkType.NEGATIVE);
+
+        registerPerk("CURSED_WATERS", "Cursed Waters",
+                "Swimming speed reduced by 40%", -1, Perk.PerkType.NEGATIVE);
+
+        registerPerk("CREEPER_SURGE", "Creeper Surge",
+                "Creeper explosion radius +50%", -2, Perk.PerkType.NEGATIVE);
+
+        registerPerk("BRITTLE_TOOLS", "Brittle Tools",
+                "Tool durability drains 25% faster", -1, Perk.PerkType.NEGATIVE);
+        registerPerk("WITHERING_ECONOMY", "Withering Economy",
+                "Lose 1 credit every 30 minutes passively", -1, Perk.PerkType.NEGATIVE);
+
+        registerPerk("PARANOIA", "Paranoia",
+                "Endermen spawn 3x more frequently", -1, Perk.PerkType.NEGATIVE);
+
+        registerPerk("SCORCHED_EARTH", "Scorched Earth",
+                "Fire spreads 50% faster, fire damage +25%", -2, Perk.PerkType.NEGATIVE);
+
+        registerPerk("VOID_TOUCHED", "Void Touched",
+                "Max health reduced by 2 hearts for all players", -2, Perk.PerkType.NEGATIVE);
 
         // Auction Tax Perks
         registerPerk("AUCTION_TAX_FREE", "Free Trade Zone",
@@ -205,6 +288,7 @@ public class PerkManager {
         if (PoliticalServer.server != null) {
             for (ServerPlayerEntity player : PoliticalServer.server.getPlayerManager().getPlayerList()) {
                 applyActivePerks(player);
+
             }
         }
 
@@ -228,6 +312,7 @@ public class PerkManager {
         if (PoliticalServer.server != null) {
             for (ServerPlayerEntity player : PoliticalServer.server.getPlayerManager().getPlayerList()) {
                 applyActivePerks(player);
+
             }
         }
 
@@ -249,13 +334,27 @@ public class PerkManager {
     public static void removeAllPerkEffects(ServerPlayerEntity player) {
         EntityAttributeInstance health = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (health != null) health.removeModifier(HEALTH_MODIFIER_ID);
+        EntityAttributeInstance armorTough = player.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS);
+        if (armorTough != null) armorTough.removeModifier(ARMOR_TOUGH_MODIFIER_ID);
 
+        EntityAttributeInstance scaleUp = player.getAttributeInstance(EntityAttributes.SCALE);
+        if (scaleUp != null) scaleUp.removeModifier(SCALE_UP_MODIFIER_ID);
+
+        EntityAttributeInstance gravity = player.getAttributeInstance(EntityAttributes.GRAVITY);
+        if (gravity != null) gravity.removeModifier(GRAVITY_MODIFIER_ID);
         EntityAttributeInstance damage = player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
         if (damage != null) {
             damage.removeModifier(DAMAGE_MODIFIER_ID);
             damage.removeModifier(ATTACK_MODIFIER_ID);
         }
-
+        EntityAttributeInstance maxHealth = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        if (maxHealth != null) {
+            maxHealth.removeModifier(VOID_TOUCHED_MODIFIER_ID);
+        }
+// Also remove night vision if it was from our perk
+        if (!activePerks.contains("NIGHTVISION_DECREE")) {
+            player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+        }
         EntityAttributeInstance armor = player.getAttributeInstance(EntityAttributes.ARMOR);
         if (armor != null) armor.removeModifier(ARMOR_MODIFIER_ID);
 
@@ -272,6 +371,54 @@ public class PerkManager {
     public static void applyActivePerks(ServerPlayerEntity player) {
         removeAllPerkEffects(player);
 
+        if (activePerks.contains("FORTIFIED_SHIELDS")) {
+            EntityAttributeInstance armorTough = player.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS);
+            if (armorTough != null) {
+                armorTough.addPersistentModifier(new EntityAttributeModifier(
+                        ARMOR_TOUGH_MODIFIER_ID, 4.0, EntityAttributeModifier.Operation.ADD_VALUE));
+            }
+        }
+// Nightvision Decree
+        if (activePerks.contains("NIGHTVISION_DECREE")) {
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.NIGHT_VISION, Integer.MAX_VALUE, 0, true, false, false));
+        }
+
+// Void Touched - reduce max health by 4 (2 hearts)
+        if (activePerks.contains("VOID_TOUCHED")) {
+            EntityAttributeInstance maxHealth = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+            if (maxHealth != null) {
+                maxHealth.removeModifier(VOID_TOUCHED_MODIFIER_ID);
+                maxHealth.addPersistentModifier(new EntityAttributeModifier(
+                        VOID_TOUCHED_MODIFIER_ID, -4.0,
+                        EntityAttributeModifier.Operation.ADD_VALUE));
+            }
+        }
+        if (activePerks.contains("BATTLE_HARDENED")) {
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.ABSORPTION, 300, 1, true, false, false));
+        }
+
+        if (activePerks.contains("TALL_ORDER")) {
+            EntityAttributeInstance scale = player.getAttributeInstance(EntityAttributes.SCALE);
+            if (scale != null) {
+                scale.addPersistentModifier(new EntityAttributeModifier(
+                        SCALE_UP_MODIFIER_ID, 0.3, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            }
+        }
+
+        if (activePerks.contains("SWIFT_HARVEST")) {
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.HASTE, 300, 0, true, false, false));
+        }
+
+        if (activePerks.contains("HEAVY_GRAVITY")) {
+            EntityAttributeInstance gravity = player.getAttributeInstance(EntityAttributes.GRAVITY);
+            if (gravity != null) {
+                gravity.addPersistentModifier(new EntityAttributeModifier(
+                        GRAVITY_MODIFIER_ID, 0.25, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            }
+        }
         if (activePerks.contains("DOUBLE_HEALTH")) {
             EntityAttributeInstance health = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
             if (health != null) {
@@ -342,14 +489,99 @@ public class PerkManager {
         tickCounter++;
         if (tickCounter < 100) return;
         tickCounter = 0;
+// Nightvision Decree - refresh every 200 ticks
+        if (activePerks.contains("NIGHTVISION_DECREE") && tickCounter % 200 == 0) {
+            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
+            }
+        }
 
+// Chaos Lottery (diamond) - already handled by DIAMOND_RAIN / CHAOS_LOTTERY
+        if (activePerks.contains("CHAOS_LOTTERY") && tickCounter % 100 == 0) {
+            if (random.nextInt(120) == 0) { // ~once per 10 min
+                List<ServerPlayerEntity> players = new ArrayList<>(server.getPlayerManager().getPlayerList());
+                if (!players.isEmpty()) {
+                    ServerPlayerEntity lucky = players.get(random.nextInt(players.size()));
+                    lucky.giveItemStack(new ItemStack(Items.DIAMOND));
+                    lucky.sendMessage(Text.literal("💎 The Chaos Lottery chose you! Free diamond!")
+                            .formatted(Formatting.AQUA), false);
+                }
+            }
+        }
+
+// Blood Moon - permanent night
+        if (activePerks.contains("BLOOD_MOON") && tickCounter % 100 == 0) {
+            for (ServerWorld world : server.getWorlds()) {
+                if (world.getTimeOfDay() % 24000 < 13000) {
+                    world.setTimeOfDay(18000);
+                }
+            }
+        }
+
+// Mirror World - reverse time (move backwards)
+        if (activePerks.contains("MIRROR_WORLD") && tickCounter % 20 == 0) {
+            for (ServerWorld world : server.getWorlds()) {
+                long time = world.getTimeOfDay();
+                world.setTimeOfDay(time - 40); // Go back 2x speed
+            }
+        }
+
+// Eternal Dawn - lock to sunrise
+        if (activePerks.contains("ETERNAL_DAWN") && tickCounter % 100 == 0) {
+            for (ServerWorld world : server.getWorlds()) {
+                world.setTimeOfDay(23000); // Sunrise
+                if (world.isRaining()) {
+                    world.setWeather(6000, 0, false, false);
+                }
+            }
+        }
+
+// Withering Economy - lose 1 credit every 30 min (36000 ticks)
+        if (activePerks.contains("WITHERING_ECONOMY") && tickCounter % 36000 == 0) {
+            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                // Integrate with your CoinManager/credit system
+                // CoinManager.removeCredits(player.getUuidAsString(), 1);
+                player.sendMessage(Text.literal("💸 The Withering Economy took 1 credit...")
+                        .formatted(Formatting.RED), false);
+            }
+        }
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
 
             if (activePerks.contains("GOLDEN_AGE")) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.REGENERATION, 200, 0, true, false, false));
             }
+            if (activePerks.contains("BATTLE_HARDENED")) {
+                if (!player.hasStatusEffect(StatusEffects.ABSORPTION)) {
+                    player.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.ABSORPTION, 300, 1, true, false, false));
+                }
+            }
 
+            if (activePerks.contains("SWIFT_HARVEST")) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.HASTE, 200, 0, true, false, false));
+            }
+
+            if (activePerks.contains("ETERNAL_DAWN")) {
+                ServerWorld world = server.getWorld(player.getEntityWorld().getRegistryKey());
+                if (world != null) {
+                    world.setTimeOfDay(2000); // sunrise
+                }
+            }
+
+            if (activePerks.contains("CHAOS_LOTTERY")) {
+                // Once per 10 min = 12000 ticks. tickPerks runs every 100 ticks, so 1 in 120
+                if (random.nextInt(120) == 0) {
+                    List<ServerPlayerEntity> players = new ArrayList<>(server.getPlayerManager().getPlayerList());
+                    if (!players.isEmpty()) {
+                        ServerPlayerEntity lucky = players.get(random.nextInt(players.size()));
+                        lucky.giveItemStack(new ItemStack(Items.DIAMOND));
+                        lucky.sendMessage(Text.literal("✦ The Chaos Lottery smiles upon you! (+1 Diamond)").formatted(Formatting.AQUA));
+                    }
+                }
+            }
             if (activePerks.contains("CIVIL_UNREST")) {
                 if (random.nextInt(100) == 0) {
                     int choice = random.nextInt(5);
@@ -407,7 +639,36 @@ public class PerkManager {
     // ============================================================
     // HELPER METHODS FOR MIXINS
     // ============================================================
+// For Diplomatic Immunity - use in LivingEntityMixin for PvP damage reduction
+    public static float getPvpDamageMultiplier() {
+        if (activePerks.contains("DIPLOMATIC_IMMUNITY")) return 0.5f;
+        return 1.0f;
+    }
 
+    // For Treasure Hunter - use in LootTableMixin for ore drops
+    public static float getOreDropMultiplier() {
+        if (activePerks.contains("TREASURE_HUNTER")) return 1.25f;
+        return 1.0f;
+    }
+
+    // For Scorched Earth - use in a fire damage mixin
+    public static float getFireDamageMultiplier() {
+        if (activePerks.contains("SCORCHED_EARTH")) return 1.25f;
+        return 1.0f;
+    }
+
+    // For Blood Moon - double XP from hostile mobs
+    public static float getMobXpMultiplier() {
+        float multiplier = getXpMultiplier();
+        if (activePerks.contains("BLOOD_MOON")) multiplier += 1.0f;
+        return multiplier;
+    }
+
+    // For Paranoia - enderman spawn rate
+    public static float getEndermanSpawnMultiplier() {
+        if (activePerks.contains("PARANOIA")) return 3.0f;
+        return 1.0f;
+    }
     public static boolean hasActivePerk(String perkId) {
         return activePerks.contains(perkId);
     }

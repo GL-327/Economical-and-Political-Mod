@@ -45,7 +45,9 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Optional;import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResult;import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;import net.fabricmc.fabric.api.event.player.UseBlockCallback;import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 
 public class PoliticalServer implements DedicatedServerModInitializer {
 
@@ -57,7 +59,34 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			if (world.isClient()) return ActionResult.PASS;
 
+			ItemStack heldItem = player.getStackInHand(hand);
+			if (CustomItemHandler.isHPEBM(heldItem)) {
+				// Completely prevent block placement interaction
+				return ActionResult.FAIL;
+			}
+
+			return ActionResult.PASS;
+		});
+
+// Ultra Overclocked left-click ability (works on entities)
+		AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+			if (world.isClient()) return ActionResult.PASS;
+			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+			ItemStack heldItem = player.getStackInHand(hand);
+
+			if (CustomItemHandler.getBeamTier(heldItem) == 7) {
+				if (CustomItemHandler.useUltraOverclockedAbility(serverPlayer, heldItem)) {
+					return ActionResult.SUCCESS;
+				}
+				return ActionResult.FAIL;
+			}
+
+			return ActionResult.PASS;
+		});
 		UseItemCallback.EVENT.register((player, world, hand) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
@@ -103,9 +132,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			AuctionHouseGui.onPlayerDisconnect(player);
 		});
 
-		// Reapply perks on respawn
+// Reapply perks on respawn
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
 			PerkManager.applyActivePerks(newPlayer);
+			// Phoenix Blessing
+			if (PerkManager.hasActivePerk("PHOENIX_BLESSING")) {
+				newPlayer.setHealth(newPlayer.getMaxHealth());
+				newPlayer.addStatusEffect(new StatusEffectInstance(
+						StatusEffects.FIRE_RESISTANCE, 100, 0, true, false, false));
+			}
 		});
 
 		// Register placeauctionmaster and removeauctionmaster commands
@@ -240,12 +275,30 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
 				CustomItemHandler.tickHPEBM(player);
 				CustomItemHandler.tickHermesShoes(player);
+				CustomItemHandler.tickUltraOverclockedLeftClick(player);
 			}
 		});
 
 		LOGGER.info("PoliticalServer initialized!");
 	}
+	public static boolean isAnyBeamWeapon(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) return false;
 
+		// Accept END_ROD (legacy), IRON_SHOVEL, and GOLDEN_SHOVEL
+		if (!stack.isOf(Items.END_ROD) &&
+				!stack.isOf(Items.IRON_SHOVEL) &&
+				!stack.isOf(Items.GOLDEN_SHOVEL)) {
+			return false;
+		}
+
+		if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+			String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
+			return name.contains("HPEBM") ||
+					name.contains("Plasma Emitter") ||
+					name.contains("Ultra Overclocked");
+		}
+		return false;
+	}
 	public static void sendJoinInfo(ServerPlayerEntity player) {
 		if (DictatorManager.isDictatorActive()) {
 			return;

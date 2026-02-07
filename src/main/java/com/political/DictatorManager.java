@@ -57,37 +57,22 @@ public class DictatorManager {
     }
 
     public static void setDictator(ServerPlayerEntity player) {
-        // ... existing perk clearing code ...
+        // Store and remove the judge FIRST
+        previousJudge = DataManager.getJudge();
+        DataManager.setJudge(null);
 
         // Set dictator data
         dictatorActive = true;
         dictatorUuid = player.getUuidAsString();
-        previousJudge = DataManager.getJudge();
-        DataManager.setJudge(null);
-        // ADD: Store and remove the judge
-        previousJudge = DataManager.getJudge();
-        DataManager.setJudge(null);
 
         // Pause elections and remove Vice Chair
         ElectionManager.setElectionSystemPaused(true);
         DataManager.setViceChair(null);
-
-        // ... rest of broadcast code ...
 
         // Reset perk locks so dictator can set fresh perks
         PerkManager.setChairPerksSetThisTerm(false);
         PerkManager.setViceChairPerksSetThisTerm(false);
-
-        // Clear previous term perks (no cooldowns for dictator)
         PerkManager.setPreviousTermPerks(new ArrayList<>());
-
-        // Set dictator data
-        dictatorActive = true;
-        dictatorUuid = player.getUuidAsString();
-
-        // Pause elections and remove Vice Chair
-        ElectionManager.setElectionSystemPaused(true);
-        DataManager.setViceChair(null);
 
         // Broadcast message
         for (ServerPlayerEntity p : PoliticalServer.server.getPlayerManager().getPlayerList()) {

@@ -117,7 +117,7 @@ public class CommandRegistry {
                 .then(CommandManager.literal("hermes_shoes")
                         .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hermes_shoes", Items.IRON_BOOTS, "Hermes Shoes")))
                 .then(CommandManager.literal("hpebm")
-                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hpebm", Items.END_ROD, "HPEBM")))
+                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hpebm", Items.IRON_SHOVEL, "HPEBM")))
         );
         // ============ CREDITS COMMANDS ============
         dispatcher.register(CommandManager.literal("credits")

@@ -141,6 +141,15 @@ public class DataManager {
         return data.viceChair;
     }
 
+    public static void resetImpeachment() {
+        DataManager.SaveData data = DataManager.getData();
+        data.impeachmentActive = false;
+        data.impeachYes = 0;
+        data.impeachNo = 0;
+        data.impeachVoted.clear();
+        DataManager.save(PoliticalServer.server);
+    }
+
     public static void setViceChair(String uuid) {
         String oldViceChair = data.viceChair;
 
