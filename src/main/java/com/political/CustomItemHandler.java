@@ -172,8 +172,12 @@ public class CustomItemHandler {
         boolean isSwinging = player.handSwinging;
         boolean wasSwingingBefore = wasSwinging.getOrDefault(uuid, false);
 
-        // Detect new swing (left-click)
-        if (isSwinging && !wasSwingingBefore) {
+        // Check if player is right-clicking - if so, don't trigger left-click ability
+        long lastClick = hpebmLastRightClick.getOrDefault(uuid, 0L);
+        boolean isRightClicking = (System.currentTimeMillis() - lastClick) < 200;
+
+        // Detect new swing (left-click) - only if NOT ng
+        if (isSwinging && !wasSwingingBefore && !isRightClicking) {
             useUltraOverclockedAbility(player, mainHand);
         }
 
@@ -186,9 +190,6 @@ public class CustomItemHandler {
         }
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // HPEBM TICK SYSTEM
-    // ═══════════════════════════════════════════════════════════════
 
     public static void tickHPEBM(ServerPlayerEntity player) {
         ItemStack mainHand = player.getStackInHand(Hand.MAIN_HAND);
@@ -205,12 +206,11 @@ public class CustomItemHandler {
             return;
         }
 
-        // Get tier for XP scaling
+
         ItemStack beamItem = isAnyBeamWeapon(mainHand) ? mainHand : offHand;
         int tier = getBeamTier(beamItem);
 
-        // XP cost: Mk1=1, Mk2=2, Mk3=3, Mk4=4, Mk5=5 (tiers 3-7)
-        // Base HPEBM and Ultra Beam cost 1
+
         int xpCostPerSecond = Math.max(1, tier - 2);
 
         if (player.experienceLevel < xpCostPerSecond) {
@@ -352,7 +352,9 @@ public class CustomItemHandler {
             world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral2.x, spiral2.y, spiral2.z, 1, 0, 0, 0, 0.25);
         }
     }
-
+    public static void markRightClick(ServerPlayerEntity player) {
+        hpebmLastRightClick.put(player.getUuid(), System.currentTimeMillis());
+    }
     // Upgraded beam (Tiers 2-7) - unique particles per tier, fast dissipating
     private static void fireUpgradedBeam(ServerWorld world, Vec3d start, Vec3d endPoint, int ticks, int tier, ServerPlayerEntity player) {
         Vec3d direction = endPoint.subtract(start).normalize();
@@ -379,22 +381,24 @@ public class CustomItemHandler {
                 }
                 case 4 -> {
                     world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.15);
-                    world.spawnParticles(ParticleTypes.GLOW, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.1);
+                    world.spawnParticles(ParticleTypes.END_ROD, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.01);
                 }
                 case 5 -> {
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.025);
+                    world.spawnParticles(ParticleTypes.WITCH, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.01);
                     world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.2);
                 }
                 case 6 -> {
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.025);
-                    world.spawnParticles(ParticleTypes.SCULK_SOUL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.025);
+                    world.spawnParticles(ParticleTypes.WITCH, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.01);
+                    world.spawnParticles(ParticleTypes.DAMAGE_INDICATOR, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.05);
                 }
                 case 7 -> {
                     // Reduced speed: 0.15 -> 0.05 (less movement = tighter beam)
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.005);
+                    world.spawnParticles(ParticleTypes.BUBBLE, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.015);
+                    world.spawnParticles(ParticleTypes.REVERSE_PORTAL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.5);
                     // Reduced delta (0.02 -> 0.0) and speed (0.2 -> 0.05)
-                    world.spawnParticles(ParticleTypes.GLOW, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.005);
-                    world.spawnParticles(ParticleTypes.SCULK_SOUL, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.025);
+                    world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
+                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
+                    world.spawnParticles(ParticleTypes.WHITE_ASH, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
                 }
             }
 
@@ -413,7 +417,7 @@ public class CustomItemHandler {
                 Vec3d outer = basePos
                         .add(perp1.multiply(Math.cos(outerAngle) * outerRadius))
                         .add(perp2.multiply(Math.sin(outerAngle) * outerRadius));
-                world.spawnParticles(ParticleTypes.CRIT, outer.x, outer.y, outer.z, 1, 0, 0, 0, 0.15);
+                world.spawnParticles(ParticleTypes.CRIT, outer.x, outer.y, outer.z, 1, 0, 0, 0, 0.015);
             }
         }
 
@@ -484,7 +488,7 @@ public class CustomItemHandler {
         return stack.isOf(Items.IRON_BOOTS) && hasCustomTag(stack, "hermes_shoes");
     }
 
-    // Add this method to CustomItemHandler
+
     public static boolean isHPEBM(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         if (!stack.isOf(Items.IRON_SHOVEL)) return false;
@@ -506,20 +510,76 @@ public class CustomItemHandler {
         return stack.isOf(Items.ECHO_SHARD) && hasCustomTag(stack, "warden_core");
     }
 
-// ═══════════════════════════════════════════════════════════════
-// ITEM CREATION
-// ═══════════════════════════════════════════════════════════════
 
     public static ItemStack createHarveysStick() {
-        return createCustomItem(Items.STICK, "harveys_stick", "Harvey's Stick", Formatting.GOLD);
+        ItemStack stack = new ItemStack(Items.STICK);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("harveys_stick", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Harvey's Stick").formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ LEGENDARY WEAPON ◆").formatted(Formatting.GOLD, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Attack: Lightning Strike").formatted(Formatting.YELLOW),
+                Text.literal("  └ Summons lightning on hit").formatted(Formatting.GRAY),
+                Text.literal(""),
+                Text.literal("Damage: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("Lightning Strike").formatted(Formatting.RED, Formatting.BOLD)),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.GOLD)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return stack;
     }
 
     public static ItemStack createTheGavel() {
-        return createCustomItem(Items.MACE, "the_gavel", "The Gavel", Formatting.LIGHT_PURPLE);
+        ItemStack stack = new ItemStack(Items.MACE);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("the_gavel", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("The Gavel").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ JUDICIAL AUTHORITY ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Right-click: Gavel Strike").formatted(Formatting.RED),
+                Text.literal("  └ AOE explosion (4.5 block radius)").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Wind Charge").formatted(Formatting.GRAY),
+                Text.literal("  └ 3s cooldown").formatted(Formatting.GRAY),
+                Text.literal(""),
+                Text.literal("Damage: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return stack;
     }
 
     public static ItemStack createHermesShoes() {
-        return createCustomItem(Items.IRON_BOOTS, "hermes_shoes", "Hermes Shoes", Formatting.AQUA);
+        ItemStack stack = new ItemStack(Items.IRON_BOOTS);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("hermes_shoes", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Hermes Shoes").formatted(Formatting.AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ DIVINE FOOTWEAR ◆").formatted(Formatting.AQUA, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Passive: Swift as the Wind").formatted(Formatting.GREEN),
+                Text.literal("  └ Permanent Speed III while worn").formatted(Formatting.GRAY),
+                Text.literal(""),
+                Text.literal("Speed Bonus: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("+60%").formatted(Formatting.GREEN, Formatting.BOLD)),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.AQUA)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return stack;
     }
 
     public static ItemStack createHPEBM() {
@@ -527,9 +587,55 @@ public class CustomItemHandler {
         NbtCompound nbt = new NbtCompound();
         nbt.putByte("hpebm", (byte) 1);
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("H.P.E.B.M.").formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("H.P.E.B.M.").formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ PLASMA WEAPON ◆").formatted(Formatting.GREEN, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("High Powered Energy Based Plasma Emitter").formatted(Formatting.DARK_GREEN),
+                Text.literal(""),
+                Text.literal("Right-click: Continuous beam attack").formatted(Formatting.RED),
+                Text.literal("  └ Costs 1 XP level per second").formatted(Formatting.GRAY),
+                Text.literal(""),
+                Text.literal("Damage: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("1.0").formatted(Formatting.RED, Formatting.BOLD))
+                        .append(Text.literal(" per tick").formatted(Formatting.GRAY)),
+                Text.literal(""),
+                Text.literal("「Tier I」").formatted(Formatting.GREEN)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        stack.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
+        stack.set(DataComponentTypes.DAMAGE, 0);
         return stack;
     }
+
+    public static ItemStack createWardenCore() {
+        ItemStack stack = new ItemStack(Items.ECHO_SHARD);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("warden_core", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Warden's Core").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ ANCIENT ARTIFACT ◆").formatted(Formatting.DARK_AQUA, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("The pulsating core of the Deep Dark's guardian").formatted(Formatting.AQUA),
+                Text.literal("Pried from the bone cold chest of the Warden.").formatted(Formatting.AQUA),
+                Text.literal(""),
+                Text.literal("Drop Rate: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("0.1%").formatted(Formatting.RED, Formatting.BOLD))
+                        .append(Text.literal(" from Wardens").formatted(Formatting.GRAY)),
+                Text.literal(""),
+                Text.literal("Used to craft Ultra weapons").formatted(Formatting.LIGHT_PURPLE),
+                Text.literal(""),
+                Text.literal("「Crafting Material」").formatted(Formatting.DARK_AQUA)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return stack;
+    }
+
     public static ItemStack createUltraOverclockedBeam() {
         ItemStack beam = new ItemStack(Items.GOLDEN_SHOVEL);
         beam.set(DataComponentTypes.CUSTOM_NAME,
@@ -556,22 +662,6 @@ public class CustomItemHandler {
         beam.set(DataComponentTypes.DAMAGE, 0);
         return beam;
     }
-    public static ItemStack createWardenCore() {
-        ItemStack stack = new ItemStack(Items.ECHO_SHARD);
-        NbtCompound nbt = new NbtCompound();
-        nbt.putByte("warden_core", (byte) 1);
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
-        stack.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Warden's Core").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("A pulsing core of sonic energy").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("0.1% drop from Wardens").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Used to craft Ultra Beam weapons").formatted(Formatting.LIGHT_PURPLE));
-        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        return stack;
-    }
 
     public static ItemStack createUltraBeam() {
         ItemStack stack = new ItemStack(Items.IRON_SHOVEL);
@@ -580,15 +670,24 @@ public class CustomItemHandler {
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
         stack.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("Ultra Beam Emitter").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Ultra High Powered Energy Beam").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("Hold right click to fire a continuous beam").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Costs 1 XP level per second").formatted(Formatting.RED));
-        lore.add(Text.literal("Tier: ULTRA").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("Damage: +50%").formatted(Formatting.GREEN));
-        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ ENHANCED WEAPON ◆").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Ultra High Powered Energy Beam").formatted(Formatting.LIGHT_PURPLE),
+                Text.literal(""),
+                Text.literal("Right-click: Continuous beam attack").formatted(Formatting.RED),
+                Text.literal("  └ Costs 1 XP level per second").formatted(Formatting.GRAY),
+                Text.literal(""),
+                Text.literal("Damage: ").formatted(Formatting.GRAY)
+                        .append(Text.literal("3.0").formatted(Formatting.RED, Formatting.BOLD))
+                        .append(Text.literal(" per tick (+200%)").formatted(Formatting.GREEN)),
+                Text.literal(""),
+                Text.literal("「Tier II」").formatted(Formatting.DARK_PURPLE)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        stack.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
+        stack.set(DataComponentTypes.DAMAGE, 0);
         return stack;
     }
 
@@ -609,21 +708,83 @@ public class CustomItemHandler {
             default -> Formatting.LIGHT_PURPLE;
         };
 
+        String titleSuffix = switch (mk) {
+            case 1 -> "OVERCLOCKED";
+            case 2 -> "SUPERCHARGED";
+            case 3 -> "HYPERPOWERED";
+            case 4 -> "DEVASTATOR";
+            case 5 -> "MAXIMUM POWER";
+            default -> "OVERCLOCKED";
+        };
+
+        String tierRoman = switch (mk) {
+            case 1 -> "III";
+            case 2 -> "IV";
+            case 3 -> "V";
+            case 4 -> "VI";
+            case 5 -> "VII";
+            default -> "III";
+        };
+
+        float baseDamage = switch (mk) {
+            case 1 -> 3.6f;
+            case 2 -> 4.2f;
+            case 3 -> 4.8f;
+            case 4 -> 5.4f;
+            case 5 -> 6.0f;
+            default -> 3.6f;
+        };
+
         int damageBonus = 50 + (mk * 20);
+        int xpCost = mk + 1;
         String suffix = mk == 5 ? " ✦ MAX ✦" : "";
+
         stack.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("Ultra Beam Emitter Mk" + mk + suffix).formatted(color, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Overclocked Energy Beam").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("Hold right click to fire a continuous beam").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Costs 1 XP level per second").formatted(Formatting.RED));
-        lore.add(Text.literal("Tier: OVERCLOCKED Mk" + mk).formatted(color));
-        lore.add(Text.literal("Damage: +" + damageBonus + "%").formatted(Formatting.GREEN));
-        if (mk == 5) {
-            lore.add(Text.literal("MAXIMUM POWER!").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ " + titleSuffix + " ◆").formatted(color, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Overclocked Energy Beam Module").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Right-click: Continuous beam attack").formatted(Formatting.RED));
+        lore.add(Text.literal("  └ Costs " + xpCost + " XP level(s) per second").formatted(Formatting.GRAY));
+
+        if (mk >= 3) {
+            float explosionDmg = switch (mk) {
+                case 3 -> 4.0f;
+                case 4 -> 6.0f;
+                case 5 -> 10.0f;
+                default -> 4.0f;
+            };
+            lore.add(Text.literal("  └ Explosive impact").formatted(Formatting.GOLD));
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("Damage: ").formatted(Formatting.GRAY)
+                    .append(Text.literal(String.format("%.1f", baseDamage)).formatted(Formatting.RED, Formatting.BOLD))
+                    .append(Text.literal(" per tick (+" + damageBonus + "%)").formatted(Formatting.GREEN)));
+            lore.add(Text.literal("Explosion: ").formatted(Formatting.GRAY)
+                    .append(Text.literal(String.format("%.1f", explosionDmg)).formatted(Formatting.GOLD, Formatting.BOLD)));
+        } else {
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("Damage: ").formatted(Formatting.GRAY)
+                    .append(Text.literal(String.format("%.1f", baseDamage)).formatted(Formatting.RED, Formatting.BOLD))
+                    .append(Text.literal(" per tick (+" + damageBonus + "%)").formatted(Formatting.GREEN)));
         }
+
+        lore.add(Text.literal(""));
+
+        if (mk == 5) {
+            lore.add(Text.literal("★ MAXIMUM POWER ACHIEVED ★").formatted(Formatting.GOLD, Formatting.BOLD));
+            lore.add(Text.literal(""));
+        }
+
+        lore.add(Text.literal("「Tier " + tierRoman + "」").formatted(color));
+
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        stack.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
+        stack.set(DataComponentTypes.DAMAGE, 0);
 
         return stack;
     }
@@ -701,7 +862,7 @@ public class CustomItemHandler {
             if (i % 2 == 0) {
                 world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 2, 0.05, 0.05, 0.05, 0.01);
                 world.spawnParticles(ParticleTypes.GLOW, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
-                world.spawnParticles(ParticleTypes.WAX_ON, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
+                world.spawnParticles(ParticleTypes.WAX_OFF, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
             }
         }
 

@@ -394,7 +394,6 @@ public class AdminGui {
         gui.open();
     }
 
-    // New dedicated Custom Items page
     private static void openCustomItemsPage(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal("Custom Items"));
@@ -410,7 +409,8 @@ public class AdminGui {
         gui.setSlot(10, new GuiElementBuilder(Items.STICK)
                 .setName(Text.literal("Harvey's Stick").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Strikes lightning on hit").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("◆ LEGENDARY WEAPON ◆").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("Summons lightning on hit").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
@@ -421,10 +421,12 @@ public class AdminGui {
                 .build());
 
         // The Gavel
-        gui.setSlot(12, new GuiElementBuilder(Items.MACE)
+        gui.setSlot(11, new GuiElementBuilder(Items.MACE)
                 .setName(Text.literal("The Gavel").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Uses wind charge to launch upward").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("◆ JUDICIAL AUTHORITY ◆").formatted(Formatting.LIGHT_PURPLE))
+                .addLoreLine(Text.literal("AOE explosion attack").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Consumes Wind Charge").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
@@ -435,10 +437,11 @@ public class AdminGui {
                 .build());
 
         // Hermes Shoes
-        gui.setSlot(14, new GuiElementBuilder(Items.IRON_BOOTS)
+        gui.setSlot(12, new GuiElementBuilder(Items.IRON_BOOTS)
                 .setName(Text.literal("Hermes Shoes").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Grants permanent Speed III").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("◆ DIVINE FOOTWEAR ◆").formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal("Permanent Speed III").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
@@ -449,17 +452,48 @@ public class AdminGui {
                 .build());
 
         // HPEBM
-        gui.setSlot(16, new GuiElementBuilder(Items.IRON_SHOVEL)
-                .setName(Text.literal("HPEBM").formatted(Formatting.RED, Formatting.BOLD))
+        gui.setSlot(14, new GuiElementBuilder(Items.IRON_SHOVEL)
+                .setName(Text.literal("H.P.E.B.M.").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("High Powered Energy Beam Module").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Fires an energy beam (3s cooldown)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("◆ PLASMA WEAPON ◆").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Continuous beam attack").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Costs XP to fire").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
                 .setCallback((index, type, action) -> {
                     player.giveItemStack(CustomItemHandler.createHPEBM());
-                    player.sendMessage(Text.literal("✓ Given HPEBM!").formatted(Formatting.GREEN));
+                    player.sendMessage(Text.literal("✓ Given H.P.E.B.M.!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Warden's Core
+        gui.setSlot(16, new GuiElementBuilder(Items.ECHO_SHARD)
+                .setName(Text.literal("Warden's Core").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("◆ ANCIENT ARTIFACT ◆").formatted(Formatting.DARK_AQUA))
+                .addLoreLine(Text.literal("Ultra weapon crafting material").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    player.giveItemStack(CustomItemHandler.createWardenCore());
+                    player.sendMessage(Text.literal("✓ Given Warden's Core!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Ultra Overclocked
+        gui.setSlot(22, new GuiElementBuilder(Items.GOLDEN_SHOVEL)
+                .setName(Text.literal("Ultra Overclocked").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("◆ ULTIMATE WEAPON ◆").formatted(Formatting.LIGHT_PURPLE))
+                .addLoreLine(Text.literal("Devastating beam + Sonic Devastation").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((index, type, action) -> {
+                    player.giveItemStack(CustomItemHandler.createUltraOverclockedBeam());
+                    player.sendMessage(Text.literal("✓ Given Ultra Overclocked!").formatted(Formatting.GREEN));
                 })
                 .build());
 

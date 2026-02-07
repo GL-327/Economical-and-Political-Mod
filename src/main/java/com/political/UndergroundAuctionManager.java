@@ -556,10 +556,19 @@ public class UndergroundAuctionManager {
                 net.minecraft.component.type.NbtComponent.of(nbt));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("A pulsing core of sonic energy").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("0.1% drop from Wardens").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Used to craft Ultra Beam weapons").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ANCIENT ARTIFACT ◆").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A pulsing core of sonic energy").formatted(Formatting.AQUA));
+        lore.add(Text.literal("harvested from the depths.").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Drop Rate: ").formatted(Formatting.GRAY)
+                .append(Text.literal("0.1%").formatted(Formatting.RED, Formatting.BOLD))
+                .append(Text.literal(" from Wardens").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Used to craft Ultra weapons").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Crafting Material」").formatted(Formatting.DARK_AQUA));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "special", 10000, stack);
@@ -567,37 +576,51 @@ public class UndergroundAuctionManager {
     private static AuctionItem createNetheriteArmor() {
         ItemStack stack;
         String name;
+        String pieceName;
 
         int piece = random.nextInt(4);
         switch (piece) {
             case 0 -> {
                 stack = new ItemStack(Items.NETHERITE_HELMET);
-                name = "Enchanted Netherite Helmet";
+                pieceName = "Helmet";
             }
             case 1 -> {
                 stack = new ItemStack(Items.NETHERITE_CHESTPLATE);
-                name = "Enchanted Netherite Chestplate";
+                pieceName = "Chestplate";
             }
             case 2 -> {
                 stack = new ItemStack(Items.NETHERITE_LEGGINGS);
-                name = "Enchanted Netherite Leggings";
+                pieceName = "Leggings";
             }
             default -> {
                 stack = new ItemStack(Items.NETHERITE_BOOTS);
-                name = "Enchanted Netherite Boots";
+                pieceName = "Boots";
             }
         }
 
         int protLevel = 5 + random.nextInt(6);
+        name = "Abyssal " + pieceName;
+
         addEnchantment(stack, Enchantments.PROTECTION, protLevel);
         addEnchantment(stack, Enchantments.UNBREAKING, 3);
         addEnchantment(stack, Enchantments.MENDING, 1);
 
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.LIGHT_PURPLE));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Protection " + toRoman(protLevel)).formatted(Formatting.GRAY));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ LEGENDARY ARMOR ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Forged in the depths of the nether.").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Protection: ").formatted(Formatting.GRAY)
+                .append(Text.literal(toRoman(protLevel)).formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal("Unbreaking: ").formatted(Formatting.GRAY)
+                .append(Text.literal("III").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("Mending: ").formatted(Formatting.GRAY)
+                .append(Text.literal("I").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name + " (Prot " + protLevel + ")", "armor", 500 + (protLevel * 50), stack);
@@ -617,9 +640,19 @@ public class UndergroundAuctionManager {
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.RED, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Sharpness " + toRoman(sharpLevel)).formatted(Formatting.GRAY));
-        lore.add(Text.literal("Forged in darkness").formatted(Formatting.DARK_RED));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ LEGENDARY WEAPON ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Forged in eternal darkness.").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Sharpness: ").formatted(Formatting.GRAY)
+                .append(Text.literal(toRoman(sharpLevel)).formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal("Fire Aspect: ").formatted(Formatting.GRAY)
+                .append(Text.literal("II").formatted(Formatting.GOLD)));
+        lore.add(Text.literal("Looting: ").formatted(Formatting.GRAY)
+                .append(Text.literal("III").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name + " (Sharp " + sharpLevel + ")", "weapon", 600 + (sharpLevel * 75), stack);
@@ -659,7 +692,7 @@ public class UndergroundAuctionManager {
         ItemStack stack = new ItemStack(Items.STICK);
 
         String name = "Harvey's Stick";
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.YELLOW, Formatting.BOLD));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.GOLD, Formatting.BOLD));
 
         stack.set(DataComponentTypes.CUSTOM_DATA,
                 net.minecraft.component.type.NbtComponent.of(createCustomNbt("harveys_stick", true)));
@@ -667,9 +700,17 @@ public class UndergroundAuctionManager {
         addEnchantment(stack, Enchantments.KNOCKBACK, 2);
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Strike your enemies with lightning!").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("Does not affect the wielder").formatted(Formatting.GRAY));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ LEGENDARY WEAPON ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Attack: Lightning Strike").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("  └ Summons lightning on hit").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  └ Does not harm wielder").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Damage: ").formatted(Formatting.GRAY)
+                .append(Text.literal("Lightning Strike").formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "special", 1750, stack);
@@ -678,8 +719,8 @@ public class UndergroundAuctionManager {
     private static AuctionItem createTheGavel() {
         ItemStack stack = new ItemStack(Items.MACE);
 
-        String name = "THE GAVEL";
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.DARK_RED, Formatting.BOLD));
+        String name = "The Gavel";
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
 
         addEnchantment(stack, Enchantments.DENSITY, 10);
         addEnchantment(stack, Enchantments.BREACH, 8);
@@ -690,9 +731,18 @@ public class UndergroundAuctionManager {
                 net.minecraft.component.type.NbtComponent.of(createCustomNbt("the_gavel", true)));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("ORDER IN THE COURT!").formatted(Formatting.RED, Formatting.BOLD));
-        lore.add(Text.literal("Right-click with Wind Charge to launch").formatted(Formatting.GRAY));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ JUDICIAL AUTHORITY ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Right-click: Gavel Strike").formatted(Formatting.RED));
+        lore.add(Text.literal("  └ AOE explosion (4.5 block radius)").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  └ Consumes 1 Wind Charge").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  └ 3s cooldown").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Damage: ").formatted(Formatting.GRAY)
+                .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "special", 5000, stack);
@@ -714,9 +764,18 @@ public class UndergroundAuctionManager {
                 net.minecraft.component.type.NbtComponent.of(createCustomNbt("hermes_shoes", true)));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Speed of the messenger god").formatted(Formatting.AQUA));
-        lore.add(Text.literal("Grants permanent Speed III when worn").formatted(Formatting.GRAY));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ DIVINE FOOTWEAR ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Blessed by the messenger god.").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Passive: Swift as the Wind").formatted(Formatting.GREEN));
+        lore.add(Text.literal("  └ Permanent Speed III while worn").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Speed Bonus: ").formatted(Formatting.GRAY)
+                .append(Text.literal("+60%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "special", 3000, stack);
@@ -728,18 +787,27 @@ public class UndergroundAuctionManager {
         String name = "H.P.E.B.M.";
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.GREEN, Formatting.BOLD));
 
-        // Use putByte to match hasCustomTag
         NbtCompound nbt = new NbtCompound();
         nbt.putByte("hpebm", (byte) 1);
         stack.set(DataComponentTypes.CUSTOM_DATA,
                 net.minecraft.component.type.NbtComponent.of(nbt));
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("High Powered Energy Beam Manipulator").formatted(Formatting.GREEN));
-        lore.add(Text.literal("Hold right click to fire a continuous beam").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Costs 1 XP level per second").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ PLASMA WEAPON ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("High Powered Energy Based Plasma Emitter").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Right-click: Continuous beam attack").formatted(Formatting.RED));
+        lore.add(Text.literal("  └ Costs 1 XP level per second").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Damage: ").formatted(Formatting.GRAY)
+                .append(Text.literal("1.0").formatted(Formatting.RED, Formatting.BOLD))
+                .append(Text.literal(" per tick").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
         lore.add(Text.literal("Upgradeable with Warden's Core").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "special", 2500, stack);
@@ -755,9 +823,19 @@ public class UndergroundAuctionManager {
         addEnchantment(stack, Enchantments.MENDING, 1);
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Unbreaking V").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Nearly indestructible").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ LEGENDARY WINGS ◆").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Torn from the fabric of reality.").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Unbreaking: ").formatted(Formatting.GRAY)
+                .append(Text.literal("V").formatted(Formatting.AQUA, Formatting.BOLD)));
+        lore.add(Text.literal("Mending: ").formatted(Formatting.GRAY)
+                .append(Text.literal("I").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Nearly indestructible").formatted(Formatting.WHITE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "armor", 4000, stack);
@@ -776,9 +854,21 @@ public class UndergroundAuctionManager {
         addEnchantment(stack, Enchantments.UNBREAKING, 3);
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Power VII").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Blessed by the sun god").formatted(Formatting.GOLD));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ DIVINE WEAPON ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Blessed by the sun god.").formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Power: ").formatted(Formatting.GRAY)
+                .append(Text.literal("VII").formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal("Punch: ").formatted(Formatting.GRAY)
+                .append(Text.literal("III").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("Flame: ").formatted(Formatting.GRAY)
+                .append(Text.literal("I").formatted(Formatting.GOLD)));
+        lore.add(Text.literal("Infinity: ").formatted(Formatting.GRAY)
+                .append(Text.literal("I").formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name, "weapon", 1500, stack);
@@ -797,10 +887,21 @@ public class UndergroundAuctionManager {
         addEnchantment(stack, Enchantments.MENDING, 1);
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal("Fortune " + toRoman(fortuneLevel)).formatted(Formatting.GRAY));
-        lore.add(Text.literal("Efficiency VI").formatted(Formatting.GRAY));
-        lore.add(Text.literal("The ultimate mining tool").formatted(Formatting.AQUA));
-        lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ LEGENDARY TOOL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The ultimate mining tool.").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Fortune: ").formatted(Formatting.GRAY)
+                .append(Text.literal(toRoman(fortuneLevel)).formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("Efficiency: ").formatted(Formatting.GRAY)
+                .append(Text.literal("VI").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("Unbreaking: ").formatted(Formatting.GRAY)
+                .append(Text.literal("III").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("Mending: ").formatted(Formatting.GRAY)
+                .append(Text.literal("I").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return new AuctionItem(name + " (Fortune " + fortuneLevel + ")", "tool", 800 + (fortuneLevel * 100), stack);

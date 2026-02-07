@@ -63,8 +63,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			if (world.isClient()) return ActionResult.PASS;
 
 			ItemStack heldItem = player.getStackInHand(hand);
-			if (CustomItemHandler.isHPEBM(heldItem)) {
-				// Completely prevent block placement interaction
+
+			// Check for any beam weapon (including Ultra Overclocked)
+			int tier = CustomItemHandler.getBeamTier(heldItem);
+			if (tier > 0) {
+				// Update right-click timestamp to prevent left-click ability from triggering
+				if (player instanceof ServerPlayerEntity serverPlayer) {
+					CustomItemHandler.markRightClick(serverPlayer);
+				}
+				// Prevent block placement interaction
 				return ActionResult.FAIL;
 			}
 
