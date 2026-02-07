@@ -56,7 +56,7 @@ public class CustomItemHandler {
     private static final Map<UUID, Integer> hpebmUseTicks = new HashMap<>();
     private static final Map<UUID, Long> hpebmLastRightClick = new HashMap<>();
     private static final Map<UUID, Long> ultraOverclockedCooldowns = new HashMap<>();
-    private static final long ULTRA_OVERCLOCKED_COOLDOWN_MS = 15000; // 15 seconds
+    private static final long ULTRA_OVERCLOCKED_COOLDOWN_MS = 10000; // 15 seconds
     public static void register() {
 
         // Harvey's Stick - Lightning on attack
@@ -541,7 +541,7 @@ public class CustomItemHandler {
                 Text.literal(""),
                 Text.literal("Right-click: Devastating beam attack").formatted(Formatting.RED),
                 Text.literal("Left-click: Sonic Devastation").formatted(Formatting.DARK_PURPLE),
-                Text.literal("  └ 15s cooldown").formatted(Formatting.GRAY),
+                Text.literal("  └ 10s cooldown").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
                         .append(Text.literal("250").formatted(Formatting.RED, Formatting.BOLD)),
@@ -657,7 +657,7 @@ public class CustomItemHandler {
             return false;
         }
 
-        // Check for dragon's breath
+        // Check for dragon's breath (only requirement now)
         ItemStack dragonBreath = findItemInInventory(player, Items.DRAGON_BREATH);
         if (dragonBreath == null || dragonBreath.isEmpty()) {
             player.sendMessage(Text.literal("Requires Dragon's Breath!")
@@ -665,21 +665,11 @@ public class CustomItemHandler {
             return false;
         }
 
-        // Check for XP (10 XP points)
-        if (player.totalExperience < 10) {
-            player.sendMessage(Text.literal("Requires 10 XP!")
-                    .formatted(Formatting.RED), true);
-            return false;
-        }
-
         // Consume dragon's breath
         dragonBreath.decrement(1);
 
-        // Consume XP
-        player.addExperience(-10);
-
         // Set 15 second cooldown (300 ticks)
-        player.getItemCooldownManager().set(stack, 300);
+        player.getItemCooldownManager().set(stack, 200);
 
         ServerWorld world = player.getEntityWorld();
         Vec3d eyePos = player.getEyePos();
@@ -711,6 +701,7 @@ public class CustomItemHandler {
             if (i % 2 == 0) {
                 world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 2, 0.05, 0.05, 0.05, 0.01);
                 world.spawnParticles(ParticleTypes.GLOW, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
+                world.spawnParticles(ParticleTypes.WAX_ON, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
             }
         }
 
