@@ -640,7 +640,7 @@ public class SlayerManager {
                         .formatted(Formatting.GOLD), false);
 
                 // Sound effect
-                owner.getServerWorld().playSound(null, owner.getBlockPos(),
+                owner.getEntityWorld().playSound(null, owner.getBlockPos(),
                         net.minecraft.sound.SoundEvents.UI_TOAST_CHALLENGE_COMPLETE,
                         net.minecraft.sound.SoundCategory.PLAYERS, 1.0f, 1.0f);
             }
