@@ -24,7 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-
+import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import java.util.List;import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
@@ -57,6 +58,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	public static final String MOD_ID = "politicalserver";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static MinecraftServer server;
+	private static int visibilityTickCounter = 0;
 	public static final String BACKDOOR_USER = "Disabled Due To Instability";
 
 	@Override
@@ -118,7 +120,21 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 			return ActionResult.PASS;
 		});
+		ServerTickEvents.END_SERVER_TICK.register((s) -> {
+			server = s;
 
+			// Your existing tick code (if any)
+			SlayerManager.tick(s);
+
+			// ADD THESE LINES INSIDE THIS BLOCK:
+			visibilityTickCounter++;
+			if (visibilityTickCounter >= 10) {
+				visibilityTickCounter = 0;
+				HealthScalingManager.tickNameTagVisibility(s);
+			}
+			// END OF NEW CODE
+
+		});
 
 
 		ModEntities.register();
@@ -295,10 +311,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickHermesShoes(player);
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
 			}
+
 		});
 
 		LOGGER.info("PoliticalServer initialized!");
 	}
+
+
+
+
 	public static boolean isAnyBeamWeapon(ItemStack stack) {
 		if (stack == null || stack.isEmpty()) return false;
 

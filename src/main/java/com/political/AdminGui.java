@@ -1122,6 +1122,76 @@ public class AdminGui {
 
         gui.open();
     }
+    private static void openBasicSwordsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("⚔ Basic Bounty Swords"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(Items.IRON_SWORD)
+                    .setName(Text.literal(type.displayName + " Slayer Sword").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("2x damage to " + type.displayName + "s").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> SlayerItems.giveSlayerSword(player, finalType))
+                    .build());
+            slot++;
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+    private static void openUpgradedSwordsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("⚔ Upgraded Bounty Swords"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                    .setName(Text.literal(type.displayName + " Slayer Sword II").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("3x damage, counts as 3 kills").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                    .glow()
+                    .setCallback((idx, clickType, action) -> {
+                        ItemStack sword = SlayerItems.createUpgradedSlayerSword(finalType);
+                        if (!player.getInventory().insertStack(sword)) {
+                            player.dropItem(sword, false);
+                        }
+                        player.sendMessage(Text.literal("✔ Received " + finalType.displayName + " Slayer Sword II!")
+                                .formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+            slot++;
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+    public static void openSlayerAdminGui(ServerPlayerEntity player) {
+        // Just redirect to the custom items admin
+        openCustomItemsAdminGui(player);
+    }
 
     private static void openPrisonGui(ServerPlayerEntity admin) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, admin, false);
@@ -1227,201 +1297,597 @@ public class AdminGui {
 
         gui.open();
     }
-    // ============================================================
-// SLAYER ADMIN GUI
-// ============================================================
 
-    public static void openSlayerAdminGui(ServerPlayerEntity player) {
+    public static void openCustomItemsAdminGui(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("⚔ Slayer Admin ⚔"));
+        gui.setTitle(Text.literal("🎁 Custom Items Admin"));
 
-        // Fill background
+        // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
         }
 
-        // Give Slayer Sword
-        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("Give Slayer Sword").formatted(Formatting.GREEN, Formatting.BOLD))
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.COMMAND_BLOCK)
+                .setName(Text.literal("🎁 Item Administration").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Give a slayer sword to a player").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> openGiveSwordGui(player))
+                .addLoreLine(Text.literal("Give custom items to yourself").formatted(Formatting.GRAY))
                 .build());
 
-        // Give Core
-        gui.setSlot(12, new GuiElementBuilder(Items.ENDER_PEARL)
-                .setName(Text.literal("Give Slayer Core").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+        // Bounty Swords
+        gui.setSlot(19, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Bounty Swords").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Give a slayer core to a player").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> openGiveCoreGui(player))
+                .addLoreLine(Text.literal("Basic slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openBasicSwordsMenu(player))
                 .build());
 
-        // Give Chunk
-        gui.setSlot(14, new GuiElementBuilder(Items.ROTTEN_FLESH)
-                .setName(Text.literal("Give Slayer Chunk").formatted(Formatting.GOLD, Formatting.BOLD))
+        // Upgraded Swords
+        gui.setSlot(21, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("⚔ Upgraded Swords").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Give a slayer chunk to a player").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> openGiveChunkGui(player))
+                .addLoreLine(Text.literal("Enhanced slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openUpgradedSwordsMenu(player))
                 .build());
 
-        // Set Slayer Level
-        gui.setSlot(16, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
-                .setName(Text.literal("Set Slayer Level").formatted(Formatting.AQUA, Formatting.BOLD))
+        // Legendary Weapons
+        gui.setSlot(23, new GuiElementBuilder(Items.NETHERITE_SWORD)
+                .setName(Text.literal("⚔ Legendary Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Set a player's slayer level").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> openSetLevelGui(player))
+                .addLoreLine(Text.literal("Ender Sword, Abyssal Blade").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openLegendaryWeaponsMenu(player))
                 .build());
 
-        // View Player Stats
-        gui.setSlot(28, new GuiElementBuilder(Items.BOOK)
-                .setName(Text.literal("View Player Stats").formatted(Formatting.YELLOW, Formatting.BOLD))
+        // HPEBM Weapons
+        gui.setSlot(25, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("View a player's slayer progress").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> openViewStatsGui(player))
+                .addLoreLine(Text.literal("Energy beam weapons Mk1-Mk5").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMMenu(player))
                 .build());
 
-        // Reset Player Progress
-        gui.setSlot(30, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("Reset Player Progress").formatted(Formatting.RED, Formatting.BOLD))
+        // Cores & Chunks
+        gui.setSlot(29, new GuiElementBuilder(Items.ENDER_PEARL)
+                .setName(Text.literal("✦ Cores & Chunks").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚠ Reset a player's slayer data").formatted(Formatting.DARK_RED))
-                .setCallback((idx, type, action) -> openResetProgressGui(player))
+                .addLoreLine(Text.literal("Crafting materials").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openMaterialsMenu(player))
                 .build());
 
-        // Spawn Slayer Boss (for testing)
-        gui.setSlot(32, new GuiElementBuilder(Items.ZOMBIE_HEAD)
-                .setName(Text.literal("Spawn Test Boss").formatted(Formatting.DARK_RED, Formatting.BOLD))
+        // Special Items
+        gui.setSlot(31, new GuiElementBuilder(Items.WOODEN_AXE)
+                .setName(Text.literal("✦ Special Items").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Spawn a slayer boss for testing").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> openSpawnBossGui(player))
+                .addLoreLine(Text.literal("Gavel, Credits, Coins").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSpecialItemsMenu(player))
+                .build());
+
+        // Player Management
+        gui.setSlot(33, new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("👤 Player Stats").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Set levels, reset progress").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPlayerManagementMenu(player))
+                .build());
+
+        gui.setSlot(37, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal("🛡 Slayer Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give slayer armor sets").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("T1 and T2 versions").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openArmorAdminMenu(player))
                 .build());
 
         // Back button
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Admin Menu").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openMainPage(player)) // Your existing admin menu
+                .setCallback((idx, type, action) -> open(player))
                 .build());
 
         gui.open();
+
     }
 
 // ============================================================
-// GIVE SWORD GUI
+// LEGENDARY WEAPONS MENU
 // ============================================================
 
-    private static void openGiveSwordGui(ServerPlayerEntity admin) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Select Slayer Type"));
+    private static void openLegendaryWeaponsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, player, false);
+        gui.setTitle(Text.literal("⚔ Legendary Weapons"));
 
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        for (int i = 0; i < 18; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
 
-        int slot = 10;
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            final SlayerManager.SlayerType finalType = type;
-            gui.setSlot(slot, new GuiElementBuilder(type.icon)
-                    .setName(Text.literal(type.displayName + " Sword").formatted(type.color, Formatting.BOLD))
-                    .setCallback((idx, clickType, action) -> {
-                        SlayerItems.giveSlayerSword(admin, finalType);
-                        admin.sendMessage(Text.literal("✔ Gave yourself " + finalType.displayName + " Slayer Sword!")
-                                .formatted(Formatting.GREEN), false);
-                    })
-                    .build());
-            slot++;
-        }
+        // Ender Sword
+        gui.setSlot(3, new GuiElementBuilder(Items.NETHERITE_SWORD)
+                .setName(Text.literal("⚔ Ender Sword")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§d§lLEGENDARY"))
+                .addLoreLine(Text.literal("Ability: Void Strike")
+                        .formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!")
+                        .formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type, action) -> {
+                    ItemStack sword = SlayerItems.createEnderSword();
+                    if (!player.getInventory().insertStack(sword)) {
+                        player.dropItem(sword, false);
+                    }
+                    player.sendMessage(Text.literal("✔ Received Ender Sword!")
+                            .formatted(Formatting.GREEN), false);
+                })
+                .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+        // Abyssal Blade
+        gui.setSlot(5, new GuiElementBuilder(Items.NETHERITE_SWORD)
+                .setName(Text.literal("⚔ Abyssal Blade")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§5§lMYTHIC"))
+                .addLoreLine(Text.literal("Ability: Sonic Devastation")
+                        .formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!")
+                        .formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type, action) -> {
+                    ItemStack sword = SlayerItems.createAbyssalBlade();
+                    if (!player.getInventory().insertStack(sword)) {
+                        player.dropItem(sword, false);
+                    }
+                    player.sendMessage(Text.literal("✔ Received Abyssal Blade!")
+                            .formatted(Formatting.GREEN), false);
+                })
+                .build());
+
+        gui.setSlot(13, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
                 .build());
 
         gui.open();
     }
 
 // ============================================================
-// GIVE CORE GUI
+// HPEBM WEAPONS MENU
 // ============================================================
+private static void openArmorAdminMenu(ServerPlayerEntity player) {
+    SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+    gui.setTitle(Text.literal("🛡 Slayer Armor Admin"));
 
-    private static void openGiveCoreGui(ServerPlayerEntity admin) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Select Core Type"));
+    for (int i = 0; i < 36; i++) {
+        gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                .setName(Text.literal("")).build());
+    }
 
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+    // T1 Armor Sets
+    gui.setSlot(1, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+            .setName(Text.literal("T1 Armor Sets").formatted(Formatting.WHITE, Formatting.BOLD))
+            .addLoreLine(Text.literal("Basic slayer armor").formatted(Formatting.GRAY))
+            .build());
+
+    int slot = 10;
+    for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+        final SlayerManager.SlayerType finalType = type;
+        gui.setSlot(slot, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+                .setName(Text.literal(type.displayName + " Armor Set").formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("T1 - Basic Set").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to receive full set!").formatted(Formatting.GREEN))
+                .setCallback((idx, clickType, action) -> {
+                    SlayerItems.giveFullArmorSet(player, finalType, 1);
+                })
+                .build());
+        slot++;
+    }
+
+    // T2 Armor Sets
+    gui.setSlot(7, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+            .setName(Text.literal("T2 Armor Sets").formatted(Formatting.AQUA, Formatting.BOLD))
+            .addLoreLine(Text.literal("Upgraded slayer armor").formatted(Formatting.GRAY))
+            .glow()
+            .build());
+
+    slot = 19;
+    for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+        final SlayerManager.SlayerType finalType = type;
+        gui.setSlot(slot, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal(type.displayName + " Armor Set II").formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("T2 - Upgraded Set").formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal("Click to receive full set!").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, clickType, action) -> {
+                    SlayerItems.giveFullArmorSet(player, finalType, 2);
+                })
+                .build());
+        slot++;
+    }
+
+    // Back button
+    gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+            .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+            .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
+            .build());
+
+    gui.open();
+}
+
+
+    private static void openHPEBMMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, player, false);
+        gui.setTitle(Text.literal("⚡ HPEBM Weapons"));
+
+        for (int i = 0; i < 18; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
 
-        int slot = 10;
+        // Mk1
+        gui.setSlot(2, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("HPEBM Mk1")
+                        .formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Basic energy weapon").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    giveHPEBM(player, 1);
+                })
+                .build());
+
+        // Mk2
+        gui.setSlot(4, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("HPEBM Mk2")
+                        .formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Enhanced output").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    giveHPEBM(player, 2);
+                })
+                .build());
+
+        // Mk3
+        gui.setSlot(6, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("HPEBM Mk3")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Military-grade").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    giveHPEBM(player, 3);
+                })
+                .build());
+
+        // Mk4
+        gui.setSlot(10, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("HPEBM Mk4")
+                        .formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Experimental prototype").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type, action) -> {
+                    giveHPEBM(player, 4);
+                })
+                .build());
+
+        // Mk5
+        gui.setSlot(12, new GuiElementBuilder(Items.END_ROD)
+                .setName(Text.literal("HPEBM Mk5")
+                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§d§lLEGENDARY"))
+                .addLoreLine(Text.literal("Ultimate energy weapon").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type, action) -> {
+                    giveHPEBM(player, 5);
+                })
+                .build());
+
+        gui.setSlot(16, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void giveHPEBM(ServerPlayerEntity player, int mk) {
+        ItemStack weapon = CustomItemHandler.createHPEBM(mk);
+        if (!player.getInventory().insertStack(weapon)) {
+            player.dropItem(weapon, false);
+        }
+        player.sendMessage(Text.literal("✔ Received HPEBM Mk" + mk + "!")
+                .formatted(Formatting.GREEN), false);
+    }
+
+// ============================================================
+// MATERIALS MENU (Cores & Chunks)
+// ============================================================
+
+    private static void openMaterialsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("✦ Cores & Chunks"));
+
+        for (int i = 0; i < 36; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.ORANGE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Cores row
+        gui.setSlot(1, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("§d§lCORES")
+                        .formatted(Formatting.LIGHT_PURPLE))
+                .addLoreLine(Text.literal("Rare boss drops").formatted(Formatting.GRAY))
+                .build());
+
+        int coreSlot = 10;
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             final SlayerManager.SlayerType finalType = type;
-            gui.setSlot(slot, new GuiElementBuilder(type.icon)
-                    .setName(Text.literal(type.displayName + " Core").formatted(type.color, Formatting.BOLD))
+            gui.setSlot(coreSlot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(type.displayName + " Core")
+                            .formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Rare drop from " + type.bossName)
+                            .formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
                     .glow()
                     .setCallback((idx, clickType, action) -> {
-                        SlayerItems.giveCore(admin, finalType);
-                        admin.sendMessage(Text.literal("✔ Gave yourself " + finalType.displayName + " Core!")
+                        SlayerItems.giveCore(player, finalType);
+                    })
+                    .build());
+            coreSlot++;
+        }
+
+        // Chunks row
+        gui.setSlot(7, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("§6§lCHUNKS")
+                        .formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("Boss crafting materials").formatted(Formatting.GRAY))
+                .build());
+
+        int chunkSlot = 19;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            String chunkName = SlayerItems.getChunkName(type);
+            gui.setSlot(chunkSlot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(chunkName)
+                            .formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Drop from " + type.bossName)
+                            .formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> {
+                        ItemStack chunk = SlayerItems.createChunk(finalType);
+                        if (!player.getInventory().insertStack(chunk)) {
+                            player.dropItem(chunk, false);
+                        }
+                        player.sendMessage(Text.literal("✔ Received " + chunkName + "!")
                                 .formatted(Formatting.GREEN), false);
                     })
                     .build());
-            slot++;
+            chunkSlot++;
         }
 
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
                 .build());
 
         gui.open();
     }
 
 // ============================================================
-// GIVE CHUNK GUI
+// SPECIAL ITEMS MENU
 // ============================================================
 
-    private static void openGiveChunkGui(ServerPlayerEntity admin) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Select Chunk Type"));
+    private static void openSpecialItemsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, player, false);
+        gui.setTitle(Text.literal("✦ Special Items"));
 
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        for (int i = 0; i < 18; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
 
-        int slot = 10;
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            final SlayerManager.SlayerType finalType = type;
-            gui.setSlot(slot, new GuiElementBuilder(type.icon)
-                    .setName(Text.literal(type.displayName + " Chunk").formatted(type.color, Formatting.BOLD))
-                    .setCallback((idx, clickType, action) -> {
-                        ItemStack chunk = SlayerItems.createChunk(finalType);
-                        if (!admin.getInventory().insertStack(chunk)) {
-                            admin.dropItem(chunk, false);
-                        }
-                        admin.sendMessage(Text.literal("✔ Gave yourself " + finalType.displayName + " Chunk!")
-                                .formatted(Formatting.GREEN), false);
-                    })
-                    .build());
-            slot++;
-        }
+        // Gavel
+        gui.setSlot(3, new GuiElementBuilder(Items.WOODEN_AXE)
+                .setName(Text.literal("⚖ The Gavel")
+                        .formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Chair holder's tool").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    ItemStack gavel = CustomItemHandler.createGavel();
+                    if (!player.getInventory().insertStack(gavel)) {
+                        player.dropItem(gavel, false);
+                    }
+                    player.sendMessage(Text.literal("✔ Received The Gavel!")
+                            .formatted(Formatting.GREEN), false);
+                })
+                .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+        // Give Credits
+        gui.setSlot(5, new GuiElementBuilder(Items.EMERALD)
+                .setName(Text.literal("💎 Give Credits")
+                        .formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give yourself credits").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left-click: +100").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Right-click: +1000").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Shift-click: +10000").formatted(Formatting.GOLD))
+                .setCallback((idx, clickType, action) -> {
+                    int amount = 100;
+                    if (clickType.isRight) amount = 1000;
+                    if (clickType.shift) amount = 10000;
+                    CreditItem.giveCredits(player, amount);
+                    player.sendMessage(Text.literal("✔ Received " + amount + " credits!")
+                            .formatted(Formatting.GREEN), false);
+                })
+                .build());
+
+        // Give Coins
+        gui.setSlot(7, new GuiElementBuilder(Items.SUNFLOWER)
+                .setName(Text.literal("🪙 Give Coins")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give yourself coins").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left-click: +100").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Right-click: +1000").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Shift-click: +10000").formatted(Formatting.GOLD))
+                .setCallback((idx, clickType, action) -> {
+                    int amount = 100;
+                    if (clickType.isRight) amount = 1000;
+                    if (clickType.shift) amount = 10000;
+                    CoinManager.giveCoins(player, amount);
+                    player.sendMessage(Text.literal("✔ Received " + amount + " coins!")
+                            .formatted(Formatting.GREEN), false);
+                })
+                .build());
+
+        gui.setSlot(13, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
                 .build());
 
         gui.open();
+    }
+
+// ============================================================
+// PLAYER MANAGEMENT MENU
+// ============================================================
+
+    private static void openPlayerManagementMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("👤 Player Management"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.LIME_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Set Bounty Level
+        gui.setSlot(10, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
+                .setName(Text.literal("Set Bounty Level")
+                        .formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Set your bounty levels").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSetLevelGui(player))
+                .build());
+
+        // View Stats
+        gui.setSlot(13, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("View Stats")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("View your bounty stats").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openViewStatsGui(player))
+                .build());
+
+        // Reset Progress
+        gui.setSlot(16, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Reset Progress")
+                        .formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚠ Reset all bounty progress").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to confirm!").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> openResetConfirmGui(player))
+                .build());
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+
+// ============================================================
+// RESET CONFIRMATION GUI
+// ============================================================
+
+    private static void openResetConfirmGui(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X1, player, false);
+        gui.setTitle(Text.literal("⚠ Confirm Reset?"));
+
+        for (int i = 0; i < 9; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Confirm button
+        gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
+                .setName(Text.literal("✔ Confirm Reset")
+                        .formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("This will reset ALL your").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("bounty progress permanently!").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> {
+                    resetPlayerProgress(player);
+                    player.sendMessage(Text.literal("✔ Your bounty progress has been reset.")
+                            .formatted(Formatting.GREEN), false);
+                    DataManager.save(PoliticalServer.server);
+                    openCustomItemsAdminGui(player);
+                })
+                .build());
+
+        // Cancel button
+        gui.setSlot(6, new GuiElementBuilder(Items.RED_CONCRETE)
+                .setName(Text.literal("✖ Cancel")
+                        .formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((idx, type, action) -> openPlayerManagementMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void resetPlayerProgress(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            SlayerData.setSlayerXp(uuid, type, 0);
+        }
     }
 
 // ============================================================
 // SET LEVEL GUI
 // ============================================================
 
-    private static void openSetLevelGui(ServerPlayerEntity admin) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Select Slayer Type"));
+    private static void openSetLevelGui(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("Set Bounty Level"));
 
         for (int i = 0; i < 27; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
@@ -1431,24 +1897,32 @@ public class AdminGui {
         int slot = 10;
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             final SlayerManager.SlayerType finalType = type;
+            int currentLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+
             gui.setSlot(slot, new GuiElementBuilder(type.icon)
-                    .setName(Text.literal(type.displayName).formatted(type.color, Formatting.BOLD))
-                    .addLoreLine(Text.literal("Click to set level").formatted(Formatting.GRAY))
-                    .setCallback((idx, clickType, action) -> openLevelSelectGui(admin, finalType))
+                    .setName(Text.literal(type.displayName + " Slayer")
+                            .formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Current Level: " + currentLevel)
+                            .formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to set level!")
+                            .formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openLevelSelectGui(player, finalType))
                     .build());
             slot++;
         }
 
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .setCallback((idx, type, action) -> openPlayerManagementMenu(player))
                 .build());
 
         gui.open();
     }
 
-    private static void openLevelSelectGui(ServerPlayerEntity admin, SlayerManager.SlayerType slayerType) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, admin, false);
+    private static void openLevelSelectGui(ServerPlayerEntity player, SlayerManager.SlayerType slayerType) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, player, false);
         gui.setTitle(Text.literal("Set " + slayerType.displayName + " Level"));
 
         for (int i = 0; i < 18; i++) {
@@ -1464,18 +1938,18 @@ public class AdminGui {
                     .setName(Text.literal("Level " + level).formatted(Formatting.GREEN))
                     .setCallback((idx, type, action) -> {
                         long xp = finalLevel > 0 ? SlayerManager.XP_REQUIREMENTS[finalLevel - 1] : 0;
-                        SlayerData.setSlayerXp(admin.getUuidAsString(), slayerType, xp);
+                        SlayerData.setSlayerXp(player.getUuidAsString(), slayerType, xp);
                         DataManager.save(PoliticalServer.server);
-                        admin.sendMessage(Text.literal("✔ Set your " + slayerType.displayName + " Slayer to level " + finalLevel)
+                        player.sendMessage(Text.literal("✔ Set " + slayerType.displayName + " Slayer to level " + finalLevel)
                                 .formatted(Formatting.GREEN), false);
-                        openSlayerAdminGui(admin);
+                        openSetLevelGui(player);
                     })
                     .build());
         }
 
         gui.setSlot(17, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSetLevelGui(admin))
+                .setCallback((idx, type, action) -> openSetLevelGui(player))
                 .build());
 
         gui.open();
@@ -1485,113 +1959,34 @@ public class AdminGui {
 // VIEW STATS GUI
 // ============================================================
 
-    private static void openViewStatsGui(ServerPlayerEntity admin) {
-        // For now, just show the admin's own stats
-        // You can expand this to select a player
-        String uuid = admin.getUuidAsString();
+    private static void openViewStatsGui(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
 
-        admin.sendMessage(Text.literal(""), false);
-        admin.sendMessage(Text.literal("══════════════════════════════").formatted(Formatting.GOLD), false);
-        admin.sendMessage(Text.literal("  ⚔ Your Slayer Stats ⚔").formatted(Formatting.YELLOW, Formatting.BOLD), false);
-        admin.sendMessage(Text.literal("══════════════════════════════").formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(Text.literal("══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("  ☠ Your Bounty Stats ☠")
+                .formatted(Formatting.YELLOW, Formatting.BOLD), false);
+        player.sendMessage(Text.literal("══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
 
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             int level = SlayerData.getSlayerLevel(uuid, type);
             int bosses = SlayerData.getBossesKilled(uuid, type);
             int highestTier = SlayerData.getHighestTier(uuid, type);
-            admin.sendMessage(Text.literal("  " + type.displayName + ": ")
+            player.sendMessage(Text.literal("  " + type.displayName + ": ")
                     .formatted(type.color)
                     .append(Text.literal("Lvl " + level).formatted(Formatting.WHITE))
                     .append(Text.literal(" | " + bosses + " kills").formatted(Formatting.GRAY))
                     .append(Text.literal(" | T" + highestTier + " max").formatted(Formatting.DARK_GRAY)), false);
         }
 
-        admin.sendMessage(Text.literal("══════════════════════════════").formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(Text.literal("  Total Level: " + SlayerData.getTotalSlayerLevel(uuid))
+                .formatted(Formatting.AQUA), false);
+        player.sendMessage(Text.literal("  Total Bosses: " + SlayerData.getTotalBossesKilled(uuid))
+                .formatted(Formatting.RED), false);
+        player.sendMessage(Text.literal("══════════════════════════════")
+                .formatted(Formatting.GOLD), false);
     }
-
-// ============================================================
-// RESET PROGRESS GUI
-// ============================================================
-
-    private static void openResetProgressGui(ServerPlayerEntity admin) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X1, admin, false);
-        gui.setTitle(Text.literal("⚠ Confirm Reset?"));
-
-        for (int i = 0; i < 9; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
-        }
-
-        // Confirm button
-        gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
-                .setName(Text.literal("✔ Confirm Reset").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("This will reset ALL your").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("slayer progress permanently!").formatted(Formatting.RED))
-                .setCallback((idx, type, action) -> {
-                    resetPlayerSlayerData(admin.getUuidAsString());
-                    admin.sendMessage(Text.literal("✔ Your slayer progress has been reset.")
-                            .formatted(Formatting.GREEN), false);
-                    DataManager.save(PoliticalServer.server);
-                    openSlayerAdminGui(admin);
-                })
-                .build());
-
-        // Cancel button
-        gui.setSlot(6, new GuiElementBuilder(Items.RED_CONCRETE)
-                .setName(Text.literal("✖ Cancel").formatted(Formatting.RED, Formatting.BOLD))
-                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
-                .build());
-
-        gui.open();
-    }
-
-    private static void resetPlayerSlayerData(String playerUuid) {
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            SlayerData.setSlayerXp(playerUuid, type, 0);
-            // Reset bosses killed and highest tier by setting XP to 0
-            // The data structure handles the rest
-        }
-    }
-
-// ============================================================
-// SPAWN TEST BOSS GUI
-// ============================================================
-
-    private static void openSpawnBossGui(ServerPlayerEntity admin) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, admin, false);
-        gui.setTitle(Text.literal("Spawn Test Boss"));
-
-        for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
-        }
-
-        // Slayer type selection (row 1)
-        int slot = 10;
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            final SlayerManager.SlayerType finalType = type;
-            gui.setSlot(slot, new GuiElementBuilder(type.icon)
-                    .setName(Text.literal(type.displayName).formatted(type.color, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Boss: " + type.bossName).formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal("Click to select tier").formatted(Formatting.GREEN))
-                    .setCallback((idx, clickType, action) -> openTierSelectForSpawn(admin, finalType))
-                    .build());
-            slot++;
-        }
-
-        // Back button
-        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
-                .build());
-
-        gui.open();
-    }
-
-    private static void openTierSelectForSpawn(ServerPlayerEntity admin, SlayerManager.SlayerType slayerType) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X1, admin, false);
-        gui.setTitle(Text.literal("Select Tier - " + slayerType.displayName));
-    }
-    }
+}

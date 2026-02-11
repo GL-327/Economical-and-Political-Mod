@@ -116,7 +116,64 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
     }
+// Add this method to CustomItemHandler.java:
+// Add this method to CustomItemHandler.java:
 
+    public static ItemStack createHPEBM(int mk) {
+        ItemStack weapon = new ItemStack(Items.END_ROD);
+
+        Formatting color = switch (mk) {
+            case 1 -> Formatting.WHITE;
+            case 2 -> Formatting.GREEN;
+            case 3 -> Formatting.YELLOW;
+            case 4 -> Formatting.GOLD;
+            case 5 -> Formatting.LIGHT_PURPLE;
+            default -> Formatting.WHITE;
+        };
+
+        weapon.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("HPEBM Mk" + mk)
+                        .formatted(color, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("High-Powered Energy Beam").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Power Level: " + mk).formatted(Formatting.YELLOW));
+        lore.add(Text.literal("Damage: " + (5 * mk)).formatted(Formatting.RED));
+
+        if (mk >= 4) {
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(mk == 5 ? "§d§lLEGENDARY" : "§6§lRAREf"));
+        }
+
+        weapon.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        if (mk >= 4) {
+            weapon.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        }
+
+        return weapon;
+    }
+    public static ItemStack createGavel() {
+        ItemStack gavel = new ItemStack(Items.WOODEN_AXE);
+
+        gavel.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚖ The Gavel")
+                        .formatted(Formatting.GOLD, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The symbol of authority").formatted(Formatting.GRAY));
+        lore.add(Text.literal("for the Chair holder.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Right-click to use powers").formatted(Formatting.YELLOW));
+
+        gavel.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        gavel.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return gavel;
+    }
     public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
         UUID uuid = player.getUuid();
         long now = System.currentTimeMillis();

@@ -11,7 +11,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.command.argument.GameProfileArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
@@ -21,17 +20,11 @@ import net.minecraft.util.Hand;
 import java.util.*;import java.util.Set;import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.item.Item;import net.minecraft.item.Item;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Formatting;import java.util.List;
+
+import java.util.List;
 import java.util.Map;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.minecraft.command.argument.EntityArgumentType;import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import net.minecraft.command.argument.EntityArgumentType;
 
 public class CommandRegistry {
 
@@ -65,28 +58,39 @@ public class CommandRegistry {
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
 
-        // ============================================================
-        // SLAYER COMMANDS
-        // ============================================================
-
-        // /slayer - Opens the slayer GUI
-        dispatcher.register(CommandManager.literal("slayer")
+        dispatcher.register(CommandManager.literal("recipes")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    SlayerGui.openMainMenu(player);
+                    RecipesGui.openMainMenu(player);
+                    return 1;
+                })
+        );
+
+// Alias
+        dispatcher.register(CommandManager.literal("recipe")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    RecipesGui.openMainMenu(player);
+                    return 1;
+                })
+        );
+        dispatcher.register(CommandManager.literal("bounty")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    BountyGui.openMainMenu(player);  // Changed from SlayerGui
                     return 1;
                 })
         );
 
         // /slayer cancel - Cancel active quest
-        dispatcher.register(CommandManager.literal("slayer")
+        dispatcher.register(CommandManager.literal("bounty")
                 .then(CommandManager.literal("cancel")
                         .executes(context -> {
                             ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                             if (SlayerManager.hasActiveQuest(player)) {
                                 SlayerManager.cancelQuest(player);
                             } else {
-                                player.sendMessage(Text.literal("✖ No active slayer quest!")
+                                player.sendMessage(Text.literal("✖ No active bounty!")
                                         .formatted(Formatting.RED), false);
                             }
                             return 1;
@@ -102,7 +106,7 @@ public class CommandRegistry {
             viewer.sendMessage(Text.literal(""), false);
             viewer.sendMessage(Text.literal("══════════════════════════════")
                     .formatted(Formatting.GOLD), false);
-            viewer.sendMessage(Text.literal("  ⚔ " + target.getName().getString() + "'s Slayer Stats ⚔")
+            viewer.sendMessage(Text.literal("  ⚔ " + target.getName().getString() + "'s Bounty Stats ⚔")
                     .formatted(Formatting.YELLOW, Formatting.BOLD), false);
             viewer.sendMessage(Text.literal("══════════════════════════════")
                     .formatted(Formatting.GOLD), false);

@@ -21,7 +21,9 @@
     "WardenDropMixin",
     "CraftingResultMixin",
     "BlockItemMixin",
-    "SlayerDamageMixin"
+    "SlayerDamageMixin",
+    "AnvilCraftingMixin",
+    "CraftingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

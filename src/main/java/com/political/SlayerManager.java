@@ -29,12 +29,12 @@ public class SlayerManager {
     // SLAYER TYPES - Ordered by difficulty progression
     // ============================================================
     public enum SlayerType {
-        ZOMBIE("Zombie", "Rotting Abomination", Formatting.DARK_GREEN, Items.ROTTEN_FLESH, 1.0),
-        SPIDER("Spider", "Venomous Broodmother", Formatting.DARK_RED, Items.SPIDER_EYE, 1.8),
-        SKELETON("Skeleton", "Bone Warlord", Formatting.WHITE, Items.BONE, 3.0),
-        SLIME("Slime", "Gelatinous Titan", Formatting.GREEN, Items.SLIME_BALL, 5.0),
-        ENDERMAN("Enderman", "Void Phantom", Formatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
-        WARDEN("Warden", "Sculk Devourer", Formatting.DARK_AQUA, Items.SCULK, 25.0);
+        ZOMBIE("Zombie", "The Undying Outlaw", Formatting.DARK_GREEN, Items.ROTTEN_FLESH, 1.0),
+        SPIDER("Spider", "The Venomous Bandit", Formatting.DARK_RED, Items.SPIDER_EYE, 1.8),
+        SKELETON("Skeleton", "The Bone Desperado", Formatting.WHITE, Items.BONE, 3.0),
+        SLIME("Slime", "The Gelatinous Rustler", Formatting.GREEN, Items.SLIME_BALL, 5.0),
+        ENDERMAN("Enderman", "The Void Phantom", Formatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
+        WARDEN("Warden", "The Sculk Terror", Formatting.DARK_AQUA, Items.SCULK, 25.0);
 
 
         public final String displayName;
@@ -290,18 +290,18 @@ public class SlayerManager {
         player.sendMessage(Text.literal(""), false);
         player.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("  ⚔ SLAYER QUEST STARTED ⚔")
+        player.sendMessage(Text.literal("  🎯 BOUNTY ACCEPTED 🎯")
                 .formatted(type.color, Formatting.BOLD), false);
         player.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
-        player.sendMessage(Text.literal("  Type: ").formatted(Formatting.GRAY)
+        player.sendMessage(Text.literal("  Target: ").formatted(Formatting.GRAY)
                 .append(Text.literal(type.displayName).formatted(type.color)), false);
         player.sendMessage(Text.literal("  Tier: ").formatted(Formatting.GRAY)
                 .append(Text.literal(String.valueOf(tier)).formatted(Formatting.YELLOW)), false);
         player.sendMessage(Text.literal("  Kills Required: ").formatted(Formatting.GRAY)
-                .append(Text.literal(String.valueOf(config.killsRequired)).formatted(Formatting.WHITE)), false);
+                .append(Text.literal(String.valueOf(getKillsRequired(type, tier))).formatted(Formatting.WHITE)), false);
         player.sendMessage(Text.literal(""), false);
-        player.sendMessage(Text.literal("  Kill " + type.displayName + "s to summon the boss!")
+        player.sendMessage(Text.literal("  Hunt down " + type.displayName + "s to summon the target!")
                 .formatted(Formatting.GREEN), false);
         player.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
@@ -371,53 +371,61 @@ public class SlayerManager {
             }
         }
 
-        // Scaled mob bonus: extra kills based on tier
+        // Scaled mob bonus
         if (HealthScalingManager.isScaledMob(killed.getUuid())) {
             int bonus = HealthScalingManager.getKillBonus(killed);
             killValue += bonus;
         }
 
-        // Increment kill count by calculated value
         quest.killCount += killValue;
 
-        // Progress message
+        int required = getKillsRequired(quest.slayerType, quest.tier);
+        int remaining = Math.max(0, required - quest.killCount);
+
+        // ========== SCOREBOARD-STYLE PROGRESS DISPLAY ==========
+        String progressBar = createProgressBar(quest.killCount, required, 20);
+        String displayText = "§6§l☠ " + quest.slayerType.displayName + " Bounty §r§7| " +
+                progressBar + " §e" + quest.killCount + "§7/§e" + required;
+
+        // Show in action bar (above hotbar)
+        player.sendMessage(Text.literal(displayText), true);
+
+        // Bonus kill notification
         if (killValue > 1) {
-            player.sendMessage(Text.literal("+" + killValue + " kills!")
-                    .formatted(Formatting.GREEN), true);
-        }
-
-        // Rest of the method unchanged...
-        int required = quest.getKillsRequired();
-        if (quest.killCount == required / 4 ||
-                quest.killCount == required / 2 ||
-                quest.killCount == (required * 3) / 4) {
-            player.sendMessage(Text.literal("⚔ Slayer Progress: " + quest.killCount + "/" + required)
-                    .formatted(quest.slayerType.color), true);
-        }
-
-        // Check for mini-boss spawn
-        TierConfig config = quest.getConfig();
-        if (config != null && config.miniBossCount > 0) {
-            int spawnInterval = required / (config.miniBossCount + 1);
-            int expectedSpawns = quest.killCount / spawnInterval;
-            if (expectedSpawns > quest.miniBossesSpawned && quest.miniBossesSpawned < config.miniBossCount) {
-                spawnMiniBoss(player, quest);
-                quest.miniBossesSpawned++;
-            }
+            player.sendMessage(Text.literal("§a+" + killValue + " kills!"), true);
         }
 
         // Check if ready for boss
-        if (quest.killCount >= required) {
+        if (quest.killCount >= required && !quest.bossSpawned) {
             player.sendMessage(Text.literal(""), false);
-            player.sendMessage(Text.literal("☠ BOSS READY TO SPAWN!")
-                    .formatted(Formatting.RED, Formatting.BOLD), false);
-            player.sendMessage(Text.literal("The " + quest.slayerType.bossName + " is coming...")
-                    .formatted(Formatting.DARK_RED), false);
+            player.sendMessage(Text.literal("§4§l☠ TARGET INCOMING! ☠")
+                    .formatted(Formatting.BOLD), false);
+            player.sendMessage(Text.literal("§c" + quest.slayerType.bossName + " is approaching...")
+                    , false);
             player.sendMessage(Text.literal(""), false);
 
-            // Spawn boss after short delay (next tick handles it)
             spawnBoss(player, quest);
         }
+    }
+
+    // Add this helper method:
+    private static String createProgressBar(int current, int max, int barLength) {
+        double progress = Math.min(1.0, (double) current / max);
+        int filled = (int) (progress * barLength);
+
+        StringBuilder bar = new StringBuilder("§8[");
+        for (int i = 0; i < barLength; i++) {
+            if (i < filled) {
+                // Color gradient based on progress
+                if (progress < 0.33) bar.append("§c█");
+                else if (progress < 0.66) bar.append("§e█");
+                else bar.append("§a█");
+            } else {
+                bar.append("§7░");
+            }
+        }
+        bar.append("§8]");
+        return bar.toString();
     }
 
     private static boolean isMatchingMob(LivingEntity entity, SlayerType type) {

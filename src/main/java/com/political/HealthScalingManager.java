@@ -3,11 +3,17 @@ package com.political;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.*;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,29 +24,83 @@ public class HealthScalingManager {
     // ============================================================
     // CONFIGURATION
     // ============================================================
+    public static void tickNameTagVisibility(MinecraftServer server) {
+        for (ServerWorld world : server.getWorlds()) {
+            for (UUID scaledUuid : new HashSet<>(scaledEntities)) {
+                // Find the entity
+                for (var entity : world.iterateEntities()) {
+                    if (entity.getUuid().equals(scaledUuid) && entity instanceof MobEntity mob) {
+                        updateNameTagVisibility(mob, world);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-    // Chance for a mob to spawn with scaling (0.0 - 1.0)
-    private static final double SCALING_CHANCE = 0.1; // 10% of mobs
+    private static void updateNameTagVisibility(MobEntity mob, ServerWorld world) {
+        boolean anyPlayerCanSee = false;
 
-    // Scaling tiers with weights
+        for (var player : world.getPlayers()) {
+            if (canPlayerSeeMob(player, mob)) {
+                anyPlayerCanSee = true;
+                break;
+            }
+        }
+
+        mob.setCustomNameVisible(anyPlayerCanSee);
+    }
+
+    private static boolean canPlayerSeeMob(net.minecraft.server.network.ServerPlayerEntity player, MobEntity mob) {
+        // Distance check (50 blocks max)
+        if (player.squaredDistanceTo(mob) > 2500) {
+            return false;
+        }
+
+        // Raycast from player eyes to mob center
+        Vec3d playerEyes = player.getEyePos();
+        Vec3d mobCenter = new Vec3d(mob.getX(), mob.getY() + mob.getHeight() / 2, mob.getZ());
+
+        RaycastContext context = new RaycastContext(
+                playerEyes,
+                mobCenter,
+                RaycastContext.ShapeType.COLLIDER,
+                RaycastContext.FluidHandling.NONE,
+                player
+        );
+
+        BlockHitResult result = player.getEntityWorld().raycast(context);
+
+        // If raycast hit nothing, player can see it
+        if (result.getType() == HitResult.Type.MISS) {
+            return true;
+        }
+
+        // Check if hit position is at or beyond mob
+        double hitDist = result.getPos().squaredDistanceTo(playerEyes);
+        double mobDist = mobCenter.squaredDistanceTo(playerEyes);
+
+        return hitDist >= mobDist * 0.9; // 10% tolerance
+    }
+    private static final double SCALING_CHANCE = 0.10; // 10% of mobs
+
     public enum ScalingTier {
-        ENHANCED(1.5, 1.5, "§a✦ Enhanced", Formatting.GREEN, 70),      // 2x HP, 1.5x DMG
-        REINFORCED(2.0, 2.0, "§e✦✦ Reinforced", Formatting.YELLOW, 17), // 3x HP, 2x DMG
-        ELITE(2.5, 2.5, "§6✦✦✦ Elite", Formatting.GOLD, 10),           // 5x HP, 3x DMG
-        CHAMPION(5.0, 4.0, "§c✦✦✦✦ Champion", Formatting.RED, 2),      // 7x HP, 4x DMG
-        LEGENDARY(7.5, 5.0, "§d✦✦✦✦✦ LEGENDARY", Formatting.LIGHT_PURPLE, 1); // 10x HP, 5x DMG
-
+        ENHANCED(1.5, 1.5, "Enhanced", Formatting.GREEN, 70),
+        REINFORCED(2.0, 2.0, "Reinforced", Formatting.YELLOW, 17),
+        ELITE(2.5, 2.5, "Elite", Formatting.GOLD, 10),
+        CHAMPION(5.0, 4.0, "Champion", Formatting.RED, 2),
+        LEGENDARY(7.5, 5.0, "LEGENDARY", Formatting.LIGHT_PURPLE, 1);
 
         public final double healthMultiplier;
         public final double damageMultiplier;
-        public final String prefix;
+        public final String displayName;
         public final Formatting color;
-        public final int weight; // Higher = more common
+        public final int weight;
 
-        ScalingTier(double healthMult, double damageMult, String prefix, Formatting color, int weight) {
+        ScalingTier(double healthMult, double damageMult, String displayName, Formatting color, int weight) {
             this.healthMultiplier = healthMult;
             this.damageMultiplier = damageMult;
-            this.prefix = prefix;
+            this.displayName = displayName;
             this.color = color;
             this.weight = weight;
         }
@@ -60,14 +120,15 @@ public class HealthScalingManager {
                     return tier;
                 }
             }
-            return ENHANCED; // Fallback
+            return ENHANCED;
         }
     }
 
-    // Track which entities have been scaled (prevent double-scaling)
+    // Track scaled entities
     private static final Set<UUID> scaledEntities = new HashSet<>();
+    private static final Set<UUID> checkedEntities = new HashSet<>();
 
-    // Mobs that can be scaled
+    // Scalable mob types
     private static final Set<EntityType<?>> SCALABLE_MOBS = Set.of(
             // Undead
             EntityType.ZOMBIE,
@@ -155,147 +216,141 @@ public class HealthScalingManager {
     );
 
     // ============================================================
-    // SCALING LOGIC
+    // MAIN SCALING METHOD
     // ============================================================
 
-    /**
-     * Attempt to scale a newly spawned mob.
-     * Call this on mob spawn events.
-     */
     public static void tryScaleMob(LivingEntity entity) {
+        if (entity == null) return;
         if (entity.getEntityWorld().isClient()) return;
         if (!(entity instanceof MobEntity mob)) return;
-        if (!SCALABLE_MOBS.contains(entity.getType())) return;
 
-        // IMPORTANT: Check if already scaled FIRST
-        if (scaledEntities.contains(entity.getUuid())) return;
+        UUID uuid = entity.getUuid();
 
-        // Don't scale if mob is already damaged (prevents respawn scaling bug)
-        if (entity.getHealth() < entity.getMaxHealth()) return;
+        // Already processed
+        if (scaledEntities.contains(uuid) || checkedEntities.contains(uuid)) return;
 
-        // Don't scale slayer bosses
-        if (SlayerManager.isSlayerBoss(entity.getUuid())) return;
-
-        Random random = entity.getRandom();
-        if (random.nextDouble() > SCALING_CHANCE) {
-            // Mark as checked so we don't roll again
-            scaledEntities.add(entity.getUuid());
+        // Not a scalable type
+        if (!SCALABLE_MOBS.contains(entity.getType())) {
+            checkedEntities.add(uuid);
             return;
         }
 
+        // Don't scale slayer bosses
+        if (SlayerManager.isSlayerBoss(uuid)) {
+            checkedEntities.add(uuid);
+            return;
+        }
+
+        // Don't scale damaged mobs (prevents bugs)
+        if (entity.getHealth() < entity.getMaxHealth()) {
+            checkedEntities.add(uuid);
+            return;
+        }
+
+        // Roll for scaling
+        Random random = entity.getRandom();
+        if (random.nextDouble() > SCALING_CHANCE) {
+            checkedEntities.add(uuid);
+            return;
+        }
+
+        // Apply scaling
         ScalingTier tier = ScalingTier.rollTier(random);
         applyScaling(mob, tier);
     }
 
     private static void applyScaling(MobEntity mob, ScalingTier tier) {
-        // Scale max health
-        var healthAttr = mob.getAttributeInstance(EntityAttributes.MAX_HEALTH);
-        if (healthAttr != null) {
-            double baseHealth = healthAttr.getBaseValue();
-            double newHealth = baseHealth * tier.healthMultiplier;
-            healthAttr.setBaseValue(newHealth);
-            mob.setHealth((float) newHealth);
+        try {
+            // Scale health
+            var healthAttr = mob.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+            if (healthAttr != null) {
+                double baseHealth = healthAttr.getBaseValue();
+                double newHealth = baseHealth * tier.healthMultiplier;
+                healthAttr.setBaseValue(newHealth);
+                mob.setHealth((float) newHealth);
+            }
+
+            // Scale damage
+            var damageAttr = mob.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
+            if (damageAttr != null) {
+                double baseDamage = damageAttr.getBaseValue();
+                damageAttr.setBaseValue(baseDamage * tier.damageMultiplier);
+            }
+
+            // Set name with tier
+            String mobName = mob.getType().getName().getString();
+            String stars = getStars(tier);
+            mob.setCustomName(Text.literal(stars + " " + tier.displayName + " " + mobName)
+                    .formatted(tier.color));
+            mob.setCustomNameVisible(true);
+
+            // Track and persist
+            scaledEntities.add(mob.getUuid());
+            mob.setPersistent();
+
+        } catch (Exception e) {
+            // Silently fail if attributes don't exist
+            checkedEntities.add(mob.getUuid());
         }
-
-        // Scale attack damage
-        var damageAttr = mob.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
-        if (damageAttr != null) {
-            double baseDamage = damageAttr.getBaseValue();
-            damageAttr.setBaseValue(baseDamage * tier.damageMultiplier);
-        }
-
-        // Set custom name with tier prefix
-        String mobName = getMobDisplayName(mob);
-        mob.setCustomName(Text.literal(tier.prefix + " " + mobName)
-                .formatted(tier.color));
-        mob.setCustomNameVisible(true);
-
-        // Mark as scaled
-        scaledEntities.add(mob.getUuid());
-
-        // Make it persistent so it doesn't despawn
-        mob.setPersistent();
     }
 
-    private static String getMobDisplayName(MobEntity mob) {
-        String typeName = mob.getType().getName().getString();
-        return typeName;
+    private static String getStars(ScalingTier tier) {
+        return switch (tier) {
+            case ENHANCED -> "✦";
+            case REINFORCED -> "✦✦";
+            case ELITE -> "✦✦✦";
+            case CHAMPION -> "✦✦✦✦";
+            case LEGENDARY -> "✦✦✦✦✦";
+        };
     }
 
     // ============================================================
-    // REWARDS - Scaled mobs drop bonus coins
+    // REWARDS
     // ============================================================
 
-    /**
-     * Calculate bonus coin reward for killing a scaled mob.
-     */
-    public static int getBonusCoinReward(LivingEntity entity) {
-        if (!scaledEntities.contains(entity.getUuid())) return 0;
+    public static void onScaledMobKill(LivingEntity entity, ServerPlayerEntity killer) {
+        if (!scaledEntities.contains(entity.getUuid())) return;
 
-        Text customName = entity.getCustomName();
-        if (customName == null) return 0;
-
-        String name = customName.getString();
-
-        // Determine tier from name prefix
-        if (name.contains("LEGENDARY")) return 70;
-        if (name.contains("Champion")) return 17;
-        if (name.contains("Elite")) return 10;
-        if (name.contains("Reinforced")) return 2;
-        if (name.contains("Enhanced")) return 1;
-
-        return 0;
-    }
-
-    /**
-     * Award bonus coins on kill. Call from death event.
-     */
-    public static void onScaledMobKill(LivingEntity entity, net.minecraft.server.network.ServerPlayerEntity killer) {
-        int bonus = getBonusCoinReward(entity);
+        int bonus = getKillBonus(entity);
         if (bonus > 0) {
             CoinManager.giveCoinsQuiet(killer, bonus);
-            killer.sendMessage(Text.literal("+" + bonus + " coins (scaled mob bonus)")
+            killer.sendMessage(Text.literal("+" + bonus + " coins (scaled mob)")
                     .formatted(Formatting.GOLD), true);
         }
 
-        // Cleanup tracking
-        scaledEntities.remove(entity.getUuid());
+        cleanup(entity.getUuid());
+    }
+
+    public static int getKillBonus(LivingEntity entity) {
+        if (!scaledEntities.contains(entity.getUuid())) return 0;
+
+        Text name = entity.getCustomName();
+        if (name == null) return 0;
+        String nameStr = name.getString();
+
+        if (nameStr.contains("LEGENDARY")) return 8;
+        if (nameStr.contains("Champion")) return 6;
+        if (nameStr.contains("Elite")) return 4;
+        if (nameStr.contains("Reinforced")) return 2;
+        if (nameStr.contains("Enhanced")) return 1;
+        return 0;
     }
 
     // ============================================================
     // UTILITY
     // ============================================================
 
-    public static boolean isScaledMob(UUID entityUuid) {
-        return scaledEntities.contains(entityUuid);
+    public static boolean isScaledMob(UUID uuid) {
+        return scaledEntities.contains(uuid);
     }
 
-    public static void cleanup(UUID entityUuid) {
-        scaledEntities.remove(entityUuid);
+    public static void cleanup(UUID uuid) {
+        scaledEntities.remove(uuid);
+        checkedEntities.remove(uuid);
     }
 
-    /**
-     * Clear all tracked entities (call on server stop)
-     */
     public static void clearAll() {
         scaledEntities.clear();
-    }
-
-    public static int getKillBonus(LivingEntity entity) {
-        if (!scaledEntities.contains(entity.getUuid())) return 0;
-
-        Text customName = entity.getCustomName();
-        if (customName == null) return 0;
-
-        String name = customName.getString();
-
-        // Bonus kills based on tier
-        if (name.contains("LEGENDARY")) return 8;
-        if (name.contains("Champion")) return 6;
-        if (name.contains("Elite")) return 4;
-        if (name.contains("Reinforced")) return 2;
-        if (name.contains("Enhanced")) return 1;
-
-        return 0;
+        checkedEntities.clear();
     }
 }

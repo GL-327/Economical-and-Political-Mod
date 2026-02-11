@@ -20,14 +20,14 @@ public class SlayerItems {
     // ITEM IDENTIFICATION
     // ============================================================
 
-    private static final String SLAYER_SWORD_TAG = "SLAYER_SWORD";
-    private static final String SLAYER_CORE_TAG = "SLAYER_CORE";
+    private static final String SLAYER_SWORD_TAG = "BOUNTY_SWORD";
+    private static final String SLAYER_CORE_TAG = "BOUNTY_CORE";
 
     public static boolean isSlayerSword(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
-        return name.getString().contains("Slayer Sword");
+        return name.getString().contains("Bounty Sword");
     }
 
     public static boolean isSlayerCore(ItemStack stack) {
@@ -58,12 +58,12 @@ public class SlayerItems {
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Sword")
+                Text.literal(type.displayName + " Bounty Sword")
                         .formatted(type.color, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("⚔ Slayer Weapon").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("⚔ Bounty Weapon").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
                 .append(Text.literal("2x damage").formatted(Formatting.RED, Formatting.BOLD))
@@ -73,21 +73,60 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Counts as 2 kills per kill").formatted(Formatting.GREEN));
         lore.add(Text.literal("Bypasses ").formatted(Formatting.GRAY)
-                .append(Text.literal("Slayer Boss Resistance").formatted(Formatting.GOLD)));
+                .append(Text.literal("Bounty Boss Resistance").formatted(Formatting.GOLD)));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Slayer Lvl " + BASIC_SWORD_LEVEL_REQ)
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + BASIC_SWORD_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
         return sword;
     }
+// Add this method to SlayerItems.java:
 
+    public static final int UPGRADED_SWORD_LEVEL_REQ = 6;
+
+    public static ItemStack createUpgradedSlayerSword(SlayerManager.SlayerType type) {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+
+        sword.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(type.displayName + " Slayer Sword II")
+                        .formatted(type.color, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚔ Upgraded Slayer Weapon").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
+                .append(Text.literal("3x damage").formatted(Formatting.RED, Formatting.BOLD))
+                .append(Text.literal(" to:").formatted(Formatting.GRAY)));
+        lore.add(Text.literal("  • " + type.displayName + "s").formatted(type.color));
+        lore.add(Text.literal("  • " + type.bossName).formatted(type.color));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Counts as 3 kills per kill").formatted(Formatting.GREEN));
+        lore.add(Text.literal("Bypasses ").formatted(Formatting.GRAY)
+                .append(Text.literal("Slayer Boss Resistance").formatted(Formatting.GOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Slayer Lvl " + UPGRADED_SWORD_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return sword;
+    }
+
+    public static boolean isUpgradedSlayerSword(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Slayer Sword II");
+    }
     public static ItemStack createSlayerSwordForPlayer(ServerPlayerEntity player, SlayerManager.SlayerType type) {
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Sword")
+                Text.literal(type.displayName + " Bounty Hunter's Sword")
                         .formatted(type.color, Formatting.BOLD));
 
         int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
@@ -96,7 +135,7 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("⚔ Slayer Weapon").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("⚔ Bounty Weapon").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
                 .append(Text.literal("2x damage").formatted(Formatting.RED, Formatting.BOLD))
@@ -106,12 +145,12 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Counts as 2 kills per kill").formatted(Formatting.GREEN));
         lore.add(Text.literal("Bypasses ").formatted(Formatting.GRAY)
-                .append(Text.literal("Slayer Boss Resistance").formatted(Formatting.GOLD)));
+                .append(Text.literal("Bounty Resistance").formatted(Formatting.GOLD)));
 
         // Only show requirement if not met
         if (!meetsRequirement) {
             lore.add(Text.literal(""));
-            lore.add(Text.literal("⚠ Requires: " + type.displayName + " Slayer Lvl " + requiredLevel)
+            lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + requiredLevel)
                     .formatted(Formatting.RED));
         }
 
@@ -191,7 +230,7 @@ public class SlayerItems {
         lore.add(Text.literal(type.bossName + ".").formatted(type.color));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Used in crafting powerful").formatted(Formatting.GRAY));
-        lore.add(Text.literal("slayer equipment.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Bounty equipment.").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
 
         // Hint at what it crafts
@@ -218,32 +257,29 @@ public class SlayerItems {
     // ============================================================
 
     public static ItemStack createEnderSword() {
-        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⚔ Ender Sword ⚔")
+                Text.literal("⚔ Ender Sword")
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("§d§lLEGENDARY WEAPON"));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Forged from the essence of").formatted(Formatting.GRAY));
-        lore.add(Text.literal("the Voidgloom Seraph.").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("the Void Phantom itself.").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Ability: Void Strike").formatted(Formatting.GOLD));
-        lore.add(Text.literal("Teleport behind your target").formatted(Formatting.GRAY));
-        lore.add(Text.literal("and deal massive damage.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Cooldown: 5s").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Ability: Void Strike").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("  Right-click to teleport behind").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  your target and deal 2x damage").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Cooldown: 10s").formatted(Formatting.RED));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
-                .append(Text.literal("3x damage").formatted(Formatting.RED, Formatting.BOLD))
-                .append(Text.literal(" to Endermen").formatted(Formatting.GRAY)));
+        lore.add(Text.literal("Deals 4x damage to Endermen").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Recipe: 1x Ender Core + 64 Obsidian").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted with: Void Core").formatted(Formatting.DARK_GRAY));
 
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
         sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
         return sword;
@@ -253,35 +289,33 @@ public class SlayerItems {
         ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⚔ Abyssal Blade ⚔")
+                Text.literal("⚔ Abyssal Blade")
                         .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("MYTHIC").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("§5§lMYTHIC WEAPON"));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("The ultimate slayer weapon,").formatted(Formatting.GRAY));
-        lore.add(Text.literal("born from the depths.").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("Born from the depths of the").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Sculk Devourer's domain.").formatted(Formatting.DARK_AQUA));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Ability: Sonic Devastation").formatted(Formatting.GOLD));
-        lore.add(Text.literal("Release a shockwave that").formatted(Formatting.GRAY));
-        lore.add(Text.literal("stuns and damages all").formatted(Formatting.GRAY));
-        lore.add(Text.literal("nearby enemies.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Cooldown: 10s").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Ability: Sonic Devastation").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("  Right-click to release a").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  shockwave stunning all enemies").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  within 8 blocks for 3s").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Cooldown: 30s").formatted(Formatting.RED));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
-                .append(Text.literal("2x damage").formatted(Formatting.RED, Formatting.BOLD))
-                .append(Text.literal(" to ALL slayer mobs").formatted(Formatting.GRAY)));
-        lore.add(Text.literal("Bypasses ALL slayer resistance").formatted(Formatting.GOLD));
+        lore.add(Text.literal("Deals 5x damage to Wardens").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("Immune to Darkness effect").formatted(Formatting.BLUE));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Recipe: 1x Warden Core + 32 Echo Shards").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted with: Sculk Core").formatted(Formatting.DARK_GRAY));
 
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
         sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
         return sword;
     }
+
     public static ItemStack createChunk(SlayerManager.SlayerType type) {
         ItemStack chunk = new ItemStack(type.icon);
 
@@ -305,7 +339,7 @@ public class SlayerItems {
         lore.add(Text.literal("A fragment from the").formatted(Formatting.GRAY));
         lore.add(Text.literal(type.bossName + ".").formatted(type.color));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Used to craft Slayer Swords").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("Used to craft Bounty Hunter's Swords").formatted(Formatting.DARK_PURPLE));
 
         chunk.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chunk.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -345,7 +379,23 @@ public class SlayerItems {
         String chunkName = getChunkName(type);
         return name.getString().contains(chunkName);
     }
+    public static boolean isEnderSword(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Ender Sword");
+    }
 
+    public static boolean isAbyssalBlade(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Abyssal Blade");
+    }
+
+    public static boolean isLegendaryWeapon(ItemStack stack) {
+        return isEnderSword(stack) || isAbyssalBlade(stack);
+    }
     public static String getChunkName(SlayerManager.SlayerType type) {
         return switch (type) {
             case ZOMBIE -> "Undead Chunk";
@@ -362,7 +412,6 @@ public class SlayerItems {
 
     // Sword tiers and their level requirements
     public static final int BASIC_SWORD_LEVEL_REQ = 3;      // T1 sword
-    public static final int UPGRADED_SWORD_LEVEL_REQ = 6;   // T2 sword
 
     public static boolean canUseSlayerSword(ServerPlayerEntity player, ItemStack sword) {
         if (!isSlayerSword(sword)) return true;
@@ -375,7 +424,153 @@ public class SlayerItems {
 
         return playerLevel >= requiredLevel;
     }
+// ============================================================
+// SLAYER ARMOR - T1 (Crafted with Chunks)
+// ============================================================
 
+    public static final int T1_ARMOR_LEVEL_REQ = 4;
+    public static final int T2_ARMOR_LEVEL_REQ = 8;
+
+    public static ItemStack createSlayerHelmet(SlayerManager.SlayerType type, int tier) {
+        ItemStack helmet = new ItemStack(tier == 1 ? Items.IRON_HELMET : Items.DIAMOND_HELMET);
+        String tierName = tier == 1 ? "" : " II";
+
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(type.displayName + " Slayer Helmet" + tierName)
+                        .formatted(type.color, Formatting.BOLD));
+
+        List<Text> lore = buildArmorLore(type, tier, "Helmet");
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        if (tier >= 2) {
+            helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        }
+
+        return helmet;
+    }
+
+    public static ItemStack createSlayerChestplate(SlayerManager.SlayerType type, int tier) {
+        ItemStack chestplate = new ItemStack(tier == 1 ? Items.IRON_CHESTPLATE : Items.DIAMOND_CHESTPLATE);
+        String tierName = tier == 1 ? "" : " II";
+
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(type.displayName + " Slayer Chestplate" + tierName)
+                        .formatted(type.color, Formatting.BOLD));
+
+        List<Text> lore = buildArmorLore(type, tier, "Chestplate");
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        if (tier >= 2) {
+            chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        }
+
+        return chestplate;
+    }
+
+    public static ItemStack createSlayerLeggings(SlayerManager.SlayerType type, int tier) {
+        ItemStack leggings = new ItemStack(tier == 1 ? Items.IRON_LEGGINGS : Items.DIAMOND_LEGGINGS);
+        String tierName = tier == 1 ? "" : " II";
+
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(type.displayName + " Slayer Leggings" + tierName)
+                        .formatted(type.color, Formatting.BOLD));
+
+        List<Text> lore = buildArmorLore(type, tier, "Leggings");
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        if (tier >= 2) {
+            leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        }
+
+        return leggings;
+    }
+
+    public static ItemStack createSlayerBoots(SlayerManager.SlayerType type, int tier) {
+        ItemStack boots = new ItemStack(tier == 1 ? Items.IRON_BOOTS : Items.DIAMOND_BOOTS);
+        String tierName = tier == 1 ? "" : " II";
+
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(type.displayName + " Slayer Boots" + tierName)
+                        .formatted(type.color, Formatting.BOLD));
+
+        List<Text> lore = buildArmorLore(type, tier, "Boots");
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        if (tier >= 2) {
+            boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        }
+
+        return boots;
+    }
+
+    private static List<Text> buildArmorLore(SlayerManager.SlayerType type, int tier, String piece) {
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+
+        if (tier == 1) {
+            lore.add(Text.literal("⚔ Slayer Armor").formatted(Formatting.GRAY));
+        } else {
+            lore.add(Text.literal("⚔ Upgraded Slayer Armor").formatted(Formatting.DARK_PURPLE));
+        }
+
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Set Bonus (" + type.displayName + "):").formatted(Formatting.GOLD));
+
+        int damageReduction = tier == 1 ? 10 : 25;
+        int bonusHealth = tier == 1 ? 2 : 5;
+
+        lore.add(Text.literal("  -" + damageReduction + "% damage from " + type.displayName + "s").formatted(Formatting.GREEN));
+        lore.add(Text.literal("  +" + bonusHealth + " hearts vs " + type.displayName + " bosses").formatted(Formatting.GREEN));
+
+        if (tier >= 2) {
+            lore.add(Text.literal("  +15% XP from " + type.displayName + " bounties").formatted(Formatting.AQUA));
+        }
+
+        lore.add(Text.literal(""));
+
+        int reqLevel = tier == 1 ? T1_ARMOR_LEVEL_REQ : T2_ARMOR_LEVEL_REQ;
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Slayer Lvl " + reqLevel)
+                .formatted(Formatting.RED));
+
+        return lore;
+    }
+
+// ============================================================
+// ARMOR SET HELPERS
+// ============================================================
+
+    public static void giveFullArmorSet(ServerPlayerEntity player, SlayerManager.SlayerType type, int tier) {
+        ItemStack helmet = createSlayerHelmet(type, tier);
+        ItemStack chestplate = createSlayerChestplate(type, tier);
+        ItemStack leggings = createSlayerLeggings(type, tier);
+        ItemStack boots = createSlayerBoots(type, tier);
+
+        giveItem(player, helmet);
+        giveItem(player, chestplate);
+        giveItem(player, leggings);
+        giveItem(player, boots);
+
+        String tierName = tier == 1 ? "" : " II";
+        player.sendMessage(Text.literal("✔ Received full " + type.displayName + " Slayer Armor" + tierName + " set!")
+                .formatted(Formatting.GREEN), false);
+    }
+
+    private static void giveItem(ServerPlayerEntity player, ItemStack stack) {
+        if (!player.getInventory().insertStack(stack)) {
+            player.dropItem(stack, false);
+        }
+    }
+
+    public static boolean isSlayerArmor(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String nameStr = name.getString();
+        return nameStr.contains("Slayer Helmet") ||
+                nameStr.contains("Slayer Chestplate") ||
+                nameStr.contains("Slayer Leggings") ||
+                nameStr.contains("Slayer Boots");
+    }
     public static int getSwordLevelRequirement(ItemStack sword) {
         if (!isSlayerSword(sword)) return 0;
 
@@ -414,7 +609,7 @@ public class SlayerItems {
             player.dropItem(sword, false);
         }
 
-        player.sendMessage(Text.literal("✔ Crafted " + type.displayName + " Slayer Sword!")
+        player.sendMessage(Text.literal("✔ Crafted " + type.displayName + " Bounty Hunter's Sword!")
                 .formatted(Formatting.GREEN), false);
 
         return true;
@@ -425,7 +620,7 @@ public class SlayerItems {
         if (!player.getInventory().insertStack(sword)) {
             player.dropItem(sword, false);
         }
-        player.sendMessage(Text.literal("✔ Received " + type.displayName + " Slayer Sword!")
+        player.sendMessage(Text.literal("✔ Received " + type.displayName + " Bounty Hunter's Sword!")
                 .formatted(Formatting.GREEN), false);
     }
 
