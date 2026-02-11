@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.Set;import com.political.SlayerManager;
+import com.political.SlayerData;
+import com.political.SlayerItems;import net.minecraft.item.ItemStack;
 
 public class AdminGui {
 
@@ -116,7 +118,12 @@ public class AdminGui {
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openPage(player, AdminPage.WORLD))
                 .build());
-
+        gui.setSlot(22, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Slayer Admin").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Manage the slayer system").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(player))
+                .build());
         // Server status
         String chair = DataManager.getChair();
         String viceChair = DataManager.getViceChair();
@@ -1005,6 +1012,18 @@ public class AdminGui {
 
         gui.open();
     }
+    private static void spawnTestBoss(ServerPlayerEntity admin, SlayerManager.SlayerType slayerType, int tier) {
+        // Cancel any existing quest
+        if (SlayerManager.hasActiveQuest(admin)) {
+            SlayerManager.cancelQuest(admin);
+        }
+
+        // Directly spawn boss without starting a quest (admin bypass)
+        SlayerManager.spawnTestBoss(admin, slayerType, tier);
+
+        admin.sendMessage(Text.literal("✔ Spawned " + slayerType.bossName + " Tier " + tier + "!")
+                .formatted(Formatting.GREEN), false);
+    }
 
     private static void openCreditsAmountSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
@@ -1208,4 +1227,371 @@ public class AdminGui {
 
         gui.open();
     }
-}
+    // ============================================================
+// SLAYER ADMIN GUI
+// ============================================================
+
+    public static void openSlayerAdminGui(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ Slayer Admin ⚔"));
+
+        // Fill background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Give Slayer Sword
+        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("Give Slayer Sword").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give a slayer sword to a player").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openGiveSwordGui(player))
+                .build());
+
+        // Give Core
+        gui.setSlot(12, new GuiElementBuilder(Items.ENDER_PEARL)
+                .setName(Text.literal("Give Slayer Core").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give a slayer core to a player").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openGiveCoreGui(player))
+                .build());
+
+        // Give Chunk
+        gui.setSlot(14, new GuiElementBuilder(Items.ROTTEN_FLESH)
+                .setName(Text.literal("Give Slayer Chunk").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give a slayer chunk to a player").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openGiveChunkGui(player))
+                .build());
+
+        // Set Slayer Level
+        gui.setSlot(16, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
+                .setName(Text.literal("Set Slayer Level").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Set a player's slayer level").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openSetLevelGui(player))
+                .build());
+
+        // View Player Stats
+        gui.setSlot(28, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("View Player Stats").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("View a player's slayer progress").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openViewStatsGui(player))
+                .build());
+
+        // Reset Player Progress
+        gui.setSlot(30, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Reset Player Progress").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚠ Reset a player's slayer data").formatted(Formatting.DARK_RED))
+                .setCallback((idx, type, action) -> openResetProgressGui(player))
+                .build());
+
+        // Spawn Slayer Boss (for testing)
+        gui.setSlot(32, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("Spawn Test Boss").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Spawn a slayer boss for testing").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openSpawnBossGui(player))
+                .build());
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Admin Menu").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainPage(player)) // Your existing admin menu
+                .build());
+
+        gui.open();
+    }
+
+// ============================================================
+// GIVE SWORD GUI
+// ============================================================
+
+    private static void openGiveSwordGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
+        gui.setTitle(Text.literal("Select Slayer Type"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(type.displayName + " Sword").formatted(type.color, Formatting.BOLD))
+                    .setCallback((idx, clickType, action) -> {
+                        SlayerItems.giveSlayerSword(admin, finalType);
+                        admin.sendMessage(Text.literal("✔ Gave yourself " + finalType.displayName + " Slayer Sword!")
+                                .formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+            slot++;
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+// ============================================================
+// GIVE CORE GUI
+// ============================================================
+
+    private static void openGiveCoreGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
+        gui.setTitle(Text.literal("Select Core Type"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(type.displayName + " Core").formatted(type.color, Formatting.BOLD))
+                    .glow()
+                    .setCallback((idx, clickType, action) -> {
+                        SlayerItems.giveCore(admin, finalType);
+                        admin.sendMessage(Text.literal("✔ Gave yourself " + finalType.displayName + " Core!")
+                                .formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+            slot++;
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+// ============================================================
+// GIVE CHUNK GUI
+// ============================================================
+
+    private static void openGiveChunkGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
+        gui.setTitle(Text.literal("Select Chunk Type"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(type.displayName + " Chunk").formatted(type.color, Formatting.BOLD))
+                    .setCallback((idx, clickType, action) -> {
+                        ItemStack chunk = SlayerItems.createChunk(finalType);
+                        if (!admin.getInventory().insertStack(chunk)) {
+                            admin.dropItem(chunk, false);
+                        }
+                        admin.sendMessage(Text.literal("✔ Gave yourself " + finalType.displayName + " Chunk!")
+                                .formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+            slot++;
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+// ============================================================
+// SET LEVEL GUI
+// ============================================================
+
+    private static void openSetLevelGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
+        gui.setTitle(Text.literal("Select Slayer Type"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(type.displayName).formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Click to set level").formatted(Formatting.GRAY))
+                    .setCallback((idx, clickType, action) -> openLevelSelectGui(admin, finalType))
+                    .build());
+            slot++;
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openLevelSelectGui(ServerPlayerEntity admin, SlayerManager.SlayerType slayerType) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, admin, false);
+        gui.setTitle(Text.literal("Set " + slayerType.displayName + " Level"));
+
+        for (int i = 0; i < 18; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Levels 0-12
+        for (int level = 0; level <= 12; level++) {
+            final int finalLevel = level;
+            gui.setSlot(level + 1, new GuiElementBuilder(level == 0 ? Items.BARRIER : Items.EXPERIENCE_BOTTLE)
+                    .setCount(Math.max(1, level))
+                    .setName(Text.literal("Level " + level).formatted(Formatting.GREEN))
+                    .setCallback((idx, type, action) -> {
+                        long xp = finalLevel > 0 ? SlayerManager.XP_REQUIREMENTS[finalLevel - 1] : 0;
+                        SlayerData.setSlayerXp(admin.getUuidAsString(), slayerType, xp);
+                        DataManager.save(PoliticalServer.server);
+                        admin.sendMessage(Text.literal("✔ Set your " + slayerType.displayName + " Slayer to level " + finalLevel)
+                                .formatted(Formatting.GREEN), false);
+                        openSlayerAdminGui(admin);
+                    })
+                    .build());
+        }
+
+        gui.setSlot(17, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSetLevelGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+// ============================================================
+// VIEW STATS GUI
+// ============================================================
+
+    private static void openViewStatsGui(ServerPlayerEntity admin) {
+        // For now, just show the admin's own stats
+        // You can expand this to select a player
+        String uuid = admin.getUuidAsString();
+
+        admin.sendMessage(Text.literal(""), false);
+        admin.sendMessage(Text.literal("══════════════════════════════").formatted(Formatting.GOLD), false);
+        admin.sendMessage(Text.literal("  ⚔ Your Slayer Stats ⚔").formatted(Formatting.YELLOW, Formatting.BOLD), false);
+        admin.sendMessage(Text.literal("══════════════════════════════").formatted(Formatting.GOLD), false);
+
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            int level = SlayerData.getSlayerLevel(uuid, type);
+            int bosses = SlayerData.getBossesKilled(uuid, type);
+            int highestTier = SlayerData.getHighestTier(uuid, type);
+            admin.sendMessage(Text.literal("  " + type.displayName + ": ")
+                    .formatted(type.color)
+                    .append(Text.literal("Lvl " + level).formatted(Formatting.WHITE))
+                    .append(Text.literal(" | " + bosses + " kills").formatted(Formatting.GRAY))
+                    .append(Text.literal(" | T" + highestTier + " max").formatted(Formatting.DARK_GRAY)), false);
+        }
+
+        admin.sendMessage(Text.literal("══════════════════════════════").formatted(Formatting.GOLD), false);
+    }
+
+// ============================================================
+// RESET PROGRESS GUI
+// ============================================================
+
+    private static void openResetProgressGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X1, admin, false);
+        gui.setTitle(Text.literal("⚠ Confirm Reset?"));
+
+        for (int i = 0; i < 9; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Confirm button
+        gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
+                .setName(Text.literal("✔ Confirm Reset").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("This will reset ALL your").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("slayer progress permanently!").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> {
+                    resetPlayerSlayerData(admin.getUuidAsString());
+                    admin.sendMessage(Text.literal("✔ Your slayer progress has been reset.")
+                            .formatted(Formatting.GREEN), false);
+                    DataManager.save(PoliticalServer.server);
+                    openSlayerAdminGui(admin);
+                })
+                .build());
+
+        // Cancel button
+        gui.setSlot(6, new GuiElementBuilder(Items.RED_CONCRETE)
+                .setName(Text.literal("✖ Cancel").formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+    private static void resetPlayerSlayerData(String playerUuid) {
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            SlayerData.setSlayerXp(playerUuid, type, 0);
+            // Reset bosses killed and highest tier by setting XP to 0
+            // The data structure handles the rest
+        }
+    }
+
+// ============================================================
+// SPAWN TEST BOSS GUI
+// ============================================================
+
+    private static void openSpawnBossGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, admin, false);
+        gui.setTitle(Text.literal("Spawn Test Boss"));
+
+        for (int i = 0; i < 36; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Slayer type selection (row 1)
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            final SlayerManager.SlayerType finalType = type;
+            gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                    .setName(Text.literal(type.displayName).formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Boss: " + type.bossName).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to select tier").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openTierSelectForSpawn(admin, finalType))
+                    .build());
+            slot++;
+        }
+
+        // Back button
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openTierSelectForSpawn(ServerPlayerEntity admin, SlayerManager.SlayerType slayerType) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X1, admin, false);
+        gui.setTitle(Text.literal("Select Tier - " + slayerType.displayName));
+    }
+    }

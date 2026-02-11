@@ -29,12 +29,13 @@ public class SlayerManager {
     // SLAYER TYPES - Ordered by difficulty progression
     // ============================================================
     public enum SlayerType {
-        ZOMBIE("Zombie", "Revenant Horror", Formatting.DARK_GREEN, Items.ROTTEN_FLESH, 1.0),
-        SPIDER("Spider", "Tarantula Broodfather", Formatting.DARK_RED, Items.SPIDER_EYE, 1.8),
-        SKELETON("Skeleton", "Skeleton Lord", Formatting.WHITE, Items.BONE, 3.0),
-        SLIME("Slime", "Sludge Monstrosity", Formatting.GREEN, Items.SLIME_BALL, 5.0),
-        ENDERMAN("Enderman", "Voidgloom Seraph", Formatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
-        WARDEN("Warden", "Abyssal Warden", Formatting.DARK_AQUA, Items.SCULK, 25.0);
+        ZOMBIE("Zombie", "Rotting Abomination", Formatting.DARK_GREEN, Items.ROTTEN_FLESH, 1.0),
+        SPIDER("Spider", "Venomous Broodmother", Formatting.DARK_RED, Items.SPIDER_EYE, 1.8),
+        SKELETON("Skeleton", "Bone Warlord", Formatting.WHITE, Items.BONE, 3.0),
+        SLIME("Slime", "Gelatinous Titan", Formatting.GREEN, Items.SLIME_BALL, 5.0),
+        ENDERMAN("Enderman", "Void Phantom", Formatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
+        WARDEN("Warden", "Sculk Devourer", Formatting.DARK_AQUA, Items.SCULK, 25.0);
+
 
         public final String displayName;
         public final String bossName;
@@ -108,12 +109,19 @@ public class SlayerManager {
 
     public static final TierConfig[] TIERS = {
             //          tier, kills, baseHP, baseDmg, cost,    xp,  minLvl, dmgResist, miniBosses
-            new TierConfig(1,   25,   100,    4,      100,     5,    0,     0.0,       0),
-            new TierConfig(2,   50,   500,    8,      500,     25,   1,     0.15,      1),
-            new TierConfig(3,  100,  2000,   15,     2000,    100,   3,     0.30,      2),
-            new TierConfig(4,  150, 10000,   25,    10000,    500,   5,     0.50,      3),
-            new TierConfig(5,  250, 50000,   40,    50000,   1500,   7,     0.65,      4),
+            new TierConfig(1,   10,   100,    4,      100,     5,    0,     0.0,       0),   // Was 25
+            new TierConfig(2,   20,   500,    8,      500,     25,   1,     0.15,      1),   // Was 50
+            new TierConfig(3,   40,  2000,   15,     2000,    100,   3,     0.30,      2),   // Was 100
+            new TierConfig(4,   60, 10000,   25,    10000,    500,   5,     0.50,      3),   // Was 150
+            new TierConfig(5,  100, 50000,   40,    50000,   1500,   7,     0.65,      4),   // Was 250
     };
+    public static int getKillsRequired(SlayerType type, int tier) {
+        if (type == SlayerType.WARDEN) {
+            return 1; // Wardens are rare, only need 1
+        }
+        TierConfig config = getTierConfig(tier);
+        return config != null ? config.killsRequired : 0;
+    }
 
     public static TierConfig getTierConfig(int tier) {
         if (tier < 1 || tier > TIERS.length) return null;
@@ -140,19 +148,19 @@ public class SlayerManager {
             10_000_000,  // Level 12
     };
 
-    public static final int[] LEVEL_COIN_REWARDS = {
-            50,       // Level 1
-            100,      // Level 2
-            250,      // Level 3
-            500,      // Level 4
-            1_000,    // Level 5
-            2_500,    // Level 6
-            5_000,    // Level 7
-            10_000,   // Level 8
-            25_000,   // Level 9
-            50_000,   // Level 10
-            100_000,  // Level 11
-            250_000,  // Level 12
+    public static final int[] LEVEL_CREDIT_REWARDS = {
+            1,        // Level 1: 1 credit
+            2,        // Level 2: 2 credits
+            5,        // Level 3: 5 credits
+            25,       // Level 4: 10 credits
+            100,       // Level 5: 25 credits
+            250,       // Level 6: 50 credits
+            500,      // Level 7: 100 credits
+            1000,      // Level 8: 200 credits
+            2500,      // Level 9: 500 credits
+            5000,     // Level 10: 1000 credits
+            10000,     // Level 11: 2500 credits
+            25000,     // Level 12: 5000 credits
     };
 
     // Returns level for given XP amount (0 if below level 1)
@@ -234,9 +242,15 @@ public class SlayerManager {
     public static boolean startQuest(ServerPlayerEntity player, SlayerType type, int tier) {
         String uuid = player.getUuidAsString();
 
+        if (!hasUnlockedSlayer(uuid, type)) {
+            String req = getUnlockRequirement(type);
+            player.sendMessage(Text.literal("✖ " + req + " first!")
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
         // Check if already has active quest
         if (activeQuests.containsKey(uuid)) {
-            player.sendMessage(Text.literal("✖ You already have an active slayer quest!")
+            player.sendMessage(Text.literal("✖ You already have an active bounty!")
                     .formatted(Formatting.RED), false);
             return false;
         }
@@ -345,10 +359,34 @@ public class SlayerManager {
         // Check if killed mob matches quest type
         if (!isMatchingMob(killed, quest.slayerType)) return;
 
-        // Increment kill count
-        quest.killCount++;
+        // Calculate kill value
+        int killValue = 1;
 
-        // Progress messages at intervals
+        // Slayer sword bonus: 2x kills
+        ItemStack weapon = player.getMainHandStack();
+        if (SlayerItems.isSlayerSword(weapon)) {
+            SlayerType swordType = SlayerItems.getSwordSlayerType(weapon);
+            if (swordType == quest.slayerType) {
+                killValue = 2;
+            }
+        }
+
+        // Scaled mob bonus: extra kills based on tier
+        if (HealthScalingManager.isScaledMob(killed.getUuid())) {
+            int bonus = HealthScalingManager.getKillBonus(killed);
+            killValue += bonus;
+        }
+
+        // Increment kill count by calculated value
+        quest.killCount += killValue;
+
+        // Progress message
+        if (killValue > 1) {
+            player.sendMessage(Text.literal("+" + killValue + " kills!")
+                    .formatted(Formatting.GREEN), true);
+        }
+
+        // Rest of the method unchanged...
         int required = quest.getKillsRequired();
         if (quest.killCount == required / 4 ||
                 quest.killCount == required / 2 ||
@@ -401,8 +439,8 @@ public class SlayerManager {
     private static void spawnBoss(ServerPlayerEntity player, ActiveQuest quest) {
         if (quest.bossSpawned) return;
 
-        ServerWorld world = player.getServerWorld();
-        Vec3d pos = player.getPos();
+        ServerWorld world = player.getEntityWorld();
+        Vec3d pos = new Vec3d(player.getX(), player.getY(), player.getZ());
         TierConfig config = quest.getConfig();
         SlayerType type = quest.slayerType;
 
@@ -426,14 +464,14 @@ public class SlayerManager {
         double actualDamage = config.getActualDamage(type);
 
         // Set max health
-        var healthAttr = boss.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        var healthAttr = boss.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (healthAttr != null) {
             healthAttr.setBaseValue(actualHp);
             boss.setHealth((float) actualHp);
         }
 
         // Set damage
-        var damageAttr = boss.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        var damageAttr = boss.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
         if (damageAttr != null) {
             damageAttr.setBaseValue(actualDamage);
         }
@@ -495,7 +533,7 @@ public class SlayerManager {
     }
 
     private static void spawnMiniBoss(ServerPlayerEntity player, ActiveQuest quest) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         TierConfig config = quest.getConfig();
         SlayerType type = quest.slayerType;
 
@@ -507,9 +545,9 @@ public class SlayerManager {
 
         miniBoss.setPosition(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
 
-        // Mini-boss has 20% of main boss HP
-        double hp = config.getActualHp(type) * 0.2;
-        var healthAttr = miniBoss.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        // Mini-boss has 5% of main boss HP
+        double hp = config.getActualHp(type) * 0.05;
+        var healthAttr = miniBoss.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         if (healthAttr != null) {
             healthAttr.setBaseValue(hp);
             miniBoss.setHealth((float) hp);
@@ -552,7 +590,7 @@ public class SlayerManager {
             while (check.getY() > world.getBottomY() && !world.getBlockState(check.down()).isSolidBlock(world, check.down())) {
                 check = check.down();
             }
-            while (check.getY() < world.getTopY() && world.getBlockState(check).isSolidBlock(world, check)) {
+            while (check.getY() < world.getTopYInclusive() && world.getBlockState(check).isSolidBlock(world, check)) {
                 check = check.up();
             }
 
@@ -590,6 +628,64 @@ public class SlayerManager {
     // ============================================================
     // BOSS DEATH & REWARDS
     // ============================================================
+// ============================================================
+// ADMIN TEST BOSS SPAWNING
+// ============================================================
+
+    public static void spawnTestBoss(ServerPlayerEntity player, SlayerType type, int tier) {
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        TierConfig config = getTierConfig(tier);
+        if (config == null) return;
+
+        BlockPos spawnPos = findSpawnPosition(world, player.getBlockPos(), 5);
+        if (spawnPos == null) spawnPos = player.getBlockPos();
+
+        MobEntity boss = createBossEntity(world, type, config);
+        if (boss == null) {
+            player.sendMessage(Text.literal("✖ Failed to spawn boss!").formatted(Formatting.RED), false);
+            return;
+        }
+
+        boss.setPosition(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+
+        double actualHp = config.getActualHp(type);
+        double actualDamage = config.getActualDamage(type);
+
+        var healthAttr = boss.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        if (healthAttr != null) {
+            healthAttr.setBaseValue(actualHp);
+            boss.setHealth((float) actualHp);
+        }
+
+        var damageAttr = boss.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
+        if (damageAttr != null) {
+            damageAttr.setBaseValue(actualDamage);
+        }
+
+        String tierRoman = toRoman(tier);
+        boss.setCustomName(Text.literal("[TEST] " + type.bossName + " " + tierRoman)
+                .formatted(type.color, Formatting.BOLD));
+        boss.setCustomNameVisible(true);
+        boss.setPersistent();
+
+        world.spawnEntity(boss);
+
+        world.playSound(null, player.getBlockPos(),
+                net.minecraft.sound.SoundEvents.ENTITY_WITHER_SPAWN,
+                net.minecraft.sound.SoundCategory.HOSTILE, 1.0f, 0.5f);
+    }
+
+    public static double getLevelDamageMultiplier(ServerPlayerEntity player, SlayerType bossType) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), bossType);
+        return 1.0 + (level * DAMAGE_BONUS_PER_LEVEL);
+    }
+    public static double getLevelDamageReduction(ServerPlayerEntity player, SlayerType bossType) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), bossType);
+        return level * DAMAGE_REDUCTION_PER_LEVEL; // Returns 0.0 to 0.18
+    }
+
+    public static final double DAMAGE_BONUS_PER_LEVEL = 0.02;
+    public static final double DAMAGE_REDUCTION_PER_LEVEL = 0.015;
 
     public static void onBossDeath(LivingEntity entity, ServerPlayerEntity killer) {
         UUID bossUuid = entity.getUuid();
@@ -612,6 +708,8 @@ public class SlayerManager {
         int oldLevel = getLevelForXp(oldXp);
 
         SlayerData.addSlayerXp(ownerUuid, type, xpGained);
+        SlayerData.updateHighestTier(ownerUuid, type, quest.tier);
+        SlayerData.incrementBossesKilled(ownerUuid, type);
 
         long newXp = SlayerData.getSlayerXp(ownerUuid, type);
         int newLevel = getLevelForXp(newXp);
@@ -627,17 +725,18 @@ public class SlayerManager {
         owner.sendMessage(Text.literal("  +" + xpGained + " " + type.displayName + " Slayer XP")
                 .formatted(Formatting.AQUA), false);
 
-        // Level up check
         if (newLevel > oldLevel) {
             for (int lvl = oldLevel + 1; lvl <= newLevel; lvl++) {
-                int coinReward = LEVEL_COIN_REWARDS[lvl - 1];
-                CoinManager.giveCoins(owner, coinReward);
+                int creditReward = LEVEL_CREDIT_REWARDS[lvl - 1];
+
+                // Give credits instead of coins
+                CreditItem.giveCredits(owner, creditReward);
 
                 owner.sendMessage(Text.literal(""), false);
                 owner.sendMessage(Text.literal("  ⬆ LEVEL UP! " + type.displayName + " Slayer " + lvl)
                         .formatted(Formatting.YELLOW, Formatting.BOLD), false);
-                owner.sendMessage(Text.literal("  +" + coinReward + " coins")
-                        .formatted(Formatting.GOLD), false);
+                owner.sendMessage(Text.literal("  +" + creditReward + " credits")
+                        .formatted(Formatting.AQUA), false);
 
                 // Sound effect
                 owner.getEntityWorld().playSound(null, owner.getBlockPos(),
@@ -670,14 +769,19 @@ public class SlayerManager {
         List<ItemStack> drops = new ArrayList<>();
         Random rand = new Random();
 
-        // Core drop chances scale with tier [1]
+        // Chunk drop chances (for crafting slayer swords)
+        // T1: 2%, T2: 5%, T3: 10%, T4: 15%, T5: 20%
+        double chunkChance = 0.02 + (tier - 1) * 0.045;
+        if (rand.nextDouble() < chunkChance) {
+            drops.add(SlayerItems.createChunk(type));
+        }
+
+        // Core drop chances (for legendary items) - ONLY from bosses, not normal mobs
         double coreChance = switch (type) {
-            case ZOMBIE -> 0.005 + (tier * 0.005);      // 0.5% - 2.5%
-            case SPIDER -> 0.005 + (tier * 0.005);      // 0.5% - 2.5%
-            case SKELETON -> 0.005 + (tier * 0.005);    // 0.5% - 2.5%
-            case SLIME -> 0.004 + (tier * 0.004);       // 0.4% - 2%
-            case ENDERMAN -> 0.0001 + (tier * 0.0001);  // 0.01% - 0.05%
-            case WARDEN -> 0.005 + (tier * 0.001);      // 0.5% - 1% (but boss is harder)
+            case ZOMBIE, SPIDER, SKELETON -> 0.005 + (tier * 0.005);  // 0.5% - 2.5%
+            case SLIME -> 0.004 + (tier * 0.004);                      // 0.4% - 2%
+            case ENDERMAN -> 0.0001 + (tier * 0.0001);                 // 0.01% - 0.05%
+            case WARDEN -> 0.005 + (tier * 0.001);                     // 0.5% - 1%
         };
 
         if (rand.nextDouble() < coreChance) {
@@ -783,6 +887,25 @@ public class SlayerManager {
             }
         }
     }
+    public static boolean hasUnlockedSlayer(String playerUuid, SlayerType type) {
+        // Zombie is always unlocked (first slayer)
+        if (type == SlayerType.ZOMBIE) return true;
+
+        // Get previous slayer type
+        SlayerType previous = type.getPreviousSlayer();
+        if (previous == null) return true;
+
+        // Check if player completed T3 of previous slayer
+        int highestTier = SlayerData.getHighestTier(playerUuid, previous);
+        return highestTier >= 3;
+    }
+
+    public static String getUnlockRequirement(SlayerType type) {
+        SlayerType previous = type.getPreviousSlayer();
+        if (previous == null) return null;
+        return "Complete " + previous.displayName + " Slayer T3";
+    }
+
 
     // ============================================================
     // DATA PERSISTENCE HELPERS

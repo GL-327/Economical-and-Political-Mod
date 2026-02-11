@@ -32,7 +32,7 @@ public class DataManager {
                 if (data == null) {
                     data = new SaveData();
                 }
-
+                SlayerManager.loadActiveQuests(data.activeSlayerQuests);
                 PerkManager.setActivePerks(data.activePerks);
                 PerkManager.setLastChairPerks(data.lastChairPerks);
                 PerkManager.setChairSelectedPerks(data.chairSelectedPerks);
@@ -56,7 +56,7 @@ public class DataManager {
         if (server == null) {
             return;
         }
-
+        data.activeSlayerQuests = SlayerManager.getActiveQuests();
         data.activePerks = PerkManager.getActivePerks();
         data.lastChairPerks = PerkManager.getLastChairPerks();
         data.chairSelectedPerks = PerkManager.getChairSelectedPerks();
@@ -147,8 +147,10 @@ public class DataManager {
         data.impeachYes = 0;
         data.impeachNo = 0;
         data.impeachVoted.clear();
+        data.activeSlayerQuests = SlayerManager.getActiveQuests();
         DataManager.save(PoliticalServer.server);
     }
+    public Map<String, SlayerData.PlayerSlayerData> playerSlayerData = new HashMap<>();
 
     public static void setViceChair(String uuid) {
         String oldViceChair = data.viceChair;
@@ -254,6 +256,8 @@ public class DataManager {
         public int chairTermCount = 0;
         public Map<String, Integer> playerCoins = new HashMap<>();
         public Map<String, String> playerHomes = new HashMap<>();
+        public Map<String, SlayerData.PlayerSlayerData> playerSlayerData = new HashMap<>();
+        public Map<String, SlayerManager.ActiveQuest> activeSlayerQuests = new HashMap<>();
 
 // Add these inside the SaveData class, after the Dictator fields:
 

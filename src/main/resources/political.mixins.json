@@ -20,7 +20,8 @@
     "VillagerLightningMixin",
     "WardenDropMixin",
     "CraftingResultMixin",
-    "BlockItemMixin"
+    "BlockItemMixin",
+    "SlayerDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

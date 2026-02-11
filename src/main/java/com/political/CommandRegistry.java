@@ -29,6 +29,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Formatting;import java.util.List;
 import java.util.Map;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import net.minecraft.command.argument.EntityArgumentType;import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.command.argument.EntityArgumentType;
 
 public class CommandRegistry {
@@ -63,7 +65,65 @@ public class CommandRegistry {
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
 
+        // ============================================================
+        // SLAYER COMMANDS
+        // ============================================================
+
+        // /slayer - Opens the slayer GUI
+        dispatcher.register(CommandManager.literal("slayer")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    SlayerGui.openMainMenu(player);
+                    return 1;
+                })
+        );
+
+        // /slayer cancel - Cancel active quest
+        dispatcher.register(CommandManager.literal("slayer")
+                .then(CommandManager.literal("cancel")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            if (SlayerManager.hasActiveQuest(player)) {
+                                SlayerManager.cancelQuest(player);
+                            } else {
+                                player.sendMessage(Text.literal("✖ No active slayer quest!")
+                                        .formatted(Formatting.RED), false);
+                            }
+                            return 1;
+                        })
+                )
+        );
     }
+
+        // Helper method for stats display
+        private static void showSlayerStats(ServerPlayerEntity viewer, ServerPlayerEntity target) {
+            String uuid = target.getUuidAsString();
+
+            viewer.sendMessage(Text.literal(""), false);
+            viewer.sendMessage(Text.literal("══════════════════════════════")
+                    .formatted(Formatting.GOLD), false);
+            viewer.sendMessage(Text.literal("  ⚔ " + target.getName().getString() + "'s Slayer Stats ⚔")
+                    .formatted(Formatting.YELLOW, Formatting.BOLD), false);
+            viewer.sendMessage(Text.literal("══════════════════════════════")
+                    .formatted(Formatting.GOLD), false);
+
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                int level = SlayerData.getSlayerLevel(uuid, type);
+                int bosses = SlayerData.getBossesKilled(uuid, type);
+                viewer.sendMessage(Text.literal("  " + type.displayName + ": ")
+                        .formatted(type.color)
+                        .append(Text.literal("Level " + level).formatted(Formatting.WHITE))
+                        .append(Text.literal(" (" + bosses + " bosses)").formatted(Formatting.GRAY)), false);
+            }
+
+            viewer.sendMessage(Text.literal(""), false);
+            viewer.sendMessage(Text.literal("  Total Level: " + SlayerData.getTotalSlayerLevel(uuid))
+                    .formatted(Formatting.AQUA), false);
+            viewer.sendMessage(Text.literal("══════════════════════════════")
+                    .formatted(Formatting.GOLD), false);
+        }
+
+
 
     // Rest of your methods stay the same...
     // I'm including the full file to avoid confusion:
@@ -984,6 +1044,8 @@ public class CommandRegistry {
                             return 1;
                         })));
     }
+
+
 
     private static int findSafeY(ServerWorld world, int x, int z) {
         for (int y = world.getTopYInclusive(); y > world.getBottomY(); y--) {

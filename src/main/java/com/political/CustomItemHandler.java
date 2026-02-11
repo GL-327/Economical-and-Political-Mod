@@ -36,6 +36,8 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.world.RaycastContext;
 import java.util.HashMap;
 import java.util.List;
@@ -487,6 +489,66 @@ public class CustomItemHandler {
     public static boolean isHermesShoes(ItemStack stack) {
         return stack.isOf(Items.IRON_BOOTS) && hasCustomTag(stack, "hermes_shoes");
     }
+
+    public static void registerSlayerDamageHook() {
+        // Hook into entity damage - Fabric API
+        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+            // Only process if attacker is a player
+            if (!(source.getAttacker() instanceof ServerPlayerEntity player)) {
+                return true; // Allow damage, no modification
+            }
+
+            // Check if target is a slayer boss
+            if (!SlayerManager.isSlayerBoss(entity.getUuid())) {
+                return true;
+            }
+
+            // Get the weapon
+            ItemStack weapon = player.getMainHandStack();
+
+            // Calculate damage resistance bypass
+            double damageResistance = SlayerManager.getDamageResistance(entity.getUuid());
+
+            // Slayer weapons bypass resistance entirely
+            if (SlayerItems.bypassesSlayerResistance(weapon)) {
+                // No resistance applied, allow full damage
+                return true;
+            }
+
+            // Non-slayer weapons take resistance penalty
+            if (damageResistance > 0) {
+                // We can't modify damage directly with ALLOW_DAMAGE
+                // Instead we'll use a mixin or apply damage ourselves
+                // For now, return true and handle in modification event
+            }
+
+            return true;
+        });
+    }
+
+    public static float calculateSlayerDamage(ServerPlayerEntity attacker, LivingEntity target, float baseDamage) {
+        ItemStack weapon = attacker.getMainHandStack();
+        float modifiedDamage = baseDamage;
+
+        // Apply slayer sword multiplier
+        double swordMultiplier = SlayerItems.getSlayerSwordDamageMultiplier(weapon, target, attacker);
+        modifiedDamage *= (float) swordMultiplier;
+
+        // Apply boss damage resistance (only for non-slayer weapons)
+        if (SlayerManager.isSlayerBoss(target.getUuid())) {
+            if (!SlayerItems.bypassesSlayerResistance(weapon)) {
+                double resistance = SlayerManager.getDamageResistance(target.getUuid());
+                modifiedDamage *= (float) (1.0 - resistance);
+            }
+        }
+
+        return modifiedDamage;
+    }
+
+    public static void tickSlayerSystems(ServerPlayerEntity player) {
+        // Already handled by SlayerManager.tick() at server level
+    }
+
 
 
     public static boolean isHPEBM(ItemStack stack) {

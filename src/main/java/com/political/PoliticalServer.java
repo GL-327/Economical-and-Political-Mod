@@ -15,7 +15,10 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
-
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,8 +81,14 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			return ActionResult.PASS;
 		});
 
+// Mob spawn scaling
+		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+			if (entity instanceof LivingEntity living) {
+				HealthScalingManager.tryScaleMob(living);
+			}
+		});
 // Ultra Overclocked left-click ability (works on entities)
-		AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+		AttackEntityCallback.EVENT.register((player, world, hand, entity, DhitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
 
@@ -244,6 +253,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			DataManager.save(s);
 			AuctionHouseManager.save(s);
 			UndergroundAuctionManager.save(s);
+			HealthScalingManager.clearAll();
 			LOGGER.info("PoliticalServer data saved");
 		});
 
@@ -277,6 +287,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			PerkManager.tickPerks(s);
 			UndergroundAuctionManager.tick(s);
 			UndergroundAuctionGui.tick();
+			SlayerManager.tick(s);
 
 			// ADD THIS - without it the beam never fires!
 			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
