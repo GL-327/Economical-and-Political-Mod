@@ -23,8 +23,8 @@ public class WardenDropMixin {
         LivingEntity self = (LivingEntity) (Object) this;
 
         if (self instanceof WardenEntity && source.getAttacker() instanceof PlayerEntity) {
-            // 0.1% chance = 1 in 1000
-            if (random.nextInt(1000) == 0) {
+            // 0.1% chance = 1 in 100000
+            if (random.nextInt(100000) == 0) {
                 self.dropStack(world, CustomItemHandler.createWardenCore());
             }
         }

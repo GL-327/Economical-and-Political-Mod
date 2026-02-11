@@ -23,7 +23,9 @@
     "BlockItemMixin",
     "SlayerDamageMixin",
     "AnvilCraftingMixin",
-    "CraftingMixin"
+    "CraftingMixin",
+    "BerserkerDamageMixin",
+    "LevelLockedWeaponMixin"
   ],
   "injectors": {
     "defaultRequire": 1

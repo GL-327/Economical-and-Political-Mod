@@ -267,7 +267,7 @@ public class SlayerManager {
         long playerXp = SlayerData.getSlayerXp(uuid, type);
         int playerLevel = getLevelForXp(playerXp);
         if (playerLevel < config.minLevel) {
-            player.sendMessage(Text.literal("✖ Requires " + type.displayName + " Slayer Level " + config.minLevel + "!")
+            player.sendMessage(Text.literal("✖ Requires " + type.displayName + " Bounty Level " + config.minLevel + "!")
                     .formatted(Formatting.RED), false);
             return false;
         }
@@ -329,7 +329,7 @@ public class SlayerManager {
                 slayerBossEntities.remove(quest.bossEntityUuid);
             }
 
-            player.sendMessage(Text.literal("✖ Slayer quest cancelled. No refund.")
+            player.sendMessage(Text.literal("✖ Bounty cancelled. No refund.")
                     .formatted(Formatting.RED), false);
         }
     }
@@ -726,11 +726,11 @@ public class SlayerManager {
         owner.sendMessage(Text.literal(""), false);
         owner.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
-        owner.sendMessage(Text.literal("  ✔ SLAYER BOSS DEFEATED!")
+        owner.sendMessage(Text.literal("  ✔ Bounty Completed!")
                 .formatted(Formatting.GREEN, Formatting.BOLD), false);
         owner.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
-        owner.sendMessage(Text.literal("  +" + xpGained + " " + type.displayName + " Slayer XP")
+        owner.sendMessage(Text.literal("  +" + xpGained + " " + type.displayName + " Bounty XP")
                 .formatted(Formatting.AQUA), false);
 
         if (newLevel > oldLevel) {
@@ -741,7 +741,7 @@ public class SlayerManager {
                 CreditItem.giveCredits(owner, creditReward);
 
                 owner.sendMessage(Text.literal(""), false);
-                owner.sendMessage(Text.literal("  ⬆ LEVEL UP! " + type.displayName + " Slayer " + lvl)
+                owner.sendMessage(Text.literal("  ⬆ LEVEL UP! " + type.displayName + " Bounty " + lvl)
                         .formatted(Formatting.YELLOW, Formatting.BOLD), false);
                 owner.sendMessage(Text.literal("  +" + creditReward + " credits")
                         .formatted(Formatting.AQUA), false);
@@ -886,7 +886,7 @@ public class SlayerManager {
                 // This handles edge cases like boss despawning
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(UUID.fromString(playerUuid));
                 if (player != null && boss == null) {
-                    player.sendMessage(Text.literal("✖ Your slayer boss has despawned! Quest failed.")
+                    player.sendMessage(Text.literal("✖ Your bounty has escaped! Quest failed.")
                             .formatted(Formatting.RED), false);
                     iterator.remove();
                     bossOwners.remove(quest.bossEntityUuid);
@@ -911,7 +911,7 @@ public class SlayerManager {
     public static String getUnlockRequirement(SlayerType type) {
         SlayerType previous = type.getPreviousSlayer();
         if (previous == null) return null;
-        return "Complete " + previous.displayName + " Slayer T3";
+        return "Complete " + previous.displayName + " Bounty T3";
     }
 
 

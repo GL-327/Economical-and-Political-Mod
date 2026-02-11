@@ -16,6 +16,10 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.util.Identifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -59,6 +63,9 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> hpebmLastRightClick = new HashMap<>();
     private static final Map<UUID, Long> ultraOverclockedCooldowns = new HashMap<>();
     private static final long ULTRA_OVERCLOCKED_COOLDOWN_MS = 10000; // 15 seconds
+    private static final Map<UUID, Boolean> berserkerHelmetActive = new HashMap<>();
+    private static final Map<UUID, Long> berserkerWarningCooldown = new HashMap<>();
+    private static final long WARNING_COOLDOWN_MS = 3000; // 3 seconds between warnings
     public static void register() {
 
         // Harvey's Stick - Lightning on attack
@@ -219,6 +226,7 @@ public class CustomItemHandler {
         player.sendMessage(Text.literal("⚡ GAVEL STRIKE! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
         return true;
     }
+
     public static void tickUltraOverclockedLeftClick(ServerPlayerEntity player) {
         ItemStack mainHand = player.getMainHandStack();
 
@@ -291,7 +299,20 @@ public class CustomItemHandler {
 
         fireHPEBMBeam(player, ticks);
     }
+    private static final Map<UUID, Long> levelWarningCooldown = new HashMap<>();
+    private static final long LEVEL_WARNING_COOLDOWN_MS = 2000;
 
+    public static void sendLevelWarning(ServerPlayerEntity player, String itemName, int requiredLevel, String slayerType) {
+        UUID uuid = player.getUuid();
+        long now = System.currentTimeMillis();
+        long lastWarning = levelWarningCooldown.getOrDefault(uuid, 0L);
+
+        if (now - lastWarning > LEVEL_WARNING_COOLDOWN_MS) {
+            player.sendMessage(Text.literal("⛔ " + itemName + " requires " + slayerType + " Bounty Level " + requiredLevel + "!")
+                    .formatted(Formatting.RED), true);
+            levelWarningCooldown.put(uuid, now);
+        }
+    }
     private static void fireHPEBMBeam(ServerPlayerEntity player, int ticks) {
         ServerWorld world = player.getEntityWorld();
 
@@ -605,7 +626,89 @@ public class CustomItemHandler {
     public static void tickSlayerSystems(ServerPlayerEntity player) {
         // Already handled by SlayerManager.tick() at server level
     }
+    public static void tickZombieBerserkerHelmet(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
+        UUID uuid = player.getUuid();
+        boolean wasActive = berserkerHelmetActive.getOrDefault(uuid, false);
 
+        if (SlayerItems.isZombieBerserkerHelmet(helmet)) {
+            boolean canUse = SlayerItems.canUseZombieBerserkerHelmet(player);
+
+            if (canUse) {
+                // Apply the berserker effect - half HP
+                if (!wasActive) {
+                    // Just equipped - apply HP reduction
+                    applyBerserkerEffect(player, true);
+                    berserkerHelmetActive.put(uuid, true);
+                    player.sendMessage(Text.literal("☠ Berserker Mode ACTIVATED! ☠")
+                            .formatted(Formatting.DARK_GREEN, Formatting.BOLD), true);
+                }
+            } else {
+                // Player doesn't meet level requirement - show warning [1]
+                long now = System.currentTimeMillis();
+                long lastWarning = berserkerWarningCooldown.getOrDefault(uuid, 0L);
+
+                if (now - lastWarning > WARNING_COOLDOWN_MS) {
+                    player.sendMessage(Text.literal("⛔ Zombie Berserker Helmet requires Level 12!")
+                            .formatted(Formatting.RED), true);
+                    berserkerWarningCooldown.put(uuid, now);
+                }
+
+                // Remove effect if it was somehow active
+                if (wasActive) {
+                    applyBerserkerEffect(player, false);
+                    berserkerHelmetActive.put(uuid, false);
+                }
+            }
+        } else {
+            // Helmet removed - restore normal HP
+            if (wasActive) {
+                applyBerserkerEffect(player, false);
+                berserkerHelmetActive.put(uuid, false);
+                player.sendMessage(Text.literal("Berserker Mode deactivated")
+                        .formatted(Formatting.GRAY), true);
+            }
+        }
+    }
+
+    private static void applyBerserkerEffect(ServerPlayerEntity player, boolean activate) {
+        var healthAttribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        if (healthAttribute == null) return;
+
+        // Remove existing modifier if present
+        Identifier modifierId = Identifier.of("political", "berserker_helmet_hp");
+        healthAttribute.removeModifier(modifierId);
+
+        if (activate) {
+            // Add -50% max HP modifier
+            EntityAttributeModifier modifier = new EntityAttributeModifier(
+                    modifierId,
+                    -0.5, // -50%
+                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            );
+            healthAttribute.addPersistentModifier(modifier);
+
+            // Clamp current health if above new max
+            float newMax = player.getMaxHealth();
+            if (player.getHealth() > newMax) {
+                player.setHealth(newMax);
+            }
+        } else {
+            // Modifier already removed above, health will auto-adjust
+        }
+    }
+
+    // Call this when player deals damage to apply the 3x multiplier
+    public static float getBerserkerDamageMultiplier(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
+
+        if (SlayerItems.isZombieBerserkerHelmet(helmet) &&
+                SlayerItems.canUseZombieBerserkerHelmet(player)) {
+            return 3.0f; // 300% damage [1]
+        }
+
+        return 1.0f;
+    }
 
 
     public static boolean isHPEBM(ItemStack stack) {

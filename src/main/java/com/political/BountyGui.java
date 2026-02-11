@@ -238,7 +238,7 @@ public class BountyGui {
                     .formatted(Formatting.WHITE));
 
             if (config.damageResistance > 0) {
-                lore.add(Text.literal("  🛡 Armor: " + (int)(config.damageResistance * 100) + "%")
+                lore.add(Text.literal("  🛡 Armor: " + (int) (config.damageResistance * 100) + "%")
                         .formatted(Formatting.GOLD));
             }
 
@@ -274,20 +274,30 @@ public class BountyGui {
 
             Formatting tierColor = canStart ? Formatting.GREEN : Formatting.RED;
             final int finalTier = tier;
+            final boolean finalCanStart = canStart;  // Capture for lambda
 
-            gui.setSlot(tierSlots[tier - 1], new GuiElementBuilder(getContractItem(tier))
-                    .setName(Text.literal("☠ Tier " + toRoman(tier) + " Bounty")
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("Left-click: Start bounty").formatted(Formatting.GREEN));
+            lore.add(Text.literal("Right-click: View drops").formatted(Formatting.AQUA));
+
+            gui.setSlot(tierSlots[tier - 1], new GuiElementBuilder(Items.PAPER)
+                    .setName(Text.literal("Tier " + tier + " Contract")
                             .formatted(tierColor, Formatting.BOLD))
                     .setLore(lore)
                     .setCallback((index, clickType, action) -> {
-                        if (canStart) {
-                            if (SlayerManager.startQuest(player, type, finalTier)) {
-                                player.closeHandledScreen();
-                            }
+                        // Right-click shows drop table [1]
+                        if (clickType.isRight) {
+                            openDropTableGui(player, type, finalTier);
+                        }
+                        // Left-click starts the bounty
+                        else if (finalCanStart) {
+                            player.closeHandledScreen();
+                            SlayerManager.startQuest(player, type, finalTier);
                         }
                     })
                     .build());
         }
+
 
         // Rewards button
         gui.setSlot(40, new GuiElementBuilder(Items.GOLD_INGOT)
@@ -311,7 +321,144 @@ public class BountyGui {
 
         gui.open();
     }
+    // ============================================================
+// DROP TABLE GUI - Shows boss loot and drop chances
+// ============================================================
+    public static void openDropTableGui(ServerPlayerEntity player, SlayerManager.SlayerType type, int tier) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("☠ " + type.bossName + " T" + tier + " Drops"));
 
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.DRAGON_HEAD)
+                .setName(Text.literal("☠ " + type.bossName + " Loot Table")
+                        .formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Tier " + tier + " Drop Rates").formatted(Formatting.YELLOW))
+                .glow()
+                .build());
+
+        // Drop rates scale with tier
+        double coreChance = switch (tier) {
+            case 1 -> 2.0;
+            case 2 -> 6.0;
+            case 3 -> 11.0;
+            case 4 -> 16.0;
+            case 5 -> 20.0;
+            default -> 0.0;
+        };
+
+        double chunkChance = switch (tier) {
+            case 1 -> 5.0;
+            case 2 -> 10.0;
+            case 3 -> 15.0;
+            case 4 -> 20.0;
+            case 5 -> 25.0;
+            default -> 0.0;
+        };
+
+        double swordChance = switch (tier) {
+            case 1 -> 0.5;
+            case 2 -> 1.0;
+            case 3 -> 2.0;
+            case 4 -> 4.0;
+            case 5 -> 6.0;
+            default -> 0.0;
+        };
+
+        // Core drop
+        int slot = 19;
+        gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                .setName(Text.literal("✦ " + type.displayName + " Core")
+                        .formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Drop Chance: " + coreChance + "%")
+                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Used for crafting powerful").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("bounty equipment.").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // Chunk drop
+        gui.setSlot(21, new GuiElementBuilder(Items.PRISMARINE_SHARD)
+                .setName(Text.literal(SlayerItems.getChunkName(type))
+                        .formatted(type.color))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Drop Chance: " + chunkChance + "%")
+                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Crafting material for").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("slayer swords.").formatted(Formatting.GRAY))
+                .build());
+
+        // Rare sword drop (T3+)
+        if (tier >= 3) {
+            gui.setSlot(23, new GuiElementBuilder(Items.IRON_SWORD)
+                    .setName(Text.literal(type.displayName + " Bounty Sword")
+                            .formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Drop Chance: " + swordChance + "%")
+                            .formatted(Formatting.LIGHT_PURPLE))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("RARE DROP!").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                    .glow()
+                    .build());
+        }
+
+        // Coins reward (guaranteed)
+        int coinReward = switch (tier) {
+            case 1 -> 50;
+            case 2 -> 150;
+            case 3 -> 400;
+            case 4 -> 1000;
+            case 5 -> 3000;
+            default -> 0;
+        };
+
+        gui.setSlot(25, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Text.literal("💰 Coin Reward")
+                        .formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Guaranteed: " + coinReward + " coins")
+                        .formatted(Formatting.YELLOW))
+                .build());
+
+        // XP reward
+        SlayerManager.TierConfig config = SlayerManager.getTierConfig(tier);
+        gui.setSlot(31, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
+                .setName(Text.literal("✨ Bounty XP")
+                        .formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Guaranteed: +" + config.xpReward + " XP")
+                        .formatted(Formatting.GREEN))
+                .build());
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Tiers")
+                        .formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> openBountyTypeMenu(player, type))
+                .build());
+
+        // Start bounty button
+        gui.setSlot(49, new GuiElementBuilder(Items.LIME_CONCRETE)
+                .setName(Text.literal("▶ Start This Bounty")
+                        .formatted(Formatting.GREEN, Formatting.BOLD))
+                .setCallback((idx, clickType, action) -> {
+                    player.closeHandledScreen();
+                    SlayerManager.startQuest(player, type, tier);
+                })
+                .build());
+
+        gui.open();
+    }
     // ============================================================
     // REWARDS MENU
     // ============================================================

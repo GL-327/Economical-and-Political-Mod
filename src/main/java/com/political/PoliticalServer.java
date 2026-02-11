@@ -123,6 +123,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register((s) -> {
 			server = s;
 
+			for (ServerWorld world : s.getWorlds()) {
+				BountySpawnManager.tick(world);
+			}
 			// Your existing tick code (if any)
 			SlayerManager.tick(s);
 
@@ -310,6 +313,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickHPEBM(player);
 				CustomItemHandler.tickHermesShoes(player);
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
+				CustomItemHandler.tickZombieBerserkerHelmet(player);
+
 			}
 
 		});

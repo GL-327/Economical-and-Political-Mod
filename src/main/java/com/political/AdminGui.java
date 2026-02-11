@@ -119,9 +119,9 @@ public class AdminGui {
                 .setCallback((index, type, action) -> openPage(player, AdminPage.WORLD))
                 .build());
         gui.setSlot(22, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("⚔ Slayer Admin").formatted(Formatting.RED, Formatting.BOLD))
+                .setName(Text.literal("⚔ Bounty Admin").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Manage the slayer system").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Manage the bounty system").formatted(Formatting.GRAY))
                 .setCallback((idx, type, action) -> openSlayerAdminGui(player))
                 .build());
         // Server status

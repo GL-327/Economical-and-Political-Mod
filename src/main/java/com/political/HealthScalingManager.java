@@ -314,7 +314,7 @@ public class HealthScalingManager {
         int bonus = getKillBonus(entity);
         if (bonus > 0) {
             CoinManager.giveCoinsQuiet(killer, bonus);
-            killer.sendMessage(Text.literal("+" + bonus + " coins (scaled mob)")
+            killer.sendMessage(Text.literal("" + bonus + "")
                     .formatted(Formatting.GOLD), true);
         }
 

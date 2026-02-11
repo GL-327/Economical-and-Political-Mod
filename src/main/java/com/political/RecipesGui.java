@@ -29,7 +29,7 @@ public class RecipesGui {
                     .build());
         }
 
-        // Header
+        // Header (slot 4)
         gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
                 .setName(Text.literal("📖 Recipe Book")
                         .formatted(Formatting.GOLD, Formatting.BOLD))
@@ -40,95 +40,226 @@ public class RecipesGui {
                         .formatted(Formatting.GRAY))
                 .glow()
                 .build());
+        gui.setSlot(10, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("☠ Zombie Berserker Helmet")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal(" [Core] [Core] [Core]").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal(" [Core] [Helmet] [Core]").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal(" [    ] [    ] [    ]").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Materials:").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(" 5x Zombie Core").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(" 1x Iron Helmet").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("━━━ EFFECT ━━━").formatted(Formatting.RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("❤ Health: -50%").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("⚔ Damage: +300%").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚠ Requires: Zombie Bounty Lvl 12").formatted(Formatting.RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.AQUA))
+                .setCallback((idx, type, action) -> openZombieHelmetRecipe(player))
+                .build());
 
-        // Category: Bounty/Slayer Items
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+
+        // Category: Bounty Weapons (slot 19)
         gui.setSlot(19, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("⚔ Bounty Weapons")
                         .formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Slayer swords and")
-                        .formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("bounty hunting gear")
-                        .formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Slayer swords and").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("bounty hunting gear").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to view!")
-                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openBountyRecipes(player))
                 .build());
 
-        // Category: HPEBM Weapons
+        // Category: HPEBM Weapons (slot 21)
         gui.setSlot(21, new GuiElementBuilder(Items.END_ROD)
                 .setName(Text.literal("⚡ HPEBM Weapons")
                         .formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("High-Powered Energy")
-                        .formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Beam Weapons (Mk1-Mk5)")
-                        .formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("High-Powered Energy").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Beam Weapons (Mk1-Mk5)").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to view!")
-                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player))
                 .build());
 
-        // Category: Special Items
+        // Category: Special Items (slot 23)
         gui.setSlot(23, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Special Items")
                         .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Unique items like the")
-                        .formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Gavel and other tools")
-                        .formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Unique items like the").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Gavel and other tools").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to view!")
-                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSpecialRecipes(player))
                 .build());
 
-        // Category: Upgraded Weapons
+        // Category: Upgraded Weapons (slot 25)
         gui.setSlot(25, new GuiElementBuilder(Items.DIAMOND_SWORD)
                 .setName(Text.literal("⬆ Upgraded Weapons")
                         .formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Advanced versions of")
-                        .formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("bounty and special weapons")
-                        .formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Advanced versions of").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("bounty and special weapons").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to view!")
-                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openUpgradedRecipes(player))
                 .build());
 
-        // Close button
-        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("✖ Close")
-                        .formatted(Formatting.RED))
-                .setCallback((idx, type, action) -> player.closeHandledScreen())
-                .build());
-
-        gui.open();
-        // Category: Slayer Armor
+        // Category: Slayer Armor (slot 28) - THIS WAS AFTER gui.open()!
         gui.setSlot(28, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
                 .setName(Text.literal("🛡 Slayer Armor")
                         .formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Protective gear crafted from")
-                        .formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("bounty boss materials")
-                        .formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Protective gear crafted from").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("bounty boss materials").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to view!")
-                        .formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openArmorRecipes(player))
                 .build());
+
+        // Close button (slot 49)
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> player.closeHandledScreen())
+                .build());
+
+        // NOW open the GUI after all slots are set
+        gui.open();
     }
 
 
     // ============================================================
     // BOUNTY/SLAYER WEAPONS RECIPES
     // ============================================================
+
+    public static void openZombieHelmetRecipe(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("☠ Zombie Berserker Helmet Recipe"));
+
+        // Dark background for dramatic effect
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("☠ Zombie Berserker Helmet")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("A cursed helm that trades").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("vitality for raw power.").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // 3x3 Crafting Grid
+        // Row 1: Core, Core, Core
+        ItemStack zombieCore = SlayerItems.createCore(SlayerManager.SlayerType.ZOMBIE);
+
+        gui.setSlot(10, new GuiElementBuilder(zombieCore.getItem())
+                .setName(Text.literal("✦ Zombie Core ✦").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .build());
+        gui.setSlot(11, new GuiElementBuilder(zombieCore.getItem())
+                .setName(Text.literal("✦ Zombie Core ✦").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .build());
+        gui.setSlot(12, new GuiElementBuilder(zombieCore.getItem())
+                .setName(Text.literal("✦ Zombie Core ✦").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .build());
+
+        // Row 2: Core, Iron Helmet, Core
+        gui.setSlot(19, new GuiElementBuilder(zombieCore.getItem())
+                .setName(Text.literal("✦ Zombie Core ✦").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .build());
+        gui.setSlot(20, new GuiElementBuilder(Items.IRON_HELMET)
+                .setName(Text.literal("Iron Helmet").formatted(Formatting.WHITE))
+                .build());
+        gui.setSlot(21, new GuiElementBuilder(zombieCore.getItem())
+                .setName(Text.literal("✦ Zombie Core ✦").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .build());
+
+        // Row 3: Empty
+        gui.setSlot(28, new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("")).build());
+        gui.setSlot(29, new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("")).build());
+        gui.setSlot(30, new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("")).build());
+
+        // Arrow
+        gui.setSlot(23, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("→").formatted(Formatting.GREEN, Formatting.BOLD))
+                .build());
+
+        // Result
+        gui.setSlot(25, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("☠ Zombie Berserker Helmet")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("❤ Health: -50%").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("⚔ Damage: +300%").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚠ Requires: Zombie Lvl 12").formatted(Formatting.RED))
+                .glow()
+                .build());
+
+        // Info panel
+        gui.setSlot(40, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("ℹ How to Obtain Cores").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Zombie Cores drop from:").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(" The Undying Outlaw (Boss)").formatted(Formatting.DARK_GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Drop Rates:").formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal(" T1: 2%  T2: 6%  T3: 11%").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(" T4: 16%  T5: 20%").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("You need 5 cores for this recipe!").formatted(Formatting.RED))
+                .build());
+
+        // Warning about the helmet's effect
+        gui.setSlot(42, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("⚠ WARNING").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("This helmet is DANGEROUS!").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Your max HP will be HALVED").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("while wearing this helmet.").formatted(Formatting.RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Recommended for experienced").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("players who can avoid damage!").formatted(Formatting.GRAY))
+                .build());
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Armor").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openArmorRecipes(player))
+                .build());
+
+        // Close button
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> player.closeHandledScreen())
+                .build());
+
+        gui.open();
+    }
 
     public static void openBountyRecipes(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
@@ -496,6 +627,46 @@ public class RecipesGui {
     // ============================================================
 // SLAYER ARMOR RECIPES
 // ============================================================
+    private static void setupCraftingGrid(SimpleGui gui, ItemStack[][] recipe, ItemStack result) {
+        // 3x3 crafting grid positions (centered in GUI)
+        // Layout:
+        //   10 11 12    ->   14 (result)
+        //   19 20 21
+        //   28 29 30
+
+        int[][] gridSlots = {
+                {10, 11, 12},
+                {19, 20, 21},
+                {28, 29, 30}
+        };
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                ItemStack ingredient = recipe[row][col];
+                if (ingredient != null && !ingredient.isEmpty()) {
+                    gui.setSlot(gridSlots[row][col], new GuiElementBuilder(ingredient.getItem())
+                            .setCount(ingredient.getCount())
+                            .setName(ingredient.getName())
+                            .build());
+                } else {
+                    gui.setSlot(gridSlots[row][col], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                            .setName(Text.literal(""))
+                            .build());
+                }
+            }
+        }
+
+        // Arrow indicator
+        gui.setSlot(13, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("→").formatted(Formatting.WHITE))
+                .build());
+
+        // Result slot
+        gui.setSlot(14, new GuiElementBuilder(result.getItem())
+                .setName(result.getName())
+                .glow()
+                .build());
+    }
 
     public static void openArmorRecipes(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
@@ -503,9 +674,11 @@ public class RecipesGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BROWN_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
         }
+
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)

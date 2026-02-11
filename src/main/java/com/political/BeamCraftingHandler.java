@@ -3,7 +3,7 @@ package com.political;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import java.util.List;
+import java.util.List;import net.minecraft.server.network.ServerPlayerEntity;
 
 public class BeamCraftingHandler {
 
@@ -90,5 +90,56 @@ public class BeamCraftingHandler {
     public static int getRequiredWardenCores(int currentTier) {
         if (currentTier == 6) return 5; // Ultra Overclocked uses 5 cores
         return 1; // Standard upgrade uses 1
+    }
+
+    public static boolean tryZombieBerserkerHelmetCraft(ServerPlayerEntity player, ItemStack[] craftingGrid) {
+        // Recipe: 5 Zombie Cores + 1 Iron Helmet
+        // [Core] [Core] [Core]
+        // [Core] [Helmet] [Core]
+        // [    ] [    ] [    ]
+
+        int coreCount = 0;
+        boolean hasHelmet = false;
+
+        // Check positions
+        int[] corePositions = {0, 1, 2, 3, 5}; // Top row + sides of middle
+        int helmetPosition = 4; // Center
+        int[] emptyPositions = {6, 7, 8}; // Bottom row
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = craftingGrid[i];
+
+            if (contains(corePositions, i)) {
+                if (SlayerItems.isSlayerCore(stack) &&
+                        SlayerItems.getCoreType(stack) == SlayerManager.SlayerType.ZOMBIE) {
+                    coreCount++;
+                } else if (!stack.isEmpty()) {
+                    return false; // Wrong item in core slot
+                }
+            } else if (i == helmetPosition) {
+                if (stack.isOf(Items.IRON_HELMET)) {
+                    hasHelmet = true;
+                } else if (!stack.isEmpty()) {
+                    return false; // Wrong item in helmet slot
+                }
+            } else if (contains(emptyPositions, i)) {
+                if (!stack.isEmpty()) {
+                    return false; // Should be empty
+                }
+            }
+        }
+
+        return coreCount == 5 && hasHelmet;
+    }
+
+    private static boolean contains(int[] arr, int value) {
+        for (int i : arr) {
+            if (i == value) return true;
+        }
+        return false;
+    }
+
+    public static ItemStack getZombieBerserkerHelmetResult() {
+        return SlayerItems.createZombieBerserkerHelmet();
     }
 }

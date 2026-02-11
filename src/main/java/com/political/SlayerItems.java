@@ -36,7 +36,22 @@ public class SlayerItems {
         if (name == null) return false;
         return name.getString().contains("Core");
     }
+    public static SlayerManager.SlayerType getCoreType(ItemStack stack) {
+        if (!isSlayerCore(stack)) return null;
 
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return null;
+
+        String nameStr = name.getString();
+
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (nameStr.contains(type.displayName)) {
+                return type;
+            }
+        }
+
+        return null;
+    }
     public static SlayerManager.SlayerType getSwordSlayerType(ItemStack stack) {
         if (!isSlayerSword(stack)) return null;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
@@ -50,7 +65,39 @@ public class SlayerItems {
         }
         return null;
     }
+    // ============================================================
+// LEVEL-LOCKED WEAPON DAMAGE MULTIPLIER
+// ============================================================
+    public static float getLevelLockedDamageMultiplier(ServerPlayerEntity player, ItemStack weapon) {
+        // Check bounty swords
+        if (isSlayerSword(weapon)) {
+            SlayerManager.SlayerType swordType = getSwordSlayerType(weapon);
+            if (swordType == null) return 1.0f;
 
+            int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), swordType);
+            int requiredLevel = BASIC_SWORD_LEVEL_REQ;
+
+            if (playerLevel < requiredLevel) {
+                CustomItemHandler.sendLevelWarning(player, swordType.displayName + " Bounty Sword", requiredLevel, swordType.displayName);
+                return 0.0f; // No damage!
+            }
+        }
+
+        // Check upgraded swords
+        if (isUpgradedSlayerSword(weapon)) {
+            SlayerManager.SlayerType swordType = getSwordSlayerType(weapon);
+            if (swordType == null) return 1.0f;
+
+            int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), swordType);
+
+            if (playerLevel < UPGRADED_SWORD_LEVEL_REQ) {
+                CustomItemHandler.sendLevelWarning(player, swordType.displayName + " Slayer Sword II", UPGRADED_SWORD_LEVEL_REQ, swordType.displayName);
+                return 0.0f;
+            }
+        }
+
+        return 1.0f; // Normal damage
+    }
     // ============================================================
     // SLAYER SWORDS - 2x damage to matching slayer type
     // ============================================================
@@ -82,7 +129,97 @@ public class SlayerItems {
 
         return sword;
     }
+
+
 // Add this method to SlayerItems.java:
+// ============================================================
+// ZOMBIE BERSERKER HELMET - Level 12 Zombie Requirement
+// ============================================================
+public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
+
+    public static ItemStack createZombieBerserkerHelmet() {
+        ItemStack helmet = new ItemStack(Items.ZOMBIE_HEAD);
+
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Zombie Berserker Helmet")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
+        lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
+        lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+300%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + BERSERKER_HELMET_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return helmet;
+    }
+
+    public static boolean isZombieBerserkerHelmet(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Zombie Berserker Helmet");
+    }
+
+    public static boolean canUseZombieBerserkerHelmet(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
+        return level >= BERSERKER_HELMET_LEVEL_REQ;
+    }
+
+    // Update lore dynamically based on player level
+    public static ItemStack createZombieBerserkerHelmetForPlayer(ServerPlayerEntity player) {
+        ItemStack helmet = new ItemStack(Items.ZOMBIE_HEAD);
+
+        int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
+        boolean meetsRequirement = playerLevel >= BERSERKER_HELMET_LEVEL_REQ;
+
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Zombie Berserker Helmet")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
+        lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
+        lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+300%").formatted(Formatting.GREEN, Formatting.BOLD)));
+
+        // Only show requirement if not met [1]
+        if (!meetsRequirement) {
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + BERSERKER_HELMET_LEVEL_REQ)
+                    .formatted(Formatting.RED));
+            lore.add(Text.literal("⛔ LOCKED - Effects disabled").formatted(Formatting.DARK_RED));
+        } else {
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("✔ UNLOCKED").formatted(Formatting.GREEN, Formatting.BOLD));
+        }
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return helmet;
+    }
 
     public static final int UPGRADED_SWORD_LEVEL_REQ = 6;
 
