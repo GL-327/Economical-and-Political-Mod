@@ -145,6 +145,16 @@ public class ElectionManager {
         startEmergencyElection(PoliticalServer.server);
     }
 
+    private static final Map<UUID, Integer> extraDropsCount = new HashMap<>();
+
+    public static void setExtraDrops(UUID uuid, int count) {
+        extraDropsCount.put(uuid, count);
+    }
+
+    public static int getAndClearExtraDrops(UUID uuid) {
+        return extraDropsCount.remove(uuid) != null ? extraDropsCount.get(uuid) : 0;
+    }
+
     public static void endElection(MinecraftServer server) {
         electionActive = false;
 

@@ -1203,10 +1203,9 @@ public class AdminGui {
                     .build());
         }
 
-        gui.setSlot(4, new GuiElementBuilder(Items.IRON_BARS)
-                .setName(Text.literal("Prison Controls").formatted(Formatting.GRAY, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Select player to imprison/release").formatted(Formatting.WHITE))
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Bounty Administration").formatted(Formatting.RED, Formatting.BOLD))
+                .glow()
                 .build());
 
         List<ServerPlayerEntity> players = new ArrayList<>(PoliticalServer.server.getPlayerManager().getPlayerList());
@@ -1397,11 +1396,142 @@ public class AdminGui {
 
         gui.open();
 
+        gui.setSlot(43, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("☠ Force Spawn Boss").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Spawn a bounty boss at your location").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to select boss type").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSpawnBossMenu(player))
+                .build());
     }
 
 // ============================================================
 // LEGENDARY WEAPONS MENU
 // ============================================================
+private static void openSpawnBossMenu(ServerPlayerEntity player) {
+    SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+    gui.setTitle(Text.literal("☠ Spawn Bounty Boss"));
+
+    // Background
+    for (int i = 0; i < 36; i++) {
+        gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                .setName(Text.literal(""))
+                .build());
+    }
+
+    // Boss type buttons
+    int slot = 10;
+    for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+        final SlayerManager.SlayerType finalType = type;
+
+        gui.setSlot(slot, new GuiElementBuilder(type.icon)
+                .setName(Text.literal("☠ " + type.bossName).formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to select tier").formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> openSpawnBossTierMenu(player, finalType))
+                .build());
+
+        slot++;
+        if (slot == 17) slot = 19; // Next row
+    }
+
+    // Back button
+    gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+            .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+            .setCallback((idx, type, action) -> openSlayerAdminGui(player))
+            .build());
+
+    gui.open();
+}
+    private static void openSpawnBossTierMenu(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("☠ " + type.bossName + " - Select Tier"));
+
+        // Background
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
+
+        // Tier buttons
+        int[] tierSlots = {11, 12, 13, 14, 15};
+        for (int tier = 1; tier <= 5; tier++) {
+            final int finalTier = tier;
+            SlayerManager.TierConfig config = SlayerManager.getTierConfig(tier);
+
+            gui.setSlot(tierSlots[tier - 1], new GuiElementBuilder(Items.PAPER)
+                    .setName(Text.literal("Tier " + tier).formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("HP: " + (int)config.getActualHp(type)).formatted(Formatting.RED))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to spawn!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> {
+                        SlayerManager.adminSpawnBoss(player, type, finalTier);
+                        player.sendMessage(Text.literal("✓ Spawned " + type.bossName + " T" + finalTier + "!")
+                                .formatted(Formatting.GREEN));
+                        player.closeHandledScreen();
+                    })
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> openSpawnBossMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openSpawnUpgradedMobMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("⬆ Spawn Upgraded Mob (limited to some hostiles)"));
+
+        // Background
+        for (int i = 0; i < 36; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.LIME_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
+
+        // Mob types with tiers
+        gui.setSlot(10, createUpgradedMobButton(player, "Zombie", Items.ZOMBIE_HEAD,
+                net.minecraft.entity.EntityType.ZOMBIE));
+        gui.setSlot(11, createUpgradedMobButton(player, "Skeleton", Items.SKELETON_SKULL,
+                net.minecraft.entity.EntityType.SKELETON));
+        gui.setSlot(12, createUpgradedMobButton(player, "Spider", Items.SPIDER_EYE,
+                net.minecraft.entity.EntityType.SPIDER));
+        gui.setSlot(13, createUpgradedMobButton(player, "Creeper", Items.CREEPER_HEAD,
+                net.minecraft.entity.EntityType.CREEPER));
+        gui.setSlot(14, createUpgradedMobButton(player, "Enderman", Items.ENDER_PEARL,
+                net.minecraft.entity.EntityType.ENDERMAN));
+        gui.setSlot(15, createUpgradedMobButton(player, "Slime", Items.SLIME_BALL,
+                net.minecraft.entity.EntityType.SLIME));
+
+
+        // Back button
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static GuiElementBuilder createUpgradedMobButton(ServerPlayerEntity player, String name,
+                                                             net.minecraft.item.Item icon, net.minecraft.entity.EntityType<?> entityType) {
+        return new GuiElementBuilder(icon)
+                .setName(Text.literal("⬆ " + name).formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to spawn upgraded " + name).formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> {
+                    HealthScalingManager.spawnUpgradedMob(player, entityType);
+                    player.sendMessage(Text.literal("✓ Spawned upgraded " + name + "!")
+                            .formatted(Formatting.GREEN));
+                });
+    }
 
     private static void openLegendaryWeaponsMenu(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X2, player, false);

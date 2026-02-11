@@ -427,7 +427,14 @@ public class SlayerManager {
         bar.append("§8]");
         return bar.toString();
     }
-
+    public static void spawnBoss(ServerWorld world, ServerPlayerEntity player, SlayerType type, int tier) {
+        // Your spawn logic here
+        // Create and spawn the boss entity based on type and tier
+    }
+    public static void adminSpawnBoss(ServerPlayerEntity player, SlayerType type, int tier) {
+        ServerWorld world = player.getEntityWorld();
+        spawnBoss(world, player, type, tier);
+    }
     private static boolean isMatchingMob(LivingEntity entity, SlayerType type) {
         return switch (type) {
             case ZOMBIE -> entity instanceof ZombieEntity;

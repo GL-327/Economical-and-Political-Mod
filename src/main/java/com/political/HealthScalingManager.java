@@ -7,20 +7,30 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.random.Random;
+import java.util.Random;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-
+import java.util.Map;
+import java.util.HashMap;
+import java.util.UUID;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 public class HealthScalingManager {
-
+    private static final java.util.Random javaRandom = new java.util.Random();
+    private static final double SPAWN_CHANCE = 0.3; // Add this at top of class
+    private static final Random random = new Random();
     // ============================================================
     // CONFIGURATION
     // ============================================================
@@ -37,6 +47,7 @@ public class HealthScalingManager {
             }
         }
     }
+    private static final Map<UUID, Integer> extraDropsCount = new HashMap<>();
 
     private static void updateNameTagVisibility(MobEntity mob, ServerWorld world) {
         boolean anyPlayerCanSee = false;
@@ -154,6 +165,7 @@ public class HealthScalingManager {
             EntityType.PIGLIN_BRUTE,
             EntityType.HOGLIN,
             EntityType.ZOGLIN,
+            EntityType.WITHER,
 
             // Overworld hostile
             EntityType.CREEPER,
@@ -168,6 +180,7 @@ public class HealthScalingManager {
             // End
             EntityType.ENDERMAN,
             EntityType.SHULKER,
+            EntityType.ENDER_DRAGON,
 
             // Ocean
             EntityType.GUARDIAN,
@@ -226,6 +239,13 @@ public class HealthScalingManager {
 
         UUID uuid = entity.getUuid();
 
+        ScalingTier scalingTier = ScalingTier.rollTier(random);
+        applyScaling(mob, scalingTier);
+        int tierValue = scalingTier.ordinal(); // Convert enum to int (0, 1, 2, etc.)
+        if (tierValue > 0) {
+            setMobTier(mob, tierValue);
+        }
+
         // Already processed
         if (scaledEntities.contains(uuid) || checkedEntities.contains(uuid)) return;
 
@@ -248,16 +268,33 @@ public class HealthScalingManager {
         }
 
         // Roll for scaling
-        Random random = entity.getRandom();
-        if (random.nextDouble() > SCALING_CHANCE) {
+        net.minecraft.util.math.random.Random random = entity.getRandom();
+        if (random.nextDouble() > SPAWN_CHANCE) {
             checkedEntities.add(uuid);
             return;
         }
 
         // Apply scaling
-        ScalingTier tier = ScalingTier.rollTier(random);
+        ScalingTier tier = ScalingTier.rollTier(javaRandom);
         applyScaling(mob, tier);
+
     }
+
+
+
+    public static void spawnUpgradedMob(ServerPlayerEntity player, EntityType<?> entityType) {
+        ServerWorld world = player.getEntityWorld();
+
+        Entity entity = entityType.spawn(world, player.getBlockPos(), SpawnReason.TRIGGERED);
+
+        if (entity instanceof MobEntity mob) {
+            // Use MobEntity instead of LivingEntity
+            ScalingTier tier = ScalingTier.ELITE;
+            applyScaling(mob, tier);
+            setMobTier(mob, tier.ordinal());
+        }
+    }
+
 
     private static void applyScaling(MobEntity mob, ScalingTier tier) {
         try {
@@ -353,4 +390,32 @@ public class HealthScalingManager {
         scaledEntities.clear();
         checkedEntities.clear();
     }
+    private static final Map<UUID, Integer> mobTiers = new HashMap<>();
+
+    public static void setMobTier(LivingEntity mob, int tier) {
+        mobTiers.put(mob.getUuid(), tier);
+    }
+
+    public static int getMobTier(LivingEntity mob) {
+        return mobTiers.getOrDefault(mob.getUuid(), 0);
+    }
+
+    // Call this when mob dies to clean up
+    public static void onMobDeath(LivingEntity mob) {
+        mobTiers.remove(mob.getUuid());
+    }
+
+
+    public static void setExtraDrops(UUID uuid, int count) {
+        extraDropsCount.put(uuid, count);
+    }
+
+    public static int getExtraDrops(UUID uuid) {
+        return extraDropsCount.getOrDefault(uuid, 0);
+    }
+
+    public static void clearExtraDrops(UUID uuid) {
+        extraDropsCount.remove(uuid);
+    }
+
 }

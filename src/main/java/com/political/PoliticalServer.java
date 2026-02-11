@@ -14,6 +14,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.util.Formatting;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -81,6 +82,13 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			}
 
 			return ActionResult.PASS;
+		});
+		ServerEntityEvents.ENTITY_UNLOAD.register((entity,world)->
+
+		{
+			if (entity instanceof LivingEntity living) {
+				HealthScalingManager.onMobDeath(living);
+			}
 		});
 
 // Mob spawn scaling
@@ -323,8 +331,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	}
 
 
-
-
 	public static boolean isAnyBeamWeapon(ItemStack stack) {
 		if (stack == null || stack.isEmpty()) return false;
 
@@ -343,6 +349,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		}
 		return false;
 	}
+
 	public static void sendJoinInfo(ServerPlayerEntity player) {
 		if (DictatorManager.isDictatorActive()) {
 			return;
