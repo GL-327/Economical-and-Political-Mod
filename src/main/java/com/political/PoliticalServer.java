@@ -70,7 +70,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			if (world.isClient()) return ActionResult.PASS;
 
 			ItemStack heldItem = player.getStackInHand(hand);
-
+			BountyCraftingHandler.register();
 			// Check for any beam weapon (including Ultra Overclocked)
 			int tier = CustomItemHandler.getBeamTier(heldItem);
 			if (tier > 0) {
@@ -153,11 +153,22 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				}
 			}
 			for (ServerWorld world : s.getWorlds()) {
+				SlayerManager.tickUpgradedMobDespawn(world);
+			}
+			for (ServerWorld world : s.getWorlds()) {
 				BountySpawnManager.tick(world);
 			}
 			// Your existing tick code (if any)
 			SlayerManager.tick(s);
-
+			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
+				CustomItemHandler.tickHermesShoes(player);
+				CustomItemHandler.tickHPEBM(player);
+				CustomItemHandler.tickSpiderLeggings(player);
+				CustomItemHandler.tickSlimeBoots(player);
+				CustomItemHandler.tickWardenChestplate(player);
+				CustomItemHandler.tickZombieBerserkerHelmet(player);
+				CustomItemHandler.tickSkeletonBow(player); // For arrow tracking
+			}
 			// ADD THESE LINES INSIDE THIS BLOCK:
 			visibilityTickCounter++;
 			if (visibilityTickCounter >= 10) {

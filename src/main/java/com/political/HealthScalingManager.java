@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import java.util.Map;
@@ -44,6 +45,17 @@ public class HealthScalingManager {
                         break;
                     }
                 }
+            }
+        }
+    }
+    public static void tickUpgradedMobDespawn(ServerWorld world) {
+        for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class,
+                new Box(-30000000, -64, -30000000, 30000000, 320, 30000000),
+                e -> e.hasCustomName() && e.getName().getString().contains("Upgraded"))) {
+
+            // Despawn after 5 minutes (6000 ticks)
+            if (entity.age > 6000) {
+                entity.discard();
             }
         }
     }
@@ -317,9 +329,7 @@ public class HealthScalingManager {
                     .formatted(tier.color));
             mob.setCustomNameVisible(true);
 
-            // Track and persist
-            scaledEntities.add(mob.getUuid());
-            mob.setPersistent();
+
 
         } catch (Exception e) {
             // Silently fail if attributes don't exist
@@ -336,7 +346,10 @@ public class HealthScalingManager {
             case LEGENDARY -> "✦✦✦✦✦";
         };
     }
-
+    public static void markForDespawn(LivingEntity mob) {
+        // Store spawn time in scoreboard or custom tag
+        mob.age = 0; // Reset age to track time alive
+    }
     // ============================================================
     // REWARDS
     // ============================================================
@@ -347,7 +360,7 @@ public class HealthScalingManager {
         int bonus = getKillBonus(entity);
         if (bonus > 0) {
             CoinManager.giveCoinsQuiet(killer, bonus);
-            killer.sendMessage(Text.literal("" + bonus + "")
+            killer.sendMessage(Text.literal("")
                     .formatted(Formatting.GOLD), true);
         }
 

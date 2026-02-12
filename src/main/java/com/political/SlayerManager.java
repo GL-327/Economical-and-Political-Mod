@@ -19,6 +19,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.*;
@@ -106,7 +107,16 @@ public class SlayerManager {
             return baseDamage * type.difficultyMultiplier;
         }
     }
-
+    public static void tickUpgradedMobDespawn(ServerWorld world) {
+        Box worldBox = new Box(-30000000, -64, -30000000, 30000000, 320, 30000000);
+        for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, worldBox,
+                e -> e.hasCustomName() && e.getName().getString().contains("Upgraded"))) {
+            // Despawn after 5 minutes (6000 ticks)
+            if (entity.age > 6000) {
+                entity.discard();
+            }
+        }
+    }
     public static final TierConfig[] TIERS = {
             //          tier, kills, baseHP, baseDmg, cost,    xp,  minLvl, dmgResist, miniBosses
             new TierConfig(1,   10,   100,    4,      100,     5,    0,     0.0,       0),   // Was 25
@@ -938,5 +948,58 @@ public class SlayerManager {
         if (quests != null) {
             activeQuests.putAll(quests);
         }
+    }
+    // ============================================================
+// FORCE SPAWN BOSS (for admin)
+// ============================================================
+    public static void forceSpawnBoss(ServerPlayerEntity player) {
+        ActiveQuest quest = getActiveQuest(player);
+        if (quest == null) return;
+
+        // Set kills to required amount to trigger boss
+        quest.killCount = quest.getKillsRequired();
+        quest.bossSpawned = false;
+
+        // Spawn the boss
+        spawnBoss(player, quest);
+    }
+
+    // ============================================================
+// SPAWN UPGRADED MOB (for admin/testing)
+// ============================================================
+    public static void spawnUpgradedMob(ServerWorld world, Vec3d pos, SlayerType type) {
+        LivingEntity mob = createUpgradedMob(world, type);
+        if (mob != null) {
+            mob.setPosition(pos.x, pos.y, pos.z);
+            if (mob instanceof net.minecraft.entity.mob.MobEntity mobEntity) {
+                mobEntity.setPersistent();
+
+            }
+            world.spawnEntity(mob);
+        }
+    }
+
+    private static LivingEntity createUpgradedMob(ServerWorld world, SlayerType type) {
+        LivingEntity mob = switch (type) {
+            case ZOMBIE -> EntityType.ZOMBIE.create(world, SpawnReason.COMMAND);
+            case SPIDER -> EntityType.SPIDER.create(world, SpawnReason.COMMAND);
+            case SKELETON -> EntityType.SKELETON.create(world, SpawnReason.COMMAND);
+            case SLIME -> EntityType.SLIME.create(world, SpawnReason.COMMAND);
+            case ENDERMAN -> EntityType.ENDERMAN.create(world, SpawnReason.COMMAND);
+            case WARDEN -> EntityType.WARDEN.create(world, SpawnReason.COMMAND);
+        };
+
+        if (mob != null) {
+            mob.setCustomName(Text.literal("Upgraded " + type.displayName)
+                    .formatted(type.color, Formatting.BOLD));
+            mob.setCustomNameVisible(true);
+
+            var healthAttr = mob.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+            if (healthAttr != null) {
+                healthAttr.setBaseValue(healthAttr.getBaseValue() * 3);
+                mob.setHealth(mob.getMaxHealth());
+            }
+        }
+        return mob;
     }
 }

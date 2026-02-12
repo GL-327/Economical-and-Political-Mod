@@ -47,7 +47,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +71,7 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> berserkerWarningCooldown = new HashMap<>();
     private static final long WARNING_COOLDOWN_MS = 3000; // 3 seconds between warnings
     public static void register() {
-
+        registerBountyItemRestrictions();
         // Harvey's Stick - Lightning on attack
 
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
@@ -123,8 +127,68 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
     }
+
+    // ============================================================
+// BLOCK BOUNTY ITEM USE (non-usable/eatable) [1]
+// ============================================================
+    public static void registerBountyItemRestrictions() {
+        // Block using/eating bounty items
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (world.isClient()) return ActionResult.PASS;
+
+            ItemStack held = player.getStackInHand(hand);
+
+            // Block using cores and bounty items
+            if (isBountyItemRestricted(held)) {
+                return ActionResult.FAIL;
+            }
+
+            return ActionResult.PASS;
+        });
+    }
+
+    // Check if item should be blocked from use
+    public static boolean isBountyItemRestricted(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+
+        // Check custom name for bounty items
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+
+        String nameStr = name.getString();
+        return nameStr.contains("Core") ||
+                nameStr.contains("Bounty Sword") ||
+                nameStr.contains("Slayer Sword") ||
+                nameStr.contains("Berserker Helmet") ||
+                nameStr.contains("Venomous Crawler") ||
+                nameStr.contains("Bone Desperado") ||
+                nameStr.contains("Gelatinous Rustler") ||
+                nameStr.contains("Sculk Terror");
+    }
+
+    // Check if item is a bounty item (for shop restriction)
+    public static boolean isBountyItem(ItemStack stack) {
+        return SlayerItems.isAnyBountyItem(stack) || isSlayerCore(stack);
+    }
+
+    public static boolean isSlayerCore(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Core");
+    }
 // Add this method to CustomItemHandler.java:
 // Add this method to CustomItemHandler.java:
+
+    // Slime boots death save tracking
+    private static final Map<UUID, Long> slimeBootsCooldowns = new HashMap<>();
+    private static final Map<UUID, Long> slimeBootsActiveUntil = new HashMap<>();
+    private static final Set<UUID> slimeBootsShrunk = new HashSet<>();
+    private static final long SLIME_BOOTS_COOLDOWN_MS = 3200 * 1000; // 53 minutes 20 seconds
+    private static final long SLIME_BOOTS_ACTIVE_MS = 30 * 1000; // 30 seconds
+
+    // Level warning cooldown to prevent spam
+    private static final Map<UUID, Long> levelWarningCooldowns = new HashMap<>();
 
     public static ItemStack createHPEBM(int mk) {
         ItemStack weapon = new ItemStack(Items.END_ROD);
@@ -302,17 +366,8 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> levelWarningCooldown = new HashMap<>();
     private static final long LEVEL_WARNING_COOLDOWN_MS = 2000;
 
-    public static void sendLevelWarning(ServerPlayerEntity player, String itemName, int requiredLevel, String slayerType) {
-        UUID uuid = player.getUuid();
-        long now = System.currentTimeMillis();
-        long lastWarning = levelWarningCooldown.getOrDefault(uuid, 0L);
 
-        if (now - lastWarning > LEVEL_WARNING_COOLDOWN_MS) {
-            player.sendMessage(Text.literal("⛔ " + itemName + " requires " + slayerType + " Bounty Level " + requiredLevel + "!")
-                    .formatted(Formatting.RED), true);
-            levelWarningCooldown.put(uuid, now);
-        }
-    }
+
     private static void fireHPEBMBeam(ServerPlayerEntity player, int ticks) {
         ServerWorld world = player.getEntityWorld();
 
@@ -1211,5 +1266,228 @@ public class CustomItemHandler {
 
         return false;
     }
+    // ============================================================
+// SLIME BOOTS TICK - Jump Boost, Fall Damage Negation
+// ============================================================
+    public static void tickSlimeBoots(ServerPlayerEntity player) {
+        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        if (!SlayerItems.isSlimeBoots(boots)) {
+            // Remove shrink effect if no longer wearing boots
+            if (slimeBootsShrunk.contains(player.getUuid())) {
+                player.calculateDimensions();
+                slimeBootsShrunk.remove(player.getUuid());
+            }
+            return;
+        }
 
+        // Check level requirement
+        if (!SlayerItems.canUseSlimeBoots(player)) {
+            sendLevelWarning(player, "Gelatinous Rustler Boots",
+                    SlayerItems.SLIME_BOOTS_LEVEL_REQ, "Slime");
+            return;
+        }
+
+        // Jump Boost II
+        player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.JUMP_BOOST, 40, 1, true, false, false));
+
+        // Check if shrunk state should end
+        UUID uuid = player.getUuid();
+        if (slimeBootsActiveUntil.containsKey(uuid)) {
+            if (System.currentTimeMillis() > slimeBootsActiveUntil.get(uuid)) {
+                // Time's up - return to normal size
+                player.calculateDimensions();
+                slimeBootsShrunk.remove(uuid);
+                slimeBootsActiveUntil.remove(uuid);
+                player.sendMessage(Text.literal("🟢 Slime form ended - returned to normal size!")
+                        .formatted(Formatting.GREEN), true);
+            }
+        }
+    }
+
+    // Called when player takes fatal damage - returns true if death should be cancelled
+    public static boolean trySlimeBootsDeathSave(ServerPlayerEntity player) {
+        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        if (!SlayerItems.isSlimeBoots(boots)) return false;
+        if (!SlayerItems.canUseSlimeBoots(player)) return false;
+
+        UUID uuid = player.getUuid();
+        long now = System.currentTimeMillis();
+
+        // Check cooldown
+        if (slimeBootsCooldowns.containsKey(uuid)) {
+            long cooldownEnd = slimeBootsCooldowns.get(uuid) + SLIME_BOOTS_COOLDOWN_MS;
+            if (now < cooldownEnd) {
+                return false; // On cooldown, death proceeds normally
+            }
+        }
+
+        // Already in shrunk state - die for real
+        if (slimeBootsShrunk.contains(uuid)) {
+            return false;
+        }
+
+        // Activate death save!
+        slimeBootsCooldowns.put(uuid, now);
+        slimeBootsActiveUntil.put(uuid, now + SLIME_BOOTS_ACTIVE_MS);
+        slimeBootsShrunk.add(uuid);
+
+        // Set health to half a heart
+        player.setHealth(1.0f);
+
+        // Shrink player (half size)
+        // Note: In 1.21+ use the scale attribute
+        ServerWorld world = player.getEntityWorld();
+
+        // Spawn 2 small slimes
+        for (int i = 0; i < 2; i++) {
+            net.minecraft.entity.mob.SlimeEntity slime = net.minecraft.entity.EntityType.SLIME.create(world, SpawnReason.TRIGGERED);
+            if (slime != null) {
+                slime.setSize(1, true); // Small slime
+                slime.setPosition(player.getX() + (i - 0.5), player.getY(), player.getZ());
+                world.spawnEntity(slime);
+            }
+        }
+
+        // Effects
+        world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_SLIME_SQUISH,
+                SoundCategory.PLAYERS, 1.0f, 1.5f);
+        world.spawnParticles(ParticleTypes.ITEM_SLIME,
+                player.getX(), player.getY() + 1, player.getZ(), 20, 0.5, 0.5, 0.5, 0.1);
+
+        player.sendMessage(Text.literal("☠ DEATH SAVED! You have 30 seconds at half size!")
+                .formatted(Formatting.GREEN, Formatting.BOLD), false);
+        player.sendMessage(Text.literal("⚠ If you die now, it's permanent!")
+                .formatted(Formatting.RED), false);
+
+        return true; // Cancel death
+    }
+
+    // ============================================================
+// WARDEN CHESTPLATE TICK - Extra Health, Echo Location
+// ============================================================
+    public static void tickSpiderLeggings(ServerPlayerEntity player) {
+        ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
+        if (!SlayerItems.isSpiderLeggings(leggings)) return;
+
+        if (!SlayerItems.canUseSpiderLeggings(player)) {
+            return;
+        }
+    }
+
+    public static void tickWardenChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (!SlayerItems.isWardenChestplate(chestplate)) return;
+
+        if (!SlayerItems.canUseWardenChestplate(player)) {
+            return;
+        }
+
+        // Extra health (+20 hearts = Health Boost X)
+        player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.HEALTH_BOOST, 40, 9, true, false, false));
+
+        // Resistance I for tankiness
+        player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 40, 0, true, false, false));
+
+        // ESP: Glow effect on nearby moving players (every 2 seconds)
+        if (player.age % 40 == 0) {
+            ServerWorld world = player.getEntityWorld();
+            double radius = 16.0;
+
+            for (ServerPlayerEntity nearby : world.getPlayers()) {
+                if (nearby == player) continue;
+                if (nearby.squaredDistanceTo(player) > radius * radius) continue;
+
+                // Check if player is moving or making sound
+                Vec3d velocity = nearby.getVelocity();
+                boolean isMoving = velocity.horizontalLengthSquared() > 0.003;
+                boolean isSprinting = nearby.isSprinting();
+                boolean isSneaking = nearby.isSneaking();
+
+                // Sneaking players are harder to detect
+                if (isSneaking) continue;
+
+                if (isMoving || isSprinting) {
+                    // Apply brief glowing effect (1.5 seconds)
+                    nearby.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.GLOWING, 30, 0, true, false, false));
+                }
+            }
+        }
+
+
+        // Extra health (+20 hearts = +40 health)
+        player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.HEALTH_BOOST, 40, 9, true, false, false)); // Level 10 = +20 hearts
+
+        // Resistance (knockback prevention is handled in mixin)
+        player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 40, 0, true, false, false));
+
+        // Echo location - glow effect on nearby players who move (every 2 seconds)
+        if (player.age % 40 == 0) {
+            ServerWorld world = player.getEntityWorld();
+            double radius = 20.0;
+
+            for (ServerPlayerEntity nearby : world.getPlayers()) {
+                if (nearby == player) continue;
+                if (nearby.squaredDistanceTo(player) > radius * radius) continue;
+
+                // Check if player is moving (velocity check)
+                Vec3d velocity = nearby.getVelocity();
+                if (velocity.lengthSquared() > 0.01) { // Moving
+                    // Apply brief glowing
+                    nearby.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.GLOWING, 30, 0, true, false, false));
+                }
+            }
+        }
+    }
+
+    // ============================================================
+// SKELETON BOW - No tick needed, damage handled in mixin
+// ============================================================
+    public static boolean isSkeletonBowEquipped(ServerPlayerEntity player) {
+        ItemStack mainHand = player.getMainHandStack();
+        ItemStack offHand = player.getOffHandStack();
+        return SlayerItems.isSkeletonBow(mainHand) || SlayerItems.isSkeletonBow(offHand);
+    }
+    public static void tickSkeletonBow(ServerPlayerEntity player) {
+        // No active tick needed - homing and headshot handled in mixins
+    }
+    // ============================================================
+// LEVEL WARNING HELPER (prevents spam)
+// ============================================================
+    public static void sendLevelWarning(ServerPlayerEntity player, String itemName, int reqLevel, String slayerType) {
+        UUID uuid = player.getUuid();
+        long now = System.currentTimeMillis();
+
+        // Only warn once per 5 seconds
+        if (levelWarningCooldowns.containsKey(uuid)) {
+            if (now - levelWarningCooldowns.get(uuid) < 5000) {
+                return;
+            }
+        }
+
+        levelWarningCooldowns.put(uuid, now);
+        player.sendMessage(Text.literal("⚠ " + itemName + " requires " + slayerType + " Bounty Level " + reqLevel + "!")
+                .formatted(Formatting.RED), true);
+    }
+
+    // ============================================================
+// PREVENT BOUNTY ITEMS FROM BEING USED/EATEN
+// ============================================================
+    public static boolean shouldBlockItemUse(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+
+        String nameStr = name.getString();
+        return nameStr.contains("Core") ||
+                nameStr.contains("Bounty Sword") ||
+                nameStr.contains("Slayer Sword");
+    }
     }

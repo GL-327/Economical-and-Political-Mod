@@ -12,7 +12,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SlayerItems {
 
@@ -166,6 +170,241 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
         return helmet;
     }
+    // ============================================================
+// SPIDER LEGGINGS - T12 Spider Requirement
+// ============================================================
+    public static final int SPIDER_LEGGINGS_LEVEL_REQ = 12;
+
+    public static ItemStack createSpiderLeggings() {
+        ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
+
+        // Set color to dark red (spider themed)
+        leggings.set(DataComponentTypes.DYED_COLOR,
+                new net.minecraft.component.type.DyedColorComponent(0x8B0000));
+
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Venomous Crawler Leggings")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Woven from the silk of").formatted(Formatting.GRAY));
+        lore.add(Text.literal("a thousand slain bounty spiders.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("❤ Health Regen: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+300%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("⚡ Movement Speed: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+100%").formatted(Formatting.AQUA, Formatting.BOLD)));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+8").formatted(Formatting.BLUE, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return leggings;
+    }
+
+    public static boolean isSpiderLeggings(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Venomous Crawler Leggings");
+    }
+
+    public static boolean canUseSpiderLeggings(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
+        return level >= SPIDER_LEGGINGS_LEVEL_REQ;
+    }
+    public static final int ZOMBIE_BERSERKER_LEVEL_REQ = 6;
+    // ============================================================
+// SKELETON BOW - T10 Skeleton Requirement
+// ============================================================
+    public static final int SKELETON_BOW_LEVEL_REQ = 10;
+
+    public static ItemStack createSkeletonBow() {
+        ItemStack bow = new ItemStack(Items.BOW);
+
+        bow.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Bone Desperado's Longbow")
+                        .formatted(Formatting.WHITE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Carved from the spine of").formatted(Formatting.GRAY));
+        lore.add(Text.literal("The Bone Desperado himself.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("🎯 Auto-Lock: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Arrows home to targets").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("💀 Headshot: ").formatted(Formatting.WHITE)
+                .append(Text.literal("5x Damage").formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return bow;
+    }
+
+    public static boolean isSkeletonBow(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Bone Desperado's Longbow");
+    }
+
+    public static boolean canUseSkeletonBow(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
+        return level >= SKELETON_BOW_LEVEL_REQ;
+    }
+    public static ItemStack createSlayerCore(SlayerManager.SlayerType type) {
+        ItemStack core = new ItemStack(type.icon);
+
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(type.displayName + " Core")
+                        .formatted(type.color, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Bounty Core").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Used for crafting " + type.displayName).formatted(Formatting.GRAY));
+        lore.add(Text.literal("bounty equipment.").formatted(Formatting.GRAY));
+
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return core;
+    }
+    // ============================================================
+// SLIME BOOTS - T8 Slime Requirement
+// ============================================================
+    public static final int SLIME_BOOTS_LEVEL_REQ = 8;
+
+    public static ItemStack createSlimeBoots() {
+        ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
+
+        boots.set(DataComponentTypes.DYED_COLOR,
+        new net.minecraft.component.type.DyedColorComponent(0x7CFC00));
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Gelatinous Rustler Boots")
+                        .formatted(Formatting.GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Bouncy boots made from").formatted(Formatting.GRAY));
+        lore.add(Text.literal("condensed slime essence.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⬆ Jump Boost II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("🛡 No Fall Damage").formatted(Formatting.WHITE));
+        lore.add(Text.literal("💀 Death Save: ").formatted(Formatting.WHITE)
+                .append(Text.literal("30s at half size").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("   (53min cooldown)").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-2").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + SLIME_BOOTS_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return boots;
+    }
+
+    public static boolean isSlimeBoots(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Gelatinous Rustler Boots");
+    }
+
+    public static boolean canUseSlimeBoots(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SLIME);
+        return level >= SLIME_BOOTS_LEVEL_REQ;
+    }
+
+    // ============================================================
+// WARDEN CHESTPLATE - T12 Warden Requirement (Best Armor)
+// ============================================================
+    public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
+
+    public static ItemStack createWardenChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Sculk Terror Chestplate")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("MYTHIC ARMOR").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Forged in the deep dark from").formatted(Formatting.GRAY));
+        lore.add(Text.literal("the heart of The Sculk Terror.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("🔇 Sculk Immunity: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Never trigger shriekers").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 No Knockback").formatted(Formatting.WHITE));
+        lore.add(Text.literal("❤ Extra Health Bar: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+20 Hearts").formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal("👁 Echo Location: ").formatted(Formatting.WHITE)
+                .append(Text.literal("See nearby players").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+16").formatted(Formatting.BLUE, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return chestplate;
+    }
+
+    public static boolean isWardenChestplate(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        return name.getString().contains("Sculk Terror Chestplate");
+    }
+
+    public static boolean canUseWardenChestplate(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
+        return level >= WARDEN_CHESTPLATE_LEVEL_REQ;
+    }
+
+    // ============================================================
+// HELPER: Check if any bounty item
+// ============================================================
+    public static boolean isAnyBountyItem(ItemStack stack) {
+        return isSlayerSword(stack) ||
+                isUpgradedSlayerSword(stack) ||
+                isSlayerCore(stack) ||
+                isZombieBerserkerHelmet(stack) ||
+                isSpiderLeggings(stack) ||
+                isSkeletonBow(stack) ||
+                isSlimeBoots(stack) ||
+                isWardenChestplate(stack);
+    }
 
     public static boolean isZombieBerserkerHelmet(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
@@ -176,7 +415,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
     public static boolean canUseZombieBerserkerHelmet(ServerPlayerEntity player) {
         int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
-        return level >= BERSERKER_HELMET_LEVEL_REQ;
+        return level >= ZOMBIE_BERSERKER_LEVEL_REQ;
     }
 
     // Update lore dynamically based on player level
@@ -769,4 +1008,5 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         player.sendMessage(Text.literal("✔ Received " + type.displayName + " Core!")
                 .formatted(Formatting.GREEN), false);
     }
+
 }

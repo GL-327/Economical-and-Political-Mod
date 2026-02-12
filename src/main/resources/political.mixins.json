@@ -26,7 +26,10 @@
     "CraftingMixin",
     "BerserkerDamageMixin",
     "LevelLockedWeaponMixin",
-    "LivingEntityDamageMixin"
+    "LivingEntityDamageMixin",
+    "ArrowHomingMixin",
+    "ArrowHeadshotMixin",
+    "BossDamageReductionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

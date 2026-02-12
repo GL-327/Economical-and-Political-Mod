@@ -165,5 +165,6 @@ public class CoinShopGui {
 
         gui.open();
     }
+
 }
 //

@@ -8,7 +8,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.*;import net.minecraft.util.math.Box;import net.minecraft.item.ItemStack;
+
 
 public class ShopManager {
 
@@ -820,6 +821,18 @@ public class ShopManager {
         if (sellPrice <= 0) {
             player.sendMessage(Text.literal("This item cannot be sold!").formatted(Formatting.RED));
             return false;
+        }
+
+        // Check if ANY of this item type in inventory is a bounty item
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack invStack = player.getInventory().getStack(i);
+            if (!invStack.isEmpty() && invStack.isOf(item)) {
+                if (CustomItemHandler.isBountyItem(invStack)) {
+                    player.sendMessage(Text.literal("✗ Bounty items can only be sold on /auction!")
+                            .formatted(Formatting.RED), false);
+                    return false;
+                }
+            }
         }
 
         int count = countItems(player, item);

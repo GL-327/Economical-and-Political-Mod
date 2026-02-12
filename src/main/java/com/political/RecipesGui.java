@@ -10,7 +10,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class RecipesGui {
 
@@ -751,5 +756,177 @@ public class RecipesGui {
                 .build());
 
         gui.open();
+    }
+    // ============================================================
+// CRAFTING TABLE STYLE RECIPE DISPLAY
+// ============================================================
+    private static void displayCraftingTableRecipe(SimpleGui gui, ServerPlayerEntity player,
+                                                   ItemStack output, ItemStack[] recipe, String recipeName, Text description) {
+
+        // Clear previous recipe area
+        for (int i = 0; i < 54; i++) {
+            if (i < 45) { // Don't clear navigation row
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal(""))
+                        .build());
+            }
+        }
+
+        // Title
+        gui.setSlot(4, new GuiElementBuilder(Items.CRAFTING_TABLE)
+                .setName(Text.literal("📖 " + recipeName).formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(description)
+                .build());
+
+        // Crafting Grid (3x3) - Slots 10,11,12 / 19,20,21 / 28,29,30
+        int[] craftingSlots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+
+        for (int i = 0; i < 9; i++) {
+            if (i < recipe.length && recipe[i] != null && !recipe[i].isEmpty()) {
+                gui.setSlot(craftingSlots[i], new GuiElementBuilder(recipe[i].getItem())
+                        .setCount(recipe[i].getCount())
+                        .setName(recipe[i].getName())
+                        .build());
+            } else {
+                // Empty slot indicator
+                gui.setSlot(craftingSlots[i], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("Empty").formatted(Formatting.DARK_GRAY))
+                        .build());
+            }
+        }
+
+        // Arrow pointing to output
+        gui.setSlot(23, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("→").formatted(Formatting.WHITE))
+                .build());
+
+        // Output item
+        gui.setSlot(24, new GuiElementBuilder(output.getItem())
+                .setName(output.getName())
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("OUTPUT").formatted(Formatting.GREEN, Formatting.BOLD))
+                .glow()
+                .build());
+    }
+    // ============================================================
+// BOUNTY ITEM RECIPES
+// ============================================================
+
+    private static void showZombieBerserkerHelmetRecipe(SimpleGui gui, ServerPlayerEntity player) {
+        ItemStack[] recipe = new ItemStack[9];
+        // 5 Zombie Cores + 1 Zombie Head + 3 Rotten Flesh
+        recipe[0] = createCoreDisplay("Zombie Core");
+        recipe[1] = new ItemStack(Items.ZOMBIE_HEAD);
+        recipe[2] = createCoreDisplay("Zombie Core");
+        recipe[3] = createCoreDisplay("Zombie Core");
+        recipe[4] = new ItemStack(Items.ROTTEN_FLESH, 3);
+        recipe[5] = createCoreDisplay("Zombie Core");
+        recipe[6] = null;
+        recipe[7] = createCoreDisplay("Zombie Core");
+        recipe[8] = null;
+
+        displayCraftingTableRecipe(gui, player,
+                SlayerItems.createZombieBerserkerHelmet(),
+                recipe,
+                "Zombie Berserker Helmet",
+                Text.literal("Requires: Zombie Bounty Level 6").formatted(Formatting.RED));
+    }
+
+    private static void showSpiderLeggingsRecipe(SimpleGui gui, ServerPlayerEntity player) {
+        ItemStack[] recipe = new ItemStack[9];
+        // 5 Spider Cores + 8 String + 1 Spider Eye
+        recipe[0] = createCoreDisplay("Spider Core");
+        recipe[1] = new ItemStack(Items.STRING, 4);
+        recipe[2] = createCoreDisplay("Spider Core");
+        recipe[3] = createCoreDisplay("Spider Core");
+        recipe[4] = new ItemStack(Items.SPIDER_EYE);
+        recipe[5] = createCoreDisplay("Spider Core");
+        recipe[6] = new ItemStack(Items.STRING, 4);
+        recipe[7] = createCoreDisplay("Spider Core");
+        recipe[8] = null;
+
+        displayCraftingTableRecipe(gui, player,
+                SlayerItems.createSpiderLeggings(),
+                recipe,
+                "Venomous Crawler Leggings",
+                Text.literal("Requires: Spider Bounty Level 12").formatted(Formatting.RED));
+    }
+
+    private static void showSkeletonBowRecipe(SimpleGui gui, ServerPlayerEntity player) {
+        ItemStack[] recipe = new ItemStack[9];
+        // 5 Skeleton Cores + 1 Bow + 3 Bones
+        recipe[0] = createCoreDisplay("Skeleton Core");
+        recipe[1] = new ItemStack(Items.BONE);
+        recipe[2] = createCoreDisplay("Skeleton Core");
+        recipe[3] = createCoreDisplay("Skeleton Core");
+        recipe[4] = new ItemStack(Items.BOW);
+        recipe[5] = createCoreDisplay("Skeleton Core");
+        recipe[6] = new ItemStack(Items.BONE);
+        recipe[7] = createCoreDisplay("Skeleton Core");
+        recipe[8] = new ItemStack(Items.BONE);
+
+        displayCraftingTableRecipe(gui, player,
+                SlayerItems.createSkeletonBow(),
+                recipe,
+                "Bone Desperado's Longbow",
+                Text.literal("Requires: Skeleton Bounty Level 10").formatted(Formatting.RED));
+    }
+
+    private static void showSlimeBootsRecipe(SimpleGui gui, ServerPlayerEntity player) {
+        ItemStack[] recipe = new ItemStack[9];
+        // 5 Slime Cores + 8 Slime Balls + 1 Leather Boots
+        recipe[0] = createCoreDisplay("Slime Core");
+        recipe[1] = new ItemStack(Items.SLIME_BALL, 4);
+        recipe[2] = createCoreDisplay("Slime Core");
+        recipe[3] = createCoreDisplay("Slime Core");
+        recipe[4] = new ItemStack(Items.LEATHER_BOOTS);
+        recipe[5] = createCoreDisplay("Slime Core");
+        recipe[6] = new ItemStack(Items.SLIME_BALL, 4);
+        recipe[7] = createCoreDisplay("Slime Core");
+        recipe[8] = null;
+
+        displayCraftingTableRecipe(gui, player,
+                SlayerItems.createSlimeBoots(),
+                recipe,
+                "Gelatinous Rustler Boots",
+                Text.literal("Requires: Slime Bounty Level 8").formatted(Formatting.RED));
+    }
+
+    private static void showWardenChestplateRecipe(SimpleGui gui, ServerPlayerEntity player) {
+        ItemStack[] recipe = new ItemStack[9];
+        // 8 Warden Cores + 1 Netherite Chestplate + 4 Echo Shards
+        recipe[0] = createCoreDisplay("Warden Core");
+        recipe[1] = createCoreDisplay("Warden Core");
+        recipe[2] = createCoreDisplay("Warden Core");
+        recipe[3] = createCoreDisplay("Warden Core");
+        recipe[4] = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        recipe[5] = createCoreDisplay("Warden Core");
+        recipe[6] = createCoreDisplay("Warden Core");
+        recipe[7] = new ItemStack(Items.ECHO_SHARD, 4);
+        recipe[8] = createCoreDisplay("Warden Core");
+
+        displayCraftingTableRecipe(gui, player,
+                SlayerItems.createWardenChestplate(),
+                recipe,
+                "Sculk Terror Chestplate",
+                Text.literal("Requires: Warden Bounty Level 12").formatted(Formatting.RED));
+    }
+
+    // Helper to create a core display item
+    private static ItemStack createCoreDisplay(String coreName) {
+        Item icon = switch (coreName) {
+            case "Zombie Core" -> Items.ROTTEN_FLESH;
+            case "Spider Core" -> Items.SPIDER_EYE;
+            case "Skeleton Core" -> Items.BONE;
+            case "Slime Core" -> Items.SLIME_BALL;
+            case "Warden Core" -> Items.ECHO_SHARD;
+            default -> Items.NETHER_STAR;
+        };
+
+        ItemStack stack = new ItemStack(icon);
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(coreName).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return stack;
     }
 }

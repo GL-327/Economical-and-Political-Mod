@@ -1,0 +1,238 @@
+package com.political;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
+
+public class BountyCraftingHandler {
+
+    public static void register() {
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+            BlockPos pos = hitResult.getBlockPos();
+
+            // Use SMITHING_TABLE for bounty crafting
+            if (!world.getBlockState(pos).isOf(Blocks.SMITHING_TABLE)) return ActionResult.PASS;
+
+            // Check for each recipe
+            if (tryZombieBerserkerHelmetRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (trySpiderLeggingsRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (trySkeletonBowRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (trySlimeBootsRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (tryWardenChestplateRecipe(serverPlayer)) return ActionResult.SUCCESS;
+
+            return ActionResult.PASS;
+        });
+    }
+
+    // ============================================================
+    // ZOMBIE BERSERKER HELMET
+    // Recipe: 5 Zombie Cores + 1 Zombie Head + 3 Rotten Flesh
+    // ============================================================
+    private static boolean tryZombieBerserkerHelmetRecipe(ServerPlayerEntity player) {
+        int zombieCores = countCores(player, "Zombie Core");
+        int rottenFlesh = countItem(player, Items.ROTTEN_FLESH);
+        boolean hasZombieHead = hasItem(player, Items.ZOMBIE_HEAD);
+
+        if (zombieCores < 5 || rottenFlesh < 3 || !hasZombieHead) return false;
+
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
+        if (level < SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires Zombie Bounty Level " + SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        removeCores(player, "Zombie Core", 5);
+        removeItem(player, Items.ROTTEN_FLESH, 3);
+        removeItem(player, Items.ZOMBIE_HEAD, 1);
+
+        player.getInventory().insertStack(SlayerItems.createZombieBerserkerHelmet());
+        player.sendMessage(Text.literal("✓ Crafted Zombie Berserker Helmet!")
+                .formatted(Formatting.GOLD, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // SPIDER LEGGINGS
+    // Recipe: 5 Spider Cores + 8 String + 1 Spider Eye
+    // ============================================================
+    private static boolean trySpiderLeggingsRecipe(ServerPlayerEntity player) {
+        int spiderCores = countCores(player, "Spider Core");
+        int string = countItem(player, Items.STRING);
+        boolean hasSpiderEye = hasItem(player, Items.SPIDER_EYE);
+
+        if (spiderCores < 5 || string < 8 || !hasSpiderEye) return false;
+
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
+        if (level < SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires Spider Bounty Level " + SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        removeCores(player, "Spider Core", 5);
+        removeItem(player, Items.STRING, 8);
+        removeItem(player, Items.SPIDER_EYE, 1);
+
+        player.getInventory().insertStack(SlayerItems.createSpiderLeggings());
+        player.sendMessage(Text.literal("✓ Crafted Venomous Crawler Leggings!")
+                .formatted(Formatting.DARK_RED, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // SKELETON BOW
+    // Recipe: 5 Skeleton Cores + 1 Bow + 3 Bones
+    // ============================================================
+    private static boolean trySkeletonBowRecipe(ServerPlayerEntity player) {
+        int skeletonCores = countCores(player, "Skeleton Core");
+        int bones = countItem(player, Items.BONE);
+        boolean hasBow = hasItem(player, Items.BOW);
+
+        if (skeletonCores < 5 || bones < 3 || !hasBow) return false;
+
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
+        if (level < SlayerItems.SKELETON_BOW_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires Skeleton Bounty Level " + SlayerItems.SKELETON_BOW_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        removeCores(player, "Skeleton Core", 5);
+        removeItem(player, Items.BONE, 3);
+        removeItem(player, Items.BOW, 1);
+
+        player.getInventory().insertStack(SlayerItems.createSkeletonBow());
+        player.sendMessage(Text.literal("✓ Crafted Bone Desperado's Longbow!")
+                .formatted(Formatting.WHITE, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // SLIME BOOTS
+    // Recipe: 5 Slime Cores + 8 Slime Balls + 1 Leather Boots
+    // ============================================================
+    private static boolean trySlimeBootsRecipe(ServerPlayerEntity player) {
+        int slimeCores = countCores(player, "Slime Core");
+        int slimeBalls = countItem(player, Items.SLIME_BALL);
+        boolean hasBoots = hasItem(player, Items.LEATHER_BOOTS);
+
+        if (slimeCores < 5 || slimeBalls < 8 || !hasBoots) return false;
+
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SLIME);
+        if (level < SlayerItems.SLIME_BOOTS_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires Slime Bounty Level " + SlayerItems.SLIME_BOOTS_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        removeCores(player, "Slime Core", 5);
+        removeItem(player, Items.SLIME_BALL, 8);
+        removeItem(player, Items.LEATHER_BOOTS, 1);
+
+        player.getInventory().insertStack(SlayerItems.createSlimeBoots());
+        player.sendMessage(Text.literal("✓ Crafted Gelatinous Rustler Boots!")
+                .formatted(Formatting.GREEN, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // WARDEN CHESTPLATE
+    // Recipe: 8 Warden Cores + 1 Netherite Chestplate + 4 Echo Shards
+    // ============================================================
+    private static boolean tryWardenChestplateRecipe(ServerPlayerEntity player) {
+        int wardenCores = countCores(player, "Warden Core");
+        int echoShards = countItem(player, Items.ECHO_SHARD);
+        boolean hasChestplate = hasItem(player, Items.NETHERITE_CHESTPLATE);
+
+        if (wardenCores < 8 || echoShards < 4 || !hasChestplate) return false;
+
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
+        if (level < SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires Warden Bounty Level " + SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        removeCores(player, "Warden Core", 8);
+        removeItem(player, Items.ECHO_SHARD, 4);
+        removeItem(player, Items.NETHERITE_CHESTPLATE, 1);
+
+        player.getInventory().insertStack(SlayerItems.createWardenChestplate());
+        player.sendMessage(Text.literal("✓ Crafted Sculk Terror Chestplate!")
+                .formatted(Formatting.DARK_AQUA, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // HELPER METHODS
+    // ============================================================
+
+    private static int countCores(ServerPlayerEntity player, String coreName) {
+        int count = 0;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+            if (name != null && name.getString().equals(coreName)) {
+                count += stack.getCount();
+            }
+        }
+        return count;
+    }
+
+    private static int countItem(ServerPlayerEntity player, Item item) {
+        int count = 0;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isOf(item)) {
+                count += stack.getCount();
+            }
+        }
+        return count;
+    }
+
+    private static boolean hasItem(ServerPlayerEntity player, Item item) {
+        return countItem(player, item) >= 1;
+    }
+
+    private static void removeCores(ServerPlayerEntity player, String coreName, int amount) {
+        int remaining = amount;
+        for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+            if (name != null && name.getString().equals(coreName)) {
+                int toRemove = Math.min(remaining, stack.getCount());
+                stack.decrement(toRemove);
+                remaining -= toRemove;
+            }
+        }
+    }
+
+    private static void removeItem(ServerPlayerEntity player, Item item, int amount) {
+        int remaining = amount;
+        for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isOf(item)) {
+                int toRemove = Math.min(remaining, stack.getCount());
+                stack.decrement(toRemove);
+                remaining -= toRemove;
+            }
+        }
+    }
+}
