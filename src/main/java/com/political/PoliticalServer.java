@@ -84,7 +84,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 			return ActionResult.PASS;
 		});
-		ServerEntityEvents.ENTITY_UNLOAD.register((entity,world)->
+		ServerEntityEvents.ENTITY_UNLOAD.register((entity, world) ->
 
 		{
 			if (entity instanceof LivingEntity living) {
@@ -129,55 +129,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 			return ActionResult.PASS;
 		});
-		ServerTickEvents.END_SERVER_TICK.register((s) -> {
-			server = s;
-			BossAbilityManager.tickAllBossAbilities(server);
-			BossAbilityManager.tickScheduledBlockRemovals();
-			for (ServerWorld world : server.getWorlds()) {
-				for (UUID bossId : BossAbilityManager.getActiveBosses()) {
-					// Find entity by UUID - iterate through entities
-					for (Entity entity : world.iterateEntities()) {
-						if (entity.getUuid().equals(bossId) && entity instanceof LivingEntity boss && boss.isAlive()) {
-							ServerPlayerEntity target = (ServerPlayerEntity) world.getClosestPlayer(
-									boss.getX(), boss.getY(), boss.getZ(), 30, false);
 
-							if (target != null) {
-								BossAbilityManager.BossAbilityState state = BossAbilityManager.getBossState(bossId);
-								if (state != null) {
-									BossAbilityManager.tickBossAbilities(boss, target, state.type, state.tier);
-								}
-							}
-							break; // Found the boss, move to next bossId
-						}
-					}
-				}
-			}
-			for (ServerWorld world : s.getWorlds()) {
-				SlayerManager.tickUpgradedMobDespawn(world);
-			}
-			for (ServerWorld world : s.getWorlds()) {
-				BountySpawnManager.tick(world);
-			}
-			// Your existing tick code (if any)
-			SlayerManager.tick(s);
-			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
-				CustomItemHandler.tickHermesShoes(player);
-				CustomItemHandler.tickHPEBM(player);
-				CustomItemHandler.tickSpiderLeggings(player);
-				CustomItemHandler.tickSlimeBoots(player);
-				CustomItemHandler.tickWardenChestplate(player);
-				CustomItemHandler.tickZombieBerserkerHelmet(player);
-				CustomItemHandler.tickSkeletonBow(player); // For arrow tracking
-			}
-			// ADD THESE LINES INSIDE THIS BLOCK:
-			visibilityTickCounter++;
-			if (visibilityTickCounter >= 10) {
-				visibilityTickCounter = 0;
-				HealthScalingManager.tickNameTagVisibility(s);
-			}
-			// END OF NEW CODE
-
-		});
 
 
 		ModEntities.register();
@@ -337,8 +289,52 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			AuctionHouseGui.onPlayerDisconnect(player);
 			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
 		});
+		ServerTickEvents.END_SERVER_TICK.register((s) -> {
+			server = s;
 
-		ServerTickEvents.END_SERVER_TICK.register(s -> {
+			// Boss abilities (fixed - no more world iteration)
+// Boss abilities - using efficient entity lookup
+			BossAbilityManager.tickScheduledBlockRemovals();
+			for (ServerWorld world : s.getWorlds()) {
+				for (UUID bossId : BossAbilityManager.getActiveBosses()) {
+					Entity entity = world.getEntity(bossId);  // O(1) lookup!
+					if (entity instanceof LivingEntity boss && boss.isAlive()) {
+						ServerPlayerEntity target = (ServerPlayerEntity) world.getClosestPlayer(
+								boss.getX(), boss.getY(), boss.getZ(), 30, false);
+
+						if (target != null) {
+							BossAbilityManager.BossAbilityState state = BossAbilityManager.getBossState(bossId);
+							if (state != null) {
+								BossAbilityManager.tickBossAbilities(boss, target, state.type, state.tier);
+							}
+						}
+						break; // Found in this world, skip other worlds
+					}
+				}
+			}
+
+			// World-based ticks (once per world)
+			for (ServerWorld world : s.getWorlds()) {
+				BountySpawnManager.tick(world);
+				HealthScalingManager.tickUpgradedMobDespawn(world);
+			}
+
+			// Slayer manager
+			SlayerManager.tick(s);
+
+			// Player-based ticks (once per player)
+			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
+				CustomItemHandler.tickHermesShoes(player);
+				CustomItemHandler.tickHPEBM(player);
+				CustomItemHandler.tickSpiderLeggings(player);
+				CustomItemHandler.tickSlimeBoots(player);
+				CustomItemHandler.tickWardenChestplate(player);
+				CustomItemHandler.tickZombieBerserkerHelmet(player);
+				CustomItemHandler.tickSkeletonBow(player);
+				CustomItemHandler.tickUltraOverclockedLeftClick(player);
+			}
+
+			// Other managers
 			ElectionManager.tick(s);
 			PrisonManager.tick(s);
 			WeatherManager.tick(s);
@@ -346,20 +342,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			PerkManager.tickPerks(s);
 			UndergroundAuctionManager.tick(s);
 			UndergroundAuctionGui.tick();
-			SlayerManager.tick(s);
 
-			// ADD THIS - without it the beam never fires!
-			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
-				CustomItemHandler.tickHPEBM(player);
-				CustomItemHandler.tickHermesShoes(player);
-				CustomItemHandler.tickUltraOverclockedLeftClick(player);
-				CustomItemHandler.tickZombieBerserkerHelmet(player);
-
+			visibilityTickCounter++;
+			if (visibilityTickCounter >= 10) {
+				visibilityTickCounter = 0;
+				HealthScalingManager.tickNameTagVisibility(s);  // ADD THIS LINE
 			}
-
+			HealthScalingManager.tickCleanup();
 		});
 
-		LOGGER.info("PoliticalServer initialized!");
 	}
 
 

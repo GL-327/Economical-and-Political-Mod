@@ -107,16 +107,7 @@ public class SlayerManager {
             return baseDamage * type.difficultyMultiplier;
         }
     }
-    public static void tickUpgradedMobDespawn(ServerWorld world) {
-        Box worldBox = new Box(-30000000, -64, -30000000, 30000000, 320, 30000000);
-        for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, worldBox,
-                e -> e.hasCustomName() && e.getName().getString().contains("Upgraded"))) {
-            // Despawn after 5 minutes (6000 ticks)
-            if (entity.age > 6000) {
-                entity.discard();
-            }
-        }
-    }
+
     public static final TierConfig[] TIERS = {
             //          tier, kills, baseHP, baseDmg, cost,    xp,  minLvl, dmgResist, miniBosses
             new TierConfig(1,   10,   100,    4,      100,     5,    0,     0.0,       0),   // Was 25
@@ -505,7 +496,7 @@ public class SlayerManager {
         String tierRoman = toRoman(quest.tier);
         boss.setCustomName(Text.literal(type.bossName + " " + tierRoman)
                 .formatted(type.color, Formatting.BOLD));
-        boss.setCustomNameVisible(true);
+        boss.setCustomNameVisible(false);
 
         // Add effects for visual flair
         boss.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, Integer.MAX_VALUE, 0, false, false));
@@ -582,7 +573,7 @@ public class SlayerManager {
 
         miniBoss.setCustomName(Text.literal("✦ " + type.displayName + " Minion ✦")
                 .formatted(type.color));
-        miniBoss.setCustomNameVisible(true);
+        miniBoss.setCustomNameVisible(false);
         miniBoss.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, Integer.MAX_VALUE, 0, false, false));
 
         world.spawnEntity(miniBoss);
@@ -692,7 +683,7 @@ public class SlayerManager {
         String tierRoman = toRoman(tier);
         boss.setCustomName(Text.literal("[TEST] " + type.bossName + " " + tierRoman)
                 .formatted(type.color, Formatting.BOLD));
-        boss.setCustomNameVisible(true);
+        boss.setCustomNameVisible(false);
         boss.setPersistent();
 
         world.spawnEntity(boss);
@@ -992,7 +983,7 @@ public class SlayerManager {
         if (mob != null) {
             mob.setCustomName(Text.literal("Upgraded " + type.displayName)
                     .formatted(type.color, Formatting.BOLD));
-            mob.setCustomNameVisible(true);
+            mob.setCustomNameVisible(false);
 
             var healthAttr = mob.getAttributeInstance(EntityAttributes.MAX_HEALTH);
             if (healthAttr != null) {

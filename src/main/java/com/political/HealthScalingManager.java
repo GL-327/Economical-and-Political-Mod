@@ -6,6 +6,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import java.util.Iterator;
 import net.minecraft.util.Formatting;
 import java.util.Random;
 import net.minecraft.server.MinecraftServer;
@@ -36,26 +37,41 @@ public class HealthScalingManager {
     // CONFIGURATION
     // ============================================================
     public static void tickNameTagVisibility(MinecraftServer server) {
+        if (scaledEntities.isEmpty()) return;
+
         for (ServerWorld world : server.getWorlds()) {
-            for (UUID scaledUuid : new HashSet<>(scaledEntities)) {
-                // Find the entity
-                for (var entity : world.iterateEntities()) {
-                    if (entity.getUuid().equals(scaledUuid) && entity instanceof MobEntity mob) {
-                        updateNameTagVisibility(mob, world);
-                        break;
-                    }
+            // Use getEntity(UUID) for O(1) lookup instead of iterating all entities
+            Iterator<UUID> it = scaledEntities.iterator();
+            while (it.hasNext()) {
+                UUID uuid = it.next();
+                Entity entity = world.getEntity(uuid);
+
+                if (entity instanceof MobEntity mob) {
+                    updateNameTagVisibility(mob, world);
                 }
             }
         }
     }
-    public static void tickUpgradedMobDespawn(ServerWorld world) {
-        for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class,
-                new Box(-30000000, -64, -30000000, 30000000, 320, 30000000),
-                e -> e.hasCustomName() && e.getName().getString().contains("Upgraded"))) {
+    private static final Map<UUID, Long> upgradedMobSpawnTimes = new HashMap<>();
 
-            // Despawn after 5 minutes (6000 ticks)
-            if (entity.age > 6000) {
-                entity.discard();
+    public static void trackUpgradedMob(UUID uuid, long worldTime) {
+        upgradedMobSpawnTimes.put(uuid, worldTime);
+    }
+
+    public static void tickUpgradedMobDespawn(ServerWorld world) {
+        if (upgradedMobSpawnTimes.isEmpty()) return;
+
+        long currentTime = world.getTime();
+        Iterator<Map.Entry<UUID, Long>> it = upgradedMobSpawnTimes.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<UUID, Long> entry = it.next();
+            if (currentTime - entry.getValue() > 6000) {
+                Entity entity = world.getEntity(entry.getKey());
+                if (entity instanceof LivingEntity living) {
+                    living.discard();
+                }
+                it.remove();
             }
         }
     }
@@ -300,6 +316,7 @@ public class HealthScalingManager {
             ScalingTier tier = ScalingTier.ELITE;
             applyScaling(mob, tier);
             setMobTier(mob, tier.ordinal());
+            trackUpgradedMob(entity.getUuid(), world.getTime());
         }
     }
 
@@ -327,8 +344,9 @@ public class HealthScalingManager {
             String stars = getStars(tier);
             mob.setCustomName(Text.literal(stars + " " + tier.displayName + " " + mobName)
                     .formatted(tier.color));
-            mob.setCustomNameVisible(true);
-
+            mob.setCustomNameVisible(false);
+            mob.setCustomNameVisible(false);
+            scaledEntities.add(mob.getUuid());  // ADD THIS LINE
 
 
         } catch (Exception e) {
@@ -409,11 +427,24 @@ public class HealthScalingManager {
         return mobTiers.getOrDefault(mob.getUuid(), 0);
     }
 
-    // Call this when mob dies to clean up
-    public static void onMobDeath(LivingEntity mob) {
-        mobTiers.remove(mob.getUuid());
+    public static void onMobDeath(LivingEntity entity) {
+        if (entity == null) return;
+        UUID uuid = entity.getUuid();
+        scaledEntities.remove(uuid);
+        checkedEntities.remove(uuid);  // ADD THIS LINE
+        extraDropsCount.remove(uuid);  // ADD THIS LINE
+        mobTiers.remove(uuid);         // ADD THIS LINE if you have mobTiers map
+        upgradedMobSpawnTimes.remove(uuid); // ADD THIS LINE
     }
+    private static int cleanupTickCounter = 0;
 
+    public static void tickCleanup() {
+        cleanupTickCounter++;
+        if (cleanupTickCounter >= 6000) {
+            cleanupTickCounter = 0;
+            checkedEntities.clear();
+        }
+    }
 
     public static void setExtraDrops(UUID uuid, int count) {
         extraDropsCount.put(uuid, count);
