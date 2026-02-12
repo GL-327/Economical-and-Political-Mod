@@ -22,7 +22,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.util.UUID;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.fabricmc.api.DedicatedServerModInitializer;
@@ -32,6 +32,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -130,7 +131,27 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		});
 		ServerTickEvents.END_SERVER_TICK.register((s) -> {
 			server = s;
+			BossAbilityManager.tickAllBossAbilities(server);
+			BossAbilityManager.tickScheduledBlockRemovals();
+			for (ServerWorld world : server.getWorlds()) {
+				for (UUID bossId : BossAbilityManager.getActiveBosses()) {
+					// Find entity by UUID - iterate through entities
+					for (Entity entity : world.iterateEntities()) {
+						if (entity.getUuid().equals(bossId) && entity instanceof LivingEntity boss && boss.isAlive()) {
+							ServerPlayerEntity target = (ServerPlayerEntity) world.getClosestPlayer(
+									boss.getX(), boss.getY(), boss.getZ(), 30, false);
 
+							if (target != null) {
+								BossAbilityManager.BossAbilityState state = BossAbilityManager.getBossState(bossId);
+								if (state != null) {
+									BossAbilityManager.tickBossAbilities(boss, target, state.type, state.tier);
+								}
+							}
+							break; // Found the boss, move to next bossId
+						}
+					}
+				}
+			}
 			for (ServerWorld world : s.getWorlds()) {
 				BountySpawnManager.tick(world);
 			}

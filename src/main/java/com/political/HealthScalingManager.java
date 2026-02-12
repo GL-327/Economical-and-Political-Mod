@@ -239,14 +239,7 @@ public class HealthScalingManager {
 
         UUID uuid = entity.getUuid();
 
-        ScalingTier scalingTier = ScalingTier.rollTier(random);
-        applyScaling(mob, scalingTier);
-        int tierValue = scalingTier.ordinal(); // Convert enum to int (0, 1, 2, etc.)
-        if (tierValue > 0) {
-            setMobTier(mob, tierValue);
-        }
-
-        // Already processed
+        // Already processed - CHECK FIRST!
         if (scaledEntities.contains(uuid) || checkedEntities.contains(uuid)) return;
 
         // Not a scalable type
@@ -267,17 +260,20 @@ public class HealthScalingManager {
             return;
         }
 
-        // Roll for scaling
-        net.minecraft.util.math.random.Random random = entity.getRandom();
-        if (random.nextDouble() > SPAWN_CHANCE) {
+        // Roll for scaling - only 30% chance
+        if (entity.getRandom().nextDouble() > SPAWN_CHANCE) {
             checkedEntities.add(uuid);
             return;
         }
 
-        // Apply scaling
+        // NOW apply scaling after all checks pass
         ScalingTier tier = ScalingTier.rollTier(javaRandom);
         applyScaling(mob, tier);
 
+        int tierValue = tier.ordinal();
+        if (tierValue > 0) {
+            setMobTier(mob, tierValue);
+        }
     }
 
 

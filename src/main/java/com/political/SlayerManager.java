@@ -518,6 +518,7 @@ public class SlayerManager {
 
         // Track the boss
         quest.bossSpawned = true;
+        BossAbilityManager.registerBoss(boss, type, quest.tier);
         quest.bossAlive = true;
         quest.bossEntityUuid = boss.getUuid();
         bossOwners.put(boss.getUuid(), player.getUuidAsString());
@@ -545,6 +546,7 @@ public class SlayerManager {
         world.playSound(null, player.getBlockPos(),
                 net.minecraft.sound.SoundEvents.ENTITY_WITHER_SPAWN,
                 net.minecraft.sound.SoundCategory.HOSTILE, 1.0f, 0.5f);
+
     }
 
     private static void spawnMiniBoss(ServerPlayerEntity player, ActiveQuest quest) {
@@ -813,6 +815,7 @@ public class SlayerManager {
     private static void cleanupQuest(String playerUuid) {
         ActiveQuest quest = activeQuests.remove(playerUuid);
         if (quest != null && quest.bossEntityUuid != null) {
+            BossAbilityManager.removeBoss(quest.bossEntityUuid);  // ADD THIS LINE
             bossOwners.remove(quest.bossEntityUuid);
             slayerBossEntities.remove(quest.bossEntityUuid);
         }

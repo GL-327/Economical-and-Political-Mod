@@ -25,7 +25,8 @@
     "AnvilCraftingMixin",
     "CraftingMixin",
     "BerserkerDamageMixin",
-    "LevelLockedWeaponMixin"
+    "LevelLockedWeaponMixin",
+    "LivingEntityDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1
