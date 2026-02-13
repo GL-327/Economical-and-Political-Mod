@@ -222,7 +222,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
         return level >= SPIDER_LEGGINGS_LEVEL_REQ;
     }
-    public static final int ZOMBIE_BERSERKER_LEVEL_REQ = 6;
+    public static final int ZOMBIE_BERSERKER_LEVEL_REQ = 12;
     // ============================================================
 // SKELETON BOW - T10 Skeleton Requirement
 // ============================================================

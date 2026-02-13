@@ -1,5 +1,6 @@
 package com.political;
 
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.component.DataComponentTypes;
@@ -27,7 +28,94 @@ public class SlayerRecipes {
             this.requiredLevel = requiredLevel;
         }
     }
+    public static final int LEATHER_HELMET_DURABILITY = 550;      // Default: 55
+    public static final int LEATHER_CHESTPLATE_DURABILITY = 800;  // Default: 80
+    public static final int LEATHER_LEGGINGS_DURABILITY = 750;    // Default: 75
+    public static final int LEATHER_BOOTS_DURABILITY = 650;       // Default: 65
+    public static final int NETHERITE_CHESTPLATE_DURABILITY = 4070; // Default: 407
+    public static final int BOW_DURABILITY = 3840;                // Default: 384
+    public static final int SLIME_BOOTS_LEVEL_REQ = 8;
+    public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
+    public static final int SKELETON_BOW_LEVEL_REQ = 10;
+    public static final int SPIDER_LEGGINGS_LEVEL_REQ = 10;
+    // ============================================================
+// WARDEN CHESTPLATE - With increased durability
+// ============================================================
+    public static ItemStack createWardenChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
 
+        // Set custom name
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("💀 Sculk Terror Chestplate")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        // INCREASED DURABILITY - 10x default netherite chestplate (407 -> 4070)
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, NETHERITE_CHESTPLATE_DURABILITY);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
+
+        // Add lore
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Forged from the sculk of").formatted(Formatting.GRAY));
+        lore.add(Text.literal("the deepest ancient cities.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("👁 ESP: ").formatted(Formatting.WHITE)
+                .append(Text.literal("See noisy entities").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🌙 Night Vision: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Permanent").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("🛡 Darkness Immunity").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return chestplate;
+    }
+
+    // ============================================================
+// SKELETON BOW - With increased durability
+// ============================================================
+    public static ItemStack createSkeletonBow() {
+        ItemStack bow = new ItemStack(Items.BOW);
+
+        // Set custom name
+        bow.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🏹 Bone Desperado's Longbow")
+                        .formatted(Formatting.WHITE, Formatting.BOLD));
+
+        // INCREASED DURABILITY - 10x default bow (384 -> 3840)
+        bow.set(DataComponentTypes.MAX_DAMAGE, BOW_DURABILITY);
+        bow.set(DataComponentTypes.DAMAGE, 0);
+
+        // Add lore
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Carved from the spine of").formatted(Formatting.GRAY));
+        lore.add(Text.literal("The Bone Desperado himself.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("🎯 Auto-Lock: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Arrows home to targets").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("💀 Headshot: ").formatted(Formatting.WHITE)
+                .append(Text.literal("5x Damage").formatted(Formatting.RED, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        return bow;
+    }
     private static final List<Recipe> RECIPES = new ArrayList<>();
 
     public static void registerRecipes() {

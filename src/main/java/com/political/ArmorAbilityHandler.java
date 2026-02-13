@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.*;import net.minecraft.util.math.Box;
 
 public class ArmorAbilityHandler {
     private static final Map<UUID, Long> entityNoiseTimestamps = new HashMap<>();
@@ -151,41 +151,51 @@ public class ArmorAbilityHandler {
         return name.contains("Slime") && name.contains("Boots");
     }
     public static void detectEntityNoise(ServerWorld world) {
-        for (LivingEntity entity : world.getEntitiesByClass(
-                LivingEntity.class,
-                null, // All entities
-                e -> e.isAlive())) {
+        // Get all players and check entities around them
+        for (ServerPlayerEntity player : world.getPlayers()) {
+            // Only check if player has warden chestplate (optimization)
+            ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+            if (!isWardenChestplate(chestplate)) continue;
 
-            // Detect noise-making activities:
-            boolean madeNoise = false;
+            // Check entities within 24 blocks of the player
+            Box searchBox = player.getBoundingBox().expand(24.0);
 
-            // 1. Entity is sprinting/running (not sneaking)
-            if (entity.isSprinting()) {
-                madeNoise = true;
-            }
+            for (LivingEntity entity : world.getEntitiesByClass(
+                    LivingEntity.class,
+                    searchBox,  // ← Use actual bounding box, not null
+                    e -> e != player && e.isAlive())) {
 
-            // 2. Entity is attacking
-            if (entity.handSwinging) {
-                madeNoise = true;
-            }
+                // Detect noise-making activities:
+                boolean madeNoise = false;
 
-            // 3. Entity is walking (velocity check) and not sneaking
-            if (!entity.isSneaking() && entity.getVelocity().horizontalLengthSquared() > 0.01) {
-                madeNoise = true;
-            }
+                // 1. Entity is sprinting/running (not sneaking)
+                if (entity.isSprinting()) {
+                    madeNoise = true;
+                }
 
-            // 4. Entity took damage recently
-            if (entity.hurtTime > 0) {
-                madeNoise = true;
-            }
+                // 2. Entity is attacking
+                if (entity.handSwinging) {
+                    madeNoise = true;
+                }
 
-            // 5. Hostile mobs making ambient sounds (random chance to simulate)
-            if (entity instanceof HostileEntity && entity.age % 60 == 0 && Math.random() < 0.3) {
-                madeNoise = true;
-            }
+                // 3. Entity is walking (velocity check) and not sneaking
+                if (!entity.isSneaking() && entity.getVelocity().horizontalLengthSquared() > 0.01) {
+                    madeNoise = true;
+                }
 
-            if (madeNoise) {
-                onEntityMakeNoise(entity, world);
+                // 4. Entity took damage recently
+                if (entity.hurtTime > 0) {
+                    madeNoise = true;
+                }
+
+                // 5. Hostile mobs making ambient sounds (random chance to simulate)
+                if (entity instanceof HostileEntity && entity.age % 60 == 0 && Math.random() < 0.3) {
+                    madeNoise = true;
+                }
+
+                if (madeNoise) {
+                    onEntityMakeNoise(entity, world);
+                }
             }
         }
     }
