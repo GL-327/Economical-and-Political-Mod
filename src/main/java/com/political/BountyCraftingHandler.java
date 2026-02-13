@@ -21,15 +21,22 @@ public class BountyCraftingHandler {
 
             BlockPos pos = hitResult.getBlockPos();
 
-            // Use SMITHING_TABLE for bounty crafting
             if (!world.getBlockState(pos).isOf(Blocks.CRAFTING_TABLE)) return ActionResult.PASS;
 
-            // Check for each recipe
+            // === ARMOR RECIPES ===
             if (tryZombieBerserkerHelmetRecipe(serverPlayer)) return ActionResult.SUCCESS;
             if (trySpiderLeggingsRecipe(serverPlayer)) return ActionResult.SUCCESS;
             if (trySkeletonBowRecipe(serverPlayer)) return ActionResult.SUCCESS;
             if (trySlimeBootsRecipe(serverPlayer)) return ActionResult.SUCCESS;
             if (tryWardenChestplateRecipe(serverPlayer)) return ActionResult.SUCCESS;
+
+            // === SWORD RECIPES (T1 & T2) ===
+            if (tryBountySwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (tryUpgradedSwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
+
+            // === WEAPON RECIPES ===
+            if (tryGavelRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (tryBaseHPEBMRecipe(serverPlayer)) return ActionResult.SUCCESS;
 
             return ActionResult.PASS;
         });
@@ -181,9 +188,150 @@ public class BountyCraftingHandler {
     }
 
     // ============================================================
-    // HELPER METHODS
+    // BOUNTY SWORDS (T1) - All Types
+    // Recipe: 3 Cores + 1 Iron Sword + 2 Sticks
     // ============================================================
+    private static boolean tryBountySwordRecipe(ServerPlayerEntity player) {
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            String coreName = type.displayName + " Core";
+            int cores = countCores(player, coreName);
+            boolean hasSword = hasItem(player, Items.IRON_SWORD);
+            int sticks = countItem(player, Items.STICK);
 
+            if (cores >= 3 && hasSword && sticks >= 2) {
+                int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+                if (level < SlayerItems.BASIC_SWORD_LEVEL_REQ) {
+                    player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.BASIC_SWORD_LEVEL_REQ)
+                            .formatted(Formatting.RED), false);
+                    return false;
+                }
+
+                removeCores(player, coreName, 3);
+                removeItem(player, Items.IRON_SWORD, 1);
+                removeItem(player, Items.STICK, 2);
+
+                player.getInventory().insertStack(SlayerItems.createSlayerSword(type));
+                player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Bounty Sword!")
+                        .formatted(type.color, Formatting.BOLD), false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // UPGRADED SLAYER SWORDS (T2) - All Types
+    // Recipe: 5 Cores + 1 Diamond Sword + 1 T1 Bounty Sword
+    // ============================================================
+    private static boolean tryUpgradedSwordRecipe(ServerPlayerEntity player) {
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            String coreName = type.displayName + " Core";
+            int cores = countCores(player, coreName);
+            boolean hasDiamondSword = hasItem(player, Items.DIAMOND_SWORD);
+            boolean hasT1Sword = hasSlayerSword(player, type);
+
+            if (cores >= 5 && hasDiamondSword && hasT1Sword) {
+                int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+                if (level < SlayerItems.UPGRADED_SWORD_LEVEL_REQ) {
+                    player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.UPGRADED_SWORD_LEVEL_REQ)
+                            .formatted(Formatting.RED), false);
+                    return false;
+                }
+
+                removeCores(player, coreName, 5);
+                removeItem(player, Items.DIAMOND_SWORD, 1);
+                removeSlayerSword(player, type);
+
+                player.getInventory().insertStack(SlayerItems.createUpgradedSlayerSword(type));
+                player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Slayer Sword II!")
+                        .formatted(type.color, Formatting.BOLD), false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // THE GAVEL
+    // Recipe: 2 Warden Cores + 2 Netherite Ingots + 1 Wooden Axe
+    // ============================================================
+    private static boolean tryGavelRecipe(ServerPlayerEntity player) {
+        int wardenCores = countCores(player, "Warden Core");
+        int netheriteIngots = countItem(player, Items.NETHERITE_INGOT);
+        boolean hasAxe = hasItem(player, Items.WOODEN_AXE);
+
+        if (wardenCores < 2 || netheriteIngots < 2 || !hasAxe) return false;
+
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
+        if (level < 7) {
+            player.sendMessage(Text.literal("✗ Requires Warden Bounty Level 7")
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        removeCores(player, "Warden Core", 2);
+        removeItem(player, Items.NETHERITE_INGOT, 2);
+        removeItem(player, Items.WOODEN_AXE, 1);
+
+        player.getInventory().insertStack(SlayerItems.createTheGavel());
+        player.sendMessage(Text.literal("✓ Crafted The Gavel!")
+                .formatted(Formatting.GOLD, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // BASE HPEBM
+    // Recipe: 1 Diamond Shovel + 4 Redstone Blocks + 4 Glowstone
+    // ============================================================
+    private static boolean tryBaseHPEBMRecipe(ServerPlayerEntity player) {
+        boolean hasShovel = hasItem(player, Items.DIAMOND_SHOVEL);
+        int redstoneBlocks = countItem(player, Items.REDSTONE_BLOCK);
+        int glowstone = countItem(player, Items.GLOWSTONE);
+
+        if (!hasShovel || redstoneBlocks < 4 || glowstone < 4) return false;
+
+        removeItem(player, Items.DIAMOND_SHOVEL, 1);
+        removeItem(player, Items.REDSTONE_BLOCK, 4);
+        removeItem(player, Items.GLOWSTONE, 4);
+
+        player.getInventory().insertStack(CustomItemHandler.createHPEBM(1));
+        player.sendMessage(Text.literal("✓ Crafted HPEBM Mk1!")
+                .formatted(Formatting.WHITE, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    // ============================================================
+    // HELPER METHODS FOR SLAYER SWORDS
+    // ============================================================
+    private static boolean hasSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        String swordName = type.displayName + " Bounty Sword";
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+            if (name != null && name.getString().contains(swordName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void removeSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        String swordName = type.displayName + " Bounty Sword";
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+            if (name != null && name.getString().contains(swordName)) {
+                stack.decrement(1);
+                return;
+            }
+        }
+    }
+
+    // ============================================================
+    // EXISTING HELPER METHODS (keep these from your current file)
+    // ============================================================
     private static int countCores(ServerPlayerEntity player, String coreName) {
         int count = 0;
         for (int i = 0; i < player.getInventory().size(); i++) {
