@@ -8,7 +8,7 @@ public class SlayerData {
     // ============================================================
     // PLAYER SLAYER DATA STRUCTURE
     // ============================================================
-
+    private static final Map<String, Integer> playerCredits = new HashMap<>();
     public static class PlayerSlayerData {
         // XP per slayer type
         public Map<String, Long> slayerXp = new HashMap<>();
@@ -97,7 +97,22 @@ public class SlayerData {
             data.highestTierCompleted.put(type.name(), tier);
         }
     }
+    public static void addCredits(String uuid, int amount) {
+        int current = getCredits(uuid);
+        setCredits(uuid, current + amount);
+    }
 
+    public static int getCredits(String uuid) {
+        // Return credits from your data storage
+        // Example if using a Map:
+        return playerCredits.getOrDefault(uuid, 0);
+    }
+
+    public static void setCredits(String uuid, int amount) {
+        // Store credits in your data storage
+        // Example if using a Map:
+        playerCredits.put(uuid, amount);
+    }
     // ============================================================
     // AGGREGATE STATS
     // ============================================================

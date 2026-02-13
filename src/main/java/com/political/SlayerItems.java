@@ -1008,5 +1008,30 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         player.sendMessage(Text.literal("✔ Received " + type.displayName + " Core!")
                 .formatted(Formatting.GREEN), false);
     }
+    public static ItemStack createZombieSword() {
+        return createSlayerSword(SlayerManager.SlayerType.ZOMBIE);
+    }
 
+    public static ItemStack createSpiderSword() {
+        return createSlayerSword(SlayerManager.SlayerType.SPIDER);
+    }
+
+    public static ItemStack createSkeletonSword() {
+        return createSlayerSword(SlayerManager.SlayerType.SKELETON);
+    }
+
+    public static ItemStack createSlimeSword() {
+        return createSlayerSword(SlayerManager.SlayerType.SLIME);
+    }
+
+    public static ItemStack createEndermanSword() {
+        return createSlayerSword(SlayerManager.SlayerType.ENDERMAN);
+    }
+
+    public static ItemStack createTheGavel() {
+        return createSlayerSword(SlayerManager.SlayerType.WARDEN);
+    }
+    public static ItemStack createZombieHelmet() {
+        return createSlayerSword(SlayerManager.SlayerType.WARDEN);
+    }
 }

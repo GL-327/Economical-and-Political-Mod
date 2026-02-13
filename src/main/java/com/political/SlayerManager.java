@@ -12,6 +12,9 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,8 +24,9 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.entity.mob.WardenEntity;
 
-import java.util.*;
+import java.util.*;import net.minecraft.server.world.ServerWorld;
 
 public class SlayerManager {
 
@@ -110,12 +114,13 @@ public class SlayerManager {
 
     public static final TierConfig[] TIERS = {
             //          tier, kills, baseHP, baseDmg, cost,    xp,  minLvl, dmgResist, miniBosses
-            new TierConfig(1,   10,   100,    4,      100,     5,    0,     0.0,       0),   // Was 25
-            new TierConfig(2,   20,   500,    8,      500,     25,   1,     0.15,      1),   // Was 50
-            new TierConfig(3,   40,  2000,   15,     2000,    100,   3,     0.30,      2),   // Was 100
-            new TierConfig(4,   60, 10000,   25,    10000,    500,   5,     0.50,      3),   // Was 150
-            new TierConfig(5,  100, 50000,   40,    50000,   1500,   7,     0.65,      4),   // Was 250
+            new TierConfig(1, 10, 100, 4, 100, 5, 0, 0.0, 0),   // Was 25
+            new TierConfig(2, 20, 500, 8, 500, 25, 1, 0.15, 1),   // Was 50
+            new TierConfig(3, 40, 2000, 15, 2000, 100, 3, 0.30, 2),   // Was 100
+            new TierConfig(4, 60, 10000, 25, 10000, 500, 5, 0.50, 3),   // Was 150
+            new TierConfig(5, 100, 50000, 40, 50000, 1500, 7, 0.65, 4),   // Was 250
     };
+
     public static int getKillsRequired(SlayerType type, int tier) {
         if (type == SlayerType.WARDEN) {
             return 1; // Wardens are rare, only need 1
@@ -324,13 +329,24 @@ public class SlayerManager {
                 bossBar.clearPlayers();
             }
 
-            // Clean up boss tracking
+            // *** FIX: DESPAWN THE BOSS ENTITY ***
             if (quest.bossEntityUuid != null) {
+                // Find and remove the boss from all worlds
+                for (ServerWorld world : PoliticalServer.server.getWorlds()) {
+                    var entity = world.getEntity(quest.bossEntityUuid);
+                    if (entity != null) {
+                        entity.discard(); // Remove the entity from the world
+                        break;
+                    }
+                }
+
+                // Clean up tracking
                 bossOwners.remove(quest.bossEntityUuid);
                 slayerBossEntities.remove(quest.bossEntityUuid);
+                BossAbilityManager.removeBoss(quest.bossEntityUuid);
             }
 
-            player.sendMessage(Text.literal("✖ Bounty cancelled. No refund.")
+            player.sendMessage(Text.literal("✖ Bounty cancelled. Boss despawned. No refund.")
                     .formatted(Formatting.RED), false);
         }
     }
@@ -428,14 +444,17 @@ public class SlayerManager {
         bar.append("§8]");
         return bar.toString();
     }
+
     public static void spawnBoss(ServerWorld world, ServerPlayerEntity player, SlayerType type, int tier) {
         // Your spawn logic here
         // Create and spawn the boss entity based on type and tier
     }
+
     public static void adminSpawnBoss(ServerPlayerEntity player, SlayerType type, int tier) {
         ServerWorld world = player.getEntityWorld();
         spawnBoss(world, player, type, tier);
     }
+
     private static boolean isMatchingMob(LivingEntity entity, SlayerType type) {
         return switch (type) {
             case ZOMBIE -> entity instanceof ZombieEntity;
@@ -451,28 +470,56 @@ public class SlayerManager {
     // ============================================================
     // BOSS SPAWNING
     // ============================================================
+    public static void addHiddenEffect(LivingEntity entity, RegistryEntry<StatusEffect> effect,
+                                       int duration, int amplifier) {
+        entity.addStatusEffect(new StatusEffectInstance(
+                effect,
+                duration,
+                amplifier,
+                true,   // ambient - reduces particles
+                false,  // showParticles
+                false   // showIcon - hides from HUD
+        ));
+    }
 
     private static void spawnBoss(ServerPlayerEntity player, ActiveQuest quest) {
         if (quest.bossSpawned) return;
 
         ServerWorld world = player.getEntityWorld();
-        Vec3d pos = new Vec3d(player.getX(), player.getY(), player.getZ());
         TierConfig config = quest.getConfig();
         SlayerType type = quest.slayerType;
 
         // Find valid spawn position nearby
-        BlockPos spawnPos = findSpawnPosition(world, player.getBlockPos(), 5);
-        if (spawnPos == null) spawnPos = player.getBlockPos();
+        BlockPos spawnPos = player.getBlockPos();
 
-        // Create the boss entity
-        MobEntity boss = createBossEntity(world, type, config);
-        if (boss == null) {
-            player.sendMessage(Text.literal("✖ Failed to spawn boss!")
-                    .formatted(Formatting.RED), false);
-            return;
+        MobEntity boss;
+
+        // Special handling for Warden - spawn as Iron Golem to prevent burrowing issues
+        if (type == SlayerType.WARDEN) {
+            // Use Iron Golem as the Warden boss (per your design decision)
+            boss = (MobEntity) EntityType.IRON_GOLEM.create(world, SpawnReason.MOB_SUMMONED);
+            if (boss == null) {
+                player.sendMessage(Text.literal("✖ Failed to spawn boss!")
+                        .formatted(Formatting.RED), false);
+                return;
+            }
+            spawnPos = player.getBlockPos().up(2); // Spawn 2 blocks above
+        } else {
+            // Create boss entity for other types
+            boss = createBossEntity(world, type, config);
+            if (boss == null) {
+                player.sendMessage(Text.literal("✖ Failed to spawn boss!")
+                        .formatted(Formatting.RED), false);
+                return;
+            }
         }
 
-        // Position and spawn
+        // Initialize slime boss tracking BEFORE spawning
+        if (type == SlayerType.SLIME) {
+            BossAbilityManager.initSlimeBoss(boss.getUuid());
+        }
+
+        // Position the boss
         boss.setPosition(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
 
         // Apply boss stats
@@ -502,28 +549,27 @@ public class SlayerManager {
         boss.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, Integer.MAX_VALUE, 0, false, false));
         boss.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
 
-        // NBT tag for identification
-        NbtCompound nbt = new NbtCompound();
-        nbt.putBoolean("SlayerBoss", true);
-        nbt.putString("SlayerType", type.name());
-        nbt.putInt("SlayerTier", quest.tier);
-        nbt.putString("OwnerUuid", player.getUuidAsString());
-        nbt.putDouble("DamageResistance", config.damageResistance);
-
         // Can't pick up items
         boss.setCanPickUpLoot(false);
         boss.setPersistent();
 
-        // Spawn
+        // **CRITICAL: Actually spawn the boss into the world**
         world.spawnEntity(boss);
+
+        // Make Iron Golem (Warden boss) aggressive toward the player
+        if (type == SlayerType.WARDEN) {
+            boss.setTarget(player);
+        }
 
         // Track the boss
         quest.bossSpawned = true;
-        BossAbilityManager.registerBoss(boss, type, quest.tier);
         quest.bossAlive = true;
         quest.bossEntityUuid = boss.getUuid();
         bossOwners.put(boss.getUuid(), player.getUuidAsString());
         slayerBossEntities.add(boss.getUuid());
+
+        // Register with BossAbilityManager
+        BossAbilityManager.registerBoss(boss, type, quest.tier);
 
         // Create boss bar
         ServerBossBar bossBar = new ServerBossBar(
@@ -547,7 +593,6 @@ public class SlayerManager {
         world.playSound(null, player.getBlockPos(),
                 net.minecraft.sound.SoundEvents.ENTITY_WITHER_SPAWN,
                 net.minecraft.sound.SoundCategory.HOSTILE, 1.0f, 0.5f);
-
     }
 
     private static void spawnMiniBoss(ServerPlayerEntity player, ActiveQuest quest) {
@@ -583,18 +628,23 @@ public class SlayerManager {
     }
 
     private static MobEntity createBossEntity(ServerWorld world, SlayerType type, TierConfig config) {
-        return switch (type) {
-            case ZOMBIE -> EntityType.ZOMBIE.create(world, SpawnReason.MOB_SUMMONED);
-            case SPIDER -> EntityType.SPIDER.create(world, SpawnReason.MOB_SUMMONED);
-            case SKELETON -> EntityType.SKELETON.create(world, SpawnReason.MOB_SUMMONED);
-            case SLIME -> {
-                SlimeEntity slime = EntityType.SLIME.create(world, SpawnReason.MOB_SUMMONED);
-                if (slime != null) slime.setSize(Math.min(config.tier + 2, 10), false);
-                yield slime;
-            }
-            case ENDERMAN -> EntityType.ENDERMAN.create(world, SpawnReason.MOB_SUMMONED);
-            case WARDEN -> EntityType.WARDEN.create(world, SpawnReason.MOB_SUMMONED);
+        EntityType<?> entityType = switch (type) {
+            case ZOMBIE -> EntityType.ZOMBIE;
+            case SPIDER -> EntityType.SPIDER;
+            case SKELETON -> EntityType.SKELETON;
+            case SLIME -> EntityType.SLIME;
+            case ENDERMAN -> EntityType.ENDERMAN;
+            case WARDEN -> EntityType.IRON_GOLEM; // Use Iron Golem for Warden
         };
+
+        MobEntity mob = (MobEntity) entityType.create(world, SpawnReason.MOB_SUMMONED);
+
+        // Set slime size to max (4) for Slime bosses
+        if (type == SlayerType.SLIME && mob instanceof net.minecraft.entity.mob.SlimeEntity slime) {
+            slime.setSize(4, true);
+        }
+
+        return mob;
     }
 
     private static BlockPos findSpawnPosition(ServerWorld world, BlockPos center, int radius) {
@@ -704,11 +754,27 @@ public class SlayerManager {
 
     public static final double DAMAGE_BONUS_PER_LEVEL = 0.02;
     public static final double DAMAGE_REDUCTION_PER_LEVEL = 0.015;
-
+    public static void markAsSlayerBoss(UUID uuid) {
+        slayerBossEntities.add(uuid);
+    }
     public static void onBossDeath(LivingEntity entity, ServerPlayerEntity killer) {
         UUID bossUuid = entity.getUuid();
         String ownerUuid = bossOwners.get(bossUuid);
+        if (ownerUuid == null) return;
 
+        // Use a different variable name to avoid conflict
+        ActiveQuest bossQuest = activeQuests.get(ownerUuid);
+        if (bossQuest == null) return;
+
+        SlayerType bossType = bossQuest.slayerType;
+        int tier = bossQuest.tier;
+
+        if (bossType == SlayerType.SLIME) {
+            // Let BossAbilityManager handle slime splitting
+            ServerWorld world = (ServerWorld) entity.getEntityWorld();
+            BossAbilityManager.onSlimeBossDeath(entity, world, killer, tier);
+            return; // Don't complete quest yet - onSlimeBossDeath handles it
+        }
         if (ownerUuid == null) return;
 
         ActiveQuest quest = activeQuests.get(ownerUuid);
@@ -787,27 +853,27 @@ public class SlayerManager {
         List<ItemStack> drops = new ArrayList<>();
         Random rand = new Random();
 
-        // Chunk drop chances (for crafting slayer swords)
-        // T1: 2%, T2: 5%, T3: 10%, T4: 15%, T5: 20%
-        double chunkChance = 0.02 + (tier - 1) * 0.045;
+        // RARER CHUNK DROP CHANCES
+        // T1: 1%, T2: 2%, T3: 4%, T4: 6%, T5: 8%
+        double chunkChance = 0.01 + (tier - 1) * 0.0175;
         if (rand.nextDouble() < chunkChance) {
             drops.add(SlayerItems.createChunk(type));
         }
 
-        // Core drop chances (for legendary items) - ONLY from bosses, not normal mobs
+        // RARER CORE DROP CHANCES (for legendary items)
         double coreChance = switch (type) {
-            case ZOMBIE, SPIDER, SKELETON -> 0.005 + (tier * 0.005);  // 0.5% - 2.5%
-            case SLIME -> 0.004 + (tier * 0.004);                      // 0.4% - 2%
-            case ENDERMAN -> 0.0001 + (tier * 0.0001);                 // 0.01% - 0.05%
-            case WARDEN -> 0.005 + (tier * 0.001);                     // 0.5% - 1%
+            case ZOMBIE, SPIDER, SKELETON -> 0.001 + (tier * 0.002);  // 0.1% - 1.1%
+            case SLIME -> 0.0008 + (tier * 0.0015);                    // 0.08% - 0.83%
+            case ENDERMAN -> 0.00005 + (tier * 0.00005);               // 0.005% - 0.03%
+            case WARDEN -> 0.001 + (tier * 0.0005);                    // 0.1% - 0.35%
         };
 
         if (rand.nextDouble() < coreChance) {
             drops.add(SlayerItems.createCore(type));
         }
 
-        // Guaranteed coins based on tier
-        int coinDrop = tier * 50 * (int) type.difficultyMultiplier;
+        // Coins based on tier (reduced)
+        int coinDrop = tier * 25 * (int) type.difficultyMultiplier;
         CoinManager.giveCoinsQuiet(player, coinDrop);
 
         return drops;
@@ -857,6 +923,13 @@ public class SlayerManager {
     // ============================================================
     // TICK - Update boss bars and check for despawns
     // ============================================================
+    public static void trackBossOwner(UUID bossId, String playerUuid) {
+        bossOwners.put(bossId, playerUuid);
+    }
+    public static String getBossOwner(UUID bossId) {
+        return bossOwners.get(bossId);
+    }
+
 
     public static void tick(MinecraftServer server) {
         Iterator<Map.Entry<String, ActiveQuest>> iterator = activeQuests.entrySet().iterator();
@@ -977,7 +1050,7 @@ public class SlayerManager {
             case SKELETON -> EntityType.SKELETON.create(world, SpawnReason.COMMAND);
             case SLIME -> EntityType.SLIME.create(world, SpawnReason.COMMAND);
             case ENDERMAN -> EntityType.ENDERMAN.create(world, SpawnReason.COMMAND);
-            case WARDEN -> EntityType.WARDEN.create(world, SpawnReason.COMMAND);
+            case WARDEN -> EntityType.IRON_GOLEM.create(world, SpawnReason.COMMAND);
         };
 
         if (mob != null) {
@@ -992,5 +1065,57 @@ public class SlayerManager {
             }
         }
         return mob;
+    }
+    // Called when slime boss and all its splits are defeated
+// Called when slime boss and all its splits are defeated
+    public static void completeSlayerQuest(ServerPlayerEntity player, SlayerType type) {
+        String uuid = player.getUuidAsString();
+        ActiveQuest quest = activeQuests.get(uuid);
+
+        if (quest == null || quest.slayerType != type) return;
+
+        // Get tier config for rewards
+        TierConfig config = getTierConfig(quest.tier);
+        if (config == null) return;
+
+        // Clean up boss tracking using quest's stored boss UUID
+        if (quest.bossEntityUuid != null) {
+            bossOwners.remove(quest.bossEntityUuid);
+            slayerBossEntities.remove(quest.bossEntityUuid);
+            BossAbilityManager.removeBoss(quest.bossEntityUuid);
+        }
+
+        // Give XP reward
+        long currentXp = SlayerData.getSlayerXp(uuid, type);
+        int oldLevel = getLevelForXp(currentXp);
+        SlayerData.addSlayerXp(uuid, type, config.xpReward);
+        int newLevel = getLevelForXp(currentXp + config.xpReward);
+
+        // Level up check
+        if (newLevel > oldLevel) {
+            int credits = LEVEL_CREDIT_REWARDS[newLevel - 1];
+            CoinManager.giveCoins(player, credits);  // Use CoinManager instead of SlayerData
+            player.sendMessage(Text.literal("⬆ LEVEL UP! " + type.displayName + " Slayer Level " + newLevel + "!")
+                    .formatted(Formatting.GOLD, Formatting.BOLD), false);
+            player.sendMessage(Text.literal("  +" + credits + " Bonus Coins!")
+                    .formatted(Formatting.AQUA), false);
+        }
+
+        // Success message
+        player.sendMessage(Text.literal(""), false);
+        player.sendMessage(Text.literal("══════════════════════════════════").formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("  ☠ BOUNTY COMPLETE! ☠").formatted(type.color, Formatting.BOLD), false);
+        player.sendMessage(Text.literal("══════════════════════════════════").formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("  +" + config.xpReward + " " + type.displayName + " XP").formatted(Formatting.GREEN), false);
+        player.sendMessage(Text.literal(""), false);
+
+        // Clean up quest
+        activeQuests.remove(uuid);
+
+        // Remove boss bar if exists
+        ServerBossBar bossBar = bossBars.remove(uuid);
+        if (bossBar != null) {
+            bossBar.clearPlayers();
+        }
     }
 }

@@ -289,9 +289,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			AuctionHouseGui.onPlayerDisconnect(player);
 			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
 		});
-		ServerTickEvents.END_SERVER_TICK.register((s) -> {
+		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
 
+			// Boss abilities - iterate worlds
+			for (ServerWorld world : s.getWorlds()) {
+				ArmorAbilityHandler.detectEntityNoise(world);  // NOW world is defined
+
+				// ... rest of world-based code
+			}
 			// Boss abilities (fixed - no more world iteration)
 // Boss abilities - using efficient entity lookup
 			BossAbilityManager.tickScheduledBlockRemovals();
@@ -313,13 +319,22 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				}
 			}
 
-			// World-based ticks (once per world)
 			for (ServerWorld world : s.getWorlds()) {
 				BountySpawnManager.tick(world);
 				HealthScalingManager.tickUpgradedMobDespawn(world);
+
+				// Player ticks for this world
+				for (ServerPlayerEntity player : world.getPlayers()) {
+					SlayerArmorHandler.applyCustomArmorAttributes(player);
+					ArmorAbilityHandler.tick(player);
+				}
+			}
+			// Player ticks
+			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+				ArmorAbilityHandler.tick(player);
 			}
 
-			// Slayer manager
+// Slayer manager
 			SlayerManager.tick(s);
 
 			// Player-based ticks (once per player)
@@ -332,6 +347,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickZombieBerserkerHelmet(player);
 				CustomItemHandler.tickSkeletonBow(player);
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
+				SlayerArmorHandler.applyCustomArmorAttributes(player);
 			}
 
 			// Other managers

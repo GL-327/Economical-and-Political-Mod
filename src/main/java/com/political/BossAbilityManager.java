@@ -6,13 +6,18 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import java.util.Set;
 import java.util.HashSet;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.boss.BossBar;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -41,7 +46,7 @@ public class BossAbilityManager {
     private static final Map<UUID, Integer> minionCounts = new HashMap<>();
     private static final Map<UUID, Set<UUID>> bossMinions = new HashMap<>();
     private static final Map<UUID, BossAbilityState> bossAbilityData = new HashMap<>();
-
+    private static final Map<UUID, ServerBossBar> splitBossBars = new HashMap<>();
     // Special state tracking
     private static final Set<UUID> enragedBosses = new HashSet<>();
     private static final Map<UUID, Long> enrageEndTimes = new HashMap<>();
@@ -56,23 +61,85 @@ public class BossAbilityManager {
     // ============================================================
     // HELPER METHOD - Get Vec3d from entity
     // ============================================================
-
+// Slime boss split tracking
+    private static final Map<UUID, Set<UUID>> slimeSplitChildren = new HashMap<>();  // root boss -> all children
+    private static final Map<UUID, UUID> slimeSplitParent = new HashMap<>();  // child -> its parent
+    private static final Map<UUID, Integer> slimeSplitLevel = new HashMap<>();  // boss -> split level (0=main, 1=first split, 2=final)
     private static Vec3d getEntityPos(Entity entity) {
         return new Vec3d(entity.getX(), entity.getY(), entity.getZ());
     }
-
+    private static final Map<UUID, Long> undyingRageCooldowns = new HashMap<>();
+    private static final long UNDYING_RAGE_COOLDOWN_MS = 30000; // 30 seconds between rages
     // ============================================================
     // MAIN TICK METHOD
     // ============================================================
+    public static void removeBoss(UUID bossId) {
+        cleanup(bossId);
+        undyingRageCooldowns.remove(bossId); // Add this line
+    }
+    public static void tickZombieBoss(MobEntity boss, ServerWorld world) {
+        UUID bossId = boss.getUuid();
 
+        // Check if boss is low HP for Undying Rage trigger
+        float healthPercent = boss.getHealth() / boss.getMaxHealth();
+
+        if (healthPercent < 0.5f) {
+            long now = System.currentTimeMillis();
+            long lastRage = undyingRageCooldowns.getOrDefault(bossId, 0L);
+
+            // CHECK COOLDOWN - only trigger if 30 seconds have passed
+            if (now - lastRage >= UNDYING_RAGE_COOLDOWN_MS) {
+                undyingRageCooldowns.put(bossId, now);
+
+                // Apply Undying Rage effects ONCE
+                boss.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.STRENGTH, 200, 1, true, false, false // 10 seconds
+                ));
+                boss.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.SPEED, 200, 1, true, false, false
+                ));
+                boss.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.RESISTANCE, 100, 0, true, false, false // 5 seconds
+                ));
+
+                // Heal 10% HP
+                boss.heal(boss.getMaxHealth() * 0.1f);
+
+                // Announce rage
+                for (ServerPlayerEntity player : world.getPlayers()) {
+                    if (player.squaredDistanceTo(boss) < 2500) { // 50 block range
+                        player.sendMessage(Text.literal("§4§l☠ UNDYING RAGE! §r§cThe Outlaw grows stronger!"), false);
+                    }
+                }
+
+                // Sound effect
+                world.playSound(null, boss.getBlockPos(),
+                        net.minecraft.sound.SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED,
+                        net.minecraft.sound.SoundCategory.HOSTILE, 2.0f, 0.5f);
+            }
+            // If on cooldown, do nothing - prevents cycling
+        }
+    }
     public static void tickBossAbilities(LivingEntity boss, ServerPlayerEntity target,
                                          SlayerManager.SlayerType type, int tier) {
+        if (type == SlayerManager.SlayerType.WARDEN && boss instanceof net.minecraft.entity.mob.WardenEntity warden) {
+            warden.increaseAngerAt(target, 80, true);
+            if (warden.getTarget() == null) {
+                warden.setTarget(target);
+            }
+        }
+
         if (boss == null || !boss.isAlive() || target == null) return;
         if (!(boss.getEntityWorld() instanceof ServerWorld world)) return;
 
+        // DELETE THE SECOND WARDEN CHECK THAT USES "player" - IT'S A DUPLICATE
+
         UUID bossId = boss.getUuid();
         long now = System.currentTimeMillis();
-
+        ServerBossBar splitBar = splitBossBars.get(bossId);
+        if (splitBar != null) {
+            splitBar.setPercent(boss.getHealth() / boss.getMaxHealth());
+        }
         updatePhase(boss, bossId, target, type, tier, world);
         tickPassiveRegen(boss, tier, world);
 
@@ -94,16 +161,17 @@ public class BossAbilityManager {
         if (used) {
             lastAbilityUse.put(bossId, now);
         }
+
     }
 
     private static long getAbilityCooldown(int tier) {
         return switch (tier) {
-            case 1 -> 10000L;
-            case 2 -> 8000L;
-            case 3 -> 6000L;
-            case 4 -> 5000L;
-            case 5 -> 4000L;
-            default -> 10000L;
+            case 1 -> 20000L;
+            case 2 -> 16000L;
+            case 3 -> 14000L;
+            case 4 -> 12000L;
+            case 5 -> 10000L;
+            default -> 20000L;
         };
     }
 
@@ -1400,9 +1468,7 @@ public class BossAbilityManager {
         return shieldedBosses.containsKey(bossId);
     }
 
-    public static void removeBoss(UUID bossId) {
-        cleanup(bossId);
-    }
+
 
     public static Set<UUID> getActiveBosses() {
         return new HashSet<>(bossPhases.keySet());
@@ -1436,5 +1502,137 @@ public class BossAbilityManager {
         minionCounts.put(bossId, 0);
         bossMinions.put(bossId, new HashSet<>());
         bossAbilityData.put(bossId, new BossAbilityState(type, tier));
+    }
+    // ============================================================
+// SLIME BOSS SPLITTING SYSTEM
+// ============================================================
+
+    public static void onSlimeBossDeath(LivingEntity boss, ServerWorld world, ServerPlayerEntity player, int tier) {
+        UUID bossId = boss.getUuid();
+        int splitLevel = slimeSplitLevel.getOrDefault(bossId, 0);
+
+        // Get the root boss (original boss that started all splits)
+        UUID rootId = getRootBoss(bossId);
+
+        // Remove this boss from children tracking
+        Set<UUID> children = slimeSplitChildren.get(rootId);
+        if (children != null) {
+            children.remove(bossId);
+        }
+
+        // Remove split boss bar
+        ServerBossBar splitBar = splitBossBars.remove(bossId);
+        if (splitBar != null) {
+            splitBar.clearPlayers();
+        }
+
+        // Only split if this is the MAIN boss (level 0) - NO SECOND SPLITS
+        if (splitLevel == 0) {
+            for (int i = 0; i < 3; i++) {
+                UUID childId = spawnSplitSlime(world, boss, 1, tier, player);
+                if (childId != null) {
+                    slimeSplitChildren.computeIfAbsent(rootId, k -> new HashSet<>()).add(childId);
+                    slimeSplitParent.put(childId, bossId);
+                    slimeSplitLevel.put(childId, 1);  // Level 1 = final split, won't split again
+                }
+            }
+        }
+
+        // Clean up this boss
+        slimeSplitLevel.remove(bossId);
+        slimeSplitParent.remove(bossId);
+        removeBoss(bossId);
+
+        // Check if ALL splits are dead
+        Set<UUID> remainingChildren = slimeSplitChildren.get(rootId);
+        boolean allDead = (remainingChildren == null || remainingChildren.isEmpty());
+
+        if (allDead && splitLevel > 0) {
+            // All split slimes are dead - complete the quest!
+            SlayerManager.completeSlayerQuest(player, SlayerManager.SlayerType.SLIME);
+            cleanupSlimeBoss(rootId);
+            player.sendMessage(Text.literal("☠ The Slime Boss has been fully defeated!").formatted(Formatting.GREEN), false);
+        } else if (splitLevel == 0) {
+            // Main boss just died, spawned splits
+            int remaining = remainingChildren != null ? remainingChildren.size() : 0;
+            player.sendMessage(Text.literal("⚔ The Slime Boss split into " + remaining + " smaller slimes!").formatted(Formatting.YELLOW), false);
+        } else {
+            // A split died but others remain
+            int remaining = remainingChildren != null ? remainingChildren.size() : 0;
+            player.sendMessage(Text.literal("⚔ " + remaining + " split slimes remaining...").formatted(Formatting.YELLOW), true);
+        }
+    }
+
+    private static UUID spawnSplitSlime(ServerWorld world, LivingEntity parent, int splitLevel, int tier, ServerPlayerEntity player) {
+        SlimeEntity slime = (SlimeEntity) EntityType.SLIME.create(world, SpawnReason.TRIGGERED);
+        if (slime == null) return null;
+
+        // Position near parent with random offset
+        double offsetX = (world.random.nextDouble() - 0.5) * 4;
+        double offsetZ = (world.random.nextDouble() - 0.5) * 4;
+        slime.setPosition(parent.getX() + offsetX, parent.getY() + 0.5, parent.getZ() + offsetZ);
+
+        // Size 2 for split slimes (smaller than main boss)
+        slime.setSize(2, true);
+
+        // Scale health - 35% of parent health
+        double baseHealth = parent.getMaxHealth() * 0.35;
+        var healthAttr = slime.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        if (healthAttr != null) {
+            healthAttr.setBaseValue(baseHealth);
+            slime.setHealth((float) baseHealth);
+        }
+
+        // Set custom name
+        String tierStars = "⚔".repeat(Math.min(tier, 5));
+        slime.setCustomName(Text.literal(tierStars + " Split Slime Boss").formatted(Formatting.GREEN));
+        slime.setCustomNameVisible(false);
+
+        slime.setPersistent();
+        slime.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, -1, 0, false, false, false));
+        world.spawnEntity(slime);
+
+        UUID childId = slime.getUuid();
+
+        // Register as boss
+        registerBoss(slime, SlayerManager.SlayerType.SLIME, tier);
+        SlayerManager.markAsSlayerBoss(childId);
+        SlayerManager.trackBossOwner(childId, player.getUuidAsString());
+
+        // Create boss bar for this split
+        ServerBossBar splitBar = new ServerBossBar(
+                Text.literal(tierStars + " Split Slime").formatted(Formatting.GREEN),
+                BossBar.Color.GREEN,
+                BossBar.Style.PROGRESS
+        );
+        splitBar.addPlayer(player);
+        splitBar.setPercent(1.0f);
+        splitBossBars.put(childId, splitBar);
+
+        return childId;
+    }
+
+    private static UUID getRootBoss(UUID bossId) {
+        UUID parent = slimeSplitParent.get(bossId);
+        if (parent == null) {
+            return bossId;  // This is the root
+        }
+        return getRootBoss(parent);  // Recurse up
+    }
+
+    public static boolean isSlimeSplit(UUID bossId) {
+        return slimeSplitParent.containsKey(bossId) || slimeSplitChildren.containsKey(bossId);
+    }
+
+    public static void initSlimeBoss(UUID bossId) {
+        slimeSplitLevel.put(bossId, 0);  // Mark as root boss (level 0)
+        slimeSplitChildren.put(bossId, new HashSet<>());  // Initialize children set
+    }
+
+    private static void cleanupSlimeBoss(UUID rootId) {
+        slimeSplitChildren.remove(rootId);
+        slimeSplitLevel.remove(rootId);
+        // Remove all parent references for this tree
+        slimeSplitParent.entrySet().removeIf(e -> getRootBoss(e.getKey()).equals(rootId));
     }
 }

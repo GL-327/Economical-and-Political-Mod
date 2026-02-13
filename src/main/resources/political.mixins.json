@@ -29,7 +29,9 @@
     "LivingEntityDamageMixin",
     "ArrowHomingMixin",
     "ArrowHeadshotMixin",
-    "BossDamageReductionMixin"
+    "BossDamageReductionMixin",
+    "SlimeEntityMixin",
+    "WardenEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

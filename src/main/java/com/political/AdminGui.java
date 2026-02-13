@@ -7,7 +7,17 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
+import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.elements.GuiElementInterface;
+import eu.pb4.sgui.api.gui.SimpleGui;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +57,18 @@ public class AdminGui {
     private static void openMainPage(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, player, false);
         gui.setTitle(Text.literal("✦ Admin Control Panel ✦"));
-
+// Add this to your main admin menu setup
+        gui.setSlot(4, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("§6§lCustom Items"))
+                .setLore(List.of(
+                        Text.literal("§7Slayer weapons & armor"),
+                        Text.literal("§7HPEBM weapons"),
+                        Text.literal("§7Crafting materials")
+                ))
+                .setCallback((index, type, action) -> {
+                    openCustomItemsMenu(player);
+                })
+                .build());
         // Background
         for (int i = 0; i < 45; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
@@ -2384,5 +2405,169 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
                 .formatted(Formatting.RED), false);
         player.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
+    }
+    // ============================================================
+// CUSTOM ITEMS ADMIN MENU
+// ============================================================
+
+    public static void openCustomItemsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("§6§lAdmin: Custom Items"));
+
+        // Fill background
+        ItemStack filler = new ItemStack(Items.BLACK_STAINED_GLASS_PANE);
+        filler.set(DataComponentTypes.CUSTOM_NAME, Text.literal(" "));
+        for (int i = 0; i < 54; i++) {
+            int finalI = i;
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(" "))
+                    .setCallback((index, type, action) -> {})
+                    .build());
+        }
+
+        // === ROW 1: SLAYER SWORDS ===
+        gui.setSlot(1, createGiveItemButton(player, SlayerItems.createSlayerSword(SlayerManager.SlayerType.ZOMBIE),
+                "§2§lZombie Cleaver", "§7Click to receive"));
+        gui.setSlot(2, createGiveItemButton(player, SlayerItems.createSlayerSword(SlayerManager.SlayerType.SPIDER),
+                "§4§lSpider Fang", "§7Click to receive"));
+        gui.setSlot(3, createGiveItemButton(player, SlayerItems.createSlayerSword(SlayerManager.SlayerType.SKELETON),
+                "§f§lBone Blade", "§7Click to receive"));
+        gui.setSlot(4, createGiveItemButton(player, SlayerItems.createSlayerSword(SlayerManager.SlayerType.SLIME),
+                "§a§lGelatinous Blade", "§7Click to receive"));
+        gui.setSlot(5, createGiveItemButton(player, SlayerItems.createSlayerSword(SlayerManager.SlayerType.ENDERMAN),
+                "§5§lVoid Blade", "§7Click to receive"));
+        gui.setSlot(6, createGiveItemButton(player, SlayerItems.createSlayerSword(SlayerManager.SlayerType.WARDEN),
+                "§3§lThe Gavel", "§7Click to receive"));
+        gui.setSlot(7, createGiveItemButton(player, SlayerItems.createSkeletonBow(),
+                "§f§lBone Bow", "§7Click to receive"));
+
+        // === ROW 2: SLAYER ARMOR ===
+        gui.setSlot(10, createGiveItemButton(player, SlayerItems.createZombieHelmet(),
+                "§2§lBerserker Helmet", "§7Zombie Slayer Set"));
+        gui.setSlot(11, createGiveItemButton(player, SlayerItems.createSpiderLeggings(),
+                "§4§lVenomous Leggings", "§7Spider Slayer Set"));
+        gui.setSlot(12, createGiveItemButton(player, SlayerItems.createSkeletonBow(),
+                "§f§lBone Chestplate", "§7Skeleton Slayer Set"));
+        gui.setSlot(13, createGiveItemButton(player, SlayerItems.createSlimeBoots(),
+                "§a§lSlime Boots", "§7Slime Slayer Set"));
+        gui.setSlot(14, createGiveItemButton(player, SlayerItems.createEndermanSword(),
+                "§5§lVoid Chestplate", "§7Enderman Slayer Set"));
+        gui.setSlot(15, createGiveItemButton(player, SlayerItems.createWardenChestplate(),
+                "§3§lWarden Chestplate", "§7Warden Slayer Set"));
+
+        // === ROW 3: CRAFTING CHUNKS ===
+        gui.setSlot(19, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.ZOMBIE),
+                "§2Zombie Chunk", "§7Crafting material"));
+        gui.setSlot(20, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.SPIDER),
+                "§4Spider Chunk", "§7Crafting material"));
+        gui.setSlot(21, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.SKELETON),
+                "§fSkeleton Chunk", "§7Crafting material"));
+        gui.setSlot(22, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.SLIME),
+                "§aSlime Chunk", "§7Crafting material"));
+        gui.setSlot(23, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                "§5Enderman Chunk", "§7Crafting material"));
+        gui.setSlot(24, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.WARDEN),
+                "§3Warden Chunk", "§7Crafting material"));
+
+        // === ROW 4: CORES (Rare) ===
+        gui.setSlot(28, createGiveItemButton(player, SlayerItems.createCore(SlayerManager.SlayerType.ZOMBIE),
+                "§2§lZombie Core", "§6Legendary material"));
+        gui.setSlot(29, createGiveItemButton(player, SlayerItems.createCore(SlayerManager.SlayerType.SPIDER),
+                "§4§lSpider Core", "§6Legendary material"));
+        gui.setSlot(30, createGiveItemButton(player, SlayerItems.createCore(SlayerManager.SlayerType.SKELETON),
+                "§f§lSkeleton Core", "§6Legendary material"));
+        gui.setSlot(31, createGiveItemButton(player, SlayerItems.createCore(SlayerManager.SlayerType.SLIME),
+                "§a§lSlime Core", "§6Legendary material"));
+        gui.setSlot(32, createGiveItemButton(player, SlayerItems.createCore(SlayerManager.SlayerType.ENDERMAN),
+                "§5§lEnderman Core", "§6Legendary material"));
+        gui.setSlot(33, createGiveItemButton(player, SlayerItems.createCore(SlayerManager.SlayerType.WARDEN),
+                "§3§lWarden Core", "§6Legendary material"));
+
+        // === ROW 5: HPEBM WEAPONS ===
+        gui.setSlot(37, createGiveItemButton(player, CustomItemHandler.createHPEBM(1),
+                "§e§lHPEBM Mk1", "§7Tier 1 Beam"));
+        gui.setSlot(38, createGiveItemButton(player, CustomItemHandler.createHPEBM(2),
+                "§e§lHPEBM Mk2", "§7Tier 2 Beam"));
+        gui.setSlot(39, createGiveItemButton(player, CustomItemHandler.createHPEBM(3),
+                "§e§lHPEBM Mk3", "§7Tier 3 Beam"));
+        gui.setSlot(40, createGiveItemButton(player, CustomItemHandler.createHPEBM(4),
+                "§e§lHPEBM Mk4", "§7Tier 4 Beam"));
+        gui.setSlot(41, createGiveItemButton(player, CustomItemHandler.createHPEBM(5),
+                "§e§lHPEBM Mk5", "§7Tier 5 Beam"));
+        gui.setSlot(42, createGiveItemButton(player, CustomItemHandler.createHPEBM(6),
+                "§6§lOverclocked Beam", "§cTier 6 Ultimate"));
+        gui.setSlot(43, createGiveItemButton(player, CustomItemHandler.createHPEBM(7),
+                "§d§lUltra Overclocked", "§cTier 7 Mythic"));
+
+        // === BACK BUTTON ===
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("§c§lBack"))
+                .setCallback((index, type, action) -> {
+                    openMainPage(player);
+                })
+                .build());
+
+        // === GIVE ALL BUTTON ===
+        gui.setSlot(53, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("§a§lGive All Items"))
+                .setLore(List.of(Text.literal("§7Click to receive ALL items")))
+                .setCallback((index, type, action) -> {
+                    giveAllCustomItems(player);
+                })
+                .build());
+
+        gui.open();
+    }
+
+    // Helper method to create give item buttons
+    private static GuiElementInterface createGiveItemButton(ServerPlayerEntity player, ItemStack item, String name, String lore) {
+        if (item == null || item.isEmpty()) {
+            return new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("§c§lMissing Item"))
+                    .setLore(List.of(Text.literal("§7Item not found")))
+                    .build();
+        }
+
+        return new GuiElementBuilder(item.getItem())
+                .setName(Text.literal(name))
+                .setLore(List.of(Text.literal(lore), Text.literal("§eClick to receive")))
+                .setCallback((index, type, action) -> {
+                    ItemStack clone = item.copy();
+                    if (player.getInventory().insertStack(clone)) {
+                        player.sendMessage(Text.literal("§a✓ Given: " + name), false);
+                        player.playSound(net.minecraft.sound.SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, 1.0f);
+                    } else {
+                        player.sendMessage(Text.literal("§c✖ Inventory full!"), false);
+                    }
+                })
+                .build();
+    }
+
+    // Give all custom items
+    private static void giveAllCustomItems(ServerPlayerEntity player) {
+        int given = 0;
+
+        // All swords
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            ItemStack sword = SlayerItems.createSlayerSword(type);
+            if (sword != null && player.getInventory().insertStack(sword)) given++;
+
+            ItemStack chunk = SlayerItems.createChunk(type);
+            if (chunk != null) {
+                chunk.setCount(16);
+                if (player.getInventory().insertStack(chunk)) given++;
+            }
+
+            ItemStack core = SlayerItems.createCore(type);
+            if (core != null && player.getInventory().insertStack(core)) given++;
+        }
+
+        // HPEBM weapons
+        for (int tier = 1; tier <= 7; tier++) {
+            ItemStack beam = CustomItemHandler.createHPEBM(tier);
+            if (beam != null && player.getInventory().insertStack(beam)) given++;
+        }
+
+        player.sendMessage(Text.literal("§a✓ Given " + given + " items!"), false);
     }
 }

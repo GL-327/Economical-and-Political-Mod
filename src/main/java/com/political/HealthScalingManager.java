@@ -261,6 +261,20 @@ public class HealthScalingManager {
     // ============================================================
 
     public static void tryScaleMob(LivingEntity entity) {
+        if (SlayerManager.isSlayerBoss(entity.getUuid())) {
+            return;
+        }
+
+        // Also check custom name for boss indicators
+        if (entity.hasCustomName()) {
+            String name = entity.getCustomName().getString();
+            if (name.contains("Outlaw") || name.contains("Bandit") ||
+                    name.contains("Desperado") || name.contains("Rustler") ||
+                    name.contains("Phantom") || name.contains("Terror") ||
+                    name.contains("[TEST]")) {
+                return; // Don't scale boss entities
+            }
+        }
         if (entity == null) return;
         if (entity.getEntityWorld().isClient()) return;
         if (!(entity instanceof MobEntity mob)) return;
