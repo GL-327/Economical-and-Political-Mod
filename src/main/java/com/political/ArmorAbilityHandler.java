@@ -46,14 +46,31 @@ public class ArmorAbilityHandler {
         player.setHealth(1.0f);
 
         // Apply shrink effect (slowness + jump boost to simulate smaller hitbox feel)
+// Example - in ArmorAbilityHandler.java, change all effect applications:
         player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.SLOWNESS, 100, 1, true, false, false  // 5 seconds
+                StatusEffects.SLOWNESS,
+                100,
+                1,
+                true,   // ambient - true hides from HUD
+                false,  // showParticles
+                false   // showIcon - this hides from side of screen
+        ));
+
+        player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.JUMP_BOOST,
+                100,
+                3,
+                true,   // ambient - true hides from HUD
+                false,  // showParticles
+                false   // showIcon - this hides from side of screen
         ));
         player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.JUMP_BOOST, 100, 3, true, false, false  // High jump
-        ));
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.RESISTANCE, 60, 2, true, false, false  // Brief invuln
+                StatusEffects.RESISTANCE,
+                60,
+                2,
+                true,   // ambient - true hides from HUD
+                false,  // showParticles
+                false   // showIcon - this hides from side of screen
         ));
 
         // Visual/audio feedback
@@ -151,63 +168,63 @@ public class ArmorAbilityHandler {
         return name.contains("Slime") && name.contains("Boots");
     }
     public static void detectEntityNoise(ServerWorld world) {
-        // Get all players and check entities around them
+        if (world.getPlayers().isEmpty()) return;
+
         for (ServerPlayerEntity player : world.getPlayers()) {
-            // Only check if player has warden chestplate (optimization)
             ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
             if (!isWardenChestplate(chestplate)) continue;
 
-            // Check entities within 24 blocks of the player
-            Box searchBox = player.getBoundingBox().expand(24.0);
+            if (player.getBoundingBox() == null) continue;
+
+            Box searchBox = player.getBoundingBox().expand(64.0);
 
             for (LivingEntity entity : world.getEntitiesByClass(
                     LivingEntity.class,
-                    searchBox,  // ← Use actual bounding box, not null
+                    searchBox,
                     e -> e != player && e.isAlive())) {
 
-                // Detect noise-making activities:
                 boolean madeNoise = false;
 
-                // 1. Entity is sprinting/running (not sneaking)
-                if (entity.isSprinting()) {
-                    madeNoise = true;
-                }
+                // 1. Entity is sprinting
+                if (entity.isSprinting()) madeNoise = true;
 
                 // 2. Entity is attacking
-                if (entity.handSwinging) {
-                    madeNoise = true;
+                if (entity.handSwinging) madeNoise = true;
+
+                // 3. Entity is moving (very low threshold to catch walking)
+                double velocitySq = entity.getVelocity().horizontalLengthSquared();
+                if (velocitySq > 0.0001) madeNoise = true;
+
+                // 4. Entity took damage
+                if (entity.hurtTime > 0) madeNoise = true;
+
+                // 5. Hostile mobs chasing a target always make noise
+                if (entity instanceof HostileEntity hostile) {
+                    if (hostile.getTarget() != null) {
+                        madeNoise = true;
+                    }
                 }
 
-                // 3. Entity is walking (velocity check) and not sneaking
-                if (!entity.isSneaking() && entity.getVelocity().horizontalLengthSquared() > 0.01) {
-                    madeNoise = true;
-                }
-
-                // 4. Entity took damage recently
-                if (entity.hurtTime > 0) {
-                    madeNoise = true;
-                }
-
-                // 5. Hostile mobs making ambient sounds (random chance to simulate)
-                if (entity instanceof HostileEntity && entity.age % 60 == 0 && Math.random() < 0.3) {
+                // 6. Any mob that's not sneaking and is on ground with velocity
+                if (entity.isOnGround() && !entity.isSneaking() && velocitySq > 0.00001) {
                     madeNoise = true;
                 }
 
                 if (madeNoise) {
-                    onEntityMakeNoise(entity, world);
+                    entityNoiseTimestamps.put(entity.getUuid(), System.currentTimeMillis());
                 }
             }
         }
     }
 
+
     // ============================================================
     // WARDEN CHESTPLATE (Warden Slayer)
     // ============================================================
+
     private static void tickWardenChestplate(ServerPlayerEntity player) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (!isWardenChestplate(chestplate)) {
-            // Player removed chestplate - clear all ESP glowing
-            espGlowingMobs.clear();
             return;
         }
 
@@ -216,48 +233,46 @@ public class ArmorAbilityHandler {
             player.removeStatusEffect(StatusEffects.DARKNESS);
         }
 
+        // Passive 2: Night vision
         StatusEffectInstance currentNightVision = player.getStatusEffect(StatusEffects.NIGHT_VISION);
         if (currentNightVision == null || currentNightVision.getDuration() < 220) {
+// Example - in ArmorAbilityHandler.java, change all effect applications:
             player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.NIGHT_VISION, 400, 0, true, false, false
+                    StatusEffects.NIGHT_VISION,
+                    400,
+                    0,
+                    true,   // ambient - true hides from HUD
+                    false,  // showParticles
+                    false   // showIcon - this hides from side of screen
             ));
         }
 
-        // Passive 3: ESP based on NOISE - check every 10 ticks (0.5 seconds)
+        // Passive 3: ESP - check every 10 ticks
         if (player.age % 10 == 0) {
             ServerWorld world = player.getEntityWorld();
             long now = System.currentTimeMillis();
 
-            // Clean up expired noise timestamps and remove glowing from silent mobs
-            Iterator<Map.Entry<UUID, Long>> iterator = entityNoiseTimestamps.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<UUID, Long> entry = iterator.next();
-                UUID entityId = entry.getKey();
-                long lastNoise = entry.getValue();
+            // Clean up old entries (older than 5 seconds)
+            entityNoiseTimestamps.entrySet().removeIf(entry ->
+                    now - entry.getValue() > NOISE_FADE_TIME_MS
+            );
 
-                // If entity hasn't made noise in 5 seconds, remove glowing
-                if (now - lastNoise > NOISE_FADE_TIME_MS) {
-                    iterator.remove();
-                    espGlowingMobs.remove(entityId);
-                    // Note: Glowing effect will naturally expire (we give short duration)
-                    for (LivingEntity entity : world.getEntitiesByClass(
-                            LivingEntity.class,
-                            player.getBoundingBox().expand(24.0), // 24 block range like Warden
-                            e -> e != player && e.isAlive())) {
+            // Make sure player has valid bounding box
+            if (player.getBoundingBox() == null) return;
 
-                        entityId = entity.getUuid();
+            // Apply glowing to entities that made noise recently (64 block range)
+            for (LivingEntity entity : world.getEntitiesByClass(
+                    LivingEntity.class,
+                    player.getBoundingBox().expand(64.0),
+                    e -> e != player && e.isAlive())) {
 
-                        // Check if this entity has made noise recently
-                        UUID currentEntityId = entity.getUuid();
-                        Long entityLastNoise = entityNoiseTimestamps.get(currentEntityId);
-                        if (entityLastNoise != null && (now - lastNoise) <= NOISE_FADE_TIME_MS) {
-                            // Entity made noise recently - apply/refresh glowing
-                            entity.addStatusEffect(new StatusEffectInstance(
-                                    StatusEffects.GLOWING, 30, 0, true, false, false // 1.5 seconds, will refresh
-                            ));
-                            espGlowingMobs.add(entityId);
-                        }
-                    }
+                UUID entityId = entity.getUuid();
+                Long lastNoise = entityNoiseTimestamps.get(entityId);
+
+                if (lastNoise != null && (now - lastNoise) <= NOISE_FADE_TIME_MS) {
+                    entity.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.GLOWING, 30, 0, true, false, false
+                    ));
                 }
             }
         }

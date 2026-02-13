@@ -22,7 +22,7 @@ public class BountyCraftingHandler {
             BlockPos pos = hitResult.getBlockPos();
 
             // Use SMITHING_TABLE for bounty crafting
-            if (!world.getBlockState(pos).isOf(Blocks.SMITHING_TABLE)) return ActionResult.PASS;
+            if (!world.getBlockState(pos).isOf(Blocks.CRAFTING_TABLE)) return ActionResult.PASS;
 
             // Check for each recipe
             if (tryZombieBerserkerHelmetRecipe(serverPlayer)) return ActionResult.SUCCESS;

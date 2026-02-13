@@ -278,7 +278,20 @@ public class HealthScalingManager {
         if (entity == null) return;
         if (entity.getEntityWorld().isClient()) return;
         if (!(entity instanceof MobEntity mob)) return;
-
+        if (entity.hasCustomName()) {
+            String name = entity.getCustomName().getString();
+            if (name.contains("Outlaw") || name.contains("Bandit") ||
+                    name.contains("Desperado") || name.contains("Rustler") ||
+                    name.contains("Phantom") || name.contains("Terror") ||
+                    name.contains("[TEST]") ||
+                    // ADD THESE NEW CHECKS:
+                    name.contains("Auction") ||
+                    name.contains("Master") ||
+                    name.contains("Underground") ||
+                    name.contains("NPC")) {
+                return; // Don't scale NPC/boss entities
+            }
+        }
         UUID uuid = entity.getUuid();
 
         // Already processed - CHECK FIRST!

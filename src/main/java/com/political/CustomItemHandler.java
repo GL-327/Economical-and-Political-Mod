@@ -191,7 +191,7 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> levelWarningCooldowns = new HashMap<>();
 
     public static ItemStack createHPEBM(int mk) {
-        ItemStack weapon = new ItemStack(Items.END_ROD);
+        ItemStack weapon = new ItemStack(Items.IRON_SHOVEL);
 
         Formatting color = switch (mk) {
             case 1 -> Formatting.WHITE;

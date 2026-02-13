@@ -31,7 +31,9 @@
     "ArrowHeadshotMixin",
     "BossDamageReductionMixin",
     "SlimeEntityMixin",
-    "WardenEntityMixin"
+    "WardenEntityMixin",
+    "TotemDisableMixin",
+    "BountyDefenseMixin"
   ],
   "injectors": {
     "defaultRequire": 1
