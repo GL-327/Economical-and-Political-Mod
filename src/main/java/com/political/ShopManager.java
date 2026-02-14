@@ -123,24 +123,10 @@ public class ShopManager {
 
         // ===== TOOLS & WEAPONS =====
         CATEGORIES.put("Tools", Arrays.asList(
-                Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD,
-                Items.WOODEN_PICKAXE, Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE,
-                Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.GOLDEN_AXE, Items.DIAMOND_AXE,
-                Items.WOODEN_SHOVEL, Items.STONE_SHOVEL, Items.IRON_SHOVEL, Items.GOLDEN_SHOVEL, Items.DIAMOND_SHOVEL,
-                Items.WOODEN_HOE, Items.STONE_HOE, Items.IRON_HOE, Items.GOLDEN_HOE, Items.DIAMOND_HOE,
-                Items.BOW, Items.CROSSBOW, Items.ARROW, Items.SPECTRAL_ARROW, Items.TIPPED_ARROW,
-                Items.SHIELD, Items.FISHING_ROD, Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK,
-                Items.FLINT_AND_STEEL, Items.SHEARS, Items.BRUSH, Items.SPYGLASS, Items.COMPASS, Items.CLOCK,
-                Items.LEAD, Items.NAME_TAG, Items.SADDLE, Items.ELYTRA, Items.FIREWORK_ROCKET
         ));
 
         // ===== ARMOR =====
         CATEGORIES.put("Armor", Arrays.asList(
-                Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS,
-                Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS,
-                Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
-                Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS,
-                Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS,
                 Items.TURTLE_HELMET
         ));
 
@@ -450,7 +436,6 @@ public class ShopManager {
         setPrice(Items.ARMADILLO_SCUTE, 15);
         setPrice(Items.GOAT_HORN, 40);
         setPrice(Items.EXPERIENCE_BOTTLE, 30);
-        setPrice(Items.TOTEM_OF_UNDYING, 500);
         setPrice(Items.TRIDENT, 600);
         setPrice(Items.NAUTILUS_SHELL, 100);
         setPrice(Items.HEART_OF_THE_SEA, 400);
@@ -490,39 +475,6 @@ public class ShopManager {
         setPrice(Items.CALIBRATED_SCULK_SENSOR, 40);
 
         // ===== TOOLS & WEAPONS =====
-        // Wooden
-        setPrice(Items.WOODEN_SWORD, 1);
-        setPrice(Items.WOODEN_PICKAXE, 2);
-        setPrice(Items.WOODEN_AXE, 2);
-        setPrice(Items.WOODEN_SHOVEL, 1);
-        setPrice(Items.WOODEN_HOE, 1);
-        // Stone
-        setPrice(Items.STONE_SWORD, 2);
-        setPrice(Items.STONE_PICKAXE, 3);
-        setPrice(Items.STONE_AXE, 3);
-        setPrice(Items.STONE_SHOVEL, 2);
-        setPrice(Items.STONE_HOE, 2);
-        // Iron
-        setPrice(Items.IRON_SWORD, 10);
-        setPrice(Items.IRON_PICKAXE, 15);
-        setPrice(Items.IRON_AXE, 15);
-        setPrice(Items.IRON_SHOVEL, 8);
-        setPrice(Items.IRON_HOE, 10);
-        // Gold
-        setPrice(Items.GOLDEN_SWORD, 2);
-        setPrice(Items.GOLDEN_PICKAXE, 3);
-        setPrice(Items.GOLDEN_AXE, 3);
-        setPrice(Items.GOLDEN_SHOVEL, 1);
-        setPrice(Items.GOLDEN_HOE, 2);
-        // Diamond
-        setPrice(Items.DIAMOND_SWORD, 110);
-        setPrice(Items.DIAMOND_PICKAXE, 160);
-        setPrice(Items.DIAMOND_AXE, 160);
-        setPrice(Items.DIAMOND_SHOVEL, 60);
-        setPrice(Items.DIAMOND_HOE, 110);
-        // Other tools
-        setPrice(Items.BOW, 8);
-        setPrice(Items.CROSSBOW, 15);
         setPrice(Items.ARROW, 1);
         setPrice(Items.SPECTRAL_ARROW, 5);
         setPrice(Items.TIPPED_ARROW, 10);
@@ -539,30 +491,9 @@ public class ShopManager {
         setPrice(Items.LEAD, 10);
         setPrice(Items.NAME_TAG, 40);
         setPrice(Items.SADDLE, 60);
-        setPrice(Items.ELYTRA, 2000);
         setPrice(Items.FIREWORK_ROCKET, 3);
 
         // ===== ARMOR =====
-        setPrice(Items.LEATHER_HELMET, 7);
-        setPrice(Items.LEATHER_CHESTPLATE, 11);
-        setPrice(Items.LEATHER_LEGGINGS, 10);
-        setPrice(Items.LEATHER_BOOTS, 6);
-        setPrice(Items.CHAINMAIL_HELMET, 20);
-        setPrice(Items.CHAINMAIL_CHESTPLATE, 30);
-        setPrice(Items.CHAINMAIL_LEGGINGS, 25);
-        setPrice(Items.CHAINMAIL_BOOTS, 15);
-        setPrice(Items.IRON_HELMET, 20);
-        setPrice(Items.IRON_CHESTPLATE, 32);
-        setPrice(Items.IRON_LEGGINGS, 28);
-        setPrice(Items.IRON_BOOTS, 16);
-        setPrice(Items.GOLDEN_HELMET, 5);
-        setPrice(Items.GOLDEN_CHESTPLATE, 8);
-        setPrice(Items.GOLDEN_LEGGINGS, 7);
-        setPrice(Items.GOLDEN_BOOTS, 4);
-        setPrice(Items.DIAMOND_HELMET, 110);
-        setPrice(Items.DIAMOND_CHESTPLATE, 180);
-        setPrice(Items.DIAMOND_LEGGINGS, 155);
-        setPrice(Items.DIAMOND_BOOTS, 90);
         setPrice(Items.TURTLE_HELMET, 120);
 
         // ===== DECORATION =====

@@ -3,6 +3,8 @@ package com.political;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.political.DataManager.save;
+
 public class SlayerData {
 
     // ============================================================
@@ -28,7 +30,9 @@ public class SlayerData {
             }
         }
     }
-
+    private static Map<String, Long> xpData = new HashMap<>();
+    private static Map<String, Integer> levelData = new HashMap<>();
+    private static Map<String, Integer> bossData = new HashMap<>();
     // ============================================================
     // DATA ACCESS - Integrates with DataManager.SaveData
     // ============================================================
@@ -163,4 +167,29 @@ public class SlayerData {
         long nextLevelXp = SlayerManager.XP_REQUIREMENTS[level];
         return nextLevelXp - xp;
     }
-}
+
+        // Assuming you have something like this:
+
+
+        // Add these setter methods:
+
+
+
+        public static void setSlayerLevel(String uuid, SlayerManager.SlayerType type, int level) {
+            String key = uuid + "_" + type.name();
+            levelData.put(key, Math.max(0, Math.min(level, SlayerManager.MAX_LEVEL)));
+            // Set XP to match level
+            if (level > 0 && level <= SlayerManager.XP_REQUIREMENTS.length) {
+                xpData.put(key, SlayerManager.XP_REQUIREMENTS[level - 1]);
+            } else {
+                xpData.put(key, 0L);
+            }
+            save(PoliticalServer.server);
+        }
+
+        public static void setBossesKilled(String uuid, SlayerManager.SlayerType type, int count) {
+            String key = uuid + "_" + type.name() + "_bosses";
+            bossData.put(key, Math.max(0, count));
+            save(PoliticalServer.server);
+        }
+    }

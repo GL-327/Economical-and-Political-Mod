@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import com.political.SlayerItems.ArmorPiece;
 
 public class BountyCraftingHandler {
 
@@ -37,6 +38,13 @@ public class BountyCraftingHandler {
             // === WEAPON RECIPES ===
             if (tryGavelRecipe(serverPlayer)) return ActionResult.SUCCESS;
             if (tryBaseHPEBMRecipe(serverPlayer)) return ActionResult.SUCCESS;
+
+            if (tryT2ArmorRecipe(serverPlayer)) return ActionResult.SUCCESS;  // Check T2 first (needs T1)
+            if (tryT1ArmorRecipe(serverPlayer)) return ActionResult.SUCCESS;
+
+            // === SWORD RECIPES (T1 & T2) ===
+            if (tryBountySwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
+            if (tryUpgradedSwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
 
             return ActionResult.PASS;
         });
@@ -380,6 +388,193 @@ public class BountyCraftingHandler {
                 int toRemove = Math.min(remaining, stack.getCount());
                 stack.decrement(toRemove);
                 remaining -= toRemove;
+            }
+        }
+    }
+    // ============================================================
+// T1 ARMOR RECIPES
+// Recipe: 3 Cores + Base Leather Armor + 2 Type-Specific Items
+// ============================================================
+
+    private static boolean tryT1ArmorRecipe(ServerPlayerEntity player) {
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            // Skip Enderman for now
+            if (type == SlayerManager.SlayerType.ENDERMAN) continue;
+
+            String coreName = type.displayName + " Core";
+            int cores = countCores(player, coreName);
+
+            if (cores < 3) continue;
+
+            // Check level requirement
+            int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+            if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) continue;
+
+            // Try each armor piece
+            for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
+                if (tryT1ArmorPieceRecipe(player, type, piece, coreName, cores)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean tryT1ArmorPieceRecipe(ServerPlayerEntity player,
+                                                 SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece,
+                                                 String coreName, int cores) {
+
+        // Get base armor item
+        Item baseArmor = switch (piece) {
+            case HELMET -> Items.LEATHER_HELMET;
+            case CHESTPLATE -> Items.LEATHER_CHESTPLATE;
+            case LEGGINGS -> Items.LEATHER_LEGGINGS;
+            case BOOTS -> Items.LEATHER_BOOTS;
+        };
+
+        if (!hasItem(player, baseArmor)) return false;
+
+        // Get type-specific secondary material
+        Item secondaryItem = getSecondaryMaterial(type);
+        int secondaryCount = countItem(player, secondaryItem);
+        int secondaryRequired = 2;
+
+        if (secondaryCount < secondaryRequired) return false;
+
+        // Check level
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+        if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.T1_ARMOR_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        // Craft!
+        removeCores(player, coreName, 3);
+        removeItem(player, baseArmor, 1);
+        removeItem(player, secondaryItem, secondaryRequired);
+
+        player.getInventory().insertStack(SlayerItems.createT1Armor(type, piece));
+        player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Hunter " + piece.displayName + "!")
+                .formatted(type.color, Formatting.BOLD), false);
+
+        return true;
+    }
+
+    private static Item getSecondaryMaterial(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> Items.ROTTEN_FLESH;
+            case SPIDER -> Items.STRING;
+            case SKELETON -> Items.BONE;
+            case SLIME -> Items.SLIME_BALL;
+            case WARDEN -> Items.SCULK;
+            case ENDERMAN -> Items.ENDER_PEARL;
+        };
+    }
+    // ============================================================
+// T2 ARMOR RECIPES
+// Recipe: 5 Cores + T1 Armor Piece + 4 Type-Specific Items + 1 Diamond
+// ============================================================
+
+    private static boolean tryT2ArmorRecipe(ServerPlayerEntity player) {
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            // Skip Enderman for now
+            if (type == SlayerManager.SlayerType.ENDERMAN) continue;
+
+            String coreName = type.displayName + " Core";
+            int cores = countCores(player, coreName);
+
+            if (cores < 5) continue;
+
+            // Check level requirement
+            int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+            if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) continue;
+
+            // Try each armor piece
+            for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
+                if (tryT2ArmorPieceRecipe(player, type, piece, coreName, cores)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean tryT2ArmorPieceRecipe(ServerPlayerEntity player,
+                                                 SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece,
+                                                 String coreName, int cores) {
+
+        // Check for T1 armor piece of same type
+        if (!hasT1ArmorPiece(player, type, piece)) return false;
+
+        // Check for diamond
+        if (!hasItem(player, Items.DIAMOND)) return false;
+
+        // Get type-specific secondary material
+        Item secondaryItem = getSecondaryMaterial(type);
+        int secondaryCount = countItem(player, secondaryItem);
+        int secondaryRequired = 4;
+
+        if (secondaryCount < secondaryRequired) return false;
+
+        // Check level
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+        if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) {
+            player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.T2_ARMOR_LEVEL_REQ)
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        // Craft!
+        removeCores(player, coreName, 5);
+        removeT1ArmorPiece(player, type, piece);
+        removeItem(player, Items.DIAMOND, 1);
+        removeItem(player, secondaryItem, secondaryRequired);
+
+        player.getInventory().insertStack(SlayerItems.createT2Armor(type, piece));
+        player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Slayer " + piece.displayName + " II!")
+                .formatted(type.color, Formatting.BOLD), false);
+
+        return true;
+    }
+// ============================================================
+// T1 ARMOR DETECTION & REMOVAL HELPERS
+// ============================================================
+
+    private static boolean hasT1ArmorPiece(ServerPlayerEntity player,
+                                           SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece) {
+
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isEmpty()) continue;
+
+            if (SlayerItems.isT1SlayerArmor(stack)) {
+                SlayerManager.SlayerType armorType = SlayerItems.getArmorSlayerType(stack);
+                SlayerItems.ArmorPiece armorPiece = SlayerItems.getArmorPiece(stack);
+
+                if (armorType == type && armorPiece == piece) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static void removeT1ArmorPiece(ServerPlayerEntity player,
+                                           SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece) {
+
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isEmpty()) continue;
+
+            if (SlayerItems.isT1SlayerArmor(stack)) {
+                SlayerManager.SlayerType armorType = SlayerItems.getArmorSlayerType(stack);
+                SlayerItems.ArmorPiece armorPiece = SlayerItems.getArmorPiece(stack);
+
+                if (armorType == type && armorPiece == piece) {
+                    stack.decrement(1);
+                    return;
+                }
             }
         }
     }
