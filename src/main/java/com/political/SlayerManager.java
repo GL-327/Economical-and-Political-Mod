@@ -244,6 +244,65 @@ public class SlayerManager {
     // ============================================================
     // QUEST MANAGEMENT (continued)
     // ============================================================
+// Add to SlayerManager.java
+
+    /**
+     * Show boss spawn progress in action bar
+     */
+    public static void showSpawnProgress(ServerPlayerEntity player) {
+        ActiveQuest quest = activeQuests.get(player.getUuidAsString());
+        if (quest == null || quest.bossSpawned) return;
+
+        int current = quest.killCount;
+        int required = quest.getKillsRequired();
+        double progress = quest.getProgress();
+
+        // Build progress bar
+        int barLength = 20;
+        int filled = (int) (progress * barLength);
+
+        StringBuilder bar = new StringBuilder();
+        bar.append("§7[");
+        for (int i = 0; i < barLength; i++) {
+            if (i < filled) {
+                bar.append("§a█");
+            } else {
+                bar.append("§8░");
+            }
+        }
+        bar.append("§7]");
+
+        // Color based on progress
+        String countColor = progress >= 1.0 ? "§a" : progress >= 0.5 ? "§e" : "§c";
+
+        String message = String.format("§6%s Bounty §7| %s %s%d§7/§a%d §7| %s",
+                quest.slayerType.displayName,
+                bar.toString(),
+                countColor,
+                current,
+                required,
+                progress >= 1.0 ? "§a§lREADY!" : "§7T" + quest.tier
+        );
+
+        player.sendMessage(Text.literal(message), true);
+    }
+
+    /**
+     * Called when a mob is killed - show progress update
+     */
+
+
+    /**
+     * Force check and spawn boss if ready
+     */
+    public static void checkBossSpawn(ServerPlayerEntity player) {
+        ActiveQuest quest = activeQuests.get(player.getUuidAsString());
+        if (quest == null || quest.bossSpawned) return;
+
+        if (quest.killCount >= quest.getKillsRequired()) {
+            spawnBoss(player, quest);
+        }
+    }
 
     public static boolean startQuest(ServerPlayerEntity player, SlayerType type, int tier) {
         String uuid = player.getUuidAsString();
@@ -950,7 +1009,15 @@ public class SlayerManager {
                     break;
                 }
             }
-
+            if (server.getTicks() % 20 == 0) {
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    // Use different variable name to avoid conflict
+                    ActiveQuest activeQuest = activeQuests.get(player.getUuidAsString());
+                    if (activeQuest != null && !activeQuest.bossSpawned) {
+                        showSpawnProgress(player);
+                    }
+                }
+            }
             // Update boss bar
             ServerBossBar bossBar = bossBars.get(playerUuid);
             if (boss != null && boss.isAlive()) {

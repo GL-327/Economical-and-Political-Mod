@@ -22,6 +22,19 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.Identifier;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+
 
 public class SlayerItems {
 
@@ -154,17 +167,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
 
 
-    public static boolean isSpiderLeggings(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        return name.getString().contains("Venomous Crawler Leggings");
-    }
 
-    public static boolean canUseSpiderLeggings(ServerPlayerEntity player) {
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
-        return level >= SPIDER_LEGGINGS_LEVEL_REQ;
-    }
     public static final int ZOMBIE_BERSERKER_LEVEL_REQ = 12;
     // ============================================================
 // SKELETON BOW - T10 Skeleton Requirement
@@ -341,12 +344,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         return sword;
     }
 
-    public static boolean isUpgradedSlayerSword(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        return name.getString().contains("Slayer Sword II");
-    }
+
     public static ItemStack createSlayerSwordForPlayer(ServerPlayerEntity player, SlayerManager.SlayerType type) {
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
 
@@ -657,6 +655,27 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
     public static final int T2_ARMOR_LEVEL_REQ = 8;
 
 
+    // ============================================================
+    // ARMOR STAT CONSTANTS
+    // ============================================================
+    // T1 Armor - Moderate stats
+    private static final double T1_HELMET_ARMOR = 4.0;        // +1 over leather
+    private static final double T1_HELMET_TOUGHNESS = 1.0;
+    private static final double T1_HELMET_KNOCKBACK_RESIST = 0.05;
+
+    private static final double T1_LEGGINGS_ARMOR = 7.0;      // +1 over leather
+    private static final double T1_LEGGINGS_TOUGHNESS = 1.5;
+    private static final double T1_LEGGINGS_KNOCKBACK_RESIST = 0.05;
+
+    private static final double T1_BOOTS_ARMOR = 3.0;         // +2 over leather
+    private static final double T1_BOOTS_TOUGHNESS = 1.0;
+    private static final double T1_BOOTS_KNOCKBACK_RESIST = 0.05;
+
+    // T2 Armor - High stats (Warden)
+    private static final double T2_CHESTPLATE_ARMOR = 10.0;   // +2 over netherite
+    private static final double T2_CHESTPLATE_TOUGHNESS = 4.0; // +1 over netherite
+    private static final double T2_CHESTPLATE_KNOCKBACK_RESIST = 0.15;
+    private static final double T2_CHESTPLATE_HEALTH_BOOST = 4.0; // +2 hearts
 
 
 
@@ -731,19 +750,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
                 nameStr.contains("Slayer Leggings") ||
                 nameStr.contains("Slayer Boots");
     }
-    public static int getSwordLevelRequirement(ItemStack sword) {
-        if (!isSlayerSword(sword)) return 0;
 
-        Text name = sword.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return BASIC_SWORD_LEVEL_REQ;
-
-        // Check if it's an upgraded sword
-        if (name.getString().contains("Upgraded") || name.getString().contains("II")) {
-            return UPGRADED_SWORD_LEVEL_REQ;
-        }
-
-        return BASIC_SWORD_LEVEL_REQ;
-    }
 
     public static boolean craftSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
         if (!canCraftSlayerSword(player, type)) {
@@ -1607,5 +1614,70 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
         return playerLevel >= requiredLevel;
     }
+    // ============================================================
+// BASIC SWORD LEVEL REQUIREMENT
+// ============================================================
 
+
+    // ============================================================
+// VENOMOUS CRAWLER LEGGINGS - FIXED DETECTION
+// ============================================================
+
+
+    public static boolean isSpiderLeggings(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String nameStr = name.getString();
+        // Check multiple possible name patterns
+        return nameStr.contains("Venomous Crawler Leggings") ||
+                nameStr.contains("Venomous") && nameStr.contains("Leggings") ||
+                nameStr.contains("Spider") && nameStr.contains("Leggings");
+    }
+
+    public static boolean canUseSpiderLeggings(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
+        return level >= SPIDER_LEGGINGS_LEVEL_REQ;
+    }
+
+    // ============================================================
+// UPGRADED SLAYER SWORD DETECTION
+// ============================================================
+    public static boolean isUpgradedSlayerSword(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String nameStr = name.getString();
+        return nameStr.contains("Sword II") || nameStr.contains("Bounty Sword II");
+    }
+
+    public static int getSwordLevelRequirement(ItemStack stack) {
+        if (isUpgradedSlayerSword(stack)) {
+            return UPGRADED_SWORD_LEVEL_REQ;
+        }
+        if (isSlayerSword(stack)) {
+            return BASIC_SWORD_LEVEL_REQ;
+        }
+        return 0;
+    }
+
+    // ============================================================
+// T2 ARMOR DETECTION HELPERS
+// ============================================================
+    public static boolean isT2Armor(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String nameStr = name.getString();
+        return nameStr.contains("Sculk") || nameStr.contains("Warden") ||
+                nameStr.contains("II") || nameStr.contains("Mk2");
+    }
+
+    public static boolean isT2Sword(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String nameStr = name.getString();
+        return nameStr.contains("Sword II");
+    }
 }

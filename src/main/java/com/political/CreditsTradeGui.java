@@ -53,26 +53,27 @@ public class CreditsTradeGui {
                 .glow()
                 .build());
 // === COIN TO CREDIT CONVERSION (10,000 coins = 1 credit) ===
+// === CREDIT TO COIN CONVERSION (1 credit = 10,000 coins) ===
         gui.setSlot(1, new GuiElementBuilder(Items.GOLD_INGOT)
-                .setName(Text.literal("💰 Convert Coins → Credits")
-                        .formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("💎 Convert Credits → Coins")
+                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("10,000 Coins = 1 Credit").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("1 Credit = 10,000 Coins").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Your Coins: " + CoinManager.getCoins(player)).formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Your Credits: " + DataManager.getCredits(player.getUuidAsString())).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Your Coins: " + CoinManager.getCoins(player)).formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to convert!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> {
-                    int coins = CoinManager.getCoins(player);
-                    if (coins >= 10000) {
-                        CoinManager.removeCoins(player, 10000);
-                        DataManager.addCredits(player.getUuidAsString(), 1);
-                        player.sendMessage(Text.literal("✓ Converted 10,000 Coins → 1 Credit!")
+                    int credits = DataManager.getCredits(player.getUuidAsString());
+                    if (credits >= 1) {
+                        DataManager.removeCredits(player.getUuidAsString(), 1);
+                        CoinManager.giveCoins(player, 10000);
+                        player.sendMessage(Text.literal("✓ Converted 1 Credit → 10,000 Coins!")
                                 .formatted(Formatting.GREEN), false);
                         open(player); // Refresh GUI
                     } else {
-                        player.sendMessage(Text.literal("✗ Need 10,000 coins! You have: " + coins)
+                        player.sendMessage(Text.literal("✗ Need at least 1 credit!")
                                 .formatted(Formatting.RED), false);
                     }
                 })

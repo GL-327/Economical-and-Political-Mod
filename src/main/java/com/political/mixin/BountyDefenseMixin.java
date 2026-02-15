@@ -22,15 +22,21 @@ public class BountyDefenseMixin {
         LivingEntity self = (LivingEntity)(Object)this;
 
         if (!(self instanceof ServerPlayerEntity player)) return amount;
-
         if (source.getAttacker() == null) return amount;
         if (!(source.getAttacker() instanceof LivingEntity attacker)) return amount;
 
         SlayerManager.SlayerType bossType = getBossType(attacker);
-        if (bossType == null) return amount;
+        boolean isAnyBoss = bossType != null || SlayerManager.isSlayerBoss(attacker.getUuid());
+
+        if (!isAnyBoss) return amount;
+
+        // Get actual boss type if tracked
+        if (bossType == null) {
+            bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
+        }
 
         float reduction = 1.0f;
-        reduction *= getArmorDefenseMultiplier(player, bossType);
+        reduction *= getArmorDefenseMultiplier(player, bossType, isAnyBoss);
         reduction *= getWeaponDefenseMultiplier(player, bossType);
 
         return amount * reduction;
@@ -40,41 +46,64 @@ public class BountyDefenseMixin {
         if (!entity.hasCustomName()) return null;
         String name = entity.getCustomName().getString();
 
-        if (name.contains("Rotting Outlaw") || name.contains("Zombie"))
+        if (name.contains("Undying Outlaw") || name.contains("Rotting"))
             return SlayerManager.SlayerType.ZOMBIE;
-        if (name.contains("Silk Bandit") || name.contains("Spider"))
+        if (name.contains("Venomous Bandit") || name.contains("Silk"))
             return SlayerManager.SlayerType.SPIDER;
-        if (name.contains("Bone Desperado") || name.contains("Skeleton"))
+        if (name.contains("Bone Desperado"))
             return SlayerManager.SlayerType.SKELETON;
-        if (name.contains("Gelatinous Rustler") || name.contains("Slime"))
+        if (name.contains("Gelatinous Rustler"))
             return SlayerManager.SlayerType.SLIME;
-        if (name.contains("Sculk Phantom") || name.contains("Warden"))
+        if (name.contains("Void Phantom"))
+            return SlayerManager.SlayerType.ENDERMAN;
+        if (name.contains("Sculk Terror"))
             return SlayerManager.SlayerType.WARDEN;
 
         return null;
     }
 
-    private float getArmorDefenseMultiplier(ServerPlayerEntity player, SlayerManager.SlayerType bossType) {
+    private float getArmorDefenseMultiplier(ServerPlayerEntity player, SlayerManager.SlayerType bossType, boolean isAnyBoss) {
         float multiplier = 1.0f;
 
         ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
-        if (isZombieBerserkerHelmet(helmet)) {
-            multiplier *= (bossType == SlayerManager.SlayerType.ZOMBIE) ? 0.25f : 0.85f;
-        }
-
-        ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
-        if (isSpiderLeggings(leggings)) {
-            multiplier *= (bossType == SlayerManager.SlayerType.SPIDER) ? 0.25f : 0.85f;
-        }
-
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
-        if (isSlimeBoots(boots)) {
-            multiplier *= (bossType == SlayerManager.SlayerType.SLIME) ? 0.25f : 0.85f;
-        }
-
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (isWardenChestplate(chestplate)) {
-            multiplier *= (bossType == SlayerManager.SlayerType.WARDEN) ? 0.10f : 0.70f;
+        ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
+        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+
+        // ===== ZOMBIE BERSERKER HELMET (T1) =====
+        if (isZombieBerserkerHelmet(helmet) && SlayerItems.canUseZombieBerserkerHelmet(player)) {
+            if (bossType == SlayerManager.SlayerType.ZOMBIE) {
+                multiplier *= 0.25f; // -75% from matching boss
+            } else if (isAnyBoss) {
+                multiplier *= 0.85f; // -15% from all bosses
+            }
+        }
+
+        // ===== VENOMOUS CRAWLER LEGGINGS (T1) =====
+        if (isSpiderLeggings(leggings) && SlayerItems.canUseSpiderLeggings(player)) {
+            if (bossType == SlayerManager.SlayerType.SPIDER) {
+                multiplier *= 0.25f; // -75% from matching boss
+            } else if (isAnyBoss) {
+                multiplier *= 0.85f; // -15% from all bosses
+            }
+        }
+
+        // ===== GELATINOUS RUSTLER BOOTS (T1) =====
+        if (isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
+            if (bossType == SlayerManager.SlayerType.SLIME) {
+                multiplier *= 0.25f; // -75% from matching boss
+            } else if (isAnyBoss) {
+                multiplier *= 0.85f; // -15% from all bosses
+            }
+        }
+
+        // ===== SCULK TERROR CHESTPLATE (T2) =====
+        if (isWardenChestplate(chestplate) && SlayerItems.canUseWardenChestplate(player)) {
+            if (bossType == SlayerManager.SlayerType.WARDEN) {
+                multiplier *= 0.10f; // -90% from matching boss
+            } else if (isAnyBoss) {
+                multiplier *= 0.70f; // -30% from all bosses
+            }
         }
 
         return multiplier;
@@ -83,9 +112,22 @@ public class BountyDefenseMixin {
     private float getWeaponDefenseMultiplier(ServerPlayerEntity player, SlayerManager.SlayerType bossType) {
         ItemStack mainHand = player.getMainHandStack();
 
+        // T2 swords provide better defense
+        if (SlayerItems.isUpgradedSlayerSword(mainHand)) {
+            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(mainHand);
+            if (swordType == bossType) {
+                return 0.40f; // -60% damage from matching boss
+            }
+            return 0.85f; // -15% from any boss
+        }
+
+        // T1 swords
         if (SlayerItems.isSlayerSword(mainHand)) {
             SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(mainHand);
-            return (swordType == bossType) ? 0.50f : 0.90f;
+            if (swordType == bossType) {
+                return 0.50f; // -50% damage from matching boss
+            }
+            return 0.90f; // -10% from any boss
         }
 
         return 1.0f;
@@ -100,18 +142,24 @@ public class BountyDefenseMixin {
     private boolean isSpiderLeggings(ItemStack stack) {
         if (stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        return name != null && name.getString().contains("Venomous");
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Venomous") || (n.contains("Spider") && n.contains("Leggings"));
     }
 
     private boolean isSlimeBoots(ItemStack stack) {
         if (stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        return name != null && (name.getString().contains("Slime") || name.getString().contains("Gelatinous"));
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Slime") || n.contains("Gelatinous");
     }
 
     private boolean isWardenChestplate(ItemStack stack) {
         if (stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        return name != null && (name.getString().contains("Warden") || name.getString().contains("Sculk"));
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Warden") || n.contains("Sculk");
     }
 }

@@ -68,8 +68,8 @@ public class BossAbilityManager {
     private static Vec3d getEntityPos(Entity entity) {
         return new Vec3d(entity.getX(), entity.getY(), entity.getZ());
     }
-    private static final Map<UUID, Long> undyingRageCooldowns = new HashMap<>();
-    private static final long UNDYING_RAGE_COOLDOWN_MS = 30000; // 30 seconds between rages
+
+
     // ============================================================
     // MAIN TICK METHOD
     // ============================================================
@@ -122,15 +122,25 @@ public class BossAbilityManager {
     }
     public static void tickBossAbilities(LivingEntity boss, ServerPlayerEntity target,
                                          SlayerManager.SlayerType type, int tier) {
+        if (!(boss.getEntityWorld() instanceof ServerWorld world)) return;
         if (type == SlayerManager.SlayerType.WARDEN && boss instanceof net.minecraft.entity.mob.WardenEntity warden) {
             warden.increaseAngerAt(target, 80, true);
             if (warden.getTarget() == null) {
                 warden.setTarget(target);
             }
         }
+        if (type == SlayerManager.SlayerType.ZOMBIE) {
+            tickUndyingRage(boss, world);
 
+            // Try to activate if health is low and not on cooldown
+            float healthPercent = boss.getHealth() / boss.getMaxHealth();
+            if (healthPercent < 0.3f && !isInUndyingRage(boss)) {
+                activateUndyingRage(boss, world);
+            }
+
+        }
         if (boss == null || !boss.isAlive() || target == null) return;
-        if (!(boss.getEntityWorld() instanceof ServerWorld world)) return;
+        if (!(boss.getEntityWorld() instanceof ServerWorld bossWorld)) return;
 
         // DELETE THE SECOND WARDEN CHECK THAT USES "player" - IT'S A DUPLICATE
 
@@ -174,7 +184,109 @@ public class BossAbilityManager {
             default -> 20000L;
         };
     }
+// ============================================================
+// UNDYING RAGE - Zombie Boss Invincibility
+// ============================================================
 
+    // At class level, add/update these constants:
+    private static final long UNDYING_RAGE_COOLDOWN_MS = 45000; // 45 seconds (was probably 15-20)
+    private static final long UNDYING_RAGE_DURATION_MS = 5000;  // 5 seconds of invincibility
+    private static final Map<UUID, Long> undyingRageEndTimes = new HashMap<>();
+    private static final Map<UUID, Long> undyingRageCooldowns = new HashMap<>();
+
+    /**
+     * Activate Undying Rage for zombie boss
+     */
+    public static boolean activateUndyingRage(LivingEntity boss, ServerWorld world) {
+        UUID bossId = boss.getUuid();
+        long now = System.currentTimeMillis();
+
+        // Check cooldown
+        Long lastUse = undyingRageCooldowns.get(bossId);
+        if (lastUse != null && (now - lastUse) < UNDYING_RAGE_COOLDOWN_MS) {
+            return false; // Still on cooldown
+        }
+
+        // Activate
+        undyingRageCooldowns.put(bossId, now);
+        undyingRageEndTimes.put(bossId, now + UNDYING_RAGE_DURATION_MS);
+
+        // Visual effects
+        boss.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.GLOWING, 100, 0, true, true, true
+        ));
+        boss.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 4, true, true, true // Resistance 5 = invincible
+        ));
+
+        // Notify nearby players
+        String bossName = boss.hasCustomName() ? boss.getCustomName().getString() : "The Boss";
+        for (ServerPlayerEntity player : world.getPlayers()) {
+            if (player.squaredDistanceTo(boss) < 2500) { // 50 blocks
+                player.sendMessage(Text.literal("§4§l⚠ " + bossName + " §4§lactivated UNDYING RAGE! §c(5s invincibility)")
+                        .formatted(Formatting.DARK_RED), false);
+            }
+        }
+
+        // Sound
+        world.playSound(null, boss.getBlockPos(),
+                SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 1.0f, 0.5f);
+
+        return true;
+    }
+
+    /**
+     * Check if boss is currently in Undying Rage
+     */
+    public static boolean isInUndyingRage(LivingEntity boss) {
+        Long endTime = undyingRageEndTimes.get(boss.getUuid());
+        if (endTime == null) return false;
+        return System.currentTimeMillis() < endTime;
+    }
+
+    /**
+     * Tick Undying Rage - call every tick for active bosses
+     */
+    public static void tickUndyingRage(LivingEntity boss, ServerWorld world) {
+        UUID bossId = boss.getUuid();
+        Long endTime = undyingRageEndTimes.get(bossId);
+
+        if (endTime == null) return;
+
+        long now = System.currentTimeMillis();
+
+        // Check if rage just ended
+        if (now >= endTime) {
+            undyingRageEndTimes.remove(bossId);
+
+            // Remove resistance
+            boss.removeStatusEffect(StatusEffects.RESISTANCE);
+
+            // Notify nearby players that it ended
+            String bossName = boss.hasCustomName() ? boss.getCustomName().getString() : "The Boss";
+            for (ServerPlayerEntity player : world.getPlayers()) {
+                if (player.squaredDistanceTo(boss) < 2500) { // 50 blocks
+                    player.sendMessage(Text.literal("§a§l✓ " + bossName + "'s §a§lUndying Rage has ENDED!")
+                            .formatted(Formatting.GREEN), false);
+                    player.sendMessage(Text.literal("§7(Next rage in §e45s§7)")
+                            .formatted(Formatting.GRAY), false);
+                }
+            }
+
+            // Sound indicating vulnerability
+            world.playSound(null, boss.getBlockPos(),
+                    SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.HOSTILE, 1.0f, 1.0f);
+        }
+    }
+
+    /**
+     * Clean up when boss dies
+     */
+    public static void onBossDeath(LivingEntity boss) {
+        UUID bossId = boss.getUuid();
+        undyingRageEndTimes.remove(bossId);
+        undyingRageCooldowns.remove(bossId);
+    }
     // ============================================================
     // PHASE SYSTEM
     // ============================================================

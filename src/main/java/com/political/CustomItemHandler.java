@@ -10,6 +10,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.item.Items;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -70,6 +72,7 @@ public class CustomItemHandler {
     private static final Map<UUID, Boolean> berserkerHelmetActive = new HashMap<>();
     private static final Map<UUID, Long> berserkerWarningCooldown = new HashMap<>();
     private static final long WARNING_COOLDOWN_MS = 3000; // 3 seconds between warnings
+
     public static void register() {
         registerBountyItemRestrictions();
         // Harvey's Stick - Lightning on attack
@@ -226,6 +229,7 @@ public class CustomItemHandler {
 
         return weapon;
     }
+
     public static ItemStack createGavel() {
         ItemStack gavel = new ItemStack(Items.WOODEN_AXE);
 
@@ -245,6 +249,7 @@ public class CustomItemHandler {
 
         return gavel;
     }
+
     public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
         UUID uuid = player.getUuid();
         long now = System.currentTimeMillis();
@@ -314,6 +319,7 @@ public class CustomItemHandler {
 
         wasSwinging.put(uuid, isSwinging);
     }
+
     public static void tickHermesShoes(ServerPlayerEntity player) {
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
         if (isHermesShoes(boots)) {
@@ -363,9 +369,9 @@ public class CustomItemHandler {
 
         fireHPEBMBeam(player, ticks);
     }
+
     private static final Map<UUID, Long> levelWarningCooldown = new HashMap<>();
     private static final long LEVEL_WARNING_COOLDOWN_MS = 2000;
-
 
 
     private static void fireHPEBMBeam(ServerPlayerEntity player, int ticks) {
@@ -487,9 +493,11 @@ public class CustomItemHandler {
             world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral2.x, spiral2.y, spiral2.z, 1, 0, 0, 0, 0.25);
         }
     }
+
     public static void markRightClick(ServerPlayerEntity player) {
         hpebmLastRightClick.put(player.getUuid(), System.currentTimeMillis());
     }
+
     // Upgraded beam (Tiers 2-7) - unique particles per tier, fast dissipating
     private static void fireUpgradedBeam(ServerWorld world, Vec3d start, Vec3d endPoint, int ticks, int tier, ServerPlayerEntity player) {
         Vec3d direction = endPoint.subtract(start).normalize();
@@ -509,7 +517,8 @@ public class CustomItemHandler {
 
             // Core particles per tier (fast-dissipating, no drop)
             switch (tier) {
-                case 2 -> world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
+                case 2 ->
+                        world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
                 case 3 -> {
                     world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
                     world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
@@ -681,6 +690,7 @@ public class CustomItemHandler {
     public static void tickSlayerSystems(ServerPlayerEntity player) {
         // Already handled by SlayerManager.tick() at server level
     }
+
     public static void tickZombieBerserkerHelmet(ServerPlayerEntity player) {
         ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
         UUID uuid = player.getUuid();
@@ -1074,6 +1084,7 @@ public class CustomItemHandler {
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(displayName).formatted(color, Formatting.BOLD));
         return stack;
     }
+
     public static float getBeamExplosionPower(ItemStack stack) {
         int tier = getBeamTier(stack);
         return switch (tier) {
@@ -1087,6 +1098,7 @@ public class CustomItemHandler {
             default -> 1.5f;
         };
     }
+
     public static boolean useUltraOverclockedAbility(ServerPlayerEntity player, ItemStack stack) {
         if (getBeamTier(stack) != 7) return false;
 
@@ -1240,7 +1252,6 @@ public class CustomItemHandler {
     }
 
 
-
     public static boolean isAnyBeamWeapon(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         if (!stack.isOf(Items.IRON_SHOVEL) && !stack.isOf(Items.GOLDEN_SHOVEL)) return false;
@@ -1266,6 +1277,7 @@ public class CustomItemHandler {
 
         return false;
     }
+
     // ============================================================
 // SLIME BOOTS TICK - Jump Boost, Fall Damage Negation
 // ============================================================
@@ -1454,9 +1466,11 @@ public class CustomItemHandler {
         ItemStack offHand = player.getOffHandStack();
         return SlayerItems.isSkeletonBow(mainHand) || SlayerItems.isSkeletonBow(offHand);
     }
+
     public static void tickSkeletonBow(ServerPlayerEntity player) {
         // No active tick needed - homing and headshot handled in mixins
     }
+
     // ============================================================
 // LEVEL WARNING HELPER (prevents spam)
 // ============================================================
@@ -1490,4 +1504,4 @@ public class CustomItemHandler {
                 nameStr.contains("Bounty Sword") ||
                 nameStr.contains("Slayer Sword");
     }
-    }
+}

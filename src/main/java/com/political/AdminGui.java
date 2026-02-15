@@ -1394,6 +1394,81 @@ public class AdminGui {
                 .build());
 
         gui.open();
+        // Add this inside openSlayerAdminGui method, after other buttons:
+
+// Force Spawn Boss Button
+        gui.setSlot(22, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("⚔ Force Spawn Boss").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Force spawn a bounty boss").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("for a player's active quest").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to select player").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    openForceSpawnBossGui(player);
+                })
+                .build());
+    }
+    private static void openForceSpawnBossGui(ServerPlayerEntity admin) {
+        List<ServerPlayerEntity> players = new ArrayList<>(PoliticalServer.server.getPlayerManager().getPlayerList());
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
+        gui.setTitle(Text.literal("Force Spawn Boss - Select Player"));
+
+        fillBackground(gui);
+
+        int slot = 0;
+        for (ServerPlayerEntity target : players) {
+            if (slot >= 18) break;
+
+            SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(target);
+            boolean hasQuest = quest != null && !quest.bossSpawned;
+
+            GuiElementBuilder builder = new GuiElementBuilder(Items.PLAYER_HEAD)
+                    .setSkullOwner(target.getGameProfile(), PoliticalServer.server)
+                    .setName(Text.literal(target.getName().getString())
+                            .formatted(hasQuest ? Formatting.GREEN : Formatting.GRAY));
+
+            if (hasQuest) {
+                builder.addLoreLine(Text.literal(""));
+                builder.addLoreLine(Text.literal("Quest: " + quest.slayerType.displayName + " T" + quest.tier)
+                        .formatted(Formatting.YELLOW));
+                builder.addLoreLine(Text.literal("Kills: " + quest.killCount + "/" + quest.getKillsRequired())
+                        .formatted(Formatting.GRAY));
+                builder.addLoreLine(Text.literal(""));
+                builder.addLoreLine(Text.literal("Click to force spawn boss").formatted(Formatting.GREEN));
+            } else {
+                builder.addLoreLine(Text.literal(""));
+                builder.addLoreLine(Text.literal("No active quest or boss already spawned")
+                        .formatted(Formatting.RED));
+            }
+
+            final ServerPlayerEntity finalTarget = target;
+            builder.setCallback((idx, clickType, clickAction) -> {
+                SlayerManager.ActiveQuest targetQuest = SlayerManager.getActiveQuest(finalTarget);
+                if (targetQuest != null && !targetQuest.bossSpawned) {
+                    // Force the kill count to required amount and spawn
+                    targetQuest.killCount = targetQuest.getKillsRequired();
+                    SlayerManager.checkBossSpawn(finalTarget);
+                    admin.sendMessage(Text.literal("✓ Force spawned " + targetQuest.slayerType.bossName +
+                            " for " + finalTarget.getName().getString()).formatted(Formatting.GREEN), false);
+                    gui.close();
+                } else {
+                    admin.sendMessage(Text.literal("✗ Cannot spawn boss for this player").formatted(Formatting.RED), true);
+                }
+            });
+
+            gui.setSlot(slot, builder.build());
+            slot++;
+        }
+
+        // Back button
+        gui.setSlot(26, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(admin))
+                .build());
+
+        gui.open();
     }
 // ═══════════════════════════════════════════════════════════
 // ARMOR GIVE GUI (T1 or T2)

@@ -167,6 +167,7 @@ public class ArmorAbilityHandler {
         String name = customName.getString();
         return name.contains("Slime") && name.contains("Boots");
     }
+
     public static void detectEntityNoise(ServerWorld world) {
         if (world.getPlayers().isEmpty()) return;
 
@@ -306,29 +307,22 @@ public class ArmorAbilityHandler {
         ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
         if (!isBerserkerHelmet(helmet)) return;
 
-        // Passive: Strength boost when low HP
+        // Check level requirement
+        if (!SlayerItems.canUseZombieBerserkerHelmet(player)) return;
+
+        // Passive: Strength boost when low HP (below 50%)
         float healthPercent = player.getHealth() / player.getMaxHealth();
-
         if (healthPercent < 0.5f) {
-            // More strength at lower HP
-            int amplifier = healthPercent < 0.25f ? 1 : 0;
-
-            if (!player.hasStatusEffect(StatusEffects.STRENGTH) ||
-                    player.getStatusEffect(StatusEffects.STRENGTH).getAmplifier() < amplifier) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.STRENGTH, 40, amplifier, true, false, false
-                ));
-            }
+            // Strength scales with missing health
+            int strengthLevel = healthPercent < 0.25f ? 2 : 1;
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.STRENGTH, 40, strengthLevel,
+                    true, false, false
+            ));
         }
 
-        // Passive 2: Resistance when very low
-        if (healthPercent < 0.25f) {
-            if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.RESISTANCE, 40, 0, true, false, false
-                ));
-            }
-        }
+        // REMOVED: Mob damage aura - this was causing issues
+        // The helmet should only buff the player, not damage mobs passively
     }
 
     private static boolean isBerserkerHelmet(ItemStack stack) {
@@ -336,6 +330,6 @@ public class ArmorAbilityHandler {
         Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (customName == null) return false;
         String name = customName.getString();
-        return name.contains("Berserker") || (name.contains("Zombie") && name.contains("Helmet"));
+        return name.contains("Berserker") && name.contains("Helmet");
     }
 }
