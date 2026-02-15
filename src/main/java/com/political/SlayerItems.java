@@ -1316,7 +1316,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
-        lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("essence of the undead.").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
         lore.add(Text.literal("🛡 Armor: +2").formatted(Formatting.BLUE));
