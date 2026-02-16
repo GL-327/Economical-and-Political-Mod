@@ -1269,7 +1269,6 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + SLIME_BOOTS_LEVEL_REQ)
                 .formatted(Formatting.RED));
-
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
