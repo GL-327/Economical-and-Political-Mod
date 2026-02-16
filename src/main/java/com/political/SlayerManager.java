@@ -26,7 +26,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.entity.mob.WardenEntity;
 
-import java.util.*;import net.minecraft.server.world.ServerWorld;
+import java.util.*;import net.minecraft.server.world.ServerWorld;import net.minecraft.entity.attribute.EntityAttributeInstance;
 
 public class SlayerManager {
 
@@ -1184,5 +1184,85 @@ public class SlayerManager {
         if (bossBar != null) {
             bossBar.clearPlayers();
         }
+    }
+    // In SlayerManager.java - add/update this method
+
+    private static void applyBossBuffs(LivingEntity boss, SlayerType type, int tier) {
+        float baseHealth = switch (type) {
+            case ZOMBIE -> 100.0f;
+            case SKELETON -> 80.0f;
+            case SPIDER -> 70.0f;
+            case SLIME -> 120.0f;
+            case ENDERMAN -> 90.0f;
+            case WARDEN -> 400.0f;
+        };
+
+        float baseDamage = switch (type) {
+            case ZOMBIE -> 10.0f;
+            case SKELETON -> 8.0f;
+            case SPIDER -> 6.0f;
+            case SLIME -> 8.0f;
+            case ENDERMAN -> 12.0f;
+            case WARDEN -> 25.0f;
+        };
+
+        float healthMult = 1.0f + (tier * 0.6f);
+        float damageMult = 1.0f + (tier * 0.4f);
+
+        // Apply health - use getAttributeInstance with the registry entry
+        var healthAttr = boss.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        if (healthAttr != null) {
+            float finalHealth = baseHealth * healthMult;
+            healthAttr.setBaseValue(finalHealth);
+            boss.setHealth(finalHealth);
+        }
+
+        // Apply damage
+        var damageAttr = boss.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE);
+        if (damageAttr != null) {
+            damageAttr.setBaseValue(baseDamage * damageMult);
+        }
+
+        // Knockback resistance
+        var kbAttr = boss.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE);
+        if (kbAttr != null) {
+            kbAttr.setBaseValue(0.5 + (tier * 0.15));
+        }
+
+        // Type-specific buffs
+        switch (type) {
+            case ZOMBIE -> {
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, Integer.MAX_VALUE, tier - 1, true, false, false));
+            }
+            case SKELETON -> {
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, Integer.MAX_VALUE, tier, true, false, false));
+            }
+            case SPIDER -> {
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, Integer.MAX_VALUE, 1, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, Integer.MAX_VALUE, 2, true, false, false));
+            }
+            case ENDERMAN -> {
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, Integer.MAX_VALUE, 2, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, Integer.MAX_VALUE, tier, true, false, false));
+            }
+            case WARDEN -> {
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, Integer.MAX_VALUE, 1, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, Integer.MAX_VALUE, 2, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, Integer.MAX_VALUE, 0, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, true, false, false));
+
+                var armorAttr = boss.getAttributeInstance(EntityAttributes.ARMOR);
+                if (armorAttr != null) {
+                    armorAttr.setBaseValue(25.0 + (tier * 5.0));
+                }
+            }
+            case SLIME -> {
+                // Slime handled by size
+            }
+        }
+
+        boss.setGlowing(true);
+
     }
 }

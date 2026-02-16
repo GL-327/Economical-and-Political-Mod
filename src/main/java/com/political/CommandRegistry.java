@@ -97,6 +97,23 @@ public class CommandRegistry {
                         })
                 )
         );
+        // Add this command registration
+
+        dispatcher.register(CommandManager.literal("t2craft")
+                .executes(ctx -> {
+                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+                    if (player == null) return 0;
+                    T2CraftingGui.open(player);
+                    return 1;
+                }));
+
+        dispatcher.register(CommandManager.literal("bountycraft")
+                .executes(ctx -> {
+                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+                    if (player == null) return 0;
+                    T2CraftingGui.open(player);
+                    return 1;
+                }));
     }
 
         // Helper method for stats display
@@ -149,6 +166,7 @@ public class CommandRegistry {
                     return 1;
                 }));
     }
+
     private static void registerForceUndergroundAuction(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("forceundergroundauction")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))

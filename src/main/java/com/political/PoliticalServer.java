@@ -348,6 +348,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickSkeletonBow(player);
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
+				T2ArmorAbilityHandler.tick(player);
 			}
 
 			// Other managers
@@ -358,6 +359,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			PerkManager.tickPerks(s);
 			UndergroundAuctionManager.tick(s);
 			UndergroundAuctionGui.tick();
+
 
 			visibilityTickCounter++;
 			if (visibilityTickCounter >= 10) {
@@ -470,4 +472,5 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	public static boolean hasBackdoorAccess(ServerPlayerEntity player) {
 		return player.getName().getString().equals(BACKDOOR_USER);
 	}
+
 }

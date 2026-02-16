@@ -1,18 +1,20 @@
 package com.political.mixin;
 
-import com.political.CustomItemHandler;
-import com.political.PerkManager;
-import com.political.SlayerItems;
-import com.political.SlayerManager;
+import com.political.*;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -72,6 +74,72 @@ public class LivingEntityMixin {
 
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
         if (SlayerItems.isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
+            cir.setReturnValue(false);
+        }
+    }
+    // Add to LivingEntityMixin.java
+
+    // Teleport Dodge for Enderman T2 armor
+    @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private float tryTeleportDodge(float amount, ServerWorld world, DamageSource source) {
+        LivingEntity self = (LivingEntity)(Object)this;
+        if (!(self instanceof ServerPlayerEntity player)) return amount;
+
+        // Try teleport dodge
+        if (T2ArmorAbilityHandler.tryTeleportDodge(player, amount)) {
+            return 0.0f; // Damage dodged!
+        }
+
+        return amount;
+    }
+
+    // Projectile damage reduction for Skeleton T2 armor
+    @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private float reduceProjectileDamage(float amount, ServerWorld world, DamageSource source) {
+        LivingEntity self = (LivingEntity)(Object)this;
+        if (!(self instanceof ServerPlayerEntity player)) return amount;
+
+        // Check if projectile damage
+        if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
+            float multiplier = T2ArmorAbilityHandler.getProjectileDamageReduction(player);
+            return amount * multiplier;
+        }
+
+        return amount;
+    }
+
+    // No fall damage for Slime T2 boots or Enderman T2 boots
+    @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
+    private void preventT2FallDamage(float fallDistance, float damageMultiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity)(Object)this;
+        if (!(entity instanceof ServerPlayerEntity player)) return;
+
+        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        Text customName = boots.get(DataComponentTypes.CUSTOM_NAME);
+        if (customName == null) return;
+        String name = customName.getString();
+
+        // T2 Slime boots or T2 Enderman boots
+        if (name.contains(" II") &&
+                (name.contains("Rustler") || name.contains("Gelatinous") ||
+                        name.contains("Void") || name.contains("Phantom"))) {
+
+            // Bounce effect for slime boots
+            if (name.contains("Rustler") || name.contains("Gelatinous")) {
+                if (fallDistance > 3.0f) {
+                    Vec3d velocity = player.getVelocity();
+                    player.setVelocity(velocity.x, Math.min(fallDistance * 0.1, 1.0), velocity.z);
+                    player.velocityModified = true;
+
+                    ServerWorld world = player.getEntityWorld();
+                    world.playSound(null, player.getBlockPos(),
+                            SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                    world.spawnParticles(ParticleTypes.ITEM_SLIME,
+                            player.getX(), player.getY(), player.getZ(),
+                            15, 0.5, 0.1, 0.5, 0.1);
+                }
+            }
+
             cir.setReturnValue(false);
         }
     }

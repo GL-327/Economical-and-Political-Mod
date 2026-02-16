@@ -3,7 +3,7 @@ package com.political;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.component.type.LoreComponent;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -14,7 +14,6 @@ import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -46,7 +45,7 @@ import com.political.SlayerData;
 import com.political.SlayerItems;
 import com.political.CoinManager;
 import com.political.CustomItemHandler;
-import com.political.PoliticalServer;
+import com.political.PoliticalServer;import eu.pb4.sgui.api.elements.GuiElementInterface;
 
 public class AdminGui {
 
@@ -1248,7 +1247,15 @@ public class AdminGui {
                     .setName(Text.literal(""))
                     .build());
         }
-
+        gui.setSlot(24, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal("Give T2 Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give yourself T2 bounty armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("for testing purposes").formatted(Formatting.GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    openT2ArmorGiveGui(player);
+                })
+                .build());
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("⚔ Bounty Admin Panel ⚔").formatted(Formatting.RED, Formatting.BOLD))
@@ -1525,72 +1532,81 @@ public class AdminGui {
         gui.open();
     }
 
+    private static Item getPieceItem(String piece) {
+        return switch (piece) {
+            case "Helmet" -> Items.NETHERITE_HELMET;
+            case "Chestplate" -> Items.NETHERITE_CHESTPLATE;
+            case "Leggings" -> Items.NETHERITE_LEGGINGS;
+            case "Boots" -> Items.NETHERITE_BOOTS;
+            default -> Items.BARRIER;
+        };
+    }
 
-        private static void openArmorPieceSelectGui(ServerPlayerEntity player, SlayerManager.SlayerType selectedType, int tier) {
-            final SlayerManager.SlayerType finalType = selectedType;
-            final int finalTier = tier;
+    private static void openArmorPieceSelectGui(ServerPlayerEntity player, SlayerManager.SlayerType selectedType, int tier) {
+        final SlayerManager.SlayerType finalType = selectedType;
+        final int finalTier = tier;
 
-            SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
-            String tierName = tier == 1 ? "Hunter" : "Slayer II";
-            gui.setTitle(Text.literal("Give " + finalType.displayName + " " + tierName + " Armor"));
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        String tierName = tier == 1 ? "Hunter" : "Slayer II";
+        gui.setTitle(Text.literal("Give " + finalType.displayName + " " + tierName + " Armor"));
 
-            // Background
-            for (int i = 0; i < 27; i++) {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                        .setName(Text.literal(""))
-                        .build());
-            }
+        // Background
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
 
-            // Armor piece buttons
-            SlayerItems.ArmorPiece[] pieces = SlayerItems.ArmorPiece.values();
-            int[] slots = {10, 11, 12, 13};
+        // Armor piece buttons - using arrays instead of enum
+        String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
+        Item[] pieceItems = {Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS};
+        int[] slots = {10, 11, 12, 13};
 
-            for (int i = 0; i < pieces.length; i++) {
-                SlayerItems.ArmorPiece piece = pieces[i];
-                final SlayerItems.ArmorPiece finalPiece = piece;
+        for (int i = 0; i < pieceNames.length; i++) {
+            final String pieceName = pieceNames[i];
+            final Item pieceItem = pieceItems[i];
 
-                gui.setSlot(slots[i], new GuiElementBuilder(piece.baseItem)
-                        .setName(Text.literal(finalType.displayName + " " + tierName + " " + piece.displayName)
-                                .formatted(finalType.color, Formatting.BOLD))
-                        .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Click to receive").formatted(Formatting.GREEN))
-                        .setCallback((idx, clickType, action) -> {
-                            ItemStack armor = finalTier == 1
-                                    ? SlayerItems.createT1Armor(finalType, finalPiece)
-                                    : SlayerItems.createT2Armor(finalType, finalPiece);
-                            player.getInventory().insertStack(armor);
-                            player.sendMessage(Text.literal("✓ Gave " + finalType.displayName + " " + tierName + " " + finalPiece.displayName)
-                                    .formatted(Formatting.GREEN), false);
-                        })
-                        .build());
-            }
-
-            // Give Full Set button
-            gui.setSlot(16, new GuiElementBuilder(Items.CHEST)
-                    .setName(Text.literal("Give Full Set").formatted(Formatting.GOLD, Formatting.BOLD))
+            gui.setSlot(slots[i], new GuiElementBuilder(pieceItem)
+                    .setName(Text.literal(finalType.displayName + " " + tierName + " " + pieceName)
+                            .formatted(finalType.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Give all 4 armor pieces").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Click to receive").formatted(Formatting.GREEN))
                     .setCallback((idx, clickType, action) -> {
-                        for (SlayerItems.ArmorPiece p : SlayerItems.ArmorPiece.values()) {
-                            ItemStack armor = finalTier == 1
-                                    ? SlayerItems.createT1Armor(finalType, p)
-                                    : SlayerItems.createT2Armor(finalType, p);
-                            player.getInventory().insertStack(armor);
-                        }
-                        player.sendMessage(Text.literal("✓ Gave full " + finalType.displayName + " " + tierName + " armor set!")
+                        ItemStack armor = finalTier == 1
+                                ? SlayerItems.createT1Armor(finalType, pieceName)
+                                : SlayerItems.createT2Armor(finalType, pieceName);
+                        player.getInventory().insertStack(armor);
+                        player.sendMessage(Text.literal("✓ Gave " + finalType.displayName + " " + tierName + " " + pieceName)
                                 .formatted(Formatting.GREEN), false);
                     })
                     .build());
-
-            // Back button
-            gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                    .setName(Text.literal("← Back").formatted(Formatting.GRAY))
-                    .setCallback((idx, clickType, action) -> openArmorGiveGui(player, finalTier))
-                    .build());
-
-            gui.open();
         }
 
+        // Give Full Set button
+        gui.setSlot(16, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("Give Full Set").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give all 4 armor pieces").formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> {
+                    for (String pieceName : pieceNames) {
+                        ItemStack armor = finalTier == 1
+                                ? SlayerItems.createT1Armor(finalType, pieceName)
+                                : SlayerItems.createT2Armor(finalType, pieceName);
+                        player.getInventory().insertStack(armor);
+                    }
+                    player.sendMessage(Text.literal("✓ Gave full " + finalType.displayName + " " + tierName + " armor set!")
+                            .formatted(Formatting.GREEN), false);
+                })
+                .build());
+
+        // Back button
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((idx, clickType, action) -> openArmorGiveGui(player, finalTier))
+                .build());
+
+        gui.open();
+    }
     // ═══════════════════════════════════════════════════════════
 // SWORDS GIVE GUI
 // ═══════════════════════════════════════════════════════════
@@ -2571,7 +2587,55 @@ public class AdminGui {
 
         return core;
     }
+    private static void openT2ArmorGiveGui(ServerPlayerEntity admin) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, admin, false);
+        gui.setTitle(Text.literal("Give T2 Armor"));
 
+        fillBackground(gui);
+
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            // Helmet
+            ItemStack helmet = SlayerItems.createT2Helmet(type);
+            gui.setSlot(slot, createGiveButton(helmet, admin));
+
+            // Chestplate
+            ItemStack chestplate = SlayerItems.createT2Chestplate(type);
+            gui.setSlot(slot + 1, createGiveButton(chestplate, admin));
+
+            // Leggings
+            ItemStack leggings = SlayerItems.createT2Leggings(type);
+            gui.setSlot(slot + 2, createGiveButton(leggings, admin));
+
+            // Boots
+            ItemStack boots = SlayerItems.createT2Boots(type);
+            gui.setSlot(slot + 3, createGiveButton(boots, admin));
+
+            slot += 9; // Next row
+        }
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    openSlayerAdminGui(admin);
+                })
+                .build());
+
+        gui.open();
+    }
+
+    private static GuiElementInterface createGiveButton(ItemStack item, ServerPlayerEntity admin) {
+        return new GuiElementBuilder(item.getItem())
+                .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.GREEN))
+                .setCallback((idx, clickType, action) -> {
+                    admin.giveItemStack(item.copy());
+                    admin.sendMessage(Text.literal("§a✓ Given!"), false);
+                })
+                .build();
+    }
 // ============================================================
 // SPIDER LEGGINGS (if missing)
 // ============================================================

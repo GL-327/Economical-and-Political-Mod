@@ -11,7 +11,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
-import com.political.SlayerItems.ArmorPiece;
 
 public class BountyCraftingHandler {
 

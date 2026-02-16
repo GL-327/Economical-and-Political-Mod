@@ -161,7 +161,26 @@ public class BountyGui {
                     })
                     .build());
         }
+// In BountyGui.java - add this button in the appropriate slot
 
+// T2 Crafting button
+        int t2CraftSlot = 53; // Bottom right corner
+        gui.setSlot(t2CraftSlot, new GuiElementBuilder(Items.SMITHING_TABLE)
+                .setName(Text.literal("⚒ T2 Armor Crafting").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Upgrade your T1 bounty armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("to powerful T2 variants!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Requirements:").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• T1 armor piece").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal("• Bounty cores").formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal("• Special materials").formatted(Formatting.LIGHT_PURPLE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.GREEN))
+                .setCallback((idx, clickType, action) -> {
+                    T2CraftingGui.open(player);
+                })
+                .build());
         // Coins display (reward money)
         int coins = CoinManager.getCoins(player);
         gui.setSlot(45, new GuiElementBuilder(Items.GOLD_NUGGET)

@@ -58,6 +58,7 @@ public class SlayerItems {
         if (name == null) return false;
         return name.getString().contains("Core");
     }
+
     public static SlayerManager.SlayerType getCoreType(ItemStack stack) {
         if (!isSlayerCore(stack)) return null;
 
@@ -74,6 +75,7 @@ public class SlayerItems {
 
         return null;
     }
+
     public static SlayerManager.SlayerType getSwordSlayerType(ItemStack stack) {
         if (!isSlayerSword(stack)) return null;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
@@ -87,6 +89,7 @@ public class SlayerItems {
         }
         return null;
     }
+
     // ============================================================
 // LEVEL-LOCKED WEAPON DAMAGE MULTIPLIER
 // ============================================================
@@ -120,6 +123,7 @@ public class SlayerItems {
 
         return 1.0f; // Normal damage
     }
+
     // ============================================================
     // SLAYER SWORDS - 2x damage to matching slayer type
     // ============================================================
@@ -153,19 +157,17 @@ public class SlayerItems {
     }
 
 
-// Add this method to SlayerItems.java:
+    // Add this method to SlayerItems.java:
 // ============================================================
 // ZOMBIE BERSERKER HELMET - Level 12 Zombie Requirement
 // ============================================================
-public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
+    public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
 
     // ============================================================
 // SPIDER LEGGINGS - T12 Spider Requirement
 // ============================================================
     public static final int SPIDER_LEGGINGS_LEVEL_REQ = 12;
-
-
 
 
     public static final int ZOMBIE_BERSERKER_LEVEL_REQ = 12;
@@ -176,17 +178,6 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
 
 
-    public static boolean isSkeletonBow(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        return name.getString().contains("Bone Desperado's Longbow");
-    }
-
-    public static boolean canUseSkeletonBow(ServerPlayerEntity player) {
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
-        return level >= SKELETON_BOW_LEVEL_REQ;
-    }
     public static ItemStack createSlayerCore(SlayerManager.SlayerType type) {
         ItemStack core = new ItemStack(type.icon);
 
@@ -206,6 +197,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
         return core;
     }
+
     // ============================================================
 // SLIME BOOTS - T8 Slime Requirement
 // ============================================================
@@ -213,36 +205,11 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
 
 
-    public static boolean isSlimeBoots(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        return name.getString().contains("Gelatinous Rustler Boots");
-    }
-
-    public static boolean canUseSlimeBoots(ServerPlayerEntity player) {
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SLIME);
-        return level >= SLIME_BOOTS_LEVEL_REQ;
-    }
-
     // ============================================================
 // WARDEN CHESTPLATE - T12 Warden Requirement (Best Armor)
 // ============================================================
     public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
 
-
-
-    public static boolean isWardenChestplate(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        return name.getString().contains("Sculk Terror Chestplate");
-    }
-
-    public static boolean canUseWardenChestplate(ServerPlayerEntity player) {
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
-        return level >= WARDEN_CHESTPLATE_LEVEL_REQ;
-    }
 
     // ============================================================
 // HELPER: Check if any bounty item
@@ -381,7 +348,6 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
         return sword;
     }
-
 
 
     public static double getSlayerSwordDamageMultiplier(ItemStack weapon, LivingEntity target, ServerPlayerEntity player) {
@@ -602,6 +568,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         String chunkName = getChunkName(type);
         return name.getString().contains(chunkName);
     }
+
     public static boolean isEnderSword(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
@@ -619,6 +586,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
     public static boolean isLegendaryWeapon(ItemStack stack) {
         return isEnderSword(stack) || isAbyssalBlade(stack);
     }
+
     public static String getChunkName(SlayerManager.SlayerType type) {
         return switch (type) {
             case ZOMBIE -> "Undead Chunk";
@@ -676,10 +644,6 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
     private static final double T2_CHESTPLATE_TOUGHNESS = 4.0; // +1 over netherite
     private static final double T2_CHESTPLATE_KNOCKBACK_RESIST = 0.15;
     private static final double T2_CHESTPLATE_HEALTH_BOOST = 4.0; // +2 hearts
-
-
-
-
 
 
     private static List<Text> buildArmorLore(SlayerManager.SlayerType type, int tier, String piece) {
@@ -799,6 +763,7 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         player.sendMessage(Text.literal("✔ Received " + type.displayName + " Core!")
                 .formatted(Formatting.GREEN), false);
     }
+
     public static ItemStack createZombieSword() {
         return createSlayerSword(SlayerManager.SlayerType.ZOMBIE);
     }
@@ -822,9 +787,11 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
     public static ItemStack createTheGavel() {
         return createSlayerSword(SlayerManager.SlayerType.WARDEN);
     }
+
     public static ItemStack createZombieHelmet() {
         return createSlayerSword(SlayerManager.SlayerType.WARDEN);
     }
+
     // ============================================================
 // ARMOR STATS CONFIGURATION
 // ============================================================
@@ -1026,8 +993,8 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal(""));
 
-        int bossReductionPercent = (int)(stats.bossReduction * 100);
-        int allReductionPercent = (int)(stats.allBossReduction * 100);
+        int bossReductionPercent = (int) (stats.bossReduction * 100);
+        int allReductionPercent = (int) (stats.allBossReduction * 100);
 
         lore.add(Text.literal("vs " + type.displayName + " Bosses: ")
                 .formatted(Formatting.GRAY)
@@ -1275,9 +1242,963 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         return boots;
     }
 
-    // ============================================================
-// ZOMBIE BERSERKER HELMET - Fixed with custom attributes
 // ============================================================
+// T2 ARMOR SYSTEM - Tiered armor per bounty type
+// Higher stats than T1, better boss defense
+// ============================================================
+
+
+
+    // ============================================================
+// T2 ZOMBIE ARMOR SET
+// ============================================================
+    public static ItemStack createT2ZombieHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Undying Outlaw Helmet II")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Zombie Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return helmet;
+    }
+
+    public static ItemStack createT2ZombieChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Undying Outlaw Chestplate II")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+6").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Zombie Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-25%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return chestplate;
+    }
+
+    public static ItemStack createT2ZombieLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Undying Outlaw Leggings II")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+8").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Zombie Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return leggings;
+    }
+
+    public static ItemStack createT2ZombieBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Undying Outlaw Boots II")
+                        .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("🔰 Knockback Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+20%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Zombie Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-15%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return boots;
+    }
+
+    // Detection methods for T2 armor
+    public static boolean isT2Armor(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains(" II") && (n.contains("Outlaw") || n.contains("Bandit") ||
+                n.contains("Desperado") || n.contains("Rustler") || n.contains("Phantom") || n.contains("Terror"));
+    }
+
+    public static SlayerManager.SlayerType getT2ArmorType(ItemStack stack) {
+        if (!isT2Armor(stack)) return null;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return null;
+        String n = name.getString();
+
+        if (n.contains("Undying") || n.contains("Outlaw")) return SlayerManager.SlayerType.ZOMBIE;
+        if (n.contains("Venomous") || n.contains("Bandit")) return SlayerManager.SlayerType.SPIDER;
+        if (n.contains("Bone") || n.contains("Desperado")) return SlayerManager.SlayerType.SKELETON;
+        if (n.contains("Gelatinous") || n.contains("Rustler")) return SlayerManager.SlayerType.SLIME;
+        if (n.contains("Void") || n.contains("Phantom")) return SlayerManager.SlayerType.ENDERMAN;
+        if (n.contains("Sculk") || n.contains("Terror")) return SlayerManager.SlayerType.WARDEN;
+
+        return null;
+    }
+
+    public static boolean canUseT2Armor(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+        return level >= T2_ARMOR_LEVEL_REQ;
+    }
+
+    // ============================================================
+// Generic T2 Armor Creation for any type
+// ============================================================
+    public static ItemStack createT2Helmet(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> createT2ZombieHelmet();
+            case SPIDER -> createT2SpiderHelmet();
+            case SKELETON -> createT2SkeletonHelmet();
+            case SLIME -> createT2SlimeHelmet();
+            case ENDERMAN -> createT2EndermanHelmet();
+            case WARDEN -> createT2WardenHelmet();
+        };
+    }
+
+    public static ItemStack createT2Chestplate(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> createT2ZombieChestplate();
+            case SPIDER -> createT2SpiderChestplate();
+            case SKELETON -> createT2SkeletonChestplate();
+            case SLIME -> createT2SlimeChestplate();
+            case ENDERMAN -> createT2EndermanChestplate();
+            case WARDEN -> createT2WardenChestplate();
+        };
+    }
+
+    public static ItemStack createT2Leggings(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> createT2ZombieLeggings();
+            case SPIDER -> createT2SpiderLeggings();
+            case SKELETON -> createT2SkeletonLeggings();
+            case SLIME -> createT2SlimeLeggings();
+            case ENDERMAN -> createT2EndermanLeggings();
+            case WARDEN -> createT2WardenLeggings();
+        };
+    }
+
+    public static ItemStack createT2Boots(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> createT2ZombieBoots();
+            case SPIDER -> createT2SpiderBoots();
+            case SKELETON -> createT2SkeletonBoots();
+            case SLIME -> createT2SlimeBoots();
+            case ENDERMAN -> createT2EndermanBoots();
+            case WARDEN -> createT2WardenBoots();
+        };
+    }
+
+    // ============================================================
+// T2 SPIDER ARMOR SET
+// ============================================================
+    public static ItemStack createT2SpiderHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Venomous Bandit Helmet II")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
+
+        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+                "+5", "+3", null, "+10%",
+                "Spider Boss", "-20%", "-5%",
+                "Spider", T2_ARMOR_LEVEL_REQ);
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return helmet;
+    }
+
+    public static ItemStack createT2SpiderChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Venomous Bandit Chestplate II")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
+
+        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+                "+10", "+4", "+6", null,
+                "Spider Boss", "-25%", "-8%",
+                "Spider", T2_ARMOR_LEVEL_REQ);
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return chestplate;
+    }
+
+    public static ItemStack createT2SpiderLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Venomous Bandit Leggings II")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
+
+        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+                "+8", "+3", "+4", null,
+                "Spider Boss", "-20%", "-5%",
+                "Spider", T2_ARMOR_LEVEL_REQ);
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return leggings;
+    }
+
+    public static ItemStack createT2SpiderBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Venomous Bandit Boots II")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
+
+        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+                "+5", "+3", null, "+15%",
+                "Spider Boss", "-15%", "-5%",
+                "Spider", T2_ARMOR_LEVEL_REQ);
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return boots;
+    }
+
+    // Helper method to create consistent T2 armor lore
+    private static List<Text> createT2ArmorLore(String title, Formatting titleColor,
+                                                String armor, String toughness, String health, String speed,
+                                                String matchBoss, String matchReduction, String otherReduction,
+                                                String bountyType, int levelReq) {
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal(title).formatted(titleColor, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+
+        if (armor != null) {
+            lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                    .append(Text.literal(armor).formatted(Formatting.GREEN)));
+        }
+        if (toughness != null) {
+            lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                    .append(Text.literal(toughness).formatted(Formatting.GREEN)));
+        }
+        if (health != null) {
+            lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                    .append(Text.literal(health).formatted(Formatting.GREEN)));
+        }
+        if (speed != null) {
+            lore.add(Text.literal("⚡ Speed: ").formatted(Formatting.WHITE)
+                    .append(Text.literal(speed).formatted(Formatting.GREEN)));
+        }
+
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 " + matchBoss + ": ").formatted(Formatting.WHITE)
+                .append(Text.literal(matchReduction).formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal(otherReduction).formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: " + bountyType + " Bounty Lvl " + levelReq)
+                .formatted(Formatting.RED));
+
+        return lore;
+    }
+    // ============================================================
+// T2 SKELETON ARMOR SET - Bone Desperado II
+// ============================================================
+    public static ItemStack createT2SkeletonHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Bone Desperado Helmet II")
+                        .formatted(Formatting.WHITE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("🏹 Projectile Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+15%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Skeleton Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return helmet;
+    }
+
+    public static ItemStack createT2SkeletonChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Bone Desperado Chestplate II")
+                        .formatted(Formatting.WHITE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("🏹 Projectile Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+25%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Skeleton Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-25%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return chestplate;
+    }
+
+    public static ItemStack createT2SkeletonLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Bone Desperado Leggings II")
+                        .formatted(Formatting.WHITE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+8").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("🏹 Projectile Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+20%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Skeleton Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return leggings;
+    }
+
+    public static ItemStack createT2SkeletonBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Bone Desperado Boots II")
+                        .formatted(Formatting.WHITE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚡ Speed: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Skeleton Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-15%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return boots;
+    }
+    // ============================================================
+// T2 SLIME ARMOR SET - Gelatinous Rustler II
+// ============================================================
+    public static ItemStack createT2SlimeHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Gelatinous Rustler Helmet II")
+                        .formatted(Formatting.GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+6").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Slime Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return helmet;
+    }
+
+    public static ItemStack createT2SlimeChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Gelatinous Rustler Chestplate II")
+                        .formatted(Formatting.GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Slime Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-25%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return chestplate;
+    }
+
+    public static ItemStack createT2SlimeLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Gelatinous Rustler Leggings II")
+                        .formatted(Formatting.GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+8").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+6").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⬆ Jump Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+1").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Slime Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return leggings;
+    }
+
+    public static ItemStack createT2SlimeBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Gelatinous Rustler Boots II")
+                        .formatted(Formatting.GREEN, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("🪶 No Fall Damage").formatted(Formatting.GREEN));
+        lore.add(Text.literal("⬆ Jump Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+2").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Slime Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-15%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return boots;
+    }
+    // ============================================================
+// T2 ENDERMAN ARMOR SET - Void Phantom II
+// ============================================================
+    public static ItemStack createT2EndermanHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Void Phantom Helmet II")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚡ Speed: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+15%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("👁 Night Vision").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Enderman Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return helmet;
+    }
+
+    public static ItemStack createT2EndermanChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Void Phantom Chestplate II")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚡ Speed: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("☍ Teleport Dodge: ").formatted(Formatting.WHITE)
+                .append(Text.literal("20% chance").formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Enderman Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-25%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return chestplate;
+    }
+
+    public static ItemStack createT2EndermanLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Void Phantom Leggings II")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+8").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚡ Speed: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Enderman Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return leggings;
+    }
+
+    public static ItemStack createT2EndermanBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Void Phantom Boots II")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+3").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚡ Speed: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+20%").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("🪶 No Fall Damage").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Enderman Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-15%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-5%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return boots;
+    }
+    // ============================================================
+// T2 WARDEN ARMOR SET - Sculk Terror II (Best T2 armor)
+// ============================================================
+    public static ItemStack createT2WardenHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Sculk Terror Helmet II")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+6").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("🔰 Knockback Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+25%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("👁 Darkness Immunity").formatted(Formatting.AQUA));
+        lore.add(Text.literal("📡 Vibration Sense").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Warden Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-30%").formatted(Formatting.AQUA, Formatting.BOLD)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-10%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return helmet;
+    }
+
+    public static ItemStack createT2WardenChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Sculk Terror Chestplate II")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+12").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("🔰 Knockback Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+40%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+8").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("📡 Sonic Pulse: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Shift + Attack").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("   AOE damage to nearby enemies").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Warden Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-40%").formatted(Formatting.AQUA, Formatting.BOLD)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-15%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return chestplate;
+    }
+
+    public static ItemStack createT2WardenLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Sculk Terror Leggings II")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("🔰 Knockback Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+25%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("❤ Health Boost: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+6").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Warden Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-30%").formatted(Formatting.AQUA, Formatting.BOLD)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-10%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return leggings;
+    }
+
+    public static ItemStack createT2WardenBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Sculk Terror Boots II")
+                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+6").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("🔰 Knockback Resist: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("🔇 Silent Steps").formatted(Formatting.AQUA));
+        lore.add(Text.literal("   Sculk sensors ignore you").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Warden Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA, Formatting.BOLD)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return boots;
+    }
+    // ============================================================
+// MISSING DETECTION METHODS
+// ============================================================
+
+    public static boolean isUpgradedSlayerSword(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Slayer Sword II") || n.contains("Bounty Sword II");
+    }
+
+    public static boolean isSpiderLeggings(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Venomous") || n.contains("Crawler") ||
+                (n.contains("Spider") && n.contains("Leggings"));
+    }
+
+    public static boolean isSkeletonBow(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        if (stack.getItem() != Items.BOW) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Bone") || n.contains("Desperado") || n.contains("Skeleton");
+    }
+
+    public static boolean isSlimeBoots(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Slime") || n.contains("Gelatinous") || n.contains("Rustler");
+    }
+
+    public static boolean isWardenChestplate(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        return n.contains("Sculk") || n.contains("Warden") || n.contains("Terror");
+    }
+
+    public static boolean canUseSkeletonBow(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
+        return level >= SKELETON_BOW_LEVEL_REQ;
+    }
+
+    public static boolean canUseSpiderLeggings(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
+        return level >= SPIDER_LEGGINGS_LEVEL_REQ;
+    }
+
+    public static boolean canUseSlimeBoots(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SLIME);
+        return level >= SLIME_BOOTS_LEVEL_REQ;
+    }
+
+    public static boolean canUseWardenChestplate(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
+        return level >= WARDEN_CHESTPLATE_LEVEL_REQ;
+    }
+
+    // Level requirements
+
+
+    public static int getSwordLevelRequirement(ItemStack sword) {
+        if (isUpgradedSlayerSword(sword)) {
+            return UPGRADED_SWORD_LEVEL_REQ;
+        }
+        if (isSlayerSword(sword)) {
+            return BASIC_SWORD_LEVEL_REQ;
+        }
+        return 0;
+    }
+
+// ============================================================
+// ITEM CREATION METHODS
+// ============================================================
+
     public static ItemStack createZombieBerserkerHelmet() {
         ItemStack helmet = new ItemStack(Items.ZOMBIE_HEAD);
 
@@ -1285,53 +2206,12 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
                 Text.literal("☠ Zombie Berserker Helmet")
                         .formatted(Formatting.DARK_GREEN, Formatting.BOLD));
 
-        // CUSTOM ATTRIBUTES - Half health, 4x damage
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
-                .add(EntityAttributes.MAX_HEALTH,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "berserker_health"),
-                                -0.5,  // -50% health
-                                EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .add(EntityAttributes.ATTACK_DAMAGE,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "berserker_damage"),
-                                3.0,  // +300% damage (4x total)
-                                EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .add(EntityAttributes.ARMOR,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "berserker_armor"),
-                                2.0,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .build();
-        helmet.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
-
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
         lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
-        lore.add(Text.literal("essence of the undead.").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
-        lore.add(Text.literal("🛡 Armor: +2").formatted(Formatting.BLUE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.RED));
-        lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
-                .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
-        lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+300%").formatted(Formatting.GREEN, Formatting.BOLD)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
-        lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("-50% Max Health").formatted(Formatting.RED));
+        lore.add(Text.literal("+300% Damage").formatted(Formatting.GREEN));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + BERSERKER_HELMET_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1342,33 +2222,20 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
         return helmet;
     }
 
-    // ============================================================
-// SKELETON BOW - Fixed with custom attributes
-// ============================================================
     public static ItemStack createSkeletonBow() {
         ItemStack bow = new ItemStack(Items.BOW);
 
         bow.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("🏹 Bone Desperado's Longbow")
+                Text.literal("💀 Bone Desperado Bow")
                         .formatted(Formatting.WHITE, Formatting.BOLD));
-
-        // Durability - 10x default
-        bow.set(DataComponentTypes.MAX_DAMAGE, 3840);
-        bow.set(DataComponentTypes.DAMAGE, 0);
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("BOUNTY WEAPON").formatted(Formatting.WHITE, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Carved from the spine of").formatted(Formatting.GRAY));
-        lore.add(Text.literal("The Bone Desperado himself.").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.WHITE));
-        lore.add(Text.literal("🎯 Auto-Lock: Arrows home to targets").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("💀 Headshot: 5x Damage").formatted(Formatting.RED));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("Passive: -50% damage from Skeleton bosses").formatted(Formatting.GREEN));
+        lore.add(Text.literal("+50% Arrow Speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("+50% Accuracy").formatted(Formatting.GREEN));
+        lore.add(Text.literal("+50% Damage").formatted(Formatting.GREEN));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1378,306 +2245,92 @@ public static final int BERSERKER_HELMET_LEVEL_REQ = 12;
 
         return bow;
     }
-    // ============================================================
-// SLAYER ARMOR LEVEL REQUIREMENTS
-// ============================================================
+
+    public static ItemStack createVenomousCrawlerLeggings() {
+        ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
 
 
-// ============================================================
-// ARMOR PIECE ENUM
-// ============================================================
+        leggings.set(DataComponentTypes.DYED_COLOR,
+                new net.minecraft.component.type.DyedColorComponent(0x2E8B57));
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🕷 Venomous Crawler Leggings")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
 
-    public enum ArmorPiece {
-        HELMET("Helmet", Items.LEATHER_HELMET),
-        CHESTPLATE("Chestplate", Items.LEATHER_CHESTPLATE),
-        LEGGINGS("Leggings", Items.LEATHER_LEGGINGS),
-        BOOTS("Boots", Items.LEATHER_BOOTS);
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("BOUNTY ARMOR").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Wall Climbing").formatted(Formatting.GREEN));
+        lore.add(Text.literal("Poison Aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
+                .formatted(Formatting.RED));
 
-        public final String displayName;
-        public final Item baseItem;
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
-        ArmorPiece(String displayName, Item baseItem) {
-            this.displayName = displayName;
-            this.baseItem = baseItem;
-        }
+        return leggings;
     }
-    private static int getSlayerColor(SlayerManager.SlayerType type) {
+
+
+    // T1 armor creation (needed for T2 crafting references)
+    public static ItemStack createT1Armor(SlayerManager.SlayerType type, String piece) {
+        return switch (piece) {
+            case "Helmet" -> createT1Helmet(type);
+            case "Chestplate" -> createT1Chestplate(type);
+            case "Leggings" -> createT1Leggings(type);
+            case "Boots" -> createT1Boots(type);
+            default -> ItemStack.EMPTY;
+        };
+    }
+
+    public static ItemStack createT2Armor(SlayerManager.SlayerType type, String piece) {
+        return switch (piece) {
+            case "Helmet" -> createT2Helmet(type);
+            case "Chestplate" -> createT2Chestplate(type);
+            case "Leggings" -> createT2Leggings(type);
+            case "Boots" -> createT2Boots(type);
+            default -> ItemStack.EMPTY;
+        };
+    }
+
+    // Placeholder T1 creation methods (add your actual T1 armor creation here)
+    public static ItemStack createT1Helmet(SlayerManager.SlayerType type) {
+        ItemStack helmet = new ItemStack(Items.IRON_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(getT1ArmorName(type, "Helmet")).formatted(type.color, Formatting.BOLD));
+        return helmet;
+    }
+
+    public static ItemStack createT1Chestplate(SlayerManager.SlayerType type) {
+        ItemStack chestplate = new ItemStack(Items.IRON_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(getT1ArmorName(type, "Chestplate")).formatted(type.color, Formatting.BOLD));
+        return chestplate;
+    }
+
+    public static ItemStack createT1Leggings(SlayerManager.SlayerType type) {
+        ItemStack leggings = new ItemStack(Items.IRON_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(getT1ArmorName(type, "Leggings")).formatted(type.color, Formatting.BOLD));
+        return leggings;
+    }
+
+    public static ItemStack createT1Boots(SlayerManager.SlayerType type) {
+        ItemStack boots = new ItemStack(Items.IRON_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(getT1ArmorName(type, "Boots")).formatted(type.color, Formatting.BOLD));
+        return boots;
+    }
+
+    private static String getT1ArmorName(SlayerManager.SlayerType type, String piece) {
         return switch (type) {
-            case ZOMBIE -> 0x2E7D32;     // Dark green
-            case SPIDER -> 0x8B0000;     // Dark red
-            case SKELETON -> 0xE0E0E0;   // Light gray/bone white
-            case SLIME -> 0x7CB342;      // Lime green
-            case ENDERMAN -> 0x6A0DAD;   // Purple
-            case WARDEN -> 0x006064;     // Dark cyan/teal
+            case ZOMBIE -> "Undying Outlaw " + piece;
+            case SPIDER -> "Venomous Bandit " + piece;
+            case SKELETON -> "Bone Desperado " + piece;
+            case SLIME -> "Gelatinous Rustler " + piece;
+            case ENDERMAN -> "Void Phantom " + piece;
+            case WARDEN -> "Sculk Terror " + piece;
         };
-    }
-    // ============================================================
-// T1 ARMOR CREATION - "Hunter" series
-// ============================================================
-
-    public static ItemStack createT1Armor(SlayerManager.SlayerType slayerType, ArmorPiece piece) {
-        ItemStack armor = new ItemStack(piece.baseItem);
-
-        // Base stats per piece type
-        int baseDurability = switch (piece) {
-            case HELMET -> 165;
-            case CHESTPLATE -> 240;
-            case LEGGINGS -> 225;
-            case BOOTS -> 195;
-        };
-
-        // Multiply durability by slayer difficulty (harder slayers = better gear)
-        int durability = (int) (baseDurability * (1 + slayerType.difficultyMultiplier * 0.1));
-
-        // Set custom name
-        armor.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(slayerType.displayName + " Hunter " + piece.displayName)
-                        .formatted(slayerType.color, Formatting.BOLD));
-
-        // Set durability
-        armor.set(DataComponentTypes.MAX_DAMAGE, durability);
-        armor.set(DataComponentTypes.DAMAGE, 0);
-
-        // Set dyed color
-        armor.set(DataComponentTypes.DYED_COLOR,
-                new net.minecraft.component.type.DyedColorComponent(getSlayerColor(slayerType)));
-
-        // Build lore
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("BOUNTY ARMOR [T1]").formatted(Formatting.BLUE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("❤ Durability: ").formatted(Formatting.WHITE)
-                .append(Text.literal(String.valueOf(durability)).formatted(Formatting.GREEN)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ SET BONUS (2+ pieces) ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal(""));
-
-        // Type-specific bonuses
-        String bonus = switch (slayerType) {
-            case ZOMBIE -> "10% Undead Damage Resistance";
-            case SPIDER -> "Poison Immunity";
-            case SKELETON -> "15% Arrow Damage Resistance";
-            case SLIME -> "25% Fall Damage Reduction";
-            case WARDEN -> "Darkness Immunity";
-            case ENDERMAN -> "10% Magic Resistance";
-        };
-        lore.add(Text.literal(" • " + bonus).formatted(slayerType.color));
-
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Effective vs: ").formatted(Formatting.GRAY)
-                .append(Text.literal(slayerType.displayName + "s").formatted(slayerType.color)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: " + slayerType.displayName + " Bounty Lvl " + T1_ARMOR_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        armor.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        return armor;
-    }
-    // ============================================================
-// T2 ARMOR CREATION - "Slayer II" series
-// ============================================================
-
-    public static ItemStack createT2Armor(SlayerManager.SlayerType slayerType, ArmorPiece piece) {
-        ItemStack armor = new ItemStack(piece.baseItem);
-
-        // T2 has better base stats
-        int baseDurability = switch (piece) {
-            case HELMET -> 330;
-            case CHESTPLATE -> 480;
-            case LEGGINGS -> 450;
-            case BOOTS -> 390;
-        };
-
-        int durability = (int) (baseDurability * (1 + slayerType.difficultyMultiplier * 0.1));
-
-        // Set custom name with II suffix
-        armor.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(slayerType.displayName + " Slayer " + piece.displayName + " II")
-                        .formatted(slayerType.color, Formatting.BOLD));
-
-        // Set durability
-        armor.set(DataComponentTypes.MAX_DAMAGE, durability);
-        armor.set(DataComponentTypes.DAMAGE, 0);
-
-        // Set dyed color
-        armor.set(DataComponentTypes.DYED_COLOR,
-                new net.minecraft.component.type.DyedColorComponent(getSlayerColor(slayerType)));
-
-        // Add enchant glint
-        armor.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Build lore
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("BOUNTY ARMOR [T2]").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("❤ Durability: ").formatted(Formatting.WHITE)
-                .append(Text.literal(String.valueOf(durability)).formatted(Formatting.GREEN)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ SET BONUS (2+ pieces) ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal(""));
-
-        // Enhanced type-specific bonuses
-        String bonus = switch (slayerType) {
-            case ZOMBIE -> "25% Undead Damage Resistance";
-            case SPIDER -> "Poison Immunity + Speed I";
-            case SKELETON -> "30% Arrow Resistance + Accuracy";
-            case SLIME -> "Fall Immunity + Jump Boost I";
-            case WARDEN -> "Darkness Immunity + Strength I";
-            case ENDERMAN -> "25% Magic Resistance";
-        };
-        lore.add(Text.literal(" • " + bonus).formatted(slayerType.color));
-
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ FULL SET (4 pieces) ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal(" • 2x " + slayerType.displayName + " Kill XP").formatted(Formatting.GREEN));
-        lore.add(Text.literal(" • +25% damage to " + slayerType.displayName + "s").formatted(Formatting.RED));
-
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: " + slayerType.displayName + " Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        armor.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        return armor;
-    }
-    // ============================================================
-// ARMOR IDENTIFICATION METHODS
-// ============================================================
-
-    public static boolean isT1SlayerArmor(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        return name.getString().contains("Hunter");
-    }
-
-    public static boolean isT2SlayerArmor(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String nameStr = name.getString();
-        // Make sure it's "Slayer ... II" not the special items
-        return nameStr.contains("Slayer") && nameStr.contains(" II") &&
-                (nameStr.contains("Helmet") || nameStr.contains("Chestplate") ||
-                        nameStr.contains("Leggings") || nameStr.contains("Boots"));
-    }
-
-    public static boolean isSlayerArmorSet(ItemStack stack) {
-        return isT1SlayerArmor(stack) || isT2SlayerArmor(stack);
-    }
-
-    public static SlayerManager.SlayerType getArmorSlayerType(ItemStack stack) {
-        if (!isSlayerArmorSet(stack)) return null;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return null;
-        String nameStr = name.getString();
-
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            if (nameStr.contains(type.displayName)) {
-                return type;
-            }
-        }
-        return null;
-    }
-
-    public static ArmorPiece getArmorPiece(ItemStack stack) {
-        if (!isSlayerArmorSet(stack)) return null;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return null;
-        String nameStr = name.getString();
-
-        for (ArmorPiece piece : ArmorPiece.values()) {
-            if (nameStr.contains(piece.displayName)) {
-                return piece;
-            }
-        }
-        return null;
-    }
-
-    // Check if player can use this armor
-    public static boolean canUseSlayerArmorPiece(ServerPlayerEntity player, ItemStack armor) {
-        if (!isSlayerArmorSet(armor)) return true;
-
-        SlayerManager.SlayerType type = getArmorSlayerType(armor);
-        if (type == null) return true;
-
-        int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-        int requiredLevel = isT2SlayerArmor(armor) ? T2_ARMOR_LEVEL_REQ : T1_ARMOR_LEVEL_REQ;
-
-        return playerLevel >= requiredLevel;
-    }
-    // ============================================================
-// BASIC SWORD LEVEL REQUIREMENT
-// ============================================================
-
-
-    // ============================================================
-// VENOMOUS CRAWLER LEGGINGS - FIXED DETECTION
-// ============================================================
-
-
-    public static boolean isSpiderLeggings(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String nameStr = name.getString();
-        // Check multiple possible name patterns
-        return nameStr.contains("Venomous Crawler Leggings") ||
-                nameStr.contains("Venomous") && nameStr.contains("Leggings") ||
-                nameStr.contains("Spider") && nameStr.contains("Leggings");
-    }
-
-    public static boolean canUseSpiderLeggings(ServerPlayerEntity player) {
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
-        return level >= SPIDER_LEGGINGS_LEVEL_REQ;
-    }
-
-    // ============================================================
-// UPGRADED SLAYER SWORD DETECTION
-// ============================================================
-    public static boolean isUpgradedSlayerSword(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String nameStr = name.getString();
-        return nameStr.contains("Sword II") || nameStr.contains("Bounty Sword II");
-    }
-
-    public static int getSwordLevelRequirement(ItemStack stack) {
-        if (isUpgradedSlayerSword(stack)) {
-            return UPGRADED_SWORD_LEVEL_REQ;
-        }
-        if (isSlayerSword(stack)) {
-            return BASIC_SWORD_LEVEL_REQ;
-        }
-        return 0;
-    }
-
-    // ============================================================
-// T2 ARMOR DETECTION HELPERS
-// ============================================================
-    public static boolean isT2Armor(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String nameStr = name.getString();
-        return nameStr.contains("Sculk") || nameStr.contains("Warden") ||
-                nameStr.contains("II") || nameStr.contains("Mk2");
-    }
-
-    public static boolean isT2Sword(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String nameStr = name.getString();
-        return nameStr.contains("Sword II");
     }
 }
