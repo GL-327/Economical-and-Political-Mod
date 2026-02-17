@@ -83,18 +83,22 @@ public class SlayerManager {
         public final double baseDamage;
         public final int coinCost;
         public final int xpReward;
+
+        public final int coinReward;
         public final int minLevel;
         public final double damageResistance; // % of non-slayer damage ignored
         public final int miniBossCount;
 
+
         public TierConfig(int tier, int killsRequired, double baseHp, double baseDamage,
-                          int coinCost, int xpReward, int minLevel,
+                          int coinCost, int coinReward, int xpReward, int minLevel,
                           double damageResistance, int miniBossCount) {
             this.tier = tier;
             this.killsRequired = killsRequired;
             this.baseHp = baseHp;
             this.baseDamage = baseDamage;
             this.coinCost = coinCost;
+            this.coinReward = coinReward;  // ← Now this works!
             this.xpReward = xpReward;
             this.minLevel = minLevel;
             this.damageResistance = damageResistance;
@@ -113,12 +117,12 @@ public class SlayerManager {
     }
 
     public static final TierConfig[] TIERS = {
-            //          tier, kills, baseHP, baseDmg, cost,    xp,  minLvl, dmgResist, miniBosses
-            new TierConfig(1, 10, 100, 4, 100, 5, 0, 0.0, 0),   // Was 25
-            new TierConfig(2, 20, 500, 8, 500, 25, 1, 0.15, 1),   // Was 50
-            new TierConfig(3, 40, 2000, 15, 2000, 100, 3, 0.30, 2),   // Was 100
-            new TierConfig(4, 60, 10000, 25, 10000, 500, 5, 0.50, 3),   // Was 150
-            new TierConfig(5, 100, 50000, 40, 50000, 1500, 7, 0.65, 4),   // Was 250
+            //          tier, kills, baseHP, baseDmg, cost,  coinReward, xp,   minLvl, dmgResist, miniBosses
+            new TierConfig(1,  10,    100,    4,       100,   50,         5,    0,      0.0,       0),
+            new TierConfig(2,  20,    500,    8,       500,   150,        25,   1,      0.15,      1),
+            new TierConfig(3,  40,    2000,   15,      2000,  400,        100,  3,      0.30,      2),
+            new TierConfig(4,  60,    10000,  25,      10000, 1000,       500,  5,      0.50,      3),
+            new TierConfig(5,  100,   50000,  40,      50000, 3000,       1500, 7,      0.65,      4),
     };
 
     public static int getKillsRequired(SlayerType type, int tier) {
@@ -1264,5 +1268,55 @@ public class SlayerManager {
 
         boss.setGlowing(true);
 
+    }
+    // Add these methods to SlayerManager.java
+
+    public static double getCoreDropChance(int tier) {
+        return switch (tier) {
+            case 1 -> 3.0;
+            case 2 -> 7.0;
+            case 3 -> 12.0;
+            case 4 -> 18.0;
+            case 5 -> 25.0;
+            default -> 0.0;
+        };
+    }
+
+    public static double getChunkDropChance(int tier) {
+        return switch (tier) {
+            case 1 -> 10.0;
+            case 2 -> 20.0;
+            case 3 -> 35.0;
+            case 4 -> 50.0;
+            case 5 -> 70.0;
+            default -> 0.0;
+        };
+    }
+
+    public static double getSwordDropChance(int tier) {
+        return switch (tier) {
+            case 1, 2 -> 0.0;  // No sword drops T1-T2
+            case 3 -> 2.0;
+            case 4 -> 5.0;
+            case 5 -> 10.0;
+            default -> 0.0;
+        };
+    }
+
+    public static double getArmorDropChance(SlayerType type, int tier) {
+        if (tier < 4) return 0.0;  // No special armor drops below T4
+
+        double baseChance = switch (tier) {
+            case 4 -> 1.0;
+            case 5 -> 3.0;
+            default -> 0.0;
+        };
+
+        // Warden has rarer drops
+        if (type == SlayerType.WARDEN) {
+            baseChance *= 0.5;
+        }
+
+        return baseChance;
     }
 }

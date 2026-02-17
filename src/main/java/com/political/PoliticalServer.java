@@ -53,7 +53,7 @@ import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.util.ActionResult;import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;import net.fabricmc.fabric.api.event.player.UseBlockCallback;import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 
 public class PoliticalServer implements DedicatedServerModInitializer {
 
@@ -84,6 +84,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 			return ActionResult.PASS;
 		});
+
 		ServerEntityEvents.ENTITY_UNLOAD.register((entity, world) ->
 
 		{
@@ -91,7 +92,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				HealthScalingManager.onMobDeath(living);
 			}
 		});
-
+		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+			return BountyDamageHandler.onDamage(entity, source, amount);
+		});
 // Mob spawn scaling
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			if (entity instanceof LivingEntity living) {
@@ -349,6 +352,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
 				T2ArmorAbilityHandler.tick(player);
+
 			}
 
 			// Other managers

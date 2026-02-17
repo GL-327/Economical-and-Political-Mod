@@ -33,7 +33,8 @@
     "SlimeEntityMixin",
     "WardenEntityMixin",
     "TotemDisableMixin",
-    "BountyDefenseMixin"
+    "BountyDefenseMixin",
+    "BountyDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

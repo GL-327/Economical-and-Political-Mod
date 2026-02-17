@@ -2,6 +2,7 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -355,7 +356,7 @@ public class BountyGui {
         }
 
         // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.DRAGON_HEAD)
+        gui.setSlot(4, new GuiElementBuilder(getWantedPosterItem(type))
                 .setName(Text.literal("☠ " + type.bossName + " Loot Table")
                         .formatted(type.color, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -363,41 +364,27 @@ public class BountyGui {
                 .glow()
                 .build());
 
-        // Drop rates scale with tier
-        double coreChance = switch (tier) {
-            case 1 -> 2.0;
-            case 2 -> 6.0;
-            case 3 -> 11.0;
-            case 4 -> 16.0;
-            case 5 -> 20.0;
-            default -> 0.0;
-        };
+        // ACTUAL drop rates from SlayerManager (or define them properly)
+        // Core drop chance
+        double coreChance = SlayerManager.getCoreDropChance(tier);
 
-        double chunkChance = switch (tier) {
-            case 1 -> 5.0;
-            case 2 -> 10.0;
-            case 3 -> 15.0;
-            case 4 -> 20.0;
-            case 5 -> 25.0;
-            default -> 0.0;
-        };
+        // Chunk drop chance
+        double chunkChance = SlayerManager.getChunkDropChance(tier);
 
-        double swordChance = switch (tier) {
-            case 1 -> 0.5;
-            case 2 -> 1.0;
-            case 3 -> 2.0;
-            case 4 -> 4.0;
-            case 5 -> 6.0;
-            default -> 0.0;
-        };
+        // Sword drop chance (T3+)
+        double swordChance = SlayerManager.getSwordDropChance(tier);
+
+        // Special armor drop chance (T4+)
+        double armorChance = SlayerManager.getArmorDropChance(type, tier);
+
+        int slot = 19;
 
         // Core drop
-        int slot = 19;
-        gui.setSlot(slot, new GuiElementBuilder(type.icon)
+        gui.setSlot(slot++, new GuiElementBuilder(type.icon)
                 .setName(Text.literal("✦ " + type.displayName + " Core")
                         .formatted(type.color, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Drop Chance: " + coreChance + "%")
+                .addLoreLine(Text.literal("Drop Chance: " + String.format("%.1f", coreChance) + "%")
                         .formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Used for crafting powerful").formatted(Formatting.GRAY))
@@ -405,25 +392,29 @@ public class BountyGui {
                 .glow()
                 .build());
 
+        slot++; // Skip a slot
+
         // Chunk drop
-        gui.setSlot(21, new GuiElementBuilder(Items.PRISMARINE_SHARD)
+        gui.setSlot(slot++, new GuiElementBuilder(Items.PRISMARINE_SHARD)
                 .setName(Text.literal(SlayerItems.getChunkName(type))
                         .formatted(type.color))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Drop Chance: " + chunkChance + "%")
+                .addLoreLine(Text.literal("Drop Chance: " + String.format("%.1f", chunkChance) + "%")
                         .formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Crafting material for").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("slayer swords.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("bounty swords.").formatted(Formatting.GRAY))
                 .build());
 
+        slot++; // Skip a slot
+
         // Rare sword drop (T3+)
-        if (tier >= 3) {
-            gui.setSlot(23, new GuiElementBuilder(Items.IRON_SWORD)
+        if (tier >= 3 && swordChance > 0) {
+            gui.setSlot(slot++, new GuiElementBuilder(Items.IRON_SWORD)
                     .setName(Text.literal(type.displayName + " Bounty Sword")
                             .formatted(type.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Drop Chance: " + swordChance + "%")
+                    .addLoreLine(Text.literal("Drop Chance: " + String.format("%.1f", swordChance) + "%")
                             .formatted(Formatting.LIGHT_PURPLE))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("RARE DROP!").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
@@ -431,27 +422,37 @@ public class BountyGui {
                     .build());
         }
 
-        // Coins reward (guaranteed)
-        int coinReward = switch (tier) {
-            case 1 -> 50;
-            case 2 -> 150;
-            case 3 -> 400;
-            case 4 -> 1000;
-            case 5 -> 3000;
-            default -> 0;
-        };
+        // Special armor drop (T4+ for specific types)
+        if (tier >= 4 && armorChance > 0) {
+            ItemStack armorPreview = getSpecialArmorPreview(type);
+            if (armorPreview != null && !armorPreview.isEmpty()) {
+                gui.setSlot(slot++, new GuiElementBuilder(armorPreview.getItem())
+                        .setName(Text.literal("★ " + getSpecialArmorName(type))
+                                .formatted(Formatting.GOLD, Formatting.BOLD))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("Drop Chance: " + String.format("%.2f", armorChance) + "%")
+                                .formatted(Formatting.GOLD))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("LEGENDARY DROP!").formatted(Formatting.GOLD, Formatting.BOLD))
+                        .glow()
+                        .build());
+            }
+        }
 
-        gui.setSlot(25, new GuiElementBuilder(Items.GOLD_NUGGET)
+        // Coins reward (guaranteed)
+        int coinReward = SlayerManager.getTierConfig(tier).coinReward;
+
+        gui.setSlot(31, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("💰 Coin Reward")
                         .formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Guaranteed: " + coinReward + " coins")
+                .addLoreLine(Text.literal("Guaranteed: " + formatNumber(coinReward) + " coins")
                         .formatted(Formatting.YELLOW))
                 .build());
 
         // XP reward
         SlayerManager.TierConfig config = SlayerManager.getTierConfig(tier);
-        gui.setSlot(31, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
+        gui.setSlot(33, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
                 .setName(Text.literal("✨ Bounty XP")
                         .formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -477,6 +478,29 @@ public class BountyGui {
                 .build());
 
         gui.open();
+    }
+
+    // Helper methods for special armor
+    private static ItemStack getSpecialArmorPreview(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> new ItemStack(Items.ZOMBIE_HEAD);
+            case SPIDER -> new ItemStack(Items.LEATHER_LEGGINGS);
+            case SKELETON -> new ItemStack(Items.BOW);
+            case SLIME -> new ItemStack(Items.LEATHER_BOOTS);
+            case ENDERMAN -> new ItemStack(Items.ENDER_PEARL);
+            case WARDEN -> new ItemStack(Items.NETHERITE_CHESTPLATE);
+        };
+    }
+
+    private static String getSpecialArmorName(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> "Zombie Berserker Helmet";
+            case SPIDER -> "Venomous Crawler Leggings";
+            case SKELETON -> "Bone Desperado Bow";
+            case SLIME -> "Gelatinous Rustler Boots";
+            case ENDERMAN -> "Void Pearl";
+            case WARDEN -> "Sculk Terror Chestplate";
+        };
     }
     // ============================================================
     // REWARDS MENU

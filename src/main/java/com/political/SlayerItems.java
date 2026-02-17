@@ -2348,46 +2348,7 @@ public class SlayerItems {
         return boots;
     }
 
-    private static void applyT1ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
-                                          String pieceName, int armorValue, int toughnessValue) {
 
-        String armorName = getT1ArmorName(type);
-
-        // Dye the leather
-        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getArmorColor(type)));
-
-        // Set custom name
-        stack.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(armorName + " " + pieceName)
-                        .formatted(type.color, Formatting.BOLD));
-
-        // Set custom max damage (durability)
-        stack.set(DataComponentTypes.MAX_DAMAGE, T1_ARMOR_DURABILITY);
-        stack.set(DataComponentTypes.DAMAGE, 0);
-
-        // Lore
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("T1 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
-        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)
-                .append(Text.literal("-10%").formatted(Formatting.AQUA)));
-        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
-                .append(Text.literal("-3%").formatted(Formatting.GRAY)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T1_ARMOR_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-    }
 
     private static String getT1ArmorName(SlayerManager.SlayerType type) {
         return switch (type) {
@@ -2429,51 +2390,6 @@ public class SlayerItems {
         return boots;
     }
 
-    private static void applyT2ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
-                                          String pieceName, int armorValue, int toughnessValue, int healthValue) {
-
-        String armorName = getT2ArmorName(type);
-
-        // Dye the leather (slightly brighter/different shade for T2)
-        int color = getArmorColor(type);
-        // Make T2 slightly brighter
-        int brighterColor = brightenColor(color);
-        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(brighterColor));
-
-        // Set custom name with II
-        stack.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(armorName + " " + pieceName + " II")
-                        .formatted(type.color, Formatting.BOLD));
-
-        // Set custom max damage (durability)
-        stack.set(DataComponentTypes.MAX_DAMAGE, T2_ARMOR_DURABILITY);
-        stack.set(DataComponentTypes.DAMAGE, 0);
-
-        // Lore - NO ABILITIES, just stats
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
-        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
-        lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+" + healthValue).formatted(Formatting.GREEN)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)
-                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
-        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
-                .append(Text.literal("-8%").formatted(Formatting.AQUA)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-    }
 
     private static String getT2ArmorName(SlayerManager.SlayerType type) {
         return switch (type) {
@@ -2528,5 +2444,163 @@ public class SlayerItems {
 
     public static ItemStack createT2Armor(SlayerManager.SlayerType type, ArmorPiece piece) {
         return createT2Armor(type, piece.displayName);
+    }
+
+
+
+
+
+    //MARKER
+
+
+
+
+    //MARKER
+    private static void applyT1ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
+                                          String pieceName, int armorValue, int toughnessValue) {
+
+        String armorName = getT1ArmorName(type);
+
+        // Dye the leather
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getArmorColor(type)));
+
+        // Set custom name
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(armorName + " " + pieceName)
+                        .formatted(type.color, Formatting.BOLD));
+
+        // Set custom max damage (durability)
+        stack.set(DataComponentTypes.MAX_DAMAGE, T1_ARMOR_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+
+        // *** FIX: ADD ACTUAL ARMOR ATTRIBUTES ***
+        AttributeModifierSlot slot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "t1_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        slot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "t1_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        slot)
+                .build();
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
+
+        // Lore (unchanged)
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T1 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-10%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-3%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T1_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    private static void applyT2ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
+                                          String pieceName, int armorValue, int toughnessValue, int healthValue) {
+
+        String armorName = getT2ArmorName(type);
+
+        // Dye the leather (brighter)
+        int color = getArmorColor(type);
+        int brighterColor = brightenColor(color);
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(brighterColor));
+
+        // Set custom name with II
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(armorName + " " + pieceName + " II")
+                        .formatted(type.color, Formatting.BOLD));
+
+        // Set custom max damage (durability)
+        stack.set(DataComponentTypes.MAX_DAMAGE, T2_ARMOR_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+
+        // *** FIX: ADD ACTUAL ARMOR ATTRIBUTES ***
+        AttributeModifierSlot slot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        slot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        slot);
+
+        // Add health boost
+        if (healthValue > 0) {
+            builder.add(EntityAttributes.MAX_HEALTH,
+                    new EntityAttributeModifier(
+                            Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_health"),
+                            healthValue,
+                            EntityAttributeModifier.Operation.ADD_VALUE
+                    ),
+                    slot);
+        }
+
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
+
+        // Lore (unchanged)
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + healthValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // Helper method to get the correct slot
+    private static AttributeModifierSlot getSlotForPiece(String pieceName) {
+        return switch (pieceName) {
+            case "Helmet" -> AttributeModifierSlot.HEAD;
+            case "Chestplate" -> AttributeModifierSlot.CHEST;
+            case "Leggings" -> AttributeModifierSlot.LEGS;
+            case "Boots" -> AttributeModifierSlot.FEET;
+            default -> AttributeModifierSlot.ANY;
+        };
     }
 }
