@@ -223,6 +223,7 @@ public class ArmorAbilityHandler {
     // WARDEN CHESTPLATE (Warden Slayer)
     // ============================================================
 
+
     private static void tickWardenChestplate(ServerPlayerEntity player) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (!isWardenChestplate(chestplate)) {
@@ -276,6 +277,7 @@ public class ArmorAbilityHandler {
                     ));
                 }
             }
+
         }
     }
 

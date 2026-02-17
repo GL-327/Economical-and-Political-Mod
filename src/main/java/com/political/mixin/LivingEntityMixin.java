@@ -1,6 +1,9 @@
 package com.political.mixin;
 
-import com.political.*;
+import com.political.CustomItemHandler;
+import com.political.SlayerItems;
+import com.political.SlayerManager;
+import com.political.T2ArmorAbilityHandler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -27,11 +30,23 @@ public class LivingEntityMixin {
 
     @ModifyVariable(method = "applyDamage", at = @At("HEAD"), argsOnly = true)
     private float political_adjustDamage(float amount, ServerWorld world, DamageSource source) {
-        // ... your existing code ...
+        LivingEntity self = (LivingEntity)(Object)this;
+        if (!(self instanceof ServerPlayerEntity player)) return amount;
+
+        // Teleport dodge for Enderman T2 armor
+        if (T2ArmorAbilityHandler.tryTeleportDodge(player, amount)) {
+            return 0.0f;
+        }
+
+        // Projectile damage reduction for Skeleton T2 armor
+        if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
+            float multiplier = T2ArmorAbilityHandler.getProjectileDamageReduction(player);
+            amount *= multiplier;
+        }
+
         return amount;
     }
 
-    // FIXED: Changed to tryUseDeathProtector (not tryUseDeathProtection)
     @Inject(method = "tryUseDeathProtector", at = @At("HEAD"), cancellable = true)
     private void preventTotemDuringBoss(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity)(Object)this;
@@ -45,7 +60,6 @@ public class LivingEntityMixin {
         }
     }
 
-    // FIXED: Changed to tryUseDeathProtector (not tryUseDeathProtection)
     @Inject(method = "tryUseDeathProtector", at = @At("HEAD"), cancellable = true)
     private void slimeBootsDeathSave(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity)(Object)this;
@@ -67,80 +81,48 @@ public class LivingEntityMixin {
         }
     }
 
+    // FIXED: fallDistance is double in 1.21.11, not float
     @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
     private void preventFallDamage(double fallDistance, float damageMultiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity)(Object)this;
         if (!(entity instanceof ServerPlayerEntity player)) return;
 
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+
+        // Check for Slime boots
         if (SlayerItems.isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
             cir.setReturnValue(false);
-        }
-    }
-    // Add to LivingEntityMixin.java
-
-    // Teleport Dodge for Enderman T2 armor
-    @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private float tryTeleportDodge(float amount, ServerWorld world, DamageSource source) {
-        LivingEntity self = (LivingEntity)(Object)this;
-        if (!(self instanceof ServerPlayerEntity player)) return amount;
-
-        // Try teleport dodge
-        if (T2ArmorAbilityHandler.tryTeleportDodge(player, amount)) {
-            return 0.0f; // Damage dodged!
+            return;
         }
 
-        return amount;
-    }
-
-    // Projectile damage reduction for Skeleton T2 armor
-    @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private float reduceProjectileDamage(float amount, ServerWorld world, DamageSource source) {
-        LivingEntity self = (LivingEntity)(Object)this;
-        if (!(self instanceof ServerPlayerEntity player)) return amount;
-
-        // Check if projectile damage
-        if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
-            float multiplier = T2ArmorAbilityHandler.getProjectileDamageReduction(player);
-            return amount * multiplier;
-        }
-
-        return amount;
-    }
-
-    // No fall damage for Slime T2 boots or Enderman T2 boots
-    @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
-    private void preventT2FallDamage(float fallDistance, float damageMultiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity entity = (LivingEntity)(Object)this;
-        if (!(entity instanceof ServerPlayerEntity player)) return;
-
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        // Check for T2 armor with fall damage immunity
         Text customName = boots.get(DataComponentTypes.CUSTOM_NAME);
-        if (customName == null) return;
-        String name = customName.getString();
+        if (customName != null) {
+            String name = customName.getString();
 
-        // T2 Slime boots or T2 Enderman boots
-        if (name.contains(" II") &&
-                (name.contains("Rustler") || name.contains("Gelatinous") ||
-                        name.contains("Void") || name.contains("Phantom"))) {
+            // T2 Slime or Enderman boots
+            if (name.contains(" II") &&
+                    (name.contains("Rustler") || name.contains("Gelatinous") ||
+                            name.contains("Void") || name.contains("Phantom"))) {
 
-            // Bounce effect for slime boots
-            if (name.contains("Rustler") || name.contains("Gelatinous")) {
-                if (fallDistance > 3.0f) {
-                    Vec3d velocity = player.getVelocity();
-                    player.setVelocity(velocity.x, Math.min(fallDistance * 0.1, 1.0), velocity.z);
-                    player.velocityModified = true;
+                // Bounce effect for slime boots
+                if (name.contains("Rustler") || name.contains("Gelatinous")) {
+                    if (fallDistance > 3.0) {
+                        Vec3d velocity = player.getVelocity();
+                        player.setVelocity(velocity.x, Math.min(fallDistance * 0.1, 1.0), velocity.z);
 
-                    ServerWorld world = player.getEntityWorld();
-                    world.playSound(null, player.getBlockPos(),
-                            SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    world.spawnParticles(ParticleTypes.ITEM_SLIME,
-                            player.getX(), player.getY(), player.getZ(),
-                            15, 0.5, 0.1, 0.5, 0.1);
+                        // FIXED: Use player.getWorld() cast to ServerWorld
+                        ServerWorld world = (ServerWorld) player.getEntityWorld();
+                        world.playSound(null, player.getBlockPos(),
+                                SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                        world.spawnParticles(ParticleTypes.ITEM_SLIME,
+                                player.getX(), player.getY(), player.getZ(),
+                                15, 0.5, 0.1, 0.5, 0.1);
+                    }
                 }
-            }
 
-            cir.setReturnValue(false);
+                cir.setReturnValue(false);
+            }
         }
     }
 }

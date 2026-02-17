@@ -1,7 +1,7 @@
 package com.political;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
+import net.minecraft.component.type.*;
 
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -17,8 +17,8 @@ import java.util.List;import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import java.util.HashSet;
-import java.util.Set;import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
+import java.util.Set;
+
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.Identifier;
@@ -1414,49 +1414,6 @@ public class SlayerItems {
     // ============================================================
 // Generic T2 Armor Creation for any type
 // ============================================================
-    public static ItemStack createT2Helmet(SlayerManager.SlayerType type) {
-        return switch (type) {
-            case ZOMBIE -> createT2ZombieHelmet();
-            case SPIDER -> createT2SpiderHelmet();
-            case SKELETON -> createT2SkeletonHelmet();
-            case SLIME -> createT2SlimeHelmet();
-            case ENDERMAN -> createT2EndermanHelmet();
-            case WARDEN -> createT2WardenHelmet();
-        };
-    }
-
-    public static ItemStack createT2Chestplate(SlayerManager.SlayerType type) {
-        return switch (type) {
-            case ZOMBIE -> createT2ZombieChestplate();
-            case SPIDER -> createT2SpiderChestplate();
-            case SKELETON -> createT2SkeletonChestplate();
-            case SLIME -> createT2SlimeChestplate();
-            case ENDERMAN -> createT2EndermanChestplate();
-            case WARDEN -> createT2WardenChestplate();
-        };
-    }
-
-    public static ItemStack createT2Leggings(SlayerManager.SlayerType type) {
-        return switch (type) {
-            case ZOMBIE -> createT2ZombieLeggings();
-            case SPIDER -> createT2SpiderLeggings();
-            case SKELETON -> createT2SkeletonLeggings();
-            case SLIME -> createT2SlimeLeggings();
-            case ENDERMAN -> createT2EndermanLeggings();
-            case WARDEN -> createT2WardenLeggings();
-        };
-    }
-
-    public static ItemStack createT2Boots(SlayerManager.SlayerType type) {
-        return switch (type) {
-            case ZOMBIE -> createT2ZombieBoots();
-            case SPIDER -> createT2SpiderBoots();
-            case SKELETON -> createT2SkeletonBoots();
-            case SLIME -> createT2SlimeBoots();
-            case ENDERMAN -> createT2EndermanBoots();
-            case WARDEN -> createT2WardenBoots();
-        };
-    }
 
     // ============================================================
 // T2 SPIDER ARMOR SET
@@ -2245,6 +2202,71 @@ public class SlayerItems {
 
         return bow;
     }
+    // Add this enum inside SlayerItems class
+    public enum ArmorPiece {
+        HELMET("Helmet", Items.NETHERITE_HELMET),
+        CHESTPLATE("Chestplate", Items.NETHERITE_CHESTPLATE),
+        LEGGINGS("Leggings", Items.NETHERITE_LEGGINGS),
+        BOOTS("Boots", Items.NETHERITE_BOOTS);
+
+        public final String displayName;
+        public final Item baseItem;
+
+        ArmorPiece(String displayName, Item baseItem) {
+            this.displayName = displayName;
+            this.baseItem = baseItem;
+        }
+    }
+
+    // Add these missing methods to SlayerItems.java
+    public static boolean isT1SlayerArmor(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return false;
+        String n = name.getString();
+        // T1 armor does NOT contain " II"
+        if (n.contains(" II")) return false;
+        return n.contains("Outlaw") || n.contains("Bandit") || n.contains("Desperado") ||
+                n.contains("Rustler") || n.contains("Phantom") || n.contains("Terror") ||
+                n.contains("Hunter");
+    }
+
+    public static SlayerManager.SlayerType getArmorSlayerType(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return null;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return null;
+        String n = name.getString();
+
+        if (n.contains("Undying") || n.contains("Outlaw") || n.contains("Zombie"))
+            return SlayerManager.SlayerType.ZOMBIE;
+        if (n.contains("Venomous") || n.contains("Bandit") || n.contains("Spider"))
+            return SlayerManager.SlayerType.SPIDER;
+        if (n.contains("Bone") || n.contains("Desperado") || n.contains("Skeleton"))
+            return SlayerManager.SlayerType.SKELETON;
+        if (n.contains("Gelatinous") || n.contains("Rustler") || n.contains("Slime"))
+            return SlayerManager.SlayerType.SLIME;
+        if (n.contains("Void") || n.contains("Phantom") || n.contains("Enderman"))
+            return SlayerManager.SlayerType.ENDERMAN;
+        if (n.contains("Sculk") || n.contains("Terror") || n.contains("Warden"))
+            return SlayerManager.SlayerType.WARDEN;
+
+        return null;
+    }
+
+    public static ArmorPiece getArmorPiece(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return null;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (name == null) return null;
+        String n = name.getString();
+
+        if (n.contains("Helmet")) return ArmorPiece.HELMET;
+        if (n.contains("Chestplate")) return ArmorPiece.CHESTPLATE;
+        if (n.contains("Leggings")) return ArmorPiece.LEGGINGS;
+        if (n.contains("Boots")) return ArmorPiece.BOOTS;
+
+        return null;
+    }
+
 
     public static ItemStack createVenomousCrawlerLeggings() {
         ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
@@ -2273,7 +2295,213 @@ public class SlayerItems {
     }
 
 
-    // T1 armor creation (needed for T2 crafting references)
+    private static String getT1ArmorName(SlayerManager.SlayerType type, String piece) {
+        return switch (type) {
+            case ZOMBIE -> "Undying Outlaw " + piece;
+            case SPIDER -> "Venomous Bandit " + piece;
+            case SKELETON -> "Bone Desperado " + piece;
+            case SLIME -> "Gelatinous Rustler " + piece;
+            case ENDERMAN -> "Void Phantom " + piece;
+            case WARDEN -> "Sculk Terror " + piece;
+        };
+    }
+    // ============================================================
+// ARMOR COLOR MAPPING
+// ============================================================
+    private static int getArmorColor(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> 0x3D5C1F;      // Dark rotting green
+            case SPIDER -> 0x8B0000;       // Dark red
+            case SKELETON -> 0xD3D3C4;     // Bone white/gray
+            case SLIME -> 0x7CFC00;        // Lime green
+            case ENDERMAN -> 0x1A0033;     // Dark purple
+            case WARDEN -> 0x0D4D4D;       // Dark teal/cyan
+        };
+    }
+
+    // ============================================================
+// T1 ARMOR - Dyed Leather with Basic Stats
+// ============================================================
+    public static final int T1_ARMOR_DURABILITY = 300; // Custom durability
+
+    public static ItemStack createT1Helmet(SlayerManager.SlayerType type) {
+        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
+        applyT1ArmorStats(helmet, type, "Helmet", 3, 1);
+        return helmet;
+    }
+
+    public static ItemStack createT1Chestplate(SlayerManager.SlayerType type) {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyT1ArmorStats(chestplate, type, "Chestplate", 5, 2);
+        return chestplate;
+    }
+
+    public static ItemStack createT1Leggings(SlayerManager.SlayerType type) {
+        ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyT1ArmorStats(leggings, type, "Leggings", 4, 1);
+        return leggings;
+    }
+
+    public static ItemStack createT1Boots(SlayerManager.SlayerType type) {
+        ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
+        applyT1ArmorStats(boots, type, "Boots", 2, 1);
+        return boots;
+    }
+
+    private static void applyT1ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
+                                          String pieceName, int armorValue, int toughnessValue) {
+
+        String armorName = getT1ArmorName(type);
+
+        // Dye the leather
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getArmorColor(type)));
+
+        // Set custom name
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(armorName + " " + pieceName)
+                        .formatted(type.color, Formatting.BOLD));
+
+        // Set custom max damage (durability)
+        stack.set(DataComponentTypes.MAX_DAMAGE, T1_ARMOR_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+
+        // Lore
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T1 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-10%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-3%").formatted(Formatting.GRAY)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T1_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    private static String getT1ArmorName(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> "Undying Outlaw";
+            case SPIDER -> "Venomous Bandit";
+            case SKELETON -> "Bone Desperado";
+            case SLIME -> "Gelatinous Rustler";
+            case ENDERMAN -> "Void Phantom";
+            case WARDEN -> "Sculk Hunter";
+        };
+    }
+
+    // ============================================================
+// T2 ARMOR - Dyed Leather with Better Stats (NO ABILITIES)
+// ============================================================
+    public static final int T2_ARMOR_DURABILITY = 500; // Higher durability
+
+    public static ItemStack createT2Helmet(SlayerManager.SlayerType type) {
+        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
+        applyT2ArmorStats(helmet, type, "Helmet", 5, 2, 4);
+        return helmet;
+    }
+
+    public static ItemStack createT2Chestplate(SlayerManager.SlayerType type) {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyT2ArmorStats(chestplate, type, "Chestplate", 8, 3, 6);
+        return chestplate;
+    }
+
+    public static ItemStack createT2Leggings(SlayerManager.SlayerType type) {
+        ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyT2ArmorStats(leggings, type, "Leggings", 6, 2, 4);
+        return leggings;
+    }
+
+    public static ItemStack createT2Boots(SlayerManager.SlayerType type) {
+        ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
+        applyT2ArmorStats(boots, type, "Boots", 4, 2, 2);
+        return boots;
+    }
+
+    private static void applyT2ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
+                                          String pieceName, int armorValue, int toughnessValue, int healthValue) {
+
+        String armorName = getT2ArmorName(type);
+
+        // Dye the leather (slightly brighter/different shade for T2)
+        int color = getArmorColor(type);
+        // Make T2 slightly brighter
+        int brighterColor = brightenColor(color);
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(brighterColor));
+
+        // Set custom name with II
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(armorName + " " + pieceName + " II")
+                        .formatted(type.color, Formatting.BOLD));
+
+        // Set custom max damage (durability)
+        stack.set(DataComponentTypes.MAX_DAMAGE, T2_ARMOR_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+
+        // Lore - NO ABILITIES, just stats
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + healthValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-20%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal("🛡 Other Bosses: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-8%").formatted(Formatting.AQUA)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    private static String getT2ArmorName(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE -> "Undying Outlaw";
+            case SPIDER -> "Venomous Bandit";
+            case SKELETON -> "Bone Desperado";
+            case SLIME -> "Gelatinous Rustler";
+            case ENDERMAN -> "Void Phantom";
+            case WARDEN -> "Sculk Hunter";
+        };
+    }
+
+    private static int brightenColor(int color) {
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+
+        // Brighten by 30%
+        r = Math.min(255, (int)(r * 1.3));
+        g = Math.min(255, (int)(g * 1.3));
+        b = Math.min(255, (int)(b * 1.3));
+
+        return (r << 16) | (g << 8) | b;
+    }
+
+    // ============================================================
+// GENERIC ARMOR CREATION METHODS
+// ============================================================
     public static ItemStack createT1Armor(SlayerManager.SlayerType type, String piece) {
         return switch (piece) {
             case "Helmet" -> createT1Helmet(type);
@@ -2282,6 +2510,10 @@ public class SlayerItems {
             case "Boots" -> createT1Boots(type);
             default -> ItemStack.EMPTY;
         };
+    }
+
+    public static ItemStack createT1Armor(SlayerManager.SlayerType type, ArmorPiece piece) {
+        return createT1Armor(type, piece.displayName);
     }
 
     public static ItemStack createT2Armor(SlayerManager.SlayerType type, String piece) {
@@ -2294,43 +2526,7 @@ public class SlayerItems {
         };
     }
 
-    // Placeholder T1 creation methods (add your actual T1 armor creation here)
-    public static ItemStack createT1Helmet(SlayerManager.SlayerType type) {
-        ItemStack helmet = new ItemStack(Items.IRON_HELMET);
-        helmet.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(getT1ArmorName(type, "Helmet")).formatted(type.color, Formatting.BOLD));
-        return helmet;
-    }
-
-    public static ItemStack createT1Chestplate(SlayerManager.SlayerType type) {
-        ItemStack chestplate = new ItemStack(Items.IRON_CHESTPLATE);
-        chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(getT1ArmorName(type, "Chestplate")).formatted(type.color, Formatting.BOLD));
-        return chestplate;
-    }
-
-    public static ItemStack createT1Leggings(SlayerManager.SlayerType type) {
-        ItemStack leggings = new ItemStack(Items.IRON_LEGGINGS);
-        leggings.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(getT1ArmorName(type, "Leggings")).formatted(type.color, Formatting.BOLD));
-        return leggings;
-    }
-
-    public static ItemStack createT1Boots(SlayerManager.SlayerType type) {
-        ItemStack boots = new ItemStack(Items.IRON_BOOTS);
-        boots.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(getT1ArmorName(type, "Boots")).formatted(type.color, Formatting.BOLD));
-        return boots;
-    }
-
-    private static String getT1ArmorName(SlayerManager.SlayerType type, String piece) {
-        return switch (type) {
-            case ZOMBIE -> "Undying Outlaw " + piece;
-            case SPIDER -> "Venomous Bandit " + piece;
-            case SKELETON -> "Bone Desperado " + piece;
-            case SLIME -> "Gelatinous Rustler " + piece;
-            case ENDERMAN -> "Void Phantom " + piece;
-            case WARDEN -> "Sculk Terror " + piece;
-        };
+    public static ItemStack createT2Armor(SlayerManager.SlayerType type, ArmorPiece piece) {
+        return createT2Armor(type, piece.displayName);
     }
 }
