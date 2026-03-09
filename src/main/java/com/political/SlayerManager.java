@@ -616,6 +616,9 @@ public class SlayerManager {
         boss.setCanPickUpLoot(false);
         boss.setPersistent();
 
+        // Apply type-specific buffs (status effects, knockback resistance, armor, etc.)
+        applyBossBuffs(boss, type, quest.tier);
+
         // **CRITICAL: Actually spawn the boss into the world**
         world.spawnEntity(boss);
 
@@ -838,7 +841,6 @@ public class SlayerManager {
             BossAbilityManager.onSlimeBossDeath(entity, world, killer, tier);
             return; // Don't complete quest yet - onSlimeBossDeath handles it
         }
-        if (ownerUuid == null) return;
 
         ActiveQuest quest = activeQuests.get(ownerUuid);
         if (quest == null || !bossUuid.equals(quest.bossEntityUuid)) return;
@@ -1166,7 +1168,7 @@ public class SlayerManager {
         if (newLevel > oldLevel) {
             int credits = LEVEL_CREDIT_REWARDS[newLevel - 1];
             CoinManager.giveCoins(player, credits);  // Use CoinManager instead of SlayerData
-            player.sendMessage(Text.literal("⬆ LEVEL UP! " + type.displayName + " Slayer Level " + newLevel + "!")
+            player.sendMessage(Text.literal("⬆ LEVEL UP! " + type.displayName + " Bounty Level " + newLevel + "!")
                     .formatted(Formatting.GOLD, Formatting.BOLD), false);
             player.sendMessage(Text.literal("  +" + credits + " Bonus Coins!")
                     .formatted(Formatting.AQUA), false);
