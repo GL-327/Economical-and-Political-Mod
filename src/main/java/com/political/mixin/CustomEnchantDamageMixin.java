@@ -96,5 +96,11 @@ public abstract class CustomEnchantDamageMixin {
                 }
             }
         }
+
+        // ── Frostbite: apply Slowness II for 3 seconds on hit ──
+        if (CustomEnchantmentManager.has(weapon, CustomEnchantmentManager.FROSTBITE)) {
+            self.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
+                    net.minecraft.entity.effect.StatusEffects.SLOWNESS, 60, 1, true, false, false));
+        }
     }
 }

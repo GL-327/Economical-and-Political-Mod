@@ -43,7 +43,7 @@ public class RecipesGui {
                         .formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Basic bounty swords for").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("hunting slayer mobs").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("hunting bounty mobs").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openBountySwordsT1(player))
@@ -51,10 +51,10 @@ public class RecipesGui {
 
         // Category: Bounty Swords T2 (slot 20)
         gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔ Slayer Swords II (T2)")
+                .setName(Text.literal("⚔ Bounty Swords II (T2)")
                         .formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Upgraded slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Upgraded bounty swords").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("with 3x damage bonus").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
@@ -75,7 +75,7 @@ public class RecipesGui {
 
         // Category: Slayer Armor (slot 23)
         gui.setSlot(23, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
-                .setName(Text.literal("🛡 Slayer Armor")
+                .setName(Text.literal("🛡 Bounty Armor")
                         .formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Protective gear crafted from").formatted(Formatting.GRAY))
@@ -165,7 +165,7 @@ public class RecipesGui {
     // ============================================================
     public static void openBountySwordsT2(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("⚔ Slayer Swords II (T2)"));
+        gui.setTitle(Text.literal("⚔ Bounty Swords II (T2)"));
 
         for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE)
@@ -175,7 +175,7 @@ public class RecipesGui {
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔ Slayer Swords II (T2)")
+                .setName(Text.literal("⚔ Bounty Swords II (T2)")
                         .formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Recipe: 5 Cores + Diamond Sword + T1 Sword").formatted(Formatting.YELLOW))
@@ -188,7 +188,7 @@ public class RecipesGui {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             if (slot > 25) break;
             gui.setSlot(slot, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                    .setName(Text.literal(type.displayName + " Slayer Sword II")
+                    .setName(Text.literal(type.displayName + " Bounty Sword II")
                             .formatted(type.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
@@ -220,7 +220,7 @@ public class RecipesGui {
     // ============================================================
     public static void openArmorRecipes(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("🛡 Slayer Armor Recipes"));
+        gui.setTitle(Text.literal("🛡 Bounty Armor Recipes"));
 
         for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)

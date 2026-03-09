@@ -22,6 +22,11 @@ public class CustomEnchantmentManager {
     public static final String BOSS_WARD          = "boss_ward";
     public static final String VITALITY           = "vitality";
     public static final String THORNS_OF_VENGEANCE = "thorns_of_vengeance";
+    public static final String EXECUTE            = "execute";
+    public static final String FROSTBITE          = "frostbite";
+    public static final String LAST_STAND         = "last_stand";
+    public static final String SOULBOUND          = "soulbound";
+    public static final String PROSPECTOR         = "prospector";
 
     private static final String ENCHANT_TAG = "custom_enchants";
 
@@ -96,6 +101,13 @@ public class CustomEnchantmentManager {
             }
         }
 
+        // Execute: +1% damage per 1% of target's missing HP per level
+        int execute = getLevel(weapon, EXECUTE);
+        if (execute > 0) {
+            float missingHpPercent = 1.0f - (target.getHealth() / target.getMaxHealth());
+            multiplier += execute * missingHpPercent;
+        }
+
         return multiplier;
     }
 
@@ -132,9 +144,19 @@ public class CustomEnchantmentManager {
             if (bossWard > 0 && isBossAttack) {
                 multiplier -= 0.10f * bossWard;
             }
+
+            // Last Stand: -2% per level per 10% missing HP (only below 30% HP)
+            int lastStand = getLevel(piece, LAST_STAND);
+            if (lastStand > 0) {
+                float missingHpPercent = 1.0f - (player.getHealth() / player.getMaxHealth());
+                if (missingHpPercent > 0.70f) { // only activates below 30% HP
+                    int tenPercentChunks = (int)((missingHpPercent - 0.70f) * 10);
+                    multiplier -= 0.02f * lastStand * tenPercentChunks;
+                }
+            }
         }
 
-        return Math.max(0.0f, multiplier);
+        return Math.max(0.1f, multiplier);
     }
 
     /**

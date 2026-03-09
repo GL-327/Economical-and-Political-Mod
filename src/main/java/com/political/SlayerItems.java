@@ -116,7 +116,7 @@ public class SlayerItems {
             int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), swordType);
 
             if (playerLevel < UPGRADED_SWORD_LEVEL_REQ) {
-                CustomItemHandler.sendLevelWarning(player, swordType.displayName + " Slayer Sword II", UPGRADED_SWORD_LEVEL_REQ, swordType.displayName);
+                CustomItemHandler.sendLevelWarning(player, swordType.displayName + " Bounty Sword II", UPGRADED_SWORD_LEVEL_REQ, swordType.displayName);
                 return 0.0f;
             }
         }
@@ -148,17 +148,24 @@ public class SlayerItems {
         lore.add(Text.literal("Bypasses ").formatted(Formatting.GRAY)
                 .append(Text.literal("Bounty Boss Resistance").formatted(Formatting.GOLD)));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("✦ Slayer Sharpness II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Sharpness II").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Mob Bane I").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Prospector I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + BASIC_SWORD_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        // Custom enchantments (T1 Bounty Swords): Slayer Sharpness 2, Mob Bane 1
+        // Custom enchantments (T1 Bounty Swords): Bounty Sharpness 2, Mob Bane 1, Prospector 1
         CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.SLAYER_SHARPNESS, 2);
         CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.MOB_BANE, 1);
+        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.PROSPECTOR, 1);
+
+        // Frostbite for Slime swords
+        if (type == SlayerManager.SlayerType.SLIME) {
+            CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.FROSTBITE, 1);
+        }
 
         return sword;
     }
@@ -292,12 +299,12 @@ public class SlayerItems {
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Sword II")
+                Text.literal(type.displayName + " Bounty Sword II")
                         .formatted(type.color, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("⚔ Upgraded Slayer Weapon").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("⚔ Upgraded Bounty Weapon").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
                 .append(Text.literal("3x damage").formatted(Formatting.RED, Formatting.BOLD))
@@ -307,22 +314,33 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Counts as 3 kills per kill").formatted(Formatting.GREEN));
         lore.add(Text.literal("Bypasses ").formatted(Formatting.GRAY)
-                .append(Text.literal("Slayer Boss Resistance").formatted(Formatting.GOLD)));
+                .append(Text.literal("Bounty Boss Resistance").formatted(Formatting.GOLD)));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("✦ Slayer Sharpness IV").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Sharpness IV").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Mob Bane II").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Boss Hunter I").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Execute I").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Prospector II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Soulbound I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Slayer Lvl " + UPGRADED_SWORD_LEVEL_REQ)
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + UPGRADED_SWORD_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
         sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
-        // Custom enchantments (T2 Bounty Swords): Slayer Sharpness 4, Mob Bane 2, Boss Hunter 1
+        // Custom enchantments (T2 Bounty Swords): Bounty Sharpness 4, Mob Bane 2, Boss Hunter 1, Execute 1, Prospector 2, Soulbound 1
         CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.SLAYER_SHARPNESS, 4);
         CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.MOB_BANE, 2);
         CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.BOSS_HUNTER, 1);
+        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.EXECUTE, 1);
+        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.PROSPECTOR, 2);
+        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.SOULBOUND, 1);
+
+        // Frostbite for Slime swords
+        if (type == SlayerManager.SlayerType.SLIME) {
+            CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.FROSTBITE, 1);
+        }
 
         return sword;
     }
@@ -667,9 +685,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
 
         if (tier == 1) {
-            lore.add(Text.literal("⚔ Slayer Armor").formatted(Formatting.GRAY));
+            lore.add(Text.literal("⚔ Bounty Armor").formatted(Formatting.GRAY));
         } else {
-            lore.add(Text.literal("⚔ Upgraded Slayer Armor").formatted(Formatting.DARK_PURPLE));
+            lore.add(Text.literal("⚔ Upgraded Bounty Armor").formatted(Formatting.DARK_PURPLE));
         }
 
         lore.add(Text.literal(""));
@@ -688,7 +706,7 @@ public class SlayerItems {
         lore.add(Text.literal(""));
 
         int reqLevel = tier == 1 ? T1_ARMOR_LEVEL_REQ : T2_ARMOR_LEVEL_REQ;
-        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Slayer Lvl " + reqLevel)
+        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + reqLevel)
                 .formatted(Formatting.RED));
 
         return lore;
@@ -710,7 +728,7 @@ public class SlayerItems {
         giveItem(player, boots);
 
         String tierName = tier == 1 ? "" : " II";
-        player.sendMessage(Text.literal("✔ Received full " + type.displayName + " Slayer Armor" + tierName + " set!")
+        player.sendMessage(Text.literal("✔ Received full " + type.displayName + " Bounty Armor" + tierName + " set!")
                 .formatted(Formatting.GREEN), false);
     }
 
@@ -845,7 +863,7 @@ public class SlayerItems {
         String tierName = tier == 1 ? "" : " II";
 
         helmet.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Helmet" + tierName)
+                Text.literal(type.displayName + " Bounty Helmet" + tierName)
                         .formatted(type.color, Formatting.BOLD));
 
         // CUSTOM ARMOR ATTRIBUTES
@@ -880,9 +898,12 @@ public class SlayerItems {
         } else if (type == SlayerManager.SlayerType.WARDEN) {
             CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
             CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOSS_WARD, 2);
+            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.SOULBOUND, 1);
+            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.LAST_STAND, 1);
         } else {
             CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
             CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOSS_WARD, 1);
+            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.SOULBOUND, 1);
         }
 
         return helmet;
@@ -894,7 +915,7 @@ public class SlayerItems {
         String tierName = tier == 1 ? "" : " II";
 
         chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Chestplate" + tierName)
+                Text.literal(type.displayName + " Bounty Chestplate" + tierName)
                         .formatted(type.color, Formatting.BOLD));
 
         // CUSTOM ARMOR ATTRIBUTES - Chestplate = 40% of total
@@ -930,9 +951,12 @@ public class SlayerItems {
             CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
             CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 2);
             CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.VITALITY, 2);
+            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.SOULBOUND, 1);
+            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.LAST_STAND, 2);
         } else {
             CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
             CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 1);
+            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.SOULBOUND, 1);
         }
 
         return chestplate;
@@ -944,7 +968,7 @@ public class SlayerItems {
         String tierName = tier == 1 ? "" : " II";
 
         leggings.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Leggings" + tierName)
+                Text.literal(type.displayName + " Bounty Leggings" + tierName)
                         .formatted(type.color, Formatting.BOLD));
 
         // CUSTOM ARMOR ATTRIBUTES - Leggings = 30% of total
@@ -979,9 +1003,12 @@ public class SlayerItems {
         } else if (type == SlayerManager.SlayerType.WARDEN) {
             CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
             CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOSS_WARD, 2);
+            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.SOULBOUND, 1);
+            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.LAST_STAND, 1);
         } else {
             CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
             CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOSS_WARD, 1);
+            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.SOULBOUND, 1);
         }
 
         return leggings;
@@ -993,7 +1020,7 @@ public class SlayerItems {
         String tierName = tier == 1 ? "" : " II";
 
         boots.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Slayer Boots" + tierName)
+                Text.literal(type.displayName + " Bounty Boots" + tierName)
                         .formatted(type.color, Formatting.BOLD));
 
         // CUSTOM ARMOR ATTRIBUTES - Boots = 10% of total
@@ -1028,9 +1055,12 @@ public class SlayerItems {
         } else if (type == SlayerManager.SlayerType.WARDEN) {
             CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
             CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOSS_WARD, 2);
+            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.SOULBOUND, 1);
+            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.LAST_STAND, 1);
         } else {
             CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
             CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOSS_WARD, 1);
+            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.SOULBOUND, 1);
         }
 
         return boots;
@@ -2280,8 +2310,9 @@ public class SlayerItems {
         lore.add(Text.literal("+50% Accuracy").formatted(Formatting.GREEN));
         lore.add(Text.literal("+50% Damage").formatted(Formatting.GREEN));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("✦ Slayer Sharpness III").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Sharpness III").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Mob Bane II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Prospector I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -2292,6 +2323,7 @@ public class SlayerItems {
         // Custom enchantments
         CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
         CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.MOB_BANE, 2);
+        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.PROSPECTOR, 1);
 
         return bow;
     }
