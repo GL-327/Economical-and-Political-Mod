@@ -840,9 +840,17 @@ public class CustomItemHandler {
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
                         .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
+                Text.literal("✦ Slayer Sharpness III").formatted(Formatting.AQUA),
+                Text.literal("✦ Boss Hunter II").formatted(Formatting.AQUA),
+                Text.literal("✦ Thunderbolt I").formatted(Formatting.AQUA),
+                Text.literal(""),
                 Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        // Custom enchantments: Slayer Sharpness 3, Boss Hunter 2, Thunderbolt 1
+        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
+        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.BOSS_HUNTER, 2);
+        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.THUNDERBOLT, 1);
         return stack;
     }
 

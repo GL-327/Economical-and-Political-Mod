@@ -32,7 +32,8 @@
     "WardenEntityMixin",
     "TotemDisableMixin",
     "BountyDefenseMixin",
-    "BountyDamageMixin"
+    "BountyDamageMixin",
+    "CustomEnchantDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -280,7 +280,7 @@ public class BountyCraftingHandler {
         removeItem(player, Items.NETHERITE_INGOT, 2);
         removeItem(player, Items.WOODEN_AXE, 1);
 
-        player.getInventory().insertStack(SlayerItems.createTheGavel());
+        player.getInventory().insertStack(CustomItemHandler.createTheGavel());
         player.sendMessage(Text.literal("✓ Crafted The Gavel!")
                 .formatted(Formatting.GOLD, Formatting.BOLD), false);
 
@@ -397,8 +397,6 @@ public class BountyCraftingHandler {
 
     private static boolean tryT1ArmorRecipe(ServerPlayerEntity player) {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            // Skip Enderman for now
-            if (type == SlayerManager.SlayerType.ENDERMAN) continue;
 
             String coreName = type.displayName + " Core";
             int cores = countCores(player, coreName);
@@ -477,9 +475,6 @@ public class BountyCraftingHandler {
 
     private static boolean tryT2ArmorRecipe(ServerPlayerEntity player) {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            // Skip Enderman for now
-            if (type == SlayerManager.SlayerType.ENDERMAN) continue;
-
             String coreName = type.displayName + " Core";
             int cores = countCores(player, coreName);
 

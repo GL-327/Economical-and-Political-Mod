@@ -23,37 +23,24 @@ import net.minecraft.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import net.fabricmc.api.DedicatedServerModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import java.util.List;import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.Vec3d;import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.Vec3d;
-import java.util.Optional;import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.minecraft.util.ActionResult;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.minecraft.util.ActionResult;import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;import net.fabricmc.fabric.api.event.player.UseBlockCallback;import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 
 public class PoliticalServer implements DedicatedServerModInitializer {
 
@@ -66,12 +53,12 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
+		BountyCraftingHandler.register();
+		BeamCraftingHandler.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
-
-			ItemStack heldItem = player.getStackInHand(hand);
-			BountyCraftingHandler.register();
 			// Check for any beam weapon (including Ultra Overclocked)
+			ItemStack heldItem = player.getStackInHand(hand);
 			int tier = CustomItemHandler.getBeamTier(heldItem);
 			if (tier > 0) {
 				// Update right-click timestamp to prevent left-click ability from triggering
@@ -328,13 +315,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 				// Player ticks for this world
 				for (ServerPlayerEntity player : world.getPlayers()) {
-					SlayerArmorHandler.applyCustomArmorAttributes(player);
 					ArmorAbilityHandler.tick(player);
 				}
-			}
-			// Player ticks
-			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-				ArmorAbilityHandler.tick(player);
 			}
 
 // Slayer manager
