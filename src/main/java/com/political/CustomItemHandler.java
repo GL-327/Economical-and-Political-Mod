@@ -174,6 +174,36 @@ public class CustomItemHandler {
         return SlayerItems.isAnyBountyItem(stack) || isSlayerCore(stack);
     }
 
+    /**
+     * Returns true for any custom item that should be protected from vanilla consumption
+     * (placement, crafting, smelting).
+     */
+    public static boolean isProtectedItem(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        if (stack.get(DataComponentTypes.CUSTOM_NAME) == null) return false;
+        String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
+        return name.contains("Core") ||
+                name.contains("Chunk") ||
+                name.contains("Bounty") ||
+                name.contains("HPEBM") ||
+                name.contains("Overclocked") ||
+                name.contains("Hermes") ||
+                name.contains("Gavel") ||
+                name.contains("Harvey") ||
+                name.contains("Desperado") ||
+                name.contains("Venomous") ||
+                name.contains("Berserker") ||
+                name.contains("Crawler") ||
+                name.contains("Warden") ||
+                name.contains("Sculk Terror") ||
+                name.contains("Outlaw") ||
+                name.contains("Rustler") ||
+                name.contains("Phantom") ||
+                name.contains("Bandit") ||
+                name.contains("Plasma Emitter") ||
+                SlayerItems.isAnyBountyItem(stack);
+    }
+
     public static boolean isSlayerCore(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
@@ -1394,6 +1424,18 @@ public class CustomItemHandler {
 
         if (!SlayerItems.canUseSpiderLeggings(player)) {
             return;
+        }
+
+        // Delegate to ArmorAbilityHandler which has the full venomous leggings implementation
+        ArmorAbilityHandler.tickVenomousLeggings(player);
+
+        // Wall climbing: when sneaking and touching a wall, apply levitation to simulate climbing
+        if (player.isSneaking() && !player.isOnGround() && player.horizontalCollision) {
+            net.minecraft.util.math.Vec3d vel = player.getVelocity();
+            if (vel.y < 0) {
+                player.setVelocity(vel.x, 0.1, vel.z);
+                player.velocityDirty = true;
+            }
         }
     }
 

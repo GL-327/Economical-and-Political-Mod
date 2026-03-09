@@ -374,6 +374,7 @@ public class SlayerManager {
                 .formatted(Formatting.GREEN), false);
         player.sendMessage(Text.literal("══════════════════════════════")
                 .formatted(Formatting.GOLD), false);
+        player.sendMessage(Text.literal("§8[Charadrius Protocol engaged]"), false);
 
         // Save data
         DataManager.save(PoliticalServer.server);
@@ -655,6 +656,11 @@ public class SlayerManager {
                 .formatted(Formatting.RED), false);
         player.sendMessage(Text.literal(""), false);
 
+        // 20% chance Charadrius MFLUX alert
+        if (world.getRandom().nextFloat() < 0.20f) {
+            player.sendMessage(Text.literal("§8[MFLUX Alert: Charadrius subject detected in your area]"), false);
+        }
+
         // Sound effect
         world.playSound(null, player.getBlockPos(),
                 net.minecraft.sound.SoundEvents.ENTITY_WITHER_SPAWN,
@@ -876,6 +882,10 @@ public class SlayerManager {
                 .formatted(Formatting.GOLD), false);
         owner.sendMessage(Text.literal("  +" + xpGained + " " + type.displayName + " Bounty XP")
                 .formatted(Formatting.AQUA), false);
+        // 20% chance of MFLUX recontainment message
+        if (PoliticalServer.server.getOverworld().getRandom().nextFloat() < 0.20f) {
+            owner.sendMessage(Text.literal("§8[MFLUX: Subject successfully recontained. Data logged.]"), false);
+        }
 
         if (newLevel > oldLevel) {
             for (int lvl = oldLevel + 1; lvl <= newLevel; lvl++) {

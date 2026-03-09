@@ -88,7 +88,7 @@ public class ArmorAbilityHandler {
     // ============================================================
     // VENOMOUS LEGGINGS (Spider Slayer)
     // ============================================================
-    private static void tickVenomousLeggings(ServerPlayerEntity player) {
+    public static void tickVenomousLeggings(ServerPlayerEntity player) {
         ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
         if (!isVenomousLeggings(leggings)) return;
 
