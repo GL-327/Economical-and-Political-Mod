@@ -38,12 +38,19 @@ public class ScoreboardManager {
         // Nothing to do on init; per-player setup happens on join
     }
 
+    private static int displayTickCounter = 0;
+
     public static void tick(MinecraftServer server) {
         tickCounter++;
         if (tickCounter < 20) return;
         tickCounter = 0;
+        displayTickCounter++;
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             updateScoreboard(player);
+            // Re-send display packet every ~10 seconds to ensure scoreboard stays visible
+            if (displayTickCounter % 10 == 0) {
+                sendDisplayPacket(player);
+            }
         }
     }
 

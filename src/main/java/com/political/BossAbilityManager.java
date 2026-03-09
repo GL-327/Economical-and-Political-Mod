@@ -386,10 +386,10 @@ public class BossAbilityManager {
         return switch (tier) {
             case 1, 2 -> zombieGroan(boss, target, world);
             case 3 -> zombieSummonMinions(boss, target, world);
-            case 4 -> zombiePestilence(boss, target, world);
-            case 5 -> zombieUndyingRage(boss, target, world);
+            case 4, 5 -> zombiePestilence(boss, target, world);
             default -> false;
         };
+        // NOTE: Undying Rage is triggered automatically via tickBossAbilities when health < 30%
     }
 
     private static boolean zombieGroan(LivingEntity boss, ServerPlayerEntity target, ServerWorld world) {
