@@ -180,6 +180,9 @@ public class CustomItemHandler {
      */
     public static boolean isProtectedItem(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Check NBT-based bounty identification first (works even without custom name)
+        if (SlayerItems.isAnyBountyItem(stack)) return true;
+        // Then check custom name for other protected items
         if (stack.get(DataComponentTypes.CUSTOM_NAME) == null) return false;
         String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
         return name.contains("Core") ||
@@ -200,8 +203,7 @@ public class CustomItemHandler {
                 name.contains("Rustler") ||
                 name.contains("Phantom") ||
                 name.contains("Bandit") ||
-                name.contains("Plasma Emitter") ||
-                SlayerItems.isAnyBountyItem(stack);
+                name.contains("Plasma Emitter");
     }
 
     public static boolean isSlayerCore(ItemStack stack) {
