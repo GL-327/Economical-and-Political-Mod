@@ -93,7 +93,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			}
 		});
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-			return BountyDamageHandler.onDamage(entity, source, amount);
+			return true; // Damage modification handled by BountyDamageMixin
 		});
 // Mob spawn scaling
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
