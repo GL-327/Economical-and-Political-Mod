@@ -121,10 +121,9 @@ public class EnchantmentScreenHandlerMixin {
         boolean isWeapon = isSword || isAxe;
 
         String applied = null;
-        double roll = political_random.nextDouble();
 
         // 15% chance for Bounty Protection I on any armor
-        if (applied == null && isArmor && roll < 0.15) {
+        if (applied == null && isArmor && political_random.nextDouble() < 0.15) {
             if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.BOUNTY_PROTECTION) == 0) {
                 CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
                 CustomEnchantmentManager.addEnchantmentLore(stack);
@@ -132,7 +131,7 @@ public class EnchantmentScreenHandlerMixin {
             }
         }
         // 10% chance for Slayer Sharpness I on any sword/axe
-        if (applied == null && isWeapon && roll < 0.10) {
+        if (applied == null && isWeapon && political_random.nextDouble() < 0.10) {
             if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.SLAYER_SHARPNESS) == 0) {
                 CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.SLAYER_SHARPNESS, 1);
                 CustomEnchantmentManager.addEnchantmentLore(stack);
@@ -140,7 +139,7 @@ public class EnchantmentScreenHandlerMixin {
             }
         }
         // 5% chance for Mob Bane I on any sword
-        if (applied == null && isSword && roll < 0.05) {
+        if (applied == null && isSword && political_random.nextDouble() < 0.05) {
             if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.MOB_BANE) == 0) {
                 CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.MOB_BANE, 1);
                 CustomEnchantmentManager.addEnchantmentLore(stack);
@@ -148,7 +147,7 @@ public class EnchantmentScreenHandlerMixin {
             }
         }
         // 3% chance for Boss Hunter I on any sword
-        if (applied == null && isSword && roll < 0.03) {
+        if (applied == null && isSword && political_random.nextDouble() < 0.03) {
             if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.BOSS_HUNTER) == 0) {
                 CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.BOSS_HUNTER, 1);
                 CustomEnchantmentManager.addEnchantmentLore(stack);
@@ -156,7 +155,7 @@ public class EnchantmentScreenHandlerMixin {
             }
         }
         // 2% chance for Vampiric I on any helmet
-        if (applied == null && isHelmet && roll < 0.02) {
+        if (applied == null && isHelmet && political_random.nextDouble() < 0.02) {
             if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.VAMPIRIC) == 0) {
                 CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.VAMPIRIC, 1);
                 CustomEnchantmentManager.addEnchantmentLore(stack);
@@ -164,7 +163,7 @@ public class EnchantmentScreenHandlerMixin {
             }
         }
         // 1% chance for Thunderbolt I on any weapon
-        if (applied == null && isWeapon && roll < 0.01) {
+        if (applied == null && isWeapon && political_random.nextDouble() < 0.01) {
             if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.THUNDERBOLT) == 0) {
                 CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.THUNDERBOLT, 1);
                 CustomEnchantmentManager.addEnchantmentLore(stack);

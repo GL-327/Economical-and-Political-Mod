@@ -325,7 +325,7 @@ public class BountyCraftingHandler {
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
             Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().equals(swordName)) {
+            if (name != null && name.getString().contains(swordName)) {
                 return true;
             }
         }
@@ -348,7 +348,7 @@ public class BountyCraftingHandler {
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
             Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().equals(swordName)) {
+            if (name != null && name.getString().contains(swordName)) {
                 stack.decrement(1);
                 return;
             }

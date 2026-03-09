@@ -229,10 +229,7 @@ public class ScoreboardManager {
 
     /** Returns a 6-char hex prefix unique per player (derived from UUID hashCode). */
     private static String getPlayerPrefix(ServerPlayerEntity player) {
-        String hex = Integer.toHexString(Math.abs(player.getUuid().hashCode()));
-        // Zero-pad to 6 chars
-        while (hex.length() < 6) hex = "0" + hex;
-        return hex.substring(0, 6);
+        return String.format("%06x", Math.abs(player.getUuid().hashCode()));
     }
 
     private static String formatNumber(int n) {
