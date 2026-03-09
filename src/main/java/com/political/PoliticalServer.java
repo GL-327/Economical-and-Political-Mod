@@ -329,6 +329,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			// Boss abilities (fixed - no more world iteration)
 // Boss abilities - using efficient entity lookup
 			BossAbilityManager.tickScheduledBlockRemovals();
+			BossAbilityManager.tickAllBossAbilities(s);
 			for (ServerWorld world : s.getWorlds()) {
 				for (UUID bossId : BossAbilityManager.getActiveBosses()) {
 					Entity entity = world.getEntity(bossId);  // O(1) lookup!

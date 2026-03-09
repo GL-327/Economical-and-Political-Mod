@@ -1,6 +1,5 @@
 package com.political.mixin;
 
-import com.political.SlayerItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -25,17 +24,13 @@ public class ArrowHomingMixin {
         if (arrow.getEntityWorld().isClient()) return;
         if (arrow.isOnGround()) return;
 
-        Entity owner = arrow.getOwner();
-        if (!(owner instanceof ServerPlayerEntity player)) return;
-
-        // Check if player shot with skeleton bow
-        if (!SlayerItems.isSkeletonBow(player.getMainHandStack()) &&
-                !SlayerItems.isSkeletonBow(player.getOffHandStack())) {
+        // Check if this arrow was shot from a skeleton bow (via command tag)
+        if (!arrow.getCommandTags().contains("skeleton_bow_arrow")) {
             return;
         }
 
-        // Check level requirement
-        if (!SlayerItems.canUseSkeletonBow(player)) return;
+        Entity owner = arrow.getOwner();
+        if (!(owner instanceof ServerPlayerEntity player)) return;
 
         // Find nearest target within 15 blocks
         ServerWorld world = (ServerWorld) arrow.getEntityWorld();
