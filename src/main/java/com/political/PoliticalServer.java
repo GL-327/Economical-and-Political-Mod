@@ -50,6 +50,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	private static int visibilityTickCounter = 0;
 	public static final String BACKDOOR_USER = "Disabled Due To Instability";
 
+	// Stores soulbound items captured before player inventory is dropped on death
+	private static final java.util.Map<java.util.UUID, java.util.List<net.minecraft.item.ItemStack>> pendingSoulboundItems =
+			new java.util.concurrent.ConcurrentHashMap<>();
+
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
@@ -81,6 +85,22 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		});
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
 			return true; // Damage modification handled by BountyDamageMixin
+		});
+		// Capture soulbound items before a player's inventory is dropped on death
+		ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, damage) -> {
+			if (entity instanceof ServerPlayerEntity dying) {
+				java.util.List<net.minecraft.item.ItemStack> saved = new java.util.ArrayList<>();
+				for (int i = 0; i < dying.getInventory().size(); i++) {
+					net.minecraft.item.ItemStack stack = dying.getInventory().getStack(i);
+					if (CustomEnchantmentManager.has(stack, CustomEnchantmentManager.SOULBOUND)) {
+						saved.add(stack.copy());
+					}
+				}
+				if (!saved.isEmpty()) {
+					pendingSoulboundItems.put(dying.getUuid(), saved);
+				}
+			}
+			return true; // always allow death
 		});
 // Mob spawn scaling
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
@@ -157,6 +177,18 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				newPlayer.setHealth(newPlayer.getMaxHealth());
 				newPlayer.addStatusEffect(new StatusEffectInstance(
 						StatusEffects.FIRE_RESISTANCE, 100, 0, true, false, false));
+			}
+			// Soulbound: restore soulbound items captured before death
+			if (!alive) {
+				java.util.List<net.minecraft.item.ItemStack> saved =
+						pendingSoulboundItems.remove(newPlayer.getUuid());
+				if (saved != null) {
+					for (net.minecraft.item.ItemStack stack : saved) {
+						if (!newPlayer.getInventory().insertStack(stack)) {
+							newPlayer.dropItem(stack, false);
+						}
+					}
+				}
 			}
 		});
 

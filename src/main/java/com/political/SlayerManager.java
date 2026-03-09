@@ -851,8 +851,11 @@ public class SlayerManager {
         TierConfig config = quest.getConfig();
         SlayerType type = quest.slayerType;
 
-        // Award XP
-        long xpGained = config.xpReward;
+        // Award XP (with Prospector bonus)
+        long baseXp = config.xpReward;
+        int prospectorLevel = CustomEnchantmentManager.getLevel(owner.getMainHandStack(), CustomEnchantmentManager.PROSPECTOR);
+        float xpMultiplier = 1.0f + (0.10f * prospectorLevel);
+        long xpGained = (long)(baseXp * xpMultiplier);
         long oldXp = SlayerData.getSlayerXp(ownerUuid, type);
         int oldLevel = getLevelForXp(oldXp);
 

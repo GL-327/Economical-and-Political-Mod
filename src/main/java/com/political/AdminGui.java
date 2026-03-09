@@ -82,7 +82,7 @@ public class AdminGui {
         gui.setSlot(4, new GuiElementBuilder(Items.CHEST)
                 .setName(Text.literal("§6§lCustom Items"))
                 .setLore(List.of(
-                        Text.literal("§7Slayer weapons & armor"),
+                        Text.literal("§7Bounty weapons & armor"),
                         Text.literal("§7HPEBM weapons"),
                         Text.literal("§7Crafting materials")
                 ))
@@ -1177,7 +1177,7 @@ public class AdminGui {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             final SlayerManager.SlayerType finalType = type;
             gui.setSlot(slot, new GuiElementBuilder(Items.IRON_SWORD)
-                    .setName(Text.literal(type.displayName + " Slayer Sword").formatted(type.color, Formatting.BOLD))
+                    .setName(Text.literal(type.displayName + " Bounty Sword").formatted(type.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("2x damage to " + type.displayName + "s").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
@@ -1206,7 +1206,7 @@ public class AdminGui {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             final SlayerManager.SlayerType finalType = type;
             gui.setSlot(slot, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                    .setName(Text.literal(type.displayName + " Slayer Sword II").formatted(type.color, Formatting.BOLD))
+                    .setName(Text.literal(type.displayName + " Bounty Sword II").formatted(type.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("3x damage, counts as 3 kills").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("Click to receive!").formatted(Formatting.GREEN))
@@ -1216,7 +1216,7 @@ public class AdminGui {
                         if (!player.getInventory().insertStack(sword)) {
                             player.dropItem(sword, false);
                         }
-                        player.sendMessage(Text.literal("✔ Received " + finalType.displayName + " Slayer Sword II!")
+                        player.sendMessage(Text.literal("✔ Received " + finalType.displayName + " Bounty Sword II!")
                                 .formatted(Formatting.GREEN), false);
                     })
                     .build());
@@ -1279,7 +1279,7 @@ public class AdminGui {
 
         // Give T2 Armor
         gui.setSlot(11, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
-                .setName(Text.literal("T2 Armor (Slayer II)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .setName(Text.literal("T2 Armor (Bounty II)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Give T2 bounty armor pieces").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Level 8 requirement").formatted(Formatting.DARK_GRAY))
@@ -1308,7 +1308,7 @@ public class AdminGui {
                 .setName(Text.literal("Bounty Swords").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• T1 Bounty Swords (2x damage)").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• T2 Slayer Swords II (3x damage)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• T2 Bounty Swords II (3x damage)").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSwordsGiveGui(player))
@@ -1318,7 +1318,7 @@ public class AdminGui {
         gui.setSlot(14, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("Bounty Cores").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Give slayer cores (crafting material)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Give bounty cores (crafting material)").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openCoresGiveGui(player))
@@ -1342,7 +1342,7 @@ public class AdminGui {
                 .setName(Text.literal("Set Player Bounty Level").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Set a player's bounty level").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("for any slayer type").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("for any bounty type").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSetLevelGui(player))
@@ -1353,7 +1353,7 @@ public class AdminGui {
                 .setName(Text.literal("Set Player Bounty XP").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Set a player's bounty XP").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("for any slayer type").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("for any bounty type").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSetXpGui(player))
@@ -1483,7 +1483,7 @@ public class AdminGui {
 
     private static void openArmorGiveGui(ServerPlayerEntity player, int tier) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        String tierName = tier == 1 ? "T1 Hunter" : "T2 Slayer II";
+        String tierName = tier == 1 ? "T1 Hunter" : "T2 Bounty II";
         gui.setTitle(Text.literal("Give " + tierName + " Armor"));
 
         // Background
@@ -1495,9 +1495,9 @@ public class AdminGui {
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
-                .setName(Text.literal("Select Slayer Type").formatted(tier == 1 ? Formatting.BLUE : Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .setName(Text.literal("Select Bounty Type").formatted(tier == 1 ? Formatting.BLUE : Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Choose a slayer type, then armor piece").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Choose a bounty type, then armor piece").formatted(Formatting.GRAY))
                 .build());
 
         // Slayer type buttons (excluding Enderman)
@@ -1547,7 +1547,7 @@ public class AdminGui {
         final int finalTier = tier;
 
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
-        String tierName = tier == 1 ? "Hunter" : "Slayer II";
+        String tierName = tier == 1 ? "Hunter" : "Bounty II";
         gui.setTitle(Text.literal("Give " + finalType.displayName + " " + tierName + " Armor"));
 
         // Background
@@ -1658,7 +1658,7 @@ public class AdminGui {
 
         // T2 Swords Row
         gui.setSlot(27, new GuiElementBuilder(Items.PAPER)
-                .setName(Text.literal("T2 Slayer Swords II").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .setName(Text.literal("T2 Bounty Swords II").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .glow()
                 .build());
 
@@ -1668,7 +1668,7 @@ public class AdminGui {
             SlayerManager.SlayerType type = types[i];
 
             gui.setSlot(t2Slots[i], new GuiElementBuilder(Items.DIAMOND_SWORD)
-                    .setName(Text.literal(type.displayName + " Slayer Sword II").formatted(type.color, Formatting.BOLD))
+                    .setName(Text.literal(type.displayName + " Bounty Sword II").formatted(type.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("3x damage to " + type.displayName + "s").formatted(Formatting.RED))
                     .addLoreLine(Text.literal("Requires Level 6").formatted(Formatting.GRAY))
@@ -1676,7 +1676,7 @@ public class AdminGui {
                     .addLoreLine(Text.literal("Click to receive").formatted(Formatting.GREEN))
                     .setCallback((idx, clickType, action) -> {
                         player.getInventory().insertStack(SlayerItems.createUpgradedSlayerSword(type));
-                        player.sendMessage(Text.literal("✓ Gave " + type.displayName + " Slayer Sword II")
+                        player.sendMessage(Text.literal("✓ Gave " + type.displayName + " Bounty Sword II")
                                 .formatted(Formatting.GREEN), false);
                     })
                     .glow()
@@ -1701,7 +1701,7 @@ public class AdminGui {
                     for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                         player.getInventory().insertStack(SlayerItems.createUpgradedSlayerSword(type));
                     }
-                    player.sendMessage(Text.literal("✓ Gave all T2 Slayer Swords II").formatted(Formatting.GREEN), false);
+                    player.sendMessage(Text.literal("✓ Gave all T2 Bounty Swords II").formatted(Formatting.GREEN), false);
                 })
                 .glow()
                 .build());
@@ -2911,7 +2911,7 @@ public class AdminGui {
         gui.setSlot(19, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("⚔ Bounty Swords").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Basic slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Basic bounty swords").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openBasicSwordsMenu(player))
                 .build());
@@ -2920,7 +2920,7 @@ public class AdminGui {
         gui.setSlot(21, new GuiElementBuilder(Items.DIAMOND_SWORD)
                 .setName(Text.literal("⚔ Upgraded Swords").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Enhanced slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Enhanced bounty swords").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openUpgradedSwordsMenu(player))
                 .build());
@@ -2971,9 +2971,9 @@ public class AdminGui {
                 .build());
 
         gui.setSlot(37, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
-                .setName(Text.literal("🛡 Slayer Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .setName(Text.literal("🛡 Bounty Armor").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Give slayer armor sets").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Give bounty armor sets").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("T1 and T2 versions").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
@@ -3192,7 +3192,7 @@ private static void openSpawnBossMenu(ServerPlayerEntity player) {
 // ============================================================
 private static void openArmorAdminMenu(ServerPlayerEntity player) {
     SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
-    gui.setTitle(Text.literal("🛡 Slayer Armor Admin"));
+    gui.setTitle(Text.literal("🛡 Bounty Armor Admin"));
 
     for (int i = 0; i < 36; i++) {
         gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
@@ -3202,7 +3202,7 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
     // T1 Armor Sets
     gui.setSlot(1, new GuiElementBuilder(Items.IRON_CHESTPLATE)
             .setName(Text.literal("T1 Armor Sets").formatted(Formatting.WHITE, Formatting.BOLD))
-            .addLoreLine(Text.literal("Basic slayer armor").formatted(Formatting.GRAY))
+            .addLoreLine(Text.literal("Basic bounty armor").formatted(Formatting.GRAY))
             .build());
 
     int slot = 10;
@@ -3223,7 +3223,7 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
     // T2 Armor Sets
     gui.setSlot(7, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
             .setName(Text.literal("T2 Armor Sets").formatted(Formatting.AQUA, Formatting.BOLD))
-            .addLoreLine(Text.literal("Upgraded slayer armor").formatted(Formatting.GRAY))
+            .addLoreLine(Text.literal("Upgraded bounty armor").formatted(Formatting.GRAY))
             .glow()
             .build());
 
@@ -3646,17 +3646,17 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
 
         // === ROW 2: SLAYER ARMOR ===
         gui.setSlot(10, createGiveItemButton(player, SlayerItems.createZombieHelmet(),
-                "§2§lBerserker Helmet", "§7Zombie Slayer Set"));
+                "§2§lBerserker Helmet", "§7Zombie Bounty Set"));
         gui.setSlot(11, createGiveItemButton(player, SlayerItems.createSpiderLeggings(),
-                "§4§lVenomous Leggings", "§7Spider Slayer Set"));
+                "§4§lVenomous Leggings", "§7Spider Bounty Set"));
         gui.setSlot(12, createGiveItemButton(player, SlayerItems.createSkeletonBow(),
-                "§f§lBone Chestplate", "§7Skeleton Slayer Set"));
+                "§f§lBone Chestplate", "§7Skeleton Bounty Set"));
         gui.setSlot(13, createGiveItemButton(player, SlayerItems.createSlimeBoots(),
-                "§a§lSlime Boots", "§7Slime Slayer Set"));
+                "§a§lSlime Boots", "§7Slime Bounty Set"));
         gui.setSlot(14, createGiveItemButton(player, SlayerItems.createEndermanSword(),
-                "§5§lVoid Chestplate", "§7Enderman Slayer Set"));
+                "§5§lVoid Chestplate", "§7Enderman Bounty Set"));
         gui.setSlot(15, createGiveItemButton(player, SlayerItems.createWardenChestplate(),
-                "§3§lWarden Chestplate", "§7Warden Slayer Set"));
+                "§3§lWarden Chestplate", "§7Warden Bounty Set"));
 
         // === ROW 3: CRAFTING CHUNKS ===
         gui.setSlot(19, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.ZOMBIE),
