@@ -250,7 +250,7 @@ public class BountyCraftingHandler {
                 removeSlayerSword(player, type);
 
                 player.getInventory().insertStack(SlayerItems.createUpgradedSlayerSword(type));
-                player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Slayer Sword II!")
+                player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Bounty Sword II!")
                         .formatted(type.color, Formatting.BOLD), false);
                 return true;
             }
@@ -531,7 +531,7 @@ public class BountyCraftingHandler {
         removeItem(player, secondaryItem, secondaryRequired);
 
         player.getInventory().insertStack(SlayerItems.createT2Armor(type, piece));
-        player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Slayer " + piece.displayName + " II!")
+        player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Bounty " + piece.displayName + " II!")
                 .formatted(type.color, Formatting.BOLD), false);
 
         return true;
