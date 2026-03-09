@@ -1,13 +1,164 @@
 package com.political;
 
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 
-import java.util.List;import net.minecraft.server.network.ServerPlayerEntity;
+import java.util.List;
 
 public class BeamCraftingHandler {
 
     public static void register() {
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+            BlockPos pos = hitResult.getBlockPos();
+            if (!world.getBlockState(pos).isOf(Blocks.SMITHING_TABLE)) return ActionResult.PASS;
+
+            ItemStack heldItem = player.getStackInHand(hand);
+            if (!CustomItemHandler.isAnyBeamWeapon(heldItem)) return ActionResult.PASS;
+
+            int tier = CustomItemHandler.getBeamTier(heldItem);
+            if (tryBeamUpgrade(serverPlayer, tier)) {
+                return ActionResult.SUCCESS;
+            }
+            return ActionResult.PASS;
+        });
+    }
+
+    private static boolean tryBeamUpgrade(ServerPlayerEntity player, int currentTier) {
+        return switch (currentTier) {
+            // Mk1 (tier 2) -> Mk2 (tier 3): 4 Iron Blocks + 2 Redstone Blocks
+            case 2 -> tryStandardUpgrade(player, currentTier,
+                    Items.IRON_BLOCK, 4, Items.REDSTONE_BLOCK, 2);
+            // Mk2 (tier 3) -> Mk3 (tier 4): 4 Diamond Blocks + 4 Redstone Blocks
+            case 3 -> tryStandardUpgrade(player, currentTier,
+                    Items.DIAMOND_BLOCK, 4, Items.REDSTONE_BLOCK, 4);
+            // Mk3 (tier 4) -> Mk4 (tier 5): 2 Netherite Ingots + 4 Glowstone
+            case 4 -> tryStandardUpgrade(player, currentTier,
+                    Items.NETHERITE_INGOT, 2, Items.GLOWSTONE, 4);
+            // Mk4 (tier 5) -> Mk5 (tier 6): 4 Netherite Ingots + 8 Glowstone
+            case 5 -> tryStandardUpgrade(player, currentTier,
+                    Items.NETHERITE_INGOT, 4, Items.GLOWSTONE, 8);
+            // Mk5 (tier 6) -> Ultra Overclocked (tier 7): 2 Warden Cores + 2 Nether Stars
+            case 6 -> tryWardenCoreUpgrade(player);
+            default -> false;
+        };
+    }
+
+    private static boolean tryStandardUpgrade(ServerPlayerEntity player, int currentTier,
+                                               net.minecraft.item.Item mat1, int count1,
+                                               net.minecraft.item.Item mat2, int count2) {
+        if (countItem(player, mat1) < count1 || countItem(player, mat2) < count2) {
+            player.sendMessage(Text.literal("✗ Requires: " + count1 + "x " + mat1.getName().getString()
+                    + " and " + count2 + "x " + mat2.getName().getString()).formatted(Formatting.RED), false);
+            return false;
+        }
+
+        player.getMainHandStack().decrement(1);
+        removeItem(player, mat1, count1);
+        removeItem(player, mat2, count2);
+
+        ItemStack upgraded = getUpgradedBeam(currentTier);
+        if (upgraded != null) {
+            if (!player.getInventory().insertStack(upgraded)) {
+                player.dropItem(upgraded, false);
+            }
+            player.sendMessage(Text.literal("✓ Upgraded to " + getBeamName(currentTier + 1) + "!")
+                    .formatted(Formatting.AQUA, Formatting.BOLD), false);
+        }
+        return true;
+    }
+
+    private static boolean tryWardenCoreUpgrade(ServerPlayerEntity player) {
+        int cores = countWardenCores(player);
+        int stars = countItem(player, Items.NETHER_STAR);
+
+        if (cores < 2 || stars < 2) {
+            player.sendMessage(Text.literal("✗ Requires: 2x Warden's Core and 2x Nether Star")
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
+
+        player.getMainHandStack().decrement(1);
+        removeWardenCores(player, 2);
+        removeItem(player, Items.NETHER_STAR, 2);
+
+        ItemStack upgraded = CustomItemHandler.createUltraOverclockedBeam();
+        if (!player.getInventory().insertStack(upgraded)) {
+            player.dropItem(upgraded, false);
+        }
+        player.sendMessage(Text.literal("✓ Upgraded to Ultra Overclocked HPEBM!")
+                .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD), false);
+        return true;
+    }
+
+    private static ItemStack getUpgradedBeam(int currentTier) {
+        return switch (currentTier) {
+            case 2 -> CustomItemHandler.createUltraBeamMk(2);
+            case 3 -> CustomItemHandler.createUltraBeamMk(3);
+            case 4 -> CustomItemHandler.createUltraBeamMk(4);
+            case 5 -> CustomItemHandler.createUltraBeamMk(5);
+            default -> null;
+        };
+    }
+
+    private static String getBeamName(int tier) {
+        return switch (tier) {
+            case 3 -> "HPEBM Mk2";
+            case 4 -> "HPEBM Mk3";
+            case 5 -> "HPEBM Mk4";
+            case 6 -> "HPEBM Mk5";
+            case 7 -> "Ultra Overclocked HPEBM";
+            default -> "HPEBM Mk" + (tier - 1);
+        };
+    }
+
+    private static int countItem(ServerPlayerEntity player, net.minecraft.item.Item item) {
+        int count = 0;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isOf(item)) count += stack.getCount();
+        }
+        return count;
+    }
+
+    private static int countWardenCores(ServerPlayerEntity player) {
+        int count = 0;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            if (CustomItemHandler.isWardenCore(player.getInventory().getStack(i))) count++;
+        }
+        return count;
+    }
+
+    private static void removeItem(ServerPlayerEntity player, net.minecraft.item.Item item, int amount) {
+        int remaining = amount;
+        for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isOf(item)) {
+                int toRemove = Math.min(remaining, stack.getCount());
+                stack.decrement(toRemove);
+                remaining -= toRemove;
+            }
+        }
+    }
+
+    private static void removeWardenCores(ServerPlayerEntity player, int amount) {
+        int remaining = amount;
+        for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (CustomItemHandler.isWardenCore(stack)) {
+                stack.decrement(1);
+                remaining--;
+            }
+        }
     }
 
     public static ItemStack checkBeamRecipe(List<ItemStack> grid) {
