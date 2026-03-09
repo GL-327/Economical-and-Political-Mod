@@ -305,6 +305,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TaxManager.checkPlayerJoin(player);
 			DictatorManager.checkPlayerJoin(player);
 			ScoreboardManager.onPlayerJoin(player);
+			VanishManager.onPlayerJoin(player);
 			sendJoinInfo(player);
 		});
 
@@ -317,6 +318,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
 			ScoreboardManager.tick(s);
+			VanishManager.tick(s);
 
 			// Boss abilities - iterate worlds
 			for (ServerWorld world : s.getWorlds()) {

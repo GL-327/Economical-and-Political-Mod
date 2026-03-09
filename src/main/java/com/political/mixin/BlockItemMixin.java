@@ -17,16 +17,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BlockItemMixin {
 
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
-    private void political_preventHPEBMPlacement(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
+    private void political_preventCustomItemPlacement(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         ItemStack stack = context.getStack();
 
-        if (CustomItemHandler.isHPEBM(stack)) {
+        if (CustomItemHandler.isProtectedItem(stack)) {
             // Cancel the placement entirely
             cir.setReturnValue(ActionResult.FAIL);
 
             if (context.getPlayer() instanceof ServerPlayerEntity serverPlayer) {
                 serverPlayer.sendMessage(
-                        Text.literal("You cannot place beam weapons!").formatted(Formatting.RED),
+                        Text.literal("You cannot place this custom item!").formatted(Formatting.RED),
                         true
                 );
             }

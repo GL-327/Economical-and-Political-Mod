@@ -379,6 +379,7 @@ public class SlayerItems {
         lore.add(Text.literal("✦ Prospector II").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Soulbound I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("§8MFLUX Classified: Charadrius Mk.II"));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + UPGRADED_SWORD_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
@@ -950,19 +951,7 @@ public class SlayerItems {
             helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         }
 
-        // Custom enchantments by tier
-        if (tier == 1) {
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
-        } else if (type == SlayerManager.SlayerType.WARDEN) {
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOSS_WARD, 2);
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.SOULBOUND, 1);
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.LAST_STAND, 1);
-        } else {
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOSS_WARD, 1);
-            CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.SOULBOUND, 1);
-        }
+        // Custom enchantments removed - armor comes without pre-applied enchantments
 
         return helmet;
     }
@@ -1002,20 +991,7 @@ public class SlayerItems {
             chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         }
 
-        // Custom enchantments by tier
-        if (tier == 1) {
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
-        } else if (type == SlayerManager.SlayerType.WARDEN) {
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 2);
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.VITALITY, 2);
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.SOULBOUND, 1);
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.LAST_STAND, 2);
-        } else {
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 1);
-            CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.SOULBOUND, 1);
-        }
+        // Custom enchantments removed - armor comes without pre-applied enchantments
 
         return chestplate;
     }
@@ -1055,19 +1031,7 @@ public class SlayerItems {
             leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         }
 
-        // Custom enchantments by tier
-        if (tier == 1) {
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
-        } else if (type == SlayerManager.SlayerType.WARDEN) {
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOSS_WARD, 2);
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.SOULBOUND, 1);
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.LAST_STAND, 1);
-        } else {
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOSS_WARD, 1);
-            CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.SOULBOUND, 1);
-        }
+        // Custom enchantments removed - armor comes without pre-applied enchantments
 
         return leggings;
     }
@@ -1107,19 +1071,7 @@ public class SlayerItems {
             boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         }
 
-        // Custom enchantments by tier
-        if (tier == 1) {
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
-        } else if (type == SlayerManager.SlayerType.WARDEN) {
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOSS_WARD, 2);
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.SOULBOUND, 1);
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.LAST_STAND, 1);
-        } else {
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOSS_WARD, 1);
-            CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.SOULBOUND, 1);
-        }
+        // Custom enchantments removed - armor comes without pre-applied enchantments
 
         return boots;
     }
@@ -1239,21 +1191,11 @@ public class SlayerItems {
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-35% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("✦ Bounty Protection IV").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Boss Ward II").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Vitality III").formatted(Formatting.AQUA));
-        lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments: Bounty Protection 4, Boss Ward 2, Vitality 3
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 4);
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 2);
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.VITALITY, 3);
 
         return chestplate;
     }
@@ -1320,19 +1262,11 @@ public class SlayerItems {
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("✦ Bounty Protection II").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Thorns of Vengeance I").formatted(Formatting.AQUA));
-        lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-        CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.THORNS_OF_VENGEANCE, 1);
 
         return leggings;
     }
@@ -1405,9 +1339,6 @@ public class SlayerItems {
                 .formatted(Formatting.RED));
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
 
         return boots;
     }
@@ -2346,18 +2277,11 @@ public class SlayerItems {
         lore.add(Text.literal("-50% Max Health").formatted(Formatting.RED));
         lore.add(Text.literal("+300% Damage").formatted(Formatting.GREEN));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("✦ Bounty Protection II").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Vampiric I").formatted(Formatting.AQUA));
-        lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + BERSERKER_HELMET_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-        CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.VAMPIRIC, 1);
 
         return helmet;
     }

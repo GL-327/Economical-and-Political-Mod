@@ -703,6 +703,45 @@ public class ShopManager {
         SELL_PRICES.put(item, sellPrice);
     }
 
+    // ===== OPERATOR PRICE CONTROL =====
+
+    // Items disabled by operators
+    private static final Set<Item> disabledItems = new HashSet<>();
+
+    // Custom price overrides (survives resetPrices if saved)
+    private static final Map<Item, Integer> customPriceOverrides = new LinkedHashMap<>();
+
+    public static void setCustomPrice(Item item, int sellPrice) {
+        SELL_PRICES.put(item, sellPrice);
+        customPriceOverrides.put(item, sellPrice);
+    }
+
+    public static void disableItem(Item item) {
+        disabledItems.add(item);
+    }
+
+    public static void enableItem(Item item) {
+        disabledItems.remove(item);
+    }
+
+    public static boolean isDisabled(Item item) {
+        return disabledItems.contains(item);
+    }
+
+    public static void resetPrices() {
+        customPriceOverrides.clear();
+        disabledItems.clear();
+        initializePrices();
+    }
+
+    public static Map<Item, Integer> getCustomOverrides() {
+        return new LinkedHashMap<>(customPriceOverrides);
+    }
+
+    public static Set<Item> getDisabledItems() {
+        return new HashSet<>(disabledItems);
+    }
+
     // ===== BALANCE MANAGEMENT =====
 
     public static void setBalance(String uuid, long balance) {
@@ -730,6 +769,7 @@ public class ShopManager {
     }
 
     public static boolean canBeSold(Item item) {
+        if (isDisabled(item)) return false;
         return SELL_PRICES.containsKey(item) && SELL_PRICES.get(item) > 0;
     }
 

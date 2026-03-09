@@ -33,7 +33,9 @@
     "TotemDisableMixin",
     "BountyDefenseMixin",
     "BountyDamageMixin",
-    "CustomEnchantDamageMixin"
+    "CustomEnchantDamageMixin",
+    "ArrowDamageMixin",
+    "BowItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,5 +1,6 @@
 package com.political.mixin;
 
+import com.political.CustomItemHandler;
 import com.political.SlayerItems;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -25,7 +26,7 @@ public class CraftingMixin {
                                                   CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe,
                                                   CallbackInfo ci) {
 
-        boolean hasCustomItem = false;
+        boolean hasProtectedItem = false;
         boolean hasNormalSword = false;
         boolean hasNormalShovel = false;
         boolean hasHPEBM = false;
@@ -34,46 +35,25 @@ public class CraftingMixin {
             ItemStack stack = craftingInventory.getStack(i);
             if (stack.isEmpty()) continue;
 
-            if (isCustomItem(stack)) {
-                hasCustomItem = true;
-                if (isHPEBM(stack)) hasHPEBM = true;
+            if (CustomItemHandler.isProtectedItem(stack)) {
+                hasProtectedItem = true;
+                if (CustomItemHandler.isHPEBM(stack)) hasHPEBM = true;
             }
             if (isNormalSword(stack)) hasNormalSword = true;
             if (isNormalShovel(stack)) hasNormalShovel = true;
         }
 
-        // Prevent combining custom items with normal swords/shovels
-        if (hasCustomItem && (hasNormalSword || (hasHPEBM && hasNormalShovel))) {
+        // Prevent combining protected items with normal swords/shovels
+        // or prevent protected items from being consumed in any vanilla recipe
+        if (hasProtectedItem && (hasNormalSword || (hasHPEBM && hasNormalShovel))) {
             resultInventory.setStack(0, ItemStack.EMPTY);
             ci.cancel();
         }
     }
 
-    private static boolean isCustomItem(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        return SlayerItems.isSlayerSword(stack) ||
-                SlayerItems.isSlayerCore(stack) ||
-                isHPEBM(stack) ||
-                isGavel(stack);
-    }
-
-    private static boolean isHPEBM(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.getName();
-        if (name == null) return false;
-        return name.getString().contains("HPEBM");
-    }
-
-    private static boolean isGavel(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        Text name = stack.getName();
-        if (name == null) return false;
-        return name.getString().contains("Gavel");
-    }
-
     private static boolean isNormalSword(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        if (isCustomItem(stack)) return false;
+        if (CustomItemHandler.isProtectedItem(stack)) return false;
         return stack.isOf(Items.IRON_SWORD) ||
                 stack.isOf(Items.DIAMOND_SWORD) ||
                 stack.isOf(Items.NETHERITE_SWORD);
@@ -81,7 +61,7 @@ public class CraftingMixin {
 
     private static boolean isNormalShovel(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        if (isCustomItem(stack)) return false;
+        if (CustomItemHandler.isProtectedItem(stack)) return false;
         return stack.isOf(Items.IRON_SHOVEL) ||
                 stack.isOf(Items.DIAMOND_SHOVEL) ||
                 stack.isOf(Items.NETHERITE_SHOVEL);
