@@ -2,6 +2,8 @@ package com.political;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.nbt.NbtCompound;
 
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -44,12 +46,50 @@ public class SlayerItems {
 
     private static final String SLAYER_SWORD_TAG = "BOUNTY_SWORD";
     private static final String SLAYER_CORE_TAG = "BOUNTY_CORE";
+    public static final String BOUNTY_SWORD_TYPE_TAG = "bounty_sword_type";
+    public static final String BOUNTY_SWORD_UPGRADED_TAG = "bounty_sword_upgraded";
+
+    /** Returns the thematic display name for a T1 bounty sword of the given type. */
+    public static String getSwordDisplayName(SlayerManager.SlayerType type) {
+        return switch (type) {
+            case ZOMBIE   -> "Outlaw's Cleaver";
+            case SPIDER   -> "Bandit's Fang";
+            case SKELETON -> "Desperado's Rifle";
+            case SLIME    -> "Rustler's Lasso";
+            case ENDERMAN -> "Phantom's Edge";
+            case WARDEN   -> "Terror's Grasp";
+        };
+    }
+
+    /** Returns the thematic display name for a T2 (upgraded) bounty sword of the given type. */
+    public static String getUpgradedSwordDisplayName(SlayerManager.SlayerType type) {
+        return getSwordDisplayName(type) + " II";
+    }
+
+    /** Writes bounty sword identification NBT into the item's CustomData. */
+    private static void setBountySwordNbt(ItemStack stack, SlayerManager.SlayerType type, boolean upgraded) {
+        NbtComponent existing = stack.get(DataComponentTypes.CUSTOM_DATA);
+        NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
+        nbt.putString(BOUNTY_SWORD_TYPE_TAG, type.name());
+        if (upgraded) nbt.putBoolean(BOUNTY_SWORD_UPGRADED_TAG, true);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    }
 
     public static boolean isSlayerSword(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Prefer NBT-based identification (new swords)
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data != null) {
+            NbtCompound nbt = data.copyNbt();
+            if (nbt.contains(BOUNTY_SWORD_TYPE_TAG) && !nbt.getBoolean(BOUNTY_SWORD_UPGRADED_TAG, false)) {
+                return true;
+            }
+        }
+        // Fallback: name-based for backward compatibility
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
-        return name.getString().contains("Bounty Sword");
+        String n = name.getString();
+        return n.contains("Bounty Sword") && !n.contains("Bounty Sword II");
     }
 
     public static boolean isSlayerCore(ItemStack stack) {
@@ -77,7 +117,20 @@ public class SlayerItems {
     }
 
     public static SlayerManager.SlayerType getSwordSlayerType(ItemStack stack) {
-        if (!isSlayerSword(stack)) return null;
+        if (stack == null || stack.isEmpty()) return null;
+        // Prefer NBT-based identification (new swords)
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data != null) {
+            NbtCompound nbt = data.copyNbt();
+            String typeName = nbt.getString(BOUNTY_SWORD_TYPE_TAG, null);
+            if (typeName != null) {
+                for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                    if (type.name().equals(typeName)) return type;
+                }
+            }
+        }
+        // Fallback: name-based for backward compat
+        if (!isSlayerSword(stack) && !isUpgradedSlayerSword(stack)) return null;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return null;
         String nameStr = name.getString();
@@ -103,7 +156,7 @@ public class SlayerItems {
             int requiredLevel = BASIC_SWORD_LEVEL_REQ;
 
             if (playerLevel < requiredLevel) {
-                CustomItemHandler.sendLevelWarning(player, swordType.displayName + " Bounty Sword", requiredLevel, swordType.displayName);
+                CustomItemHandler.sendLevelWarning(player, getSwordDisplayName(swordType), requiredLevel, swordType.displayName);
                 return 0.0f; // No damage!
             }
         }
@@ -116,7 +169,7 @@ public class SlayerItems {
             int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), swordType);
 
             if (playerLevel < UPGRADED_SWORD_LEVEL_REQ) {
-                CustomItemHandler.sendLevelWarning(player, swordType.displayName + " Bounty Sword II", UPGRADED_SWORD_LEVEL_REQ, swordType.displayName);
+                CustomItemHandler.sendLevelWarning(player, getUpgradedSwordDisplayName(swordType), UPGRADED_SWORD_LEVEL_REQ, swordType.displayName);
                 return 0.0f;
             }
         }
@@ -131,7 +184,7 @@ public class SlayerItems {
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Sword")
+                Text.literal(getSwordDisplayName(type))
                         .formatted(type.color, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
@@ -166,6 +219,9 @@ public class SlayerItems {
         if (type == SlayerManager.SlayerType.SLIME) {
             CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.FROSTBITE, 1);
         }
+
+        // Tag for NBT-based identification (must be added after enchantments)
+        setBountySwordNbt(sword, type, false);
 
         return sword;
     }
@@ -299,7 +355,7 @@ public class SlayerItems {
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Sword II")
+                Text.literal(getUpgradedSwordDisplayName(type))
                         .formatted(type.color, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
@@ -342,15 +398,17 @@ public class SlayerItems {
             CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.FROSTBITE, 1);
         }
 
+        // Tag for NBT-based identification (must be added after enchantments)
+        setBountySwordNbt(sword, type, true);
+
         return sword;
     }
-
 
     public static ItemStack createSlayerSwordForPlayer(ServerPlayerEntity player, SlayerManager.SlayerType type) {
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Hunter's Sword")
+                Text.literal(getSwordDisplayName(type))
                         .formatted(type.color, Formatting.BOLD));
 
         int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
@@ -2188,6 +2246,15 @@ public class SlayerItems {
 
     public static boolean isUpgradedSlayerSword(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Prefer NBT-based identification (new swords)
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data != null) {
+            NbtCompound nbt = data.copyNbt();
+            if (nbt.contains(BOUNTY_SWORD_TYPE_TAG) && nbt.getBoolean(BOUNTY_SWORD_UPGRADED_TAG, false)) {
+                return true;
+            }
+        }
+        // Fallback: name-based for backward compat
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         String n = name.getString();

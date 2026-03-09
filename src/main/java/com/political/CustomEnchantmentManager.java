@@ -2,8 +2,13 @@ package com.political;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages custom enchantments stored as NBT data in item CustomData components.
@@ -210,5 +215,66 @@ public class CustomEnchantmentManager {
             };
         }
         return false;
+    }
+
+    // ── Lore helpers ─────────────────────────────────────────────
+
+    /**
+     * Alias for {@link #getLevel} for API compatibility.
+     */
+    public static int getEnchantmentLevel(ItemStack stack, String enchantment) {
+        return getLevel(stack, enchantment);
+    }
+
+    /**
+     * Appends lore lines for all active custom enchantments on the item.
+     * Lines are added in a consistent order.
+     */
+    public static void addEnchantmentLore(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return;
+        NbtCompound nbt = data.copyNbt();
+        if (!nbt.contains(ENCHANT_TAG)) return;
+        NbtCompound enchants = nbt.getCompound(ENCHANT_TAG).orElse(null);
+        if (enchants == null) return;
+
+        LoreComponent existing = stack.get(DataComponentTypes.LORE);
+        List<Text> lore = existing != null ? new ArrayList<>(existing.lines()) : new ArrayList<>();
+
+        String[][] entries = {
+            {SLAYER_SHARPNESS,      "✦ Slayer Sharpness"},
+            {BOSS_HUNTER,           "✦ Boss Hunter"},
+            {MOB_BANE,              "✦ Mob Bane"},
+            {VAMPIRIC,              "✦ Vampiric"},
+            {THUNDERBOLT,           "✦ Thunderbolt"},
+            {BOUNTY_PROTECTION,     "✦ Bounty Protection"},
+            {BOSS_WARD,             "✦ Boss Ward"},
+            {VITALITY,              "✦ Vitality"},
+            {THORNS_OF_VENGEANCE,   "✦ Thorns of Vengeance"},
+            {EXECUTE,               "✦ Execute"},
+            {FROSTBITE,             "✦ Frostbite"},
+            {LAST_STAND,            "✦ Last Stand"},
+            {SOULBOUND,             "✦ Soulbound"},
+            {PROSPECTOR,            "✦ Prospector"},
+        };
+        for (String[] entry : entries) {
+            int level = enchants.getInt(entry[0], 0);
+            if (level > 0) {
+                lore.add(Text.literal(entry[1] + " " + toRoman(level)).formatted(Formatting.AQUA));
+            }
+        }
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+    }
+
+    private static String toRoman(int level) {
+        return switch (level) {
+            case 1 -> "I";
+            case 2 -> "II";
+            case 3 -> "III";
+            case 4 -> "IV";
+            case 5 -> "V";
+            default -> String.valueOf(level);
+        };
     }
 }

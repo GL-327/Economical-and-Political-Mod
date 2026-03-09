@@ -1,10 +1,17 @@
 package com.political.mixin;
 
+import com.political.CustomEnchantmentManager;
 import com.political.PerkManager;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.screen.EnchantmentScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Random;
 
 @Mixin(EnchantmentScreenHandler.class)
 public class EnchantmentScreenHandlerMixin {
@@ -21,6 +29,10 @@ public class EnchantmentScreenHandlerMixin {
     @Final
     @Shadow
     public int[] enchantmentPower;
+
+    @Final
+    @Shadow
+    private Inventory inventory;
 
     // Track the original unmodified values
     @Unique
@@ -72,5 +84,98 @@ public class EnchantmentScreenHandlerMixin {
             }
         }
         return true;
+    }
+
+    // ── Enchanting table bonus custom enchantments ───────────────
+
+    @Inject(method = "onButtonClick", at = @At("RETURN"))
+    private void political_onEnchantApply(PlayerEntity player, int id, CallbackInfoReturnable<Boolean> cir) {
+        if (!Boolean.TRUE.equals(cir.getReturnValue())) return;
+        if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
+
+        ItemStack stack = this.inventory.getStack(0);
+        if (stack.isEmpty()) return;
+
+        political_applyBonusEnchantments(serverPlayer, stack);
+    }
+
+    @Unique
+    private static final Random political_random = new Random();
+
+    @Unique
+    private void political_applyBonusEnchantments(ServerPlayerEntity player, ItemStack stack) {
+        net.minecraft.entity.EquipmentSlot equipSlot = null;
+        net.minecraft.component.type.EquippableComponent equippable =
+                stack.get(net.minecraft.component.DataComponentTypes.EQUIPPABLE);
+        if (equippable != null) equipSlot = equippable.slot();
+
+        boolean isArmor  = equipSlot == net.minecraft.entity.EquipmentSlot.HEAD
+                        || equipSlot == net.minecraft.entity.EquipmentSlot.CHEST
+                        || equipSlot == net.minecraft.entity.EquipmentSlot.LEGS
+                        || equipSlot == net.minecraft.entity.EquipmentSlot.FEET;
+        boolean isHelmet = equipSlot == net.minecraft.entity.EquipmentSlot.HEAD;
+        boolean isSword  = stack.isOf(Items.WOODEN_SWORD) || stack.isOf(Items.STONE_SWORD)
+                        || stack.isOf(Items.IRON_SWORD)   || stack.isOf(Items.GOLDEN_SWORD)
+                        || stack.isOf(Items.DIAMOND_SWORD) || stack.isOf(Items.NETHERITE_SWORD);
+        boolean isAxe    = stack.getItem() instanceof net.minecraft.item.AxeItem;
+        boolean isWeapon = isSword || isAxe;
+
+        String applied = null;
+        double roll = political_random.nextDouble();
+
+        // 15% chance for Bounty Protection I on any armor
+        if (applied == null && isArmor && roll < 0.15) {
+            if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.BOUNTY_PROTECTION) == 0) {
+                CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
+                CustomEnchantmentManager.addEnchantmentLore(stack);
+                applied = "Bounty Protection I";
+            }
+        }
+        // 10% chance for Slayer Sharpness I on any sword/axe
+        if (applied == null && isWeapon && roll < 0.10) {
+            if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.SLAYER_SHARPNESS) == 0) {
+                CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.SLAYER_SHARPNESS, 1);
+                CustomEnchantmentManager.addEnchantmentLore(stack);
+                applied = "Slayer Sharpness I";
+            }
+        }
+        // 5% chance for Mob Bane I on any sword
+        if (applied == null && isSword && roll < 0.05) {
+            if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.MOB_BANE) == 0) {
+                CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.MOB_BANE, 1);
+                CustomEnchantmentManager.addEnchantmentLore(stack);
+                applied = "Mob Bane I";
+            }
+        }
+        // 3% chance for Boss Hunter I on any sword
+        if (applied == null && isSword && roll < 0.03) {
+            if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.BOSS_HUNTER) == 0) {
+                CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.BOSS_HUNTER, 1);
+                CustomEnchantmentManager.addEnchantmentLore(stack);
+                applied = "Boss Hunter I";
+            }
+        }
+        // 2% chance for Vampiric I on any helmet
+        if (applied == null && isHelmet && roll < 0.02) {
+            if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.VAMPIRIC) == 0) {
+                CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.VAMPIRIC, 1);
+                CustomEnchantmentManager.addEnchantmentLore(stack);
+                applied = "Vampiric I";
+            }
+        }
+        // 1% chance for Thunderbolt I on any weapon
+        if (applied == null && isWeapon && roll < 0.01) {
+            if (CustomEnchantmentManager.getLevel(stack, CustomEnchantmentManager.THUNDERBOLT) == 0) {
+                CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.THUNDERBOLT, 1);
+                CustomEnchantmentManager.addEnchantmentLore(stack);
+                applied = "Thunderbolt I";
+            }
+        }
+
+        if (applied != null) {
+            player.sendMessage(Text.literal("✦ Bonus: ").formatted(Formatting.GOLD)
+                    .append(Text.literal(applied).formatted(Formatting.AQUA, Formatting.BOLD))
+                    .append(Text.literal(" applied!").formatted(Formatting.GOLD)), false);
+        }
     }
 }
