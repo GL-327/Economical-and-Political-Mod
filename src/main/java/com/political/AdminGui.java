@@ -2980,6 +2980,17 @@ public class AdminGui {
                 .setCallback((idx, type, action) -> openArmorAdminMenu(player))
                 .build());
 
+        // Custom Enchantments
+        gui.setSlot(39, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("✦ Custom Enchantments").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Apply custom enchantments").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("to held items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCustomEnchantmentsMenu(player))
+                .build());
+
         // Back button
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Admin Menu").formatted(Formatting.YELLOW))
@@ -3772,5 +3783,154 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
         }
 
         player.sendMessage(Text.literal("§a✓ Given " + given + " items!"), false);
+    }
+
+    // ============================================================
+    // CUSTOM ENCHANTMENTS ADMIN MENU
+    // ============================================================
+
+    public static void openCustomEnchantmentsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✦ Custom Enchantments").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("✦ Custom Enchantments").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Hold an item and click to apply").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Left-click: Level 1  |  Right-click: Max Level").formatted(Formatting.YELLOW))
+                .build());
+
+        // ── OFFENSIVE ENCHANTMENTS ───────────────────────────────
+        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Slayer Sharpness").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: V").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+15% damage per level to all mobs").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left: Lvl 1  |  Right: Lvl 5").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.SLAYER_SHARPNESS,
+                        type == ClickType.MOUSE_RIGHT ? 5 : 1, "Slayer Sharpness"))
+                .build());
+
+        gui.setSlot(11, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("☠ Boss Hunter").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: III").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+25% damage per level vs slayer bosses").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left: Lvl 1  |  Right: Lvl 3").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.BOSS_HUNTER,
+                        type == ClickType.MOUSE_RIGHT ? 3 : 1, "Boss Hunter"))
+                .build());
+
+        gui.setSlot(12, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("☠ Mob Bane").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: III").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+20% damage per level vs matching mob type").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left: Lvl 1  |  Right: Lvl 3").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.MOB_BANE,
+                        type == ClickType.MOUSE_RIGHT ? 3 : 1, "Mob Bane"))
+                .build());
+
+        gui.setSlot(13, new GuiElementBuilder(Items.SPIDER_EYE)
+                .setName(Text.literal("🩸 Vampiric").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: I").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Heals on kill").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left/Right: Lvl 1").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.VAMPIRIC,
+                        1, "Vampiric"))
+                .build());
+
+        gui.setSlot(14, new GuiElementBuilder(Items.LIGHTNING_ROD)
+                .setName(Text.literal("⚡ Thunderbolt").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: I").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Strikes lightning on hit").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left/Right: Lvl 1").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.THUNDERBOLT,
+                        1, "Thunderbolt"))
+                .build());
+
+        // ── DEFENSIVE ENCHANTMENTS ────────────────────────────────
+        gui.setSlot(19, new GuiElementBuilder(Items.SHIELD)
+                .setName(Text.literal("🛡 Bounty Protection").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: IV").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("-5% all damage per level").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left: Lvl 1  |  Right: Lvl 4").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.BOUNTY_PROTECTION,
+                        type == ClickType.MOUSE_RIGHT ? 4 : 1, "Bounty Protection"))
+                .build());
+
+        gui.setSlot(20, new GuiElementBuilder(Items.TOTEM_OF_UNDYING)
+                .setName(Text.literal("🛡 Boss Ward").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: III").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("-10% boss damage per level").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left: Lvl 1  |  Right: Lvl 3").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.BOSS_WARD,
+                        type == ClickType.MOUSE_RIGHT ? 3 : 1, "Boss Ward"))
+                .build());
+
+        gui.setSlot(21, new GuiElementBuilder(Items.GOLDEN_APPLE)
+                .setName(Text.literal("❤ Vitality").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: III").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+4 max HP per level").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left: Lvl 1  |  Right: Lvl 3").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.VITALITY,
+                        type == ClickType.MOUSE_RIGHT ? 3 : 1, "Vitality"))
+                .build());
+
+        gui.setSlot(22, new GuiElementBuilder(Items.CACTUS)
+                .setName(Text.literal("🌵 Thorns of Vengeance").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Max Level: I").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Reflects damage to attackers").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left/Right: Lvl 1").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> applyEnchant(player, CustomEnchantmentManager.THORNS_OF_VENGEANCE,
+                        1, "Thorns of Vengeance"))
+                .build());
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomItemsAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void applyEnchant(ServerPlayerEntity player, String enchant, int level, String name) {
+        ItemStack held = player.getMainHandStack();
+        if (held.isEmpty()) {
+            player.sendMessage(Text.literal("✗ Hold an item in your main hand first!").formatted(Formatting.RED), false);
+            return;
+        }
+        CustomEnchantmentManager.addEnchantment(held, enchant, level);
+        CustomEnchantmentManager.addEnchantmentLore(held);
+        String roman = switch (level) {
+            case 1 -> "I"; case 2 -> "II"; case 3 -> "III"; case 4 -> "IV"; case 5 -> "V"; default -> String.valueOf(level);
+        };
+        player.sendMessage(Text.literal("✦ Applied ").formatted(Formatting.GOLD)
+                .append(Text.literal(name + " " + roman).formatted(Formatting.AQUA, Formatting.BOLD))
+                .append(Text.literal(" to held item!").formatted(Formatting.GOLD)), false);
     }
 }

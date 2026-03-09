@@ -218,7 +218,7 @@ public class BountyCraftingHandler {
                 removeItem(player, Items.STICK, 2);
 
                 player.getInventory().insertStack(SlayerItems.createSlayerSword(type));
-                player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Bounty Sword!")
+                player.sendMessage(Text.literal("✓ Crafted " + SlayerItems.getSwordDisplayName(type) + "!")
                         .formatted(type.color, Formatting.BOLD), false);
                 return true;
             }
@@ -250,7 +250,7 @@ public class BountyCraftingHandler {
                 removeSlayerSword(player, type);
 
                 player.getInventory().insertStack(SlayerItems.createUpgradedSlayerSword(type));
-                player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Bounty Sword II!")
+                player.sendMessage(Text.literal("✓ Crafted " + SlayerItems.getUpgradedSwordDisplayName(type) + "!")
                         .formatted(type.color, Formatting.BOLD), false);
                 return true;
             }
@@ -313,6 +313,14 @@ public class BountyCraftingHandler {
     // HELPER METHODS FOR SLAYER SWORDS
     // ============================================================
     private static boolean hasSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (SlayerItems.isSlayerSword(stack) || SlayerItems.isUpgradedSlayerSword(stack)) {
+                SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(stack);
+                if (swordType == type && SlayerItems.isSlayerSword(stack)) return true;
+            }
+        }
+        // Fallback: name-based for backward compatibility
         String swordName = type.displayName + " Bounty Sword";
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
@@ -325,6 +333,17 @@ public class BountyCraftingHandler {
     }
 
     private static void removeSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (SlayerItems.isSlayerSword(stack)) {
+                SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(stack);
+                if (swordType == type) {
+                    stack.decrement(1);
+                    return;
+                }
+            }
+        }
+        // Fallback: name-based for backward compatibility
         String swordName = type.displayName + " Bounty Sword";
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);

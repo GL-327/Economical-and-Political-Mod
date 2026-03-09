@@ -279,6 +279,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			DataManager.load(s);
 			AuctionHouseManager.load(s);
 			UndergroundAuctionManager.load(s);
+			ScoreboardManager.init(s);
 			LOGGER.info("PoliticalServer data loaded");
 		});
 
@@ -303,6 +304,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			PrisonManager.checkPlayerJoin(player);
 			TaxManager.checkPlayerJoin(player);
 			DictatorManager.checkPlayerJoin(player);
+			ScoreboardManager.onPlayerJoin(player);
 			sendJoinInfo(player);
 		});
 
@@ -310,9 +312,11 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			ServerPlayerEntity player = handler.getPlayer();
 			AuctionHouseGui.onPlayerDisconnect(player);
 			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
+			ScoreboardManager.onPlayerDisconnect(player);
 		});
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
+			ScoreboardManager.tick(s);
 
 			// Boss abilities - iterate worlds
 			for (ServerWorld world : s.getWorlds()) {
