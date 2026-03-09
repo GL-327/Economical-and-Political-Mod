@@ -564,14 +564,14 @@ public class RecipesGui {
                                                 net.minecraft.item.Item mat1, int count1,
                                                 net.minecraft.item.Item mat2, int count2) {
         // Show the ingredients needed for upgrade (displayed in crafting grid for visual purposes)
-        // Using grid to show: mat1 x count1, mat2 x count2
+        // targetTier is the Mk number of the resulting beam (e.g., 2 = Mk2, 3 = Mk3, etc.)
         ItemStack mat1Stack = new ItemStack(mat1, count1);
         ItemStack mat2Stack = new ItemStack(mat2, count2);
-        // Grid: [mat1, mat1, mat2] / [mat1, HPEBM, mat2] / [mat1, mat2, mat2]
-        ItemStack currentBeam = CustomItemHandler.createUltraBeamMk(targetTier - 1);
+        // Grid: [mat1, mat1, mat2] / [mat1, previousBeam, mat2] / [mat1, mat2, mat2]
+        ItemStack previousBeam = CustomItemHandler.createUltraBeamMk(targetTier - 1);
         ItemStack[] grid = {
                 mat1Stack.copy(), mat1Stack.copy(), mat2Stack.copy(),
-                mat1Stack.copy(), currentBeam,      mat2Stack.copy(),
+                mat1Stack.copy(), previousBeam,     mat2Stack.copy(),
                 mat1Stack.copy(), mat2Stack.copy(),  mat2Stack.copy()
         };
         // Trim counts to fit (display purposes only)
@@ -585,13 +585,8 @@ public class RecipesGui {
         grid[8].setCount(Math.min(count2, 16));
 
         ItemStack result = CustomItemHandler.createUltraBeamMk(targetTier);
-        String tierName = switch (targetTier) {
-            case 3 -> "Mk2";
-            case 4 -> "Mk3";
-            case 5 -> "Mk4";
-            case 6 -> "Mk5";
-            default -> "Mk" + (targetTier - 1);
-        };
+        // targetTier IS the Mk number of the result (e.g., targetTier=2 → "Mk2")
+        String tierName = "Mk" + targetTier;
         openRecipePage(player, "⚡ HPEBM " + tierName,
                 Text.literal("⚡ HPEBM → " + tierName + " Upgrade (Smithing Table)").formatted(Formatting.AQUA, Formatting.BOLD),
                 grid, result, () -> openHPEBMRecipes(player));

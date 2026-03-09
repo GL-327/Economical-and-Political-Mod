@@ -22,6 +22,9 @@ public class ScoreboardManager {
 
     // Tick counter for throttling updates
     private static int tickCounter = 0;
+    private static int displayTickCounter = 0;
+    // How often (in seconds) to re-send the display packet to keep scoreboard visible
+    private static final int DISPLAY_REFRESH_INTERVAL_SECONDS = 10;
 
     // Per-player data: objective name → objective
     private static final Map<UUID, String> playerObjectiveNames = new ConcurrentHashMap<>();
@@ -38,8 +41,6 @@ public class ScoreboardManager {
         // Nothing to do on init; per-player setup happens on join
     }
 
-    private static int displayTickCounter = 0;
-
     public static void tick(MinecraftServer server) {
         tickCounter++;
         if (tickCounter < 20) return;
@@ -47,8 +48,8 @@ public class ScoreboardManager {
         displayTickCounter++;
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             updateScoreboard(player);
-            // Re-send display packet every ~10 seconds to ensure scoreboard stays visible
-            if (displayTickCounter % 10 == 0) {
+            // Re-send display packet periodically to ensure scoreboard stays visible
+            if (displayTickCounter % DISPLAY_REFRESH_INTERVAL_SECONDS == 0) {
                 sendDisplayPacket(player);
             }
         }
