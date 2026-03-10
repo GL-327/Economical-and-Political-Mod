@@ -59,6 +59,24 @@ public class CommandRegistry {
         registerForceUndergroundAuction(dispatcher);
         registerCustomMob(dispatcher);
 
+        dispatcher.register(CommandManager.literal("setrecipe")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    RecipeEditorGui.openRecipeList(player);
+                    return 1;
+                })
+        );
+
+        dispatcher.register(CommandManager.literal("customitems")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    CustomItemsGui.open(player);
+                    return 1;
+                })
+        );
+
         dispatcher.register(CommandManager.literal("recipes")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();

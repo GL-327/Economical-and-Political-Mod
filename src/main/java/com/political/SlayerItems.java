@@ -631,6 +631,8 @@ public class SlayerItems {
         setCustomItemId(sword, "abyssal_blade");
         return sword;
     }
+
+    public static ItemStack createChunk(SlayerManager.SlayerType type) {
         ItemStack chunk = new ItemStack(type.icon);
 
         String chunkName = switch (type) {
@@ -992,7 +994,9 @@ public class SlayerItems {
 
         setCustomItemId(helmet, type.name().toLowerCase() + "_t" + tier + "_helmet");
         return helmet;
-    }(SlayerManager.SlayerType type, int tier) {
+    }
+
+    public static ItemStack createSlayerChestplate(SlayerManager.SlayerType type, int tier) {
         ArmorStats stats = getArmorStats(type, tier);
         ItemStack chestplate = new ItemStack(tier == 1 ? Items.IRON_CHESTPLATE : Items.DIAMOND_CHESTPLATE);
         String tierName = tier == 1 ? "" : " II";
@@ -1031,7 +1035,9 @@ public class SlayerItems {
 
         setCustomItemId(chestplate, type.name().toLowerCase() + "_t" + tier + "_chestplate");
         return chestplate;
-    }(SlayerManager.SlayerType type, int tier) {
+    }
+
+    public static ItemStack createSlayerLeggings(SlayerManager.SlayerType type, int tier) {
         ArmorStats stats = getArmorStats(type, tier);
         ItemStack leggings = new ItemStack(tier == 1 ? Items.IRON_LEGGINGS : Items.DIAMOND_LEGGINGS);
         String tierName = tier == 1 ? "" : " II";
@@ -1308,6 +1314,37 @@ public class SlayerItems {
 
         setCustomItemId(leggings, "spider_leggings");
         return leggings;
+    }
+
+    public static ItemStack createSkeletonBow() {
+        ItemStack bow = new ItemStack(Items.BOW);
+
+        bow.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🦴 Bone Desperado Bow")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD));
+
+        bow.set(DataComponentTypes.MAX_DAMAGE, 3840);
+        bow.set(DataComponentTypes.DAMAGE, 0);
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Carved from the bones of a").formatted(Formatting.GRAY));
+        lore.add(Text.literal("thousand fallen archers.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("🏹 Homing Arrows").formatted(Formatting.WHITE));
+        lore.add(Text.literal("⚡ +50% Arrow Speed").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        setCustomItemId(bow, "skeleton_bow");
+        return bow;
     }
 
     public static ItemStack createSlimeBoots() {
@@ -2360,39 +2397,8 @@ public class SlayerItems {
 
         setCustomItemId(helmet, "zombie_berserker_helmet");
         return helmet;
-    } {
-        ItemStack bow = new ItemStack(Items.BOW);
-
-        bow.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("💀 Bone Desperado Bow")
-                        .formatted(Formatting.WHITE, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("BOUNTY WEAPON").formatted(Formatting.WHITE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("+50% Arrow Speed").formatted(Formatting.GREEN));
-        lore.add(Text.literal("+50% Accuracy").formatted(Formatting.GREEN));
-        lore.add(Text.literal("+50% Damage").formatted(Formatting.GREEN));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("✦ Bounty Sharpness III").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Mob Bane II").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Prospector I").formatted(Formatting.AQUA));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.MOB_BANE, 2);
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.PROSPECTOR, 1);
-
-        setCustomItemId(bow, "skeleton_bow");
-        return bow;
     }
+
     // Add this enum inside SlayerItems class
     public enum ArmorPiece {
         HELMET("Helmet", Items.NETHERITE_HELMET),

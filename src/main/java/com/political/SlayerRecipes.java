@@ -248,6 +248,10 @@ public class SlayerRecipes {
         ));
     }
 
+    public static List<Recipe> getRecipes() {
+        return java.util.Collections.unmodifiableList(RECIPES);
+    }
+
     public static List<Recipe> getAllRecipes() {
         return new ArrayList<>(RECIPES);
     }

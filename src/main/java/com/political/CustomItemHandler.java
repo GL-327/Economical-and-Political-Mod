@@ -286,7 +286,9 @@ public class CustomItemHandler {
 
         SlayerItems.setCustomItemId(gavel, "the_gavel");
         return gavel;
-    }(ServerPlayerEntity player, ItemStack gavelStack) {
+    }
+
+    public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
         UUID uuid = player.getUuid();
         long now = System.currentTimeMillis();
 

@@ -310,19 +310,8 @@ public class ArmorAbilityHandler {
         // Check level requirement
         if (!SlayerItems.canUseZombieBerserkerHelmet(player)) return;
 
-        // Passive: Strength boost when low HP (below 50%)
-        float healthPercent = player.getHealth() / player.getMaxHealth();
-        if (healthPercent < 0.5f) {
-            // Strength scales with missing health
-            int strengthLevel = healthPercent < 0.25f ? 2 : 1;
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.STRENGTH, 40, strengthLevel,
-                    true, false, false
-            ));
-        }
-
-        // REMOVED: Mob damage aura - this was causing issues
-        // The helmet should only buff the player, not damage mobs passively
+        // NOTE: Damage buff (+300%) is handled via BerserkerDamageMixin (melee only).
+        // No passive effects applied here — the helmet's power comes solely from the damage mixin.
     }
 
     private static boolean isBerserkerHelmet(ItemStack stack) {
