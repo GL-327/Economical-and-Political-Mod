@@ -913,15 +913,11 @@ public class SlayerItems {
     }
 
     public static ItemStack createTheGavel() {
-        ItemStack stack = createSlayerSword(SlayerManager.SlayerType.WARDEN);
-        setCustomItemId(stack, "the_gavel");
-        return stack;
+        return CustomItemHandler.createGavel();
     }
 
     public static ItemStack createZombieHelmet() {
-        ItemStack stack = createSlayerSword(SlayerManager.SlayerType.WARDEN);
-        setCustomItemId(stack, "zombie_berserker_helmet");
-        return stack;
+        return createZombieBerserkerHelmet();
     }
 
     // ============================================================
