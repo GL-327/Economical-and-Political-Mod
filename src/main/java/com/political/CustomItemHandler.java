@@ -228,6 +228,16 @@ public class CustomItemHandler {
     public static ItemStack createHPEBM(int mk) {
         ItemStack weapon = new ItemStack(Items.IRON_SHOVEL);
 
+        // Unique names per tier
+        String[] names = {
+            "HPEBM Mk.I — Prototype",
+            "HPEBM Mk.II — Standard Issue",
+            "HPEBM Mk.III — Advanced",
+            "HPEBM Mk.IV — Elite",
+            "HPEBM Mk.V — Legendary"
+        };
+        String name = (mk >= 1 && mk <= 5) ? names[mk - 1] : "HPEBM Mk" + mk;
+
         Formatting color = switch (mk) {
             case 1 -> Formatting.WHITE;
             case 2 -> Formatting.GREEN;
@@ -238,20 +248,84 @@ public class CustomItemHandler {
         };
 
         weapon.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("HPEBM Mk" + mk)
-                        .formatted(color, Formatting.BOLD));
+                Text.literal(name).formatted(color, Formatting.BOLD));
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("High-Powered Energy Beam").formatted(Formatting.AQUA));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Power Level: " + mk).formatted(Formatting.YELLOW));
-        lore.add(Text.literal("Damage: " + (5 * mk)).formatted(Formatting.RED));
 
-        if (mk >= 4) {
-            lore.add(Text.literal(""));
-            lore.add(Text.literal(mk == 5 ? "§d§lLEGENDARY" : "§6§lRAREf"));
+        // Tier classification
+        String tierTag = switch (mk) {
+            case 1 -> "◆ COMMON";
+            case 2 -> "◆ UNCOMMON";
+            case 3 -> "◆ RARE";
+            case 4 -> "◆ EPIC";
+            case 5 -> "◆ LEGENDARY";
+            default -> "◆ UNKNOWN";
+        };
+        Formatting tierColor = switch (mk) {
+            case 1 -> Formatting.GRAY;
+            case 2 -> Formatting.GREEN;
+            case 3 -> Formatting.BLUE;
+            case 4 -> Formatting.GOLD;
+            case 5 -> Formatting.LIGHT_PURPLE;
+            default -> Formatting.GRAY;
+        };
+        lore.add(Text.literal(tierTag + " — High-Powered Energy Beam").formatted(tierColor, Formatting.BOLD));
+        lore.add(Text.literal(""));
+
+        // Unique flavor text per tier
+        switch (mk) {
+            case 1 -> {
+                lore.add(Text.literal("An experimental energy emitter salvaged from").formatted(Formatting.GRAY));
+                lore.add(Text.literal("classified research archives. Unstable but").formatted(Formatting.GRAY));
+                lore.add(Text.literal("functional as a proof-of-concept weapon.").formatted(Formatting.GRAY));
+            }
+            case 2 -> {
+                lore.add(Text.literal("Military-grade energy emitter issued to elite").formatted(Formatting.GRAY));
+                lore.add(Text.literal("field operatives. Refined plasma containment").formatted(Formatting.GRAY));
+                lore.add(Text.literal("ensures consistent output under field conditions.").formatted(Formatting.GRAY));
+            }
+            case 3 -> {
+                lore.add(Text.literal("Equipped with an enhanced focusing crystal,").formatted(Formatting.GRAY));
+                lore.add(Text.literal("this unit concentrates plasma into a tighter").formatted(Formatting.GRAY));
+                lore.add(Text.literal("beam with explosive endpoint detonation.").formatted(Formatting.GRAY));
+            }
+            case 4 -> {
+                lore.add(Text.literal("Forged from rare celestial alloys, this unit").formatted(Formatting.GRAY));
+                lore.add(Text.literal("was commissioned by the highest echelons of").formatted(Formatting.GRAY));
+                lore.add(Text.literal("command. Few have ever seen one in person.").formatted(Formatting.GRAY));
+            }
+            case 5 -> {
+                lore.add(Text.literal("The pinnacle of plasma engineering. Rumored").formatted(Formatting.GRAY));
+                lore.add(Text.literal("to have been assembled using the core of a").formatted(Formatting.GRAY));
+                lore.add(Text.literal("collapsed star. Maximum power. Maximum risk.").formatted(Formatting.GRAY));
+            }
         }
+
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(color));
+        lore.add(Text.literal("⚡ Damage/tick: ").formatted(Formatting.WHITE)
+                .append(Text.literal(String.valueOf(5 * mk)).formatted(Formatting.RED, Formatting.BOLD)));
+        int xpCost = Math.max(1, mk - 2);
+        lore.add(Text.literal("💡 XP Cost: ").formatted(Formatting.WHITE)
+                .append(Text.literal(xpCost + " level(s)/sec").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("📡 Beam Range: ").formatted(Formatting.WHITE)
+                .append(Text.literal("30 blocks").formatted(Formatting.AQUA)));
+
+        if (mk >= 3) {
+            float explosionDmg = switch (mk) {
+                case 3, 4 -> 0.0f;
+                case 5 -> 4.0f;
+                default -> 0.0f;
+            };
+            if (mk >= 5) {
+                lore.add(Text.literal("💥 Endpoint Explosion: ").formatted(Formatting.WHITE)
+                        .append(Text.literal(explosionDmg + " dmg, 2.0 radius").formatted(Formatting.GOLD)));
+            }
+        }
+
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Right-click: Continuous beam (hold)").formatted(Formatting.YELLOW));
 
         weapon.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
@@ -710,13 +784,19 @@ public class CustomItemHandler {
         ItemStack weapon = attacker.getMainHandStack();
         float modifiedDamage = baseDamage;
 
-        // Apply slayer sword multiplier
+        // Apply T1 slayer sword multiplier (2x)
         double swordMultiplier = SlayerItems.getSlayerSwordDamageMultiplier(weapon, target, attacker);
         modifiedDamage *= (float) swordMultiplier;
 
+        // Apply T2 slayer sword multiplier (3x) — only if T1 multiplier wasn't already applied
+        if (swordMultiplier == 1.0) {
+            double upgradedMultiplier = SlayerItems.getUpgradedSlayerSwordDamageMultiplier(weapon, target, attacker);
+            modifiedDamage *= (float) upgradedMultiplier;
+        }
+
         // Apply boss damage resistance (only for non-slayer weapons)
         if (SlayerManager.isSlayerBoss(target.getUuid())) {
-            if (!SlayerItems.bypassesSlayerResistance(weapon)) {
+            if (!SlayerItems.bypassesSlayerResistance(weapon) && !SlayerItems.isUpgradedSlayerSword(weapon)) {
                 double resistance = SlayerManager.getDamageResistance(target.getUuid());
                 modifiedDamage *= (float) (1.0 - resistance);
             }
@@ -801,13 +881,13 @@ public class CustomItemHandler {
         }
     }
 
-    // Call this when player deals damage to apply the 3x multiplier
+    // Call this when player deals damage to apply the 4x multiplier (300% MORE damage dealt = 4x total)
     public static float getBerserkerDamageMultiplier(ServerPlayerEntity player) {
         ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
 
         if (SlayerItems.isZombieBerserkerHelmet(helmet) &&
                 SlayerItems.canUseZombieBerserkerHelmet(player)) {
-            return 3.0f; // 300% damage [1]
+            return 4.0f; // +300% damage = 4x total
         }
 
         return 1.0f;
@@ -976,25 +1056,34 @@ public class CustomItemHandler {
     public static ItemStack createUltraOverclockedBeam() {
         ItemStack beam = new ItemStack(Items.GOLDEN_SHOVEL);
         beam.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Ultra Overclocked Energy Based Plasma Emitter")
-                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+                Text.literal("HPEBM Mk.VII — Ultra Overclocked")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         beam.set(DataComponentTypes.LORE, new LoreComponent(List.of(
                 Text.literal("").formatted(Formatting.DARK_PURPLE),
-                Text.literal("◆ ULTIMATE WEAPON ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal("◆ MYTHIC — Beyond Classification ◆").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
                 Text.literal(""),
-                Text.literal("Right-click: Devastating beam attack").formatted(Formatting.RED),
+                Text.literal("This unit operates beyond all known safety").formatted(Formatting.GRAY),
+                Text.literal("parameters. Its containment field has been").formatted(Formatting.GRAY),
+                Text.literal("removed entirely. Catastrophic by design.").formatted(Formatting.GRAY),
+                Text.literal("Only one is known to exist.").formatted(Formatting.DARK_GRAY),
+                Text.literal(""),
+                Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE),
+                Text.literal("⚡ Damage/tick: ").formatted(Formatting.WHITE)
+                        .append(Text.literal("35").formatted(Formatting.RED, Formatting.BOLD)),
+                Text.literal("💡 XP Cost: ").formatted(Formatting.WHITE)
+                        .append(Text.literal("5 levels/sec").formatted(Formatting.YELLOW)),
+                Text.literal("📡 Beam Range: ").formatted(Formatting.WHITE)
+                        .append(Text.literal("30 blocks").formatted(Formatting.AQUA)),
+                Text.literal("💥 Endpoint Explosion: ").formatted(Formatting.WHITE)
+                        .append(Text.literal("10 dmg, 3.0 radius").formatted(Formatting.GOLD)),
+                Text.literal(""),
+                Text.literal("Right-click: Devastating beam (hold)").formatted(Formatting.RED),
                 Text.literal("Left-click: Sonic Devastation").formatted(Formatting.DARK_PURPLE),
-                Text.literal("  └ 10s cooldown").formatted(Formatting.GRAY),
+                Text.literal("  └ AOE devastation, 10s cooldown").formatted(Formatting.GRAY),
                 Text.literal(""),
-                Text.literal("Damage: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("250").formatted(Formatting.RED, Formatting.BOLD)),
-                Text.literal("Explosion Power: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("8.0").formatted(Formatting.GOLD, Formatting.BOLD)),
-                Text.literal(""),
-                Text.literal("「Tier VII」").formatted(Formatting.DARK_PURPLE)
+                Text.literal("「Tier VII — Mythic」").formatted(Formatting.DARK_PURPLE)
         )));
         beam.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-// Alternative: just set max damage very high and don't let it break
         beam.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
         beam.set(DataComponentTypes.DAMAGE, 0);
         return beam;
@@ -1271,18 +1360,36 @@ public class CustomItemHandler {
         if (stack == null || stack.isEmpty()) return 0;
         if (!stack.isOf(Items.IRON_SHOVEL) && !stack.isOf(Items.GOLDEN_SHOVEL)) return 0;
 
-        // Check by custom name first
+        // Prefer custom_item_id for reliable tier detection
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId != null) {
+            if (customId.equals("hpebm_ultra")) return 7;
+            if (customId.equals("hpebm_mk5")) return 6;
+            if (customId.equals("hpebm_mk4")) return 5;
+            if (customId.equals("hpebm_mk3")) return 4;
+            if (customId.equals("hpebm_mk2")) return 3;
+            if (customId.equals("hpebm_mk1")) return 2;
+        }
+
+        // Fallback: check by custom name
         if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
             Text nameText = stack.get(DataComponentTypes.CUSTOM_NAME);
             if (nameText != null) {
                 String name = nameText.getString();
-                if (name.contains("Ultra Overclocked")) return 7;  // Tier 7 - Ultimate
-                if (name.contains("Mk5")) return 6;                 // Tier 6
-                if (name.contains("Mk4")) return 5;                 // Tier 5
-                if (name.contains("Mk3")) return 4;                 // Tier 4
-                if (name.contains("Mk2")) return 3;                 // Tier 3
-                if (name.contains("Mk1")) return 2;                 // Tier 2
-                if (name.contains("Ultra")) return 1;               // Tier 1 (Ultra HPEBM, no Mk)
+                if (name.contains("Ultra Overclocked") || name.contains("Mk.VII")) return 7;
+                // New Roman numeral names
+                if (name.contains("Mk.V")) return 6;
+                if (name.contains("Mk.IV")) return 5;
+                if (name.contains("Mk.III")) return 4;
+                if (name.contains("Mk.II")) return 3;
+                if (name.contains("Mk.I")) return 2;
+                // Legacy numeric names
+                if (name.contains("Mk5")) return 6;
+                if (name.contains("Mk4")) return 5;
+                if (name.contains("Mk3")) return 4;
+                if (name.contains("Mk2")) return 3;
+                if (name.contains("Mk1")) return 2;
+                if (name.contains("Ultra")) return 1;
                 if (name.contains("H.P.E.B.M.") || name.contains("HPEBM")) return 0; // Base tier
             }
         }

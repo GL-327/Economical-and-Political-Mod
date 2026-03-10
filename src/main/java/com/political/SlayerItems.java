@@ -507,6 +507,34 @@ public class SlayerItems {
         return 1.0;
     }
 
+    public static double getUpgradedSlayerSwordDamageMultiplier(ItemStack weapon, LivingEntity target, ServerPlayerEntity player) {
+        if (!isUpgradedSlayerSword(weapon)) return 1.0;
+
+        SlayerManager.SlayerType swordType = getSwordSlayerType(weapon);
+        if (swordType == null) return 1.0;
+
+        // Level requirement check
+        int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), swordType);
+        if (playerLevel < UPGRADED_SWORD_LEVEL_REQ) return 1.0;
+
+        boolean isMatchingMob = isMatchingMobType(target, swordType);
+        boolean isMatchingBoss = false;
+        if (SlayerManager.isSlayerBoss(target.getUuid())) {
+            SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(target.getUuid());
+            isMatchingBoss = (bossType == swordType);
+        }
+
+        if (isMatchingMob || isMatchingBoss) {
+            return 3.0; // T2 sword: 3x damage as stated in lore
+        }
+
+        if (SlayerManager.isSlayerBoss(target.getUuid())) {
+            return 2.0; // Better bonus vs non-matching bosses
+        }
+
+        return 1.0;
+    }
+
     public static boolean bypassesSlayerResistance(ItemStack weapon) {
         return isSlayerSword(weapon);
     }
@@ -1228,13 +1256,25 @@ public class SlayerItems {
         lore.add(Text.literal("vs Warden Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-90% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-35% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-30% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Protection III").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Boss Ward II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Vitality II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Thorns of Vengeance I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        // Custom enchantments
+        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
+        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 2);
+        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.VITALITY, 2);
+        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.THORNS_OF_VENGEANCE, 1);
 
         setCustomItemId(chestplate, "warden_chestplate");
         return chestplate;
@@ -1269,7 +1309,7 @@ public class SlayerItems {
                 .add(EntityAttributes.MOVEMENT_SPEED,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "spider_speed"),
-                                0.05,  // +50% speed
+                                0.50,  // +50% speed
                                 EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                         ),
                         AttributeModifierSlot.LEGS)
@@ -1302,11 +1342,19 @@ public class SlayerItems {
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Protection II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Vitality I").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        // Custom enchantments
+        CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
+        CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.VITALITY, 1);
 
         setCustomItemId(leggings, "spider_leggings");
         return leggings;
@@ -1334,12 +1382,21 @@ public class SlayerItems {
         lore.add(Text.literal("⚡ Instant Fire (Left-Click)").formatted(Formatting.AQUA));
         lore.add(Text.literal("⏱ 0.6s Cooldown").formatted(Formatting.GRAY));
         lore.add(Text.literal("⚡ +50% Arrow Speed").formatted(Formatting.AQUA));
+        lore.add(Text.literal("💀 Headshot: x5 Damage").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Slayer Sharpness III").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Boss Hunter I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
         bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        // Custom enchantments
+        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
+        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.BOSS_HUNTER, 1);
 
         setCustomItemId(bow, "skeleton_bow");
         return bow;
@@ -1409,10 +1466,18 @@ public class SlayerItems {
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Protection II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Last Stand I").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + SLIME_BOOTS_LEVEL_REQ)
                 .formatted(Formatting.RED));
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        // Custom enchantments
+        CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
+        CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.LAST_STAND, 1);
 
         setCustomItemId(boots, "slime_boots");
         return boots;
@@ -2384,14 +2449,34 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("-50% Max Health").formatted(Formatting.RED));
-        lore.add(Text.literal("+300% Damage").formatted(Formatting.GREEN));
+        lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
+        lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
+                .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
+        lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
+                .append(Text.literal("x4 (300% MORE)").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-75% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Bounty Protection I").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ Vampiric II").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Zombie Bounty Lvl " + BERSERKER_HELMET_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        // Custom enchantments
+        CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
+        CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.VAMPIRIC, 2);
 
         setCustomItemId(helmet, "zombie_berserker_helmet");
         return helmet;

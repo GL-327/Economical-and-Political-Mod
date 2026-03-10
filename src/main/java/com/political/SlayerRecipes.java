@@ -34,49 +34,7 @@ public class SlayerRecipes {
     public static final int LEATHER_BOOTS_DURABILITY = 650;       // Default: 65
     public static final int NETHERITE_CHESTPLATE_DURABILITY = 4070; // Default: 407
     public static final int BOW_DURABILITY = 3840;                // Default: 384
-    public static final int SLIME_BOOTS_LEVEL_REQ = 8;
-    public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
-    public static final int SKELETON_BOW_LEVEL_REQ = 10;
-    public static final int SPIDER_LEGGINGS_LEVEL_REQ = 10;
-    // ============================================================
-// WARDEN CHESTPLATE - With increased durability
-// ============================================================
-    public static ItemStack createWardenChestplate() {
-        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
-
-        // Set custom name
-        chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("💀 Sculk Terror Chestplate")
-                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
-
-        // INCREASED DURABILITY - 10x default netherite chestplate (407 -> 4070)
-        chestplate.set(DataComponentTypes.MAX_DAMAGE, NETHERITE_CHESTPLATE_DURABILITY);
-        chestplate.set(DataComponentTypes.DAMAGE, 0);
-
-        // Add lore
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Forged from the sculk of").formatted(Formatting.GRAY));
-        lore.add(Text.literal("the deepest ancient cities.").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("👁 ESP: ").formatted(Formatting.WHITE)
-                .append(Text.literal("See noisy entities").formatted(Formatting.AQUA)));
-        lore.add(Text.literal("🌙 Night Vision: ").formatted(Formatting.WHITE)
-                .append(Text.literal("Permanent").formatted(Formatting.YELLOW)));
-        lore.add(Text.literal("🛡 Darkness Immunity").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        return chestplate;
-    }
+    // Level requirements are defined canonically in SlayerItems
 
     private static final List<Recipe> RECIPES = new ArrayList<>();
 
@@ -270,43 +228,4 @@ public class SlayerRecipes {
         int playerLevel = SlayerData.getSlayerLevel(playerUuid, recipe.requiredSlayer);
         return playerLevel >= recipe.requiredLevel;
     }
-    // In SlayerItems.java - Add durability component when creating armor
-
-    public static ItemStack createZombieHelmet() {
-        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
-
-        // Set custom name
-        helmet.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("Berserker Helmet").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
-
-        // INCREASE DURABILITY - Set max damage higher than default leather (55)
-        helmet.set(DataComponentTypes.MAX_DAMAGE, 550); // 10x durability
-        helmet.set(DataComponentTypes.DAMAGE, 0);
-
-        // Set leather color (dark red for zombie berserker)
-        helmet.set(DataComponentTypes.DYED_COLOR,
-                new net.minecraft.component.type.DyedColorComponent(0x8B0000));
-
-        // Add lore
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8§m                              "));
-        lore.add(Text.literal("§2§lZOMBIE SLAYER SET"));
-        lore.add(Text.literal("§8§m                              "));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§7Passive: §cBerserker Rage"));
-        lore.add(Text.literal("§7Deal more damage at low HP"));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§7Bonus Armor: §a+3"));
-        lore.add(Text.literal("§7Bonus Toughness: §a+2"));
-        helmet.set(DataComponentTypes.LORE, new net.minecraft.component.type.LoreComponent(lore));
-
-        return helmet;
-    }
-
-// Apply same pattern to ALL custom armor pieces:
-// Spider Leggings: 750 durability (default 75)
-// Skeleton Chestplate: 800 durability (default 80)
-// Slime Boots: 650 durability (default 65)
-// Warden Chestplate: 1000 durability (default 80)
 }

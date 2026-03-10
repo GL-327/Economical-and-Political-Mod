@@ -1,7 +1,9 @@
 package com.political.mixin;
 
 import com.political.CustomEnchantmentManager;
+import com.political.CustomItemHandler;
 import com.political.PerkManager;
+import com.political.SlayerItems;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -104,6 +106,11 @@ public class EnchantmentScreenHandlerMixin {
 
     @Unique
     private void political_applyBonusEnchantments(ServerPlayerEntity player, ItemStack stack) {
+        // Only apply custom enchantments to bounty/custom items, not random vanilla items
+        if (!SlayerItems.isAnyBountyItem(stack) && !CustomItemHandler.isProtectedItem(stack)) {
+            return;
+        }
+
         net.minecraft.entity.EquipmentSlot equipSlot = null;
         net.minecraft.component.type.EquippableComponent equippable =
                 stack.get(net.minecraft.component.DataComponentTypes.EQUIPPABLE);
