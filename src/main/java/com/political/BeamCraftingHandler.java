@@ -195,9 +195,9 @@ public class BeamCraftingHandler {
 
         // ═══════════════════════════════════════════════════════════════
         // STANDARD UPGRADE RECIPE (Tiers 0-5)
-        // [Nether Star] [Warden Core] [Nether Star]
-        // [Nether Star] [   Beam    ] [Nether Star]
-        // [Nether Star] [Dragon Brth] [Nether Star]
+        // [Redstone Block] [Warden Core]   [Redstone Block]
+        // [Glowstone]      [   Beam    ]   [Glowstone]
+        // [Redstone Block] [Dragon Brth]   [Redstone Block]
         // ═══════════════════════════════════════════════════════════════
         ItemStack topMid = grid.get(1);
         ItemStack botMid = grid.get(7);
@@ -208,11 +208,20 @@ public class BeamCraftingHandler {
         // Bottom middle must be exactly 1 Dragon's Breath
         if (!botMid.isOf(Items.DRAGON_BREATH) || botMid.getCount() != 1) return null;
 
-        // Each star slot must have exactly 1 Nether Star
-        int[] starSlots = {0, 2, 3, 5, 6, 8};
-        for (int slot : starSlots) {
+        // Corner slots must each have exactly 1 Redstone Block
+        int[] cornerSlots = {0, 2, 6, 8};
+        for (int slot : cornerSlots) {
             ItemStack stack = grid.get(slot);
-            if (!stack.isOf(Items.NETHER_STAR) || stack.getCount() != 1) {
+            if (!stack.isOf(Items.REDSTONE_BLOCK) || stack.getCount() != 1) {
+                return null;
+            }
+        }
+
+        // Side middle slots must each have exactly 1 Glowstone
+        int[] sideSlots = {3, 5};
+        for (int slot : sideSlots) {
+            ItemStack stack = grid.get(slot);
+            if (!stack.isOf(Items.GLOWSTONE) || stack.getCount() != 1) {
                 return null;
             }
         }
@@ -229,13 +238,13 @@ public class BeamCraftingHandler {
     }
 
     public static int getRequiredStars(int currentTier) {
-        if (currentTier == 6) return 3; // Ultra Overclocked uses 3 stars
-        return 6; // Standard upgrade uses 6
+        if (currentTier == 6) return 3; // Ultra Overclocked uses 3 Nether Stars
+        return 0; // Standard upgrade (tiers 0-5) does not use Nether Stars
     }
 
     public static int getRequiredBreath(int currentTier) {
-        if (currentTier == 6) return 0; // Ultra Overclocked doesn't use dragon breath
-        return 1;
+        if (currentTier == 6) return 0; // Ultra Overclocked does not use Dragon's Breath
+        return 1; // Standard upgrade uses 1 Dragon's Breath
     }
 
     public static int getRequiredWardenCores(int currentTier) {

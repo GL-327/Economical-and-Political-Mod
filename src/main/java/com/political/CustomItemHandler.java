@@ -1265,16 +1265,18 @@ public class CustomItemHandler {
 
         // Check by custom name first
         if (stack.contains(DataComponentTypes.CUSTOM_NAME)) {
-            String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
-
-            if (name.contains("Ultra Overclocked")) return 7;  // Tier 7 - Ultimate
-            if (name.contains("Mk5")) return 6;                 // Tier 6
-            if (name.contains("Mk4")) return 5;                 // Tier 5
-            if (name.contains("Mk3")) return 4;                 // Tier 4
-            if (name.contains("Mk2")) return 3;                 // Tier 3
-            if (name.contains("Mk1")) return 2;                 // Tier 2
-            if (name.contains("Ultra")) return 1;               // Tier 1 (Ultra HPEBM, no Mk)
-            if (name.contains("H.P.E.B.M.") || name.contains("HPEBM")) return 0; // Base tier
+            Text nameText = stack.get(DataComponentTypes.CUSTOM_NAME);
+            if (nameText != null) {
+                String name = nameText.getString();
+                if (name.contains("Ultra Overclocked")) return 7;  // Tier 7 - Ultimate
+                if (name.contains("Mk5")) return 6;                 // Tier 6
+                if (name.contains("Mk4")) return 5;                 // Tier 5
+                if (name.contains("Mk3")) return 4;                 // Tier 4
+                if (name.contains("Mk2")) return 3;                 // Tier 3
+                if (name.contains("Mk1")) return 2;                 // Tier 2
+                if (name.contains("Ultra")) return 1;               // Tier 1 (Ultra HPEBM, no Mk)
+                if (name.contains("H.P.E.B.M.") || name.contains("HPEBM")) return 0; // Base tier
+            }
         }
 
         // Fallback: check NBT for legacy items
