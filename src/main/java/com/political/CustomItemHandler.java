@@ -259,6 +259,11 @@ public class CustomItemHandler {
             weapon.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         }
 
+        if (mk == 7) {
+            SlayerItems.setCustomItemId(weapon, "hpebm_ultra");
+        } else {
+            SlayerItems.setCustomItemId(weapon, "hpebm_mk" + mk);
+        }
         return weapon;
     }
 
@@ -279,10 +284,9 @@ public class CustomItemHandler {
         gavel.set(DataComponentTypes.LORE, new LoreComponent(lore));
         gavel.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        SlayerItems.setCustomItemId(gavel, "the_gavel");
         return gavel;
-    }
-
-    public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
+    }(ServerPlayerEntity player, ItemStack gavelStack) {
         UUID uuid = player.getUuid();
         long now = System.currentTimeMillis();
 
@@ -850,6 +854,7 @@ public class CustomItemHandler {
                 Text.literal("「Unique」").formatted(Formatting.GOLD)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "harveys_stick");
         return stack;
     }
 
@@ -908,6 +913,7 @@ public class CustomItemHandler {
                 Text.literal("「Unique」").formatted(Formatting.AQUA)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "hermes_shoes");
         return stack;
     }
 
@@ -1459,10 +1465,10 @@ public class CustomItemHandler {
         player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.RESISTANCE, 40, 0, true, false, false));
 
-        // ESP: Glow effect on nearby moving players (every 2 seconds)
+        // ESP: Glow effect on nearby moving players (every 2 seconds) — 24 block range
         if (player.age % 40 == 0) {
             ServerWorld world = player.getEntityWorld();
-            double radius = 16.0;
+            double radius = 24.0;
 
             for (ServerPlayerEntity nearby : world.getPlayers()) {
                 if (nearby == player) continue;
@@ -1479,34 +1485,6 @@ public class CustomItemHandler {
 
                 if (isMoving || isSprinting) {
                     // Apply brief glowing effect (1.5 seconds)
-                    nearby.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.GLOWING, 30, 0, true, false, false));
-                }
-            }
-        }
-
-
-        // Extra health (+20 hearts = +40 health)
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.HEALTH_BOOST, 40, 9, true, false, false)); // Level 10 = +20 hearts
-
-        // Resistance (knockback prevention is handled in mixin)
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.RESISTANCE, 40, 0, true, false, false));
-
-        // Echo location - glow effect on nearby players who move (every 2 seconds)
-        if (player.age % 40 == 0) {
-            ServerWorld world = player.getEntityWorld();
-            double radius = 20.0;
-
-            for (ServerPlayerEntity nearby : world.getPlayers()) {
-                if (nearby == player) continue;
-                if (nearby.squaredDistanceTo(player) > radius * radius) continue;
-
-                // Check if player is moving (velocity check)
-                Vec3d velocity = nearby.getVelocity();
-                if (velocity.lengthSquared() > 0.01) { // Moving
-                    // Apply brief glowing
                     nearby.addStatusEffect(new StatusEffectInstance(
                             StatusEffects.GLOWING, 30, 0, true, false, false));
                 }
