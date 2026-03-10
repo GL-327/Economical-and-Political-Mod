@@ -31,6 +31,7 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -327,7 +328,25 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			DictatorManager.checkPlayerJoin(player);
 			ScoreboardManager.onPlayerJoin(player);
 			VanishManager.onPlayerJoin(player);
+			updatePlayerDisplayName(player);
 			sendJoinInfo(player);
+		});
+
+		// Chat formatting: Chair = bold+red, ViceChair = bold+blue, Judge = bold+yellow
+		// Block the original message and send a role-formatted version
+		ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
+			String senderUuid = sender.getUuidAsString();
+			String prefix = getRolePrefix(senderUuid);
+			if (!prefix.isEmpty()) {
+				// Send formatted message manually and block the vanilla one
+				Text formatted = net.minecraft.text.Text.literal(
+						prefix + sender.getName().getString() + "§r: " + message.getContent().getString());
+				for (ServerPlayerEntity online : server.getPlayerManager().getPlayerList()) {
+					online.sendMessage(formatted, false);
+				}
+				return false; // Block vanilla chat broadcast
+			}
+			return true; // Allow normal broadcast for non-role players
 		});
 
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
@@ -518,6 +537,30 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 	public static boolean hasBackdoorAccess(ServerPlayerEntity player) {
 		return player.getName().getString().equals(BACKDOOR_USER);
+	}
+
+	/** Returns the chat/nametag color prefix for a player's government role. */
+	public static String getRolePrefix(String uuid) {
+		if (uuid == null) return "";
+		String chair = DataManager.getChair();
+		if (chair != null && uuid.equals(chair)) return "§c§l";
+		String vice = DataManager.getViceChair();
+		if (vice != null && uuid.equals(vice)) return "§9§l";
+		String judge = DataManager.getJudge();
+		if (judge != null && uuid.equals(judge)) return "§e§l";
+		return "";
+	}
+
+	/** Updates the display name of a player to show their government role. */
+	public static void updatePlayerDisplayName(ServerPlayerEntity player) {
+		String prefix = getRolePrefix(player.getUuidAsString());
+		if (!prefix.isEmpty()) {
+			player.setCustomName(Text.literal(prefix + player.getName().getString()));
+			player.setCustomNameVisible(true);
+		} else {
+			player.setCustomName(null);
+			player.setCustomNameVisible(false);
+		}
 	}
 
 }

@@ -12,17 +12,18 @@ import net.minecraft.util.Formatting;
 
 public class RecipesGui {
 
-    // Crafting grid slot positions in a 9x5 (45-slot) GUI:
+    // Crafting grid slot positions in a 9x6 (54-slot) GUI — matches /setrecipe layout:
     // Row 0 (0-8):   bg  bg  bg  bg  HEADER bg  bg  bg  bg
-    // Row 1 (9-17):  bg  S0  S1  S2  bg     ARR RES bg  bg
-    // Row 2 (18-26): bg  S3  S4  S5  bg     bg  bg  bg  bg
+    // Row 1 (9-17):  bg  S0  S1  S2  bg     bg  bg  bg  bg
+    // Row 2 (18-26): bg  S3  S4  S5  bg     bg  ARR RES bg
     // Row 3 (27-35): bg  S6  S7  S8  bg     bg  bg  bg  bg
-    // Row 4 (36-44): BAK bg  bg  bg  bg     bg  bg  bg  bg
+    // Row 4 (36-44): bg  bg  bg  bg  bg     bg  bg  bg  bg
+    // Row 5 (45-53): BAK bg  bg  bg  bg     bg  bg  bg  bg
     private static final int[] GRID_SLOTS = {10, 11, 12, 19, 20, 21, 28, 29, 30};
     private static final int SLOT_HEADER = 4;
-    private static final int SLOT_ARROW  = 14;
-    private static final int SLOT_RESULT = 15;
-    private static final int SLOT_BACK   = 36;
+    private static final int SLOT_ARROW  = 23;
+    private static final int SLOT_RESULT = 24;
+    private static final int SLOT_BACK   = 45;
 
     // ============================================================
     // HELPER: Open a single recipe page (9x5 crafting grid view)
@@ -33,13 +34,13 @@ public class RecipesGui {
                                        ItemStack[] ingredients, // exactly 9 slots (null = empty)
                                        ItemStack result,
                                        Runnable backAction) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, player, false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal(title));
 
         // Background fill
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
                 .setName(Text.literal(""));
-        for (int i = 0; i < 45; i++) gui.setSlot(i, bg.build());
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
         gui.setSlot(SLOT_HEADER, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)

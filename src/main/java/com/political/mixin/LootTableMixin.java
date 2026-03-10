@@ -1,5 +1,6 @@
 package com.political.mixin;
 
+import com.political.CustomEnchantmentManager;
 import com.political.PerkManager;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,12 @@ public class LootTableMixin {
 
         for (ItemStack stack : loot) {
             if (stack.isEmpty()) continue;
+
+            // Strip any custom enchantments from looted items to prevent
+            // players from obtaining pre-enchanted custom-enchant items
+            if (CustomEnchantmentManager.hasAnyCustomEnchantment(stack)) {
+                CustomEnchantmentManager.removeAllCustomEnchantments(stack);
+            }
 
             int originalCount = stack.getCount();
             float effectiveMultiplier = multiplier;

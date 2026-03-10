@@ -217,6 +217,32 @@ public class CustomEnchantmentManager {
         return false;
     }
 
+    /**
+     * Returns true if the item has any custom enchantment.
+     */
+    public static boolean hasAnyCustomEnchantment(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return false;
+        NbtCompound nbt = data.copyNbt();
+        if (!nbt.contains(ENCHANT_TAG)) return false;
+        NbtCompound enchants = nbt.getCompound(ENCHANT_TAG).orElse(null);
+        return enchants != null && !enchants.isEmpty();
+    }
+
+    /**
+     * Removes all custom enchantments from the item.
+     */
+    public static void removeAllCustomEnchantments(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return;
+        NbtCompound nbt = data.copyNbt();
+        if (!nbt.contains(ENCHANT_TAG)) return;
+        nbt.remove(ENCHANT_TAG);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    }
+
     // ── Lore helpers ─────────────────────────────────────────────
 
     /**

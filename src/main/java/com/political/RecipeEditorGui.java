@@ -42,6 +42,16 @@ public class RecipeEditorGui {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             items.add(SlayerItems.createSlayerSword(type));
             items.add(SlayerItems.createUpgradedSlayerSword(type));
+            // T1 armor pieces
+            items.add(SlayerItems.createSlayerHelmet(type, 1));
+            items.add(SlayerItems.createSlayerChestplate(type, 1));
+            items.add(SlayerItems.createSlayerLeggings(type, 1));
+            items.add(SlayerItems.createSlayerBoots(type, 1));
+            // T2 armor pieces
+            items.add(SlayerItems.createSlayerHelmet(type, 2));
+            items.add(SlayerItems.createSlayerChestplate(type, 2));
+            items.add(SlayerItems.createSlayerLeggings(type, 2));
+            items.add(SlayerItems.createSlayerBoots(type, 2));
         }
         items.add(SlayerItems.createZombieBerserkerHelmet());
         items.add(SlayerItems.createSpiderLeggings());
@@ -101,13 +111,25 @@ public class RecipeEditorGui {
             }
 
             final ItemStack finalItem = item;
+            final SlayerRecipes.Recipe existingRecipe;
+            // Find existing recipe for this item to pre-populate
+            SlayerRecipes.Recipe found = null;
+            if (customId != null) {
+                for (SlayerRecipes.Recipe r : existingRecipes) {
+                    if (customId.equals(SlayerItems.getCustomItemId(r.result))) {
+                        found = r;
+                        break;
+                    }
+                }
+            }
+            existingRecipe = found;
             GuiElementBuilder eb = new GuiElementBuilder(item.getItem())
                     .setName(displayName != null ? displayName : Text.literal("§e" + (customId != null ? customId : "Unknown")))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(hasRecipe
                             ? Text.literal("§a✔ Has recipe — click to edit").formatted(Formatting.GREEN)
                             : Text.literal("§e➕ No recipe — click to create").formatted(Formatting.YELLOW))
-                    .setCallback((index, clickType, actionType) -> openRecipeEditor(player, finalItem, null));
+                    .setCallback((index, clickType, actionType) -> openRecipeEditor(player, finalItem, existingRecipe));
             gui.setSlot(slot, eb.build());
             shown++;
         }
