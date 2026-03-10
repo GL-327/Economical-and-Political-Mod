@@ -36,6 +36,19 @@ public class BountyCraftingHandler {
 
         int totalItems = getTotalGridItems(grid);
 
+        // ─── Check custom recipes from RecipeConfigManager first ───────────
+        for (SlayerRecipes.Recipe customRecipe : RecipeConfigManager.getCustomRecipes()) {
+            if (matchesCustomRecipeShapeless(grid, customRecipe)) {
+                int reqLevel = customRecipe.requiredLevel;
+                SlayerManager.SlayerType reqType = customRecipe.requiredSlayer;
+                if (reqType != null && reqLevel > 0) {
+                    int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), reqType);
+                    if (level < reqLevel) return null;
+                }
+                return customRecipe.result.copy();
+            }
+        }
+
         // ─── Special Armor Recipes (all use 6 slots) ───────────────────────
 
         // Zombie Berserker Helmet: 3 Zombie Cores + 1 Zombie Head + 2 Rotten Flesh
@@ -247,5 +260,41 @@ public class BountyCraftingHandler {
             case LEGGINGS   -> Items.LEATHER_LEGGINGS;
             case BOOTS      -> Items.LEATHER_BOOTS;
         };
+    }
+
+    /**
+     * Checks whether the given 9-slot grid matches a custom recipe using shapeless matching
+     * (counts items, ignoring position). Custom recipes stored by /setrecipe are shapeless.
+     */
+    private static boolean matchesCustomRecipeShapeless(List<ItemStack> grid, SlayerRecipes.Recipe recipe) {
+        if (recipe.ingredients == null) return false;
+
+        // Build a count map of what's in the grid
+        java.util.Map<String, Integer> gridCounts = new java.util.HashMap<>();
+        for (ItemStack stack : grid) {
+            if (stack.isEmpty()) continue;
+            String key = getIngredientKey(stack);
+            gridCounts.merge(key, 1, Integer::sum);
+        }
+
+        // Build a count map of what the recipe requires
+        java.util.Map<String, Integer> recipeCounts = new java.util.HashMap<>();
+        for (ItemStack ing : recipe.ingredients) {
+            if (ing == null || ing.isEmpty()) continue;
+            String key = getIngredientKey(ing);
+            recipeCounts.merge(key, 1, Integer::sum);
+        }
+
+        return gridCounts.equals(recipeCounts);
+    }
+
+    /** Returns a stable string key for a given ItemStack for recipe matching. */
+    private static String getIngredientKey(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return "";
+        // Prefer custom_item_id for mod items
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId != null) return "political:" + customId;
+        // Use vanilla registry name
+        return net.minecraft.registry.Registries.ITEM.getId(stack.getItem()).toString();
     }
 }
