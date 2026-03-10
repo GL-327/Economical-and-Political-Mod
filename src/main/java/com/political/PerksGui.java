@@ -17,6 +17,59 @@ public class PerksGui {
     private static int currentPoints = 0;
     private static int currentPage = 0;
 
+    /** Returns an item that visually represents the given perk. */
+    private static net.minecraft.item.Item getPerkIcon(String perkId) {
+        return switch (perkId) {
+            case "DOUBLE_HEALTH"               -> Items.ENCHANTED_GOLDEN_APPLE;
+            case "DOUBLE_DAMAGE"               -> Items.DIAMOND_SWORD;
+            case "INCREASED_ARMOUR"            -> Items.DIAMOND_CHESTPLATE;
+            case "SOFTER_LANDING"              -> Items.FEATHER;
+            case "LOOT_GALORE"                 -> Items.CHEST;
+            case "PUBLIC_WORKS"                -> Items.SUGAR;
+            case "GOLDEN_AGE"                  -> Items.GOLDEN_APPLE;
+            case "NATIONAL_UNITY"              -> Items.SHIELD;
+            case "XP_TAX_CUTS"                 -> Items.EXPERIENCE_BOTTLE;
+            case "GREEN_THUMB"                 -> Items.WHEAT_SEEDS;
+            case "RESOURCE_SUBSIDY"            -> Items.FURNACE;
+            case "MONSTER_CONTROL"             -> Items.TOTEM_OF_UNDYING;
+            case "PROSPERITY_SURGE"            -> Items.NETHER_STAR;
+            case "FORTIFIED_SHIELDS"           -> Items.NETHERITE_CHESTPLATE;
+            case "SWIFT_HARVEST"               -> Items.DIAMOND_PICKAXE;
+            case "IRON_STOMACH"                -> Items.COOKED_BEEF;
+            case "LUCKY_FISHERMAN"             -> Items.FISHING_ROD;
+            case "BATTLE_HARDENED"             -> Items.IRON_INGOT;
+            case "MERCHANTS_FAVOUR"            -> Items.EMERALD;
+            case "PHOENIX_BLESSING"            -> Items.FIRE_CHARGE;
+            case "TREASURE_HUNTER"             -> Items.DIAMOND;
+            case "DIPLOMATIC_IMMUNITY"         -> Items.GOLDEN_HELMET;
+            case "NIGHTVISION_DECREE"          -> Items.ENDER_EYE;
+            case "ETERNAL_FOG"                 -> Items.GRAY_DYE;
+            case "BIGGER_ISNT_ALWAYS_BETTER"   -> Items.COOKIE;
+            case "NIGHT_OWL_POLICY"            -> Items.PHANTOM_MEMBRANE;
+            case "WILDLIFE_PROTECTION"         -> Items.OAK_SAPLING;
+            case "BALANCED_BUDGET"             -> Items.PAPER;
+            case "CULTURAL_FESTIVAL"           -> Items.FIREWORK_ROCKET;
+            case "TALL_ORDER"                  -> Items.TALL_GRASS;
+            case "ETERNAL_DAWN"                -> Items.CLOCK;
+            case "CHAOS_LOTTERY"               -> Items.RABBIT_FOOT;
+            case "SILENT_WORLD"                -> Items.NOTE_BLOCK;
+            case "MIRROR_WORLD"                -> Items.DAYLIGHT_DETECTOR;
+            case "TRADERS_GAMBIT"              -> Items.GOLD_INGOT;
+            case "BLOOD_MOON"                  -> Items.MAGMA_BLOCK;
+            case "GIANTS_PLAYGROUND"           -> Items.SLIME_BLOCK;
+            case "CIVIL_UNREST"                -> Items.REDSTONE;
+            case "CRIME_WAVE"                  -> Items.ROTTEN_FLESH;
+            case "INFRASTRUCTURE_NEGLECT"      -> Items.COBBLESTONE;
+            case "ENVIRONMENTAL_MISMANAGEMENT" -> Items.DEAD_BUSH;
+            case "ECONOMIC_COLLAPSE"           -> Items.COAL;
+            case "ARCANE_DECAY"                -> Items.SPIDER_EYE;
+            case "REDUCED_PATROLS"             -> Items.IRON_SWORD;
+            case "HEAVY_GRAVITY"               -> Items.ANVIL;
+            case "VOID_TOUCHED"                -> Items.ENDER_PEARL;
+            default                            -> Items.PAPER;
+        };
+    }
+
     public static void open(ServerPlayerEntity player, boolean isChair) {
         if (!PerkManager.canChangePerks(isChair)) {
             player.sendMessage(Text.literal("Perks have already been selected for this term!").formatted(Formatting.RED));
@@ -117,7 +170,7 @@ public class PerksGui {
                         .addLoreLine(Text.literal("ON COOLDOWN").formatted(Formatting.RED, Formatting.BOLD))
                         .addLoreLine(Text.literal("Was used by previous Chair").formatted(Formatting.DARK_RED));
             } else if (isSelected) {
-                builder = new GuiElementBuilder(Items.LIME_CONCRETE)
+                builder = new GuiElementBuilder(getPerkIcon(perk.id))
                         .setName(Text.literal(perk.name).formatted(Formatting.GREEN, Formatting.BOLD))
                         .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
                         .addLoreLine(Text.literal(""));
@@ -148,7 +201,7 @@ public class PerksGui {
 
                 builder.addLoreLine(Text.literal("Maximum perks selected!").formatted(Formatting.RED));
             } else {
-                builder = new GuiElementBuilder(Items.WHITE_CONCRETE)
+                builder = new GuiElementBuilder(getPerkIcon(perk.id))
                         .setName(Text.literal(perk.name).formatted(Formatting.WHITE))
                         .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
                         .addLoreLine(Text.literal(""));

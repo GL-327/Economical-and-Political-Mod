@@ -235,45 +235,64 @@ public class ScoreboardManager {
         int coins = CoinManager.getCoins(player);
         int credits = CreditItem.countCredits(player);
         lines.add("§e Coins: §f" + formatNumber(coins));
-        lines.add("§e Credits: §f" + credits);
-        lines.add("§8 "); // blank
+        lines.add("§b Credits: §f" + credits);
+        lines.add("§8 ");
 
         // Government
-        lines.add("§a Government:");
         String chairUuid = DataManager.getChair();
         String viceUuid  = DataManager.getViceChair();
         String chairName = chairUuid != null ? DataManager.getPlayerName(chairUuid) : null;
         String viceName  = viceUuid  != null ? DataManager.getPlayerName(viceUuid)  : null;
-        lines.add("§f  Chair: " + (chairName != null ? "§c§l" + chairName : "§cNone"));
-        lines.add("§f  Vice: "  + (viceName  != null ? "§9§l" + viceName  : "§cNone"));
+        lines.add("§a§l ⚖ §aGovernment");
+        lines.add("§7  Chair: " + (chairName != null ? "§c" + chairName : "§8None"));
+        lines.add("§7  Vice:  " + (viceName  != null ? "§9" + viceName  : "§8None"));
+        lines.add("§8  ");
 
-        // Bounty Gear Stats (conditional)
-        SlayerManager.SlayerType gearType = detectBountyGearType(player);
-        if (gearType != null) {
-            lines.add("§8  "); // blank
-            // Pulse effect: cycle between two shades for gear stats header
+        // Underground auction timer
+        boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
+        if (auctionActive) {
+            String auctionPulse = (animFrame % 4 < 2) ? "§6§l" : "§e§l";
+            lines.add(auctionPulse + " 🏪 " + "§r§a§lAuction: LIVE");
+        } else {
+            long msLeft = UndergroundAuctionManager.getTimeUntilNextAuction();
+            lines.add("§6 🏪 §7Auction: §f" + formatDuration(msLeft));
+        }
+
+        // Bounty Gear Stats – display each active type separately
+        // stats[type] = int[3]: [weaponDmgPct, specificDefPct, universalDefPct]
+        Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
+        SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
+        boolean hasQuest = quest != null;
+
+        if (!bountyStats.isEmpty()) {
+            lines.add("§8   ");
             String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
-            lines.add(gearColor + " Bounty Gear Stats:");
-            lines.add("§f  Type: " + gearType.color + gearType.displayName);
+            lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
 
-            // Show actual armor set bonus stats from the armor being worn
-            int[] armorStats = detectArmorSetStats(player, gearType);
-            int bossReductPct = armorStats[0];
-            int allBossReductPct = armorStats[1];
-            lines.add("§f  vs " + gearType.displayName + " Boss: §a-" + bossReductPct + "%");
-            lines.add("§f  vs All Bosses: §a-" + allBossReductPct + "%");
+            int totalUniversalDef = 0;
+            for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
+                SlayerManager.SlayerType type = entry.getKey();
+                int[] s = entry.getValue();
+                totalUniversalDef += s[2];
+                if (s[0] > 0) {
+                    lines.add("§7  " + type.displayName + " DMG: §c+" + s[0] + "%");
+                }
+                if (s[1] > 0) {
+                    lines.add("§7  " + type.displayName + " DEF: §a-" + s[1] + "%");
+                }
+            }
+            if (totalUniversalDef > 0) {
+                lines.add("§7  Bounty Defence: §a-" + totalUniversalDef + "%");
+            }
         }
 
         // Bounty Quest (conditional)
-        SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
-        if (quest != null) {
-            lines.add("§8   "); // blank
-            // Pulse the quest header
+        if (hasQuest) {
+            lines.add("§8    ");
             String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
-            lines.add(questColor + " Bounty Quest:");
-            lines.add("§f  Target: §4" + quest.slayerType.bossName);
+            lines.add(questColor + "§l ⚔ §r§dBounty Quest");
+            lines.add("§7  Target: §c" + quest.slayerType.bossName);
             int required = quest.getKillsRequired();
-            // Animated kill counter bar
             int progress = required > 0 ? (quest.killCount * 5 / required) : 5;
             StringBuilder bar = new StringBuilder("§a");
             for (int i = 0; i < 5; i++) {
@@ -290,6 +309,7 @@ public class ScoreboardManager {
         return lines;
     }
 
+
     // ── Helpers ──────────────────────────────────────────────────
 
     /** Returns an 8-char prefix unique per player (first 8 chars of UUID string, no dashes). */
@@ -301,79 +321,116 @@ public class ScoreboardManager {
         return NumberFormat.getInstance().format(n);
     }
 
-    /**
-     * Detects the bounty gear type the player is wearing/holding.
-     * Checks main-hand weapon first, then all armor slots for any T1 or T2 bounty armor.
-     */
-    private static SlayerManager.SlayerType detectBountyGearType(ServerPlayerEntity player) {
-        // Check main hand weapon
-        ItemStack mainHand = player.getMainHandStack();
-        if (!mainHand.isEmpty()) {
-            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(mainHand);
-            if (swordType != null) return swordType;
+    /** Formats a duration in milliseconds to a human-readable string like "2h 30m" or "45s". */
+    private static String formatDuration(long ms) {
+        if (ms <= 0) return "Now";
+        long totalSecs = ms / 1000;
+        long hours = totalSecs / 3600;
+        long minutes = (totalSecs % 3600) / 60;
+        long seconds = totalSecs % 60;
+        if (hours > 0) {
+            return hours + "h " + minutes + "m";
+        } else if (minutes > 0) {
+            return minutes + "m " + seconds + "s";
+        } else {
+            return seconds + "s";
         }
-
-        // Check armor slots for any bounty armor (T1 or T2 for any slayer type)
-        net.minecraft.item.ItemStack[] armorSlots = {
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD),
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST),
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.LEGS),
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET)
-        };
-        for (net.minecraft.item.ItemStack armor : armorSlots) {
-            if (armor.isEmpty()) continue;
-            // Check custom_item_id for T1/T2 bounty armor
-            String customId = SlayerItems.getCustomItemId(armor);
-            if (customId != null) {
-                for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-                    String prefix = type.name().toLowerCase();
-                    if (customId.startsWith(prefix + "_t1_") || customId.startsWith(prefix + "_t2_")) {
-                        return type;
-                    }
-                }
-            }
-            // Also check special pieces
-            if (SlayerItems.isZombieBerserkerHelmet(armor))  return SlayerManager.SlayerType.ZOMBIE;
-            if (SlayerItems.isSpiderLeggings(armor))          return SlayerManager.SlayerType.SPIDER;
-            if (SlayerItems.isSkeletonBow(armor))             return SlayerManager.SlayerType.SKELETON;
-            if (SlayerItems.isSlimeBoots(armor))              return SlayerManager.SlayerType.SLIME;
-            if (SlayerItems.isWardenChestplate(armor))        return SlayerManager.SlayerType.WARDEN;
-        }
-        return null;
     }
 
     /**
-     * Detects the armor set stats (boss reduction %) from the bounty armor the player is wearing.
-     * Returns int[]{bossReductionPct, allBossReductionPct}.
+     * Scans the player's main hand and all armour slots for bounty gear.
+     * Returns a LinkedHashMap keyed by SlayerType, each entry being int[3]:
+     *   [0] = weapon damage % bonus (e.g. 200 for T1 sword)
+     *   [1] = boss-specific defence % (e.g. 50 for T1 set)
+     *   [2] = universal (all-boss) defence % from this type's pieces
      */
-    private static int[] detectArmorSetStats(ServerPlayerEntity player, SlayerManager.SlayerType type) {
-        int bossReductPct = 0;
-        int allBossReductPct = 0;
-        int tier = 1;
+    private static Map<SlayerManager.SlayerType, int[]> collectBountyGearStats(ServerPlayerEntity player) {
+        Map<SlayerManager.SlayerType, int[]> stats = new LinkedHashMap<>();
 
-        net.minecraft.item.ItemStack[] armorSlots = {
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD),
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST),
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.LEGS),
-            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET)
+        // ── Weapon in main hand ──────────────────────────────────
+        ItemStack weapon = player.getMainHandStack();
+        if (!weapon.isEmpty()) {
+            if (SlayerItems.isSkeletonBow(weapon)) {
+                stats.computeIfAbsent(SlayerManager.SlayerType.SKELETON, k -> new int[3])[0] = 500;
+            } else if (SlayerItems.isUpgradedSlayerSword(weapon)) {
+                SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
+                if (t != null) stats.computeIfAbsent(t, k -> new int[3])[0] = 300;
+            } else if (SlayerItems.isSlayerSword(weapon)) {
+                SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
+                if (t != null) stats.computeIfAbsent(t, k -> new int[3])[0] = 200;
+            }
+        }
+
+        // ── Armour slots ─────────────────────────────────────────
+        ItemStack[] armorSlots = {
+            player.getEquippedStack(EquipmentSlot.HEAD),
+            player.getEquippedStack(EquipmentSlot.CHEST),
+            player.getEquippedStack(EquipmentSlot.LEGS),
+            player.getEquippedStack(EquipmentSlot.FEET)
         };
-        for (net.minecraft.item.ItemStack armor : armorSlots) {
+
+        // Track the highest tier seen per type for the standard set bonus
+        Map<SlayerManager.SlayerType, Integer> highestTier = new LinkedHashMap<>();
+
+        for (ItemStack armor : armorSlots) {
             if (armor.isEmpty()) continue;
+
+            // Special pieces
+            if (SlayerItems.isZombieBerserkerHelmet(armor)) {
+                int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.ZOMBIE, k -> new int[3]);
+                s[1] = Math.max(s[1], (int)(SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION * 100));
+                s[2] += (int)(SlayerItems.BERSERKER_HELMET_ALL_REDUCTION * 100);
+                continue;
+            }
+            if (SlayerItems.isSpiderLeggings(armor)) {
+                int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SPIDER, k -> new int[3]);
+                s[1] = Math.max(s[1], (int)(SlayerItems.SPIDER_LEGS_BOSS_REDUCTION * 100));
+                s[2] += (int)(SlayerItems.SPIDER_LEGS_ALL_REDUCTION * 100);
+                continue;
+            }
+            if (SlayerItems.isSlimeBoots(armor)) {
+                int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SLIME, k -> new int[3]);
+                s[1] = Math.max(s[1], (int)(SlayerItems.SLIME_BOOTS_BOSS_REDUCTION * 100));
+                s[2] += (int)(SlayerItems.SLIME_BOOTS_ALL_REDUCTION * 100);
+                continue;
+            }
+            if (SlayerItems.isWardenChestplate(armor)) {
+                int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.WARDEN, k -> new int[3]);
+                s[1] = Math.max(s[1], (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100));
+                s[2] += (int)(SlayerItems.WARDEN_CHEST_ALL_REDUCTION * 100);
+                continue;
+            }
+
+            // Standard T1/T2 set pieces (identified via custom_item_id prefix)
             String customId = SlayerItems.getCustomItemId(armor);
-            if (customId != null) {
-                String prefix = type.name().toLowerCase();
-                if (customId.startsWith(prefix + "_t2_")) {
-                    tier = 2;
+            if (customId == null) continue;
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                String pfx = type.name().toLowerCase();
+                int tier = 0;
+                if (customId.startsWith(pfx + "_t2_")) tier = 2;
+                else if (customId.startsWith(pfx + "_t1_")) tier = 1;
+                if (tier > 0) {
+                    int prev = highestTier.getOrDefault(type, 0);
+                    if (tier > prev) highestTier.put(type, tier);
+                    // Ensure the type is in the stats map
+                    stats.computeIfAbsent(type, k -> new int[3]);
                     break;
-                } else if (customId.startsWith(prefix + "_t1_")) {
-                    tier = 1;
                 }
             }
         }
 
-        SlayerItems.ArmorStats stats = SlayerItems.getArmorStats(type, tier);
-        bossReductPct = (int) (stats.bossReduction * 100);
-        allBossReductPct = (int) (stats.allBossReduction * 100);
-        return new int[]{bossReductPct, allBossReductPct};
+        // Apply set bonus for each type using the highest tier detected
+        for (Map.Entry<SlayerManager.SlayerType, Integer> entry : highestTier.entrySet()) {
+            SlayerManager.SlayerType type = entry.getKey();
+            int tier = entry.getValue();
+            SlayerItems.ArmorStats armorStats = SlayerItems.getArmorStats(type, tier);
+            int[] s = stats.computeIfAbsent(type, k -> new int[3]);
+            s[1] = Math.max(s[1], (int)(armorStats.bossReduction * 100));
+            s[2] += (int)(armorStats.allBossReduction * 100);
+        }
+
+        // Remove entries that have no meaningful stats to display
+        stats.entrySet().removeIf(e -> e.getValue()[0] == 0 && e.getValue()[1] == 0 && e.getValue()[2] == 0);
+        return stats;
     }
 }
