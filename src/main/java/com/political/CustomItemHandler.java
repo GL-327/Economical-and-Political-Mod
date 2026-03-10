@@ -962,6 +962,7 @@ public class CustomItemHandler {
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
                         .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
+                Text.literal("━ Compatible Enchants ━").formatted(Formatting.AQUA),
                 Text.literal("✦ Bounty Sharpness III").formatted(Formatting.AQUA),
                 Text.literal("✦ Boss Hunter II").formatted(Formatting.AQUA),
                 Text.literal("✦ Thunderbolt I").formatted(Formatting.AQUA),

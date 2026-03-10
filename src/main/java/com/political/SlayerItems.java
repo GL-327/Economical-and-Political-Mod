@@ -287,6 +287,8 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Used for crafting " + type.displayName).formatted(Formatting.GRAY));
         lore.add(Text.literal("bounty equipment.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Anomalous biological residue | Charadrius core sample]").formatted(Formatting.DARK_GRAY));
 
         core.set(DataComponentTypes.LORE, new LoreComponent(lore));
         core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -1082,19 +1084,19 @@ public class SlayerItems {
                 Text.literal(type.displayName + " Bounty Leggings" + tierName)
                         .formatted(type.color, Formatting.BOLD));
 
-        // CUSTOM ARMOR ATTRIBUTES - Leggings = 30% of total
+        // CUSTOM ARMOR ATTRIBUTES - Leggings = 25% of total (matches PIECE_MULT_LEGGINGS)
         AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "slayer_legs_armor"),
-                                stats.armor * 0.3,
+                                stats.armor * 0.25,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.LEGS)
                 .add(EntityAttributes.ARMOR_TOUGHNESS,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "slayer_legs_toughness"),
-                                stats.toughness * 0.3,
+                                stats.toughness * 0.25,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.LEGS)
@@ -1123,19 +1125,19 @@ public class SlayerItems {
                 Text.literal(type.displayName + " Bounty Boots" + tierName)
                         .formatted(type.color, Formatting.BOLD));
 
-        // CUSTOM ARMOR ATTRIBUTES - Boots = 10% of total
+        // CUSTOM ARMOR ATTRIBUTES - Boots = 15% of total (matches PIECE_MULT_BOOTS)
         AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "slayer_boots_armor"),
-                                stats.armor * 0.1,
+                                stats.armor * 0.15,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.FEET)
                 .add(EntityAttributes.ARMOR_TOUGHNESS,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "slayer_boots_toughness"),
-                                stats.toughness * 0.1,
+                                stats.toughness * 0.15,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.FEET)
@@ -1483,10 +1485,10 @@ public class SlayerItems {
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
         lore.add(Text.literal("🛡 Armor: +6").formatted(Formatting.BLUE));
         lore.add(Text.literal("🛡 Toughness: +3").formatted(Formatting.BLUE));
-        lore.add(Text.literal("⬆ Jump Boost: Jump Boost III while worn").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⬆ Jump Boost: III").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GREEN));
-        lore.add(Text.literal("⬆ Jump Boost II").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⬆ Jump Boost III").formatted(Formatting.AQUA));
         lore.add(Text.literal("🛡 No Fall Damage").formatted(Formatting.WHITE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));

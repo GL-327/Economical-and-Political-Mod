@@ -66,6 +66,19 @@ public class PerksGui {
             case "REDUCED_PATROLS"             -> Items.IRON_SWORD;
             case "HEAVY_GRAVITY"               -> Items.ANVIL;
             case "VOID_TOUCHED"                -> Items.ENDER_PEARL;
+            case "MONSTER_UPRISING"            -> Items.ZOMBIE_HEAD;
+            case "MINOR_CORRUPTION"            -> Items.FERMENTED_SPIDER_EYE;
+            case "GLASS_CANNON"                -> Items.GLASS;
+            case "FAMINE"                      -> Items.BONE;
+            case "CURSED_WATERS"               -> Items.PUFFERFISH;
+            case "CREEPER_SURGE"               -> Items.CREEPER_HEAD;
+            case "BRITTLE_TOOLS"               -> Items.WOODEN_PICKAXE;
+            case "WITHERING_ECONOMY"           -> Items.WITHER_ROSE;
+            case "PARANOIA"                    -> Items.ENDER_EYE;
+            case "SCORCHED_EARTH"              -> Items.FIRE_CHARGE;
+            case "AUCTION_TAX_FREE"            -> Items.GOLD_BLOCK;
+            case "AUCTION_TAX_REDUCTION"       -> Items.GOLD_INGOT;
+            case "AUCTION_TAX_INCREASE"        -> Items.IRON_INGOT;
             default                            -> Items.PAPER;
         };
     }

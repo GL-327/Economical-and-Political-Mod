@@ -25,8 +25,9 @@ public class ArrowHeadshotMixin {
 
         // Only apply headshot bonus for critical (fully-charged) shots.
         // Instant-fire arrows fired by the Skeleton Bow's instant-shot mode
-        // are NOT set as critical, so they do not trigger headshots.
-        if (!arrow.isCritical()) {
+        // are tagged "instant_shot" and must never trigger headshots even though
+        // they are also marked critical for visual particles.
+        if (!arrow.isCritical() || arrow.getCommandTags().contains("instant_shot")) {
             return damage;
         }
 

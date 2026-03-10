@@ -81,7 +81,6 @@ public class AdminGui {
 
         // Fill with colored glass borders (cyan border, gray interior)
         fillBackground(gui);
-        // Header
         gui.setSlot(4, new GuiElementBuilder(Items.COMMAND_BLOCK)
                 .setName(Text.literal("★ Admin Control Panel ★").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -864,6 +863,10 @@ public class AdminGui {
     // HELPER METHODS (from old AdminGui)
     // ═══════════════════════════════════════════════════════════
 
+    /**
+     * Fills the GUI background with a cyan stained glass pane border (top row, bottom row,
+     * left column, right column) and a gray stained glass pane interior.
+     */
     private static void fillBackground(SimpleGui gui) {
         int size = gui.getSize();
         int cols = 9;
