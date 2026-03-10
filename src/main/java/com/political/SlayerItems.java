@@ -574,6 +574,8 @@ public class SlayerItems {
         lore.add(Text.literal("Used in crafting powerful").formatted(Formatting.GRAY));
         lore.add(Text.literal("Bounty equipment.").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Anomalous biological residue | Charadrius specimen]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
 
         // Hint at what it crafts
         String craftHint = switch (type) {
@@ -681,6 +683,8 @@ public class SlayerItems {
         lore.add(Text.literal(type.bossName + ".").formatted(type.color));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Used to craft Bounty Hunter's Swords").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Anomalous biological sample | Charadrius specimen]").formatted(Formatting.DARK_GRAY));
 
         chunk.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chunk.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -1151,28 +1155,65 @@ public class SlayerItems {
         return boots;
     }
 
+    // Per-piece multipliers for distributing boss stats across armor slots
+    private static final double PIECE_MULT_HELMET     = 0.20;
+    private static final double PIECE_MULT_CHESTPLATE = 0.40;
+    private static final double PIECE_MULT_LEGGINGS   = 0.25;
+    private static final double PIECE_MULT_BOOTS      = 0.15;
+
+    /** Returns the per-piece boss-reduction multiplier for the named piece. */
+    public static double getPieceBossMultiplier(String piece) {
+        return switch (piece) {
+            case "Helmet"     -> PIECE_MULT_HELMET;
+            case "Chestplate" -> PIECE_MULT_CHESTPLATE;
+            case "Leggings"   -> PIECE_MULT_LEGGINGS;
+            case "Boots"      -> PIECE_MULT_BOOTS;
+            default           -> 0.25;
+        };
+    }
+
     private static List<Text> buildSlayerArmorLore(SlayerManager.SlayerType type, int tier, String piece, ArmorStats stats) {
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        String mfluxLabel = tier == 1 ? "§8MFLUX Contractor Program" : "§8MFLUX Research Division";
+        String mfluxCrd = switch (type) {
+            case ZOMBIE   -> "CRD-001";
+            case SPIDER   -> "CRD-002";
+            case SKELETON -> "CRD-003";
+            case SLIME    -> "CRD-004";
+            case ENDERMAN -> "CRD-005";
+            case WARDEN   -> "CRD-006";
+        };
+        String mfluxLabel = tier == 1
+                ? "§8[MFLUX: Field-tested containment gear | " + mfluxCrd + "]"
+                : "§8[MFLUX: Upgraded containment gear | " + mfluxCrd + "-T2]";
         lore.add(Text.literal(mfluxLabel).formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(type.color));
-        lore.add(Text.literal("🛡 Armor: +" + stats.armor).formatted(Formatting.BLUE));
-        lore.add(Text.literal("🛡 Toughness: +" + stats.toughness).formatted(Formatting.BLUE));
+
+        // Per-piece armor/toughness values (already applied via attributes; show in lore)
+        double pieceMult = getPieceBossMultiplier(piece);
+        double armorValue = stats.armor * (piece.equals("Helmet") ? 0.2 : piece.equals("Chestplate") ? 0.4
+                : piece.equals("Leggings") ? 0.3 : 0.1);
+        double toughValue = stats.toughness * (piece.equals("Helmet") ? 0.2 : piece.equals("Chestplate") ? 0.4
+                : piece.equals("Leggings") ? 0.3 : 0.1);
+        lore.add(Text.literal("🛡 Armor: +" + (int) Math.round(armorValue)).formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Toughness: +" + (int) Math.round(toughValue)).formatted(Formatting.BLUE));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal(""));
 
-        int bossReductionPercent = (int) (stats.bossReduction * 100);
-        int allReductionPercent = (int) (stats.allBossReduction * 100);
+        // Per-piece boss reductions
+        int pieceSpecificDef = (int) Math.round(stats.bossReduction * pieceMult * 100);
+        int pieceAllDef      = (int) Math.round(stats.allBossReduction * pieceMult * 100);
+        if (pieceSpecificDef < 1) pieceSpecificDef = 1;
+        if (pieceAllDef < 1) pieceAllDef = 1;
 
         lore.add(Text.literal("vs " + type.displayName + " Bosses: ")
                 .formatted(Formatting.GRAY)
-                .append(Text.literal("-" + bossReductionPercent + "% damage")
+                .append(Text.literal("-" + pieceSpecificDef + "% damage")
                         .formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ")
                 .formatted(Formatting.GRAY)
-                .append(Text.literal("-" + allReductionPercent + "% damage")
+                .append(Text.literal("-" + pieceAllDef + "% damage")
                         .formatted(Formatting.GREEN)));
 
         if (tier >= 2) {
@@ -1210,14 +1251,14 @@ public class SlayerItems {
                 .add(EntityAttributes.ARMOR_TOUGHNESS,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "warden_toughness"),
-                                4.0,
+                                6.0,   // buffed: 4 → 6
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.CHEST)
                 .add(EntityAttributes.MAX_HEALTH,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "warden_health"),
-                                20.0,  // +10 hearts
+                                24.0,  // buffed: +10 hearts → +12 hearts
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.CHEST)
@@ -1241,11 +1282,11 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Forged in the deep dark from").formatted(Formatting.GRAY));
         lore.add(Text.literal("the heart of The Sculk Terror.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("§8MFLUX Research Division Prototype").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[MFLUX: CRD-006 Warden-class containment chestplate]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
         lore.add(Text.literal("🛡 Armor: +12").formatted(Formatting.BLUE));
-        lore.add(Text.literal("🛡 Toughness: +4").formatted(Formatting.BLUE));
-        lore.add(Text.literal("❤ Health: +10 Hearts").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Toughness: +6").formatted(Formatting.BLUE));
+        lore.add(Text.literal("❤ Health: +12 Hearts").formatted(Formatting.RED));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_AQUA));
         lore.add(Text.literal("👁 ESP: See noisy entities (24 blocks)").formatted(Formatting.AQUA));
@@ -1285,19 +1326,19 @@ public class SlayerItems {
                 Text.literal("🕷 Venomous Crawler Leggings")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD));
 
-        // CUSTOM ARMOR ATTRIBUTES
+        // CUSTOM ARMOR ATTRIBUTES - buffed (Item #6)
         AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "spider_legs_armor"),
-                                8.0,
+                                10.0,   // buffed: 8 → 10
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.LEGS)
                 .add(EntityAttributes.ARMOR_TOUGHNESS,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "spider_legs_toughness"),
-                                3.0,
+                                4.0,    // buffed: 3 → 4
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.LEGS)
@@ -1320,11 +1361,11 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Woven from the silk of").formatted(Formatting.GRAY));
         lore.add(Text.literal("a thousand slain bounty spiders.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("§8MFLUX Research Division Prototype").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[MFLUX: CRD-002 spider-silk containment leggings]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
-        lore.add(Text.literal("🛡 Armor: +8").formatted(Formatting.BLUE));
-        lore.add(Text.literal("🛡 Toughness: +3").formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Armor: +10").formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Toughness: +4").formatted(Formatting.BLUE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_RED));
         lore.add(Text.literal("🕸 Web Immunity: Walk through webs").formatted(Formatting.WHITE));
@@ -1379,6 +1420,7 @@ public class SlayerItems {
         lore.add(Text.literal("✦ Boss Hunter I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Research Division").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[MFLUX: CRD-003 reanimated projectile weapon]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("Skeleton Core: projectiles self-correct in flight").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1400,19 +1442,19 @@ public class SlayerItems {
                 Text.literal("🟢 Gelatinous Rustler Boots")
                         .formatted(Formatting.GREEN, Formatting.BOLD));
 
-        // CUSTOM ARMOR ATTRIBUTES
+        // CUSTOM ARMOR ATTRIBUTES - buffed (Item #6)
         AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "slime_boots_armor"),
-                                4.0,
+                                6.0,   // buffed: 4 → 6
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.FEET)
                 .add(EntityAttributes.ARMOR_TOUGHNESS,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "slime_boots_toughness"),
-                                2.0,
+                                3.0,   // buffed: 2 → 3
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
                         AttributeModifierSlot.FEET)
@@ -1435,14 +1477,15 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Bouncy boots made from").formatted(Formatting.GRAY));
         lore.add(Text.literal("condensed slime.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("§8MFLUX Research Division Prototype").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[MFLUX: CRD-004 gelatinous containment boots]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Some say it saves you").formatted(Formatting.DARK_AQUA, Formatting.OBFUSCATED, Formatting.ITALIC));
         lore.add(Text.literal("from death").formatted(Formatting.DARK_AQUA, Formatting.OBFUSCATED, Formatting.ITALIC));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
-        lore.add(Text.literal("🛡 Armor: +4").formatted(Formatting.BLUE));
-        lore.add(Text.literal("🛡 Toughness: +2").formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Armor: +6").formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Toughness: +3").formatted(Formatting.BLUE));
+        lore.add(Text.literal("⬆ Jump Boost: +3 (higher jump)").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GREEN));
         lore.add(Text.literal("⬆ Jump Boost II").formatted(Formatting.AQUA));
@@ -2418,6 +2461,14 @@ public class SlayerItems {
         lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
         lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+10").formatted(Formatting.BLUE)));
+        lore.add(Text.literal("🛡 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+5").formatted(Formatting.BLUE)));
+        lore.add(Text.literal("❤ Bonus Health: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+4 Hearts").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
                 .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
@@ -2430,6 +2481,7 @@ public class SlayerItems {
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-50% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: CRD-001 augmented containment helm | Berserker-class]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Bounty Protection I").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Vampiric II").formatted(Formatting.AQUA));
@@ -2747,8 +2799,7 @@ public class SlayerItems {
         // Lore (unchanged)
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T1 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
-        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Field-tested containment gear | Contractor Program]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
                 .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));

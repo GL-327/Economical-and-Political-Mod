@@ -78,25 +78,9 @@ public class AdminGui {
     private static void openMainPage(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, player, false);
         gui.setTitle(Text.literal("✦ Admin Control Panel ✦"));
-// Add this to your main admin menu setup
-        gui.setSlot(4, new GuiElementBuilder(Items.CHEST)
-                .setName(Text.literal("§6§lCustom Items"))
-                .setLore(List.of(
-                        Text.literal("§7Bounty weapons & armor"),
-                        Text.literal("§7HPEBM weapons"),
-                        Text.literal("§7Crafting materials")
-                ))
-                .setCallback((index, type, action) -> {
-                    openCustomItemsMenu(player);
-                })
-                .build());
-        // Background
-        for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                    .setName(Text.literal(""))
-                    .build());
-        }
 
+        // Fill with colored glass borders (cyan border, gray interior)
+        fillBackground(gui);
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.COMMAND_BLOCK)
                 .setName(Text.literal("★ Admin Control Panel ★").formatted(Formatting.RED, Formatting.BOLD))
@@ -881,8 +865,18 @@ public class AdminGui {
     // ═══════════════════════════════════════════════════════════
 
     private static void fillBackground(SimpleGui gui) {
-        for (int i = 0; i < gui.getSize(); i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        int size = gui.getSize();
+        int cols = 9;
+        int rows = size / cols;
+
+        for (int i = 0; i < size; i++) {
+            int row = i / cols;
+            int col = i % cols;
+            boolean isBorder = (row == 0 || row == rows - 1 || col == 0 || col == cols - 1);
+            net.minecraft.item.Item pane = isBorder
+                    ? Items.CYAN_STAINED_GLASS_PANE
+                    : Items.GRAY_STAINED_GLASS_PANE;
+            gui.setSlot(i, new GuiElementBuilder(pane)
                     .setName(Text.literal(""))
                     .build());
         }
