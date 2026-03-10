@@ -356,6 +356,8 @@ public class CustomItemHandler {
         lore.add(Text.literal("Right-click to use powers").formatted(Formatting.YELLOW));
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8[MFLUX: Contractor-issued judicial armament]").formatted(Formatting.DARK_GRAY));
+
+        gavel.set(DataComponentTypes.LORE, new LoreComponent(lore));
         gavel.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
         SlayerItems.setCustomItemId(gavel, "the_gavel");

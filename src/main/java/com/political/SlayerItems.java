@@ -1191,10 +1191,8 @@ public class SlayerItems {
 
         // Per-piece armor/toughness values (already applied via attributes; show in lore)
         double pieceMult = getPieceBossMultiplier(piece);
-        double armorValue = stats.armor * (piece.equals("Helmet") ? 0.2 : piece.equals("Chestplate") ? 0.4
-                : piece.equals("Leggings") ? 0.3 : 0.1);
-        double toughValue = stats.toughness * (piece.equals("Helmet") ? 0.2 : piece.equals("Chestplate") ? 0.4
-                : piece.equals("Leggings") ? 0.3 : 0.1);
+        double armorValue = stats.armor * pieceMult;
+        double toughValue = stats.toughness * pieceMult;
         lore.add(Text.literal("🛡 Armor: +" + (int) Math.round(armorValue)).formatted(Formatting.BLUE));
         lore.add(Text.literal("🛡 Toughness: +" + (int) Math.round(toughValue)).formatted(Formatting.BLUE));
         lore.add(Text.literal(""));
@@ -1485,7 +1483,7 @@ public class SlayerItems {
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
         lore.add(Text.literal("🛡 Armor: +6").formatted(Formatting.BLUE));
         lore.add(Text.literal("🛡 Toughness: +3").formatted(Formatting.BLUE));
-        lore.add(Text.literal("⬆ Jump Boost: +3 (higher jump)").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⬆ Jump Boost: Jump Boost III while worn").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GREEN));
         lore.add(Text.literal("⬆ Jump Boost II").formatted(Formatting.AQUA));
