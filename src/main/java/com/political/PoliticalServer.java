@@ -116,6 +116,12 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 			ItemStack heldItem = player.getStackInHand(hand);
 
+			// Skeleton Bow: instant left-click fire (intercept entity attacks)
+			if (SkeletonBowHandler.isSkeletonBow(heldItem)) {
+				SkeletonBowHandler.handleInstantShot(serverPlayer);
+				return ActionResult.FAIL; // prevent normal melee attack
+			}
+
 			if (CustomItemHandler.getBeamTier(heldItem) == 7) {
 				if (CustomItemHandler.useUltraOverclockedAbility(serverPlayer, heldItem)) {
 					return ActionResult.SUCCESS;
@@ -123,6 +129,18 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				return ActionResult.FAIL;
 			}
 
+			return ActionResult.PASS;
+		});
+
+		// Skeleton Bow: instant left-click fire when clicking on blocks
+		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+			if (world.isClient()) return ActionResult.PASS;
+			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+			ItemStack heldItem = player.getStackInHand(hand);
+			if (SkeletonBowHandler.isSkeletonBow(heldItem)) {
+				SkeletonBowHandler.handleInstantShot(serverPlayer);
+				return ActionResult.FAIL; // prevent block breaking
+			}
 			return ActionResult.PASS;
 		});
 		UseItemCallback.EVENT.register((player, world, hand) -> {

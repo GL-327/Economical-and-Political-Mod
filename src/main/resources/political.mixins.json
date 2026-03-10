@@ -34,8 +34,7 @@
     "BountyDefenseMixin",
     "BountyDamageMixin",
     "CustomEnchantDamageMixin",
-    "ArrowDamageMixin",
-    "BowItemMixin"
+    "ArrowDamageMixin"
   ],
   "injectors": {
     "defaultRequire": 1
