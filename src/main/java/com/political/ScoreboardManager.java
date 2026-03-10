@@ -10,22 +10,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.entity.EquipmentSlot;
 
 import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages a per-player Hypixel SkyBlock-style sidebar scoreboard.
- * Updated every 20 ticks (1 second).
+ * Updated every 5 ticks for animation effects.
  */
 public class ScoreboardManager {
 
     // Tick counter for throttling updates
     private static int tickCounter = 0;
     private static int displayTickCounter = 0;
-    // How often (in update cycles = seconds) to re-send the display packet
-    private static final int DISPLAY_REFRESH_INTERVAL_SECONDS = 5;
+    // Animation frame counter (increments each update cycle)
+    private static int animFrame = 0;
+    // How often (in update cycles) to re-send the display packet
+    private static final int DISPLAY_REFRESH_INTERVAL = 20;
 
     // Per-player data: objective name → objective
     private static final Map<UUID, String> playerObjectiveNames = new ConcurrentHashMap<>();
@@ -34,7 +34,6 @@ public class ScoreboardManager {
 
     // Max sidebar lines (enough for the full scoreboard layout)
     private static final int MAX_LINES = 18;
-    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("M/d/yyyy");
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -44,15 +43,38 @@ public class ScoreboardManager {
         // Nothing to do on init; per-player setup happens on join
     }
 
+    // Color codes for the animated title cycle
+    private static final String[] TITLE_COLORS = {"§6", "§e", "§a", "§b", "§d", "§c", "§e", "§6"};
+    // Separator animation frames
+    private static final String[] SEPARATOR_FRAMES = {
+        "§8────────────────",
+        "§7─§8───────────────",
+        "§8─§7─§8──────────────",
+        "§8──§7─§8─────────────",
+        "§8───§7─§8────────────",
+        "§8────§7─§8───────────",
+        "§8─────§7─§8──────────",
+        "§8──────§7─§8─────────",
+        "§8───────§7─§8────────",
+        "§8────────§7─§8───────",
+        "§8─────────§7─§8──────",
+        "§8──────────§7─§8─────",
+        "§8───────────§7─§8────",
+        "§8────────────§7─§8───",
+        "§8─────────────§7─§8──",
+        "§8──────────────§7─§8─",
+    };
+
     public static void tick(MinecraftServer server) {
         tickCounter++;
-        if (tickCounter < 20) return;
+        if (tickCounter < 5) return;
         tickCounter = 0;
+        animFrame++;
         displayTickCounter++;
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             updateScoreboard(player);
             // Re-send display packet periodically to ensure scoreboard stays visible
-            if (displayTickCounter % DISPLAY_REFRESH_INTERVAL_SECONDS == 0) {
+            if (displayTickCounter % DISPLAY_REFRESH_INTERVAL == 0) {
                 sendDisplayPacket(player);
             }
         }
@@ -201,10 +223,13 @@ public class ScoreboardManager {
     private static List<String> buildLines(ServerPlayerEntity player) {
         List<String> lines = new ArrayList<>();
 
-        // Title / Date
-        String date = LocalDate.now().format(DATE_FMT);
-        lines.add("§7 " + date);
-        lines.add("§8────────────────");
+        // Animated title color
+        String titleColor = TITLE_COLORS[animFrame % TITLE_COLORS.length];
+        lines.add(titleColor + "§l✦ CivilCraft ✦");
+
+        // Animated separator
+        String sep = SEPARATOR_FRAMES[animFrame % SEPARATOR_FRAMES.length];
+        lines.add(sep);
 
         // Economy
         int coins = CoinManager.getCoins(player);
@@ -219,35 +244,47 @@ public class ScoreboardManager {
         String viceUuid  = DataManager.getViceChair();
         String chairName = chairUuid != null ? DataManager.getPlayerName(chairUuid) : null;
         String viceName  = viceUuid  != null ? DataManager.getPlayerName(viceUuid)  : null;
-        lines.add("§f  Chair: " + (chairName != null ? "§a" + chairName : "§cNone"));
-        lines.add("§f  Vice: "  + (viceName  != null ? "§b" + viceName  : "§cNone"));
+        lines.add("§f  Chair: " + (chairName != null ? "§c§l" + chairName : "§cNone"));
+        lines.add("§f  Vice: "  + (viceName  != null ? "§9§l" + viceName  : "§cNone"));
 
         // Bounty Gear Stats (conditional)
         SlayerManager.SlayerType gearType = detectBountyGearType(player);
         if (gearType != null) {
             lines.add("§8  "); // blank
-            lines.add("§c Bounty Gear Stats:");
-            lines.add("§f  Type: §a" + gearType.displayName);
-            double dmgMulti = SlayerManager.getLevelDamageMultiplier(player, gearType);
-            double dmgReduction = SlayerManager.getLevelDamageReduction(player, gearType);
-            int dmgBonusPct  = (int) Math.round((dmgMulti - 1.0) * 100);
-            int defPct       = (int) Math.round(dmgReduction * 100);
-            lines.add("§f  Dmg Bonus: §c+" + dmgBonusPct + "%");
-            lines.add("§f  Defense: §b-" + defPct + "%");
+            // Pulse effect: cycle between two shades for gear stats header
+            String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
+            lines.add(gearColor + " Bounty Gear Stats:");
+            lines.add("§f  Type: " + gearType.color + gearType.displayName);
+
+            // Show actual armor set bonus stats from the armor being worn
+            int[] armorStats = detectArmorSetStats(player, gearType);
+            int bossReductPct = armorStats[0];
+            int allBossReductPct = armorStats[1];
+            lines.add("§f  vs " + gearType.displayName + " Boss: §a-" + bossReductPct + "%");
+            lines.add("§f  vs All Bosses: §a-" + allBossReductPct + "%");
         }
 
         // Bounty Quest (conditional)
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
         if (quest != null) {
             lines.add("§8   "); // blank
-            lines.add("§d Bounty Quest:");
+            // Pulse the quest header
+            String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
+            lines.add(questColor + " Bounty Quest:");
             lines.add("§f  Target: §4" + quest.slayerType.bossName);
             int required = quest.getKillsRequired();
-            lines.add("§f  Kills: §e" + quest.killCount + "/" + required);
+            // Animated kill counter bar
+            int progress = required > 0 ? (quest.killCount * 5 / required) : 5;
+            StringBuilder bar = new StringBuilder("§a");
+            for (int i = 0; i < 5; i++) {
+                bar.append(i < progress ? "█" : "§8█");
+            }
+            lines.add("§f  " + bar + " §e" + quest.killCount + "/" + required);
         }
 
-        // Footer
-        lines.add("§8────────────────");
+        // Footer separator with animation offset
+        String footSep = SEPARATOR_FRAMES[(animFrame + SEPARATOR_FRAMES.length / 2) % SEPARATOR_FRAMES.length];
+        lines.add(footSep);
         lines.add("§eplay.civilcraft.net");
 
         return lines;
@@ -266,7 +303,7 @@ public class ScoreboardManager {
 
     /**
      * Detects the bounty gear type the player is wearing/holding.
-     * Prefers main-hand weapon type, then armor.
+     * Checks main-hand weapon first, then all armor slots for any T1 or T2 bounty armor.
      */
     private static SlayerManager.SlayerType detectBountyGearType(ServerPlayerEntity player) {
         // Check main hand weapon
@@ -276,7 +313,7 @@ public class ScoreboardManager {
             if (swordType != null) return swordType;
         }
 
-        // Check armor pieces for bounty-related names
+        // Check armor slots for any bounty armor (T1 or T2 for any slayer type)
         net.minecraft.item.ItemStack[] armorSlots = {
             player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD),
             player.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST),
@@ -285,6 +322,17 @@ public class ScoreboardManager {
         };
         for (net.minecraft.item.ItemStack armor : armorSlots) {
             if (armor.isEmpty()) continue;
+            // Check custom_item_id for T1/T2 bounty armor
+            String customId = SlayerItems.getCustomItemId(armor);
+            if (customId != null) {
+                for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                    String prefix = type.name().toLowerCase();
+                    if (customId.startsWith(prefix + "_t1_") || customId.startsWith(prefix + "_t2_")) {
+                        return type;
+                    }
+                }
+            }
+            // Also check special pieces
             if (SlayerItems.isZombieBerserkerHelmet(armor))  return SlayerManager.SlayerType.ZOMBIE;
             if (SlayerItems.isSpiderLeggings(armor))          return SlayerManager.SlayerType.SPIDER;
             if (SlayerItems.isSkeletonBow(armor))             return SlayerManager.SlayerType.SKELETON;
@@ -292,5 +340,40 @@ public class ScoreboardManager {
             if (SlayerItems.isWardenChestplate(armor))        return SlayerManager.SlayerType.WARDEN;
         }
         return null;
+    }
+
+    /**
+     * Detects the armor set stats (boss reduction %) from the bounty armor the player is wearing.
+     * Returns int[]{bossReductionPct, allBossReductionPct}.
+     */
+    private static int[] detectArmorSetStats(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        int bossReductPct = 0;
+        int allBossReductPct = 0;
+        int tier = 1;
+
+        net.minecraft.item.ItemStack[] armorSlots = {
+            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD),
+            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST),
+            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.LEGS),
+            player.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET)
+        };
+        for (net.minecraft.item.ItemStack armor : armorSlots) {
+            if (armor.isEmpty()) continue;
+            String customId = SlayerItems.getCustomItemId(armor);
+            if (customId != null) {
+                String prefix = type.name().toLowerCase();
+                if (customId.startsWith(prefix + "_t2_")) {
+                    tier = 2;
+                    break;
+                } else if (customId.startsWith(prefix + "_t1_")) {
+                    tier = 1;
+                }
+            }
+        }
+
+        SlayerItems.ArmorStats stats = SlayerItems.getArmorStats(type, tier);
+        bossReductPct = (int) (stats.bossReduction * 100);
+        allBossReductPct = (int) (stats.allBossReduction * 100);
+        return new int[]{bossReductPct, allBossReductPct};
     }
 }

