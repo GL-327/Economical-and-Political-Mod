@@ -89,6 +89,9 @@ public class ScoreboardManager {
 
         // Create per-player teams (one per line)
         String[] teamNames = new String[MAX_LINES];
+        // Use color-code combinations as invisible score holder names
+        // These render as empty strings but are unique per line/player
+        String[] colorCodes = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
         for (int i = 0; i < MAX_LINES; i++) {
             String teamName = "sbt" + prefix + String.format("%02d", i);
             // Remove old team if exists
@@ -96,9 +99,14 @@ public class ScoreboardManager {
             if (existing != null) scoreboard.removeTeam(existing);
             Team team = scoreboard.addTeam(teamName);
             team.setPrefix(Text.literal(""));
+            // Hide score number display
+            team.setShowFriendlyInvisibles(false);
             teamNames[i] = teamName;
-            // Each line gets a unique score holder (invisible unique string per player/line)
-            String holderName = prefix + ":" + i;
+            // Holder name: use color codes so they're invisible in sidebar
+            // Format: §<code1>§<code2> - unique per line, renders empty
+            String c1 = colorCodes[i % colorCodes.length];
+            String c2 = colorCodes[(i / colorCodes.length) % colorCodes.length];
+            String holderName = "§" + c1 + "§" + c2 + prefix;
             scoreboard.addScoreHolderToTeam(holderName, team);
         }
         playerTeamNames.put(player.getUuid(), teamNames);
@@ -136,6 +144,13 @@ public class ScoreboardManager {
 
     // ── Update ────────────────────────────────────────────────────
 
+    private static String getHolderName(String prefix, int i) {
+        String[] colorCodes = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
+        String c1 = colorCodes[i % colorCodes.length];
+        String c2 = colorCodes[(i / colorCodes.length) % colorCodes.length];
+        return "§" + c1 + "§" + c2 + prefix;
+    }
+
     private static void updateScoreboard(ServerPlayerEntity player) {
         String objName = playerObjectiveNames.get(player.getUuid());
         String[] teamNames = playerTeamNames.get(player.getUuid());
@@ -157,7 +172,7 @@ public class ScoreboardManager {
         for (int i = 0; i < Math.min(lines.size(), MAX_LINES); i++) {
             String lineText = lines.get(i);
             String teamName = teamNames[i];
-            String holderName = prefix + ":" + i;
+            String holderName = getHolderName(prefix, i);
 
             if (teamName == null) continue;
             Team team = scoreboard.getTeam(teamName);
