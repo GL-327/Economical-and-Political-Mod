@@ -359,11 +359,13 @@ public class BountyCraftingHandler {
     // EXISTING HELPER METHODS (keep these from your current file)
     // ============================================================
     private static int countCores(ServerPlayerEntity player, String coreName) {
+        // Core display names are formatted as "✦ <coreName> ✦"
+        String fullName = "✦ " + coreName + " ✦";
         int count = 0;
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
             Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().equals(coreName)) {
+            if (name != null && name.getString().equals(fullName)) {
                 count += stack.getCount();
             }
         }
@@ -386,11 +388,13 @@ public class BountyCraftingHandler {
     }
 
     private static void removeCores(ServerPlayerEntity player, String coreName, int amount) {
+        // Core display names are formatted as "✦ <coreName> ✦"
+        String fullName = "✦ " + coreName + " ✦";
         int remaining = amount;
         for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
             ItemStack stack = player.getInventory().getStack(i);
             Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().equals(coreName)) {
+            if (name != null && name.getString().equals(fullName)) {
                 int toRemove = Math.min(remaining, stack.getCount());
                 stack.decrement(toRemove);
                 remaining -= toRemove;

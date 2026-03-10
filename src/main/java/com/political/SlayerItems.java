@@ -517,12 +517,12 @@ public class SlayerItems {
 
         // Hint at what it crafts
         String craftHint = switch (type) {
-            case ZOMBIE -> "Crafts: Revenant Falchion";
-            case SPIDER -> "Crafts: Tarantula Blade";
-            case SKELETON -> "Crafts: Bone Reaper";
-            case SLIME -> "Crafts: Sludge Hammer";
-            case ENDERMAN -> "Crafts: Ender Sword";
-            case WARDEN -> "Crafts: Abyssal Blade";
+            case ZOMBIE -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.ZOMBIE);
+            case SPIDER -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.SPIDER);
+            case SKELETON -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.SKELETON);
+            case SLIME -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.SLIME);
+            case ENDERMAN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.ENDERMAN);
+            case WARDEN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.WARDEN);
         };
         lore.add(Text.literal(craftHint).formatted(Formatting.DARK_PURPLE));
 

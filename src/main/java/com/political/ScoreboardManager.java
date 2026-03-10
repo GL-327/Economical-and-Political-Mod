@@ -34,6 +34,8 @@ public class ScoreboardManager {
     // Max sidebar lines (enough for the full scoreboard layout)
     private static final int MAX_LINES = 18;
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("M/d/yyyy");
+    // Color codes used as invisible score holder names in the sidebar
+    private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
     // ── Lifecycle ─────────────────────────────────────────────────
 
@@ -96,9 +98,14 @@ public class ScoreboardManager {
             if (existing != null) scoreboard.removeTeam(existing);
             Team team = scoreboard.addTeam(teamName);
             team.setPrefix(Text.literal(""));
+            // Hide score number display
+            team.setShowFriendlyInvisibles(false);
             teamNames[i] = teamName;
-            // Each line gets a unique score holder (invisible unique string per player/line)
-            String holderName = prefix + ":" + i;
+            // Holder name: use color codes so they're invisible in sidebar
+            // Format: §<code1>§<code2> - unique per line, renders empty
+            String c1 = HOLDER_COLOR_CODES[i % HOLDER_COLOR_CODES.length];
+            String c2 = HOLDER_COLOR_CODES[(i / HOLDER_COLOR_CODES.length) % HOLDER_COLOR_CODES.length];
+            String holderName = "§" + c1 + "§" + c2 + prefix;
             scoreboard.addScoreHolderToTeam(holderName, team);
         }
         playerTeamNames.put(player.getUuid(), teamNames);
@@ -136,6 +143,12 @@ public class ScoreboardManager {
 
     // ── Update ────────────────────────────────────────────────────
 
+    private static String getHolderName(String prefix, int i) {
+        String c1 = HOLDER_COLOR_CODES[i % HOLDER_COLOR_CODES.length];
+        String c2 = HOLDER_COLOR_CODES[(i / HOLDER_COLOR_CODES.length) % HOLDER_COLOR_CODES.length];
+        return "§" + c1 + "§" + c2 + prefix;
+    }
+
     private static void updateScoreboard(ServerPlayerEntity player) {
         String objName = playerObjectiveNames.get(player.getUuid());
         String[] teamNames = playerTeamNames.get(player.getUuid());
@@ -157,7 +170,7 @@ public class ScoreboardManager {
         for (int i = 0; i < Math.min(lines.size(), MAX_LINES); i++) {
             String lineText = lines.get(i);
             String teamName = teamNames[i];
-            String holderName = prefix + ":" + i;
+            String holderName = getHolderName(prefix, i);
 
             if (teamName == null) continue;
             Team team = scoreboard.getTeam(teamName);

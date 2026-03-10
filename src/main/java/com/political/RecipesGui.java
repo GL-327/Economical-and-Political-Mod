@@ -135,7 +135,7 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
         gui.setSlot(23, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
-                .setName(Text.literal("�� Bounty Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .setName(Text.literal("🛡 Bounty Armor").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Berserker Helmet, Venomous Leggings,").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Slime Boots, Warden Chestplate, Bow").formatted(Formatting.GRAY))
@@ -143,11 +143,12 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openArmorRecipes(player)).build());
 
         gui.setSlot(25, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("✦ Special Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("The Gavel, Base HPEBM").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openSpecialRecipes(player)).build());
+                .addLoreLine(Text.literal("⚠ HPEBM Mk1 & The Gavel are obtained").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("ONLY from Underground Auctions!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to view HPEBM upgrades!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED))
@@ -500,8 +501,9 @@ public class RecipesGui {
 
         gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SHOVEL)
                 .setName(Text.literal("⚡ HPEBM Upgrade Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal("Right-click a Smithing Table with your beam to upgrade!").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click an upgrade to see what's needed.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ HPEBM Mk1 (Base) is obtained from").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Underground Auctions ONLY!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Upgrades: right-click Smithing Table").formatted(Formatting.GRAY))
                 .glow().build());
 
         // Mk1 → Mk2

@@ -104,15 +104,14 @@ public class ArmorAbilityHandler {
                     LivingEntity.class,
                     player.getBoundingBox().expand(4.0),
                     e -> e != player && e instanceof HostileEntity && e.isAlive())) {
-                // Hidden poison effect (ambient=true, showParticles=false, showIcon=false)
                 entity.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.POISON, 60, 1, true, false, false
+                        StatusEffects.POISON, 80, 1, false, true, true
                 ));
             }
         }
 
         // Passive 3: Speed boost when poisoning enemies
-        if (player.age % 100 == 0) { // Check every 5 seconds
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
             ServerWorld world = player.getEntityWorld();
             long poisonedNearby = world.getEntitiesByClass(
                     LivingEntity.class,
@@ -121,10 +120,9 @@ public class ArmorAbilityHandler {
             ).size();
 
             if (poisonedNearby > 0) {
-                // Speed boost based on poisoned enemies (hidden)
                 int amplifier = (int) Math.min(2, poisonedNearby - 1);
                 player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED, 60, amplifier, true, false, false
+                        StatusEffects.SPEED, 60, amplifier, false, true, true
                 ));
             }
         }

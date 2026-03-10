@@ -75,50 +75,9 @@ public class BossAbilityManager {
     // ============================================================
     public static void removeBoss(UUID bossId) {
         cleanup(bossId);
-        undyingRageCooldowns.remove(bossId); // Add this line
-    }
-    public static void tickZombieBoss(MobEntity boss, ServerWorld world) {
-        UUID bossId = boss.getUuid();
-
-        // Check if boss is low HP for Undying Rage trigger
-        float healthPercent = boss.getHealth() / boss.getMaxHealth();
-
-        if (healthPercent < 0.5f) {
-            long now = System.currentTimeMillis();
-            long lastRage = undyingRageCooldowns.getOrDefault(bossId, 0L);
-
-            // CHECK COOLDOWN - only trigger if 30 seconds have passed
-            if (now - lastRage >= UNDYING_RAGE_COOLDOWN_MS) {
-                undyingRageCooldowns.put(bossId, now);
-
-                // Apply Undying Rage effects ONCE
-                boss.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.STRENGTH, 200, 1, true, false, false // 10 seconds
-                ));
-                boss.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED, 200, 1, true, false, false
-                ));
-                boss.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.RESISTANCE, 100, 0, true, false, false // 5 seconds
-                ));
-
-                // Heal 10% HP
-                boss.heal(boss.getMaxHealth() * 0.1f);
-
-                // Announce rage
-                for (ServerPlayerEntity player : world.getPlayers()) {
-                    if (player.squaredDistanceTo(boss) < 2500) { // 50 block range
-                        player.sendMessage(Text.literal("§4§l☠ UNDYING RAGE! §r§cThe Outlaw grows stronger!"), false);
-                    }
-                }
-
-                // Sound effect
-                world.playSound(null, boss.getBlockPos(),
-                        net.minecraft.sound.SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED,
-                        net.minecraft.sound.SoundCategory.HOSTILE, 2.0f, 0.5f);
-            }
-            // If on cooldown, do nothing - prevents cycling
-        }
+        undyingRageCooldowns.remove(bossId);
+        undyingRageEndTimes.remove(bossId);
+        undyingRageUsed.remove(bossId);
     }
     public static void tickBossAbilities(LivingEntity boss, ServerPlayerEntity target,
                                          SlayerManager.SlayerType type, int tier) {
@@ -188,49 +147,61 @@ public class BossAbilityManager {
 // UNDYING RAGE - Zombie Boss Invincibility
 // ============================================================
 
-    // At class level, add/update these constants:
-    private static final long UNDYING_RAGE_COOLDOWN_MS = 45000; // 45 seconds (was probably 15-20)
-    private static final long UNDYING_RAGE_DURATION_MS = 5000;  // 5 seconds of invincibility
+    private static final long UNDYING_RAGE_DURATION_MS = 8000;  // 8 seconds of invincibility
     private static final Map<UUID, Long> undyingRageEndTimes = new HashMap<>();
+    // Tracks bosses that have already used Undying Rage (once per fight only)
+    private static final Set<UUID> undyingRageUsed = new HashSet<>();
+    // Keep this for compatibility with removeBoss()
     private static final Map<UUID, Long> undyingRageCooldowns = new HashMap<>();
 
     /**
-     * Activate Undying Rage for zombie boss
+     * Activate Undying Rage for zombie boss - triggers once per fight at 30% HP
      */
     public static boolean activateUndyingRage(LivingEntity boss, ServerWorld world) {
         UUID bossId = boss.getUuid();
-        long now = System.currentTimeMillis();
 
-        // Check cooldown
-        Long lastUse = undyingRageCooldowns.get(bossId);
-        if (lastUse != null && (now - lastUse) < UNDYING_RAGE_COOLDOWN_MS) {
-            return false; // Still on cooldown
+        // Only trigger once per fight
+        if (undyingRageUsed.contains(bossId)) {
+            return false;
         }
 
-        // Activate
-        undyingRageCooldowns.put(bossId, now);
+        undyingRageUsed.add(bossId);
+        long now = System.currentTimeMillis();
         undyingRageEndTimes.put(bossId, now + UNDYING_RAGE_DURATION_MS);
+        undyingRageCooldowns.put(bossId, now);
+
+        // Add to enragedBosses for true invincibility via modifyIncomingDamage
+        enragedBosses.add(bossId);
+        enrageEndTimes.put(bossId, now + UNDYING_RAGE_DURATION_MS);
 
         // Visual effects
         boss.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.GLOWING, 100, 0, true, true, true
+                StatusEffects.GLOWING, 160, 0, true, true, true
         ));
         boss.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.RESISTANCE, 100, 4, true, true, true // Resistance 5 = invincible
+                StatusEffects.STRENGTH, 160, 1, true, true, true
         ));
+        boss.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 160, 1, true, true, true
+        ));
+
+        // Heal 20% HP
+        boss.heal(boss.getMaxHealth() * 0.2f);
 
         // Notify nearby players
         String bossName = boss.hasCustomName() ? boss.getCustomName().getString() : "The Boss";
         for (ServerPlayerEntity player : world.getPlayers()) {
             if (player.squaredDistanceTo(boss) < 2500) { // 50 blocks
-                player.sendMessage(Text.literal("§4§l⚠ " + bossName + " §4§lactivated UNDYING RAGE! §c(5s invincibility)")
+                player.sendMessage(Text.literal("§4§l☠ UNDYING RAGE! §r§c" + bossName + " §cis temporarily INVINCIBLE!")
                         .formatted(Formatting.DARK_RED), false);
+                player.sendMessage(Text.literal("§7(Stay back for §e8 seconds§7 or deal no damage!)")
+                        .formatted(Formatting.GRAY), false);
             }
         }
 
         // Sound
         world.playSound(null, boss.getBlockPos(),
-                SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 1.0f, 0.5f);
+                SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 1.5f, 0.5f);
 
         return true;
     }
@@ -258,18 +229,18 @@ public class BossAbilityManager {
         // Check if rage just ended
         if (now >= endTime) {
             undyingRageEndTimes.remove(bossId);
+            // enragedBosses cleanup is handled by tickEnrageEffects
 
-            // Remove resistance
-            boss.removeStatusEffect(StatusEffects.RESISTANCE);
+            // Remove strength/speed but keep boss alive
+            boss.removeStatusEffect(StatusEffects.STRENGTH);
+            boss.removeStatusEffect(StatusEffects.SPEED);
 
             // Notify nearby players that it ended
             String bossName = boss.hasCustomName() ? boss.getCustomName().getString() : "The Boss";
             for (ServerPlayerEntity player : world.getPlayers()) {
                 if (player.squaredDistanceTo(boss) < 2500) { // 50 blocks
-                    player.sendMessage(Text.literal("§a§l✓ " + bossName + "'s §a§lUndying Rage has ENDED!")
+                    player.sendMessage(Text.literal("§a§l✓ " + bossName + "'s §a§lUndying Rage has ENDED! Attack now!")
                             .formatted(Formatting.GREEN), false);
-                    player.sendMessage(Text.literal("§7(Next rage in §e45s§7)")
-                            .formatted(Formatting.GRAY), false);
                 }
             }
 
@@ -279,14 +250,6 @@ public class BossAbilityManager {
         }
     }
 
-    /**
-     * Clean up when boss dies
-     */
-    public static void onBossDeath(LivingEntity boss) {
-        UUID bossId = boss.getUuid();
-        undyingRageEndTimes.remove(bossId);
-        undyingRageCooldowns.remove(bossId);
-    }
     // ============================================================
     // PHASE SYSTEM
     // ============================================================
@@ -1402,6 +1365,8 @@ public class BossAbilityManager {
         voidZones.keySet().retainAll(aliveBosses);
         abyssalRoarTargets.keySet().retainAll(aliveBosses);
         sculkInfestations.keySet().retainAll(aliveBosses);
+        undyingRageEndTimes.keySet().retainAll(aliveBosses);
+        undyingRageUsed.retainAll(aliveBosses);
     }
 
     // ============================================================
