@@ -1,6 +1,5 @@
 package com.political;
 
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
@@ -9,18 +8,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
 public class SkeletonBowHandler {
 
     public static boolean isSkeletonBow(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        if (stack.getItem() != Items.BOW) return false;
-        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (customName == null) return false;
-        String name = customName.getString();
-        return name.contains("Bone") || name.contains("Skeleton") || name.contains("Desperado");
+        return SlayerItems.isSkeletonBow(stack);
     }
 
     /**

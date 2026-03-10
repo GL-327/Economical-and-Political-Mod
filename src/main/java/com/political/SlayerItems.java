@@ -41,6 +41,35 @@ import net.minecraft.util.Identifier;
 public class SlayerItems {
 
     // ============================================================
+    // CUSTOM ITEM ID SYSTEM (for texture packs)
+    // ============================================================
+
+    public static final String CUSTOM_ITEM_ID_KEY = "custom_item_id";
+
+    /** Sets the custom_item_id field in this item's CUSTOM_DATA NBT. */
+    public static void setCustomItemId(ItemStack stack, String id) {
+        NbtComponent existing = stack.get(DataComponentTypes.CUSTOM_DATA);
+        NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
+        nbt.putString(CUSTOM_ITEM_ID_KEY, id);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    }
+
+    /** Returns the custom_item_id of this item, or null if not set. */
+    public static String getCustomItemId(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return null;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return null;
+        NbtCompound nbt = data.copyNbt();
+        String id = nbt.getString(CUSTOM_ITEM_ID_KEY, null);
+        return (id != null && !id.isEmpty()) ? id : null;
+    }
+
+    /** Returns true if this item has the given custom_item_id. */
+    public static boolean hasCustomItemId(ItemStack stack, String id) {
+        return id != null && id.equals(getCustomItemId(stack));
+    }
+
+    // ============================================================
     // ITEM IDENTIFICATION
     // ============================================================
 
@@ -223,6 +252,7 @@ public class SlayerItems {
         // Tag for NBT-based identification (must be added after enchantments)
         setBountySwordNbt(sword, type, false);
 
+        setCustomItemId(sword, type.name().toLowerCase() + "_sword");
         return sword;
     }
 
@@ -297,6 +327,9 @@ public class SlayerItems {
 
     public static boolean isZombieBerserkerHelmet(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Check custom ID first (preferred)
+        if (hasCustomItemId(stack, "zombie_berserker_helmet")) return true;
+        // Fallback: name-based for old items
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         return name.getString().contains("Zombie Berserker Helmet");
@@ -402,6 +435,7 @@ public class SlayerItems {
         // Tag for NBT-based identification (must be added after enchantments)
         setBountySwordNbt(sword, type, true);
 
+        setCustomItemId(sword, type.name().toLowerCase() + "_sword_t2");
         return sword;
     }
 
@@ -531,11 +565,9 @@ public class SlayerItems {
         // Make it glow
         core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(core, type.name().toLowerCase() + "_core");
         return core;
     }
-
-    // ============================================================
-    // CRAFTED SLAYER WEAPONS (Future expansion)
     // ============================================================
 
     public static ItemStack createEnderSword() {
@@ -564,6 +596,7 @@ public class SlayerItems {
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
         sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(sword, "enderman_sword");
         return sword;
     }
 
@@ -595,6 +628,7 @@ public class SlayerItems {
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
         sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(sword, "abyssal_blade");
         return sword;
     }
 
@@ -626,6 +660,7 @@ public class SlayerItems {
         chunk.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chunk.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(chunk, type.name().toLowerCase() + "_chunk");
         return chunk;
     }
     // ============================================================
@@ -878,11 +913,11 @@ public class SlayerItems {
     }
 
     public static ItemStack createTheGavel() {
-        return createSlayerSword(SlayerManager.SlayerType.WARDEN);
+        return CustomItemHandler.createGavel();
     }
 
     public static ItemStack createZombieHelmet() {
-        return createSlayerSword(SlayerManager.SlayerType.WARDEN);
+        return createZombieBerserkerHelmet();
     }
 
     // ============================================================
@@ -953,6 +988,7 @@ public class SlayerItems {
 
         // Custom enchantments removed - armor comes without pre-applied enchantments
 
+        setCustomItemId(helmet, type.name().toLowerCase() + "_t" + tier + "_helmet");
         return helmet;
     }
 
@@ -993,6 +1029,7 @@ public class SlayerItems {
 
         // Custom enchantments removed - armor comes without pre-applied enchantments
 
+        setCustomItemId(chestplate, type.name().toLowerCase() + "_t" + tier + "_chestplate");
         return chestplate;
     }
 
@@ -1033,6 +1070,7 @@ public class SlayerItems {
 
         // Custom enchantments removed - armor comes without pre-applied enchantments
 
+        setCustomItemId(leggings, type.name().toLowerCase() + "_t" + tier + "_leggings");
         return leggings;
     }
 
@@ -1073,6 +1111,7 @@ public class SlayerItems {
 
         // Custom enchantments removed - armor comes without pre-applied enchantments
 
+        setCustomItemId(boots, type.name().toLowerCase() + "_t" + tier + "_boots");
         return boots;
     }
 
@@ -1180,7 +1219,7 @@ public class SlayerItems {
         lore.add(Text.literal("❤ Health: +10 Hearts").formatted(Formatting.RED));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("👁 ESP: See noisy entities (64 blocks)").formatted(Formatting.AQUA));
+        lore.add(Text.literal("👁 ESP: See noisy entities (24 blocks)").formatted(Formatting.AQUA));
         lore.add(Text.literal("🌙 Night Vision: Permanent").formatted(Formatting.YELLOW));
         lore.add(Text.literal("🛡 Darkness Immunity").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("🛡 Full Knockback Resistance").formatted(Formatting.WHITE));
@@ -1197,6 +1236,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(chestplate, "warden_chestplate");
         return chestplate;
     }
 
@@ -1268,7 +1308,39 @@ public class SlayerItems {
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(leggings, "spider_leggings");
         return leggings;
+    }
+
+    public static ItemStack createSkeletonBow() {
+        ItemStack bow = new ItemStack(Items.BOW);
+
+        bow.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🦴 Bone Desperado Bow")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD));
+
+        bow.set(DataComponentTypes.MAX_DAMAGE, 3840);
+        bow.set(DataComponentTypes.DAMAGE, 0);
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Carved from the bones of a").formatted(Formatting.GRAY));
+        lore.add(Text.literal("thousand fallen archers.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("🏹 Homing Arrows").formatted(Formatting.WHITE));
+        lore.add(Text.literal("⚡ +50% Arrow Speed").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        setCustomItemId(bow, "skeleton_bow");
+        return bow;
     }
 
     public static ItemStack createSlimeBoots() {
@@ -1340,9 +1412,9 @@ public class SlayerItems {
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(boots, "slime_boots");
         return boots;
     }
-// Higher stats than T1, better boss defense
 // ============================================================
 
 
@@ -1379,6 +1451,7 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "zombie_t2_helmet");
         return helmet;
     }
 
@@ -1411,6 +1484,7 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "zombie_t2_chestplate");
         return chestplate;
     }
 
@@ -1443,6 +1517,7 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "zombie_t2_leggings");
         return leggings;
     }
 
@@ -1475,6 +1550,7 @@ public class SlayerItems {
 
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "zombie_t2_boots");
         return boots;
     }
 
@@ -1529,6 +1605,7 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "spider_t2_helmet");
         return helmet;
     }
 
@@ -1545,6 +1622,7 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "spider_t2_chestplate");
         return chestplate;
     }
 
@@ -1561,6 +1639,7 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "spider_t2_leggings");
         return leggings;
     }
 
@@ -1577,6 +1656,7 @@ public class SlayerItems {
 
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "spider_t2_boots");
         return boots;
     }
 
@@ -1653,6 +1733,7 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "skeleton_t2_helmet");
         return helmet;
     }
 
@@ -1685,6 +1766,7 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "skeleton_t2_chestplate");
         return chestplate;
     }
 
@@ -1717,6 +1799,7 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "skeleton_t2_leggings");
         return leggings;
     }
 
@@ -1749,6 +1832,7 @@ public class SlayerItems {
 
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "skeleton_t2_boots");
         return boots;
     }
     // ============================================================
@@ -1783,6 +1867,7 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "slime_t2_helmet");
         return helmet;
     }
 
@@ -1815,6 +1900,7 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "slime_t2_chestplate");
         return chestplate;
     }
 
@@ -1849,6 +1935,7 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "slime_t2_leggings");
         return leggings;
     }
 
@@ -1882,6 +1969,7 @@ public class SlayerItems {
 
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "slime_t2_boots");
         return boots;
     }
     // ============================================================
@@ -1917,6 +2005,7 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "enderman_t2_helmet");
         return helmet;
     }
 
@@ -1953,6 +2042,7 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "enderman_t2_chestplate");
         return chestplate;
     }
 
@@ -1985,6 +2075,7 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "enderman_t2_leggings");
         return leggings;
     }
 
@@ -2018,6 +2109,7 @@ public class SlayerItems {
 
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "enderman_t2_boots");
         return boots;
     }
     // ============================================================
@@ -2057,6 +2149,7 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "warden_t2_helmet");
         return helmet;
     }
 
@@ -2097,6 +2190,7 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "warden_t2_chestplate");
         return chestplate;
     }
 
@@ -2132,6 +2226,7 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "warden_t2_leggings");
         return leggings;
     }
 
@@ -2169,6 +2264,7 @@ public class SlayerItems {
 
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "warden_t2_boots");
         return boots;
     }
     // ============================================================
@@ -2194,6 +2290,9 @@ public class SlayerItems {
 
     public static boolean isSpiderLeggings(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Check custom ID first (preferred)
+        if (hasCustomItemId(stack, "spider_leggings")) return true;
+        // Fallback: name-based for old items
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         String n = name.getString();
@@ -2204,6 +2303,9 @@ public class SlayerItems {
     public static boolean isSkeletonBow(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         if (stack.getItem() != Items.BOW) return false;
+        // Check custom ID first (preferred)
+        if (hasCustomItemId(stack, "skeleton_bow")) return true;
+        // Fallback: name-based for old items
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         String n = name.getString();
@@ -2212,6 +2314,9 @@ public class SlayerItems {
 
     public static boolean isSlimeBoots(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Check custom ID first (preferred)
+        if (hasCustomItemId(stack, "slime_boots")) return true;
+        // Fallback: name-based for old items
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         String n = name.getString();
@@ -2220,6 +2325,9 @@ public class SlayerItems {
 
     public static boolean isWardenChestplate(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
+        // Check custom ID first (preferred)
+        if (hasCustomItemId(stack, "warden_chestplate")) return true;
+        // Fallback: name-based for old items
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         String n = name.getString();
@@ -2283,41 +2391,10 @@ public class SlayerItems {
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(helmet, "zombie_berserker_helmet");
         return helmet;
     }
 
-    public static ItemStack createSkeletonBow() {
-        ItemStack bow = new ItemStack(Items.BOW);
-
-        bow.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("💀 Bone Desperado Bow")
-                        .formatted(Formatting.WHITE, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("BOUNTY WEAPON").formatted(Formatting.WHITE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("+50% Arrow Speed").formatted(Formatting.GREEN));
-        lore.add(Text.literal("+50% Accuracy").formatted(Formatting.GREEN));
-        lore.add(Text.literal("+50% Damage").formatted(Formatting.GREEN));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("✦ Bounty Sharpness III").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Mob Bane II").formatted(Formatting.AQUA));
-        lore.add(Text.literal("✦ Prospector I").formatted(Formatting.AQUA));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.MOB_BANE, 2);
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.PROSPECTOR, 1);
-
-        return bow;
-    }
     // Add this enum inside SlayerItems class
     public enum ArmorPiece {
         HELMET("Helmet", Items.NETHERITE_HELMET),
@@ -2407,6 +2484,7 @@ public class SlayerItems {
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
+        setCustomItemId(leggings, "spider_leggings");
         return leggings;
     }
 
@@ -2443,24 +2521,28 @@ public class SlayerItems {
     public static ItemStack createT1Helmet(SlayerManager.SlayerType type) {
         ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
         applyT1ArmorStats(helmet, type, "Helmet", 3, 1);
+        setCustomItemId(helmet, type.name().toLowerCase() + "_t1_helmet");
         return helmet;
     }
 
     public static ItemStack createT1Chestplate(SlayerManager.SlayerType type) {
         ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         applyT1ArmorStats(chestplate, type, "Chestplate", 5, 2);
+        setCustomItemId(chestplate, type.name().toLowerCase() + "_t1_chestplate");
         return chestplate;
     }
 
     public static ItemStack createT1Leggings(SlayerManager.SlayerType type) {
         ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
         applyT1ArmorStats(leggings, type, "Leggings", 4, 1);
+        setCustomItemId(leggings, type.name().toLowerCase() + "_t1_leggings");
         return leggings;
     }
 
     public static ItemStack createT1Boots(SlayerManager.SlayerType type) {
         ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
         applyT1ArmorStats(boots, type, "Boots", 2, 1);
+        setCustomItemId(boots, type.name().toLowerCase() + "_t1_boots");
         return boots;
     }
 
@@ -2485,24 +2567,28 @@ public class SlayerItems {
     public static ItemStack createT2Helmet(SlayerManager.SlayerType type) {
         ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
         applyT2ArmorStats(helmet, type, "Helmet", 5, 2, 4);
+        setCustomItemId(helmet, type.name().toLowerCase() + "_t2_helmet");
         return helmet;
     }
 
     public static ItemStack createT2Chestplate(SlayerManager.SlayerType type) {
         ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         applyT2ArmorStats(chestplate, type, "Chestplate", 8, 3, 6);
+        setCustomItemId(chestplate, type.name().toLowerCase() + "_t2_chestplate");
         return chestplate;
     }
 
     public static ItemStack createT2Leggings(SlayerManager.SlayerType type) {
         ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
         applyT2ArmorStats(leggings, type, "Leggings", 6, 2, 4);
+        setCustomItemId(leggings, type.name().toLowerCase() + "_t2_leggings");
         return leggings;
     }
 
     public static ItemStack createT2Boots(SlayerManager.SlayerType type) {
         ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
         applyT2ArmorStats(boots, type, "Boots", 4, 2, 2);
+        setCustomItemId(boots, type.name().toLowerCase() + "_t2_boots");
         return boots;
     }
 

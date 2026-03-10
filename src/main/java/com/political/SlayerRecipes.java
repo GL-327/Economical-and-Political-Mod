@@ -78,44 +78,6 @@ public class SlayerRecipes {
         return chestplate;
     }
 
-    // ============================================================
-// SKELETON BOW - With increased durability
-// ============================================================
-    public static ItemStack createSkeletonBow() {
-        ItemStack bow = new ItemStack(Items.BOW);
-
-        // Set custom name
-        bow.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("🏹 Bone Desperado's Longbow")
-                        .formatted(Formatting.WHITE, Formatting.BOLD));
-
-        // INCREASED DURABILITY - 10x default bow (384 -> 3840)
-        bow.set(DataComponentTypes.MAX_DAMAGE, BOW_DURABILITY);
-        bow.set(DataComponentTypes.DAMAGE, 0);
-
-        // Add lore
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Carved from the spine of").formatted(Formatting.GRAY));
-        lore.add(Text.literal("The Bone Desperado himself.").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.WHITE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("🎯 Auto-Lock: ").formatted(Formatting.WHITE)
-                .append(Text.literal("Arrows home to targets").formatted(Formatting.YELLOW)));
-        lore.add(Text.literal("💀 Headshot: ").formatted(Formatting.WHITE)
-                .append(Text.literal("5x Damage").formatted(Formatting.RED, Formatting.BOLD)));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        return bow;
-    }
     private static final List<Recipe> RECIPES = new ArrayList<>();
 
     public static void registerRecipes() {
@@ -284,6 +246,10 @@ public class SlayerRecipes {
                 },
                 SlayerManager.SlayerType.WARDEN, 9
         ));
+    }
+
+    public static List<Recipe> getRecipes() {
+        return java.util.Collections.unmodifiableList(RECIPES);
     }
 
     public static List<Recipe> getAllRecipes() {
