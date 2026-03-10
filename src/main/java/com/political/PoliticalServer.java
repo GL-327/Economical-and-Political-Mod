@@ -320,6 +320,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			server = s;
 			ScoreboardManager.tick(s);
 			VanishManager.tick(s);
+			BountyArmorHandler.tick(s);
 
 			// Boss abilities - iterate worlds
 			for (ServerWorld world : s.getWorlds()) {

@@ -83,7 +83,7 @@ public class ScoreboardManager {
         scoreboard.addObjective(
             objName,
             ScoreboardCriterion.DUMMY,
-            Text.literal("§6§lPOLITICAL SERVER"),
+            Text.literal("§6§lCivilCraft"),
             ScoreboardCriterion.RenderType.INTEGER,
             false,
             BlankNumberFormat.INSTANCE
@@ -112,7 +112,7 @@ public class ScoreboardManager {
             // Format: §<code1>§<code2> - unique per line, renders empty
             String c1 = HOLDER_COLOR_CODES[i % HOLDER_COLOR_CODES.length];
             String c2 = HOLDER_COLOR_CODES[(i / HOLDER_COLOR_CODES.length) % HOLDER_COLOR_CODES.length];
-            String holderName = "§" + c1 + "§" + c2 + prefix;
+            String holderName = "§" + c1 + "§" + c2;
             scoreboard.addScoreHolderToTeam(holderName, team);
         }
         playerTeamNames.put(player.getUuid(), teamNames);
@@ -153,7 +153,7 @@ public class ScoreboardManager {
     private static String getHolderName(String prefix, int i) {
         String c1 = HOLDER_COLOR_CODES[i % HOLDER_COLOR_CODES.length];
         String c2 = HOLDER_COLOR_CODES[(i / HOLDER_COLOR_CODES.length) % HOLDER_COLOR_CODES.length];
-        return "§" + c1 + "§" + c2 + prefix;
+        return "§" + c1 + "§" + c2;
     }
 
     private static void updateScoreboard(ServerPlayerEntity player) {
@@ -248,7 +248,7 @@ public class ScoreboardManager {
 
         // Footer
         lines.add("§8────────────────");
-        lines.add("§ewww.example.com");
+        lines.add("§eplay.civilcraft.net");
 
         return lines;
     }

@@ -45,7 +45,7 @@ public class BountyCraftingHandler {
                 && countGridVanilla(grid, Items.ROTTEN_FLESH) == 2) {
             int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
             if (level < SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ) return null;
-            return SlayerItems.createZombieBerserkerHelmet();
+            return SlayerItems.createT2ZombieHelmet();
         }
 
         // Spider Leggings: 3 Spider Cores + 2 String + 1 Spider Eye
@@ -55,7 +55,7 @@ public class BountyCraftingHandler {
                 && countGridVanilla(grid, Items.SPIDER_EYE) == 1) {
             int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
             if (level < SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ) return null;
-            return SlayerItems.createSpiderLeggings();
+            return SlayerItems.createT2SpiderLeggings();
         }
 
         // Skeleton Bow: 3 Skeleton Cores + 1 Bow + 2 Bones
@@ -75,7 +75,7 @@ public class BountyCraftingHandler {
                 && countGridVanilla(grid, Items.LEATHER_BOOTS) == 1) {
             int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.SLIME);
             if (level < SlayerItems.SLIME_BOOTS_LEVEL_REQ) return null;
-            return SlayerItems.createSlimeBoots();
+            return SlayerItems.createT2SlimeBoots();
         }
 
         // Warden Chestplate: 3 Warden Cores + 2 Echo Shards + 1 Netherite Chestplate
@@ -85,7 +85,7 @@ public class BountyCraftingHandler {
                 && countGridVanilla(grid, Items.NETHERITE_CHESTPLATE) == 1) {
             int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
             if (level < SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ) return null;
-            return SlayerItems.createWardenChestplate();
+            return SlayerItems.createT2WardenChestplate();
         }
 
         // ─── T1 Bounty Swords: 3 Cores + 1 Iron Sword + 2 Sticks = 6 items ──
