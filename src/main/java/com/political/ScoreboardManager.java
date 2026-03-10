@@ -24,8 +24,8 @@ public class ScoreboardManager {
     // Tick counter for throttling updates
     private static int tickCounter = 0;
     private static int displayTickCounter = 0;
-    // How often (in seconds) to re-send the display packet to keep scoreboard visible
-    private static final int DISPLAY_REFRESH_INTERVAL_SECONDS = 10;
+    // How often (in update cycles = seconds) to re-send the display packet
+    private static final int DISPLAY_REFRESH_INTERVAL_SECONDS = 5;
 
     // Per-player data: objective name → objective
     private static final Map<UUID, String> playerObjectiveNames = new ConcurrentHashMap<>();
@@ -89,6 +89,12 @@ public class ScoreboardManager {
             BlankNumberFormat.INSTANCE
         );
         playerObjectiveNames.put(player.getUuid(), objName);
+
+        // Register as the sidebar display on the server scoreboard so clients see it
+        ScoreboardObjective objective = scoreboard.getNullableObjective(objName);
+        if (objective != null) {
+            scoreboard.setObjectiveSlot(ScoreboardDisplaySlot.SIDEBAR, objective);
+        }
 
         // Create per-player teams (one per line)
         String[] teamNames = new String[MAX_LINES];

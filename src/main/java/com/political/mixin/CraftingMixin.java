@@ -1,5 +1,7 @@
 package com.political.mixin;
 
+import com.political.BeamCraftingHandler;
+import com.political.BountyCraftingHandler;
 import com.political.CustomItemHandler;
 import com.political.SlayerItems;
 import net.minecraft.inventory.CraftingResultInventory;
@@ -16,6 +18,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(CraftingScreenHandler.class)
 public class CraftingMixin {
@@ -44,8 +49,17 @@ public class CraftingMixin {
         }
 
         // Prevent combining protected items with normal swords/shovels
-        // or prevent protected items from being consumed in any vanilla recipe
+        // or prevent protected items from being consumed in any vanilla recipe.
+        // BUT: if the grid matches a valid custom recipe, let the TAIL mixin handle it.
         if (hasProtectedItem && (hasNormalSword || (hasHPEBM && hasNormalShovel))) {
+            // Check if this grid matches a valid custom recipe before blocking
+            List<ItemStack> grid = new ArrayList<>();
+            for (int i = 0; i < craftingInventory.size(); i++) {
+                grid.add(craftingInventory.getStack(i));
+            }
+            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return;
+            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return;
+
             resultInventory.setStack(0, ItemStack.EMPTY);
             ci.cancel();
         }
