@@ -221,7 +221,7 @@ public class SlayerItems {
         lore.add(Text.literal("⚔ Bounty Weapon").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
-                .append(Text.literal("2x damage").formatted(Formatting.RED, Formatting.BOLD))
+                .append(Text.literal("200% damage").formatted(Formatting.RED, Formatting.BOLD))
                 .append(Text.literal(" to:").formatted(Formatting.GRAY)));
         lore.add(Text.literal("  • " + type.displayName + "s").formatted(type.color));
         lore.add(Text.literal("  • " + type.bossName).formatted(type.color));
@@ -234,22 +234,13 @@ public class SlayerItems {
         lore.add(Text.literal("✦ Mob Bane I").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Prospector I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("MFLUX Contractor Program").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + BASIC_SWORD_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        // Custom enchantments (T1 Bounty Swords): Bounty Sharpness 2, Mob Bane 1, Prospector 1
-        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.SLAYER_SHARPNESS, 2);
-        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.MOB_BANE, 1);
-        CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.PROSPECTOR, 1);
-
-        // Frostbite for Slime swords
-        if (type == SlayerManager.SlayerType.SLIME) {
-            CustomEnchantmentManager.addEnchantment(sword, CustomEnchantmentManager.FROSTBITE, 1);
-        }
-
-        // Tag for NBT-based identification (must be added after enchantments)
+        // Tag for NBT-based identification
         setBountySwordNbt(sword, type, false);
 
         setCustomItemId(sword, type.name().toLowerCase() + "_sword");
@@ -287,7 +278,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Bounty Core").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Used for crafting " + type.displayName).formatted(Formatting.GRAY));
         lore.add(Text.literal("bounty equipment.").formatted(Formatting.GRAY));
@@ -353,7 +343,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
         lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
@@ -364,6 +353,12 @@ public class SlayerItems {
                 .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
         lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
                 .append(Text.literal("+300%").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-15% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+        lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-50% damage").formatted(Formatting.GREEN)));
 
         // Only show requirement if not met [1]
         if (!meetsRequirement) {
@@ -396,7 +391,7 @@ public class SlayerItems {
         lore.add(Text.literal("⚔ Upgraded Bounty Weapon").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
-                .append(Text.literal("3x damage").formatted(Formatting.RED, Formatting.BOLD))
+                .append(Text.literal("300% damage").formatted(Formatting.RED, Formatting.BOLD))
                 .append(Text.literal(" to:").formatted(Formatting.GRAY)));
         lore.add(Text.literal("  • " + type.displayName + "s").formatted(type.color));
         lore.add(Text.literal("  • " + type.bossName).formatted(type.color));
@@ -412,7 +407,7 @@ public class SlayerItems {
         lore.add(Text.literal("✦ Prospector II").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Soulbound I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§8MFLUX Classified: Charadrius Mk.II"));
+        lore.add(Text.literal("MFLUX Classified: Charadrius Mk.II").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + UPGRADED_SWORD_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
@@ -455,7 +450,7 @@ public class SlayerItems {
         lore.add(Text.literal("⚔ Bounty Weapon").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals ").formatted(Formatting.GRAY)
-                .append(Text.literal("2x damage").formatted(Formatting.RED, Formatting.BOLD))
+                .append(Text.literal("200% damage").formatted(Formatting.RED, Formatting.BOLD))
                 .append(Text.literal(" to:").formatted(Formatting.GRAY)));
         lore.add(Text.literal("  • " + type.displayName + "s").formatted(type.color));
         lore.add(Text.literal("  • " + type.bossName).formatted(type.color));
@@ -568,7 +563,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("RARE DROP").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("A powerful essence from the").formatted(Formatting.GRAY));
         lore.add(Text.literal(type.bossName + ".").formatted(type.color));
@@ -607,7 +601,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§d§lLEGENDARY WEAPON"));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Forged from the essence of").formatted(Formatting.GRAY));
         lore.add(Text.literal("the Void Phantom itself.").formatted(Formatting.DARK_PURPLE));
@@ -637,7 +630,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§5§lMYTHIC WEAPON"));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Born from the depths of the").formatted(Formatting.GRAY));
         lore.add(Text.literal("Sculk Devourer's domain.").formatted(Formatting.DARK_AQUA));
@@ -678,7 +670,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("BOSS DROP").formatted(Formatting.GOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("A fragment from the").formatted(Formatting.GRAY));
         lore.add(Text.literal(type.bossName + ".").formatted(type.color));
@@ -965,6 +956,17 @@ public class SlayerItems {
         }
     }
 
+    // ── Defence constants for special (non-set) armour pieces ──
+    // These deliberately have HIGHER universal defence than boss-specific defence.
+    public static final double BERSERKER_HELMET_BOSS_REDUCTION = 0.15;  // 15% vs zombie boss
+    public static final double BERSERKER_HELMET_ALL_REDUCTION  = 0.50;  // 50% vs all bosses
+    public static final double WARDEN_CHEST_BOSS_REDUCTION     = 0.35;  // 35% vs warden boss
+    public static final double WARDEN_CHEST_ALL_REDUCTION      = 0.65;  // 65% vs all bosses
+    public static final double SPIDER_LEGS_BOSS_REDUCTION      = 0.20;  // 20% vs spider boss
+    public static final double SPIDER_LEGS_ALL_REDUCTION       = 0.55;  // 55% vs all bosses
+    public static final double SLIME_BOOTS_BOSS_REDUCTION      = 0.20;  // 20% vs slime boss
+    public static final double SLIME_BOOTS_ALL_REDUCTION       = 0.55;  // 55% vs all bosses
+
     public static ArmorStats getArmorStats(SlayerManager.SlayerType type, int tier) {
         return switch (type) {
             case ZOMBIE -> tier == 1 ? new ArmorStats(6, 1, 0.50, 0.10) : new ArmorStats(10, 3, 0.70, 0.20);
@@ -1148,9 +1150,7 @@ public class SlayerItems {
         lore.add(Text.literal(""));
 
         if (tier == 1) {
-            lore.add(Text.literal("RARE ARMOR").formatted(Formatting.BLUE, Formatting.BOLD));
         } else {
-            lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         }
 
         lore.add(Text.literal(""));
@@ -1236,7 +1236,6 @@ public class SlayerItems {
         // FIXED LORE
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("MYTHIC ARMOR").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Forged in the deep dark from").formatted(Formatting.GRAY));
         lore.add(Text.literal("the heart of The Sculk Terror.").formatted(Formatting.GRAY));
@@ -1254,9 +1253,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs Warden Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-90% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-35% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-30% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-65% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Bounty Protection III").formatted(Formatting.AQUA));
@@ -1269,12 +1268,6 @@ public class SlayerItems {
 
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOUNTY_PROTECTION, 3);
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.BOSS_WARD, 2);
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.VITALITY, 2);
-        CustomEnchantmentManager.addEnchantment(chestplate, CustomEnchantmentManager.THORNS_OF_VENGEANCE, 1);
 
         setCustomItemId(chestplate, "warden_chestplate");
         return chestplate;
@@ -1322,7 +1315,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Woven from the silk of").formatted(Formatting.GRAY));
         lore.add(Text.literal("a thousand slain bounty spiders.").formatted(Formatting.GRAY));
@@ -1338,9 +1330,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs Spider Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-20% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-55% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Bounty Protection II").formatted(Formatting.AQUA));
@@ -1351,10 +1343,6 @@ public class SlayerItems {
 
         leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
         leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-        CustomEnchantmentManager.addEnchantment(leggings, CustomEnchantmentManager.VITALITY, 1);
 
         setCustomItemId(leggings, "spider_leggings");
         return leggings;
@@ -1372,7 +1360,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY WEAPON").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Carved from the bones of a").formatted(Formatting.GRAY));
         lore.add(Text.literal("thousand fallen archers.").formatted(Formatting.GRAY));
@@ -1382,21 +1369,19 @@ public class SlayerItems {
         lore.add(Text.literal("⚡ Instant Fire (Left-Click)").formatted(Formatting.AQUA));
         lore.add(Text.literal("⏱ 0.6s Cooldown").formatted(Formatting.GRAY));
         lore.add(Text.literal("⚡ +50% Arrow Speed").formatted(Formatting.AQUA));
-        lore.add(Text.literal("💀 Headshot: x5 Damage").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal("💀 Headshot: 500% damage").formatted(Formatting.RED, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Slayer Sharpness III").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Boss Hunter I").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("MFLUX Research Division").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Skeleton Core: projectiles self-correct in flight").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         bow.set(DataComponentTypes.LORE, new LoreComponent(lore));
         bow.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
-        CustomEnchantmentManager.addEnchantment(bow, CustomEnchantmentManager.BOSS_HUNTER, 1);
 
         setCustomItemId(bow, "skeleton_bow");
         return bow;
@@ -1444,7 +1429,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Bouncy boots made from").formatted(Formatting.GRAY));
         lore.add(Text.literal("condensed slime.").formatted(Formatting.GRAY));
@@ -1462,9 +1446,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs Slime Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-20% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-55% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Bounty Protection II").formatted(Formatting.AQUA));
@@ -1474,10 +1458,6 @@ public class SlayerItems {
                 .formatted(Formatting.RED));
         boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.BOUNTY_PROTECTION, 2);
-        CustomEnchantmentManager.addEnchantment(boots, CustomEnchantmentManager.LAST_STAND, 1);
 
         setCustomItemId(boots, "slime_boots");
         return boots;
@@ -1497,7 +1477,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1530,7 +1509,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1563,7 +1541,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1596,7 +1573,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1665,7 +1641,7 @@ public class SlayerItems {
                 Text.literal("Venomous Bandit Helmet II")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD));
 
-        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+        List<Text> lore = createT2ArmorLore(
                 "+5", "+3", null, "+10%",
                 "Spider Boss", "-20%", "-5%",
                 "Spider", T2_ARMOR_LEVEL_REQ);
@@ -1682,7 +1658,7 @@ public class SlayerItems {
                 Text.literal("Venomous Bandit Chestplate II")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD));
 
-        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+        List<Text> lore = createT2ArmorLore(
                 "+10", "+4", "+6", null,
                 "Spider Boss", "-25%", "-8%",
                 "Spider", T2_ARMOR_LEVEL_REQ);
@@ -1699,7 +1675,7 @@ public class SlayerItems {
                 Text.literal("Venomous Bandit Leggings II")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD));
 
-        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+        List<Text> lore = createT2ArmorLore(
                 "+8", "+3", "+4", null,
                 "Spider Boss", "-20%", "-5%",
                 "Spider", T2_ARMOR_LEVEL_REQ);
@@ -1716,7 +1692,7 @@ public class SlayerItems {
                 Text.literal("Venomous Bandit Boots II")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD));
 
-        List<Text> lore = createT2ArmorLore("T2 BOUNTY ARMOR", Formatting.DARK_RED,
+        List<Text> lore = createT2ArmorLore(
                 "+5", "+3", null, "+15%",
                 "Spider Boss", "-15%", "-5%",
                 "Spider", T2_ARMOR_LEVEL_REQ);
@@ -1728,14 +1704,12 @@ public class SlayerItems {
     }
 
     // Helper method to create consistent T2 armor lore
-    private static List<Text> createT2ArmorLore(String title, Formatting titleColor,
+    private static List<Text> createT2ArmorLore(
                                                 String armor, String toughness, String health, String speed,
                                                 String matchBoss, String matchReduction, String otherReduction,
                                                 String bountyType, int levelReq) {
 
         List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal(title).formatted(titleColor, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
 
@@ -1779,7 +1753,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1812,7 +1785,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1845,7 +1817,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1878,7 +1849,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.WHITE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1913,7 +1883,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1946,7 +1915,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -1979,7 +1947,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2014,7 +1981,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2050,7 +2016,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2084,7 +2049,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2121,7 +2085,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2154,7 +2117,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2190,7 +2152,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
@@ -2228,7 +2189,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
@@ -2269,7 +2229,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
@@ -2305,7 +2264,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
@@ -2447,7 +2405,6 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("LEGENDARY ARMOR").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("A cursed helm forged from the").formatted(Formatting.GRAY));
         lore.add(Text.literal("essence of fallen bounty bosses.").formatted(Formatting.GRAY));
@@ -2456,13 +2413,13 @@ public class SlayerItems {
         lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
                 .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
         lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
-                .append(Text.literal("x4 (300% MORE)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("+300% MORE").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-15% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-50% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ENCHANTMENTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Bounty Protection I").formatted(Formatting.AQUA));
@@ -2473,10 +2430,6 @@ public class SlayerItems {
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        // Custom enchantments
-        CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.BOUNTY_PROTECTION, 1);
-        CustomEnchantmentManager.addEnchantment(helmet, CustomEnchantmentManager.VAMPIRIC, 2);
 
         setCustomItemId(helmet, "zombie_berserker_helmet");
         return helmet;
@@ -2859,7 +2812,6 @@ public class SlayerItems {
         // Lore (unchanged)
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("T2 BOUNTY ARMOR").formatted(type.color, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)

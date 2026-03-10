@@ -528,10 +528,11 @@ public class CommandRegistry {
 
                             String message = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "message");
                             String chairName = player.getName().getString();
-                            Text broadcast = Text.literal("§c§l[INTERCOM] §c§l" + chairName + "§f§l: " + message);
-
                             for (ServerPlayerEntity online : PoliticalServer.server.getPlayerManager().getPlayerList()) {
-                                online.sendMessage(broadcast, false);
+                                online.sendMessage(Text.literal("§8§m                                        "), false);
+                                online.sendMessage(Text.literal("§6§l📢 INTERCOM §8| §f" + chairName), false);
+                                online.sendMessage(Text.literal("§7" + message), false);
+                                online.sendMessage(Text.literal("§8§m                                        "), false);
                             }
                             return 1;
                         })));
