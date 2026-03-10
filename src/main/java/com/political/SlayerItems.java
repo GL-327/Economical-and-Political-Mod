@@ -1331,6 +1331,8 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
         lore.add(Text.literal("🏹 Homing Arrows").formatted(Formatting.WHITE));
+        lore.add(Text.literal("⚡ Instant Fire (Left-Click)").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⏱ 0.6s Cooldown").formatted(Formatting.GRAY));
         lore.add(Text.literal("⚡ +50% Arrow Speed").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Skeleton Bounty Lvl " + SKELETON_BOW_LEVEL_REQ)

@@ -1495,7 +1495,7 @@ public class CustomItemHandler {
     }
 
     // ============================================================
-// SKELETON BOW - No tick needed, damage handled in mixin
+// SKELETON BOW - Instant-fire on left-click (swing detection)
 // ============================================================
     public static boolean isSkeletonBowEquipped(ServerPlayerEntity player) {
         ItemStack mainHand = player.getMainHandStack();
@@ -1504,7 +1504,8 @@ public class CustomItemHandler {
     }
 
     public static void tickSkeletonBow(ServerPlayerEntity player) {
-        // No active tick needed - homing and headshot handled in mixins
+        // Detect left-clicks in the air (no block/entity target) via hand swing
+        SkeletonBowHandler.tickSwingDetection(player);
     }
 
     // ============================================================
