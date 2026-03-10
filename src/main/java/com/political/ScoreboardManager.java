@@ -34,6 +34,8 @@ public class ScoreboardManager {
     // Max sidebar lines (enough for the full scoreboard layout)
     private static final int MAX_LINES = 18;
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("M/d/yyyy");
+    // Color codes used as invisible score holder names in the sidebar
+    private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
     // ── Lifecycle ─────────────────────────────────────────────────
 
@@ -89,9 +91,6 @@ public class ScoreboardManager {
 
         // Create per-player teams (one per line)
         String[] teamNames = new String[MAX_LINES];
-        // Use color-code combinations as invisible score holder names
-        // These render as empty strings but are unique per line/player
-        String[] colorCodes = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
         for (int i = 0; i < MAX_LINES; i++) {
             String teamName = "sbt" + prefix + String.format("%02d", i);
             // Remove old team if exists
@@ -104,8 +103,8 @@ public class ScoreboardManager {
             teamNames[i] = teamName;
             // Holder name: use color codes so they're invisible in sidebar
             // Format: §<code1>§<code2> - unique per line, renders empty
-            String c1 = colorCodes[i % colorCodes.length];
-            String c2 = colorCodes[(i / colorCodes.length) % colorCodes.length];
+            String c1 = HOLDER_COLOR_CODES[i % HOLDER_COLOR_CODES.length];
+            String c2 = HOLDER_COLOR_CODES[(i / HOLDER_COLOR_CODES.length) % HOLDER_COLOR_CODES.length];
             String holderName = "§" + c1 + "§" + c2 + prefix;
             scoreboard.addScoreHolderToTeam(holderName, team);
         }
@@ -145,9 +144,8 @@ public class ScoreboardManager {
     // ── Update ────────────────────────────────────────────────────
 
     private static String getHolderName(String prefix, int i) {
-        String[] colorCodes = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
-        String c1 = colorCodes[i % colorCodes.length];
-        String c2 = colorCodes[(i / colorCodes.length) % colorCodes.length];
+        String c1 = HOLDER_COLOR_CODES[i % HOLDER_COLOR_CODES.length];
+        String c2 = HOLDER_COLOR_CODES[(i / HOLDER_COLOR_CODES.length) % HOLDER_COLOR_CODES.length];
         return "§" + c1 + "§" + c2 + prefix;
     }
 

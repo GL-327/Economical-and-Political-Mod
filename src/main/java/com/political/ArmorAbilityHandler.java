@@ -110,7 +110,7 @@ public class ArmorAbilityHandler {
             }
         }
 
-        // Passive 3: Persistent speed boost while wearing leggings
+        // Passive 3: Speed boost when poisoning enemies
         if (!player.hasStatusEffect(StatusEffects.SPEED)) {
             ServerWorld world = player.getEntityWorld();
             long poisonedNearby = world.getEntitiesByClass(
@@ -119,10 +119,12 @@ public class ArmorAbilityHandler {
                     e -> e != player && e.hasStatusEffect(StatusEffects.POISON)
             ).size();
 
-            int amplifier = poisonedNearby > 0 ? (int) Math.min(2, poisonedNearby - 1) : 0;
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SPEED, 60, amplifier, false, true, true
-            ));
+            if (poisonedNearby > 0) {
+                int amplifier = (int) Math.min(2, poisonedNearby - 1);
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.SPEED, 60, amplifier, false, true, true
+                ));
+            }
         }
     }
 
