@@ -413,6 +413,7 @@ public class SlayerItems {
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ COMPATIBLE ENCHANTS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Bounty Sharpness IV").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Mob Bane II").formatted(Formatting.AQUA));
         lore.add(Text.literal("✦ Boss Hunter I").formatted(Formatting.AQUA));
@@ -610,7 +611,7 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("Ability: Void Strike").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal("  Right-click to teleport behind").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  your target and deal 200% extra damage").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  your target and deal 200% damage").formatted(Formatting.GRAY));
         lore.add(Text.literal("  Cooldown: 10s").formatted(Formatting.RED));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Deals 400% damage to Endermen").formatted(Formatting.LIGHT_PURPLE));
@@ -2157,6 +2158,7 @@ public class SlayerItems {
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("§8MFLUX Research Division").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2194,6 +2196,7 @@ public class SlayerItems {
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("§8MFLUX Research Division").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2234,6 +2237,7 @@ public class SlayerItems {
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("§8MFLUX Research Division").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
@@ -2269,6 +2273,7 @@ public class SlayerItems {
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
         lore.add(Text.literal("LEGENDARY").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("§8MFLUX Research Division").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)

@@ -36,17 +36,17 @@ public class BountyDefenseMixin {
             bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
         }
 
-        float multiplier = 1.0f;
-        multiplier *= getArmorDefenseMultiplier(player, bossType, isAnyBoss);
-        multiplier *= getWeaponDefenseMultiplier(player, bossType);
+        float damageMultiplier = 1.0f;
+        damageMultiplier *= getArmorDefenseMultiplier(player, bossType, isAnyBoss);
+        damageMultiplier *= getWeaponDefenseMultiplier(player, bossType);
 
         // Standard T1/T2 armor defense reduction via SlayerArmorHandler
         if (bossType != null) {
             float setReduction = SlayerArmorHandler.getBossDamageReduction(player, bossType);
-            multiplier *= (1.0f - setReduction);
+            damageMultiplier *= (1.0f - setReduction);
         }
 
-        return amount * multiplier;
+        return amount * damageMultiplier;
     }
 
     private SlayerManager.SlayerType getBossType(LivingEntity entity) {
