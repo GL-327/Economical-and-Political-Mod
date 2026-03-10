@@ -13,6 +13,8 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+// SlayerData is in the same package
+
 /**
  * Manages a per-player Hypixel SkyBlock-style sidebar scoreboard.
  * Updated every 5 ticks for animation effects.
@@ -43,8 +45,6 @@ public class ScoreboardManager {
         // Nothing to do on init; per-player setup happens on join
     }
 
-    // Color codes for the animated title cycle
-    private static final String[] TITLE_COLORS = {"§6", "§e", "§a", "§b", "§d", "§c", "§e", "§6"};
     // Separator animation frames
     private static final String[] SEPARATOR_FRAMES = {
         "§8────────────────",
@@ -223,11 +223,7 @@ public class ScoreboardManager {
     private static List<String> buildLines(ServerPlayerEntity player) {
         List<String> lines = new ArrayList<>();
 
-        // Animated title color
-        String titleColor = TITLE_COLORS[animFrame % TITLE_COLORS.length];
-        lines.add(titleColor + "§l✦ CivilCraft ✦");
-
-        // Animated separator
+        // Animated separator (no duplicate CivilCraft — the objective title already shows it)
         String sep = SEPARATOR_FRAMES[animFrame % SEPARATOR_FRAMES.length];
         lines.add(sep);
 
@@ -248,26 +244,35 @@ public class ScoreboardManager {
         lines.add("§7  Vice:  " + (viceName  != null ? "§9" + viceName  : "§8None"));
         lines.add("§8  ");
 
-        // Underground auction timer
+        // Underground Auction timer
         boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
         if (auctionActive) {
             String auctionPulse = (animFrame % 4 < 2) ? "§6§l" : "§e§l";
-            lines.add(auctionPulse + " 🏪 " + "§r§a§lAuction: LIVE");
+            lines.add(auctionPulse + " 🏪 " + "§r§a§lUnderground Auction: LIVE");
         } else {
             long msLeft = UndergroundAuctionManager.getTimeUntilNextAuction();
-            lines.add("§6 🏪 §7Auction: §f" + formatDuration(msLeft));
+            lines.add("§6 🏪 §7Underground Auction: §f" + formatDuration(msLeft));
         }
 
-        // Bounty Gear Stats – display each active type separately
+        // Bounty level summary
+        lines.add("§8   ");
+        int totalLevel = 0;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            totalLevel += SlayerData.getSlayerLevel(player.getUuidAsString(), type);
+        }
+        String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
+        lines.add("§e ⭐ §7Bounty Level: " + levelColor + totalLevel);
+
+        // Bounty Stats – display each active type separately
         // stats[type] = int[3]: [weaponDmgPct, specificDefPct, universalDefPct]
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
         boolean hasQuest = quest != null;
 
         if (!bountyStats.isEmpty()) {
-            lines.add("§8   ");
+            lines.add("§8    ");
             String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
-            lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
+            lines.add(gearColor + "§l ⚔ §r§7Bounty Stats");
 
             int totalUniversalDef = 0;
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
@@ -288,7 +293,7 @@ public class ScoreboardManager {
 
         // Bounty Quest (conditional)
         if (hasQuest) {
-            lines.add("§8    ");
+            lines.add("§8     ");
             String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
             lines.add(questColor + "§l ⚔ §r§dBounty Quest");
             lines.add("§7  Target: §c" + quest.slayerType.bossName);
@@ -351,13 +356,26 @@ public class ScoreboardManager {
         ItemStack weapon = player.getMainHandStack();
         if (!weapon.isEmpty()) {
             if (SlayerItems.isSkeletonBow(weapon)) {
-                stats.computeIfAbsent(SlayerManager.SlayerType.SKELETON, k -> new int[3])[0] = 500;
+                int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SKELETON, k -> new int[3]);
+                s[0] = 500;
+                // Skeleton bow also provides some universal defence
+                s[2] += 10;
             } else if (SlayerItems.isUpgradedSlayerSword(weapon)) {
                 SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
-                if (t != null) stats.computeIfAbsent(t, k -> new int[3])[0] = 300;
+                if (t != null) {
+                    int[] s = stats.computeIfAbsent(t, k -> new int[3]);
+                    s[0] = 300;
+                    s[1] = Math.max(s[1], 60); // -60% vs matching boss
+                    s[2] += 15;                 // -15% vs all bosses
+                }
             } else if (SlayerItems.isSlayerSword(weapon)) {
                 SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
-                if (t != null) stats.computeIfAbsent(t, k -> new int[3])[0] = 200;
+                if (t != null) {
+                    int[] s = stats.computeIfAbsent(t, k -> new int[3]);
+                    s[0] = 200;
+                    s[1] = Math.max(s[1], 50); // -50% vs matching boss
+                    s[2] += 10;                 // -10% vs all bosses
+                }
             }
         }
 
