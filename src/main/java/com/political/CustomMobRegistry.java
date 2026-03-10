@@ -6,10 +6,13 @@ import java.util.*;
  * Registry for custom mob type definitions.
  * Use {@link #register(String, CustomMobManager.CustomMobDefinition)} to add new mob types.
  * Use {@link #get(String)} to look up a type by its ID.
+ * Use {@link #getByDisplayName(String)} for O(1) lookup during tick/death events.
  */
 public class CustomMobRegistry {
 
     private static final Map<String, CustomMobManager.CustomMobDefinition> REGISTRY = new LinkedHashMap<>();
+    /** Secondary index keyed by display-name string for O(1) lookup during tick/death events. */
+    private static final Map<String, CustomMobManager.CustomMobDefinition> BY_DISPLAY_NAME = new HashMap<>();
 
     // ── Registration ─────────────────────────────────────────────
 
@@ -26,6 +29,7 @@ public class CustomMobRegistry {
             PoliticalServer.LOGGER.warn("[CustomMobRegistry] Duplicate mob type '{}' – overwriting previous entry.", key);
         }
         REGISTRY.put(key, def);
+        BY_DISPLAY_NAME.put(def.displayName.getString(), def);
         PoliticalServer.LOGGER.info("[CustomMobRegistry] Registered custom mob type '{}'.", key);
     }
 
@@ -33,6 +37,11 @@ public class CustomMobRegistry {
 
     public static Optional<CustomMobManager.CustomMobDefinition> get(String id) {
         return Optional.ofNullable(REGISTRY.get(id.toLowerCase(Locale.ROOT)));
+    }
+
+    /** O(1) lookup by the mob's display-name string, for use during tick/death events. */
+    public static Optional<CustomMobManager.CustomMobDefinition> getByDisplayName(String displayName) {
+        return Optional.ofNullable(BY_DISPLAY_NAME.get(displayName));
     }
 
     public static boolean contains(String id) {

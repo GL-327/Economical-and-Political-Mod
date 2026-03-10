@@ -249,9 +249,9 @@ public class ScoreboardManager {
 
     // ── Helpers ──────────────────────────────────────────────────
 
-    /** Returns a 6-char prefix unique per player (first 6 chars of UUID string, no dashes). */
+    /** Returns an 8-char prefix unique per player (first 8 chars of UUID string, no dashes). */
     private static String getPlayerPrefix(ServerPlayerEntity player) {
-        return player.getUuid().toString().replace("-", "").substring(0, 6);
+        return player.getUuid().toString().replace("-", "").substring(0, 8);
     }
 
     private static String formatNumber(int n) {

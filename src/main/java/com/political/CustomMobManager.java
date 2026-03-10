@@ -248,12 +248,9 @@ public class CustomMobManager {
     public static void tick(MobEntity entity, ServerWorld world) {
         if (entity.getCustomName() == null) return;
         String name = entity.getCustomName().getString();
-        for (CustomMobDefinition def : CustomMobRegistry.getAllDefinitions()) {
-            if (def.displayName.getString().equals(name) && def.onTick != null) {
-                def.onTick.accept(entity, world);
-                return;
-            }
-        }
+        CustomMobRegistry.getByDisplayName(name).ifPresent(def -> {
+            if (def.onTick != null) def.onTick.accept(entity, world);
+        });
     }
 
     // ── Drop Handling ─────────────────────────────────────────────
@@ -265,18 +262,17 @@ public class CustomMobManager {
     public static List<ItemStack> getDrops(LivingEntity entity, ServerPlayerEntity killer) {
         if (entity.getCustomName() == null) return List.of();
         String name = entity.getCustomName().getString();
-        for (CustomMobDefinition def : CustomMobRegistry.getAllDefinitions()) {
-            if (!def.displayName.getString().equals(name)) continue;
-            if (def.requiredSlayerType != null && def.requiredSlayerLevel > 0) {
-                int level = SlayerData.getSlayerLevel(killer.getUuidAsString(), def.requiredSlayerType);
-                if (level < def.requiredSlayerLevel) return List.of();
-            }
-            List<ItemStack> result = new ArrayList<>();
-            for (ItemStack drop : def.drops) {
-                result.add(drop.copy());
-            }
-            return result;
+        Optional<CustomMobDefinition> opt = CustomMobRegistry.getByDisplayName(name);
+        if (opt.isEmpty()) return List.of();
+        CustomMobDefinition def = opt.get();
+        if (def.requiredSlayerType != null && def.requiredSlayerLevel > 0) {
+            int level = SlayerData.getSlayerLevel(killer.getUuidAsString(), def.requiredSlayerType);
+            if (level < def.requiredSlayerLevel) return List.of();
         }
-        return List.of();
+        List<ItemStack> result = new ArrayList<>();
+        for (ItemStack drop : def.drops) {
+            result.add(drop.copy());
+        }
+        return result;
     }
 }

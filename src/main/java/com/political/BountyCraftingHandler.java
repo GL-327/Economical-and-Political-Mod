@@ -174,13 +174,13 @@ public class BountyCraftingHandler {
 
     /**
      * Count slots in grid that contain the given vanilla item.
-     * Excludes custom-named items to avoid counting custom equipment as vanilla materials.
+     * Excludes protected (mod-custom) items to avoid counting custom equipment as vanilla materials.
      */
     private static int countGridVanilla(List<ItemStack> grid, Item item) {
         int count = 0;
         for (ItemStack stack : grid) {
             if (stack.isEmpty()) continue;
-            if (stack.isOf(item) && !stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+            if (stack.isOf(item) && !CustomItemHandler.isProtectedItem(stack)) {
                 count++;
             }
         }
