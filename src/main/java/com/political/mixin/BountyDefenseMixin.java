@@ -1,5 +1,6 @@
 package com.political.mixin;
 
+import com.political.SlayerArmorHandler;
 import com.political.SlayerItems;
 import com.political.SlayerManager;
 import net.minecraft.component.DataComponentTypes;
@@ -35,11 +36,17 @@ public class BountyDefenseMixin {
             bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
         }
 
-        float reduction = 1.0f;
-        reduction *= getArmorDefenseMultiplier(player, bossType, isAnyBoss);
-        reduction *= getWeaponDefenseMultiplier(player, bossType);
+        float damageMultiplier = 1.0f;
+        damageMultiplier *= getArmorDefenseMultiplier(player, bossType, isAnyBoss);
+        damageMultiplier *= getWeaponDefenseMultiplier(player, bossType);
 
-        return amount * reduction;
+        // Standard T1/T2 armor defense reduction via SlayerArmorHandler
+        if (bossType != null) {
+            float setReduction = SlayerArmorHandler.getBossDamageReduction(player, bossType);
+            damageMultiplier *= (1.0f - setReduction);
+        }
+
+        return amount * damageMultiplier;
     }
 
     private SlayerManager.SlayerType getBossType(LivingEntity entity) {
@@ -70,39 +77,39 @@ public class BountyDefenseMixin {
         ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
 
-        // ===== ZOMBIE BERSERKER HELMET (T1) =====
+        // ===== ZOMBIE BERSERKER HELMET =====
         if (isZombieBerserkerHelmet(helmet) && SlayerItems.canUseZombieBerserkerHelmet(player)) {
             if (bossType == SlayerManager.SlayerType.ZOMBIE) {
-                multiplier *= 0.25f; // -75% from matching boss
+                multiplier *= (1.0f - (float) SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION);
             } else if (isAnyBoss) {
-                multiplier *= 0.85f; // -15% from all bosses
+                multiplier *= (1.0f - (float) SlayerItems.BERSERKER_HELMET_ALL_REDUCTION);
             }
         }
 
-        // ===== VENOMOUS CRAWLER LEGGINGS (T1) =====
+        // ===== VENOMOUS CRAWLER LEGGINGS =====
         if (isSpiderLeggings(leggings) && SlayerItems.canUseSpiderLeggings(player)) {
             if (bossType == SlayerManager.SlayerType.SPIDER) {
-                multiplier *= 0.25f; // -75% from matching boss
+                multiplier *= (1.0f - (float) SlayerItems.SPIDER_LEGS_BOSS_REDUCTION);
             } else if (isAnyBoss) {
-                multiplier *= 0.85f; // -15% from all bosses
+                multiplier *= (1.0f - (float) SlayerItems.SPIDER_LEGS_ALL_REDUCTION);
             }
         }
 
-        // ===== GELATINOUS RUSTLER BOOTS (T1) =====
+        // ===== GELATINOUS RUSTLER BOOTS =====
         if (isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
             if (bossType == SlayerManager.SlayerType.SLIME) {
-                multiplier *= 0.25f; // -75% from matching boss
+                multiplier *= (1.0f - (float) SlayerItems.SLIME_BOOTS_BOSS_REDUCTION);
             } else if (isAnyBoss) {
-                multiplier *= 0.85f; // -15% from all bosses
+                multiplier *= (1.0f - (float) SlayerItems.SLIME_BOOTS_ALL_REDUCTION);
             }
         }
 
-        // ===== SCULK TERROR CHESTPLATE (T2) =====
+        // ===== SCULK TERROR CHESTPLATE =====
         if (isWardenChestplate(chestplate) && SlayerItems.canUseWardenChestplate(player)) {
             if (bossType == SlayerManager.SlayerType.WARDEN) {
-                multiplier *= 0.10f; // -90% from matching boss
+                multiplier *= (1.0f - (float) SlayerItems.WARDEN_CHEST_BOSS_REDUCTION);
             } else if (isAnyBoss) {
-                multiplier *= 0.70f; // -30% from all bosses
+                multiplier *= (1.0f - (float) SlayerItems.WARDEN_CHEST_ALL_REDUCTION);
             }
         }
 

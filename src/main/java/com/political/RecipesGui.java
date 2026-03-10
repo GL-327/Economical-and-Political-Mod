@@ -155,6 +155,64 @@ public class RecipesGui {
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED))
                 .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
 
+        // Admin-set custom recipes (from /setrecipe)
+        java.util.List<SlayerRecipes.Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();
+        if (!customRecipes.isEmpty()) {
+            gui.setSlot(43, new GuiElementBuilder(Items.COMMAND_BLOCK)
+                    .setName(Text.literal("⚙ Admin Recipes").formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Custom recipes set by admins").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("(" + customRecipes.size() + " recipe(s) available)").formatted(Formatting.GREEN))
+                    .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                    .setCallback((idx, type, action) -> openCustomRecipes(player)).build());
+        }
+
+        gui.open();
+    }
+
+    // ============================================================
+    // ADMIN CUSTOM RECIPES (from /setrecipe)
+    // ============================================================
+    public static void openCustomRecipes(ServerPlayerEntity player) {
+        java.util.List<SlayerRecipes.Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();
+        if (customRecipes.isEmpty()) {
+            player.sendMessage(Text.literal("No custom recipes set yet.").formatted(Formatting.YELLOW), false);
+            return;
+        }
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚙ Admin Custom Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.COMMAND_BLOCK)
+                .setName(Text.literal("⚙ Admin Recipes").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipes configured by server admins").formatted(Formatting.GRAY))
+                .glow().build());
+
+        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39, 40, 41};
+        int slot = 0;
+        for (SlayerRecipes.Recipe recipe : customRecipes) {
+            if (slot >= slots.length) break;
+            ItemStack result = recipe.result;
+            GuiElementBuilder rb = new GuiElementBuilder(result.getItem());
+            Text resultName = result.get(DataComponentTypes.CUSTOM_NAME);
+            if (resultName != null) rb.setName(resultName);
+            else rb.setName(Text.literal(recipe.name).formatted(Formatting.WHITE));
+            rb.addLoreLine(Text.literal("Click to view recipe").formatted(Formatting.YELLOW));
+            rb.setCallback((idx, type, action) -> openRecipePage(player, recipe.name,
+                    resultName != null ? resultName : Text.literal(recipe.name),
+                    recipe.ingredients, recipe.result,
+                    () -> openCustomRecipes(player)));
+            gui.setSlot(slots[slot++], rb.build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
         gui.open();
     }
 

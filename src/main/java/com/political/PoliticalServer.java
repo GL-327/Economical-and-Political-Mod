@@ -327,6 +327,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TaxManager.checkPlayerJoin(player);
 			DictatorManager.checkPlayerJoin(player);
 			ScoreboardManager.onPlayerJoin(player);
+			TabListManager.onPlayerJoin(player);
 			VanishManager.onPlayerJoin(player);
 			updatePlayerDisplayName(player);
 			sendJoinInfo(player);
@@ -358,6 +359,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
 			ScoreboardManager.tick(s);
+			TabListManager.tick(s);
 			VanishManager.tick(s);
 			BountyArmorHandler.tick(s);
 

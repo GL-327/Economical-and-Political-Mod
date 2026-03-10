@@ -29,12 +29,16 @@ public class ArrowHeadshotMixin {
         Entity target = hitResult.getEntity();
         if (!(target instanceof LivingEntity living)) return damage;
 
-        // Check for headshot (arrow hit above eye height - 0.3)
-        double hitY = arrow.getY();
-        double targetEyeY = living.getEyeY();
+        // Headshot: arrow hit the upper 25% of the entity's height (the head region)
+        // Entity bounding box bottom is getY(), top is getY() + getHeight()
+        double entityBottom = living.getY();
+        double entityHeight = living.getHeight();
+        double headThreshold = entityBottom + entityHeight * 0.75;  // top 25% = head
 
-        if (hitY >= targetEyeY - 0.3) {
-            // HEADSHOT! 5x damage
+        double hitY = arrow.getY();
+
+        if (hitY >= headThreshold) {
+            // HEADSHOT! 500% damage (5x)
             player.sendMessage(Text.literal("💀 HEADSHOT!")
                     .formatted(Formatting.RED, Formatting.BOLD), true);
             return damage * 5;

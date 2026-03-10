@@ -528,11 +528,15 @@ public class CommandRegistry {
 
                             String message = com.mojang.brigadier.arguments.StringArgumentType.getString(context, "message");
                             String chairName = player.getName().getString();
+                            String border = "§8╔══════════════════════════════╗";
+                            String footerLine = "§8╚══════════════════════════════╝";
+                            String titleLine = "§8║  §6§l📢 INTERCOM §8— §f" + chairName;
+                            String msgLine   = "§8║  §7" + message;
                             for (ServerPlayerEntity online : PoliticalServer.server.getPlayerManager().getPlayerList()) {
-                                online.sendMessage(Text.literal("§8§m                                        "), false);
-                                online.sendMessage(Text.literal("§6§l📢 INTERCOM §8| §f" + chairName), false);
-                                online.sendMessage(Text.literal("§7" + message), false);
-                                online.sendMessage(Text.literal("§8§m                                        "), false);
+                                online.sendMessage(Text.literal(border), false);
+                                online.sendMessage(Text.literal(titleLine), false);
+                                online.sendMessage(Text.literal(msgLine), false);
+                                online.sendMessage(Text.literal(footerLine), false);
                             }
                             return 1;
                         })));
