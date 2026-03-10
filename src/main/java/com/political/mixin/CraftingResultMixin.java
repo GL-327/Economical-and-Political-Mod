@@ -1,6 +1,7 @@
 package com.political.mixin;
 
 import com.political.BeamCraftingHandler;
+import com.political.BountyCraftingHandler;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ import java.util.List;
 public class CraftingResultMixin {
 
     @Inject(method = "updateResult", at = @At("TAIL"))
-    private static void political_checkBeamRecipe(
+    private static void political_checkCustomRecipes(
             ScreenHandler handler,
             ServerWorld world,
             PlayerEntity player,
@@ -39,9 +40,17 @@ public class CraftingResultMixin {
             grid.add(craftingInventory.getStack(i));
         }
 
+        // Check HPEBM upgrade recipes (smithing-table-style upgrades via crafting grid)
         ItemStack beamResult = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beamResult != null) {
             resultInventory.setStack(0, beamResult);
+            return;
+        }
+
+        // Check bounty item recipes (cores, armor, swords, etc.)
+        ItemStack bountyResult = BountyCraftingHandler.checkBountyGridRecipe(grid, player);
+        if (bountyResult != null) {
+            resultInventory.setStack(0, bountyResult);
         }
     }
 }

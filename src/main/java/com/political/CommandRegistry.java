@@ -57,6 +57,7 @@ public class CommandRegistry {
         registerSecretCommand(dispatcher);
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
+        registerCustomMob(dispatcher);
 
         dispatcher.register(CommandManager.literal("recipes")
                 .executes(context -> {
@@ -1758,5 +1759,50 @@ public class CommandRegistry {
         );
 
         return book;
+    }
+
+    // ============================================================
+    // CUSTOM MOB COMMANDS
+    // /custommob spawn <typeId>  (operator-only)
+    // /custommob list            (operator-only)
+    // ============================================================
+    private static void registerCustomMob(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("custommob")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.literal("spawn")
+                        .then(CommandManager.argument("type", com.mojang.brigadier.arguments.StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    for (String id : CustomMobRegistry.getAllIds()) {
+                                        builder.suggest(id);
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .executes(ctx -> {
+                                    ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                                    String typeId = com.mojang.brigadier.arguments.StringArgumentType.getString(ctx, "type");
+                                    net.minecraft.util.math.BlockPos pos = player.getBlockPos().up();
+                                    CustomMobManager.spawnMob(
+                                            (ServerWorld) player.getEntityWorld(), typeId, pos, player);
+                                    return 1;
+                                })
+                        )
+                )
+                .then(CommandManager.literal("list")
+                        .executes(ctx -> {
+                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                            Set<String> ids = CustomMobRegistry.getAllIds();
+                            if (ids.isEmpty()) {
+                                player.sendMessage(Text.literal("No custom mob types registered.")
+                                        .formatted(Formatting.GRAY), false);
+                            } else {
+                                player.sendMessage(Text.literal("§6Custom Mob Types (§f" + ids.size() + "§6):"), false);
+                                for (String id : ids) {
+                                    player.sendMessage(Text.literal("  §7- §f" + id), false);
+                                }
+                            }
+                            return 1;
+                        })
+                )
+        );
     }
 }

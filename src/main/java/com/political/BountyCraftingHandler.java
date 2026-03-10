@@ -1,598 +1,251 @@
 package com.political;
 
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class BountyCraftingHandler {
 
+    /**
+     * Previously used UseBlockCallback to intercept crafting table right-clicks.
+     * Now crafting is handled via CraftingResultMixin which calls checkBountyGridRecipe.
+     * BeamCraftingHandler still uses UseBlockCallback for the smithing table (HPEBM upgrades).
+     */
     public static void register() {
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
-
-            BlockPos pos = hitResult.getBlockPos();
-
-            if (!world.getBlockState(pos).isOf(Blocks.CRAFTING_TABLE)) return ActionResult.PASS;
-
-            // === ARMOR RECIPES ===
-            if (tryZombieBerserkerHelmetRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (trySpiderLeggingsRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (trySkeletonBowRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (trySlimeBootsRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (tryWardenChestplateRecipe(serverPlayer)) return ActionResult.SUCCESS;
-
-            // === SWORD RECIPES (T1 & T2) ===
-            if (tryBountySwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (tryUpgradedSwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
-
-            // === WEAPON RECIPES ===
-            if (tryGavelRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (tryBaseHPEBMRecipe(serverPlayer)) return ActionResult.SUCCESS;
-
-            if (tryT2ArmorRecipe(serverPlayer)) return ActionResult.SUCCESS;  // Check T2 first (needs T1)
-            if (tryT1ArmorRecipe(serverPlayer)) return ActionResult.SUCCESS;
-
-            // === SWORD RECIPES (T1 & T2) ===
-            if (tryBountySwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
-            if (tryUpgradedSwordRecipe(serverPlayer)) return ActionResult.SUCCESS;
-
-            return ActionResult.PASS;
-        });
+        // Grid-based crafting is handled via CraftingResultMixin.
+        // HPEBM Mk1 and The Gavel are Underground Auction exclusive — no crafting recipes.
     }
 
     // ============================================================
-    // ZOMBIE BERSERKER HELMET
-    // Recipe: 5 Zombie Cores + 1 Zombie Head + 3 Rotten Flesh
+    // GRID-BASED RECIPE CHECKER
+    // Called by CraftingResultMixin when the crafting grid changes.
+    // Returns the result ItemStack if the grid matches a bounty recipe,
+    // or null if no recipe matches (or the player doesn't meet the level).
+    // Ingredient consumption is handled automatically by vanilla (each
+    // non-empty slot is decremented by 1 when the player takes the result).
     // ============================================================
-    private static boolean tryZombieBerserkerHelmetRecipe(ServerPlayerEntity player) {
-        int zombieCores = countCores(player, "Zombie Core");
-        int rottenFlesh = countItem(player, Items.ROTTEN_FLESH);
-        boolean hasZombieHead = hasItem(player, Items.ZOMBIE_HEAD);
+    public static ItemStack checkBountyGridRecipe(List<ItemStack> grid, PlayerEntity player) {
+        if (!(player instanceof ServerPlayerEntity serverPlayer)) return null;
+        if (grid.size() != 9) return null;
 
-        if (zombieCores < 5 || rottenFlesh < 3 || !hasZombieHead) return false;
+        int totalItems = getTotalGridItems(grid);
 
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
-        if (level < SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires Zombie Bounty Level " + SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
+        // ─── Special Armor Recipes (all use 9 slots exactly) ───────────────
+
+        // Zombie Berserker Helmet: 5 Zombie Cores + 1 Zombie Head + 3 Rotten Flesh
+        if (totalItems == 9
+                && countGridCores(grid, SlayerManager.SlayerType.ZOMBIE) == 5
+                && countGridVanilla(grid, Items.ZOMBIE_HEAD) == 1
+                && countGridVanilla(grid, Items.ROTTEN_FLESH) == 3) {
+            int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
+            if (level < SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ) return null;
+            return SlayerItems.createZombieBerserkerHelmet();
         }
 
-        removeCores(player, "Zombie Core", 5);
-        removeItem(player, Items.ROTTEN_FLESH, 3);
-        removeItem(player, Items.ZOMBIE_HEAD, 1);
-
-        player.getInventory().insertStack(SlayerItems.createZombieBerserkerHelmet());
-        player.sendMessage(Text.literal("✓ Crafted Zombie Berserker Helmet!")
-                .formatted(Formatting.GOLD, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // SPIDER LEGGINGS
-    // Recipe: 5 Spider Cores + 8 String + 1 Spider Eye
-    // ============================================================
-    private static boolean trySpiderLeggingsRecipe(ServerPlayerEntity player) {
-        int spiderCores = countCores(player, "Spider Core");
-        int string = countItem(player, Items.STRING);
-        boolean hasSpiderEye = hasItem(player, Items.SPIDER_EYE);
-
-        if (spiderCores < 5 || string < 8 || !hasSpiderEye) return false;
-
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
-        if (level < SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires Spider Bounty Level " + SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
+        // Spider Leggings: 5 Spider Cores + 3 String + 1 Spider Eye
+        if (totalItems == 9
+                && countGridCores(grid, SlayerManager.SlayerType.SPIDER) == 5
+                && countGridVanilla(grid, Items.STRING) == 3
+                && countGridVanilla(grid, Items.SPIDER_EYE) == 1) {
+            int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.SPIDER);
+            if (level < SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ) return null;
+            return SlayerItems.createSpiderLeggings();
         }
 
-        removeCores(player, "Spider Core", 5);
-        removeItem(player, Items.STRING, 8);
-        removeItem(player, Items.SPIDER_EYE, 1);
-
-        player.getInventory().insertStack(SlayerItems.createSpiderLeggings());
-        player.sendMessage(Text.literal("✓ Crafted Venomous Crawler Leggings!")
-                .formatted(Formatting.DARK_RED, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // SKELETON BOW
-    // Recipe: 5 Skeleton Cores + 1 Bow + 3 Bones
-    // ============================================================
-    private static boolean trySkeletonBowRecipe(ServerPlayerEntity player) {
-        int skeletonCores = countCores(player, "Skeleton Core");
-        int bones = countItem(player, Items.BONE);
-        boolean hasBow = hasItem(player, Items.BOW);
-
-        if (skeletonCores < 5 || bones < 3 || !hasBow) return false;
-
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
-        if (level < SlayerItems.SKELETON_BOW_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires Skeleton Bounty Level " + SlayerItems.SKELETON_BOW_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
+        // Skeleton Bow: 5 Skeleton Cores + 1 Bow + 3 Bones
+        if (totalItems == 9
+                && countGridCores(grid, SlayerManager.SlayerType.SKELETON) == 5
+                && countGridVanilla(grid, Items.BOW) == 1
+                && countGridVanilla(grid, Items.BONE) == 3) {
+            int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
+            if (level < SlayerItems.SKELETON_BOW_LEVEL_REQ) return null;
+            return SlayerItems.createSkeletonBow();
         }
 
-        removeCores(player, "Skeleton Core", 5);
-        removeItem(player, Items.BONE, 3);
-        removeItem(player, Items.BOW, 1);
-
-        player.getInventory().insertStack(SlayerItems.createSkeletonBow());
-        player.sendMessage(Text.literal("✓ Crafted Bone Desperado's Longbow!")
-                .formatted(Formatting.WHITE, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // SLIME BOOTS
-    // Recipe: 5 Slime Cores + 8 Slime Balls + 1 Leather Boots
-    // ============================================================
-    private static boolean trySlimeBootsRecipe(ServerPlayerEntity player) {
-        int slimeCores = countCores(player, "Slime Core");
-        int slimeBalls = countItem(player, Items.SLIME_BALL);
-        boolean hasBoots = hasItem(player, Items.LEATHER_BOOTS);
-
-        if (slimeCores < 5 || slimeBalls < 8 || !hasBoots) return false;
-
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SLIME);
-        if (level < SlayerItems.SLIME_BOOTS_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires Slime Bounty Level " + SlayerItems.SLIME_BOOTS_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
+        // Slime Boots: 5 Slime Cores + 3 Slime Balls + 1 Leather Boots
+        if (totalItems == 9
+                && countGridCores(grid, SlayerManager.SlayerType.SLIME) == 5
+                && countGridVanilla(grid, Items.SLIME_BALL) == 3
+                && countGridVanilla(grid, Items.LEATHER_BOOTS) == 1) {
+            int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.SLIME);
+            if (level < SlayerItems.SLIME_BOOTS_LEVEL_REQ) return null;
+            return SlayerItems.createSlimeBoots();
         }
 
-        removeCores(player, "Slime Core", 5);
-        removeItem(player, Items.SLIME_BALL, 8);
-        removeItem(player, Items.LEATHER_BOOTS, 1);
-
-        player.getInventory().insertStack(SlayerItems.createSlimeBoots());
-        player.sendMessage(Text.literal("✓ Crafted Gelatinous Rustler Boots!")
-                .formatted(Formatting.GREEN, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // WARDEN CHESTPLATE
-    // Recipe: 8 Warden Cores + 1 Netherite Chestplate + 4 Echo Shards
-    // ============================================================
-    private static boolean tryWardenChestplateRecipe(ServerPlayerEntity player) {
-        int wardenCores = countCores(player, "Warden Core");
-        int echoShards = countItem(player, Items.ECHO_SHARD);
-        boolean hasChestplate = hasItem(player, Items.NETHERITE_CHESTPLATE);
-
-        if (wardenCores < 8 || echoShards < 4 || !hasChestplate) return false;
-
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
-        if (level < SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires Warden Bounty Level " + SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
+        // Warden Chestplate: 5 Warden Cores + 3 Echo Shards + 1 Netherite Chestplate
+        if (totalItems == 9
+                && countGridCores(grid, SlayerManager.SlayerType.WARDEN) == 5
+                && countGridVanilla(grid, Items.ECHO_SHARD) == 3
+                && countGridVanilla(grid, Items.NETHERITE_CHESTPLATE) == 1) {
+            int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
+            if (level < SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ) return null;
+            return SlayerItems.createWardenChestplate();
         }
 
-        removeCores(player, "Warden Core", 8);
-        removeItem(player, Items.ECHO_SHARD, 4);
-        removeItem(player, Items.NETHERITE_CHESTPLATE, 1);
-
-        player.getInventory().insertStack(SlayerItems.createWardenChestplate());
-        player.sendMessage(Text.literal("✓ Crafted Sculk Terror Chestplate!")
-                .formatted(Formatting.DARK_AQUA, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // BOUNTY SWORDS (T1) - All Types
-    // Recipe: 3 Cores + 1 Iron Sword + 2 Sticks
-    // ============================================================
-    private static boolean tryBountySwordRecipe(ServerPlayerEntity player) {
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            String coreName = type.displayName + " Core";
-            int cores = countCores(player, coreName);
-            boolean hasSword = hasItem(player, Items.IRON_SWORD);
-            int sticks = countItem(player, Items.STICK);
-
-            if (cores >= 3 && hasSword && sticks >= 2) {
-                int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-                if (level < SlayerItems.BASIC_SWORD_LEVEL_REQ) {
-                    player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.BASIC_SWORD_LEVEL_REQ)
-                            .formatted(Formatting.RED), false);
-                    return false;
-                }
-
-                removeCores(player, coreName, 3);
-                removeItem(player, Items.IRON_SWORD, 1);
-                removeItem(player, Items.STICK, 2);
-
-                player.getInventory().insertStack(SlayerItems.createSlayerSword(type));
-                player.sendMessage(Text.literal("✓ Crafted " + SlayerItems.getSwordDisplayName(type) + "!")
-                        .formatted(type.color, Formatting.BOLD), false);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // ============================================================
-    // UPGRADED SLAYER SWORDS (T2) - All Types
-    // Recipe: 5 Cores + 1 Diamond Sword + 1 T1 Bounty Sword
-    // ============================================================
-    private static boolean tryUpgradedSwordRecipe(ServerPlayerEntity player) {
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            String coreName = type.displayName + " Core";
-            int cores = countCores(player, coreName);
-            boolean hasDiamondSword = hasItem(player, Items.DIAMOND_SWORD);
-            boolean hasT1Sword = hasSlayerSword(player, type);
-
-            if (cores >= 5 && hasDiamondSword && hasT1Sword) {
-                int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-                if (level < SlayerItems.UPGRADED_SWORD_LEVEL_REQ) {
-                    player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.UPGRADED_SWORD_LEVEL_REQ)
-                            .formatted(Formatting.RED), false);
-                    return false;
-                }
-
-                removeCores(player, coreName, 5);
-                removeItem(player, Items.DIAMOND_SWORD, 1);
-                removeSlayerSword(player, type);
-
-                player.getInventory().insertStack(SlayerItems.createUpgradedSlayerSword(type));
-                player.sendMessage(Text.literal("✓ Crafted " + SlayerItems.getUpgradedSwordDisplayName(type) + "!")
-                        .formatted(type.color, Formatting.BOLD), false);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // ============================================================
-    // THE GAVEL
-    // Recipe: 2 Warden Cores + 2 Netherite Ingots + 1 Wooden Axe
-    // ============================================================
-    private static boolean tryGavelRecipe(ServerPlayerEntity player) {
-        int wardenCores = countCores(player, "Warden Core");
-        int netheriteIngots = countItem(player, Items.NETHERITE_INGOT);
-        boolean hasAxe = hasItem(player, Items.WOODEN_AXE);
-
-        if (wardenCores < 2 || netheriteIngots < 2 || !hasAxe) return false;
-
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.WARDEN);
-        if (level < 7) {
-            player.sendMessage(Text.literal("✗ Requires Warden Bounty Level 7")
-                    .formatted(Formatting.RED), false);
-            return false;
-        }
-
-        removeCores(player, "Warden Core", 2);
-        removeItem(player, Items.NETHERITE_INGOT, 2);
-        removeItem(player, Items.WOODEN_AXE, 1);
-
-        player.getInventory().insertStack(CustomItemHandler.createTheGavel());
-        player.sendMessage(Text.literal("✓ Crafted The Gavel!")
-                .formatted(Formatting.GOLD, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // BASE HPEBM
-    // Recipe: 1 Diamond Shovel + 4 Redstone Blocks + 4 Glowstone
-    // ============================================================
-    private static boolean tryBaseHPEBMRecipe(ServerPlayerEntity player) {
-        boolean hasShovel = hasItem(player, Items.DIAMOND_SHOVEL);
-        int redstoneBlocks = countItem(player, Items.REDSTONE_BLOCK);
-        int glowstone = countItem(player, Items.GLOWSTONE);
-
-        if (!hasShovel || redstoneBlocks < 4 || glowstone < 4) return false;
-
-        removeItem(player, Items.DIAMOND_SHOVEL, 1);
-        removeItem(player, Items.REDSTONE_BLOCK, 4);
-        removeItem(player, Items.GLOWSTONE, 4);
-
-        player.getInventory().insertStack(CustomItemHandler.createHPEBM(1));
-        player.sendMessage(Text.literal("✓ Crafted HPEBM Mk1!")
-                .formatted(Formatting.WHITE, Formatting.BOLD), false);
-
-        return true;
-    }
-
-    // ============================================================
-    // HELPER METHODS FOR SLAYER SWORDS
-    // ============================================================
-    private static boolean hasSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (SlayerItems.isSlayerSword(stack) || SlayerItems.isUpgradedSlayerSword(stack)) {
-                SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(stack);
-                if (swordType == type && SlayerItems.isSlayerSword(stack)) return true;
-            }
-        }
-        // Fallback: name-based for backward compatibility
-        String swordName = type.displayName + " Bounty Sword";
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().contains(swordName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static void removeSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (SlayerItems.isSlayerSword(stack)) {
-                SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(stack);
-                if (swordType == type) {
-                    stack.decrement(1);
-                    return;
+        // ─── T1 Bounty Swords: 3 Cores + 1 Iron Sword + 2 Sticks = 6 items ──
+        if (totalItems == 6 && countGridVanilla(grid, Items.IRON_SWORD) == 1
+                && countGridVanilla(grid, Items.STICK) == 2) {
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                if (countGridCores(grid, type) == 3) {
+                    int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
+                    if (level < SlayerItems.BASIC_SWORD_LEVEL_REQ) return null;
+                    return SlayerItems.createSlayerSword(type);
                 }
             }
         }
-        // Fallback: name-based for backward compatibility
-        String swordName = type.displayName + " Bounty Sword";
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().contains(swordName)) {
-                stack.decrement(1);
-                return;
+
+        // ─── T2 Upgraded Swords: 5 Cores + 1 Diamond Sword + 1 T1 Sword = 7 items ─
+        if (totalItems == 7 && countGridVanilla(grid, Items.DIAMOND_SWORD) == 1) {
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                if (countGridCores(grid, type) == 5 && countGridT1Swords(grid, type) == 1) {
+                    int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
+                    if (level < SlayerItems.UPGRADED_SWORD_LEVEL_REQ) return null;
+                    return SlayerItems.createUpgradedSlayerSword(type);
+                }
             }
         }
+
+        // ─── T1 Armor: 3 Cores + 1 Base Leather Armor + 2 Secondary = 6 items ──
+        if (totalItems == 6) {
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                if (countGridCores(grid, type) != 3) continue;
+                Item secondary = getSecondaryMaterial(type);
+                if (countGridVanilla(grid, secondary) != 2) continue;
+                for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
+                    Item base = getBaseLeatherArmor(piece);
+                    if (countGridVanilla(grid, base) == 1) {
+                        int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
+                        if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) return null;
+                        return SlayerItems.createT1Armor(type, piece);
+                    }
+                }
+            }
+        }
+
+        // ─── T2 Armor: 5 Cores + 1 T1 Armor + 2 Secondary + 1 Diamond = 9 items ─
+        if (totalItems == 9 && countGridVanilla(grid, Items.DIAMOND) == 1) {
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                if (countGridCores(grid, type) != 5) continue;
+                Item secondary = getSecondaryMaterial(type);
+                if (countGridVanilla(grid, secondary) != 2) continue;
+                for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
+                    if (countGridT1Armor(grid, type, piece) == 1) {
+                        int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
+                        if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) return null;
+                        return SlayerItems.createT2Armor(type, piece);
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     // ============================================================
-    // EXISTING HELPER METHODS (keep these from your current file)
+    // GRID COUNTING HELPERS
     // ============================================================
-    private static int countCores(ServerPlayerEntity player, String coreName) {
-        // Core display names are formatted as "✦ <coreName> ✦"
-        String fullName = "✦ " + coreName + " ✦";
+
+    /** Count slots in grid that contain a Core of the given slayer type. */
+    private static int countGridCores(List<ItemStack> grid, SlayerManager.SlayerType type) {
+        String coreName = type.displayName + " Core";
+        return countGridCores(grid, coreName);
+    }
+
+    private static int countGridCores(List<ItemStack> grid, String coreName) {
         int count = 0;
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
+        for (ItemStack stack : grid) {
+            if (stack.isEmpty()) continue;
             Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().equals(fullName)) {
-                count += stack.getCount();
+            if (name != null) {
+                String n = name.getString();
+                if (n.contains(coreName) && n.contains("✦")) {
+                    count++;
+                }
             }
         }
         return count;
     }
 
-    private static int countItem(ServerPlayerEntity player, Item item) {
+    /**
+     * Count slots in grid that contain the given vanilla item.
+     * Excludes custom-named items to avoid counting custom equipment as vanilla materials.
+     */
+    private static int countGridVanilla(List<ItemStack> grid, Item item) {
         int count = 0;
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.isOf(item)) {
-                count += stack.getCount();
+        for (ItemStack stack : grid) {
+            if (stack.isEmpty()) continue;
+            if (stack.isOf(item) && !stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+                count++;
             }
         }
         return count;
     }
 
-    private static boolean hasItem(ServerPlayerEntity player, Item item) {
-        return countItem(player, item) >= 1;
-    }
-
-    private static void removeCores(ServerPlayerEntity player, String coreName, int amount) {
-        // Core display names are formatted as "✦ <coreName> ✦"
-        String fullName = "✦ " + coreName + " ✦";
-        int remaining = amount;
-        for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-            if (name != null && name.getString().equals(fullName)) {
-                int toRemove = Math.min(remaining, stack.getCount());
-                stack.decrement(toRemove);
-                remaining -= toRemove;
+    /** Count slots in grid that contain a T1 bounty sword of the given type. */
+    private static int countGridT1Swords(List<ItemStack> grid, SlayerManager.SlayerType type) {
+        int count = 0;
+        for (ItemStack stack : grid) {
+            if (stack.isEmpty()) continue;
+            if (SlayerItems.isSlayerSword(stack) && SlayerItems.getSwordSlayerType(stack) == type) {
+                count++;
             }
         }
+        return count;
     }
 
-    private static void removeItem(ServerPlayerEntity player, Item item, int amount) {
-        int remaining = amount;
-        for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.isOf(item)) {
-                int toRemove = Math.min(remaining, stack.getCount());
-                stack.decrement(toRemove);
-                remaining -= toRemove;
+    /** Count slots in grid that contain a T1 armor piece of the given type and slot. */
+    private static int countGridT1Armor(List<ItemStack> grid, SlayerManager.SlayerType type,
+                                        SlayerItems.ArmorPiece piece) {
+        int count = 0;
+        for (ItemStack stack : grid) {
+            if (stack.isEmpty()) continue;
+            if (SlayerItems.isT1SlayerArmor(stack)
+                    && SlayerItems.getArmorSlayerType(stack) == type
+                    && SlayerItems.getArmorPiece(stack) == piece) {
+                count++;
             }
         }
+        return count;
     }
+
+    /** Total number of non-empty slots in the crafting grid. */
+    private static int getTotalGridItems(List<ItemStack> grid) {
+        int count = 0;
+        for (ItemStack stack : grid) {
+            if (!stack.isEmpty()) count++;
+        }
+        return count;
+    }
+
     // ============================================================
-// T1 ARMOR RECIPES
-// Recipe: 3 Cores + Base Leather Armor + 2 Type-Specific Items
-// ============================================================
+    // RECIPE CONSTANTS HELPERS
+    // ============================================================
 
-    private static boolean tryT1ArmorRecipe(ServerPlayerEntity player) {
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-
-            String coreName = type.displayName + " Core";
-            int cores = countCores(player, coreName);
-
-            if (cores < 3) continue;
-
-            // Check level requirement
-            int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-            if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) continue;
-
-            // Try each armor piece
-            for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
-                if (tryT1ArmorPieceRecipe(player, type, piece, coreName, cores)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private static boolean tryT1ArmorPieceRecipe(ServerPlayerEntity player,
-                                                 SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece,
-                                                 String coreName, int cores) {
-
-        // Get base armor item
-        Item baseArmor = switch (piece) {
-            case HELMET -> Items.LEATHER_HELMET;
-            case CHESTPLATE -> Items.LEATHER_CHESTPLATE;
-            case LEGGINGS -> Items.LEATHER_LEGGINGS;
-            case BOOTS -> Items.LEATHER_BOOTS;
-        };
-
-        if (!hasItem(player, baseArmor)) return false;
-
-        // Get type-specific secondary material
-        Item secondaryItem = getSecondaryMaterial(type);
-        int secondaryCount = countItem(player, secondaryItem);
-        int secondaryRequired = 2;
-
-        if (secondaryCount < secondaryRequired) return false;
-
-        // Check level
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-        if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.T1_ARMOR_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
-        }
-
-        // Craft!
-        removeCores(player, coreName, 3);
-        removeItem(player, baseArmor, 1);
-        removeItem(player, secondaryItem, secondaryRequired);
-
-        player.getInventory().insertStack(SlayerItems.createT1Armor(type, piece));
-        player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Hunter " + piece.displayName + "!")
-                .formatted(type.color, Formatting.BOLD), false);
-
-        return true;
-    }
-
+    /** Returns the vanilla secondary material used in T1 and T2 armor for the given type. */
     private static Item getSecondaryMaterial(SlayerManager.SlayerType type) {
         return switch (type) {
-            case ZOMBIE -> Items.ROTTEN_FLESH;
-            case SPIDER -> Items.STRING;
+            case ZOMBIE   -> Items.ROTTEN_FLESH;
+            case SPIDER   -> Items.STRING;
             case SKELETON -> Items.BONE;
-            case SLIME -> Items.SLIME_BALL;
-            case WARDEN -> Items.SCULK;
+            case SLIME    -> Items.SLIME_BALL;
+            case WARDEN   -> Items.SCULK;
             case ENDERMAN -> Items.ENDER_PEARL;
         };
     }
-    // ============================================================
-// T2 ARMOR RECIPES
-// Recipe: 5 Cores + T1 Armor Piece + 4 Type-Specific Items + 1 Diamond
-// ============================================================
 
-    private static boolean tryT2ArmorRecipe(ServerPlayerEntity player) {
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            String coreName = type.displayName + " Core";
-            int cores = countCores(player, coreName);
-
-            if (cores < 5) continue;
-
-            // Check level requirement
-            int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-            if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) continue;
-
-            // Try each armor piece
-            for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
-                if (tryT2ArmorPieceRecipe(player, type, piece, coreName, cores)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private static boolean tryT2ArmorPieceRecipe(ServerPlayerEntity player,
-                                                 SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece,
-                                                 String coreName, int cores) {
-
-        // Check for T1 armor piece of same type
-        if (!hasT1ArmorPiece(player, type, piece)) return false;
-
-        // Check for diamond
-        if (!hasItem(player, Items.DIAMOND)) return false;
-
-        // Get type-specific secondary material
-        Item secondaryItem = getSecondaryMaterial(type);
-        int secondaryCount = countItem(player, secondaryItem);
-        int secondaryRequired = 4;
-
-        if (secondaryCount < secondaryRequired) return false;
-
-        // Check level
-        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), type);
-        if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) {
-            player.sendMessage(Text.literal("✗ Requires " + type.displayName + " Bounty Level " + SlayerItems.T2_ARMOR_LEVEL_REQ)
-                    .formatted(Formatting.RED), false);
-            return false;
-        }
-
-        // Craft!
-        removeCores(player, coreName, 5);
-        removeT1ArmorPiece(player, type, piece);
-        removeItem(player, Items.DIAMOND, 1);
-        removeItem(player, secondaryItem, secondaryRequired);
-
-        player.getInventory().insertStack(SlayerItems.createT2Armor(type, piece));
-        player.sendMessage(Text.literal("✓ Crafted " + type.displayName + " Bounty " + piece.displayName + " II!")
-                .formatted(type.color, Formatting.BOLD), false);
-
-        return true;
-    }
-// ============================================================
-// T1 ARMOR DETECTION & REMOVAL HELPERS
-// ============================================================
-
-    private static boolean hasT1ArmorPiece(ServerPlayerEntity player,
-                                           SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece) {
-
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.isEmpty()) continue;
-
-            if (SlayerItems.isT1SlayerArmor(stack)) {
-                SlayerManager.SlayerType armorType = SlayerItems.getArmorSlayerType(stack);
-                SlayerItems.ArmorPiece armorPiece = SlayerItems.getArmorPiece(stack);
-
-                if (armorType == type && armorPiece == piece) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private static void removeT1ArmorPiece(ServerPlayerEntity player,
-                                           SlayerManager.SlayerType type, SlayerItems.ArmorPiece piece) {
-
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.isEmpty()) continue;
-
-            if (SlayerItems.isT1SlayerArmor(stack)) {
-                SlayerManager.SlayerType armorType = SlayerItems.getArmorSlayerType(stack);
-                SlayerItems.ArmorPiece armorPiece = SlayerItems.getArmorPiece(stack);
-
-                if (armorType == type && armorPiece == piece) {
-                    stack.decrement(1);
-                    return;
-                }
-            }
-        }
+    /** Returns the base vanilla leather armor item for the given armor piece slot. */
+    private static Item getBaseLeatherArmor(SlayerItems.ArmorPiece piece) {
+        return switch (piece) {
+            case HELMET     -> Items.LEATHER_HELMET;
+            case CHESTPLATE -> Items.LEATHER_CHESTPLATE;
+            case LEGGINGS   -> Items.LEATHER_LEGGINGS;
+            case BOOTS      -> Items.LEATHER_BOOTS;
+        };
     }
 }
