@@ -302,8 +302,8 @@ public class RecipesGui {
         // Spider Venomous Leggings
         gui.setSlot(20, new GuiElementBuilder(Items.LEATHER_LEGGINGS)
                 .setName(Text.literal("🕷 Venomous Crawler Leggings").formatted(Formatting.DARK_RED, Formatting.BOLD))
-                .addLoreLine(Text.literal("5 Spider Cores + 8 String + Spider Eye").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚠ Requires: Spider Lvl 10").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("5 Spider Cores + 3 String + 1 Spider Eye").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Spider Lvl " + SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ).formatted(Formatting.RED))
                 .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSpiderLeggingsRecipe(player)).build());
 
@@ -318,16 +318,16 @@ public class RecipesGui {
         // Slime Boots
         gui.setSlot(22, new GuiElementBuilder(Items.LEATHER_BOOTS)
                 .setName(Text.literal("🟢 Gelatinous Rustler Boots").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal("5 Slime Cores + 8 Slime Ball + Leather Boots").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚠ Requires: Slime Lvl 8").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("5 Slime Cores + 3 Slime Ball + 1 Leather Boots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Slime Lvl " + SlayerItems.SLIME_BOOTS_LEVEL_REQ).formatted(Formatting.RED))
                 .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSlimeBootsRecipe(player)).build());
 
         // Warden Chestplate
         gui.setSlot(23, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
                 .setName(Text.literal("💀 Sculk Terror Chestplate").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal("8 Warden Cores + 4 Echo Shards + Neth. Chestplate").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚠ Requires: Warden Lvl 12").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("5 Warden Cores + 3 Echo Shards + Neth. Chestplate").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Warden Lvl " + SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ).formatted(Formatting.RED))
                 .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openWardenChestplateRecipe(player)).build());
 
@@ -355,15 +355,12 @@ public class RecipesGui {
 
     private static void openSpiderLeggingsRecipe(ServerPlayerEntity player) {
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SPIDER);
-        // 5 Spider Cores + 8 String + 1 Spider Eye (9 slots total)
-        // Grid: [Core, String, String] / [Core, String, Eye] / [Core, String, Core] + extra shown via count
-        ItemStack string2 = new ItemStack(Items.STRING, 2);
+        // 5 Spider Cores + 3 String + 1 Spider Eye = 9 items
         ItemStack[] grid = {
-                core.copy(), string2.copy(), string2.copy(),
-                core.copy(), string2.copy(), new ItemStack(Items.SPIDER_EYE),
-                core.copy(), string2.copy(), core.copy()
+                core.copy(), core.copy(), core.copy(),
+                core.copy(), core.copy(), new ItemStack(Items.STRING),
+                new ItemStack(Items.STRING), new ItemStack(Items.STRING), new ItemStack(Items.SPIDER_EYE)
         };
-        // Note: 5 cores shown as 4 (3 single + 1 pair) but we approximate - use count=2 on some
         ItemStack result = SlayerItems.createSpiderLeggings();
         openRecipePage(player, "🕷 Venomous Crawler Leggings",
                 Text.literal("🕷 Venomous Crawler Leggings Recipe").formatted(Formatting.DARK_RED, Formatting.BOLD),
@@ -387,13 +384,11 @@ public class RecipesGui {
 
     private static void openSlimeBootsRecipe(ServerPlayerEntity player) {
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SLIME);
-        // 5 Slime Cores + 8 Slime Balls + 1 Leather Boots
-        // Grid: [Core, SBall x2, SBall x2] / [Core, LBoots, SBall x2] / [Core, SBall x2, Core]
-        ItemStack slimeBall2 = new ItemStack(Items.SLIME_BALL, 2);
+        // 5 Slime Cores + 3 Slime Balls + 1 Leather Boots = 9 items
         ItemStack[] grid = {
-                core.copy(), slimeBall2.copy(), slimeBall2.copy(),
-                core.copy(), new ItemStack(Items.LEATHER_BOOTS), slimeBall2.copy(),
-                core.copy(), slimeBall2.copy(), core.copy()
+                core.copy(), core.copy(), core.copy(),
+                core.copy(), core.copy(), new ItemStack(Items.SLIME_BALL),
+                new ItemStack(Items.SLIME_BALL), new ItemStack(Items.SLIME_BALL), new ItemStack(Items.LEATHER_BOOTS)
         };
         ItemStack result = SlayerItems.createSlimeBoots();
         openRecipePage(player, "🟢 Gelatinous Rustler Boots",
@@ -403,15 +398,12 @@ public class RecipesGui {
 
     private static void openWardenChestplateRecipe(ServerPlayerEntity player) {
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.WARDEN);
-        // 8 Warden Cores + 4 Echo Shards + 1 Netherite Chestplate
-        // Grid: [Core x2, EShard x2, Core x2] / [Core x2, NChest, Core x2] / [EShard x2, _, EShard x2]
-        // Using count to show multiples
-        ItemStack core2 = core.copy(); core2.setCount(2);
-        ItemStack echo2 = new ItemStack(Items.ECHO_SHARD, 2);
+        // 5 Warden Cores + 3 Echo Shards + 1 Netherite Chestplate = 9 items
         ItemStack[] grid = {
-                core2.copy(), echo2.copy(), core2.copy(),
-                core2.copy(), new ItemStack(Items.NETHERITE_CHESTPLATE), core2.copy(),
-                echo2.copy(), ItemStack.EMPTY, echo2.copy()
+                core.copy(), core.copy(), core.copy(),
+                core.copy(), core.copy(), new ItemStack(Items.ECHO_SHARD),
+                new ItemStack(Items.ECHO_SHARD), new ItemStack(Items.ECHO_SHARD),
+                new ItemStack(Items.NETHERITE_CHESTPLATE)
         };
         ItemStack result = SlayerItems.createWardenChestplate();
         openRecipePage(player, "💀 Sculk Terror Chestplate",
@@ -436,20 +428,22 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click an item to see its recipe").formatted(Formatting.GRAY))
                 .glow().build());
 
-        // The Gavel
+        // The Gavel - Auction Only
         gui.setSlot(21, new GuiElementBuilder(Items.WOODEN_AXE)
                 .setName(Text.literal("⚖ The Gavel").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal("2 Warden Cores + 2 Netherite Ingots + Wooden Axe").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚠ Requires: Warden Lvl 7").formatted(Formatting.RED))
-                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openGavelRecipe(player)).build());
+                .addLoreLine(Text.literal("⚠ UNDERGROUND AUCTION ONLY").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Cannot be crafted!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Obtainable from Underground Auctions at T1.").formatted(Formatting.GRAY))
+                .build());
 
-        // Base HPEBM
+        // Base HPEBM - Auction Only
         gui.setSlot(22, new GuiElementBuilder(Items.DIAMOND_SHOVEL)
                 .setName(Text.literal("⚡ HPEBM Mk1 (Base)").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal("1 Diamond Shovel + 4 Redstone Blocks + 4 Glowstone").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openBaseHPEBMRecipe(player)).build());
+                .addLoreLine(Text.literal("⚠ UNDERGROUND AUCTION ONLY").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Cannot be crafted!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Obtainable from Underground Auctions at T1.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Upgrades: right-click Smithing Table").formatted(Formatting.GRAY))
+                .build());
 
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))

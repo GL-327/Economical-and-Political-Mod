@@ -2,6 +2,7 @@ package com.political;
 
 import net.minecraft.network.packet.s2c.play.ScoreboardDisplayS2CPacket;
 import net.minecraft.scoreboard.*;
+import net.minecraft.scoreboard.number.BlankNumberFormat;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -78,14 +79,14 @@ public class ScoreboardManager {
         ScoreboardObjective old = scoreboard.getNullableObjective(objName);
         if (old != null) scoreboard.removeObjective(old);
 
-        // Create new objective
+        // Create new objective (use BlankNumberFormat to hide score integers)
         scoreboard.addObjective(
             objName,
             ScoreboardCriterion.DUMMY,
             Text.literal("§6§lPOLITICAL SERVER"),
             ScoreboardCriterion.RenderType.INTEGER,
             false,
-            null
+            BlankNumberFormat.INSTANCE
         );
         playerObjectiveNames.put(player.getUuid(), objName);
 
@@ -248,9 +249,9 @@ public class ScoreboardManager {
 
     // ── Helpers ──────────────────────────────────────────────────
 
-    /** Returns a 6-char hex prefix unique per player (derived from UUID hashCode). */
+    /** Returns an 8-char prefix unique per player (first 8 chars of UUID string, no dashes). */
     private static String getPlayerPrefix(ServerPlayerEntity player) {
-        return String.format("%06x", Math.abs(player.getUuid().hashCode()));
+        return player.getUuid().toString().replace("-", "").substring(0, 8);
     }
 
     private static String formatNumber(int n) {
