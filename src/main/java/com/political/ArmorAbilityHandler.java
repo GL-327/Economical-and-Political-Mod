@@ -129,11 +129,7 @@ public class ArmorAbilityHandler {
     }
 
     private static boolean isVenomousLeggings(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (customName == null) return false;
-        String name = customName.getString();
-        return name.contains("Venomous") || (name.contains("Spider") && name.contains("Leggings"));
+        return SlayerItems.isSpiderLeggings(stack);
     }
 
     // ============================================================
