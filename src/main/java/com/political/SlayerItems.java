@@ -2030,11 +2030,67 @@ public class SlayerItems {
                 .append(Text.literal("-" + fullSetBoss + "% " + type.displayName).formatted(Formatting.GREEN))
                 .append(Text.literal(" / -" + fullSetAll + "% all").formatted(Formatting.GREEN)));
         lore.add(Text.literal(""));
+        // Per-piece unique buff line
+        String pieceBuff = getT1PieceBuff(type, pieceName);
+        if (pieceBuff != null) {
+            lore.add(Text.literal("━━━ PIECE BUFF ━━━").formatted(Formatting.AQUA));
+            lore.add(Text.literal("✦ " + pieceBuff).formatted(Formatting.AQUA));
+            lore.add(Text.literal(""));
+        }
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T1_ARMOR_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    /** Returns the per-piece passive buff description for a T1 armor piece. */
+    private static String getT1PieceBuff(SlayerManager.SlayerType type, String piece) {
+        return switch (type) {
+            case ZOMBIE -> switch (piece) {
+                case "Helmet"     -> "Hunger Immunity";
+                case "Chestplate" -> "+2 Hearts Health";
+                case "Leggings"   -> "-10% Damage from Undead Mobs";
+                case "Boots"      -> "+10% Knockback Resistance";
+                default           -> null;
+            };
+            case SPIDER -> switch (piece) {
+                case "Helmet"     -> "+5% Movement Speed";
+                case "Chestplate" -> "Weakness Immunity";
+                case "Leggings"   -> "Poison Immunity";
+                case "Boots"      -> "+10% Movement Speed";
+                default           -> null;
+            };
+            case SKELETON -> switch (piece) {
+                case "Helmet"     -> "+10% Projectile Damage";
+                case "Chestplate" -> "+10% Projectile Resistance";
+                case "Leggings"   -> "+5% Movement Speed";
+                case "Boots"      -> "+5% Movement Speed";
+                default           -> null;
+            };
+            case SLIME -> switch (piece) {
+                case "Helmet"     -> "+2 Hearts Health";
+                case "Chestplate" -> "+4 Hearts Health";
+                case "Leggings"   -> "Jump Boost I";
+                case "Boots"      -> "No Fall Damage";
+                default           -> null;
+            };
+            case ENDERMAN -> switch (piece) {
+                case "Helmet"     -> "Night Vision";
+                case "Chestplate" -> "+5% Movement Speed";
+                case "Leggings"   -> "+5% Movement Speed";
+                case "Boots"      -> "Safe Fall +3 Blocks";
+                default           -> null;
+            };
+            case WARDEN -> switch (piece) {
+                case "Helmet"     -> "Darkness Immunity";
+                case "Chestplate" -> "+10% Knockback Resistance";
+                case "Leggings"   -> "+10% Knockback Resistance";
+                case "Boots"      -> "Vibration Sense: Hostile Mobs Glow within 8 blocks (refreshes every second)";
+                default           -> null;
+            };
+            case PIGLIN -> null;
+        };
     }
 
     private static void applyT2ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
@@ -2104,11 +2160,67 @@ public class SlayerItems {
                 .append(Text.literal(" / -" + fullSetAll + "% all").formatted(Formatting.GREEN)));
         lore.add(Text.literal("+15% XP from " + type.displayName + " bounties").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
+        // Per-piece unique buff line
+        String pieceBuff = getT2PieceBuff(type, pieceName);
+        if (pieceBuff != null) {
+            lore.add(Text.literal("━━━ PIECE BUFF ━━━").formatted(Formatting.LIGHT_PURPLE));
+            lore.add(Text.literal("✦ " + pieceBuff).formatted(Formatting.LIGHT_PURPLE));
+            lore.add(Text.literal(""));
+        }
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + T2_ARMOR_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    /** Returns the per-piece passive buff description for a T2 armor piece. */
+    private static String getT2PieceBuff(SlayerManager.SlayerType type, String piece) {
+        return switch (type) {
+            case ZOMBIE -> switch (piece) {
+                case "Helmet"     -> "Hunger Immunity + Fire Resistance";
+                case "Chestplate" -> "+4 Hearts Health + Regeneration I";
+                case "Leggings"   -> "-20% Damage from Undead Mobs";
+                case "Boots"      -> "+20% Knockback Resistance + Speed I below 50% HP";
+                default           -> null;
+            };
+            case SPIDER -> switch (piece) {
+                case "Helmet"     -> "+10% Movement Speed + Night Vision";
+                case "Chestplate" -> "Weakness Immunity + Poison Thorns (attackers get Poison I)";
+                case "Leggings"   -> "Poison Immunity + Speed II";
+                case "Boots"      -> "+15% Movement Speed + Safe Fall +3 Blocks";
+                default           -> null;
+            };
+            case SKELETON -> switch (piece) {
+                case "Helmet"     -> "+20% Projectile Damage + Arrows Apply Glowing";
+                case "Chestplate" -> "+25% Projectile Resistance";
+                case "Leggings"   -> "+10% Movement Speed";
+                case "Boots"      -> "+10% Movement Speed";
+                default           -> null;
+            };
+            case SLIME -> switch (piece) {
+                case "Helmet"     -> "+4 Hearts Health + Saturation";
+                case "Chestplate" -> "+6 Hearts Health + Absorption I every 30s";
+                case "Leggings"   -> "Jump Boost II";
+                case "Boots"      -> "No Fall Damage + Jump Boost II";
+                default           -> null;
+            };
+            case ENDERMAN -> switch (piece) {
+                case "Helmet"     -> "Night Vision (Permanent)";
+                case "Chestplate" -> "+10% Movement Speed + 20% Teleport Dodge on Hit";
+                case "Leggings"   -> "+10% Movement Speed";
+                case "Boots"      -> "No Fall Damage + +20% Movement Speed";
+                default           -> null;
+            };
+            case WARDEN -> switch (piece) {
+                case "Helmet"     -> "Darkness Immunity + Vibration Sense (wider range)";
+                case "Chestplate" -> "+25% Knockback Resistance + Sonic Pulse (Shift+Attack)";
+                case "Leggings"   -> "+25% Knockback Resistance + +6 Hearts Health";
+                case "Boots"      -> "+10% Knockback Resistance + Silent Steps";
+                default           -> null;
+            };
+            case PIGLIN -> null;
+        };
     }
 
     // Helper method to get the correct slot

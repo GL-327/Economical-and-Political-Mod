@@ -1,5 +1,6 @@
 package com.political.mixin;
 
+import com.political.BountyArmorHandler;
 import com.political.CustomItemHandler;
 import com.political.SlayerItems;
 import com.political.SlayerManager;
@@ -8,9 +9,12 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -38,6 +42,13 @@ public class LivingEntityMixin {
             return 0.0f;
         }
 
+        // Undead mob damage reduction from Zombie Leggings (T1: -10%, T2: -20%)
+        LivingEntity attacker = source.getAttacker() instanceof LivingEntity le ? le : null;
+        if (attacker != null && attacker.getType().isIn(EntityTypeTags.UNDEAD)) {
+            float multiplier = BountyArmorHandler.getUndeadDamageReduction(player);
+            amount *= multiplier;
+        }
+
         // Projectile damage reduction for Skeleton T2 armor
         if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
             float multiplier = T2ArmorAbilityHandler.getProjectileDamageReduction(player);
@@ -45,6 +56,25 @@ public class LivingEntityMixin {
         }
 
         return amount;
+    }
+
+    /**
+     * Poison thorns: when a player with Spider T2 Chestplate is hit by a melee attacker,
+     * the attacker gets Poison I for 3 seconds.
+     */
+    @Inject(method = "applyDamage", at = @At("HEAD"))
+    private void political_poisonThorns(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
+        LivingEntity self = (LivingEntity)(Object)this;
+        if (!(self instanceof ServerPlayerEntity player)) return;
+        if (amount <= 0) return;
+        // Only trigger on direct melee (non-projectile)
+        if (source.isIn(DamageTypeTags.IS_PROJECTILE)) return;
+        if (!(source.getAttacker() instanceof LivingEntity attacker)) return;
+
+        if (BountyArmorHandler.hasPoisonThorns(player)) {
+            attacker.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.POISON, 60, 0, true, false, false)); // 3s Poison I
+        }
     }
 
     @Inject(method = "tryUseDeathProtector", at = @At("HEAD"), cancellable = true)
@@ -89,29 +119,70 @@ public class LivingEntityMixin {
 
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
 
-        // Check for Slime boots
+        // Check for legendary Slime boots
         if (SlayerItems.isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
             cir.setReturnValue(false);
             return;
         }
 
-        // Check for T2 armor with fall damage immunity
+        // Check per-piece fall damage immunity / reduction
+        String bootsId = SlayerItems.getCustomItemId(boots);
+        if (bootsId != null) {
+            switch (bootsId) {
+                // T1 Slime Boots: no fall damage
+                case "slime_t1_boots" -> {
+                    cir.setReturnValue(false);
+                    return;
+                }
+                // T2 Slime Boots: no fall damage + bounce
+                case "slime_t2_boots" -> {
+                    if (fallDistance > 3.0) {
+                        Vec3d velocity = player.getVelocity();
+                        player.setVelocity(velocity.x, Math.min(fallDistance * 0.1, 1.0), velocity.z);
+                        ServerWorld world = (ServerWorld) player.getEntityWorld();
+                        world.playSound(null, player.getBlockPos(),
+                                SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                        world.spawnParticles(ParticleTypes.ITEM_SLIME,
+                                player.getX(), player.getY(), player.getZ(),
+                                15, 0.5, 0.1, 0.5, 0.1);
+                    }
+                    cir.setReturnValue(false);
+                    return;
+                }
+                // T1 Enderman Boots: safe fall +3 blocks (cancel if fall <= 6 blocks)
+                case "enderman_t1_boots" -> {
+                    if (fallDistance <= 6.0) {
+                        cir.setReturnValue(false);
+                        return;
+                    }
+                }
+                // T2 Enderman Boots: complete no fall damage
+                case "enderman_t2_boots" -> {
+                    cir.setReturnValue(false);
+                    return;
+                }
+                // T2 Spider Boots: safe fall (+3 block boost = cancel if fall <= 6)
+                case "spider_t2_boots" -> {
+                    if (fallDistance <= 6.0) {
+                        cir.setReturnValue(false);
+                        return;
+                    }
+                }
+                default -> {}
+            }
+        }
+
+        // Legacy: T2 Slime or Enderman boots identified by name (for items created before custom ID system)
         Text customName = boots.get(DataComponentTypes.CUSTOM_NAME);
         if (customName != null) {
             String name = customName.getString();
-
-            // T2 Slime or Enderman boots
             if (name.contains(" II") &&
                     (name.contains("Rustler") || name.contains("Gelatinous") ||
                             name.contains("Void") || name.contains("Phantom"))) {
-
-                // Bounce effect for slime boots
                 if (name.contains("Rustler") || name.contains("Gelatinous")) {
                     if (fallDistance > 3.0) {
                         Vec3d velocity = player.getVelocity();
                         player.setVelocity(velocity.x, Math.min(fallDistance * 0.1, 1.0), velocity.z);
-
-                        // FIXED: Use player.getWorld() cast to ServerWorld
                         ServerWorld world = (ServerWorld) player.getEntityWorld();
                         world.playSound(null, player.getBlockPos(),
                                 SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 1.0f, 1.0f);
@@ -120,7 +191,6 @@ public class LivingEntityMixin {
                                 15, 0.5, 0.1, 0.5, 0.1);
                     }
                 }
-
                 cir.setReturnValue(false);
             }
         }
