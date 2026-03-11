@@ -4,11 +4,16 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class DictatorManager {
 
@@ -19,6 +24,9 @@ public class DictatorManager {
     private static long lastSummonTime = 0;
     private static long lastSmiteTime = 0;
     private static String previousJudge = null;
+
+    private static final Map<UUID, Boolean> pendingDictatorOffer = new HashMap<>();
+    private static final Map<UUID, Boolean> pendingLeadershipChoice = new HashMap<>();
 
     private static final long SUMMON_COOLDOWN_MS = 60L * 1000L;
     private static final long SMITE_COOLDOWN_MS = 15L * 1000L;
@@ -213,6 +221,95 @@ public class DictatorManager {
         for (ServerPlayerEntity p : PoliticalServer.server.getPlayerManager().getPlayerList()) {
             p.sendMessage(Text.literal("⚡ " + target.getName().getString() + " has been smitten by the Dictator!").formatted(Formatting.RED));
         }
+    }
+
+    public static void offerDictatorTitle(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        pendingDictatorOffer.put(uuid, true);
+
+        MutableText msg = Text.literal("You received overwhelming support! Would you like to become Dictator?").formatted(Formatting.GOLD);
+        MutableText yes = Text.literal(" [YES]").formatted(Formatting.GREEN, Formatting.BOLD);
+        yes.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dictator accept")));
+        MutableText no = Text.literal(" [NO]").formatted(Formatting.RED, Formatting.BOLD);
+        no.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dictator decline")));
+
+        player.sendMessage(msg.append(yes).append(no));
+    }
+
+    public static boolean hasPendingDictatorOffer(UUID uuid) {
+        return pendingDictatorOffer.containsKey(uuid);
+    }
+
+    public static void acceptDictatorOffer(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        if (!pendingDictatorOffer.containsKey(uuid)) {
+            player.sendMessage(Text.literal("You don't have a pending dictator offer!").formatted(Formatting.RED));
+            return;
+        }
+        pendingDictatorOffer.remove(uuid);
+        DictatorManager.setDictator(player);
+    }
+
+    public static void declineDictatorOffer(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        if (!pendingDictatorOffer.containsKey(uuid)) {
+            player.sendMessage(Text.literal("You don't have a pending dictator offer!").formatted(Formatting.RED));
+            return;
+        }
+        pendingDictatorOffer.remove(uuid);
+        player.sendMessage(Text.literal("You declined the Dictator title.").formatted(Formatting.GREEN));
+    }
+
+    public static void handleDictatorKilled(ServerPlayerEntity dictator, ServerPlayerEntity killer) {
+        removeDictator();
+
+        UUID killerUuid = killer.getUuid();
+        pendingLeadershipChoice.put(killerUuid, true);
+
+        MutableText msg = Text.literal("You slew the Dictator! Choose your path:").formatted(Formatting.GOLD, Formatting.BOLD);
+        killer.sendMessage(msg);
+
+        MutableText force = Text.literal("[Become Leader by Force]").formatted(Formatting.DARK_RED, Formatting.BOLD);
+        force.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/takeleadership force")));
+        killer.sendMessage(force);
+
+        MutableText election = Text.literal("[Run an Election]").formatted(Formatting.GREEN, Formatting.BOLD);
+        election.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/takeleadership election")));
+        killer.sendMessage(election);
+    }
+
+    public static boolean hasPendingLeadershipChoice(UUID uuid) {
+        return pendingLeadershipChoice.containsKey(uuid);
+    }
+
+    public static void takeLeadershipByForce(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        if (!pendingLeadershipChoice.containsKey(uuid)) {
+            player.sendMessage(Text.literal("You don't have a pending leadership choice!").formatted(Formatting.RED));
+            return;
+        }
+        pendingLeadershipChoice.remove(uuid);
+        DataManager.setChair(player.getUuidAsString());
+        DataManager.setViceChair(null);
+        PerkManager.clearAllPerks();
+        PerkManager.onNewTermStart();
+        player.sendMessage(Text.literal("You have seized power! You are now the Chair.").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        for (ServerPlayerEntity p : PoliticalServer.server.getPlayerManager().getPlayerList()) {
+            if (!p.getUuidAsString().equals(player.getUuidAsString())) {
+                p.sendMessage(Text.literal("⚠ " + player.getName().getString() + " has seized power as the new Chair!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+            }
+        }
+        DataManager.save(PoliticalServer.server);
+    }
+
+    public static void takeLeadershipByElection(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        if (!pendingLeadershipChoice.containsKey(uuid)) {
+            player.sendMessage(Text.literal("You don't have a pending leadership choice!").formatted(Formatting.RED));
+            return;
+        }
+        pendingLeadershipChoice.remove(uuid);
+        ElectionManager.startEmergencyElection(PoliticalServer.server);
     }
 
     public static void checkPlayerJoin(ServerPlayerEntity player) {

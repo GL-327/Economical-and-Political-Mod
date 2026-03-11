@@ -182,6 +182,7 @@ public class T2CraftingHandler {
             case SLIME -> n.contains("Gelatinous") || n.contains("Rustler");
             case ENDERMAN -> n.contains("Void") || n.contains("Phantom");
             case WARDEN -> n.contains("Sculk") || n.contains("Terror");
+            case PIGLIN -> n.contains("Gilded") || n.contains("Ravager");
         };
     }
 

@@ -142,8 +142,9 @@ public class PerksGui {
             perksToShow = PerkManager.getPerksByType(Perk.PerkType.NEGATIVE);
         }
 
-        // CHANGED: Chair gets 6 perks, Vice Chair gets 2
-        int maxPerks = isChair ? 6 : 2;
+        // CHANGED: Chair gets 6 perks, Vice Chair gets 2 (1 fewer if corrupt)
+        String playerUuid = player.getUuidAsString();
+        int maxPerks = isChair ? (ElectionManager.isCorrupt(playerUuid) ? 5 : 6) : (ElectionManager.isCorrupt(playerUuid) ? 1 : 2);
 
 // ADDED: Get Chair's selected perks (for Vice Chair to see as blocked)
         List<String> chairPerks = PerkManager.getChairSelectedPerks();

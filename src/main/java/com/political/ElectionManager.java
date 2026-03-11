@@ -9,6 +9,7 @@ import java.util.*;
 
 public class ElectionManager {
 
+
     private static final long WEEK_MS = 7L * 24L * 60L * 60L * 1000L;
     private static final long DAY_MS = 24L * 60L * 60L * 1000L;
 
@@ -17,6 +18,8 @@ public class ElectionManager {
     private static boolean electionActive = false;
 
     private static Map<String, Integer> votes = new HashMap<>();
+    private static Map<String, Integer> fakeVotes = new HashMap<>();
+    private static Set<String> corruptCandidates = new HashSet<>();
     private static Map<String, String> votedPlayers = new HashMap<>();
     private static List<String> candidates = new ArrayList<>();
 
@@ -86,6 +89,46 @@ public class ElectionManager {
         }
     }
 
+    public static void buyFakeVote(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        if (!electionActive) {
+            player.sendMessage(Text.literal("No election is active!").formatted(Formatting.RED));
+            return;
+        }
+        if (!candidates.contains(uuid)) {
+            player.sendMessage(Text.literal("You are not a candidate!").formatted(Formatting.RED));
+            return;
+        }
+        if (CreditItem.countCredits(player) < 25) {
+            player.sendMessage(Text.literal("You need at least 25 credits to buy a fake vote!").formatted(Formatting.RED));
+            return;
+        }
+        CreditItem.removeCredits(player, 25);
+        int count = fakeVotes.getOrDefault(uuid, 0) + 1;
+        fakeVotes.put(uuid, count);
+        votes.put(uuid, votes.getOrDefault(uuid, 0) + 1);
+        if (count >= 5) {
+            corruptCandidates.add(uuid);
+            player.sendMessage(Text.literal("⚠ You have been flagged as CORRUPT! You will choose 1 fewer perk if elected.").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        } else {
+            player.sendMessage(Text.literal("Fake vote purchased! (" + count + "/5 before corruption flag). -25 credits.").formatted(Formatting.YELLOW));
+        }
+        DataManager.save(PoliticalServer.server);
+    }
+
+    public static boolean isCorrupt(String uuid) {
+        return corruptCandidates.contains(uuid);
+    }
+
+    public static int getFakeVotes(String uuid) {
+        return fakeVotes.getOrDefault(uuid, 0);
+    }
+
+    public static void resetFakeVotes() {
+        fakeVotes.clear();
+        corruptCandidates.clear();
+    }
+
     public static void startElection(MinecraftServer server) {
         // ADDED: Block elections during dictatorship
         if (DictatorManager.isDictatorActive()) {
@@ -98,6 +141,7 @@ public class ElectionManager {
         votes.clear();
         votedPlayers.clear();
         candidates.clear();
+        resetFakeVotes();
 
         List<String> allPlayers = new ArrayList<>(DataManager.getAllPlayers().keySet());
 
@@ -171,6 +215,23 @@ public class ElectionManager {
             newViceChair = sorted.get(1).getKey();
         }
 
+        // Check for dictator offer
+        int totalVotesCast = votedPlayers.size();
+        if (newChair != null && totalVotesCast > 0) {
+            int winnerVotes = sorted.get(0).getValue();
+            double percentage = (double) winnerVotes / totalVotesCast;
+            boolean qualifies = (totalVotesCast > 15 && percentage > 0.97)
+                    || (totalVotesCast <= 15 && percentage >= 1.0);
+            if (qualifies) {
+                final String winnerUuid = newChair;
+                ServerPlayerEntity winner = server.getPlayerManager().getPlayer(java.util.UUID.fromString(winnerUuid));
+                if (winner != null) {
+                    broadcast(server, Text.literal(winner.getName().getString() + " received " + String.format("%.0f", percentage * 100) + "% of votes!").formatted(Formatting.GOLD));
+                    DictatorManager.offerDictatorTitle(winner);
+                }
+            }
+        }
+
         String oldChair = DataManager.getChair();
 
         if (newChair != null && newChair.equals(oldChair)) {
@@ -217,6 +278,7 @@ public class ElectionManager {
         }
         broadcast(server, Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
 
+        resetFakeVotes();
         DataManager.save(server);
     }
 

@@ -125,6 +125,7 @@ public class BossAbilityManager {
             case SLIME -> useSlimeAbility(boss, target, tier);
             case ENDERMAN -> useEndermanAbility(boss, target, tier);
             case WARDEN -> useWardenAbility(boss, target, tier);
+            case PIGLIN -> usePiglinAbility(boss, target, tier, world);
         };
 
         if (used) {

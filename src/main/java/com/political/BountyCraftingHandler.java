@@ -157,12 +157,23 @@ public class BountyCraftingHandler {
             }
         }
 
+        // Crown of Greed: 2 Piglin Cores + 4 Piglin Flesh
+        if (totalItems == 6) {
+            int piglinCores = 0;
+            int piglinFlesh = 0;
+            for (ItemStack stack : grid) {
+                if (stack.isEmpty()) continue;
+                String cid = SlayerItems.getCustomItemId(stack);
+                if ("piglin_core".equals(cid)) piglinCores++;
+                else if ("piglin_flesh".equals(cid)) piglinFlesh++;
+            }
+            if (piglinCores == 2 && piglinFlesh == 4) {
+                return SlayerItems.createCrownOfGreed();
+            }
+        }
+
         return null;
     }
-
-    // ============================================================
-    // GRID COUNTING HELPERS
-    // ============================================================
 
     /** Count slots in grid that contain a Core of the given slayer type. */
     private static int countGridCores(List<ItemStack> grid, SlayerManager.SlayerType type) {
@@ -248,6 +259,7 @@ public class BountyCraftingHandler {
             case SKELETON -> Items.BONE;
             case SLIME    -> Items.SLIME_BALL;
             case WARDEN   -> Items.SCULK;
+            case PIGLIN   -> Items.GOLD_NUGGET;
             case ENDERMAN -> Items.ENDER_PEARL;
         };
     }

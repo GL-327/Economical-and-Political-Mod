@@ -87,6 +87,7 @@ public class SlayerItems {
             case SLIME    -> "Rustler's Lasso";
             case ENDERMAN -> "Phantom's Edge";
             case WARDEN   -> "Terror's Grasp";
+            case PIGLIN   -> "Gilded Ravager's Blade";
         };
     }
 
@@ -551,6 +552,7 @@ public class SlayerItems {
                     || entity instanceof net.minecraft.entity.mob.MagmaCubeEntity;
             case ENDERMAN -> entity instanceof net.minecraft.entity.mob.EndermanEntity;
             case WARDEN -> entity instanceof net.minecraft.entity.mob.WardenEntity;
+            case PIGLIN -> entity instanceof net.minecraft.entity.mob.PiglinBruteEntity || entity instanceof net.minecraft.entity.mob.PiglinEntity;
         };
     }
 
@@ -587,6 +589,7 @@ public class SlayerItems {
             case SLIME -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.SLIME);
             case ENDERMAN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.ENDERMAN);
             case WARDEN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.WARDEN);
+            case PIGLIN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.PIGLIN);
         };
         lore.add(Text.literal(craftHint).formatted(Formatting.DARK_PURPLE));
 
@@ -672,6 +675,7 @@ public class SlayerItems {
             case SLIME -> "Condensed Gel";
             case ENDERMAN -> "Void Fragment";
             case WARDEN -> "Sculk Heart";
+            case PIGLIN -> "Gilded Shard";
         };
 
         chunk.set(DataComponentTypes.CUSTOM_NAME,
@@ -754,6 +758,7 @@ public class SlayerItems {
             case SLIME -> "Condensed Gel";
             case ENDERMAN -> "Void Fragment";
             case WARDEN -> "Sculk Heart";
+            case PIGLIN -> "Gilded Shard";
         };
     }
 // ============================================================
@@ -987,6 +992,7 @@ public class SlayerItems {
             case SLIME -> tier == 1 ? new ArmorStats(10, 3, 0.60, 0.15) : new ArmorStats(14, 5, 0.80, 0.30);
             case ENDERMAN -> tier == 1 ? new ArmorStats(10, 3, 0.60, 0.15) : new ArmorStats(14, 5, 0.80, 0.30);
             case WARDEN -> tier == 1 ? new ArmorStats(12, 4, 0.70, 0.20) : new ArmorStats(16, 6, 0.90, 0.35);
+            case PIGLIN -> tier == 1 ? new ArmorStats(10, 3, 0.60, 0.15) : new ArmorStats(14, 5, 0.80, 0.30);
         };
     }
 
@@ -1184,6 +1190,7 @@ public class SlayerItems {
             case SLIME    -> "CRD-004";
             case ENDERMAN -> "CRD-005";
             case WARDEN   -> "CRD-006";
+            case PIGLIN   -> "CRD-007";
         };
         String mfluxLabel = tier == 1
                 ? "§8[MFLUX: Field-tested containment gear | " + mfluxCrd + "]"
@@ -2598,6 +2605,7 @@ public class SlayerItems {
             case SLIME -> "Gelatinous Rustler " + piece;
             case ENDERMAN -> "Void Phantom " + piece;
             case WARDEN -> "Sculk Terror " + piece;
+            case PIGLIN -> "Gilded Ravager " + piece;
         };
     }
     // ============================================================
@@ -2611,6 +2619,7 @@ public class SlayerItems {
             case SLIME -> 0x7CFC00;        // Lime green
             case ENDERMAN -> 0x1A0033;     // Dark purple
             case WARDEN -> 0x0D4D4D;       // Dark teal/cyan
+            case PIGLIN -> 0xFFD700;       // Gold
         };
     }
 
@@ -2657,6 +2666,7 @@ public class SlayerItems {
             case SLIME -> "Gelatinous Rustler";
             case ENDERMAN -> "Void Phantom";
             case WARDEN -> "Sculk Hunter";
+            case PIGLIN -> "Gilded Ravager";
         };
     }
 
@@ -2702,6 +2712,7 @@ public class SlayerItems {
             case SLIME -> "Gelatinous Rustler";
             case ENDERMAN -> "Void Phantom";
             case WARDEN -> "Sculk Hunter";
+            case PIGLIN -> "Gilded Ravager";
         };
     }
 
@@ -2905,5 +2916,67 @@ public class SlayerItems {
             case "Boots" -> AttributeModifierSlot.FEET;
             default -> AttributeModifierSlot.ANY;
         };
+    }
+
+    public static ItemStack createPiglinCore() {
+        ItemStack core = new ItemStack(Items.GOLD_NUGGET);
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Piglin Core ✦").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A powerful essence from the").formatted(Formatting.GRAY));
+        lore.add(Text.literal("The Gilded Ravager.").formatted(Formatting.GOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Used to craft the Crown of Greed.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: CRD-007 Piglin-class anomalous residue]").formatted(Formatting.DARK_GRAY));
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(core, "piglin_core");
+        return core;
+    }
+
+    public static ItemStack createPiglinFlesh() {
+        ItemStack flesh = new ItemStack(Items.GOLD_NUGGET);
+        flesh.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Piglin Flesh").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The singed flesh of a fallen Piglin.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Still radiates heat.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Biological material, handle with care]").formatted(Formatting.DARK_GRAY));
+        flesh.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        setCustomItemId(flesh, "piglin_flesh");
+        return flesh;
+    }
+
+    public static ItemStack createCrownOfGreed() {
+        ItemStack crown = new ItemStack(Items.GOLDEN_HELMET);
+        crown.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("👑 Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Specimen CRD-007-G]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("❤ Max Health: 4 HP (2 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 0 (all defence removed)").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: ×(digits of your coins)").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("  (e.g. 999 coins = ×3 damage)").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✗ All potion effects suppressed").formatted(Formatting.RED));
+        lore.add(Text.literal("✗ All bounty buffs/defence disabled").formatted(Formatting.RED));
+        lore.add(Text.literal("✗ All armour defence cleared").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ WARNING ━━━").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("💀 ON DEATH: Lose ALL coins!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Wealth is power — and power devours.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        crown.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        crown.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.builder().build());
+        setCustomItemId(crown, "crown_of_greed");
+        return crown;
     }
 }

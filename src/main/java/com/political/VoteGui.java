@@ -71,6 +71,31 @@ public class VoteGui {
                 .addLoreLine(Text.literal(PoliticalServer.formatTime(ElectionManager.getRemainingTime())).formatted(Formatting.WHITE))
                 .build());
 
+        // Buy Fake Vote button (only for candidates)
+        boolean isCandidate = candidates.contains(voterUuid);
+        if (isCandidate) {
+            int fakeVoteCount = ElectionManager.getFakeVotes(voterUuid);
+            boolean isCorrupt = ElectionManager.isCorrupt(voterUuid);
+            GuiElementBuilder fakeVoteBtn = new GuiElementBuilder(Items.GOLD_NUGGET)
+                    .setName(Text.literal("Buy Fake Vote").formatted(Formatting.GOLD, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Cost: 25 credits per vote").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Fake votes: " + fakeVoteCount + "/5").formatted(Formatting.WHITE))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Adds 1 to your vote total.").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("5+ fake votes → Corrupt flag").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("  (1 fewer perk if elected)").formatted(Formatting.GRAY));
+            if (isCorrupt) {
+                fakeVoteBtn.addLoreLine(Text.literal("⚠ YOU ARE CORRUPT").formatted(Formatting.DARK_RED, Formatting.BOLD));
+            } else {
+                fakeVoteBtn.addLoreLine(Text.literal("Click to buy!").formatted(Formatting.GREEN));
+                fakeVoteBtn.setCallback((index, type, action) -> {
+                    ElectionManager.buyFakeVote(player);
+                    player.closeHandledScreen();
+                });
+            }
+            gui.setSlot(20, fakeVoteBtn.build());
+        }
+
         gui.open();
     }
 }
