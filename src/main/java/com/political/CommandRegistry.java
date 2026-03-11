@@ -223,19 +223,6 @@ public class CommandRegistry {
                     return 1;
                 })
         );
-        // Add inside your register() method
-
-        dispatcher.register(CommandManager.literal("customitem")
-                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
-                .then(CommandManager.literal("harveys_stick")
-                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "harveys_stick", Items.STICK, "Harvey's Stick")))
-                .then(CommandManager.literal("the_gavel")
-                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "the_gavel", Items.MACE, "The Gavel")))
-                .then(CommandManager.literal("hermes_shoes")
-                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hermes_shoes", Items.IRON_BOOTS, "Hermes Shoes")))
-                .then(CommandManager.literal("hpebm")
-                        .executes(ctx -> giveCustomItem(ctx.getSource().getPlayerOrThrow(), "hpebm", Items.IRON_SHOVEL, "HPEBM")))
-        );
         // ============ CREDITS COMMANDS ============
         dispatcher.register(CommandManager.literal("credits")
                 .then(CommandManager.literal("add")
@@ -371,56 +358,6 @@ public class CommandRegistry {
                 })
         );
 
-// ============ CUSTOM ITEM COMMANDS ============
-        dispatcher.register(CommandManager.literal("customitem")
-                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
-                .then(CommandManager.literal("harveys_stick")
-                        .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                            player.giveItemStack(CustomItemHandler.createHarveysStick());
-                            player.sendMessage(Text.literal("Given Harvey's Stick!").formatted(Formatting.GREEN));
-                            return 1;
-                        }))
-                .then(CommandManager.literal("the_gavel")
-                        .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                            player.giveItemStack(CustomItemHandler.createTheGavel());
-                            player.sendMessage(Text.literal("Given The Gavel!").formatted(Formatting.GREEN));
-                            return 1;
-                        }))
-                .then(CommandManager.literal("hermes_shoes")
-                        .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                            player.giveItemStack(CustomItemHandler.createHermesShoes());
-                            player.sendMessage(Text.literal("Given Hermes Shoes!").formatted(Formatting.GREEN));
-                            return 1;
-                        }))
-                .then(CommandManager.literal("hpebm")
-                        .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                            player.giveItemStack(CustomItemHandler.createHPEBM());
-                            player.sendMessage(Text.literal("Given HPEBM!").formatted(Formatting.GREEN));
-                            return 1;
-                        }))
-        );
-    }
-    private static int giveCustomItem(ServerPlayerEntity player, String tagName, Item baseItem, String displayName) {
-        ItemStack stack = new ItemStack(baseItem);
-
-        // Set custom NBT data
-        NbtCompound nbt = new NbtCompound();
-        nbt.putByte(tagName, (byte) 1);
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
-
-        // Set custom name
-        stack.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(displayName).formatted(Formatting.GOLD, Formatting.BOLD));
-
-        // Give to player
-        player.giveItemStack(stack);
-        player.sendMessage(Text.literal("Given " + displayName + "!").formatted(Formatting.GREEN));
-
-        return 1;
     }
 
     private static void registerAuctionHouse(CommandDispatcher<ServerCommandSource> dispatcher) {

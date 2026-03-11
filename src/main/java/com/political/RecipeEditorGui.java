@@ -52,20 +52,31 @@ public class RecipeEditorGui {
             items.add(SlayerItems.createSlayerChestplate(type, 2));
             items.add(SlayerItems.createSlayerLeggings(type, 2));
             items.add(SlayerItems.createSlayerBoots(type, 2));
+            // Cores and chunks
+            items.add(SlayerItems.createCore(type));
+            items.add(SlayerItems.createChunk(type));
         }
+        // Legendary armor
         items.add(SlayerItems.createZombieBerserkerHelmet());
         items.add(SlayerItems.createSpiderLeggings());
         items.add(SlayerItems.createSkeletonBow());
         items.add(SlayerItems.createSlimeBoots());
         items.add(SlayerItems.createWardenChestplate());
+        // Piglin items
+        items.add(SlayerItems.createCrownOfGreed());
+        items.add(SlayerItems.createPiglinCore());
+        items.add(SlayerItems.createPiglinFlesh());
+        // Special weapons
+        items.add(CustomItemHandler.createTheGavel());
+        items.add(CustomItemHandler.createGavel());
+        items.add(CustomItemHandler.createHarveysStick());
+        items.add(CustomItemHandler.createHermesShoes());
         items.add(CustomItemHandler.createHPEBM(1));
         items.add(CustomItemHandler.createHPEBM(2));
         items.add(CustomItemHandler.createHPEBM(3));
         items.add(CustomItemHandler.createHPEBM(4));
         items.add(CustomItemHandler.createHPEBM(5));
         items.add(CustomItemHandler.createUltraOverclockedBeam());
-        items.add(CustomItemHandler.createTheGavel());
-        items.add(CustomItemHandler.createHermesShoes());
         return items;
     }
 
@@ -74,6 +85,10 @@ public class RecipeEditorGui {
     // ────────────────────────────────────────────────────────────
 
     public static void openRecipeList(ServerPlayerEntity player) {
+        openRecipeList(player, 0);
+    }
+
+    public static void openRecipeList(ServerPlayerEntity player, int page) {
         List<SlayerRecipes.Recipe> existingRecipes = RecipeConfigManager.getRecipes();
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("§6§l/setrecipe — Recipe Editor"));
@@ -90,9 +105,14 @@ public class RecipeEditorGui {
 
         // Show all custom items (that could have a recipe set)
         List<ItemStack> allItems = getAllCustomItems();
+        final int ITEMS_PER_PAGE = 28;
+        int totalPages = (allItems.size() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
+        int clampedPage = Math.min(page, totalPages - 1);
+
+        int start = clampedPage * ITEMS_PER_PAGE;
         int shown = 0;
-        for (ItemStack item : allItems) {
-            if (shown >= 28) break;
+        for (int idx = start; idx < allItems.size() && shown < ITEMS_PER_PAGE; idx++) {
+            ItemStack item = allItems.get(idx);
             int row = shown / 7;
             int col = shown % 7 + 1;
             int slot = row * 9 + col;
@@ -133,6 +153,27 @@ public class RecipeEditorGui {
             gui.setSlot(slot, eb.build());
             shown++;
         }
+
+        // Pagination buttons
+        if (clampedPage > 0) {
+            final int prevPage = clampedPage - 1;
+            gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("§7Page " + clampedPage + " / " + totalPages))
+                    .setCallback((idx, t, a) -> openRecipeList(player, prevPage)).build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int nextPage = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("§7Page " + (clampedPage + 2) + " / " + totalPages))
+                    .setCallback((idx, t, a) -> openRecipeList(player, nextPage)).build());
+        }
+
+        // Page indicator
+        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("§7Page " + (clampedPage + 1) + " / " + totalPages))
+                .build());
 
         gui.open();
     }

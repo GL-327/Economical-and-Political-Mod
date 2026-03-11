@@ -253,10 +253,7 @@ public class ScoreboardManager {
             lines.add("§6 🏪 §7Auction: §f" + formatDuration(msLeft));
         }
 
-        // Line 9: spacer
-        lines.add("§8   ");
-
-        // Line 10: Bounty level
+        // Line 9: Bounty level
         int totalLevel = 0;
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             totalLevel += SlayerData.getSlayerLevel(player.getUuidAsString(), type);
@@ -264,7 +261,7 @@ public class ScoreboardManager {
         String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
         lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
 
-        // Lines 11-13: Compact bounty stats (max 3 lines)
+        // Lines 10-13: Compact bounty stats / quest info
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
 
@@ -277,21 +274,26 @@ public class ScoreboardManager {
             StringBuilder bar = new StringBuilder("§f  ");
             for (int i = 0; i < 5; i++) bar.append(i < progress ? "§a█" : "§8█");
             lines.add(bar + " §e" + quest.killCount + "/" + required);
+            lines.add("§7  T" + quest.tier + " " + quest.slayerType.displayName + (quest.bossSpawned ? " §cBoss Active!" : ""));
         } else if (!bountyStats.isEmpty()) {
-            // Show compact bounty stats (at most 2 lines)
-            int linesAdded = 0;
+            // Show compact bounty stats (up to 3 lines)
             String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
-            lines.add(gearColor + "§l ⚔ §r§7Bounty Stats");
-            linesAdded++;
+            lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
             int universalDef = 0;
+            int weaponBonus = 0;
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
                 int[] s = entry.getValue();
                 universalDef += s[2];
+                if (s[0] > weaponBonus) weaponBonus = s[0];
             }
-            if (universalDef > 0 && linesAdded < 2) {
-                lines.add("§7  Bounty DEF: §a-" + universalDef + "%");
-                linesAdded++;
+            if (universalDef > 0) {
+                lines.add("§7  DEF: §a-" + universalDef + "% all bosses");
             }
+            if (weaponBonus > 0) {
+                lines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");
+            }
+        } else {
+            lines.add("§8  No bounty gear");
         }
 
         // Lines 14-15: Footer

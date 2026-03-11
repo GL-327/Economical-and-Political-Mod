@@ -5,37 +5,22 @@ import net.minecraft.component.type.*;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.nbt.NbtCompound;
 
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
-import java.util.List;import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.util.Identifier;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 
 public class SlayerItems {
@@ -1202,14 +1187,27 @@ public class SlayerItems {
         if (pieceSpecificDef < 1) pieceSpecificDef = 1;
         if (pieceAllDef < 1) pieceAllDef = 1;
 
-        lore.add(Text.literal("vs " + type.displayName + " Bosses: ")
+        // Full-set boss reductions (actual capped values)
+        // T1 full set always caps at 60%, T2 full set always caps at 80%
+        int fullSetBossDef = (tier == 1) ? 60 : 80;
+        int fullSetAllDef  = (int) Math.round(stats.allBossReduction * 100);
+
+        lore.add(Text.literal("This piece: ")
                 .formatted(Formatting.GRAY)
-                .append(Text.literal("-" + pieceSpecificDef + "% damage")
+                .append(Text.literal("-" + pieceSpecificDef + "% vs " + type.displayName + " Boss")
                         .formatted(Formatting.GREEN, Formatting.BOLD)));
-        lore.add(Text.literal("vs All Bosses: ")
+        lore.add(Text.literal("This piece: ")
                 .formatted(Formatting.GRAY)
-                .append(Text.literal("-" + pieceAllDef + "% damage")
+                .append(Text.literal("-" + pieceAllDef + "% vs All Bosses")
                         .formatted(Formatting.GREEN)));
+        lore.add(Text.literal("Full set: ")
+                .formatted(Formatting.GOLD)
+                .append(Text.literal("-" + fullSetBossDef + "% vs " + type.displayName + " Boss")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD)));
+        lore.add(Text.literal("Full set: ")
+                .formatted(Formatting.GOLD)
+                .append(Text.literal("-" + fullSetAllDef + "% vs All Bosses")
+                        .formatted(Formatting.YELLOW)));
 
         if (tier >= 2) {
             lore.add(Text.literal("+15% XP from " + type.displayName + " bounties").formatted(Formatting.AQUA));
@@ -2004,7 +2002,8 @@ public class SlayerItems {
         double pieceMult = getPieceBossMultiplier(pieceName);
         int pieceBossDef  = Math.max(1, (int) Math.round(stats.bossReduction * pieceMult * 100));
         int pieceAllDef   = Math.max(1, (int) Math.round(stats.allBossReduction * pieceMult * 100));
-        int fullSetBoss   = (int) Math.round(stats.bossReduction * 100);
+        // T1 full set always caps at 60% boss-specific; all-boss is sum of all pieces
+        int fullSetBoss   = 60;
         int fullSetAll    = (int) Math.round(stats.allBossReduction * 100);
 
         List<Text> lore = new ArrayList<>();
@@ -2076,7 +2075,8 @@ public class SlayerItems {
         double pieceMult = getPieceBossMultiplier(pieceName);
         int pieceBossDef  = Math.max(1, (int) Math.round(stats.bossReduction * pieceMult * 100));
         int pieceAllDef   = Math.max(1, (int) Math.round(stats.allBossReduction * pieceMult * 100));
-        int fullSetBoss   = (int) Math.round(stats.bossReduction * 100);
+        // T2 full set always caps at 80% boss-specific; all-boss is sum of all pieces
+        int fullSetBoss   = 80;
         int fullSetAll    = (int) Math.round(stats.allBossReduction * 100);
 
         List<Text> lore = new ArrayList<>();
