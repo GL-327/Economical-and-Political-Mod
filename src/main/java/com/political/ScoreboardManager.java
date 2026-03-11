@@ -572,7 +572,7 @@ public class ScoreboardManager {
             case "warden_t2_chestplate"   -> "+25% KB Resist §7| Sonic Pulse";
             case "warden_t1_leggings"     -> "+10% KB Resist";
             case "warden_t2_leggings"     -> "+25% KB Resist §7| +6 Hearts";
-            case "warden_t1_boots"        -> "Vibration Sense (8 blocks)";
+            case "warden_t1_boots"        -> "Vibration Sense (8 blocks, 3s glow)";
             case "warden_t2_boots"        -> "+10% KB Resist";
             default -> null;
         };

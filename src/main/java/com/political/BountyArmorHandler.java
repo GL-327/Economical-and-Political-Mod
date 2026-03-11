@@ -221,14 +221,16 @@ public class BountyArmorHandler {
         }
 
         // T1 Boots: Vibration sense — Glowing applied to hostile entities within 8 blocks
+        // Use StatusEffects.GLOWING with a short duration so it expires naturally
         String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
         if ("warden_t1_boots".equals(bootsId)) {
             ServerWorld world = player.getEntityWorld();
             if (world.getTime() % 20 == 0) {
                 Box searchBox = player.getBoundingBox().expand(8.0);
                 for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, searchBox,
-                        e -> e instanceof HostileEntity && !e.isGlowing())) {
-                    entity.setGlowing(true);
+                        e -> e instanceof HostileEntity)) {
+                    entity.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.GLOWING, 60, 0, true, false, false)); // 3s, expires naturally
                 }
             }
         }

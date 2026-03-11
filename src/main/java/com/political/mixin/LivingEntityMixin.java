@@ -73,7 +73,7 @@ public class LivingEntityMixin {
 
         if (BountyArmorHandler.hasPoisonThorns(player)) {
             attacker.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.POISON, 60, 0, true, true, true)); // 3s Poison I
+                    StatusEffects.POISON, 60, 0, true, false, false)); // 3s Poison I
         }
     }
 

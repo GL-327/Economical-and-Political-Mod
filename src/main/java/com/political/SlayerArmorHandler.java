@@ -202,7 +202,7 @@ public class SlayerArmorHandler {
                             bonusKnockbackResist += 0.25; // +25%
                             bonusHealth += 12.0;           // +6 hearts
                         }
-                        case "warden_t1_boots"       -> bonusKnockbackResist += 0.05; // +5% (lore)
+                        case "warden_t1_boots"       -> bonusKnockbackResist += 0.05; // +5% KB resist
                         case "warden_t2_boots"       -> bonusKnockbackResist += 0.10; // +10%
                         default -> {}
                     }

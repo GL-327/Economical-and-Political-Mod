@@ -2086,7 +2086,7 @@ public class SlayerItems {
                 case "Helmet"     -> "Darkness Immunity";
                 case "Chestplate" -> "+10% Knockback Resistance";
                 case "Leggings"   -> "+10% Knockback Resistance";
-                case "Boots"      -> "Vibration Sense (Hostile Mobs Glow within 8 blocks)";
+                case "Boots"      -> "Vibration Sense: Hostile Mobs Glow within 8 blocks (refreshes every second)";
                 default           -> null;
             };
             case PIGLIN -> null;
