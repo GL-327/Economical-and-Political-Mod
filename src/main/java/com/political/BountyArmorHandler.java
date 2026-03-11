@@ -340,4 +340,18 @@ public class BountyArmorHandler {
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
         return "skeleton_t2_helmet".equals(helmetId);
     }
+
+    /**
+     * Returns the projectile damage INCOMING multiplier for the player based on skeleton T1 chestplate.
+     * Skeleton T1 Chestplate: 0.90 (-10%).
+     * T2 chestplate resistance is handled by T2ArmorAbilityHandler.getProjectileDamageReduction().
+     *
+     * <p>Crown of Greed suppresses all bounty-gear bonuses, including this resistance.
+     */
+    public static float getProjectileDamageResistance(ServerPlayerEntity player) {
+        if (SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD))) return 1.0f;
+        String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
+        if ("skeleton_t1_chestplate".equals(chestId)) return 0.90f;
+        return 1.0f;
+    }
 }

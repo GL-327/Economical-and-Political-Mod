@@ -526,7 +526,7 @@ public class ScoreboardManager {
             case "slime_boots"             -> "No Fall Dmg §7| Death Save";
             case "warden_chestplate"       -> "KB Immune §7| NightVis §7| ESP 64blk";
             // ── ZOMBIE ───────────────────────────────────────────────────────
-            case "zombie_t1_helmet"       -> "Hunger Immune";
+            case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";
             case "zombie_t1_chestplate"   -> "+2 Hearts";
             case "zombie_t2_chestplate"   -> "+4 Hearts §7| §aRegen I";

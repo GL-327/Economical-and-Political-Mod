@@ -2021,7 +2021,7 @@ public class SlayerItems {
     private static String getT1PieceBuff(SlayerManager.SlayerType type, String piece) {
         return switch (type) {
             case ZOMBIE -> switch (piece) {
-                case "Helmet"     -> "Hunger Immunity";
+                case "Helmet"     -> "Hunger Immunity + +2 Hearts Health";
                 case "Chestplate" -> "+2 Hearts Health";
                 case "Leggings"   -> "-10% Damage from Undead Mobs";
                 case "Boots"      -> "+10% Knockback Resistance";

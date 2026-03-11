@@ -45,6 +45,7 @@ public class DataManager {
                 TaxManager.loadFromData(data);
                 DictatorManager.loadFromData(data);
                 SpawnManager.loadFromData(data);  // ADD THIS LINE
+                SpawnProtectionManager.loadFromData(data);
 
             } catch (IOException e) {
                 PoliticalServer.LOGGER.error("Failed to load data", e);
@@ -69,6 +70,7 @@ public class DataManager {
         TaxManager.saveToData(data);
         DictatorManager.saveToData(data);
         SpawnManager.saveToData(data);  // ADD THIS LINE
+        SpawnProtectionManager.saveToData(data);
 
         Path path = getDataPath(server);
         try {
@@ -363,5 +365,14 @@ public class DataManager {
         public double spawnZ = 0;
         public float spawnYaw = 0;
         public float spawnPitch = 0;
+
+        // Spawn protection region
+        public boolean spawnProtectionActive = false;
+        public int spawnProtectionMinX = 0;
+        public int spawnProtectionMaxX = 0;
+        public int spawnProtectionMinY = -64;
+        public int spawnProtectionMaxY = 320;
+        public int spawnProtectionMinZ = 0;
+        public int spawnProtectionMaxZ = 0;
     }
 }
