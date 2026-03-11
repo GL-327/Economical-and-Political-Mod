@@ -1382,7 +1382,7 @@ public class CustomItemHandler {
             Text nameText = stack.get(DataComponentTypes.CUSTOM_NAME);
             if (nameText != null) {
                 String name = nameText.getString();
-                if (name.contains("Ultra Overclocked") || name.contains("Mk.VI") || name.contains("Mk.VII")) return 7;
+                if (name.contains("Ultra Overclocked") || name.contains("Mk.VI")) return 7;
                 // New Roman numeral names
                 if (name.contains("Mk.V")) return 6;
                 if (name.contains("Mk.IV")) return 5;

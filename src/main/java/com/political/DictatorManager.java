@@ -229,9 +229,9 @@ public class DictatorManager {
 
         MutableText msg = Text.literal("You received overwhelming support! Would you like to become Dictator?").formatted(Formatting.GOLD);
         MutableText yes = Text.literal(" [YES]").formatted(Formatting.GREEN, Formatting.BOLD);
-        yes.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dictator accept")));
+        yes = yes.styled(s -> s.withClickEvent(new ClickEvent.RunCommand("/dictator accept")));
         MutableText no = Text.literal(" [NO]").formatted(Formatting.RED, Formatting.BOLD);
-        no.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/dictator decline")));
+        no = no.styled(s -> s.withClickEvent(new ClickEvent.RunCommand("/dictator decline")));
 
         player.sendMessage(msg.append(yes).append(no));
     }
@@ -270,11 +270,11 @@ public class DictatorManager {
         killer.sendMessage(msg);
 
         MutableText force = Text.literal("[Become Leader by Force]").formatted(Formatting.DARK_RED, Formatting.BOLD);
-        force.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/takeleadership force")));
+        force = force.styled(s -> s.withClickEvent(new ClickEvent.RunCommand("/takeleadership force")));
         killer.sendMessage(force);
 
         MutableText election = Text.literal("[Run an Election]").formatted(Formatting.GREEN, Formatting.BOLD);
-        election.styled(s -> s.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/takeleadership election")));
+        election = election.styled(s -> s.withClickEvent(new ClickEvent.RunCommand("/takeleadership election")));
         killer.sendMessage(election);
     }
 

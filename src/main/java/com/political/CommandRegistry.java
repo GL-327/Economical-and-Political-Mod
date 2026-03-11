@@ -938,6 +938,7 @@ public class CommandRegistry {
     }
 
     private static void registerSmite(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("smite")
                 .then(CommandManager.argument("player", EntityArgumentType.player())
                         .executes(context -> {
                             ServerPlayerEntity source = context.getSource().getPlayer();
