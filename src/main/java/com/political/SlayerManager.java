@@ -41,8 +41,8 @@ public class SlayerManager {
         SKELETON("Skeleton", "The Bone Desperado", Formatting.WHITE, Items.BONE, 3.0),
         SLIME("Slime", "The Gelatinous Rustler", Formatting.GREEN, Items.SLIME_BALL, 5.0),
         ENDERMAN("Enderman", "The Void Phantom", Formatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
-        WARDEN("Warden", "The Sculk Terror", Formatting.DARK_AQUA, Items.SCULK, 25.0),
-        PIGLIN("Piglin", "The Gilded Ravager", Formatting.GOLD, Items.GOLD_NUGGET, 15.0);
+        PIGLIN("Piglin", "The Gilded Ravager", Formatting.GOLD, Items.GOLD_NUGGET, 15.0),
+        WARDEN("Warden", "The Sculk Terror", Formatting.DARK_AQUA, Items.SCULK, 25.0);
 
 
         public final String displayName;

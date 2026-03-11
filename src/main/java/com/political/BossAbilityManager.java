@@ -82,6 +82,12 @@ public class BossAbilityManager {
     public static void tickBossAbilities(LivingEntity boss, ServerPlayerEntity target,
                                          SlayerManager.SlayerType type, int tier) {
         if (!(boss.getEntityWorld() instanceof ServerWorld world)) return;
+
+        // Tick Piglin barter shields (remove invulnerability when expired)
+        if (type == SlayerManager.SlayerType.PIGLIN) {
+            tickPiglinShields(world);
+        }
+
         if (type == SlayerManager.SlayerType.WARDEN && boss instanceof net.minecraft.entity.mob.WardenEntity warden) {
             warden.increaseAngerAt(target, 80, true);
             if (warden.getTarget() == null) {
@@ -938,37 +944,170 @@ public class BossAbilityManager {
         return true;
     }
 
+    // Piglin boss shield state tracking
+    private static final Map<UUID, Long> piglinShieldEndTimes = new HashMap<>();
+    private static final Map<UUID, Integer> piglinAbilityCounter = new HashMap<>();
+
     private static boolean usePiglinAbility(LivingEntity boss, ServerPlayerEntity target, int tier, ServerWorld world) {
-        // Piglin boss ability: gold rush - applies weakness and deals bonus gold damage
-        return switch (tier) {
-            case 1, 2 -> {
-                // Tier 1-2: Blind the target briefly
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 40, 0));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0));
-                target.sendMessage(Text.literal("⚠ The Piglin boss blinds you with glittering gold!").formatted(Formatting.GOLD));
-                yield true;
-            }
-            case 3, 4 -> {
-                // Tier 3-4: Gold rush - apply multiple debuffs
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 60, 0));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 120, 1));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 0));
-                target.sendMessage(Text.literal("⚠ The Gilded Ravager overwhelms you!").formatted(Formatting.GOLD, Formatting.BOLD));
-                yield true;
-            }
-            case 5 -> {
-                // Tier 5: Greed's Curse - blindness, weakness, and coin drain warning
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 200, 1));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 1));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 200, 0));
-                target.sendMessage(Text.literal("💀 Greed's Curse! The Piglin boss drains your will to fight!").formatted(Formatting.DARK_RED, Formatting.BOLD));
-                yield true;
-            }
+        UUID bossId = boss.getUuid();
+        Map<String, Long> cooldowns = abilityCooldowns.computeIfAbsent(bossId, k -> new HashMap<>());
+        long now = System.currentTimeMillis();
+
+        // Cycle through abilities: Gold Rush → Greed Aura → Barter Shield → Reinforcements
+        int counter = piglinAbilityCounter.getOrDefault(bossId, 0);
+        int ability = counter % (tier >= 3 ? 4 : 2);
+        piglinAbilityCounter.put(bossId, counter + 1);
+
+        return switch (ability) {
+            case 0 -> piglinGoldRush(boss, target, tier, world, cooldowns, now);
+            case 1 -> piglinGreedAura(boss, target, tier, world);
+            case 2 -> piglinBarterShield(boss, tier, world);
+            case 3 -> piglinReinforcements(boss, target, tier, world, cooldowns, now);
             default -> false;
         };
     }
 
+    /** Gold Rush: throws a burst of golden items that deal damage on impact */
+    private static boolean piglinGoldRush(LivingEntity boss, ServerPlayerEntity target, int tier, ServerWorld world,
+                                          Map<String, Long> cooldowns, long now) {
+        if (now - cooldowns.getOrDefault("gold_rush", 0L) < 8000L) return false;
+        cooldowns.put("gold_rush", now);
+
+        int projectileCount = 3 + tier * 2;
+        Vec3d bossPos = getEntityPos(boss);
+        Vec3d toTarget = new Vec3d(target.getX(), target.getY(), target.getZ()).subtract(bossPos).normalize();
+
+        for (int i = 0; i < projectileCount; i++) {
+            // Spread projectiles slightly
+            double spread = 0.3;
+            double dx = toTarget.x + (world.getRandom().nextDouble() - 0.5) * spread;
+            double dy = toTarget.y + 0.1 + world.getRandom().nextDouble() * 0.2;
+            double dz = toTarget.z + (world.getRandom().nextDouble() - 0.5) * spread;
+            net.minecraft.entity.projectile.SmallFireballEntity fireball =
+                    new net.minecraft.entity.projectile.SmallFireballEntity(world, boss,
+                            new net.minecraft.util.math.Vec3d(dx * (1.0 + tier * 0.3),
+                                    dy * (1.0 + tier * 0.3), dz * (1.0 + tier * 0.3)));
+            fireball.setVelocity(dx * 0.8, dy * 0.8, dz * 0.8);
+            world.spawnEntity(fireball);
+        }
+
+        world.playSoundFromEntity(null, boss, SoundEvents.ENTITY_PIGLIN_ANGRY,
+                SoundCategory.HOSTILE, 1.5f, 0.8f + world.getRandom().nextFloat() * 0.4f);
+
+        target.sendMessage(Text.literal("💰 Gold Rush! The Gilded Ravager hurls golden bolts!")
+                .formatted(Formatting.GOLD, Formatting.BOLD));
+        return true;
+    }
+
+    /** Greed Aura: nearby players lose coins while inside the radius */
+    private static boolean piglinGreedAura(LivingEntity boss, ServerPlayerEntity target, int tier, ServerWorld world) {
+        Box area = boss.getBoundingBox().expand(6 + tier);
+        boolean affected = false;
+
+        for (ServerPlayerEntity nearby : world.getEntitiesByClass(ServerPlayerEntity.class, area, p -> true)) {
+            int coins = CoinManager.getCoins(nearby);
+            if (coins > 0) {
+                int drain = Math.min(coins, 50 + tier * 50);
+                CoinManager.removeCoins(nearby, drain);
+                nearby.sendMessage(Text.literal("💸 Greed Aura! The Gilded Ravager drained §c" + drain + "§r coins from you!")
+                        .formatted(Formatting.YELLOW));
+                affected = true;
+            }
+        }
+
+        world.playSoundFromEntity(null, boss, SoundEvents.ENTITY_PIGLIN_AMBIENT,
+                SoundCategory.HOSTILE, 1.5f, 0.6f);
+
+        // Visual particle burst
+        world.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING,
+                boss.getX(), boss.getY() + 1, boss.getZ(),
+                20, 1.5, 0.5, 1.5, 0.1);
+
+        target.sendMessage(Text.literal("✦ The Gilded Ravager's Greed Aura pulses!")
+                .formatted(Formatting.GOLD));
+        return true;
+    }
+
+    /** Barter Shield: boss becomes temporarily immune and throws items */
+    private static boolean piglinBarterShield(LivingEntity boss, int tier, ServerWorld world) {
+        UUID bossId = boss.getUuid();
+        long now = System.currentTimeMillis();
+        long existingShield = piglinShieldEndTimes.getOrDefault(bossId, 0L);
+        if (now < existingShield) return false;
+
+        // Grant brief invulnerability
+        int shieldTicks = 40 + tier * 10;  // 2–3 seconds
+        boss.setInvulnerable(true);
+        piglinShieldEndTimes.put(bossId, now + shieldTicks * 50L);
+
+        // Glowing gold effect
+        boss.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, shieldTicks, tier));
+        boss.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, shieldTicks, 4));
+
+        world.playSoundFromEntity(null, boss, SoundEvents.ENTITY_PIGLIN_CELEBRATE,
+                SoundCategory.HOSTILE, 1.5f, 1.0f);
+        world.spawnParticles(ParticleTypes.FIREWORK,
+                boss.getX(), boss.getY() + 1, boss.getZ(), 30, 1, 0.5, 1, 0.05);
+
+        Box area = boss.getBoundingBox().expand(20);
+        for (ServerPlayerEntity nearby : world.getEntitiesByClass(ServerPlayerEntity.class, area, p -> true)) {
+            nearby.sendMessage(Text.literal("🛡 Barter Shield! The Gilded Ravager becomes invulnerable! (Lasts " + (shieldTicks / 20) + "s)")
+                    .formatted(Formatting.YELLOW, Formatting.BOLD));
+        }
+
+        return true;
+    }
+
+    /** Reinforcements: summons Piglin Brutes to fight alongside the boss */
+    private static boolean piglinReinforcements(LivingEntity boss, ServerPlayerEntity target, int tier, ServerWorld world,
+                                                 Map<String, Long> cooldowns, long now) {
+        if (now - cooldowns.getOrDefault("reinforcements", 0L) < 30000L) return false;
+        cooldowns.put("reinforcements", now);
+
+        int count = 1 + tier;  // 2–6 piglins depending on tier
+        BlockPos bossBlock = boss.getBlockPos();
+
+        for (int i = 0; i < count; i++) {
+            int offsetX = (world.getRandom().nextInt(5) - 2);
+            int offsetZ = (world.getRandom().nextInt(5) - 2);
+            BlockPos spawnPos = bossBlock.add(offsetX, 0, offsetZ);
+
+            net.minecraft.entity.mob.PiglinBruteEntity brute =
+                    EntityType.PIGLIN_BRUTE.create(world, SpawnReason.EVENT);
+            if (brute != null) {
+                brute.refreshPositionAndAngles(spawnPos.getX() + 0.5,
+                        spawnPos.getY(), spawnPos.getZ() + 0.5, 0, 0);
+                brute.setTarget(target);
+                world.spawnEntity(brute);
+                world.spawnParticles(ParticleTypes.PORTAL,
+                        brute.getX(), brute.getY() + 1, brute.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.1);
+            }
+        }
+
+        world.playSoundFromEntity(null, boss, SoundEvents.ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED,
+                SoundCategory.HOSTILE, 1.5f, 0.8f);
+
+        target.sendMessage(Text.literal("⚔ Reinforcements! " + count + " Piglin Brute(s) join the fray!")
+                .formatted(Formatting.GOLD, Formatting.BOLD));
+        return true;
+    }
+
+    /** Tick method to remove Barter Shield when expired */
+    public static void tickPiglinShields(ServerWorld world) {
+        long now = System.currentTimeMillis();
+        piglinShieldEndTimes.entrySet().removeIf(entry -> {
+            if (now >= entry.getValue()) {
+                // Find the entity and remove invulnerability
+                net.minecraft.entity.Entity entity = world.getEntity(entry.getKey());
+                if (entity instanceof LivingEntity living) {
+                    living.setInvulnerable(false);
+                }
+                return true;
+            }
+            return false;
+        });
+    }
 
 
     private static boolean useWardenAbility(LivingEntity boss, ServerPlayerEntity target, int tier) {

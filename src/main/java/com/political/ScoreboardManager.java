@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Max sidebar lines (enough for the full scoreboard layout)
-    private static final int MAX_LINES = 18;
+    // Max sidebar lines — Minecraft sidebar shows up to 15 entries
+    private static final int MAX_LINES = 15;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -223,90 +223,78 @@ public class ScoreboardManager {
     private static List<String> buildLines(ServerPlayerEntity player) {
         List<String> lines = new ArrayList<>();
 
-        // Animated separator (no duplicate CivilCraft — the objective title already shows it)
+        // Line 1: Animated separator
         String sep = SEPARATOR_FRAMES[animFrame % SEPARATOR_FRAMES.length];
         lines.add(sep);
 
-        // Economy
+        // Lines 2-3: Economy (combined credits/coins to save space)
         int coins = CoinManager.getCoins(player);
         int credits = CreditItem.countCredits(player);
         lines.add("§e Coins: §f" + formatNumber(coins));
         lines.add("§b Credits: §f" + credits);
         lines.add("§8 ");
 
-        // Government
+        // Lines 5-7: Government
         String chairUuid = DataManager.getChair();
         String viceUuid  = DataManager.getViceChair();
         String chairName = chairUuid != null ? DataManager.getPlayerName(chairUuid) : null;
         String viceName  = viceUuid  != null ? DataManager.getPlayerName(viceUuid)  : null;
-        lines.add("§a§l ⚖ §aGovernment");
-        lines.add("§7  Chair: " + (chairName != null ? "§c" + chairName : "§8None"));
-        lines.add("§7  Vice:  " + (viceName  != null ? "§9" + viceName  : "§8None"));
+        lines.add("§a§l ⚖ §r§7Chair: " + (chairName != null ? "§c" + chairName : "§8None"));
+        lines.add("§7  Vice: " + (viceName  != null ? "§9" + viceName  : "§8None"));
         lines.add("§8  ");
 
-        // Underground Auction timer
+        // Line 8: Underground Auction timer
         boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
         if (auctionActive) {
             String auctionPulse = (animFrame % 4 < 2) ? "§6§l" : "§e§l";
-            lines.add(auctionPulse + " 🏪 " + "§r§a§lUnderground Auction: LIVE");
+            lines.add(auctionPulse + " 🏪 §r§aAuction: §l§aLIVE");
         } else {
             long msLeft = UndergroundAuctionManager.getTimeUntilNextAuction();
-            lines.add("§6 🏪 §7Underground Auction: §f" + formatDuration(msLeft));
+            lines.add("§6 🏪 §7Auction: §f" + formatDuration(msLeft));
         }
 
-        // Bounty level summary
+        // Line 9: spacer
         lines.add("§8   ");
+
+        // Line 10: Bounty level
         int totalLevel = 0;
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             totalLevel += SlayerData.getSlayerLevel(player.getUuidAsString(), type);
         }
         String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
-        lines.add("§e ⭐ §7Bounty Level: " + levelColor + totalLevel);
+        lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
 
-        // Bounty Stats – display each active type separately
-        // stats[type] = int[3]: [weaponDmgPct, specificDefPct, universalDefPct]
+        // Lines 11-13: Compact bounty stats (max 3 lines)
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
-        boolean hasQuest = quest != null;
 
-        if (!bountyStats.isEmpty()) {
-            lines.add("§8    ");
+        if (quest != null) {
+            // Bounty quest takes priority over gear stats when active
+            String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
+            lines.add(questColor + "§l ⚔ §r§7Quest: §c" + quest.slayerType.bossName);
+            int required = quest.getKillsRequired();
+            int progress = required > 0 ? (quest.killCount * 5 / Math.max(1, required)) : 5;
+            StringBuilder bar = new StringBuilder("§f  ");
+            for (int i = 0; i < 5; i++) bar.append(i < progress ? "§a█" : "§8█");
+            lines.add(bar + " §e" + quest.killCount + "/" + required);
+        } else if (!bountyStats.isEmpty()) {
+            // Show compact bounty stats (at most 2 lines)
+            int linesAdded = 0;
             String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
             lines.add(gearColor + "§l ⚔ §r§7Bounty Stats");
-
-            int totalUniversalDef = 0;
+            linesAdded++;
+            int universalDef = 0;
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
-                SlayerManager.SlayerType type = entry.getKey();
                 int[] s = entry.getValue();
-                totalUniversalDef += s[2];
-                if (s[0] > 0) {
-                    lines.add("§7  " + type.displayName + " DMG: §c+" + s[0] + "%");
-                }
-                if (s[1] > 0) {
-                    lines.add("§7  " + type.displayName + " DEF: §a-" + s[1] + "%");
-                }
+                universalDef += s[2];
             }
-            if (totalUniversalDef > 0) {
-                lines.add("§7  Bounty Defence: §a-" + totalUniversalDef + "%");
+            if (universalDef > 0 && linesAdded < 2) {
+                lines.add("§7  Bounty DEF: §a-" + universalDef + "%");
+                linesAdded++;
             }
         }
 
-        // Bounty Quest (conditional)
-        if (hasQuest) {
-            lines.add("§8     ");
-            String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
-            lines.add(questColor + "§l ⚔ §r§dBounty Quest");
-            lines.add("§7  Target: §c" + quest.slayerType.bossName);
-            int required = quest.getKillsRequired();
-            int progress = required > 0 ? (quest.killCount * 5 / required) : 5;
-            StringBuilder bar = new StringBuilder("§a");
-            for (int i = 0; i < 5; i++) {
-                bar.append(i < progress ? "█" : "§8█");
-            }
-            lines.add("§f  " + bar + " §e" + quest.killCount + "/" + required);
-        }
-
-        // Footer separator with animation offset
+        // Lines 14-15: Footer
         String footSep = SEPARATOR_FRAMES[(animFrame + SEPARATOR_FRAMES.length / 2) % SEPARATOR_FRAMES.length];
         lines.add(footSep);
         lines.add("§eplay.civilcraft.net");
