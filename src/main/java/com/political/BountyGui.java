@@ -467,7 +467,7 @@ public class BountyGui {
             case SPIDER -> new ItemStack(Items.LEATHER_LEGGINGS);
             case SKELETON -> new ItemStack(Items.BOW);
             case SLIME -> new ItemStack(Items.LEATHER_BOOTS);
-            case ENDERMAN -> new ItemStack(Items.ENDER_PEARL);
+            case ENDERMAN -> new ItemStack(Items.NETHERITE_HELMET);
             case WARDEN -> new ItemStack(Items.NETHERITE_CHESTPLATE);
             case PIGLIN -> new ItemStack(Items.GOLDEN_HELMET);
         };
@@ -479,7 +479,7 @@ public class BountyGui {
             case SPIDER -> "Venomous Crawler Leggings";
             case SKELETON -> "Bone Desperado Bow";
             case SLIME -> "Gelatinous Rustler Boots";
-            case ENDERMAN -> "Void Pearl";
+            case ENDERMAN -> "Ender Phase Helmet";
             case WARDEN -> "Sculk Terror Chestplate";
             case PIGLIN -> "Crown of Greed";
         };

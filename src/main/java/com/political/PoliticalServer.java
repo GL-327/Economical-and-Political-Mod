@@ -425,6 +425,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickZombieBerserkerHelmet(player);
 				CustomItemHandler.tickSkeletonBow(player);
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
+				CustomItemHandler.tickEnderPhaseHelmet(player);
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
 				T2ArmorAbilityHandler.tick(player);
 

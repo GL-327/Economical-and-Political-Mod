@@ -290,6 +290,83 @@ public class SlayerItems {
 // ============================================================
     public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
 
+    // ============================================================
+// ENDER PHASE HELMET - T7 Enderman Requirement
+// ============================================================
+    public static final int ENDER_PHASE_HELMET_LEVEL_REQ = 7;
+
+    public static boolean isEnderPhaseHelmet(ItemStack stack) {
+        return hasCustomItemId(stack, "ender_phase_helmet");
+    }
+
+    public static ItemStack createEnderPhaseHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⟡ Ender Phase Helmet")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "ender_phase_armor"),
+                                5.0,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "ender_phase_toughness"),
+                                4.0,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .add(EntityAttributes.MAX_HEALTH,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "ender_phase_health"),
+                                8.0,  // +4 Hearts
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .build();
+        helmet.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
+
+        helmet.set(DataComponentTypes.MAX_DAMAGE, 4071);
+        helmet.set(DataComponentTypes.DAMAGE, 0);
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: CRD-005 Enderman-class dimensional gear]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🛡 Armor: +5").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("💎 Toughness: +4").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("❤ Health: +4 Hearts").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("⟡ Ender Warp").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("  Right-click to teleport to where").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  you are looking. No cost.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Cooldown: 2 seconds").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⟡ Ender Phase Mode").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("  Sneak + Right-click to enter").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Ender Phase Mode. Screen turns").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  purple. No players or mobs can").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  interact with you (except Endermen).").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  You become translucent/invisible.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Duration: 15 seconds").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("  Cooldown: 2 minutes").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("  ⚠ Overstaying causes Wither!").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + ENDER_PHASE_HELMET_LEVEL_REQ)
+                .formatted(Formatting.RED));
+
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "ender_phase_helmet");
+        return helmet;
+    }
+
 
     // ============================================================
 // HELPER: Check if any bounty item
@@ -302,7 +379,8 @@ public class SlayerItems {
                 isSpiderLeggings(stack) ||
                 isSkeletonBow(stack) ||
                 isSlimeBoots(stack) ||
-                isWardenChestplate(stack);
+                isWardenChestplate(stack) ||
+                isEnderPhaseHelmet(stack);
     }
 
     public static boolean isZombieBerserkerHelmet(ItemStack stack) {
@@ -1249,10 +1327,22 @@ public class SlayerItems {
         // FIXED LORE
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
+        lore.add(Text.literal("§7Designation: NGL-1 \"Nightingale\"").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§7Project Nightingale, Warden Core").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§7integration armour. Housing a suspended").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§7Core in a resonance cradle of Reinforced").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§7Deepslate and sculk composite.").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("Forged in the deep dark from").formatted(Formatting.GRAY));
-        lore.add(Text.literal("the heart of The Sculk Terror.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("§8[MFLUX: CRD-006 Warden-class containment chestplate]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§c108 pre-trial casualties.").formatted(Formatting.RED));
+        lore.add(Text.literal("§c16 trial subjects. 0 survivors.").formatted(Formatting.RED));
+        lore.add(Text.literal("§cMax recorded wear time: 3m 34.852s").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8\"We are not making soldiers.").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§8 We are making offerings.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§8  — Programme Lead, Trial 11").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: NGL-1 | Project Nightingale]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[INDESTRUCTIBLE — Destruction attempts: Failed]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
         lore.add(Text.literal("🛡 Armor: +12").formatted(Formatting.BLUE));
         lore.add(Text.literal("🛡 Toughness: +6").formatted(Formatting.BLUE));
@@ -1940,6 +2030,52 @@ public class SlayerItems {
 
 
     //MARKER
+    /** Returns the MAX_HEALTH bonus in HP (2 per heart) for a T1 armor piece, or 0 if none. */
+    private static double getT1ArmorHealth(SlayerManager.SlayerType type, String piece) {
+        return switch (type) {
+            case ZOMBIE -> switch (piece) {
+                case "Helmet"     -> 4.0;  // +2 Hearts
+                case "Chestplate" -> 4.0;  // +2 Hearts
+                default           -> 0.0;
+            };
+            case SLIME -> switch (piece) {
+                case "Helmet"     -> 4.0;  // +2 Hearts
+                case "Chestplate" -> 8.0;  // +4 Hearts
+                default           -> 0.0;
+            };
+            case PIGLIN -> switch (piece) {
+                case "Chestplate" -> 4.0;  // +2 Hearts
+                default           -> 0.0;
+            };
+            default -> 0.0;
+        };
+    }
+
+    /** Returns the MAX_HEALTH bonus in HP (2 per heart) for a T2 armor piece, or 0 if none. */
+    private static double getT2ArmorHealth(SlayerManager.SlayerType type, String piece) {
+        return switch (type) {
+            case ZOMBIE -> switch (piece) {
+                case "Chestplate" -> 8.0;  // +4 Hearts
+                default           -> 0.0;
+            };
+            case SLIME -> switch (piece) {
+                case "Helmet"     -> 8.0;   // +4 Hearts
+                case "Chestplate" -> 12.0;  // +6 Hearts
+                default           -> 0.0;
+            };
+            case WARDEN -> switch (piece) {
+                case "Leggings"   -> 12.0;  // +6 Hearts
+                default           -> 0.0;
+            };
+            case PIGLIN -> switch (piece) {
+                case "Chestplate" -> 8.0;  // +4 Hearts
+                default           -> 0.0;
+            };
+            default -> 0.0;
+        };
+    }
+
+    //MARKER
     private static void applyT1ArmorStats(ItemStack stack, SlayerManager.SlayerType type,
                                           String pieceName, int armorValue, int toughnessValue) {
 
@@ -1959,7 +2095,8 @@ public class SlayerItems {
 
         // ADD ACTUAL ARMOR ATTRIBUTES
         AttributeModifierSlot slot = getSlotForPiece(pieceName);
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
+        double healthValue = getT1ArmorHealth(type, pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "t1_" + pieceName.toLowerCase() + "_armor"),
@@ -1973,8 +2110,17 @@ public class SlayerItems {
                                 toughnessValue,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
-                        slot)
-                .build();
+                        slot);
+        if (healthValue > 0) {
+            attrBuilder.add(EntityAttributes.MAX_HEALTH,
+                    new EntityAttributeModifier(
+                            Identifier.of("politicalserver", "t1_" + pieceName.toLowerCase() + "_health"),
+                            healthValue,
+                            EntityAttributeModifier.Operation.ADD_VALUE
+                    ),
+                    slot);
+        }
+        AttributeModifiersComponent attributes = attrBuilder.build();
         stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
 
         // Compute per-piece boss defense from ArmorStats * pieceMult
@@ -1994,6 +2140,10 @@ public class SlayerItems {
                 .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
         lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
                 .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        if (healthValue > 0) {
+            lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
+                    .append(Text.literal("+" + (int)(healthValue / 2) + " Hearts").formatted(Formatting.RED)));
+        }
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENCE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("🛡 This piece: ").formatted(Formatting.WHITE)
@@ -2091,9 +2241,10 @@ public class SlayerItems {
         stack.set(DataComponentTypes.MAX_DAMAGE, T2_ARMOR_DURABILITY);
         stack.set(DataComponentTypes.DAMAGE, 0);
 
-        // ADD ACTUAL ARMOR ATTRIBUTES (T2 gives NO health bonus — only Warden chestplate gets extra hearts)
+        // ADD ACTUAL ARMOR ATTRIBUTES
         AttributeModifierSlot slot = getSlotForPiece(pieceName);
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
+        double t2HealthValue = getT2ArmorHealth(type, pieceName);
+        AttributeModifiersComponent.Builder t2AttrBuilder = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_armor"),
@@ -2107,10 +2258,18 @@ public class SlayerItems {
                                 toughnessValue,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
-                        slot)
-                .build();
+                        slot);
+        if (t2HealthValue > 0) {
+            t2AttrBuilder.add(EntityAttributes.MAX_HEALTH,
+                    new EntityAttributeModifier(
+                            Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_health"),
+                            t2HealthValue,
+                            EntityAttributeModifier.Operation.ADD_VALUE
+                    ),
+                    slot);
+        }
 
-        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, t2AttrBuilder.build());
 
         // Compute per-piece boss defense from ArmorStats * pieceMult
         ArmorStats stats = getArmorStats(type, 2);
@@ -2129,6 +2288,10 @@ public class SlayerItems {
                 .append(Text.literal("+" + armorValue).formatted(Formatting.AQUA)));
         lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
                 .append(Text.literal("+" + toughnessValue).formatted(Formatting.AQUA)));
+        if (t2HealthValue > 0) {
+            lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
+                    .append(Text.literal("+" + (int)(t2HealthValue / 2) + " Hearts").formatted(Formatting.RED)));
+        }
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENCE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("🛡 This piece: ").formatted(Formatting.WHITE)

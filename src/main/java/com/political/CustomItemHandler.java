@@ -73,6 +73,15 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> berserkerWarningCooldown = new HashMap<>();
     private static final long WARNING_COOLDOWN_MS = 3000; // 3 seconds between warnings
 
+    // Ender Phase Helmet state tracking
+    private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
+    private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
+    private static final Map<UUID, Long> enderPhaseCooldowns = new HashMap<>();
+    private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
+    private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
+    private static final long ENDER_PHASE_DURATION_MS = 15_000; // 15 seconds
+    private static final Map<UUID, Long> enderPhaseLastRightClick = new HashMap<>();
+
     public static void register() {
         registerBountyItemRestrictions();
         // Harvey's Stick - Lightning on attack
@@ -128,6 +137,87 @@ public class CustomItemHandler {
                 return ActionResult.FAIL;
             }
             return ActionResult.PASS;
+        });
+
+        // Ender Phase Helmet - right-click handler
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+            ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
+            if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
+
+            ItemStack heldItem = player.getStackInHand(hand);
+            // Only trigger on right-click with an empty hand or the helmet itself (avoid interfering)
+            if (!heldItem.isEmpty() && heldItem != helmet) return ActionResult.PASS;
+
+            long now = System.currentTimeMillis();
+            UUID uuid = serverPlayer.getUuid();
+
+            if (serverPlayer.isSneaking()) {
+                // Sneak + right-click: Toggle Ender Phase Mode
+                Long activeUntil = enderPhaseActiveUntil.get(uuid);
+                boolean isInPhaseMode = activeUntil != null && now < activeUntil;
+
+                if (isInPhaseMode) {
+                    // Deactivate
+                    enderPhaseActiveUntil.remove(uuid);
+                    enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
+                    serverPlayer.removeStatusEffect(StatusEffects.INVISIBILITY);
+                    serverPlayer.removeStatusEffect(StatusEffects.WITHER);
+                    serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode deactivated.")
+                            .formatted(Formatting.DARK_PURPLE), true);
+                    return ActionResult.CONSUME;
+                }
+
+                Long cooldownUntil = enderPhaseCooldowns.get(uuid);
+                if (cooldownUntil != null && now < cooldownUntil) {
+                    long remainingSec = (cooldownUntil - now) / 1000;
+                    serverPlayer.sendMessage(Text.literal("⟡ Ender Phase on cooldown: " + remainingSec + "s")
+                            .formatted(Formatting.RED), true);
+                    return ActionResult.CONSUME;
+                }
+
+                // Activate Ender Phase Mode
+                enderPhaseActiveUntil.put(uuid, now + ENDER_PHASE_DURATION_MS);
+                serverPlayer.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.INVISIBILITY, Integer.MAX_VALUE, 0, false, false, true));
+                serverPlayer.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.BLINDNESS, 300, 3, false, false, false));
+                serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode ACTIVE — 15 seconds!")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
+                return ActionResult.CONSUME;
+            } else {
+                // Normal right-click: Ender Warp (teleport to where player is looking)
+                Long cooldownUntil = enderWarpCooldowns.get(uuid);
+                if (cooldownUntil != null && now < cooldownUntil) {
+                    return ActionResult.CONSUME;
+                }
+
+                ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
+                Vec3d eyePos = serverPlayer.getEyePos();
+                Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
+                Vec3d targetPos = eyePos.add(lookVec.multiply(50.0));
+
+                net.minecraft.util.hit.BlockHitResult hitResult = serverWorld.raycast(
+                        new RaycastContext(eyePos, targetPos,
+                                RaycastContext.ShapeType.OUTLINE,
+                                RaycastContext.FluidHandling.NONE,
+                                serverPlayer));
+
+                Vec3d dest = hitResult.getPos();
+                // Place player above the hit surface
+                serverPlayer.teleport(serverWorld,
+                        dest.x, dest.y + 0.1, dest.z,
+                        Set.of(), serverPlayer.getYaw(), serverPlayer.getPitch(), false);
+
+                serverWorld.playSound(null, serverPlayer.getBlockPos(),
+                        SoundEvents.ENTITY_ENDERMAN_TELEPORT,
+                        SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+                enderWarpCooldowns.put(uuid, now + ENDER_WARP_COOLDOWN_MS);
+                return ActionResult.CONSUME;
+            }
         });
     }
 
@@ -438,6 +528,61 @@ public class CustomItemHandler {
         ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
         if (isHermesShoes(boots)) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 40, 2, true, false, false));
+        }
+    }
+
+    public static void tickEnderPhaseHelmet(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
+        if (!SlayerItems.isEnderPhaseHelmet(helmet)) {
+            // If they removed the helmet while in phase, cancel phase
+            UUID uuid = player.getUuid();
+            if (enderPhaseActiveUntil.containsKey(uuid)) {
+                enderPhaseActiveUntil.remove(uuid);
+                player.removeStatusEffect(StatusEffects.INVISIBILITY);
+                player.removeStatusEffect(StatusEffects.WITHER);
+                enderPhaseCooldowns.put(uuid, System.currentTimeMillis() + ENDER_PHASE_COOLDOWN_MS);
+            }
+            return;
+        }
+
+        UUID uuid = player.getUuid();
+        long now = System.currentTimeMillis();
+        Long activeUntil = enderPhaseActiveUntil.get(uuid);
+
+        if (activeUntil == null) return; // Not in phase mode
+
+        if (now >= activeUntil) {
+            // Phase has expired — apply scaling wither based on how long they overstayed
+            long overstayMs = now - activeUntil;
+            int witherAmplifier = (int) Math.min(4, overstayMs / 3000); // +1 level every 3 seconds
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.WITHER, 60, witherAmplifier, false, true, true));
+
+            if (overstayMs > 30_000) {
+                // Forcibly end phase after 30 extra seconds
+                enderPhaseActiveUntil.remove(uuid);
+                player.removeStatusEffect(StatusEffects.INVISIBILITY);
+                enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
+                player.sendMessage(Text.literal("⟡ Ender Phase Mode forcibly ended!")
+                        .formatted(Formatting.DARK_RED, Formatting.BOLD), true);
+            } else {
+                long remainWarning = (activeUntil + 30_000 - now) / 1000;
+                player.sendMessage(Text.literal("⟡ ⚠ Wither Lv" + (witherAmplifier + 1) + " — exit phase! " + remainWarning + "s left")
+                        .formatted(Formatting.DARK_RED), true);
+            }
+        } else {
+            // Still in phase — show countdown
+            long remainMs = activeUntil - now;
+            if (remainMs % 1000 < 50) { // Update roughly every second
+                long remainSec = remainMs / 1000;
+                player.sendMessage(Text.literal("⟡ Ender Phase: " + remainSec + "s")
+                        .formatted(Formatting.DARK_PURPLE), true);
+            }
+            // Ensure invisibility is maintained
+            if (!player.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.INVISIBILITY, 60, 0, false, false, true));
+            }
         }
     }
 

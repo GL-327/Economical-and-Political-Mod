@@ -149,7 +149,6 @@ public class CommandRegistry {
 
         registerShopPriceCommands(dispatcher);
         registerVanish(dispatcher);
-        registerGovDocument(dispatcher);
     }
 
         // Helper method for stats display
@@ -1728,65 +1727,6 @@ public class CommandRegistry {
                     return 1;
                 })
         );
-    }
-
-    // ============================================================
-    // /govdocument MFLUX — Give the player the MFLUX Lore Book
-    // ============================================================
-    private static void registerGovDocument(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("govdocument")
-                .then(CommandManager.literal("MFLUX")
-                        .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                            net.minecraft.item.ItemStack book = createMfluxBook();
-                            if (!player.getInventory().insertStack(book)) {
-                                player.dropItem(book, false);
-                            }
-                            player.sendMessage(Text.literal("§8[MFLUX Archive received. Handle with care.]"), false);
-                            return 1;
-                        })
-                )
-        );
-    }
-
-    private static net.minecraft.item.ItemStack createMfluxBook() {
-        net.minecraft.item.ItemStack book = new net.minecraft.item.ItemStack(net.minecraft.item.Items.WRITTEN_BOOK);
-
-        // Build pages as RawFilteredPair<Text>
-        List<net.minecraft.text.RawFilteredPair<net.minecraft.text.Text>> filteredPages = new java.util.ArrayList<>();
-
-        String[] pageTexts = {
-            // Page 1 - Cover
-            "§6§lMFLUX RESEARCH ARCHIVE\n§7━━━━━━━━━━━━━━━━━\n\n§fClassification: §4TOP SECRET\n\n§7Document recovered from\n§7MFLUX Research Station\n§7Sigma-7\n\n§8[Property of MFLUX Corp]",
-            // Page 2 - About MFLUX
-            "§6§lABOUT MFLUX\n§7━━━━━━━━━━━━━━━━━\n\n§fMFLUX is a clandestine\n§fresearch organization\n§fdedicated to studying\n§fanomalous entities and\n§fdimensional rifts.\n\n§fOur operatives work in\n§fthe shadows to contain\n§fthreats most don't even\n§fknow exist.",
-            // Page 3 - Project Charadrius
-            "§6§lPROJECT CHARADRIUS\n§7━━━━━━━━━━━━━━━━━\n§4[CLASSIFIED - LEVEL 5]\n\n§fThe Charadrius Protocol\n§fwas initiated after the\n§ffirst §4Bounty Anomalies\n§fwere detected.\n\n§fSubjects exhibit extreme\n§fhostility beyond known\n§fparameters.\n\n§8See: Bounty System Files",
-            // Page 4 - Bounty Connection
-            "§6§lBOUNTY SYSTEM FILES\n§7━━━━━━━━━━━━━━━━━\n\n§fThe \"Bounty\" creatures\n§fare §4Charadrius subjects\n§fthat escaped containment.\n\n§c§lThe Undying Outlaw\n§f- Zombie mutation\n§f- Codename: CRD-001\n\n§c§lThe Venomous Bandit\n§f- Arachnid hybrid\n§f- Codename: CRD-002",
-            // Page 5 - More Subjects
-            "§c§lThe Bone Desperado\n§f- Skeletal anomaly\n§f- Codename: CRD-003\n\n§c§lThe Gelatinous Rustler\n§f- Amorphous entity\n§f- Codename: CRD-004\n\n§c§lThe Void Phantom\n§f- Dimensional breach\n§f- Codename: CRD-005\n\n§c§lThe Sculk Terror\n§f- Deepcave specimen\n§f- Codename: CRD-006",
-            // Page 6 - Warning
-            "§4§lWARNING\n§7━━━━━━━━━━━━━━━━━\n\n§fAll Charadrius subjects\n§fare §4EXTREMELY DANGEROUS.\n\n§fBounty hunters are\n§fcivilians recruited to\n§fassist MFLUX in\n§frecontainment efforts.\n\n§fBounty levels reflect\n§ffield experience with\n§feach subject class.\n\n§8- Dr. ████, MFLUX Dir.",
-            // Page 7 - The Charadrius
-            "§6§lTHE CHARADRIUS\n§7━━━━━━━━━━━━━━━━━\n\n§fIn ancient mythology,\n§fthe Charadrius was a bird\n§fthat could absorb disease.\n\n§fMFLUX believes §4something\n§fsimilar exists §fin the\n§fdimensions we study.\n\n§fProject Charadrius aims\n§fto find and harness this\n§fentity.\n\n§8[END OF DOCUMENT]"
-        };
-
-        for (String pageText : pageTexts) {
-            filteredPages.add(net.minecraft.text.RawFilteredPair.of(Text.literal(pageText)));
-        }
-
-        book.set(net.minecraft.component.DataComponentTypes.WRITTEN_BOOK_CONTENT,
-                new net.minecraft.component.type.WrittenBookContentComponent(
-                        net.minecraft.text.RawFilteredPair.of("MFLUX Research Archive"),
-                        "MFLUX Corp",
-                        0,
-                        filteredPages,
-                        true
-                )
-        );
-
-        return book;
     }
 
     // ============================================================

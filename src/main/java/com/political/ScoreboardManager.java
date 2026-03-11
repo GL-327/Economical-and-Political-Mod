@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Max sidebar lines — large enough to accommodate all header + gear + buff lines (max ~25)
-    private static final int MAX_LINES = 35;
+    // Minecraft's sidebar scoreboard supports a maximum of 15 visible lines
+    private static final int MAX_LINES = 15;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -321,8 +321,16 @@ public class ScoreboardManager {
 
         // Lines 14-15: Footer
         String footSep = SEPARATOR_FRAMES[(animFrame + SEPARATOR_FRAMES.length / 2) % SEPARATOR_FRAMES.length];
-        lines.add(footSep);
-        lines.add("§eplay.civilcraft.net");
+        List<String> footer = new ArrayList<>();
+        footer.add(footSep);
+        footer.add("§eplay.civilcraft.net");
+
+        // Trim content to fit MAX_LINES, always preserving the footer
+        int maxContent = MAX_LINES - footer.size();
+        while (lines.size() > maxContent) {
+            lines.remove(lines.size() - 1);
+        }
+        lines.addAll(footer);
 
         return lines;
     }
@@ -463,11 +471,48 @@ public class ScoreboardManager {
             int tier = entry.getValue();
             SlayerItems.ArmorStats armorStats = SlayerItems.getArmorStats(type, tier);
             int[] s = stats.computeIfAbsent(type, k -> new int[3]);
-            // Boss-specific: full set cap (60% T1, 80% T2) is the specific component
-            int capPct = tier == 2 ? 80 : 60;
-            s[1] = Math.max(s[1], capPct);
-            // Universal: full allBossReduction for the tier
-            s[2] += (int)(armorStats.allBossReduction * 100);
+
+            // Count how many pieces of this type the player has equipped
+            int pieces = 0;
+            for (ItemStack armor : armorSlots) {
+                if (armor.isEmpty()) continue;
+                String cid = SlayerItems.getCustomItemId(armor);
+                if (cid == null) continue;
+                String pfx = type.name().toLowerCase();
+                if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) pieces++;
+            }
+
+            if (pieces >= 4) {
+                // Full set: apply cap
+                int capPct = tier == 2 ? 80 : 60;
+                s[1] = Math.max(s[1], capPct);
+                s[2] += (int)(armorStats.allBossReduction * 100);
+            } else {
+                // Partial set: sum per-piece contributions
+                int bossContrib = 0;
+                int allContrib = 0;
+                EquipmentSlot[] equipSlots = {
+                    net.minecraft.entity.EquipmentSlot.HEAD,
+                    net.minecraft.entity.EquipmentSlot.CHEST,
+                    net.minecraft.entity.EquipmentSlot.LEGS,
+                    net.minecraft.entity.EquipmentSlot.FEET
+                };
+                String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
+                for (int pi = 0; pi < armorSlots.length; pi++) {
+                    ItemStack armor = armorSlots[pi];
+                    if (armor.isEmpty()) continue;
+                    String cid = SlayerItems.getCustomItemId(armor);
+                    if (cid == null) continue;
+                    String pfx = type.name().toLowerCase();
+                    if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) {
+                        double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
+                        bossContrib += (int) Math.round(armorStats.bossReduction * mult * 100);
+                        allContrib  += (int) Math.round(armorStats.allBossReduction * mult * 100);
+                    }
+                }
+                s[1] = Math.max(s[1], bossContrib);
+                s[2] += allContrib;
+            }
         }
 
         // Compute final combined defence (universal + specific, capped at 85) into s[1]
@@ -525,6 +570,7 @@ public class ScoreboardManager {
             case "zombie_berserker_helmet" -> "Berserker §7| +300% Dmg";
             case "slime_boots"             -> "No Fall Dmg §7| Death Save";
             case "warden_chestplate"       -> "KB Immune §7| NightVis §7| ESP 64blk";
+            case "ender_phase_helmet"      -> "Ender Warp §7| Phase Mode §7| §d+4 Hearts";
             // ── ZOMBIE ───────────────────────────────────────────────────────
             case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";

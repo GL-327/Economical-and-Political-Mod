@@ -45,6 +45,7 @@ public class PerkManager {
     private static final Identifier GRAVITY_MODIFIER_ID = Identifier.of("political", "heavy_gravity");
 
     private static int tickCounter = 0;
+    private static int witheringEconomyCounter = 0;
     private static final Random random = new Random();
 
     static {
@@ -148,7 +149,7 @@ public class PerkManager {
         registerPerk("BRITTLE_TOOLS", "Brittle Tools",
                 "Tool durability drains 25% faster", -1, Perk.PerkType.NEGATIVE);
         registerPerk("WITHERING_ECONOMY", "Withering Economy",
-                "Lose 1 credit every 30 minutes passively", -1, Perk.PerkType.NEGATIVE);
+                "Lose 500 coins every 30 minutes passively", -1, Perk.PerkType.NEGATIVE);
 
         registerPerk("PARANOIA", "Paranoia",
                 "Endermen spawn 3x more frequently", -1, Perk.PerkType.NEGATIVE);
@@ -171,6 +172,20 @@ public class PerkManager {
         registerPerk("AUCTION_TAX_INCREASE", "Trade Tariffs",
                 "Auction house tax increased by 50% - generates government revenue",
                 -1, Perk.PerkType.NEGATIVE);
+
+        // Bounty-based perks
+        registerPerk("BOUNTY_HUNTERS_ZEAL", "Bounty Hunter's Zeal",
+                "Bounty boss damage increased by 25%", 2, Perk.PerkType.POSITIVE);
+        registerPerk("SLAYERS_FORTUNE", "Slayer's Fortune",
+                "Bounty boss loot drop chance increased by 50%", 2, Perk.PerkType.POSITIVE);
+        registerPerk("QUICK_CONTRACTS", "Quick Contracts",
+                "Bounty boss spawn time reduced by 30%", 1, Perk.PerkType.POSITIVE);
+        registerPerk("VETERANS_DISCOUNT", "Veteran's Discount",
+                "Bounty contract costs reduced by 50%", 1, Perk.PerkType.POSITIVE);
+        registerPerk("BOUNTY_DROUGHT", "Bounty Drought",
+                "Bounty XP gain reduced by 50%", -2, Perk.PerkType.NEGATIVE);
+        registerPerk("WEAKENED_PREY", "Weakened Prey",
+                "Bounty bosses have 50% more health", -1, Perk.PerkType.NEGATIVE);
     }
 
 
@@ -537,14 +552,19 @@ public class PerkManager {
             }
         }
 
-// Withering Economy - lose 1 credit every 30 min (36000 ticks)
-        if (activePerks.contains("WITHERING_ECONOMY") && tickCounter % 36000 == 0) {
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                // Integrate with your CoinManager/credit system
-                // CoinManager.removeCredits(player.getUuidAsString(), 1);
-                player.sendMessage(Text.literal("💸 The Withering Economy took 1 credit...")
-                        .formatted(Formatting.RED), false);
+// Withering Economy - lose 500 coins every 30 min (360 * 100 ticks = 36000 ticks)
+        if (activePerks.contains("WITHERING_ECONOMY")) {
+            witheringEconomyCounter++;
+            if (witheringEconomyCounter >= 360) {
+                witheringEconomyCounter = 0;
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    CoinManager.removeCoins(player, 500);
+                    player.sendMessage(Text.literal("§c-500 coins (Withering Economy)")
+                            .formatted(Formatting.RED), false);
+                }
             }
+        } else {
+            witheringEconomyCounter = 0;
         }
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
 
