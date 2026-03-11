@@ -3753,6 +3753,8 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
                 "§5§lVoid Chestplate", "§7Enderman Bounty Set"));
         gui.setSlot(15, createGiveItemButton(player, SlayerItems.createWardenChestplate(),
                 "§3§lWarden Chestplate", "§7Warden Bounty Set"));
+        gui.setSlot(16, createGiveItemButton(player, SlayerItems.createVoidwalkerCrown(),
+                "§5§lVoidwalker's Crown", "§7Enderman Special Drop"));
 
         // === ROW 3: CRAFTING CHUNKS ===
         gui.setSlot(19, createGiveItemButton(player, SlayerItems.createChunk(SlayerManager.SlayerType.ZOMBIE),

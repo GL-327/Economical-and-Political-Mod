@@ -38,6 +38,14 @@ public class BountyDefenseMixin {
         if (source.getAttacker() == null) return amount;
         if (!(source.getAttacker() instanceof LivingEntity attacker)) return amount;
 
+        // Ender Phase Mode: cancel all damage except from Endermen
+        if (com.political.CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
+            boolean attackerIsEnderman = attacker instanceof net.minecraft.entity.mob.EndermanEntity;
+            if (!attackerIsEnderman) {
+                return 0.0f; // Fully block damage while in Ender Phase Mode
+            }
+        }
+
         // Must be a bounty boss attacker
         SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
         boolean isAnyBoss = bossType != null || SlayerManager.isSlayerBoss(attacker.getUuid());
@@ -86,6 +94,12 @@ public class BountyDefenseMixin {
             if (bossType == SlayerManager.SlayerType.WARDEN) {
                 specificDef += (float) SlayerItems.WARDEN_CHEST_BOSS_REDUCTION;
             }
+        }
+
+        // Voidwalker's Crown (Ender Phase Helmet) — treated as a special piece, not standard Enderman set
+        if (SlayerItems.isEnderPhaseHelmet(helmet)) {
+            // Voidwalker's Crown provides no boss reduction by itself; its stats are from attributes
+            // We do nothing here so it doesn't accidentally count towards standard Enderman set defence
         }
 
         // ── Standard T1 / T2 armour sets ────────────────────────────────

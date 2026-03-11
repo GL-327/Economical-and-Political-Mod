@@ -451,6 +451,10 @@ public class ScoreboardManager {
                 s[1] = Math.max(s[1], (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100));
                 continue;
             }
+            // Voidwalker's Crown — skip standard set processing (no set bonus)
+            if (SlayerItems.isEnderPhaseHelmet(armor)) {
+                continue;
+            }
 
             // Standard T1/T2 set pieces (identified via custom_item_id prefix)
             String customId = SlayerItems.getCustomItemId(armor);
@@ -471,17 +475,19 @@ public class ScoreboardManager {
         }
 
         // Apply set bonus for each type using the highest tier detected.
-        // Use a single pass per type: count pieces and accumulate per-piece contributions together.
+        // Use per-piece tier for accurate partial-set calculations.
         String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
         for (Map.Entry<SlayerManager.SlayerType, Integer> entry : highestTier.entrySet()) {
             SlayerManager.SlayerType type = entry.getKey();
-            int tier = entry.getValue();
-            SlayerItems.ArmorStats armorStats = SlayerItems.getArmorStats(type, tier);
+            int maxTier = entry.getValue();
             int[] s = stats.computeIfAbsent(type, k -> new int[3]);
             String pfx = type.name().toLowerCase();
 
             // Single loop: count equipped pieces and accumulate per-piece contributions
+            // using each piece's ACTUAL tier (not the highest tier) for accuracy
             int pieces = 0;
+            int t1Pieces = 0;
+            int t2Pieces = 0;
             int bossContrib = 0;
             int allContrib = 0;
             for (int pi = 0; pi < armorSlots.length; pi++) {
@@ -489,19 +495,26 @@ public class ScoreboardManager {
                 if (armor.isEmpty()) continue;
                 String cid = SlayerItems.getCustomItemId(armor);
                 if (cid == null) continue;
-                if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) {
+                int pieceTier = 0;
+                if (cid.startsWith(pfx + "_t2_")) pieceTier = 2;
+                else if (cid.startsWith(pfx + "_t1_")) pieceTier = 1;
+                if (pieceTier > 0) {
                     pieces++;
+                    if (pieceTier == 2) t2Pieces++; else t1Pieces++;
+                    SlayerItems.ArmorStats pieceStats = SlayerItems.getArmorStats(type, pieceTier);
                     double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
-                    bossContrib += (int) Math.round(armorStats.bossReduction * mult * 100);
-                    allContrib  += (int) Math.round(armorStats.allBossReduction * mult * 100);
+                    bossContrib += (int) Math.round(pieceStats.bossReduction * mult * 100);
+                    allContrib  += (int) Math.round(pieceStats.allBossReduction * mult * 100);
                 }
             }
 
             if (pieces >= 4) {
-                // Full set bonus: apply cap (60% T1, 80% T2) instead of plain sum
-                int capPct = tier == 2 ? 80 : 60;
+                // Full set bonus: apply cap based on the highest tier present
+                int capPct = maxTier == 2 ? 80 : 60;
                 s[1] = Math.max(s[1], capPct);
-                s[2] += (int)(armorStats.allBossReduction * 100);
+                // Universal defence: use exact allBossReduction of the set's primary tier
+                SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, maxTier);
+                s[2] += (int)(setStats.allBossReduction * 100);
             } else {
                 // Partial set: sum of the per-piece contributions only
                 s[1] = Math.max(s[1], bossContrib);
@@ -563,7 +576,8 @@ public class ScoreboardManager {
             case "zombie_berserker_helmet" -> "Berserker §7| +300% Dmg";
             case "slime_boots"             -> "No Fall Dmg §7| Death Save";
             case "warden_chestplate"       -> "KB Immune §7| NightVis §7| ESP 64blk";
-            case "ender_phase_helmet"      -> "Ender Warp §7| Phase Mode §7| §d+4 Hearts";
+            case "voidwalker_crown",
+                 "ender_phase_helmet"      -> "Phase Warp §7| Phase Mode §7| §d+4 Hearts";
             // ── ZOMBIE ───────────────────────────────────────────────────────
             case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";

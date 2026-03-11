@@ -863,10 +863,11 @@ public class SlayerManager {
         TierConfig config = quest.getConfig();
         SlayerType type = quest.slayerType;
 
-        // Award XP (with Prospector bonus)
+        // Award XP (with Prospector bonus + perk multiplier)
         long baseXp = config.xpReward;
         int prospectorLevel = CustomEnchantmentManager.getLevel(owner.getMainHandStack(), CustomEnchantmentManager.PROSPECTOR);
         float xpMultiplier = 1.0f + (0.10f * prospectorLevel);
+        xpMultiplier *= PerkManager.getBountyXpMultiplier();
         long xpGained = (long)(baseXp * xpMultiplier);
         long oldXp = SlayerData.getSlayerXp(ownerUuid, type);
         int oldLevel = getLevelForXp(oldXp);
@@ -940,6 +941,7 @@ public class SlayerManager {
         // RARER CHUNK DROP CHANCES
         // T1: 1%, T2: 2%, T3: 4%, T4: 6%, T5: 8%
         double chunkChance = 0.01 + (tier - 1) * 0.0175;
+        chunkChance *= PerkManager.getBountyDropMultiplier();
         if (rand.nextDouble() < chunkChance) {
             drops.add(SlayerItems.createChunk(type));
         }
@@ -952,6 +954,7 @@ public class SlayerManager {
             case WARDEN -> 0.001 + (tier * 0.0005);                    // 0.1% - 0.35%
             case PIGLIN -> 0.002 + (tier * 0.001);                     // 0.2% - 0.7%
         };
+        coreChance *= PerkManager.getBountyDropMultiplier();
 
         if (rand.nextDouble() < coreChance) {
             drops.add(SlayerItems.createCore(type));
@@ -963,14 +966,15 @@ public class SlayerManager {
             player.sendMessage(Text.literal("✦ Piglin Flesh dropped!").formatted(Formatting.YELLOW), false);
         }
 
-        // Ender Phase Helmet drop (for ENDERMAN type, T4+)
+        // Ender Phase Helmet drop (for ENDERMAN type, T4+) — now drops Voidwalker's Crown
         double enderHelmetChance = getArmorDropChance(type, tier);
         if (type == SlayerType.ENDERMAN && enderHelmetChance > 0 && rand.nextDouble() * 100 < enderHelmetChance) {
-            drops.add(SlayerItems.createEnderPhaseHelmet());
+            drops.add(SlayerItems.createVoidwalkerCrown());
         }
 
-        // Coins based on tier (reduced)
-        int coinDrop = tier * 25 * (int) type.difficultyMultiplier;
+        // Coins based on tier (with BOUNTY_TAX perk applied)
+        int baseCoinDrop = tier * 25 * (int) type.difficultyMultiplier;
+        int coinDrop = PerkManager.applyBountyTax(baseCoinDrop);
         CoinManager.giveCoinsQuiet(player, coinDrop);
 
         return drops;
@@ -1248,6 +1252,7 @@ public class SlayerManager {
         };
 
         float healthMult = 1.0f + (tier * 0.6f);
+        healthMult *= PerkManager.getBountyBossHealthMultiplier();  // WEAKENED_QUARRY / HARDENED_QUARRY
         float damageMult = 1.0f + (tier * 0.8f);
 
         // Apply health - use getAttributeInstance with the registry entry

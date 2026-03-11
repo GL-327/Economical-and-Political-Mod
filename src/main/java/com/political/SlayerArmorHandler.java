@@ -43,7 +43,8 @@ public class SlayerArmorHandler {
 
             // Skip special legendary pieces — handled separately in BountyDefenseMixin
             if (SlayerItems.isZombieBerserkerHelmet(stack) || SlayerItems.isSpiderLeggings(stack)
-                    || SlayerItems.isSlimeBoots(stack) || SlayerItems.isWardenChestplate(stack)) {
+                    || SlayerItems.isSlimeBoots(stack) || SlayerItems.isWardenChestplate(stack)
+                    || SlayerItems.isEnderPhaseHelmet(stack)) {
                 continue;
             }
 
@@ -96,7 +97,8 @@ public class SlayerArmorHandler {
 
             // Skip special legendary pieces — handled separately in BountyDefenseMixin
             if (SlayerItems.isZombieBerserkerHelmet(stack) || SlayerItems.isSpiderLeggings(stack)
-                    || SlayerItems.isSlimeBoots(stack) || SlayerItems.isWardenChestplate(stack)) {
+                    || SlayerItems.isSlimeBoots(stack) || SlayerItems.isWardenChestplate(stack)
+                    || SlayerItems.isEnderPhaseHelmet(stack)) {
                 continue;
             }
 
@@ -129,9 +131,11 @@ public class SlayerArmorHandler {
             case SPIDER -> name.contains("Venomous") || name.contains("Spider") || name.contains("Bandit");
             case SKELETON -> name.contains("Bone") || name.contains("Desperado");
             case SLIME -> name.contains("Slime") || name.contains("Gelatinous") || name.contains("Rustler");
-            case ENDERMAN -> name.contains("Void") || name.contains("Phantom");
+            // "Voidwalker" should NOT be counted as standard Enderman set armor
+            case ENDERMAN -> (name.contains("Void") && !name.contains("Voidwalker")) || name.contains("Phantom");
             case WARDEN -> name.contains("Sculk") || name.contains("Warden") || name.contains("Terror");
-            case PIGLIN -> name.contains("Gilded") || name.contains("Ravager") || name.contains("Crown");
+            // "Crown of Greed" is NOT piglin set armor either
+            case PIGLIN -> name.contains("Gilded") || name.contains("Ravager");
         };
     }
 

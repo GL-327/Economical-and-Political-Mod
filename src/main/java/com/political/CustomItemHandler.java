@@ -537,6 +537,12 @@ public class CustomItemHandler {
         }
     }
 
+    /** Returns true if the given player is currently in Ender Phase Mode. */
+    public static boolean isInEnderPhaseMode(java.util.UUID uuid) {
+        Long activeUntil = enderPhaseActiveUntil.get(uuid);
+        return activeUntil != null && System.currentTimeMillis() < activeUntil;
+    }
+
     public static void tickEnderPhaseHelmet(ServerPlayerEntity player) {
         ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
         if (!SlayerItems.isEnderPhaseHelmet(helmet)) {

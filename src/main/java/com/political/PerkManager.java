@@ -173,19 +173,19 @@ public class PerkManager {
                 "Auction house tax increased by 50% - generates government revenue",
                 -1, Perk.PerkType.NEGATIVE);
 
-        // Bounty-based perks
-        registerPerk("BOUNTY_HUNTERS_ZEAL", "Bounty Hunter's Zeal",
-                "Bounty boss damage increased by 25%", 2, Perk.PerkType.POSITIVE);
-        registerPerk("SLAYERS_FORTUNE", "Slayer's Fortune",
-                "Bounty boss loot drop chance increased by 50%", 2, Perk.PerkType.POSITIVE);
-        registerPerk("QUICK_CONTRACTS", "Quick Contracts",
-                "Bounty boss spawn time reduced by 30%", 1, Perk.PerkType.POSITIVE);
-        registerPerk("VETERANS_DISCOUNT", "Veteran's Discount",
-                "Bounty contract costs reduced by 50%", 1, Perk.PerkType.POSITIVE);
-        registerPerk("BOUNTY_DROUGHT", "Bounty Drought",
-                "Bounty XP gain reduced by 50%", -2, Perk.PerkType.NEGATIVE);
-        registerPerk("WEAKENED_PREY", "Weakened Prey",
-                "Bounty bosses have 50% more health", -1, Perk.PerkType.NEGATIVE);
+        // Bounty-based perks (V2.0)
+        registerPerk("BOUNTY_HUNTER_SURGE", "Bounty Hunter's Surge",
+                "Bounty XP gains increased by 25% for all players", 2, Perk.PerkType.POSITIVE);
+        registerPerk("SLAYER_CONTRACTS", "Slayer Contracts",
+                "Bounty bosses drop 50% more chunks and cores", 1, Perk.PerkType.POSITIVE);
+        registerPerk("WEAKENED_QUARRY", "Weakened Quarry",
+                "Bounty bosses have 20% less health", 2, Perk.PerkType.POSITIVE);
+        registerPerk("HUNTERS_INSTINCT", "Hunter's Instinct",
+                "Players deal 15% more damage to bounty bosses", 1, Perk.PerkType.POSITIVE);
+        registerPerk("BOUNTY_TAX", "Bounty Tax",
+                "10% of bounty coin rewards are taxed to the government treasury", -1, Perk.PerkType.NEGATIVE);
+        registerPerk("HARDENED_QUARRY", "Hardened Quarry",
+                "Bounty bosses have 30% more health", -2, Perk.PerkType.NEGATIVE);
     }
 
 
@@ -757,6 +757,50 @@ public class PerkManager {
     public static float getPatrolSpawnMultiplier() {
         if (activePerks.contains("REDUCED_PATROLS")) return 2.0f;
         return 1.0f;
+    }
 
+    // ── Bounty perk helpers (used by SlayerManager / BossAbilityManager) ──
+
+    /** Returns the bounty XP multiplier from active perks. */
+    public static float getBountyXpMultiplier() {
+        float m = 1.0f;
+        if (activePerks.contains("BOUNTY_HUNTER_SURGE")) m += 0.25f;
+        if (activePerks.contains("BOUNTY_DROUGHT"))      m -= 0.50f;
+        return Math.max(0.1f, m);
+    }
+
+    /** Returns the boss health multiplier from active perks (applied when boss spawns). */
+    public static float getBountyBossHealthMultiplier() {
+        float m = 1.0f;
+        if (activePerks.contains("WEAKENED_QUARRY")) m -= 0.20f;
+        if (activePerks.contains("HARDENED_QUARRY")) m += 0.30f;
+        if (activePerks.contains("WEAKENED_PREY"))   m += 0.50f; // legacy compat
+        return Math.max(0.1f, m);
+    }
+
+    /** Returns the boss drop quantity multiplier from active perks. */
+    public static float getBountyDropMultiplier() {
+        if (activePerks.contains("SLAYER_CONTRACTS"))  return 1.50f;
+        if (activePerks.contains("SLAYERS_FORTUNE"))   return 1.50f; // legacy compat
+        if (activePerks.contains("LOOT_GALORE"))       return 2.00f;
+        return 1.0f;
+    }
+
+    /** Returns the damage multiplier applied when a player attacks a bounty boss. */
+    public static float getBountyBossDamageMultiplier() {
+        float m = 1.0f;
+        if (activePerks.contains("HUNTERS_INSTINCT"))     m += 0.15f;
+        if (activePerks.contains("BOUNTY_HUNTERS_ZEAL"))  m += 0.25f; // legacy compat
+        return m;
+    }
+
+    /**
+     * Applies the BOUNTY_TAX perk by removing 10% of the given coin reward before giving it.
+     * Returns the amount actually given to the player (after tax deduction).
+     */
+    public static int applyBountyTax(int coinReward) {
+        if (!activePerks.contains("BOUNTY_TAX")) return coinReward;
+        int tax = (int)(coinReward * 0.10);
+        return coinReward - tax;
     }
 }
