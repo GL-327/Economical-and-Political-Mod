@@ -165,15 +165,39 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
+        gui.setSlot(22, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("🛡 Bounty Armor T1").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("T1 Armor: 3 Chunks + vanilla armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("All 7 bounty types!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openBountyArmorT1(player)).build());
+
         gui.setSlot(23, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
-                .setName(Text.literal("🛡 Bounty Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .setName(Text.literal("🛡 Bounty Armor T2").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("T2 Armor: 3 Cores + T1 piece + 2 Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Upgrade all 7 bounty types!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openBountyArmorT2(player)).build());
+
+        gui.setSlot(24, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡 Special Bounty Armor").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Berserker Helmet, Venomous Leggings,").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Slime Boots, Warden Chestplate, Bow").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openArmorRecipes(player)).build());
 
-        gui.setSlot(25, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(25, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Gold Helmet").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("The ultimate gamble!").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCrownOfGreedRecipe(player)).build());
+
+        gui.setSlot(31, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("⚠ HPEBM T0 & The Gavel are obtained").formatted(Formatting.YELLOW))
@@ -652,5 +676,206 @@ public class RecipesGui {
         openRecipePage(player, "✦ Ultra Overclocked HPEBM",
                 Text.literal("✦ Ultra Overclocked HPEBM (Smithing Table)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
                 grid, result, () -> openHPEBMRecipes(player));
+    }
+
+    // ============================================================
+    // T1 BOUNTY ARMOR RECIPES - Category list
+    // ============================================================
+    public static void openBountyArmorT1(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 T1 Bounty Armor Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GREEN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("🛡 T1 Bounty Armor").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipe: 3 Cores + Vanilla Piece + 2 Type Drops").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Requires: Bounty Level " + SlayerItems.T1_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                .glow().build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] listSlots = {19, 20, 21, 22, 23, 24, 28};
+        for (int i = 0; i < Math.min(types.length, listSlots.length); i++) {
+            final SlayerManager.SlayerType type = types[i];
+            gui.setSlot(listSlots[i], new GuiElementBuilder(Items.LEATHER_HELMET)
+                    .setName(Text.literal("🛡 " + type.displayName + " T1 Armor").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("• Helmet, Chestplate, Leggings, Boots").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("⚠ Requires Lvl " + SlayerItems.T1_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view pieces!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT1ArmorTypeMenu(player, type)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT1ArmorTypeMenu(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 " + type.displayName + " T1 Armor"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GREEN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("🛡 " + type.displayName + " T1 Armor").formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal("Select a piece to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        String[] pieces = {"Helmet", "Chestplate", "Leggings", "Boots"};
+        int[] pieceSlots = {20, 21, 22, 23};
+        net.minecraft.item.Item[] icons = {Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS};
+
+        for (int i = 0; i < pieces.length; i++) {
+            final String piece = pieces[i];
+            final net.minecraft.item.Item icon = icons[i];
+            gui.setSlot(pieceSlots[i], new GuiElementBuilder(icon)
+                    .setName(Text.literal("🛡 " + type.displayName + " T1 " + piece).formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT1ArmorRecipe(player, type, piece)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, t, action) -> openBountyArmorT1(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT1ArmorRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type, String piece) {
+        ItemStack result = SlayerItems.createT1Armor(type, piece);
+        String pageTitle = "🛡 T1 " + type.displayName + " " + piece;
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openT1ArmorTypeMenu(player, type))) return;
+
+        ItemStack core = SlayerItems.createCore(type);
+        net.minecraft.item.Item basePiece = switch (piece) {
+            case "Helmet" -> Items.LEATHER_HELMET;
+            case "Chestplate" -> Items.LEATHER_CHESTPLATE;
+            case "Leggings" -> Items.LEATHER_LEGGINGS;
+            default -> Items.LEATHER_BOOTS;
+        };
+        net.minecraft.item.Item typeMat = type.icon;
+
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(typeMat), new ItemStack(basePiece), new ItemStack(typeMat),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        Text headerName = Text.literal("🛡 " + type.displayName + " T1 " + piece).formatted(type.color, Formatting.BOLD);
+        openRecipePage(player, pageTitle, headerName, grid, result, () -> openT1ArmorTypeMenu(player, type));
+    }
+
+    // ============================================================
+    // T2 BOUNTY ARMOR RECIPES - Category list
+    // ============================================================
+    public static void openBountyArmorT2(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 T2 Bounty Armor Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡 T2 Bounty Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipe: 3 Cores + T1 Piece + 2 Iron Ingots").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Requires: Bounty Level " + SlayerItems.T2_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                .glow().build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] listSlots = {19, 20, 21, 22, 23, 24, 28};
+        for (int i = 0; i < Math.min(types.length, listSlots.length); i++) {
+            final SlayerManager.SlayerType type = types[i];
+            gui.setSlot(listSlots[i], new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                    .setName(Text.literal("🛡 " + type.displayName + " T2 Armor").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("• Helmet II, Chestplate II, Leggings II, Boots II").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("⚠ Requires Lvl " + SlayerItems.T2_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view pieces!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT2ArmorTypeMenu(player, type)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT2ArmorTypeMenu(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 " + type.displayName + " T2 Armor"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡 " + type.displayName + " T2 Armor").formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal("Select a piece to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        String[] pieces = {"Helmet", "Chestplate", "Leggings", "Boots"};
+        int[] pieceSlots = {20, 21, 22, 23};
+        net.minecraft.item.Item[] icons = {Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS};
+
+        for (int i = 0; i < pieces.length; i++) {
+            final String piece = pieces[i];
+            final net.minecraft.item.Item icon = icons[i];
+            gui.setSlot(pieceSlots[i], new GuiElementBuilder(icon)
+                    .setName(Text.literal("🛡 " + type.displayName + " T2 " + piece + " II").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT2ArmorRecipe(player, type, piece)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, t, action) -> openBountyArmorT2(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT2ArmorRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type, String piece) {
+        ItemStack result = SlayerItems.createT2Armor(type, piece);
+        String pageTitle = "🛡 T2 " + type.displayName + " " + piece + " II";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openT2ArmorTypeMenu(player, type))) return;
+
+        ItemStack core = SlayerItems.createCore(type);
+        ItemStack t1piece = SlayerItems.createT1Armor(type, piece);
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.IRON_INGOT), t1piece, new ItemStack(Items.IRON_INGOT),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        Text headerName = Text.literal("🛡 " + type.displayName + " T2 " + piece + " II").formatted(type.color, Formatting.BOLD);
+        openRecipePage(player, pageTitle, headerName, grid, result, () -> openT2ArmorTypeMenu(player, type));
+    }
+
+    // ============================================================
+    // CROWN OF GREED RECIPE
+    // ============================================================
+    private static void openCrownOfGreedRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCrownOfGreed();
+        String pageTitle = "👑 Crown of Greed";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        ItemStack piglinCore = SlayerItems.createPiglinCore();
+        ItemStack piglinFlesh = SlayerItems.createPiglinFlesh();
+        ItemStack[] grid = {
+                piglinCore.copy(), piglinCore.copy(), piglinCore.copy(),
+                piglinFlesh.copy(), new ItemStack(Items.GOLDEN_HELMET), piglinFlesh.copy(),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, pageTitle,
+                Text.literal("👑 Crown of Greed Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openMainMenu(player));
     }
 }
