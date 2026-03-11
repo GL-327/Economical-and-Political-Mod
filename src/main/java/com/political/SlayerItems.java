@@ -83,7 +83,7 @@ public class SlayerItems {
         return switch (type) {
             case ZOMBIE   -> "Outlaw's Cleaver";
             case SPIDER   -> "Bandit's Fang";
-            case SKELETON -> "Desperado's Rifle";
+            case SKELETON -> "Desperado's Sword";
             case SLIME    -> "Rustler's Lasso";
             case ENDERMAN -> "Phantom's Edge";
             case WARDEN   -> "Terror's Grasp";
@@ -2667,28 +2667,28 @@ public class SlayerItems {
 
     public static ItemStack createT2Helmet(SlayerManager.SlayerType type) {
         ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
-        applyT2ArmorStats(helmet, type, "Helmet", 5, 2, 4);
+        applyT2ArmorStats(helmet, type, "Helmet", 5, 2, 0);
         setCustomItemId(helmet, type.name().toLowerCase() + "_t2_helmet");
         return helmet;
     }
 
     public static ItemStack createT2Chestplate(SlayerManager.SlayerType type) {
         ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
-        applyT2ArmorStats(chestplate, type, "Chestplate", 8, 3, 6);
+        applyT2ArmorStats(chestplate, type, "Chestplate", 8, 3, 0);
         setCustomItemId(chestplate, type.name().toLowerCase() + "_t2_chestplate");
         return chestplate;
     }
 
     public static ItemStack createT2Leggings(SlayerManager.SlayerType type) {
         ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
-        applyT2ArmorStats(leggings, type, "Leggings", 6, 2, 4);
+        applyT2ArmorStats(leggings, type, "Leggings", 6, 2, 0);
         setCustomItemId(leggings, type.name().toLowerCase() + "_t2_leggings");
         return leggings;
     }
 
     public static ItemStack createT2Boots(SlayerManager.SlayerType type) {
         ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
-        applyT2ArmorStats(boots, type, "Boots", 4, 2, 2);
+        applyT2ArmorStats(boots, type, "Boots", 4, 2, 0);
         setCustomItemId(boots, type.name().toLowerCase() + "_t2_boots");
         return boots;
     }
@@ -2878,8 +2878,10 @@ public class SlayerItems {
                 .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
         lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
                 .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
-        lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
-                .append(Text.literal("+" + healthValue).formatted(Formatting.GREEN)));
+        if (healthValue > 0) {
+            lore.add(Text.literal("❤ Health: ").formatted(Formatting.WHITE)
+                    .append(Text.literal("+" + healthValue).formatted(Formatting.GREEN)));
+        }
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ VS BOSSES ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("🛡 " + type.displayName + " Boss: ").formatted(Formatting.WHITE)

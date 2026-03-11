@@ -1226,7 +1226,7 @@ public class SlayerManager {
         };
 
         float healthMult = 1.0f + (tier * 0.6f);
-        float damageMult = 1.0f + (tier * 0.4f);
+        float damageMult = 1.0f + (tier * 0.8f);
 
         // Apply health - use getAttributeInstance with the registry entry
         var healthAttr = boss.getAttributeInstance(EntityAttributes.MAX_HEALTH);

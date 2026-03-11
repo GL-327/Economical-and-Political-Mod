@@ -4,12 +4,14 @@ import com.political.CustomEnchantmentManager;
 import com.political.CustomItemHandler;
 import com.political.PerkManager;
 import com.political.SlayerItems;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -22,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -43,9 +46,23 @@ public class EnchantmentScreenHandlerMixin {
     @Unique
     private float political_lastMultiplier = 1.0f;
 
-    @Inject(method = "generateEnchantments", at = @At("TAIL"))
+    /**
+     * Maximum level multiplier: enchantments can reach up to 2x their vanilla max level.
+     * E.g. Sharpness V → X, Protection IV → VIII, etc.
+     */
+    @Unique
+    private static final double ENCHANT_LEVEL_MULTIPLIER = 2.0;
+
+    /**
+     * XP level cost multiplier for the boosted enchanting table.
+     * Higher enchantments cost proportionally more levels.
+     */
+    @Unique
+    private static final double ENCHANT_COST_MULTIPLIER = 2.0;
+
+    @Inject(method = "generateEnchantments", at = @At("TAIL"), cancellable = true)
     private void political_modifyEnchantCost(DynamicRegistryManager registryManager, ItemStack stack, int slot, int level, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        float multiplier = PerkManager.getEnchantCostMultiplier();
+        float perkMultiplier = PerkManager.getEnchantCostMultiplier();
 
         // Store original values if this is a fresh generation
         if (political_originalPower == null || political_originalPower.length != this.enchantmentPower.length) {
@@ -54,33 +71,61 @@ public class EnchantmentScreenHandlerMixin {
 
         // Check if these are fresh values (not yet modified) by comparing to last multiplier
         // or if the multiplier changed
-        if (multiplier != political_lastMultiplier || !political_hasBeenModified()) {
+        if (perkMultiplier != political_lastMultiplier || !political_hasBeenModified()) {
             // Store the original values before modification
             for (int i = 0; i < this.enchantmentPower.length; i++) {
                 political_originalPower[i] = this.enchantmentPower[i];
             }
         }
 
-        // Apply multiplier from original values, not from already-modified values
-        if (multiplier != 1.0f) {
-            for (int i = 0; i < this.enchantmentPower.length; i++) {
-                if (political_originalPower[i] > 0) {
-                    this.enchantmentPower[i] = Math.max(1, (int) Math.ceil(political_originalPower[i] * multiplier));
+        // Apply perk multiplier from original values, then apply the higher-level cost multiplier
+        for (int i = 0; i < this.enchantmentPower.length; i++) {
+            if (political_originalPower[i] > 0) {
+                int base = political_originalPower[i];
+                if (perkMultiplier != 1.0f) {
+                    base = Math.max(1, (int) Math.ceil(base * perkMultiplier));
                 }
+                // Scale costs up to reflect that higher-level enchantments are being given
+                this.enchantmentPower[i] = (int) Math.ceil(base * ENCHANT_COST_MULTIPLIER);
             }
         }
 
-        political_lastMultiplier = multiplier;
+        political_lastMultiplier = perkMultiplier;
+
+        // ── Boost enchantment levels in the returned list ──────────────────
+        List<EnchantmentLevelEntry> original = cir.getReturnValue();
+        if (original == null || original.isEmpty()) return;
+
+        List<EnchantmentLevelEntry> boosted = new ArrayList<>(original.size());
+        for (EnchantmentLevelEntry entry : original) {
+            RegistryEntry<Enchantment> enchantEntry = entry.enchantment();
+            Enchantment enchantment = enchantEntry.value();
+            int vanillaMaxLevel = enchantment.getMaxLevel();
+            int currentLevel = entry.level();
+
+            // Boost the level up to ENCHANT_LEVEL_MULTIPLIER × vanilla max
+            int boostedMax = (int) Math.ceil(vanillaMaxLevel * ENCHANT_LEVEL_MULTIPLIER);
+            int newLevel = Math.min(
+                    (int) Math.ceil(currentLevel * ENCHANT_LEVEL_MULTIPLIER),
+                    boostedMax
+            );
+            newLevel = Math.max(1, newLevel); // never go below 1
+            boosted.add(new EnchantmentLevelEntry(enchantEntry, newLevel));
+        }
+        cir.setReturnValue(boosted);
     }
 
     @Unique
     private boolean political_hasBeenModified() {
         if (political_originalPower == null) return false;
 
-        // Check if current values match what we would expect after modification
-        float multiplier = PerkManager.getEnchantCostMultiplier();
+        float perkMultiplier = PerkManager.getEnchantCostMultiplier();
         for (int i = 0; i < this.enchantmentPower.length; i++) {
-            int expected = (int) Math.ceil(political_originalPower[i] * multiplier);
+            int base = political_originalPower[i];
+            if (perkMultiplier != 1.0f) {
+                base = (int) Math.ceil(base * perkMultiplier);
+            }
+            int expected = (int) Math.ceil(base * ENCHANT_COST_MULTIPLIER);
             if (this.enchantmentPower[i] != expected && political_originalPower[i] > 0) {
                 return false; // Values are fresh, not yet modified
             }

@@ -341,7 +341,7 @@ public class UndergroundAuctionManager {
                 Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE),
                 Text.literal("📦 NOW BIDDING: " + item.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
                 Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE),
-                Text.literal("💰 Starting Bid: " + item.startingBid + " credits").formatted(Formatting.GOLD),
+                Text.literal("💰 Starting Bid: " + item.startingBid + " coins").formatted(Formatting.GOLD),
                 Text.literal("📋 Item " + (currentItemIndex + 1) + " of " + currentItems.size()).formatted(Formatting.GRAY),
                 Text.literal("⏱ " + (NO_BID_TIMEOUT_MS / 1000) + " seconds to bid!").formatted(Formatting.YELLOW),
                 Text.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━").formatted(Formatting.DARK_PURPLE)
@@ -369,7 +369,7 @@ public class UndergroundAuctionManager {
 
                 broadcastNearAuctioneers(server,
                         Text.literal("🔨 SOLD! " + item.name).formatted(Formatting.GREEN, Formatting.BOLD),
-                        Text.literal("   Winner: " + item.highestBidderName + " for " + item.currentBid + " credits").formatted(Formatting.YELLOW)
+                        Text.literal("   Winner: " + item.highestBidderName + " for " + item.currentBid + " coins").formatted(Formatting.YELLOW)
                 );
 
                 if (winner != null && item.itemStack != null && !item.itemStack.isEmpty()) {
@@ -466,30 +466,31 @@ public class UndergroundAuctionManager {
         }
 
         if (amount <= item.currentBid) {
-            player.sendMessage(Text.literal("❌ Bid must be higher than " + item.currentBid + " credits!").formatted(Formatting.RED));
+            player.sendMessage(Text.literal("❌ Bid must be higher than " + item.currentBid + " coins!").formatted(Formatting.RED));
             return false;
         }
 
-        if (!CreditItem.hasCredits(player, amount)) {
-            int playerCredits = CreditItem.countCredits(player);
-            player.sendMessage(Text.literal("❌ Not enough credits! You have: " + playerCredits + ", Need: " + amount).formatted(Formatting.RED));
+        int playerCoins = CoinManager.getCoins(player);
+        if (playerCoins < amount) {
+            player.sendMessage(Text.literal("❌ Not enough coins! You have: " + playerCoins + ", Need: " + amount).formatted(Formatting.RED));
             return false;
         }
 
         // Refund previous bidder
         if (item.highestBidderUuid != null && !item.highestBidderUuid.isEmpty()) {
             try {
-                CreditItem.giveCredits(item.highestBidderUuid, item.currentBid);
+                // Refund via DataManager since previous bidder may be offline
+                DataManager.addCoins(item.highestBidderUuid, item.currentBid);
                 ServerPlayerEntity previousBidder = PoliticalServer.server.getPlayerManager().getPlayer(UUID.fromString(item.highestBidderUuid));
                 if (previousBidder != null) {
-                    previousBidder.sendMessage(Text.literal("⚠ You were outbid! Your " + item.currentBid + " credits have been refunded.").formatted(Formatting.YELLOW));
+                    previousBidder.sendMessage(Text.literal("⚠ You were outbid! Your " + item.currentBid + " coins have been refunded.").formatted(Formatting.YELLOW));
                 }
             } catch (Exception e) {
                 PoliticalServer.LOGGER.error("Error refunding previous bidder", e);
             }
         }
 
-        if (!CreditItem.removeCredits(player, amount)) {
+        if (!CoinManager.removeCoins(player, amount)) {
             player.sendMessage(Text.literal("❌ Failed to process bid!").formatted(Formatting.RED));
             return false;
         }
@@ -501,7 +502,7 @@ public class UndergroundAuctionManager {
 
         // Broadcast only to players near auctioneers
         broadcastNearAuctioneers(PoliticalServer.server,
-                Text.literal("💰 NEW BID: " + amount + " credits by " + player.getName().getString()).formatted(Formatting.GOLD, Formatting.BOLD),
+                Text.literal("💰 NEW BID: " + amount + " coins by " + player.getName().getString()).formatted(Formatting.GOLD, Formatting.BOLD),
                 Text.literal("   ⏱ " + (BID_TIMEOUT_MS / 1000) + "s until sold!").formatted(Formatting.RED)
         );
 

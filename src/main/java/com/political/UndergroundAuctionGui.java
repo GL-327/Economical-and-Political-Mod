@@ -60,10 +60,10 @@ public class UndergroundAuctionGui {
                     .build());
         }
 
-        // Player credits display
-        int playerCredits = CreditItem.countCredits(player);
+        // Player coins display
+        int playerCoins = CoinManager.getCoins(player);
         gui.setSlot(4, new GuiElementBuilder(Items.GOLD_NUGGET)
-                .setName(Text.literal("Your Credits: " + playerCredits).formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("Your Coins: " + playerCoins).formatted(Formatting.GOLD, Formatting.BOLD))
                 .glow()
                 .build());
 
@@ -118,7 +118,7 @@ public class UndergroundAuctionGui {
                 gui.setSlot(13, new GuiElementBuilder(currentItem.itemStack.getItem())
                         .setName(Text.literal(currentItem.name).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                         .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Current Bid: " + currentItem.currentBid + " credits").formatted(Formatting.GOLD, Formatting.BOLD))
+                        .addLoreLine(Text.literal("Current Bid: " + currentItem.currentBid + " coins").formatted(Formatting.GOLD, Formatting.BOLD))
                         .addLoreLine(currentItem.highestBidderName != null
                                 ? Text.literal("Highest Bidder: " + currentItem.highestBidderName).formatted(Formatting.GREEN)
                                 : Text.literal("No bids yet!").formatted(Formatting.GRAY))
@@ -134,7 +134,7 @@ public class UndergroundAuctionGui {
                 for (int i = 0; i < bidIncrements.length; i++) {
                     int increment = bidIncrements[i];
                     int bidAmount = currentItem.currentBid + increment;
-                    boolean canAfford = playerCredits >= bidAmount;
+                    boolean canAfford = playerCoins >= bidAmount;
 
                     final int finalBid = bidAmount;
                     gui.setSlot(slots[i], new GuiElementBuilder(canAfford ? Items.GOLD_INGOT : Items.IRON_INGOT)
@@ -143,13 +143,13 @@ public class UndergroundAuctionGui {
                             .addLoreLine(Text.literal(""))
                             .addLoreLine(canAfford
                                     ? Text.literal("Click to bid!").formatted(Formatting.YELLOW)
-                                    : Text.literal("Not enough credits!").formatted(Formatting.RED))
+                                    : Text.literal("Not enough coins!").formatted(Formatting.RED))
                             .setCallback((index, type, action) -> {
                                 if (canAfford) {
                                     UndergroundAuctionManager.placeBid(player, finalBid);
                                     // No need to manually refresh - tick() handles it
                                 } else {
-                                    player.sendMessage(Text.literal("You don't have enough credits!").formatted(Formatting.RED));
+                                    player.sendMessage(Text.literal("You don't have enough coins!").formatted(Formatting.RED));
                                 }
                             })
                             .build());

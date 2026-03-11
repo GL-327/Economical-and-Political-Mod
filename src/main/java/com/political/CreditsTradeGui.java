@@ -52,7 +52,6 @@ public class CreditsTradeGui {
                 .setName(Text.literal("Your Credits: " + playerCredits).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .glow()
                 .build());
-// === COIN TO CREDIT CONVERSION (10,000 coins = 1 credit) ===
 // === CREDIT TO COIN CONVERSION (1 credit = 10,000 coins) ===
         gui.setSlot(1, new GuiElementBuilder(Items.GOLD_INGOT)
                 .setName(Text.literal("💎 Convert Credits → Coins")
@@ -78,30 +77,6 @@ public class CreditsTradeGui {
                     }
                 })
                 .build());
-        gui.setSlot(7, new GuiElementBuilder(Items.DIAMOND)
-                        .setName(Text.literal("🪙 Convert Coins → Credits")
-                                .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                        .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("10,000 Coins = 1 Credit").formatted(Formatting.YELLOW))
-                        .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Your Credits: " + DataManager.getCredits(player.getUuidAsString())).formatted(Formatting.GRAY))
-                        .addLoreLine(Text.literal("Your Coins: " + CoinManager.getCoins(player)).formatted(Formatting.GRAY))
-                        .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("Click to convert!").formatted(Formatting.GREEN))
-                        .setCallback((idx, type, action) -> {
-                            int coins = DataManager.getCoins(player.getUuidAsString());
-                            if (coins >= 10000) {
-                                DataManager.removeCoins(player.getUuidAsString(), 10000);
-                                CreditItem.giveCredits(player, 1);
-                                player.sendMessage(Text.literal("✓ Converted 10,000 Coins → 1 Credit!")
-                                        .formatted(Formatting.GREEN), false);
-                                open(player); // Refresh GUI
-                            } else {
-                                player.sendMessage(Text.literal("✗ Need at least 10,000 Coins!")
-                                        .formatted(Formatting.RED), false);
-                            }
-                        })
-                                .build());
 
         // === SELL SECTION (Left side) ===
         gui.setSlot(19, new GuiElementBuilder(Items.TOTEM_OF_UNDYING)

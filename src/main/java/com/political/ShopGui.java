@@ -101,6 +101,31 @@ public class ShopGui {
                 })
                 .build());
 
+        // Convert Credits → Coins button
+        int playerCredits = DataManager.getCredits(player.getUuidAsString());
+        gui.setSlot(46, new GuiElementBuilder(Items.AMETHYST_SHARD)
+                .setName(Text.literal("💎 Convert Credits → Coins").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("1 Credit = 10,000 Coins").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Your Credits: " + playerCredits).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(playerCredits > 0
+                        ? Text.literal("Click to convert 1 credit!").formatted(Formatting.GREEN)
+                        : Text.literal("No credits to convert.").formatted(Formatting.RED))
+                .setCallback((index, type, action) -> {
+                    int credits = DataManager.getCredits(player.getUuidAsString());
+                    if (credits >= 1) {
+                        DataManager.removeCredits(player.getUuidAsString(), 1);
+                        CoinManager.giveCoins(player, 10000);
+                        player.sendMessage(Text.literal("✓ Converted 1 Credit → 10,000 Coins!").formatted(Formatting.GREEN), false);
+                        openMainMenu(player);
+                    } else {
+                        player.sendMessage(Text.literal("✗ You have no credits to convert!").formatted(Formatting.RED), false);
+                    }
+                })
+                .build());
+
         gui.open();
     }
 

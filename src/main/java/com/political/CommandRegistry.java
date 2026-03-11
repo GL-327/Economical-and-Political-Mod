@@ -1404,13 +1404,6 @@ public class CommandRegistry {
                             player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
                             return 1;
                         }))
-                .then(CommandManager.literal("shop")
-                        .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayer();
-                            if (player == null) return 0;
-                            CreditsTradeGui.open(player);
-                            return 1;
-                        }))
                 .then(CommandManager.literal("add")
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
