@@ -217,10 +217,10 @@ public class SlayerItems {
                 .append(Text.literal("Bounty Boss Resistance").formatted(Formatting.GOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DEFENCE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs " + type.displayName + " Boss: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-50% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-10% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("vs " + type.displayName + " Boss: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-60% total (-10 + -50 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Contractor Program").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + BASIC_SWORD_LEVEL_REQ)
@@ -392,10 +392,10 @@ public class SlayerItems {
                 .append(Text.literal("Bounty Boss Resistance").formatted(Formatting.GOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DEFENCE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs " + type.displayName + " Boss: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-60% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("vs " + type.displayName + " Boss: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-75% total (-15 + -60 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Classified: Charadrius Mk.II").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + UPGRADED_SWORD_LEVEL_REQ)
@@ -1288,10 +1288,10 @@ public class SlayerItems {
         lore.add(Text.literal("🛡 Full Knockback Resistance").formatted(Formatting.WHITE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs Warden Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-35% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-65% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("vs Warden Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-85% capped (-65 + -35 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1358,10 +1358,10 @@ public class SlayerItems {
         lore.add(Text.literal("⚡ Movement Speed: +50%").formatted(Formatting.AQUA));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs Spider Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-20% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-55% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("vs Spider Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-75% total (-55 + -20 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1469,10 +1469,10 @@ public class SlayerItems {
         lore.add(Text.literal("🛡 No Fall Damage").formatted(Formatting.WHITE));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs Slime Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-20% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-55% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("vs Slime Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-75% total (-55 + -20 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + SLIME_BOOTS_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1611,6 +1611,13 @@ public class SlayerItems {
         return n.contains("Sculk") || n.contains("Warden") || n.contains("Terror");
     }
 
+    public static boolean isCrownOfGreed(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        if (hasCustomItemId(stack, "crown_of_greed")) return true;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        return name != null && name.getString().contains("Crown of Greed");
+    }
+
     public static boolean canUseSkeletonBow(ServerPlayerEntity player) {
         int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
         return level >= SKELETON_BOW_LEVEL_REQ;
@@ -1676,10 +1683,10 @@ public class SlayerItems {
                 .append(Text.literal("+300% MORE").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
                 .append(Text.literal("-50% damage").formatted(Formatting.GREEN)));
+        lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
+                .append(Text.literal("-65% total (-50 + -15 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8[MFLUX: CRD-001 augmented containment helm | Berserker-class]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));

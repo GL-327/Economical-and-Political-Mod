@@ -18,16 +18,14 @@ import java.util.List;
 /**
  * GUI for the /setrecipe admin command.
  *
- * <ul>
- *   <li>Page 1 – Recipe list: shows all custom items. Click one to open the editor.</li>
- *   <li>Page 2 – Recipe editor: 3×3 ingredient grid + result slot + Save button.
- *       The admin clicks a grid slot, then the item from their cursor (main inventory
- *       interaction) is recorded as the ingredient for that slot.</li>
- * </ul>
+ * Navigation hierarchy:
+ *   Main Menu (category list)
+ *     → Category Page (all items in that category)
+ *       → Recipe Editor (3×3 grid editor, save/clear, ← Back)
  */
 public class RecipeEditorGui {
 
-    // ── Layout constants (9×6 chest) ────────────────────────────
+    // ── Recipe-editor layout constants (9×6 chest) ──────────────
     private static final int[] GRID_SLOTS   = {10, 11, 12, 19, 20, 21, 28, 29, 30};
     private static final int SLOT_ARROW     = 23;
     private static final int SLOT_RESULT    = 24;
@@ -36,83 +34,165 @@ public class RecipeEditorGui {
     private static final int SLOT_BACK      = 45;
     private static final int SLOT_HEADER    = 4;
 
-    // ── All custom items that can be given a recipe ─────────────
-    private static List<ItemStack> getAllCustomItems() {
-        List<ItemStack> items = new ArrayList<>();
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            items.add(SlayerItems.createSlayerSword(type));
-            items.add(SlayerItems.createUpgradedSlayerSword(type));
-            // T1 armor pieces
-            items.add(SlayerItems.createSlayerHelmet(type, 1));
-            items.add(SlayerItems.createSlayerChestplate(type, 1));
-            items.add(SlayerItems.createSlayerLeggings(type, 1));
-            items.add(SlayerItems.createSlayerBoots(type, 1));
-            // T2 armor pieces
-            items.add(SlayerItems.createSlayerHelmet(type, 2));
-            items.add(SlayerItems.createSlayerChestplate(type, 2));
-            items.add(SlayerItems.createSlayerLeggings(type, 2));
-            items.add(SlayerItems.createSlayerBoots(type, 2));
-            // Cores and chunks
-            items.add(SlayerItems.createCore(type));
-            items.add(SlayerItems.createChunk(type));
+    // ── Category definitions ─────────────────────────────────────
+    private enum Category {
+        SWORDS_T1    ("⚔ Bounty Swords (T1)",               Items.IRON_SWORD,         Formatting.YELLOW),
+        SWORDS_T2    ("⚔ Bounty Swords (T2)",               Items.DIAMOND_SWORD,      Formatting.AQUA),
+        ARMOR_T1     ("🛡 Bounty Armor T1",                  Items.IRON_CHESTPLATE,    Formatting.GREEN),
+        ARMOR_T2     ("🛡 Bounty Armor T2",                  Items.DIAMOND_CHESTPLATE, Formatting.DARK_AQUA),
+        SPECIAL_ARMOR("🛡 Special / Legendary Armor",        Items.NETHERITE_HELMET,   Formatting.GOLD),
+        HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
+        SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
+        PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
+        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY);
+
+        final String label;
+        final net.minecraft.item.Item icon;
+        final Formatting colour;
+
+        Category(String label, net.minecraft.item.Item icon, Formatting colour) {
+            this.label = label;
+            this.icon  = icon;
+            this.colour = colour;
         }
-        // Legendary armor
-        items.add(SlayerItems.createZombieBerserkerHelmet());
-        items.add(SlayerItems.createSpiderLeggings());
-        items.add(SlayerItems.createSkeletonBow());
-        items.add(SlayerItems.createSlimeBoots());
-        items.add(SlayerItems.createWardenChestplate());
-        // Piglin items
-        items.add(SlayerItems.createCrownOfGreed());
-        items.add(SlayerItems.createPiglinCore());
-        items.add(SlayerItems.createPiglinFlesh());
-        // Special weapons
-        items.add(CustomItemHandler.createTheGavel());
-        items.add(CustomItemHandler.createGavel());
-        items.add(CustomItemHandler.createHarveysStick());
-        items.add(CustomItemHandler.createHermesShoes());
-        items.add(CustomItemHandler.createHPEBM(1));
-        items.add(CustomItemHandler.createHPEBM(2));
-        items.add(CustomItemHandler.createHPEBM(3));
-        items.add(CustomItemHandler.createHPEBM(4));
-        items.add(CustomItemHandler.createHPEBM(5));
-        items.add(CustomItemHandler.createUltraOverclockedBeam());
+    }
+
+    /** Returns all items belonging to a given category. */
+    private static List<ItemStack> getItemsForCategory(Category cat) {
+        List<ItemStack> items = new ArrayList<>();
+        switch (cat) {
+            case SWORDS_T1 -> {
+                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values())
+                    items.add(SlayerItems.createSlayerSword(t));
+            }
+            case SWORDS_T2 -> {
+                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values())
+                    items.add(SlayerItems.createUpgradedSlayerSword(t));
+            }
+            case ARMOR_T1 -> {
+                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+                    items.add(SlayerItems.createSlayerHelmet(t, 1));
+                    items.add(SlayerItems.createSlayerChestplate(t, 1));
+                    items.add(SlayerItems.createSlayerLeggings(t, 1));
+                    items.add(SlayerItems.createSlayerBoots(t, 1));
+                }
+            }
+            case ARMOR_T2 -> {
+                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+                    items.add(SlayerItems.createSlayerHelmet(t, 2));
+                    items.add(SlayerItems.createSlayerChestplate(t, 2));
+                    items.add(SlayerItems.createSlayerLeggings(t, 2));
+                    items.add(SlayerItems.createSlayerBoots(t, 2));
+                }
+            }
+            case SPECIAL_ARMOR -> {
+                items.add(SlayerItems.createZombieBerserkerHelmet());
+                items.add(SlayerItems.createSpiderLeggings());
+                items.add(SlayerItems.createSkeletonBow());
+                items.add(SlayerItems.createSlimeBoots());
+                items.add(SlayerItems.createWardenChestplate());
+            }
+            case HPEBM -> {
+                for (int mk = 1; mk <= 5; mk++)
+                    items.add(CustomItemHandler.createHPEBM(mk));
+                items.add(CustomItemHandler.createUltraOverclockedBeam());
+            }
+            case SPECIAL_ITEMS -> {
+                items.add(CustomItemHandler.createTheGavel());
+                items.add(CustomItemHandler.createGavel());
+                items.add(CustomItemHandler.createHarveysStick());
+                items.add(CustomItemHandler.createHermesShoes());
+            }
+            case PIGLIN -> {
+                items.add(SlayerItems.createCrownOfGreed());
+                items.add(SlayerItems.createPiglinCore());
+                items.add(SlayerItems.createPiglinFlesh());
+            }
+            case MATERIALS -> {
+                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+                    items.add(SlayerItems.createCore(t));
+                    items.add(SlayerItems.createChunk(t));
+                }
+            }
+        }
         return items;
     }
 
-    // ────────────────────────────────────────────────────────────
-    // Page 1: Recipe list
-    // ────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // Page 0: Main Category Menu
+    // ──────────────────────────────────────────────────────────────
 
-    public static void openRecipeList(ServerPlayerEntity player) {
-        openRecipeList(player, 0);
+    /** Entry point — opens the main category selection menu. */
+    public static void openMainMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("§6§l/setrecipe — Choose Category"));
+
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
+        for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+                .setName(Text.literal("§6§l/setrecipe").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Select a category to view and edit recipes"))
+                .glow().build());
+
+        // Place category buttons (skip slot 4 = header)
+        Category[] cats = Category.values();
+        int[] catSlots = {0, 1, 2, 3, 5, 6, 7, 8, 18};
+        for (int i = 0; i < cats.length && i < catSlots.length; i++) {
+            Category cat = cats[i];
+            int slot = catSlots[i];
+            gui.setSlot(slot, new GuiElementBuilder(cat.icon)
+                    .setName(Text.literal("§l" + cat.label).formatted(cat.colour, Formatting.BOLD))
+                    .addLoreLine(Text.literal("§7Click to browse items"))
+                    .setCallback((idx, type, action) -> openCategoryPage(player, cat, 0))
+                    .build());
+        }
+
+        // Row 2: More categories
+        int[] row2Slots = {9, 10, 11, 12, 13, 14, 15, 16, 17};
+        int extra = cats.length - catSlots.length;
+        for (int i = 0; i < extra; i++) {
+            Category cat = cats[catSlots.length + i];
+            gui.setSlot(row2Slots[i], new GuiElementBuilder(cat.icon)
+                    .setName(Text.literal("§l" + cat.label).formatted(cat.colour, Formatting.BOLD))
+                    .addLoreLine(Text.literal("§7Click to browse items"))
+                    .setCallback((idx, type, action) -> openCategoryPage(player, cat, 0))
+                    .build());
+        }
+
+        gui.open();
     }
 
-    public static void openRecipeList(ServerPlayerEntity player, int page) {
+    // ──────────────────────────────────────────────────────────────
+    // Page 1: Category Item List
+    // ──────────────────────────────────────────────────────────────
+
+    public static void openCategoryPage(ServerPlayerEntity player, Category cat, int page) {
         List<SlayerRecipes.Recipe> existingRecipes = RecipeConfigManager.getRecipes();
+        List<ItemStack> items = getItemsForCategory(cat);
+
+        final int ITEMS_PER_PAGE = 28;
+        int totalPages = Math.max(1, (items.size() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE);
+        int clampedPage = Math.min(page, totalPages - 1);
+
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("§6§l/setrecipe — Recipe Editor"));
+        gui.setTitle(Text.literal("§6" + cat.label));
 
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
-        gui.setSlot(SLOT_HEADER, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
-                .setName(Text.literal("§6§l/setrecipe — Recipe Editor"))
-                .addLoreLine(Text.literal("§7Click a custom item to edit its recipe"))
-                .addLoreLine(Text.literal("§7Or click an existing recipe to view/edit"))
+        gui.setSlot(4, new GuiElementBuilder(cat.icon)
+                .setName(Text.literal("§l" + cat.label).formatted(cat.colour, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Click an item to edit its recipe"))
                 .glow().build());
 
-        // Show all custom items (that could have a recipe set)
-        List<ItemStack> allItems = getAllCustomItems();
-        final int ITEMS_PER_PAGE = 28;
-        int totalPages = (allItems.size() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
-        int clampedPage = Math.min(page, totalPages - 1);
-
+        // Item slots (7 per row, rows 1-4, columns 1-7)
         int start = clampedPage * ITEMS_PER_PAGE;
         int shown = 0;
-        for (int idx = start; idx < allItems.size() && shown < ITEMS_PER_PAGE; idx++) {
-            ItemStack item = allItems.get(idx);
+        for (int idx = start; idx < items.size() && shown < ITEMS_PER_PAGE; idx++) {
+            ItemStack item = items.get(idx);
             int row = shown / 7;
             int col = shown % 7 + 1;
             int slot = row * 9 + col;
@@ -120,57 +200,55 @@ public class RecipeEditorGui {
             Text displayName = item.get(DataComponentTypes.CUSTOM_NAME);
             String customId = SlayerItems.getCustomItemId(item);
 
-            // Check if this item already has a custom recipe
+            // Check for existing recipe
             boolean hasRecipe = false;
-            for (SlayerRecipes.Recipe r : existingRecipes) {
-                if (SlayerItems.getCustomItemId(r.result) != null
-                        && SlayerItems.getCustomItemId(r.result).equals(customId)) {
-                    hasRecipe = true;
-                    break;
-                }
-            }
-
-            final ItemStack finalItem = item;
-            final SlayerRecipes.Recipe existingRecipe;
-            // Find existing recipe for this item to pre-populate
-            SlayerRecipes.Recipe found = null;
+            SlayerRecipes.Recipe existingRecipe = null;
             if (customId != null) {
                 for (SlayerRecipes.Recipe r : existingRecipes) {
                     if (customId.equals(SlayerItems.getCustomItemId(r.result))) {
-                        found = r;
+                        hasRecipe = true;
+                        existingRecipe = r;
                         break;
                     }
                 }
             }
-            existingRecipe = found;
-            GuiElementBuilder eb = new GuiElementBuilder(item.getItem())
-                    .setName(displayName != null ? displayName : Text.literal("§e" + (customId != null ? customId : "Unknown")))
+
+            final ItemStack finalItem = item;
+            final SlayerRecipes.Recipe finalRecipe = existingRecipe;
+
+            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+                    .setName(displayName != null ? displayName
+                            : Text.literal("§e" + (customId != null ? customId : "Unknown")))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(hasRecipe
-                            ? Text.literal("§a✔ Has recipe — click to edit").formatted(Formatting.GREEN)
-                            : Text.literal("§e➕ No recipe — click to create").formatted(Formatting.YELLOW))
-                    .setCallback((index, clickType, actionType) -> openRecipeEditor(player, finalItem, existingRecipe));
-            gui.setSlot(slot, eb.build());
+                            ? Text.literal("§a✔ Has recipe — click to edit")
+                            : Text.literal("§e➕ No recipe — click to create"))
+                    .setCallback((i, t, a) -> openRecipeEditor(player, finalItem, finalRecipe, cat))
+                    .build());
             shown++;
         }
 
-        // Pagination buttons
+        // ← Back to main menu
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Categories").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openMainMenu(player)).build());
+
+        // Pagination
         if (clampedPage > 0) {
-            final int prevPage = clampedPage - 1;
-            gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
                     .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("§7Page " + clampedPage + " / " + totalPages))
-                    .setCallback((idx, t, a) -> openRecipeList(player, prevPage)).build());
+                    .setCallback((i, t, a) -> openCategoryPage(player, cat, prev)).build());
         }
         if (clampedPage < totalPages - 1) {
-            final int nextPage = clampedPage + 1;
+            final int next = clampedPage + 1;
             gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
                     .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("§7Page " + (clampedPage + 2) + " / " + totalPages))
-                    .setCallback((idx, t, a) -> openRecipeList(player, nextPage)).build());
+                    .setCallback((i, t, a) -> openCategoryPage(player, cat, next)).build());
         }
 
-        // Page indicator
         gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("§7Page " + (clampedPage + 1) + " / " + totalPages))
                 .build());
@@ -178,9 +256,9 @@ public class RecipeEditorGui {
         gui.open();
     }
 
-    // ────────────────────────────────────────────────────────────
-    // Page 2: Recipe editor
-    // ────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // Page 2: Recipe Editor  (unchanged core logic)
+    // ──────────────────────────────────────────────────────────────
 
     /**
      * Opens the editable recipe grid for the given result item.
@@ -188,10 +266,10 @@ public class RecipeEditorGui {
      * @param player     the admin
      * @param resultItem the item the recipe produces
      * @param existing   an existing recipe to pre-populate (may be null)
+     * @param backCat    the category to return to when ← Back is clicked (may be null → opens main menu)
      */
     public static void openRecipeEditor(ServerPlayerEntity player, ItemStack resultItem,
-                                         SlayerRecipes.Recipe existing) {
-        // Working copies of the 9-slot grid
+                                         SlayerRecipes.Recipe existing, Category backCat) {
         ItemStack[] grid = new ItemStack[9];
         for (int i = 0; i < 9; i++) {
             grid[i] = (existing != null && existing.ingredients != null && existing.ingredients[i] != null)
@@ -203,37 +281,32 @@ public class RecipeEditorGui {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false) {
             @Override
             public boolean onAnyClick(int index, ClickType type, SlotActionType action) {
-                // Check if the admin clicked a grid slot
                 for (int g = 0; g < 9; g++) {
                     if (index == GRID_SLOTS[g]) {
                         ItemStack cursor = player.currentScreenHandler.getCursorStack();
                         if (!cursor.isEmpty()) {
-                            // Place a single copy of the cursor item as the ingredient
                             grid[g] = cursor.copyWithCount(1);
                         } else {
-                            // Clear the slot
                             grid[g] = ItemStack.EMPTY;
                         }
                         refreshGrid(this, grid, resultItem);
                         return true;
                     }
                 }
-                // Save button
                 if (index == SLOT_SAVE) {
                     saveRecipe(player, resultItem, grid);
                     player.closeHandledScreen();
                     return true;
                 }
-                // Clear grid button
                 if (index == SLOT_CLEAR) {
                     for (int g = 0; g < 9; g++) grid[g] = ItemStack.EMPTY;
                     refreshGrid(this, grid, resultItem);
                     return true;
                 }
-                // Back button
                 if (index == SLOT_BACK) {
                     player.closeHandledScreen();
-                    openRecipeList(player);
+                    if (backCat != null) openCategoryPage(player, backCat, 0);
+                    else openMainMenu(player);
                     return true;
                 }
                 return super.onAnyClick(index, type, action);
@@ -242,56 +315,53 @@ public class RecipeEditorGui {
 
         Text resultName = resultItem.get(DataComponentTypes.CUSTOM_NAME);
         gui.setTitle(Text.literal("§6Edit Recipe: §e")
-                .append(resultName != null ? resultName : Text.literal(resultCustomId != null ? resultCustomId : "?")));
+                .append(resultName != null ? resultName
+                        : Text.literal(resultCustomId != null ? resultCustomId : "?")));
 
-        // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
-        // Header
         gui.setSlot(SLOT_HEADER, new GuiElementBuilder(Items.WRITABLE_BOOK)
                 .setName(Text.literal("§6Recipe Editor"))
-                .addLoreLine(Text.literal("§7Left-click a grid slot while holding an item"))
-                .addLoreLine(Text.literal("§7to set it as an ingredient."))
-                .addLoreLine(Text.literal("§7Left-click an empty slot to clear it."))
+                .addLoreLine(Text.literal("§7Hold an item and left-click a grid slot to set it"))
+                .addLoreLine(Text.literal("§7Left-click empty cursor on a slot to clear it"))
                 .build());
 
-        // Arrow
         gui.setSlot(SLOT_ARROW, new GuiElementBuilder(Items.SPECTRAL_ARROW)
-                .setName(Text.literal("→").formatted(Formatting.YELLOW))
-                .build());
+                .setName(Text.literal("→").formatted(Formatting.YELLOW)).build());
 
-        // Result item (fixed display)
         GuiElementBuilder res = new GuiElementBuilder(resultItem.getItem())
-                .setName(resultName != null ? resultName : Text.literal(resultCustomId != null ? resultCustomId : "?"))
+                .setName(resultName != null ? resultName
+                        : Text.literal(resultCustomId != null ? resultCustomId : "?"))
                 .glow();
         gui.setSlot(SLOT_RESULT, res.build());
 
-        // Save button
         gui.setSlot(SLOT_SAVE, new GuiElementBuilder(Items.LIME_DYE)
-                .setName(Text.literal("§a§lSave Recipe").formatted(Formatting.GREEN, Formatting.BOLD))
+                .setName(Text.literal("§a§lSave Recipe"))
                 .addLoreLine(Text.literal("§7Click to save this recipe."))
-                .addLoreLine(Text.literal("§7It will be usable at a crafting table."))
                 .glow().build());
 
-        // Clear button
         gui.setSlot(SLOT_CLEAR, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("§c§lClear Grid").formatted(Formatting.RED, Formatting.BOLD))
+                .setName(Text.literal("§c§lClear Grid"))
                 .addLoreLine(Text.literal("§7Click to clear all ingredient slots."))
                 .build());
 
-        // Back button
         gui.setSlot(SLOT_BACK, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(backCat != null ? "§7Return to " + backCat.label : "§7Return to main menu"))
                 .build());
 
-        // Populate grid with existing ingredients
         refreshGrid(gui, grid, resultItem);
-
         gui.open();
     }
 
-    /** Re-draws the 3×3 grid slots based on the current grid array. */
+    /** Convenience overload — back goes to main menu. */
+    public static void openRecipeEditor(ServerPlayerEntity player, ItemStack resultItem,
+                                         SlayerRecipes.Recipe existing) {
+        openRecipeEditor(player, resultItem, existing, null);
+    }
+
+    /** Re-draws the 3×3 grid slots. */
     private static void refreshGrid(SimpleGui gui, ItemStack[] grid, ItemStack resultItem) {
         for (int g = 0; g < 9; g++) {
             ItemStack ing = grid[g];
@@ -303,22 +373,20 @@ public class RecipeEditorGui {
                 Text ingName = ing.get(DataComponentTypes.CUSTOM_NAME);
                 gui.setSlot(GRID_SLOTS[g], new GuiElementBuilder(ing.getItem())
                         .setName(ingName != null ? ingName : Text.of(ing.getItem().toString()))
-                        .addLoreLine(Text.literal("§7Left-click to replace, right-click to clear"))
+                        .addLoreLine(Text.literal("§7Click with item to replace, empty-hand to clear"))
                         .build());
             }
         }
     }
 
-    /** Saves the recipe to RecipeConfigManager (and to disk). */
+    /** Saves the recipe to RecipeConfigManager. */
     private static void saveRecipe(ServerPlayerEntity player, ItemStack resultItem, ItemStack[] grid) {
         Text nameTxt = resultItem.get(DataComponentTypes.CUSTOM_NAME);
         String recipeName = nameTxt != null ? nameTxt.getString() : "Custom Recipe";
 
-        // Remove existing custom recipe with same name (or same result ID)
         String resultId = SlayerItems.getCustomItemId(resultItem);
         RecipeConfigManager.removeCustomRecipe(recipeName);
         if (resultId != null) {
-            // Also remove any recipe whose result has the same custom_item_id
             for (SlayerRecipes.Recipe existing : new ArrayList<>(RecipeConfigManager.getCustomRecipes())) {
                 if (resultId.equals(SlayerItems.getCustomItemId(existing.result))) {
                     RecipeConfigManager.removeCustomRecipe(existing.name);
@@ -332,20 +400,28 @@ public class RecipeEditorGui {
         }
 
         SlayerRecipes.Recipe newRecipe = new SlayerRecipes.Recipe(
-                recipeName,
-                resultItem.copy(),
-                ingredientsCopy,
-                null, // no slayer type restriction for custom recipes
-                0
-        );
-
+                recipeName, resultItem.copy(), ingredientsCopy, null, 0);
         RecipeConfigManager.addCustomRecipe(newRecipe);
         player.sendMessage(Text.literal("§a✔ Recipe saved for §e" + recipeName + "§a!"), false);
     }
 
-    // ────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // Legacy public entry-points (backwards compatibility)
+    // ──────────────────────────────────────────────────────────────
+
+    /** Opens the main category menu. Called by /setrecipe command. */
+    public static void openRecipeList(ServerPlayerEntity player) {
+        openMainMenu(player);
+    }
+
+    /** Retained for backward-compat — now opens the main menu (page is ignored). */
+    public static void openRecipeList(ServerPlayerEntity player, int page) {
+        openMainMenu(player);
+    }
+
+    // ──────────────────────────────────────────────────────────────
     // Legacy: read-only recipe view (still used by /recipes GUI)
-    // ────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
 
     public static void openRecipeView(ServerPlayerEntity player, SlayerRecipes.Recipe recipe) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, player, false);
@@ -354,13 +430,12 @@ public class RecipeEditorGui {
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
         for (int i = 0; i < 45; i++) gui.setSlot(i, bg.build());
 
-        // Header
         Text resultName = recipe.result.get(DataComponentTypes.CUSTOM_NAME);
         gui.setSlot(SLOT_HEADER, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
-                .setName(resultName != null ? resultName : Text.literal(recipe.name).formatted(Formatting.GOLD))
+                .setName(resultName != null ? resultName
+                        : Text.literal(recipe.name).formatted(Formatting.GOLD))
                 .glow().build());
 
-        // 3×3 crafting grid
         int[] viewGrid = {10, 11, 12, 19, 20, 21, 28, 29, 30};
         for (int i = 0; i < 9; i++) {
             ItemStack ing = (recipe.ingredients != null && i < recipe.ingredients.length)
@@ -374,7 +449,6 @@ public class RecipeEditorGui {
             }
         }
 
-        // Arrow & result
         gui.setSlot(23, new GuiElementBuilder(Items.SPECTRAL_ARROW)
                 .setName(Text.literal("→").formatted(Formatting.YELLOW)).build());
         if (!recipe.result.isEmpty()) {
@@ -385,17 +459,15 @@ public class RecipeEditorGui {
             gui.setSlot(24, res.build());
         }
 
-        // Recipe info
         String slayerName = recipe.requiredSlayer != null ? recipe.requiredSlayer.displayName : "Any";
         gui.setSlot(34, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("§eRecipe Info"))
                 .addLoreLine(Text.literal("§7Type: §f" + slayerName))
                 .addLoreLine(Text.literal("§7Required Level: §f" + recipe.requiredLevel)).build());
 
-        // Back button
         gui.setSlot(36, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openRecipeList(player)).build());
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
 
         gui.open();
     }

@@ -265,6 +265,9 @@ public class ScoreboardManager {
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
 
+        // Crown of Greed indicator
+        boolean hasCrown = SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD));
+
         if (quest != null) {
             // Bounty quest takes priority over gear stats when active
             String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
@@ -275,20 +278,36 @@ public class ScoreboardManager {
             for (int i = 0; i < 5; i++) bar.append(i < progress ? "§a█" : "§8█");
             lines.add(bar + " §e" + quest.killCount + "/" + required);
             lines.add("§7  T" + quest.tier + " " + quest.slayerType.displayName + (quest.bossSpawned ? " §cBoss Active!" : ""));
+        } else if (hasCrown) {
+            lines.add("§6§l 👑 §r§7Crown of Greed");
+            lines.add("§c  ✗ All defence DISABLED");
         } else if (!bountyStats.isEmpty()) {
-            // Show compact bounty stats (up to 3 lines)
+            // Show compact bounty stats
             String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
             lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
+
+            // Aggregate stats across all gear types
             int universalDef = 0;
             int weaponBonus = 0;
+            // Collect (type, specificDef%) pairs for display (only show non-zero specific defs)
+            java.util.List<String> specificLines = new java.util.ArrayList<>();
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
                 int[] s = entry.getValue();
-                universalDef += s[2];
+                universalDef += s[2]; // sum universal defence from all equipped gear
                 if (s[0] > weaponBonus) weaponBonus = s[0];
+                if (s[1] > 0) {
+                    specificLines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + s[1] + "%");
+                }
             }
+            // Universal defence line
             if (universalDef > 0) {
-                lines.add("§7  DEF: §a-" + universalDef + "% all bosses");
+                lines.add("§7  DEF all: §a-" + Math.min(universalDef, 85) + "%");
             }
+            // Show specific defence for at most 1 type (space constrained)
+            if (!specificLines.isEmpty()) {
+                lines.add(specificLines.get(0) + " §7(vs boss)");
+            }
+            // Weapon bonus
             if (weaponBonus > 0) {
                 lines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");
             }
@@ -335,12 +354,20 @@ public class ScoreboardManager {
     /**
      * Scans the player's main hand and all armour slots for bounty gear.
      * Returns a LinkedHashMap keyed by SlayerType, each entry being int[3]:
-     *   [0] = weapon damage % bonus (e.g. 200 for T1 sword)
-     *   [1] = boss-specific defence % (e.g. 50 for T1 set)
+     *   [0] = weapon damage % bonus (e.g. 200 for T1 sword = +100% more)
+     *   [1] = total specific boss defence % vs that type (universalDef + specificDef combined, capped at 85)
      *   [2] = universal (all-boss) defence % from this type's pieces
+     *
+     * Crown of Greed: if worn, returns empty map (all defence disabled).
      */
     private static Map<SlayerManager.SlayerType, int[]> collectBountyGearStats(ServerPlayerEntity player) {
         Map<SlayerManager.SlayerType, int[]> stats = new LinkedHashMap<>();
+
+        // Crown of Greed disables all bounty defence
+        ItemStack helmetCheck = player.getEquippedStack(EquipmentSlot.HEAD);
+        if (SlayerItems.isCrownOfGreed(helmetCheck)) {
+            return stats; // empty — no defence
+        }
 
         // ── Weapon in main hand ──────────────────────────────────
         ItemStack weapon = player.getMainHandStack();
@@ -348,23 +375,22 @@ public class ScoreboardManager {
             if (SlayerItems.isSkeletonBow(weapon)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SKELETON, k -> new int[3]);
                 s[0] = 500;
-                // Skeleton bow also provides some universal defence
-                s[2] += 10;
+                s[2] += 10; // Skeleton bow: -10% universal
             } else if (SlayerItems.isUpgradedSlayerSword(weapon)) {
                 SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
                 if (t != null) {
                     int[] s = stats.computeIfAbsent(t, k -> new int[3]);
                     s[0] = 300;
-                    s[1] = Math.max(s[1], 60); // -60% vs matching boss
-                    s[2] += 15;                 // -15% vs all bosses
+                    s[1] = Math.max(s[1], 60); // -60% specific vs matching boss
+                    s[2] += 15;                 // -15% universal vs all bosses
                 }
             } else if (SlayerItems.isSlayerSword(weapon)) {
                 SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
                 if (t != null) {
                     int[] s = stats.computeIfAbsent(t, k -> new int[3]);
                     s[0] = 200;
-                    s[1] = Math.max(s[1], 50); // -50% vs matching boss
-                    s[2] += 10;                 // -10% vs all bosses
+                    s[1] = Math.max(s[1], 50); // -50% specific vs matching boss
+                    s[2] += 10;                 // -10% universal vs all bosses
                 }
             }
         }
@@ -383,29 +409,29 @@ public class ScoreboardManager {
         for (ItemStack armor : armorSlots) {
             if (armor.isEmpty()) continue;
 
-            // Special pieces
+            // Special pieces — register universal + specific using the stacking model
             if (SlayerItems.isZombieBerserkerHelmet(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.ZOMBIE, k -> new int[3]);
-                s[1] = Math.max(s[1], (int)(SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION * 100));
                 s[2] += (int)(SlayerItems.BERSERKER_HELMET_ALL_REDUCTION * 100);
+                s[1] = Math.max(s[1], (int)(SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION * 100));
                 continue;
             }
             if (SlayerItems.isSpiderLeggings(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SPIDER, k -> new int[3]);
-                s[1] = Math.max(s[1], (int)(SlayerItems.SPIDER_LEGS_BOSS_REDUCTION * 100));
                 s[2] += (int)(SlayerItems.SPIDER_LEGS_ALL_REDUCTION * 100);
+                s[1] = Math.max(s[1], (int)(SlayerItems.SPIDER_LEGS_BOSS_REDUCTION * 100));
                 continue;
             }
             if (SlayerItems.isSlimeBoots(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SLIME, k -> new int[3]);
-                s[1] = Math.max(s[1], (int)(SlayerItems.SLIME_BOOTS_BOSS_REDUCTION * 100));
                 s[2] += (int)(SlayerItems.SLIME_BOOTS_ALL_REDUCTION * 100);
+                s[1] = Math.max(s[1], (int)(SlayerItems.SLIME_BOOTS_BOSS_REDUCTION * 100));
                 continue;
             }
             if (SlayerItems.isWardenChestplate(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.WARDEN, k -> new int[3]);
-                s[1] = Math.max(s[1], (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100));
                 s[2] += (int)(SlayerItems.WARDEN_CHEST_ALL_REDUCTION * 100);
+                s[1] = Math.max(s[1], (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100));
                 continue;
             }
 
@@ -433,8 +459,18 @@ public class ScoreboardManager {
             int tier = entry.getValue();
             SlayerItems.ArmorStats armorStats = SlayerItems.getArmorStats(type, tier);
             int[] s = stats.computeIfAbsent(type, k -> new int[3]);
-            s[1] = Math.max(s[1], (int)(armorStats.bossReduction * 100));
+            // Boss-specific: full set cap (60% T1, 80% T2) is the specific component
+            int capPct = tier == 2 ? 80 : 60;
+            s[1] = Math.max(s[1], capPct);
+            // Universal: full allBossReduction for the tier
             s[2] += (int)(armorStats.allBossReduction * 100);
+        }
+
+        // Compute final combined defence (universal + specific, capped at 85) into s[1]
+        for (int[] s : stats.values()) {
+            int combined = Math.min(85, s[2] + s[1]);
+            s[1] = combined; // s[1] now = total specific (vs matching boss, = combined)
+            // s[2] remains as universal-only value
         }
 
         // Remove entries that have no meaningful stats to display

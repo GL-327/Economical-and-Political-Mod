@@ -2,6 +2,7 @@ package com.political;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -65,6 +66,8 @@ public class SkeletonBowHandler {
         arrow.getCommandTags().add("skeleton_bow_arrow");
         // Instant shots are never headshots — headshots require a fully-drawn right-click hold.
         arrow.getCommandTags().add("instant_shot");
+        // Arrows from the Skeleton Bow cannot be picked up by players.
+        arrow.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 
         world.spawnEntity(arrow);
 
