@@ -1020,167 +1020,19 @@ public class SlayerItems {
 // SLAYER ARMOR - T1 & T2 WITH CUSTOM ATTRIBUTES
 // ============================================================
     public static ItemStack createSlayerHelmet(SlayerManager.SlayerType type, int tier) {
-        ArmorStats stats = getArmorStats(type, tier);
-        ItemStack helmet = new ItemStack(tier == 1 ? Items.IRON_HELMET : Items.DIAMOND_HELMET);
-        String tierName = tier == 1 ? "" : " II";
-
-        helmet.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Helmet" + tierName)
-                        .formatted(type.color, Formatting.BOLD));
-
-        // CUSTOM ARMOR ATTRIBUTES
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
-                .add(EntityAttributes.ARMOR,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_helmet_armor"),
-                                stats.armor * 0.2,  // Helmet = 20% of total armor
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .add(EntityAttributes.ARMOR_TOUGHNESS,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_helmet_toughness"),
-                                stats.toughness * 0.2,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .build();
-        helmet.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
-
-        List<Text> lore = buildSlayerArmorLore(type, tier, "Helmet", stats);
-        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        if (tier >= 2) {
-            helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        }
-
-        // Custom enchantments removed - armor comes without pre-applied enchantments
-
-        setCustomItemId(helmet, type.name().toLowerCase() + "_t" + tier + "_helmet");
-        return helmet;
+        return tier == 1 ? createT1Helmet(type) : createT2Helmet(type);
     }
 
     public static ItemStack createSlayerChestplate(SlayerManager.SlayerType type, int tier) {
-        ArmorStats stats = getArmorStats(type, tier);
-        ItemStack chestplate = new ItemStack(tier == 1 ? Items.IRON_CHESTPLATE : Items.DIAMOND_CHESTPLATE);
-        String tierName = tier == 1 ? "" : " II";
-
-        chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Chestplate" + tierName)
-                        .formatted(type.color, Formatting.BOLD));
-
-        // CUSTOM ARMOR ATTRIBUTES - Chestplate = 40% of total
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
-                .add(EntityAttributes.ARMOR,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_chest_armor"),
-                                stats.armor * 0.4,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.CHEST)
-                .add(EntityAttributes.ARMOR_TOUGHNESS,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_chest_toughness"),
-                                stats.toughness * 0.4,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.CHEST)
-                .build();
-        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
-
-        List<Text> lore = buildSlayerArmorLore(type, tier, "Chestplate", stats);
-        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        if (tier >= 2) {
-            chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        }
-
-        // Custom enchantments removed - armor comes without pre-applied enchantments
-
-        setCustomItemId(chestplate, type.name().toLowerCase() + "_t" + tier + "_chestplate");
-        return chestplate;
+        return tier == 1 ? createT1Chestplate(type) : createT2Chestplate(type);
     }
 
     public static ItemStack createSlayerLeggings(SlayerManager.SlayerType type, int tier) {
-        ArmorStats stats = getArmorStats(type, tier);
-        ItemStack leggings = new ItemStack(tier == 1 ? Items.IRON_LEGGINGS : Items.DIAMOND_LEGGINGS);
-        String tierName = tier == 1 ? "" : " II";
-
-        leggings.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Leggings" + tierName)
-                        .formatted(type.color, Formatting.BOLD));
-
-        // CUSTOM ARMOR ATTRIBUTES - Leggings = 25% of total (matches PIECE_MULT_LEGGINGS)
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
-                .add(EntityAttributes.ARMOR,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_legs_armor"),
-                                stats.armor * 0.25,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.LEGS)
-                .add(EntityAttributes.ARMOR_TOUGHNESS,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_legs_toughness"),
-                                stats.toughness * 0.25,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.LEGS)
-                .build();
-        leggings.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
-
-        List<Text> lore = buildSlayerArmorLore(type, tier, "Leggings", stats);
-        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        if (tier >= 2) {
-            leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        }
-
-        // Custom enchantments removed - armor comes without pre-applied enchantments
-
-        setCustomItemId(leggings, type.name().toLowerCase() + "_t" + tier + "_leggings");
-        return leggings;
+        return tier == 1 ? createT1Leggings(type) : createT2Leggings(type);
     }
 
     public static ItemStack createSlayerBoots(SlayerManager.SlayerType type, int tier) {
-        ArmorStats stats = getArmorStats(type, tier);
-        ItemStack boots = new ItemStack(tier == 1 ? Items.IRON_BOOTS : Items.DIAMOND_BOOTS);
-        String tierName = tier == 1 ? "" : " II";
-
-        boots.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal(type.displayName + " Bounty Boots" + tierName)
-                        .formatted(type.color, Formatting.BOLD));
-
-        // CUSTOM ARMOR ATTRIBUTES - Boots = 15% of total (matches PIECE_MULT_BOOTS)
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
-                .add(EntityAttributes.ARMOR,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_boots_armor"),
-                                stats.armor * 0.15,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.FEET)
-                .add(EntityAttributes.ARMOR_TOUGHNESS,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "slayer_boots_toughness"),
-                                stats.toughness * 0.15,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.FEET)
-                .build();
-        boots.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
-
-        List<Text> lore = buildSlayerArmorLore(type, tier, "Boots", stats);
-        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
-
-        if (tier >= 2) {
-            boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        }
-
-        // Custom enchantments removed - armor comes without pre-applied enchantments
-
-        setCustomItemId(boots, type.name().toLowerCase() + "_t" + tier + "_boots");
-        return boots;
+        return tier == 1 ? createT1Boots(type) : createT2Boots(type);
     }
 
     // Per-piece multipliers for distributing boss stats across armor slots
@@ -1327,22 +1179,14 @@ public class SlayerItems {
         // FIXED LORE
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§7Designation: NGL-1 \"Nightingale\"").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("§7Project Nightingale, Warden Core").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("§7integration armour. Housing a suspended").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("§7Core in a resonance cradle of Reinforced").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("§7Deepslate and sculk composite.").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[MFLUX: CRD-006 | Warden-class containment chestplate]"));
+        lore.add(Text.literal("§7Forged from the heart of The Sculk Terror."));
+        lore.add(Text.literal("§7MFLUX Field Test Status: §c§lFAILED"));
+        lore.add(Text.literal("§8Every operative deployed with this unit"));
+        lore.add(Text.literal("§8was either KIA or listed MIA within 48 hours."));
+        lore.add(Text.literal("§8Containment integrity: UNSTABLE."));
+        lore.add(Text.literal("§8Use at your own risk."));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§c108 pre-trial casualties.").formatted(Formatting.RED));
-        lore.add(Text.literal("§c16 trial subjects. 0 survivors.").formatted(Formatting.RED));
-        lore.add(Text.literal("§cMax recorded wear time: 3m 34.852s").formatted(Formatting.RED));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8\"We are not making soldiers.").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
-        lore.add(Text.literal("§8 We are making offerings.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
-        lore.add(Text.literal("§8  — Programme Lead, Trial 11").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[MFLUX: NGL-1 | Project Nightingale]").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("§8[INDESTRUCTIBLE — Destruction attempts: Failed]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
         lore.add(Text.literal("🛡 Armor: +12").formatted(Formatting.BLUE));
         lore.add(Text.literal("🛡 Toughness: +6").formatted(Formatting.BLUE));

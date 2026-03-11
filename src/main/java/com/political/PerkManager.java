@@ -559,7 +559,7 @@ public class PerkManager {
                 witheringEconomyCounter = 0;
                 for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                     CoinManager.removeCoins(player, 500);
-                    player.sendMessage(Text.literal("§c-500 coins (Withering Economy)")
+                    player.sendMessage(Text.literal("💸 The Withering Economy took 500 coins from you!")
                             .formatted(Formatting.RED), false);
                 }
             }
