@@ -1244,15 +1244,7 @@ public class AdminGui {
                     .setName(Text.literal(""))
                     .build());
         }
-        gui.setSlot(24, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
-                .setName(Text.literal("Give T2 Armor").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Give yourself T2 bounty armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("for testing purposes").formatted(Formatting.GRAY))
-                .setCallback((idx, clickType, action) -> {
-                    openT2ArmorGiveGui(player);
-                })
-                .build());
+
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("⚔ Bounty Admin Panel ⚔").formatted(Formatting.RED, Formatting.BOLD))
@@ -1268,31 +1260,31 @@ public class AdminGui {
                 .setName(Text.literal("T1 Armor (Hunter)").formatted(Formatting.BLUE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Give T1 bounty armor pieces").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Level 3 requirement").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Level " + SlayerItems.T1_ARMOR_LEVEL_REQ + " requirement").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openArmorGiveGui(player, 1))
                 .build());
 
         // Give T2 Armor
-        gui.setSlot(11, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+        gui.setSlot(11, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
                 .setName(Text.literal("T2 Armor (Bounty II)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Give T2 bounty armor pieces").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Level 8 requirement").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Level " + SlayerItems.T2_ARMOR_LEVEL_REQ + " requirement").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openArmorGiveGui(player, 2))
                 .glow()
                 .build());
 
-        // Give Special Items (existing legendary items)
+        // Give Special/Legendary Items
         gui.setSlot(12, new GuiElementBuilder(Items.ZOMBIE_HEAD)
-                .setName(Text.literal("Special/Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("★ Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• Zombie Berserker Helmet").formatted(Formatting.DARK_GREEN))
                 .addLoreLine(Text.literal("• Venomous Crawler Leggings").formatted(Formatting.DARK_RED))
-                .addLoreLine(Text.literal("• Bone Desperado's Longbow").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal("• Bone Desperado's Bow").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal("• Gelatinous Rustler Boots").formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal("• Sculk Terror Chestplate").formatted(Formatting.DARK_AQUA))
                 .addLoreLine(Text.literal(""))
@@ -1304,8 +1296,9 @@ public class AdminGui {
         gui.setSlot(13, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("Bounty Swords").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• T1 Bounty Swords (2x damage)").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• T2 Bounty Swords II (3x damage)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• T1 Swords (2x damage)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• T2 Swords II (3x damage)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• All " + SlayerManager.SlayerType.values().length + " bounty types").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSwordsGiveGui(player))
@@ -1316,17 +1309,33 @@ public class AdminGui {
                 .setName(Text.literal("Bounty Cores").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Give bounty cores (crafting material)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Includes Piglin Core").formatted(Formatting.GOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openCoresGiveGui(player))
+                .build());
+
+        // Piglin Items
+        gui.setSlot(15, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Crown of Greed").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("• Piglin Core").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• Piglin Flesh").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .glow()
+                .setCallback((idx, type, action) -> openPiglinItemsGui(player))
                 .build());
 
         // Give Other Weapons (Gavel, HPEBM, etc.)
         gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_AXE)
                 .setName(Text.literal("Other Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• Gavel").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• HPEBM").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• The Gavel").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Harvey's Stick").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Hermes Shoes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• HPEBM (all marks)").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openOtherWeaponsGui(player))
@@ -1814,6 +1823,73 @@ public class AdminGui {
 
         gui.open();
     }
+
+    // ═══════════════════════════════════════════════════════════
+// PIGLIN ITEMS GUI
+// ═══════════════════════════════════════════════════════════
+
+    private static void openPiglinItemsGui(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("👑 Piglin Items"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Crown of Greed
+        gui.setSlot(10, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Damage scales with your coins").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Lose all coins on death!").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.getInventory().insertStack(SlayerItems.createCrownOfGreed());
+                    player.sendMessage(Text.literal("✓ Gave Crown of Greed").formatted(Formatting.GREEN), false);
+                })
+                .glow()
+                .build());
+
+        // Piglin Core
+        gui.setSlot(13, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Text.literal("✦ Piglin Core ✦").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Used to craft Crown of Greed").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Dropped by Gilded Ravager boss").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.getInventory().insertStack(SlayerItems.createPiglinCore());
+                    player.sendMessage(Text.literal("✓ Gave Piglin Core").formatted(Formatting.GREEN), false);
+                })
+                .glow()
+                .build());
+
+        // Piglin Flesh
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Text.literal("Piglin Flesh").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Crafting material from Piglins").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")
+)
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.getInventory().insertStack(SlayerItems.createPiglinFlesh());
+                    player.sendMessage(Text.literal("✓ Gave Piglin Flesh").formatted(Formatting.GREEN), false);
+                })
+                .build());
+
+        // Back button
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(player))
+                .build());
+
+        gui.open();
+    }
+
     // ═══════════════════════════════════════════════════════════
 // CORES GIVE GUI
 // ═══════════════════════════════════════════════════════════
@@ -1911,46 +1987,105 @@ public class AdminGui {
 // ═══════════════════════════════════════════════════════════
 
     private static void openOtherWeaponsGui(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal("⚔ Other Weapons ⚔"));
 
         // Background
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 36; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
                     .setName(Text.literal(""))
                     .build());
         }
 
-        // Gavel
-        gui.setSlot(11, new GuiElementBuilder(Items.GOLDEN_AXE)
-                .setName(Text.literal("⚖ The Gavel").formatted(Formatting.GOLD, Formatting.BOLD))
+        // The Gavel (Mace)
+        gui.setSlot(10, new GuiElementBuilder(Items.MACE)
+                .setName(Text.literal("⚖ The Gavel (Mace)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Judge's weapon of justice").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Judicial AOE weapon (Mace)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("25 damage, 4.5 radius").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("3s cooldown").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> {
-                    player.getInventory().insertStack(CustomItemHandler.createGavel());
-                    player.sendMessage(Text.literal("✓ Gave The Gavel").formatted(Formatting.GREEN), false);
+                    player.getInventory().insertStack(CustomItemHandler.createTheGavel());
+                    player.sendMessage(Text.literal("✓ Gave The Gavel (Mace)").formatted(Formatting.GREEN), false);
                 })
                 .glow()
                 .build());
 
-        // HPEBM (High Powered Energy Beam Module)
-        gui.setSlot(13, new GuiElementBuilder(Items.BLAZE_ROD)
-                .setName(Text.literal("⚡ HPEBM").formatted(Formatting.RED, Formatting.BOLD))
+        // The Gavel (Wooden Axe)
+        gui.setSlot(11, new GuiElementBuilder(Items.WOODEN_AXE)
+                .setName(Text.literal("⚖ The Gavel (Axe)").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("High Powered Energy Beam Module").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Fires devastating laser beams").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Judicial weapon (Wooden Axe)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click for gavel strike").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> {
-                    player.getInventory().insertStack(CustomItemHandler.createHPEBM());
-                    player.sendMessage(Text.literal("✓ Gave HPEBM").formatted(Formatting.GREEN), false);
+                    player.getInventory().insertStack(CustomItemHandler.createGavel());
+                    player.sendMessage(Text.literal("✓ Gave The Gavel (Axe)").formatted(Formatting.GREEN), false);
                 })
                 .glow()
                 .build());
+
+        // Harvey's Stick
+        gui.setSlot(12, new GuiElementBuilder(Items.STICK)
+                .setName(Text.literal("Harvey's Stick").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Summons lightning on hit").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.getInventory().insertStack(CustomItemHandler.createHarveysStick());
+                    player.sendMessage(Text.literal("✓ Gave Harvey's Stick").formatted(Formatting.GREEN), false);
+                })
+                .glow()
+                .build());
+
+        // Hermes Shoes
+        gui.setSlot(13, new GuiElementBuilder(Items.IRON_BOOTS)
+                .setName(Text.literal("Hermes Shoes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Permanent Speed III while worn").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("+60% movement speed").formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.getInventory().insertStack(CustomItemHandler.createHermesShoes());
+                    player.sendMessage(Text.literal("✓ Gave Hermes Shoes").formatted(Formatting.GREEN), false);
+                })
+                .glow()
+                .build());
+
+        // HPEBM Mk.I-V
+        gui.setSlot(15, new GuiElementBuilder(Items.IRON_SHOVEL)
+                .setName(Text.literal("⚡ HPEBM (All Marks)").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Energy beam modules Mk.I–Mk.V").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Left-click: receive Mk.I through Mk.V").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Right-click: receive Ultra Overclocked").formatted(Formatting.GOLD))
+                .setCallback((idx, clickType, action) -> {
+                    if (clickType == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
+                        player.getInventory().insertStack(CustomItemHandler.createUltraOverclockedBeam());
+                        player.sendMessage(Text.literal("✓ Gave HPEBM Ultra Overclocked").formatted(Formatting.GOLD), false);
+                    } else {
+                        for (int mk = 1; mk <= 5; mk++) {
+                            player.getInventory().insertStack(CustomItemHandler.createHPEBM(mk));
+                        }
+                        player.sendMessage(Text.literal("✓ Gave HPEBM Mk.I–Mk.V").formatted(Formatting.GREEN), false);
+                    }
+                })
+                .glow()
+                .build());
+
+        // Back button
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openSlayerAdminGui(player))
+                .build());
+
+        gui.open();
     }
-        // Beam Saber (if exists)
 
     // ═══════════════════════════════════════════════════════════
 // SET PLAYER LEVEL GUI

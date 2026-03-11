@@ -67,6 +67,11 @@ public class CustomItemsGui {
             items.add(SlayerItems.createCore(type));
         }
 
+        // Piglin Items
+        items.add(SlayerItems.createCrownOfGreed());
+        items.add(SlayerItems.createPiglinCore());
+        items.add(SlayerItems.createPiglinFlesh());
+
         return items;
     }
 
