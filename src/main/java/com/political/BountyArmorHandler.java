@@ -45,6 +45,7 @@ public class BountyArmorHandler {
             tickSlimeArmorEffects(player);
             tickEndermanArmorEffects(player);
             tickWardenArmorEffects(player);
+            tickPiglinArmorEffects(player);
         }
     }
 
@@ -232,6 +233,30 @@ public class BountyArmorHandler {
                     entity.addStatusEffect(new StatusEffectInstance(
                             StatusEffects.GLOWING, 60, 0, true, false, false)); // 3s, expires naturally
                 }
+            }
+        }
+    }
+
+    // =========================================================
+    // PIGLIN ARMOR (Gilded Ravager)
+    // =========================================================
+
+    private static void tickPiglinArmorEffects(ServerPlayerEntity player) {
+        // T1 Helmet & T2 Helmet: Fire Resistance
+        String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
+        if ("piglin_t1_helmet".equals(helmetId) || "piglin_t2_helmet".equals(helmetId)) {
+            if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE, 40, 0, true, false, false));
+            }
+        }
+
+        // T1 Boots & T2 Boots: Fire Resistance
+        String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
+        if ("piglin_t1_boots".equals(bootsId) || "piglin_t2_boots".equals(bootsId)) {
+            if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE, 40, 0, true, false, false));
             }
         }
     }

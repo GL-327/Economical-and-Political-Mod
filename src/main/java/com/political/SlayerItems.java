@@ -1182,6 +1182,14 @@ public class SlayerItems {
             lore.add(Text.literal("+15% XP from " + type.displayName + " bounties").formatted(Formatting.AQUA));
         }
 
+        // Per-piece ability
+        String pieceBuff = tier == 1 ? getT1PieceBuff(type, piece) : getT2PieceBuff(type, piece);
+        if (pieceBuff != null) {
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("━━━ PIECE ABILITY ━━━").formatted(Formatting.AQUA));
+            lore.add(Text.literal("✦ " + pieceBuff).formatted(Formatting.WHITE));
+        }
+
         lore.add(Text.literal(""));
         int reqLevel = tier == 1 ? T1_ARMOR_LEVEL_REQ : T2_ARMOR_LEVEL_REQ;
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + reqLevel)
@@ -1251,7 +1259,7 @@ public class SlayerItems {
         lore.add(Text.literal("❤ Health: +12 Hearts").formatted(Formatting.RED));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("👁 ESP: See noisy entities (24 blocks)").formatted(Formatting.AQUA));
+        lore.add(Text.literal("👁 ESP: See noisy entities (64 blocks)").formatted(Formatting.AQUA));
         lore.add(Text.literal("🌙 Night Vision: Permanent").formatted(Formatting.YELLOW));
         lore.add(Text.literal("🛡 Darkness Immunity").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("🛡 Full Knockback Resistance").formatted(Formatting.WHITE));
@@ -1359,11 +1367,9 @@ public class SlayerItems {
         lore.add(Text.literal("thousand fallen archers.").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("🏹 Homing Arrows").formatted(Formatting.WHITE));
-        lore.add(Text.literal("⚡ Instant Fire (Left-Click)").formatted(Formatting.AQUA));
-        lore.add(Text.literal("⏱ 0.6s Cooldown").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚡ +50% Arrow Speed").formatted(Formatting.AQUA));
-        lore.add(Text.literal("💀 Headshot: 500% damage").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal("🏹 Standard arrow mechanics").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ +2x damage to Skeleton Bosses").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⏱ Infinite Durability").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Research Division").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("§8[MFLUX: CRD-003 reanimated projectile weapon]").formatted(Formatting.DARK_GRAY));
@@ -1646,8 +1652,6 @@ public class SlayerItems {
                 .append(Text.literal("+4 Hearts").formatted(Formatting.RED)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.RED));
-        lore.add(Text.literal("❤ Max Health: ").formatted(Formatting.WHITE)
-                .append(Text.literal("-50%").formatted(Formatting.DARK_RED, Formatting.BOLD)));
         lore.add(Text.literal("⚔ Damage Dealt: ").formatted(Formatting.WHITE)
                 .append(Text.literal("+300% MORE").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
@@ -2062,7 +2066,7 @@ public class SlayerItems {
                 case "Helmet"     -> "Fire Resistance";
                 case "Chestplate" -> "+2 Hearts Health";
                 case "Leggings"   -> "+5% Movement Speed";
-                case "Boots"      -> "Fire Immune (Lava Walk)";
+                case "Boots"      -> "Fire Resistance";
                 default           -> null;
             };
         };
@@ -2191,14 +2195,14 @@ public class SlayerItems {
                 case "Helmet"     -> "Darkness Immunity + Vibration Sense (wider range)";
                 case "Chestplate" -> "+25% Knockback Resistance + Sonic Pulse (Shift+Attack)";
                 case "Leggings"   -> "+25% Knockback Resistance + +6 Hearts Health";
-                case "Boots"      -> "+10% Knockback Resistance + Silent Steps";
+                case "Boots"      -> "+10% Knockback Resistance";
                 default           -> null;
             };
             case PIGLIN -> switch (piece) {
-                case "Helmet"     -> "Fire Resistance + Loot Bonus";
-                case "Chestplate" -> "+4 Hearts Health + Gold Find";
-                case "Leggings"   -> "+10% Movement Speed + Barter Luck";
-                case "Boots"      -> "Fire Immune + +15% Movement Speed";
+                case "Helmet"     -> "Fire Resistance";
+                case "Chestplate" -> "+4 Hearts Health";
+                case "Leggings"   -> "+10% Movement Speed";
+                case "Boots"      -> "Fire Resistance + +15% Movement Speed";
                 default           -> null;
             };
         };
