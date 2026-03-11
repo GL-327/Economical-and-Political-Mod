@@ -6,7 +6,7 @@
     "AbstractFurnaceBlockEntityMixin",
     "AuctionNPCDamageMixin",
     "CropBlockMixin",
-    "EnchantmentScreenHandlerMixin",
+
     "EntityLoadMixin",
     "ExperienceOrbMixin",
     "LivingEntityMixin",
@@ -33,7 +33,7 @@
     "TotemDisableMixin",
     "BountyDefenseMixin",
     "BountyDamageMixin",
-    "CustomEnchantDamageMixin",
+
     "ArrowDamageMixin"
   ],
   "injectors": {

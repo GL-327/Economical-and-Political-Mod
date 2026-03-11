@@ -20,7 +20,6 @@ public class SlayerArmorHandler {
     private static final Identifier SLAYER_HEALTH_ID = Identifier.of("political", "slayer_health");
     private static final Identifier SLAYER_KB_ID = Identifier.of("political", "slayer_knockback");
     private static final Identifier SLAYER_SPEED_ID = Identifier.of("political", "slayer_speed");
-    private static final Identifier VITALITY_ID = Identifier.of("political", "custom_vitality");
 
     /**
      * Calculate total boss damage reduction from armor.
@@ -225,9 +224,7 @@ public class SlayerArmorHandler {
         applyModifier(player, EntityAttributes.KNOCKBACK_RESISTANCE, SLAYER_KB_ID, bonusKnockbackResist);
         applyModifier(player, EntityAttributes.MOVEMENT_SPEED, SLAYER_SPEED_ID, bonusSpeed);
 
-        // Apply Vitality enchantment bonus (+4 HP / +2 hearts per level)
-        double vitalityBonus = CustomEnchantmentManager.getVitalityHealthBonus(player);
-        applyModifier(player, EntityAttributes.MAX_HEALTH, VITALITY_ID, vitalityBonus);
+        // Vitality enchantment removed — custom enchantments are disabled.
     }
 
     private static void applyModifier(ServerPlayerEntity player,

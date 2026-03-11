@@ -1898,28 +1898,65 @@ public class CommandRegistry {
                     String uuid = player.getUuidAsString();
 
                     player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
-                    player.sendMessage(Text.literal("        MOD COMMANDS").formatted(Formatting.YELLOW, Formatting.BOLD));
+                    player.sendMessage(Text.literal("        ⚔ CIVILCRAFT COMMANDS ⚔").formatted(Formatting.YELLOW, Formatting.BOLD));
                     player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+                    player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
+                    player.sendMessage(Text.literal("  § Economy").formatted(Formatting.AQUA, Formatting.BOLD));
                     player.sendMessage(Text.literal("/shop").formatted(Formatting.GREEN)
-                            .append(Text.literal(" - Buy and sell items").formatted(Formatting.GRAY)));
-                    player.sendMessage(Text.literal("/recipes").formatted(Formatting.GREEN)
-                            .append(Text.literal(" - View crafting recipes").formatted(Formatting.GRAY)));
+                            .append(Text.literal(" — Buy and sell items, convert credits→coins").formatted(Formatting.GRAY)));
                     player.sendMessage(Text.literal("/bank").formatted(Formatting.GREEN)
-                            .append(Text.literal(" - Banking system (deposits, savings, loans)").formatted(Formatting.GRAY)));
-                    player.sendMessage(Text.literal("/intercom").formatted(Formatting.GREEN)
-                            .append(Text.literal(" - Intercom system").formatted(Formatting.GRAY)));
+                            .append(Text.literal(" — Deposits, savings accounts & loans").formatted(Formatting.GRAY)));
                     player.sendMessage(Text.literal("/credits").formatted(Formatting.GREEN)
-                            .append(Text.literal(" - Check your credit balance").formatted(Formatting.GRAY)));
-                    player.sendMessage(Text.literal("/bounty").formatted(Formatting.GREEN)
-                            .append(Text.literal(" - View bounty quests").formatted(Formatting.GRAY)));
+                            .append(Text.literal(" — Check your credit balance").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
+                    player.sendMessage(Text.literal("  ⚔ Bounty Hunting").formatted(Formatting.RED, Formatting.BOLD));
+                    player.sendMessage(Text.literal("/bounties").formatted(Formatting.GREEN)
+                            .append(Text.literal(" — View bounty board & start quests").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/recipes").formatted(Formatting.GREEN)
+                            .append(Text.literal(" — View all crafting recipes").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
+                    player.sendMessage(Text.literal("  ⚖ Government").formatted(Formatting.YELLOW, Formatting.BOLD));
+                    player.sendMessage(Text.literal("/vote").formatted(Formatting.GREEN)
+                            .append(Text.literal(" — Vote in elections").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/intercom").formatted(Formatting.GREEN)
+                            .append(Text.literal(" — Broadcast a server-wide intercom message").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
+                    player.sendMessage(Text.literal("  § Other").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+                    player.sendMessage(Text.literal("/modhelp").formatted(Formatting.GREEN)
+                            .append(Text.literal(" — Show this help message").formatted(Formatting.GRAY)));
 
-                    if (uuid.equals(DataManager.getChair())) {
-                        player.sendMessage(Text.literal("/chair").formatted(Formatting.AQUA)
-                                .append(Text.literal(" - Chair government menu").formatted(Formatting.GRAY)));
+                    // Leader-only commands
+                    boolean isChair = uuid.equals(DataManager.getChair());
+                    boolean isVice = uuid.equals(DataManager.getViceChair());
+                    boolean isDictator = DictatorManager.isDictator(uuid);
+
+                    if (isChair || isVice || isDictator) {
+                        player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
+                        player.sendMessage(Text.literal("  👑 Leadership Commands").formatted(Formatting.GOLD, Formatting.BOLD));
                     }
-                    if (uuid.equals(DataManager.getViceChair())) {
+                    if (isChair) {
+                        player.sendMessage(Text.literal("/chair").formatted(Formatting.AQUA)
+                                .append(Text.literal(" — Chair government panel").formatted(Formatting.GRAY)));
+                    }
+                    if (isVice) {
                         player.sendMessage(Text.literal("/vicechair").formatted(Formatting.AQUA)
-                                .append(Text.literal(" - Vice Chair government menu").formatted(Formatting.GRAY)));
+                                .append(Text.literal(" — Vice Chair government panel").formatted(Formatting.GRAY)));
+                    }
+                    if (isDictator) {
+                        player.sendMessage(Text.literal("/dictator").formatted(Formatting.RED)
+                                .append(Text.literal(" — Dictator control panel").formatted(Formatting.GRAY)));
+                    }
+
+                    // Admin-only commands (only shown to operators)
+                    if (CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK).test(context.getSource())) {
+                        player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
+                        player.sendMessage(Text.literal("  🔧 Admin Commands").formatted(Formatting.DARK_RED, Formatting.BOLD));
+                        player.sendMessage(Text.literal("/bountyadmin").formatted(Formatting.RED)
+                                .append(Text.literal(" — Bounty admin management").formatted(Formatting.GRAY)));
+                        player.sendMessage(Text.literal("/setrecipe").formatted(Formatting.RED)
+                                .append(Text.literal(" — Configure custom crafting recipes").formatted(Formatting.GRAY)));
+                        player.sendMessage(Text.literal("/customitems").formatted(Formatting.RED)
+                                .append(Text.literal(" — View/give custom items").formatted(Formatting.GRAY)));
                     }
 
                     player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
