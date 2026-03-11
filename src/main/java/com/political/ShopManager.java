@@ -734,6 +734,19 @@ public class ShopManager {
         initializePrices();
     }
 
+    /** Resets a single item's price to its default (removes custom override and re-enables it). */
+    public static void resetItemPrice(Item item) {
+        customPriceOverrides.remove(item);
+        disabledItems.remove(item);
+        // Re-run initializePrices would reset everything; instead we just remove the override
+        // so the item falls back to its default in SELL_PRICES (if any was set at init).
+        // We need to restore the original default — re-initialize only this item's price.
+        initializePrices(); // Reinitializes all defaults, then re-apply remaining overrides
+        for (Map.Entry<Item, Integer> e : customPriceOverrides.entrySet()) {
+            SELL_PRICES.put(e.getKey(), e.getValue());
+        }
+    }
+
     public static Map<Item, Integer> getCustomOverrides() {
         return new LinkedHashMap<>(customPriceOverrides);
     }

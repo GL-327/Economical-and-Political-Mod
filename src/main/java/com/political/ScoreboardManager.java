@@ -574,6 +574,15 @@ public class ScoreboardManager {
             case "warden_t2_leggings"     -> "+25% KB Resist §7| +6 Hearts";
             case "warden_t1_boots"        -> "Vibration Sense (8 blocks, 3s glow)";
             case "warden_t2_boots"        -> "+10% KB Resist";
+            // ── PIGLIN ────────────────────────────────────────────────────────
+            case "piglin_t1_helmet"       -> "Fire Resist";
+            case "piglin_t2_helmet"       -> "Fire Resist §7| §6Loot Bonus";
+            case "piglin_t1_chestplate"   -> "+2 Hearts";
+            case "piglin_t2_chestplate"   -> "+4 Hearts §7| §6Gold Find";
+            case "piglin_t1_leggings"     -> "+5% Speed";
+            case "piglin_t2_leggings"     -> "+10% Speed §7| §6Barter Luck";
+            case "piglin_t1_boots"        -> "Fire Immune (lava walk)";
+            case "piglin_t2_boots"        -> "Fire Immune §7| +15% Speed";
             default -> null;
         };
     }

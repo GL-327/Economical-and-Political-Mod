@@ -1554,9 +1554,15 @@ public class CommandRegistry {
     // SHOP PRICE COMMANDS (OP Level 4)
     // ============================================================
     private static void registerShopPriceCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        // /setprice <item_id> <sellPrice>
+        // /setprice (no args) → opens GUI
         dispatcher.register(CommandManager.literal("setprice")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(ctx -> {
+                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+                    if (player == null) return 0;
+                    SetPriceGui.openMainMenu(player);
+                    return 1;
+                })
                 .then(CommandManager.argument("item", com.mojang.brigadier.arguments.StringArgumentType.word())
                         .then(CommandManager.argument("sellPrice", IntegerArgumentType.integer(0))
                                 .executes(ctx -> {

@@ -783,37 +783,6 @@ public class SlayerItems {
     private static final double T2_CHESTPLATE_HEALTH_BOOST = 4.0; // +2 hearts
 
 
-    private static List<Text> buildArmorLore(SlayerManager.SlayerType type, int tier, String piece) {
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-
-        if (tier == 1) {
-            lore.add(Text.literal("⚔ Bounty Armor").formatted(Formatting.GRAY));
-        } else {
-            lore.add(Text.literal("⚔ Upgraded Bounty Armor").formatted(Formatting.DARK_PURPLE));
-        }
-
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Set Bonus (" + type.displayName + "):").formatted(Formatting.GOLD));
-
-        int damageReduction = tier == 1 ? 10 : 25;
-        int bonusHealth = tier == 1 ? 2 : 5;
-
-        lore.add(Text.literal("  -" + damageReduction + "% damage from " + type.displayName + "s").formatted(Formatting.GREEN));
-        lore.add(Text.literal("  +" + bonusHealth + " hearts vs " + type.displayName + " bosses").formatted(Formatting.GREEN));
-
-        if (tier >= 2) {
-            lore.add(Text.literal("  +15% XP from " + type.displayName + " bounties").formatted(Formatting.AQUA));
-        }
-
-        lore.add(Text.literal(""));
-
-        int reqLevel = tier == 1 ? T1_ARMOR_LEVEL_REQ : T2_ARMOR_LEVEL_REQ;
-        lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + reqLevel)
-                .formatted(Formatting.RED));
-
-        return lore;
-    }
 
 // ============================================================
 // ARMOR SET HELPERS
@@ -2089,7 +2058,13 @@ public class SlayerItems {
                 case "Boots"      -> "Vibration Sense: Hostile Mobs Glow within 8 blocks (refreshes every second)";
                 default           -> null;
             };
-            case PIGLIN -> null;
+            case PIGLIN -> switch (piece) {
+                case "Helmet"     -> "Fire Resistance";
+                case "Chestplate" -> "+2 Hearts Health";
+                case "Leggings"   -> "+5% Movement Speed";
+                case "Boots"      -> "Fire Immune (Lava Walk)";
+                default           -> null;
+            };
         };
     }
 
@@ -2219,7 +2194,13 @@ public class SlayerItems {
                 case "Boots"      -> "+10% Knockback Resistance + Silent Steps";
                 default           -> null;
             };
-            case PIGLIN -> null;
+            case PIGLIN -> switch (piece) {
+                case "Helmet"     -> "Fire Resistance + Loot Bonus";
+                case "Chestplate" -> "+4 Hearts Health + Gold Find";
+                case "Leggings"   -> "+10% Movement Speed + Barter Luck";
+                case "Boots"      -> "Fire Immune + +15% Movement Speed";
+                default           -> null;
+            };
         };
     }
 
