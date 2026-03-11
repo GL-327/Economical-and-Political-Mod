@@ -1817,6 +1817,22 @@ public class AdminGui {
                 .glow()
                 .build());
 
+        // Ender Phase Helmet
+        gui.setSlot(13, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("⟡ Ender Phase Helmet").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Ender Warp (Right-click teleport)").formatted(Formatting.LIGHT_PURPLE))
+                .addLoreLine(Text.literal("Ender Phase Mode (Sneak+Right-click)").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("Requires Enderman Lvl 7").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.getInventory().insertStack(SlayerItems.createEnderPhaseHelmet());
+                    player.sendMessage(Text.literal("✓ Gave Ender Phase Helmet").formatted(Formatting.GREEN), false);
+                })
+                .glow()
+                .build());
+
         // Back button
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.GRAY))

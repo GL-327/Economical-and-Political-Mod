@@ -168,7 +168,7 @@ public class SlayerArmorHandler {
                     switch (cid) {
                         // ── ZOMBIE ──────────────────────────────────────
                         case "zombie_t1_helmet"      -> bonusHealth += 4.0;   // +2 hearts
-                        case "zombie_t2_helmet"      -> bonusHealth += 8.0;   // +4 hearts
+                        // zombie_t2_helmet: no health bonus (Hunger Immunity + Fire Resist only)
                         case "zombie_t1_chestplate"  -> bonusHealth += 4.0;   // +2 hearts
                         case "zombie_t2_chestplate"  -> bonusHealth += 8.0;   // +4 hearts
                         case "zombie_t1_boots"       -> bonusKnockbackResist += 0.1;  // +10%
@@ -202,7 +202,7 @@ public class SlayerArmorHandler {
                             bonusKnockbackResist += 0.25; // +25%
                             bonusHealth += 12.0;           // +6 hearts
                         }
-                        case "warden_t1_boots"       -> bonusKnockbackResist += 0.05; // +5% KB resist
+                        // warden_t1_boots: Vibration Sense only — no KB resist
                         case "warden_t2_boots"       -> bonusKnockbackResist += 0.10; // +10%
                         // ── PIGLIN ───────────────────────────────────────
                         case "piglin_t1_chestplate"  -> bonusHealth += 4.0;    // +2 hearts

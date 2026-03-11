@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Max sidebar lines — large enough to accommodate all header + gear + buff lines (max ~25)
-    private static final int MAX_LINES = 35;
+    // Design limit: keep sidebar at 15 lines for readability and to guarantee the footer is always visible
+    private static final int MAX_LINES = 15;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -321,8 +321,16 @@ public class ScoreboardManager {
 
         // Lines 14-15: Footer
         String footSep = SEPARATOR_FRAMES[(animFrame + SEPARATOR_FRAMES.length / 2) % SEPARATOR_FRAMES.length];
-        lines.add(footSep);
-        lines.add("§eplay.civilcraft.net");
+        List<String> footer = new ArrayList<>();
+        footer.add(footSep);
+        footer.add("§eplay.civilcraft.net");
+
+        // Trim content to fit MAX_LINES, always preserving the footer
+        int maxContent = MAX_LINES - footer.size();
+        while (lines.size() > maxContent) {
+            lines.remove(lines.size() - 1);
+        }
+        lines.addAll(footer);
 
         return lines;
     }
@@ -457,25 +465,50 @@ public class ScoreboardManager {
             }
         }
 
-        // Apply set bonus for each type using the highest tier detected
+        // Apply set bonus for each type using the highest tier detected.
+        // Use a single pass per type: count pieces and accumulate per-piece contributions together.
+        String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
         for (Map.Entry<SlayerManager.SlayerType, Integer> entry : highestTier.entrySet()) {
             SlayerManager.SlayerType type = entry.getKey();
             int tier = entry.getValue();
             SlayerItems.ArmorStats armorStats = SlayerItems.getArmorStats(type, tier);
             int[] s = stats.computeIfAbsent(type, k -> new int[3]);
-            // Boss-specific: full set cap (60% T1, 80% T2) is the specific component
-            int capPct = tier == 2 ? 80 : 60;
-            s[1] = Math.max(s[1], capPct);
-            // Universal: full allBossReduction for the tier
-            s[2] += (int)(armorStats.allBossReduction * 100);
+            String pfx = type.name().toLowerCase();
+
+            // Single loop: count equipped pieces and accumulate per-piece contributions
+            int pieces = 0;
+            int bossContrib = 0;
+            int allContrib = 0;
+            for (int pi = 0; pi < armorSlots.length; pi++) {
+                ItemStack armor = armorSlots[pi];
+                if (armor.isEmpty()) continue;
+                String cid = SlayerItems.getCustomItemId(armor);
+                if (cid == null) continue;
+                if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) {
+                    pieces++;
+                    double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
+                    bossContrib += (int) Math.round(armorStats.bossReduction * mult * 100);
+                    allContrib  += (int) Math.round(armorStats.allBossReduction * mult * 100);
+                }
+            }
+
+            if (pieces >= 4) {
+                // Full set bonus: apply cap (60% T1, 80% T2) instead of plain sum
+                int capPct = tier == 2 ? 80 : 60;
+                s[1] = Math.max(s[1], capPct);
+                s[2] += (int)(armorStats.allBossReduction * 100);
+            } else {
+                // Partial set: sum of the per-piece contributions only
+                s[1] = Math.max(s[1], bossContrib);
+                s[2] += allContrib;
+            }
         }
 
-        // Compute final combined defence (universal + specific, capped at 85) into s[1]
-        for (int[] s : stats.values()) {
-            int combined = Math.min(85, s[2] + s[1]);
-            s[1] = combined; // s[1] now = total specific (vs matching boss, = combined)
-            // s[2] remains as universal-only value
-        }
+        // Keep s[1] as boss-specific defence and s[2] as universal — do NOT combine them.
+        // This matches the lore which lists them separately:
+        //   "This piece: -X% vs Boss / -Y% vs All Bosses"
+        // The actual in-game damage model adds specificDef + universalDef when fighting the
+        // matching boss, so the player can mentally add s[1] + s[2] for the full picture.
 
         // Remove entries that have no meaningful stats to display
         stats.entrySet().removeIf(e -> e.getValue()[0] == 0 && e.getValue()[1] == 0 && e.getValue()[2] == 0);
@@ -525,6 +558,7 @@ public class ScoreboardManager {
             case "zombie_berserker_helmet" -> "Berserker §7| +300% Dmg";
             case "slime_boots"             -> "No Fall Dmg §7| Death Save";
             case "warden_chestplate"       -> "KB Immune §7| NightVis §7| ESP 64blk";
+            case "ender_phase_helmet"      -> "Ender Warp §7| Phase Mode §7| §d+4 Hearts";
             // ── ZOMBIE ───────────────────────────────────────────────────────
             case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";

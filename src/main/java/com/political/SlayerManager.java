@@ -963,6 +963,12 @@ public class SlayerManager {
             player.sendMessage(Text.literal("✦ Piglin Flesh dropped!").formatted(Formatting.YELLOW), false);
         }
 
+        // Ender Phase Helmet drop (for ENDERMAN type, T4+)
+        double enderHelmetChance = getArmorDropChance(type, tier);
+        if (type == SlayerType.ENDERMAN && enderHelmetChance > 0 && rand.nextDouble() * 100 < enderHelmetChance) {
+            drops.add(SlayerItems.createEnderPhaseHelmet());
+        }
+
         // Coins based on tier (reduced)
         int coinDrop = tier * 25 * (int) type.difficultyMultiplier;
         CoinManager.giveCoinsQuiet(player, coinDrop);

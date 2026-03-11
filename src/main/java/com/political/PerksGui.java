@@ -79,6 +79,13 @@ public class PerksGui {
             case "AUCTION_TAX_FREE"            -> Items.GOLD_BLOCK;
             case "AUCTION_TAX_REDUCTION"       -> Items.GOLD_INGOT;
             case "AUCTION_TAX_INCREASE"        -> Items.IRON_INGOT;
+            // Bounty perks
+            case "BOUNTY_HUNTERS_ZEAL"         -> Items.BLAZE_POWDER;
+            case "SLAYERS_FORTUNE"             -> Items.NETHER_STAR;
+            case "QUICK_CONTRACTS"             -> Items.CLOCK;
+            case "VETERANS_DISCOUNT"           -> Items.EMERALD_BLOCK;
+            case "BOUNTY_DROUGHT"              -> Items.BARRIER;
+            case "WEAKENED_PREY"               -> Items.SPIDER_SPAWN_EGG;
             default                            -> Items.PAPER;
         };
     }
