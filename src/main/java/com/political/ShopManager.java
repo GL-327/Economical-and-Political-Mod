@@ -19,6 +19,9 @@ public class ShopManager {
     // Item prices (sell price - buy price is 3x)
     private static final Map<Item, Integer> SELL_PRICES = new LinkedHashMap<>();
 
+    // Default prices snapshot (set once at initialization, never mutated)
+    private static final Map<Item, Integer> DEFAULT_PRICES = new LinkedHashMap<>();
+
     // Shop categories
     public static final Map<String, List<Item>> CATEGORIES = new LinkedHashMap<>();
 
@@ -218,6 +221,7 @@ public class ShopManager {
     }
 
     private static void initializePrices() {
+        SELL_PRICES.clear();
         // ===== BUILDING BLOCKS (very cheap) =====
         setPrice(Items.STONE, 1);
         setPrice(Items.COBBLESTONE, 1);
@@ -697,6 +701,10 @@ public class ShopManager {
         setPrice(Items.END_CRYSTAL, 500);
         setPrice(Items.RESPAWN_ANCHOR, 200);
         setPrice(Items.LODESTONE, 300);
+        // Snapshot defaults the first time (when DEFAULT_PRICES is empty)
+        if (DEFAULT_PRICES.isEmpty()) {
+            DEFAULT_PRICES.putAll(SELL_PRICES);
+        }
     }
 
     private static void setPrice(Item item, int sellPrice) {
@@ -738,12 +746,11 @@ public class ShopManager {
     public static void resetItemPrice(Item item) {
         customPriceOverrides.remove(item);
         disabledItems.remove(item);
-        // Re-run initializePrices would reset everything; instead we just remove the override
-        // so the item falls back to its default in SELL_PRICES (if any was set at init).
-        // We need to restore the original default — re-initialize only this item's price.
-        initializePrices(); // Reinitializes all defaults, then re-apply remaining overrides
-        for (Map.Entry<Item, Integer> e : customPriceOverrides.entrySet()) {
-            SELL_PRICES.put(e.getKey(), e.getValue());
+        // Restore the original default price, or remove if item had no default
+        if (DEFAULT_PRICES.containsKey(item)) {
+            SELL_PRICES.put(item, DEFAULT_PRICES.get(item));
+        } else {
+            SELL_PRICES.remove(item);
         }
     }
 

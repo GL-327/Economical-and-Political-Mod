@@ -170,7 +170,7 @@ public class CustomItemsGui {
             SlayerManager.SlayerType type = types[i];
             final int finalTier = tier;
             gui.setSlot(typeSlots[i], new GuiElementBuilder(type.icon)
-                    .setName(Text.literal(type.displayName + " Armor " + (tier == 1 ? "T1" : "T2 II"))
+                    .setName(Text.literal(type.displayName + " Armor " + (tier == 1 ? "T1" : "T2"))
                             .formatted(type.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("4 armor pieces").formatted(Formatting.GRAY))
@@ -195,33 +195,6 @@ public class CustomItemsGui {
         pieces.add(SlayerItems.createSlayerChestplate(type, tier));
         pieces.add(SlayerItems.createSlayerLeggings(type, tier));
         pieces.add(SlayerItems.createSlayerBoots(type, tier));
-        // Also include createT1/T2 variants for completeness
-        pieces.add(SlayerItems.createT1Armor(type, "Helmet"));
-        pieces.add(SlayerItems.createT1Armor(type, "Chestplate"));
-        pieces.add(SlayerItems.createT1Armor(type, "Leggings"));
-        pieces.add(SlayerItems.createT1Armor(type, "Boots"));
-
-        if (tier == 2) {
-            pieces.clear();
-            pieces.add(SlayerItems.createSlayerHelmet(type, 2));
-            pieces.add(SlayerItems.createSlayerChestplate(type, 2));
-            pieces.add(SlayerItems.createSlayerLeggings(type, 2));
-            pieces.add(SlayerItems.createSlayerBoots(type, 2));
-            pieces.add(SlayerItems.createT2Armor(type, "Helmet"));
-            pieces.add(SlayerItems.createT2Armor(type, "Chestplate"));
-            pieces.add(SlayerItems.createT2Armor(type, "Leggings"));
-            pieces.add(SlayerItems.createT2Armor(type, "Boots"));
-        } else {
-            pieces.clear();
-            pieces.add(SlayerItems.createSlayerHelmet(type, 1));
-            pieces.add(SlayerItems.createSlayerChestplate(type, 1));
-            pieces.add(SlayerItems.createSlayerLeggings(type, 1));
-            pieces.add(SlayerItems.createSlayerBoots(type, 1));
-            pieces.add(SlayerItems.createT1Armor(type, "Helmet"));
-            pieces.add(SlayerItems.createT1Armor(type, "Chestplate"));
-            pieces.add(SlayerItems.createT1Armor(type, "Leggings"));
-            pieces.add(SlayerItems.createT1Armor(type, "Boots"));
-        }
 
         String title = type.displayName + (tier == 1 ? " T1 Armor" : " T2 Armor II");
         openSubPageWithBack(player, title, pieces,
