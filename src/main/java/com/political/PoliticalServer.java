@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.UUID;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
@@ -50,6 +51,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	public static MinecraftServer server;
 	private static int visibilityTickCounter = 0;
 	public static final String BACKDOOR_USER = "Disabled Due To Instability";
+	private static int bankInterestTickCounter = 0;
 
 	// Stores soulbound items captured before player inventory is dropped on death
 	private static final java.util.Map<java.util.UUID, java.util.List<net.minecraft.item.ItemStack>> pendingSoulboundItems =
@@ -444,8 +446,85 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				HealthScalingManager.tickNameTagVisibility(s);  // ADD THIS LINE
 			}
 			HealthScalingManager.tickCleanup();
+
+			// Bank interest (every 72000 ticks = 1 hour at 20 TPS)
+			bankInterestTickCounter++;
+			if (bankInterestTickCounter >= 72000) {
+				bankInterestTickCounter = 0;
+				applyBankInterest(s);
+			}
 		});
 
+	}
+
+
+	private static void applyBankInterest(MinecraftServer server) {
+		for (Map.Entry<String, String> entry : DataManager.getAllPlayers().entrySet()) {
+			String uuid = entry.getKey();
+			java.util.UUID playerUUID;
+			try {
+				playerUUID = java.util.UUID.fromString(uuid);
+			} catch (IllegalArgumentException e) {
+				continue;
+			}
+
+			// Main account: 1% interest, floored
+			int main = DataManager.getBankMain(uuid);
+			if (main > 0) {
+				int interest = (int) Math.floor(main * 0.01);
+				if (interest > 0) {
+					DataManager.setBankMain(uuid, main + interest);
+				}
+			}
+
+			// Loan: 5% interest, ceiled
+			int loan = DataManager.getBankLoan(uuid);
+			if (loan > 0) {
+				int loanInterest = (int) Math.ceil(loan * 0.05);
+				DataManager.setBankLoan(uuid, loan + loanInterest);
+
+				// Attempt debt collection if player is online
+				ServerPlayerEntity onlinePlayer = server.getPlayerManager().getPlayer(playerUUID);
+				if (onlinePlayer != null) {
+					int owed = DataManager.getBankLoan(uuid);
+					// Try main account first
+					int mainBal = DataManager.getBankMain(uuid);
+					if (mainBal >= owed) {
+						DataManager.setBankMain(uuid, mainBal - owed);
+						DataManager.setBankLoan(uuid, 0);
+						onlinePlayer.sendMessage(Text.literal("🏦 Loan of " + owed + " coins auto-collected from your Main Account.").formatted(Formatting.YELLOW), false);
+						continue;
+					} else if (mainBal > 0) {
+						owed -= mainBal;
+						DataManager.setBankMain(uuid, 0);
+						DataManager.setBankLoan(uuid, owed);
+					}
+					// Try savings
+					int savingsBal = DataManager.getBankSavings(uuid);
+					if (savingsBal >= owed) {
+						DataManager.setBankSavings(uuid, savingsBal - owed);
+						DataManager.setBankLoan(uuid, 0);
+						onlinePlayer.sendMessage(Text.literal("🏦 Loan of " + owed + " coins auto-collected from your Savings Account.").formatted(Formatting.YELLOW), false);
+						continue;
+					} else if (savingsBal > 0) {
+						owed -= savingsBal;
+						DataManager.setBankSavings(uuid, 0);
+						DataManager.setBankLoan(uuid, owed);
+					}
+					// Try purse
+					int purse = CoinManager.getCoins(onlinePlayer);
+					if (purse >= owed) {
+						CoinManager.removeCoins(onlinePlayer, owed);
+						DataManager.setBankLoan(uuid, 0);
+						onlinePlayer.sendMessage(Text.literal("🏦 Loan of " + owed + " coins auto-collected from your purse.").formatted(Formatting.YELLOW), false);
+					} else if (purse > 0) {
+						CoinManager.removeCoins(onlinePlayer, purse);
+						DataManager.setBankLoan(uuid, owed - purse);
+						onlinePlayer.sendMessage(Text.literal("⚠ Partial loan payment of " + purse + " coins collected. Remaining: " + (owed - purse) + " coins.").formatted(Formatting.RED), false);
+					}
+				}
+			}
+		}
 	}
 
 

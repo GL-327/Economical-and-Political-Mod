@@ -62,6 +62,14 @@ public class CommandRegistry {
         registerCustomMob(dispatcher);
         registerModHelp(dispatcher);
 
+        dispatcher.register(CommandManager.literal("bank")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    BankGui.open(player);
+                    return 1;
+                }));
+
         dispatcher.register(CommandManager.literal("setrecipe")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .executes(context -> {
