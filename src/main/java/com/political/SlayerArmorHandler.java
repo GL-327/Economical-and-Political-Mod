@@ -22,9 +22,12 @@ public class SlayerArmorHandler {
     private static final Identifier SLAYER_SPEED_ID = Identifier.of("political", "slayer_speed");
 
     /**
-     * Calculate total boss damage reduction from armor.
+     * Calculate total boss-specific damage reduction from standard T1/T2 armor sets only.
      * Uses per-piece ArmorStats values weighted by slot (Helmet 20%, Chest 40%, Legs 25%, Boots 15%)
-     * to exactly match what the per-piece lore displays (Items #5 and #18).
+     * to exactly match what the per-piece lore displays.
+     *
+     * NOTE: Special legendary pieces (Berserker Helmet, Spider Leggings, Slime Boots, Warden
+     * Chestplate) are intentionally excluded here — they are handled directly by BountyDefenseMixin.
      */
     public static float getBossDamageReduction(ServerPlayerEntity player, SlayerManager.SlayerType bossType) {
         float reduction = 0.0f;
@@ -37,6 +40,13 @@ public class SlayerArmorHandler {
 
         for (int i = 0; i < slots.length; i++) {
             ItemStack stack = player.getEquippedStack(slots[i]);
+
+            // Skip special legendary pieces — handled separately in BountyDefenseMixin
+            if (SlayerItems.isZombieBerserkerHelmet(stack) || SlayerItems.isSpiderLeggings(stack)
+                    || SlayerItems.isSlimeBoots(stack) || SlayerItems.isWardenChestplate(stack)) {
+                continue;
+            }
+
             Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
             if (customName == null) continue;
             String name = customName.getString();
@@ -68,6 +78,49 @@ public class SlayerArmorHandler {
         // Cap at 80% for T2, 60% for T1 only
         float cap = t2MatchingPieces > 0 ? 0.80f : 0.60f;
         return Math.min(cap, reduction);
+    }
+
+    /**
+     * Calculate the universal (all-boss) damage reduction from standard T1/T2 armor sets only.
+     * Each armor piece contributes its allBossReduction weighted by slot.
+     * Special legendary pieces are excluded (handled by BountyDefenseMixin).
+     */
+    public static float getUniversalBossReduction(ServerPlayerEntity player) {
+        float reduction = 0.0f;
+
+        float[] weights = {0.20f, 0.40f, 0.25f, 0.15f}; // HEAD, CHEST, LEGS, FEET
+        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+
+        for (int i = 0; i < slots.length; i++) {
+            ItemStack stack = player.getEquippedStack(slots[i]);
+
+            // Skip special legendary pieces — handled separately in BountyDefenseMixin
+            if (SlayerItems.isZombieBerserkerHelmet(stack) || SlayerItems.isSpiderLeggings(stack)
+                    || SlayerItems.isSlimeBoots(stack) || SlayerItems.isWardenChestplate(stack)) {
+                continue;
+            }
+
+            Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
+            if (customName == null) continue;
+            String name = customName.getString();
+
+            // Match ANY slayer armor type for universal reduction
+            SlayerManager.SlayerType armorType = null;
+            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+                if (isMatchingSlayerArmor(name, type)) {
+                    armorType = type;
+                    break;
+                }
+            }
+            if (armorType == null) continue;
+
+            boolean isT2 = name.contains(" II");
+            int tier = isT2 ? 2 : 1;
+            SlayerItems.ArmorStats stats = SlayerItems.getArmorStats(armorType, tier);
+            reduction += (float) stats.allBossReduction * weights[i];
+        }
+
+        return Math.min(0.60f, reduction); // Cap universal-only reduction at 60%
     }
 
     private static boolean isMatchingSlayerArmor(String name, SlayerManager.SlayerType type) {

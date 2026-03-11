@@ -3,172 +3,117 @@ package com.political.mixin;
 import com.political.SlayerArmorHandler;
 import com.political.SlayerItems;
 import com.political.SlayerManager;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+/**
+ * Applies bounty-gear damage reduction when a player takes damage from a bounty boss.
+ *
+ * Defence model (additive stacking, capped at 85%):
+ *   universalDef  — % reduction vs ALL bounty bosses (always active when worn/held)
+ *   specificDef   — EXTRA % reduction vs the MATCHING boss type (stacks with universalDef)
+ *   totalDef      = min(0.85, universalDef + specificDef)
+ *   finalDamage   = incomingDamage × (1 - totalDef)
+ *
+ * Crown of Greed: disables ALL bounty gear defence.
+ */
 @Mixin(LivingEntity.class)
 public class BountyDefenseMixin {
+
+    private static final float MAX_TOTAL_REDUCTION = 0.85f;
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private float reduceBossDamage(float amount, ServerWorld world, DamageSource source) {
         LivingEntity self = (LivingEntity)(Object)this;
 
+        // Only applies when a player is the one being hit
         if (!(self instanceof ServerPlayerEntity player)) return amount;
         if (source.getAttacker() == null) return amount;
         if (!(source.getAttacker() instanceof LivingEntity attacker)) return amount;
 
-        SlayerManager.SlayerType bossType = getBossType(attacker);
+        // Must be a bounty boss attacker
+        SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
         boolean isAnyBoss = bossType != null || SlayerManager.isSlayerBoss(attacker.getUuid());
-
         if (!isAnyBoss) return amount;
 
-        // Get actual boss type if tracked
-        if (bossType == null) {
-            bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
-        }
+        // Crown of Greed: disables ALL bounty defence
+        ItemStack helmet     = player.getEquippedStack(EquipmentSlot.HEAD);
+        if (SlayerItems.isCrownOfGreed(helmet)) return amount;
 
-        float damageMultiplier = 1.0f;
-        damageMultiplier *= getArmorDefenseMultiplier(player, bossType, isAnyBoss);
-        damageMultiplier *= getWeaponDefenseMultiplier(player, bossType);
-
-        // Standard T1/T2 armor defense reduction via SlayerArmorHandler
-        if (bossType != null) {
-            float setReduction = SlayerArmorHandler.getBossDamageReduction(player, bossType);
-            damageMultiplier *= (1.0f - setReduction);
-        }
-
-        return amount * damageMultiplier;
-    }
-
-    private SlayerManager.SlayerType getBossType(LivingEntity entity) {
-        if (!entity.hasCustomName()) return null;
-        String name = entity.getCustomName().getString();
-
-        if (name.contains("Undying Outlaw") || name.contains("Rotting"))
-            return SlayerManager.SlayerType.ZOMBIE;
-        if (name.contains("Venomous Bandit") || name.contains("Silk"))
-            return SlayerManager.SlayerType.SPIDER;
-        if (name.contains("Bone Desperado"))
-            return SlayerManager.SlayerType.SKELETON;
-        if (name.contains("Gelatinous Rustler"))
-            return SlayerManager.SlayerType.SLIME;
-        if (name.contains("Void Phantom"))
-            return SlayerManager.SlayerType.ENDERMAN;
-        if (name.contains("Sculk Terror"))
-            return SlayerManager.SlayerType.WARDEN;
-        if (name.contains("Gilded Ravager") || name.contains("Piglin"))
-            return SlayerManager.SlayerType.PIGLIN;
-
-        return null;
-    }
-
-    private float getArmorDefenseMultiplier(ServerPlayerEntity player, SlayerManager.SlayerType bossType, boolean isAnyBoss) {
-        float multiplier = 1.0f;
-
-        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        ItemStack leggings   = player.getEquippedStack(EquipmentSlot.LEGS);
+        ItemStack boots      = player.getEquippedStack(EquipmentSlot.FEET);
+        ItemStack weapon     = player.getMainHandStack();
 
-        // ===== ZOMBIE BERSERKER HELMET =====
-        if (isZombieBerserkerHelmet(helmet) && SlayerItems.canUseZombieBerserkerHelmet(player)) {
+        float universalDef = 0.0f;  // vs ALL bounty bosses
+        float specificDef  = 0.0f;  // EXTRA vs the matching boss type
+
+        // ── Special legendary pieces ─────────────────────────────────────
+        // Zombie Berserker Helmet
+        if (SlayerItems.isZombieBerserkerHelmet(helmet) && SlayerItems.canUseZombieBerserkerHelmet(player)) {
+            universalDef += (float) SlayerItems.BERSERKER_HELMET_ALL_REDUCTION;
             if (bossType == SlayerManager.SlayerType.ZOMBIE) {
-                multiplier *= (1.0f - (float) SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION);
-            } else if (isAnyBoss) {
-                multiplier *= (1.0f - (float) SlayerItems.BERSERKER_HELMET_ALL_REDUCTION);
+                specificDef += (float) SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION;
             }
         }
 
-        // ===== VENOMOUS CRAWLER LEGGINGS =====
-        if (isSpiderLeggings(leggings) && SlayerItems.canUseSpiderLeggings(player)) {
+        // Venomous Crawler Leggings
+        if (SlayerItems.isSpiderLeggings(leggings) && SlayerItems.canUseSpiderLeggings(player)) {
+            universalDef += (float) SlayerItems.SPIDER_LEGS_ALL_REDUCTION;
             if (bossType == SlayerManager.SlayerType.SPIDER) {
-                multiplier *= (1.0f - (float) SlayerItems.SPIDER_LEGS_BOSS_REDUCTION);
-            } else if (isAnyBoss) {
-                multiplier *= (1.0f - (float) SlayerItems.SPIDER_LEGS_ALL_REDUCTION);
+                specificDef += (float) SlayerItems.SPIDER_LEGS_BOSS_REDUCTION;
             }
         }
 
-        // ===== GELATINOUS RUSTLER BOOTS =====
-        if (isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
+        // Gelatinous Rustler Boots
+        if (SlayerItems.isSlimeBoots(boots) && SlayerItems.canUseSlimeBoots(player)) {
+            universalDef += (float) SlayerItems.SLIME_BOOTS_ALL_REDUCTION;
             if (bossType == SlayerManager.SlayerType.SLIME) {
-                multiplier *= (1.0f - (float) SlayerItems.SLIME_BOOTS_BOSS_REDUCTION);
-            } else if (isAnyBoss) {
-                multiplier *= (1.0f - (float) SlayerItems.SLIME_BOOTS_ALL_REDUCTION);
+                specificDef += (float) SlayerItems.SLIME_BOOTS_BOSS_REDUCTION;
             }
         }
 
-        // ===== SCULK TERROR CHESTPLATE =====
-        if (isWardenChestplate(chestplate) && SlayerItems.canUseWardenChestplate(player)) {
+        // Sculk Terror Chestplate
+        if (SlayerItems.isWardenChestplate(chestplate) && SlayerItems.canUseWardenChestplate(player)) {
+            universalDef += (float) SlayerItems.WARDEN_CHEST_ALL_REDUCTION;
             if (bossType == SlayerManager.SlayerType.WARDEN) {
-                multiplier *= (1.0f - (float) SlayerItems.WARDEN_CHEST_BOSS_REDUCTION);
-            } else if (isAnyBoss) {
-                multiplier *= (1.0f - (float) SlayerItems.WARDEN_CHEST_ALL_REDUCTION);
+                specificDef += (float) SlayerItems.WARDEN_CHEST_BOSS_REDUCTION;
             }
         }
 
-        return multiplier;
-    }
+        // ── Standard T1 / T2 armour sets ────────────────────────────────
+        if (bossType != null) {
+            specificDef  += SlayerArmorHandler.getBossDamageReduction(player, bossType);
+        }
+        universalDef += SlayerArmorHandler.getUniversalBossReduction(player);
 
-    private float getWeaponDefenseMultiplier(ServerPlayerEntity player, SlayerManager.SlayerType bossType) {
-        ItemStack mainHand = player.getMainHandStack();
-
-        // T2 swords provide better defense
-        if (SlayerItems.isUpgradedSlayerSword(mainHand)) {
-            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(mainHand);
-            if (swordType == bossType) {
-                return 0.40f; // -60% damage from matching boss
+        // ── Weapon (bounty swords / bow) ─────────────────────────────────
+        if (SlayerItems.isUpgradedSlayerSword(weapon)) {
+            universalDef += 0.15f; // T2 sword: -15% vs all bosses
+            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(weapon);
+            if (swordType != null && swordType == bossType) {
+                specificDef += 0.60f; // T2 sword: -60% extra vs matching boss
             }
-            return 0.85f; // -15% from any boss
+        } else if (SlayerItems.isSlayerSword(weapon)) {
+            universalDef += 0.10f; // T1 sword: -10% vs all bosses
+            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(weapon);
+            if (swordType != null && swordType == bossType) {
+                specificDef += 0.50f; // T1 sword: -50% extra vs matching boss
+            }
+        } else if (SlayerItems.isSkeletonBow(weapon)) {
+            universalDef += 0.10f; // Skeleton bow: -10% universal
         }
 
-        // T1 swords
-        if (SlayerItems.isSlayerSword(mainHand)) {
-            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(mainHand);
-            if (swordType == bossType) {
-                return 0.50f; // -50% damage from matching boss
-            }
-            return 0.90f; // -10% from any boss
-        }
-
-        return 1.0f;
-    }
-
-    private boolean isZombieBerserkerHelmet(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        return name != null && name.getString().contains("Berserker");
-    }
-
-    private boolean isSpiderLeggings(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String n = name.getString();
-        return n.contains("Venomous") || (n.contains("Spider") && n.contains("Leggings"));
-    }
-
-    private boolean isSlimeBoots(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String n = name.getString();
-        return n.contains("Slime") || n.contains("Gelatinous");
-    }
-
-    private boolean isWardenChestplate(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (name == null) return false;
-        String n = name.getString();
-        return n.contains("Warden") || n.contains("Sculk");
+        // ── Apply total (additive, capped at 85%) ────────────────────────
+        float totalDef = Math.min(MAX_TOTAL_REDUCTION, universalDef + specificDef);
+        if (totalDef <= 0) return amount;
+        return amount * (1.0f - totalDef);
     }
 }

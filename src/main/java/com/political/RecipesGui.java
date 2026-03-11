@@ -365,7 +365,7 @@ public class RecipesGui {
         gui.setSlot(19, new GuiElementBuilder(Items.LEATHER_HELMET)
                 .setName(Text.literal("💀 Zombie Berserker Helmet").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal("3 Zombie Cores + 2 Rotten Flesh + Zombie Head").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚠ Requires: Zombie Lvl 5").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("⚠ Requires: Zombie Lvl " + SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ).formatted(Formatting.RED))
                 .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openZombieHelmetRecipe(player)).build());
 
