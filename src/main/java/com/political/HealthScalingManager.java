@@ -124,11 +124,11 @@ public class HealthScalingManager {
     private static final double SCALING_CHANCE = 0.10; // 10% of mobs
 
     public enum ScalingTier {
-        ENHANCED(1.5, 1.5, "Enhanced", Formatting.GREEN, 70),
-        REINFORCED(2.0, 2.0, "Reinforced", Formatting.YELLOW, 17),
-        ELITE(2.5, 2.5, "Elite", Formatting.GOLD, 10),
-        CHAMPION(5.0, 4.0, "Champion", Formatting.RED, 2),
-        LEGENDARY(7.5, 5.0, "LEGENDARY", Formatting.LIGHT_PURPLE, 1);
+        ENHANCED(1.5, 2.5, "Enhanced", Formatting.GREEN, 70),
+        REINFORCED(2.0, 3.5, "Reinforced", Formatting.YELLOW, 17),
+        ELITE(2.5, 5.0, "Elite", Formatting.GOLD, 10),
+        CHAMPION(5.0, 8.0, "Champion", Formatting.RED, 2),
+        LEGENDARY(7.5, 12.0, "LEGENDARY", Formatting.LIGHT_PURPLE, 1);
 
         public final double healthMultiplier;
         public final double damageMultiplier;

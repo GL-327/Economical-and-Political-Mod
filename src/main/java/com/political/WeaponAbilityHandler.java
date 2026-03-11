@@ -180,6 +180,7 @@ public class WeaponAbilityHandler {
             case SLIME -> weaponName.contains("Slime") || weaponName.contains("Gelatinous");
             case ENDERMAN -> weaponName.contains("Void") || weaponName.contains("Ender");
             case WARDEN -> weaponName.contains("Gavel") || weaponName.contains("Sculk");
+            case PIGLIN -> weaponName.contains("Gilded") || weaponName.contains("Ravager");
         };
     }
 
@@ -220,6 +221,7 @@ public class WeaponAbilityHandler {
             case SLIME -> armorName.contains("Slime") || armorName.contains("Gelatinous");
             case ENDERMAN -> armorName.contains("Void") || armorName.contains("Phantom");
             case WARDEN -> armorName.contains("Sculk") || armorName.contains("Warden");
+            case PIGLIN -> armorName.contains("Gilded") || armorName.contains("Ravager") || armorName.contains("Crown");
         };
     }
 

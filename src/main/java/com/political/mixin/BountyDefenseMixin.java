@@ -65,6 +65,8 @@ public class BountyDefenseMixin {
             return SlayerManager.SlayerType.ENDERMAN;
         if (name.contains("Sculk Terror"))
             return SlayerManager.SlayerType.WARDEN;
+        if (name.contains("Gilded Ravager") || name.contains("Piglin"))
+            return SlayerManager.SlayerType.PIGLIN;
 
         return null;
     }

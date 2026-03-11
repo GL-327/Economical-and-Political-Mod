@@ -212,6 +212,7 @@ public class CustomEnchantmentManager {
                 case SLIME    -> name.contains("Slime");
                 case ENDERMAN -> name.contains("Enderman");
                 case WARDEN   -> name.contains("Warden");
+                case PIGLIN   -> name.contains("Piglin") || name.contains("Gilded") || name.contains("Ravager");
             };
         }
         return false;

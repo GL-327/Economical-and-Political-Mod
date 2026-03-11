@@ -1061,7 +1061,7 @@ public class CustomItemHandler {
     public static ItemStack createUltraOverclockedBeam() {
         ItemStack beam = new ItemStack(Items.GOLDEN_SHOVEL);
         beam.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("HPEBM Mk.VII — Ultra Overclocked")
+                Text.literal("HPEBM Mk.VI — Ultra Overclocked")
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         beam.set(DataComponentTypes.LORE, new LoreComponent(List.of(
                 Text.literal("").formatted(Formatting.DARK_PURPLE),
@@ -1086,8 +1086,8 @@ public class CustomItemHandler {
                 Text.literal("Left-click: Sonic Devastation").formatted(Formatting.DARK_PURPLE),
                 Text.literal("  └ AOE devastation, 10s cooldown").formatted(Formatting.GRAY),
                 Text.literal(""),
-                Text.literal("「Tier VII — Mythic」").formatted(Formatting.DARK_PURPLE),
-                Text.literal("§8[MFLUX: Mk.VII beyond-class weapon | Containment VOID]").formatted(Formatting.DARK_GRAY)
+                Text.literal("「Tier VI — Mythic」").formatted(Formatting.DARK_PURPLE),
+                Text.literal("§8[MFLUX: Mk.VI beyond-class weapon | Containment VOID]").formatted(Formatting.DARK_GRAY)
         )));
         beam.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         beam.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
@@ -1382,7 +1382,7 @@ public class CustomItemHandler {
             Text nameText = stack.get(DataComponentTypes.CUSTOM_NAME);
             if (nameText != null) {
                 String name = nameText.getString();
-                if (name.contains("Ultra Overclocked") || name.contains("Mk.VII")) return 7;
+                if (name.contains("Ultra Overclocked") || name.contains("Mk.VI")) return 7;
                 // New Roman numeral names
                 if (name.contains("Mk.V")) return 6;
                 if (name.contains("Mk.IV")) return 5;

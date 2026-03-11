@@ -137,6 +137,7 @@ public class BountySpawnManager {
             }
             case ENDERMAN -> new EndermanEntity(EntityType.ENDERMAN, world);
             case WARDEN -> null; // Never spawn wardens [1]
+            case PIGLIN -> new PiglinBruteEntity(EntityType.PIGLIN_BRUTE, world);
         };
     }
 }

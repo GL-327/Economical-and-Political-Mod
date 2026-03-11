@@ -96,5 +96,14 @@ public abstract class BountyDamageMixin {
         }
 
         HealthScalingManager.onScaledMobKill(self, player);
+
+        // Dictator kill detection
+        if (self instanceof ServerPlayerEntity killedPlayer) {
+            if (com.political.DictatorManager.isDictator(killedPlayer.getUuidAsString())) {
+                if (source.getAttacker() instanceof ServerPlayerEntity killer) {
+                    com.political.DictatorManager.handleDictatorKilled(killedPlayer, killer);
+                }
+            }
+        }
     }
 }

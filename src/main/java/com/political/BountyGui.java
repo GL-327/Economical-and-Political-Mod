@@ -489,6 +489,7 @@ public class BountyGui {
             case SLIME -> new ItemStack(Items.LEATHER_BOOTS);
             case ENDERMAN -> new ItemStack(Items.ENDER_PEARL);
             case WARDEN -> new ItemStack(Items.NETHERITE_CHESTPLATE);
+            case PIGLIN -> new ItemStack(Items.GOLDEN_HELMET);
         };
     }
 
@@ -500,6 +501,7 @@ public class BountyGui {
             case SLIME -> "Gelatinous Rustler Boots";
             case ENDERMAN -> "Void Pearl";
             case WARDEN -> "Sculk Terror Chestplate";
+            case PIGLIN -> "Crown of Greed";
         };
     }
     // ============================================================
@@ -592,6 +594,7 @@ public class BountyGui {
             case SLIME -> 3;
             case ENDERMAN -> 4;
             case WARDEN -> 5;
+            case PIGLIN -> 4;
         };
         return "§c" + "★".repeat(stars) + "§7" + "☆".repeat(5 - stars);
     }
@@ -613,6 +616,7 @@ public class BountyGui {
             case SLIME -> Items.SLIME_BALL;
             case ENDERMAN -> Items.ENDER_PEARL;
             case WARDEN -> Items.SCULK;
+            case PIGLIN -> Items.GOLD_NUGGET;
         };
     }
 

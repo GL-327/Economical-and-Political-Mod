@@ -241,6 +241,7 @@ public class T2CraftingGui {
                         case SLIME -> n.contains("Gelatinous") || n.contains("Rustler");
                         case ENDERMAN -> n.contains("Void") || n.contains("Phantom");
                         case WARDEN -> n.contains("Sculk") || n.contains("Terror");
+                        case PIGLIN -> n.contains("Gilded") || n.contains("Ravager");
                     };
                     if (typeMatch) hasT1 = true;
                 }
@@ -278,6 +279,7 @@ public class T2CraftingGui {
                         case SLIME -> n.contains("Gelatinous") || n.contains("Rustler");
                         case ENDERMAN -> n.contains("Void") || n.contains("Phantom");
                         case WARDEN -> n.contains("Sculk") || n.contains("Terror");
+                        case PIGLIN -> n.contains("Gilded") || n.contains("Ravager");
                     };
                     if (typeMatch) {
                         player.getInventory().removeStack(i, 1);
@@ -334,6 +336,7 @@ public class T2CraftingGui {
             case SLIME -> new ItemStack(Items.SLIME_BALL);
             case ENDERMAN -> new ItemStack(Items.ENDER_PEARL);
             case WARDEN -> new ItemStack(Items.SCULK);
+            case PIGLIN -> new ItemStack(Items.GOLD_NUGGET);
         };
     }
 }

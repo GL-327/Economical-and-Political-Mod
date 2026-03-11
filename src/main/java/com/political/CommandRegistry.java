@@ -60,6 +60,16 @@ public class CommandRegistry {
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
         registerCustomMob(dispatcher);
+        registerModHelp(dispatcher);
+        registerTakeLeadership(dispatcher);
+
+        dispatcher.register(CommandManager.literal("bank")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    BankGui.open(player);
+                    return 1;
+                }));
 
         dispatcher.register(CommandManager.literal("setrecipe")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
@@ -892,6 +902,38 @@ public class CommandRegistry {
                             DictatorManager.removeDictator();
                             context.getSource().sendMessage(Text.literal("Dictatorship removed!").formatted(Formatting.GREEN));
                             return 1;
+                        }))
+                .then(CommandManager.literal("accept")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            DictatorManager.acceptDictatorOffer(player);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("decline")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            DictatorManager.declineDictatorOffer(player);
+                            return 1;
+                        })));
+    }
+
+    private static void registerTakeLeadership(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("takeleadership")
+                .then(CommandManager.literal("force")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            DictatorManager.takeLeadershipByForce(player);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("election")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            DictatorManager.takeLeadershipByElection(player);
+                            return 1;
                         })));
     }
 
@@ -1404,13 +1446,6 @@ public class CommandRegistry {
                             player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
                             return 1;
                         }))
-                .then(CommandManager.literal("shop")
-                        .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayer();
-                            if (player == null) return 0;
-                            CreditsTradeGui.open(player);
-                            return 1;
-                        }))
                 .then(CommandManager.literal("add")
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
@@ -1853,5 +1888,42 @@ public class CommandRegistry {
                         })
                 )
         );
+    }
+
+    private static void registerModHelp(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("modhelp")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    String uuid = player.getUuidAsString();
+
+                    player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+                    player.sendMessage(Text.literal("        MOD COMMANDS").formatted(Formatting.YELLOW, Formatting.BOLD));
+                    player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+                    player.sendMessage(Text.literal("/shop").formatted(Formatting.GREEN)
+                            .append(Text.literal(" - Buy and sell items").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/recipes").formatted(Formatting.GREEN)
+                            .append(Text.literal(" - View crafting recipes").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/bank").formatted(Formatting.GREEN)
+                            .append(Text.literal(" - Banking system (deposits, savings, loans)").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/intercom").formatted(Formatting.GREEN)
+                            .append(Text.literal(" - Intercom system").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/credits").formatted(Formatting.GREEN)
+                            .append(Text.literal(" - Check your credit balance").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/bounty").formatted(Formatting.GREEN)
+                            .append(Text.literal(" - View bounty quests").formatted(Formatting.GRAY)));
+
+                    if (uuid.equals(DataManager.getChair())) {
+                        player.sendMessage(Text.literal("/chair").formatted(Formatting.AQUA)
+                                .append(Text.literal(" - Chair government menu").formatted(Formatting.GRAY)));
+                    }
+                    if (uuid.equals(DataManager.getViceChair())) {
+                        player.sendMessage(Text.literal("/vicechair").formatted(Formatting.AQUA)
+                                .append(Text.literal(" - Vice Chair government menu").formatted(Formatting.GRAY)));
+                    }
+
+                    player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+                    return 1;
+                }));
     }
 }

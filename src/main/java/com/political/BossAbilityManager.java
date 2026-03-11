@@ -125,6 +125,7 @@ public class BossAbilityManager {
             case SLIME -> useSlimeAbility(boss, target, tier);
             case ENDERMAN -> useEndermanAbility(boss, target, tier);
             case WARDEN -> useWardenAbility(boss, target, tier);
+            case PIGLIN -> usePiglinAbility(boss, target, tier, world);
         };
 
         if (used) {
@@ -937,9 +938,38 @@ public class BossAbilityManager {
         return true;
     }
 
-    // ============================================================
-    // WARDEN ABILITIES
-    // ============================================================
+    private static boolean usePiglinAbility(LivingEntity boss, ServerPlayerEntity target, int tier, ServerWorld world) {
+        // Piglin boss ability: gold rush - applies weakness and deals bonus gold damage
+        return switch (tier) {
+            case 1, 2 -> {
+                // Tier 1-2: Blind the target briefly
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 40, 0));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0));
+                target.sendMessage(Text.literal("⚠ The Piglin boss blinds you with glittering gold!").formatted(Formatting.GOLD));
+                yield true;
+            }
+            case 3, 4 -> {
+                // Tier 3-4: Gold rush - apply multiple debuffs
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 60, 0));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 120, 1));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 0));
+                target.sendMessage(Text.literal("⚠ The Gilded Ravager overwhelms you!").formatted(Formatting.GOLD, Formatting.BOLD));
+                yield true;
+            }
+            case 5 -> {
+                // Tier 5: Greed's Curse - blindness, weakness, and coin drain warning
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 200, 1));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 1));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 200, 0));
+                target.sendMessage(Text.literal("💀 Greed's Curse! The Piglin boss drains your will to fight!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+                yield true;
+            }
+            default -> false;
+        };
+    }
+
+
 
     private static boolean useWardenAbility(LivingEntity boss, ServerPlayerEntity target, int tier) {
         if (!(boss.getEntityWorld() instanceof ServerWorld world)) return false;

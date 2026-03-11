@@ -98,6 +98,42 @@ public class DataManager {
         setCoins(uuid, current - amount);
         return true;
     }
+
+    // ============================================================
+    // BANK SYSTEM
+    // ============================================================
+
+    public static int getBankMain(String uuid) {
+        return data.playerBankMain.getOrDefault(uuid, 0);
+    }
+
+    public static void setBankMain(String uuid, int amount) {
+        data.playerBankMain.put(uuid, Math.max(0, amount));
+    }
+
+    public static int getBankSavings(String uuid) {
+        return data.playerBankSavings.getOrDefault(uuid, 0);
+    }
+
+    public static void setBankSavings(String uuid, int amount) {
+        data.playerBankSavings.put(uuid, Math.max(0, amount));
+    }
+
+    public static int getBankLoan(String uuid) {
+        return data.playerBankLoan.getOrDefault(uuid, 0);
+    }
+
+    public static void setBankLoan(String uuid, int amount) {
+        data.playerBankLoan.put(uuid, Math.max(0, amount));
+    }
+
+    public static long getBankSavingsWithdrawTime(String uuid) {
+        return data.playerBankSavingsWithdrawTime.getOrDefault(uuid, 0L);
+    }
+
+    public static void setBankSavingsWithdrawTime(String uuid, long timestamp) {
+        data.playerBankSavingsWithdrawTime.put(uuid, timestamp);
+    }
     private static Path getDataPath(MinecraftServer server) {
         return server.getSavePath(WorldSavePath.ROOT).resolve("political_data.json");
     }
@@ -305,6 +341,12 @@ public class DataManager {
 
         // Credits (non-physical)
         public Map<String, Integer> playerCredits = new HashMap<>();
+
+        // Bank system
+        public Map<String, Integer> playerBankMain = new HashMap<>();
+        public Map<String, Integer> playerBankSavings = new HashMap<>();
+        public Map<String, Integer> playerBankLoan = new HashMap<>();
+        public Map<String, Long> playerBankSavingsWithdrawTime = new HashMap<>();
 
         // Dictator
         public boolean dictatorActive = false;

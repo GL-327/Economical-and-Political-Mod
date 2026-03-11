@@ -79,6 +79,7 @@ public class SlayerArmorHandler {
             case SLIME -> name.contains("Slime") || name.contains("Gelatinous") || name.contains("Rustler");
             case ENDERMAN -> name.contains("Void") || name.contains("Phantom");
             case WARDEN -> name.contains("Sculk") || name.contains("Warden") || name.contains("Terror");
+            case PIGLIN -> name.contains("Gilded") || name.contains("Ravager") || name.contains("Crown");
         };
     }
 

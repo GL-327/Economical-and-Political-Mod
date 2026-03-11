@@ -25,6 +25,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.mob.PiglinBruteEntity;
+import net.minecraft.entity.mob.PiglinEntity;
 
 import java.util.*;import net.minecraft.server.world.ServerWorld;import net.minecraft.entity.attribute.EntityAttributeInstance;
 
@@ -39,7 +41,8 @@ public class SlayerManager {
         SKELETON("Skeleton", "The Bone Desperado", Formatting.WHITE, Items.BONE, 3.0),
         SLIME("Slime", "The Gelatinous Rustler", Formatting.GREEN, Items.SLIME_BALL, 5.0),
         ENDERMAN("Enderman", "The Void Phantom", Formatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
-        WARDEN("Warden", "The Sculk Terror", Formatting.DARK_AQUA, Items.SCULK, 25.0);
+        WARDEN("Warden", "The Sculk Terror", Formatting.DARK_AQUA, Items.SCULK, 25.0),
+        PIGLIN("Piglin", "The Gilded Ravager", Formatting.GOLD, Items.GOLD_NUGGET, 15.0);
 
 
         public final String displayName;
@@ -528,6 +531,7 @@ public class SlayerManager {
             case SLIME -> entity instanceof SlimeEntity || entity instanceof MagmaCubeEntity;
             case ENDERMAN -> entity instanceof EndermanEntity;
             case WARDEN -> entity instanceof WardenEntity;
+            case PIGLIN -> entity instanceof PiglinBruteEntity || entity instanceof PiglinEntity;
         };
     }
 
@@ -707,6 +711,7 @@ public class SlayerManager {
             case SLIME -> EntityType.SLIME;
             case ENDERMAN -> EntityType.ENDERMAN;
             case WARDEN -> EntityType.IRON_GOLEM; // Use Iron Golem for Warden
+            case PIGLIN -> EntityType.PIGLIN_BRUTE;
         };
 
         MobEntity mob = (MobEntity) entityType.create(world, SpawnReason.MOB_SUMMONED);
@@ -751,6 +756,7 @@ public class SlayerManager {
             case SLIME -> BossBar.Color.GREEN;
             case ENDERMAN -> BossBar.Color.PURPLE;
             case WARDEN -> BossBar.Color.BLUE;
+            case PIGLIN -> BossBar.Color.YELLOW;
         };
     }
 
@@ -944,10 +950,17 @@ public class SlayerManager {
             case SLIME -> 0.0008 + (tier * 0.0015);                    // 0.08% - 0.83%
             case ENDERMAN -> 0.00005 + (tier * 0.00005);               // 0.005% - 0.03%
             case WARDEN -> 0.001 + (tier * 0.0005);                    // 0.1% - 0.35%
+            case PIGLIN -> 0.002 + (tier * 0.001);                     // 0.2% - 0.7%
         };
 
         if (rand.nextDouble() < coreChance) {
             drops.add(SlayerItems.createCore(type));
+        }
+
+        // Piglin Flesh drop (for PIGLIN type)
+        if (type == SlayerType.PIGLIN && rand.nextDouble() < 0.15 + (tier * 0.05)) {
+            drops.add(SlayerItems.createPiglinFlesh());
+            player.sendMessage(Text.literal("✦ Piglin Flesh dropped!").formatted(Formatting.YELLOW), false);
         }
 
         // Coins based on tier (reduced)
@@ -1137,6 +1150,7 @@ public class SlayerManager {
             case SLIME -> EntityType.SLIME.create(world, SpawnReason.COMMAND);
             case ENDERMAN -> EntityType.ENDERMAN.create(world, SpawnReason.COMMAND);
             case WARDEN -> EntityType.IRON_GOLEM.create(world, SpawnReason.COMMAND);
+            case PIGLIN -> EntityType.PIGLIN_BRUTE.create(world, SpawnReason.COMMAND);
         };
 
         if (mob != null) {
@@ -1214,6 +1228,7 @@ public class SlayerManager {
             case SLIME -> 120.0f;
             case ENDERMAN -> 90.0f;
             case WARDEN -> 400.0f;
+            case PIGLIN -> 150.0f;
         };
 
         float baseDamage = switch (type) {
@@ -1223,10 +1238,11 @@ public class SlayerManager {
             case SLIME -> 8.0f;
             case ENDERMAN -> 12.0f;
             case WARDEN -> 25.0f;
+            case PIGLIN -> 15.0f;
         };
 
         float healthMult = 1.0f + (tier * 0.6f);
-        float damageMult = 1.0f + (tier * 0.4f);
+        float damageMult = 1.0f + (tier * 0.8f);
 
         // Apply health - use getAttributeInstance with the registry entry
         var healthAttr = boss.getAttributeInstance(EntityAttributes.MAX_HEALTH);
@@ -1278,6 +1294,10 @@ public class SlayerManager {
             }
             case SLIME -> {
                 // Slime handled by size
+            }
+            case PIGLIN -> {
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, Integer.MAX_VALUE, tier, true, false, false));
+                boss.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, true, false, false));
             }
         }
 
