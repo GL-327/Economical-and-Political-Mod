@@ -204,6 +204,12 @@ public class SlayerArmorHandler {
                         }
                         case "warden_t1_boots"       -> bonusKnockbackResist += 0.05; // +5% KB resist
                         case "warden_t2_boots"       -> bonusKnockbackResist += 0.10; // +10%
+                        // ── PIGLIN ───────────────────────────────────────
+                        case "piglin_t1_chestplate"  -> bonusHealth += 4.0;    // +2 hearts
+                        case "piglin_t2_chestplate"  -> bonusHealth += 8.0;    // +4 hearts
+                        case "piglin_t1_leggings"    -> bonusSpeed  += 0.05;   // +5%
+                        case "piglin_t2_leggings"    -> bonusSpeed  += 0.10;   // +10%
+                        case "piglin_t2_boots"       -> bonusSpeed  += 0.15;   // +15%
                         default -> {}
                     }
                 }

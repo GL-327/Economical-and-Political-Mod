@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Max sidebar lines — increased to 30 to display all bounty buff lines
-    private static final int MAX_LINES = 30;
+    // Max sidebar lines — large enough to accommodate all header + gear + buff lines (max ~25)
+    private static final int MAX_LINES = 35;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -504,11 +504,11 @@ public class ScoreboardManager {
             ItemStack stack = player.getEquippedStack(slot);
             String id = SlayerItems.getCustomItemId(stack);
             if (id == null) {
-                // Check legendary special pieces
+                // Check legendary special pieces (old items without custom_item_id)
                 if (SlayerItems.isSpiderLeggings(stack))    { buffs.add("§b  ✦ §fPoison Immune §7| Web Immune §7| §aSpeed II"); }
-                else if (SlayerItems.isZombieBerserkerHelmet(stack)) { buffs.add("§b  ✦ §fBerserker"); }
+                else if (SlayerItems.isZombieBerserkerHelmet(stack)) { buffs.add("§b  ✦ §fBerserker §7| +300% Dmg"); }
                 else if (SlayerItems.isSlimeBoots(stack))   { buffs.add("§b  ✦ §fNo Fall Dmg §7| Death Save"); }
-                else if (SlayerItems.isWardenChestplate(stack)) { buffs.add("§b  ✦ §fKB Immune §7| Sonic Pulse"); }
+                else if (SlayerItems.isWardenChestplate(stack)) { buffs.add("§b  ✦ §fKB Immune §7| NightVis §7| ESP 64blk"); }
                 continue;
             }
             String buff = getPieceBuff(id);
@@ -520,8 +520,13 @@ public class ScoreboardManager {
     /** Returns the short buff description for a given custom item ID, or null if none. */
     private static String getPieceBuff(String id) {
         return switch (id) {
+            // ── LEGENDARY PIECES ─────────────────────────────────────────────
+            case "spider_leggings"         -> "Poison Immune §7| Web Immune §7| §aSpeed II";
+            case "zombie_berserker_helmet" -> "Berserker §7| +300% Dmg";
+            case "slime_boots"             -> "No Fall Dmg §7| Death Save";
+            case "warden_chestplate"       -> "KB Immune §7| NightVis §7| ESP 64blk";
             // ── ZOMBIE ───────────────────────────────────────────────────────
-            case "zombie_t1_helmet"       -> "Hunger Immune";
+            case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";
             case "zombie_t1_chestplate"   -> "+2 Hearts";
             case "zombie_t2_chestplate"   -> "+4 Hearts §7| §aRegen I";
@@ -574,6 +579,15 @@ public class ScoreboardManager {
             case "warden_t2_leggings"     -> "+25% KB Resist §7| +6 Hearts";
             case "warden_t1_boots"        -> "Vibration Sense (8 blocks, 3s glow)";
             case "warden_t2_boots"        -> "+10% KB Resist";
+            // ── PIGLIN ────────────────────────────────────────────────────────
+            case "piglin_t1_helmet"       -> "Fire Resist";
+            case "piglin_t2_helmet"       -> "Fire Resist";
+            case "piglin_t1_chestplate"   -> "+2 Hearts";
+            case "piglin_t2_chestplate"   -> "+4 Hearts";
+            case "piglin_t1_leggings"     -> "+5% Speed";
+            case "piglin_t2_leggings"     -> "+10% Speed";
+            case "piglin_t1_boots"        -> "Fire Resist";
+            case "piglin_t2_boots"        -> "Fire Resist §7| +15% Speed";
             default -> null;
         };
     }

@@ -62,6 +62,7 @@ public class CommandRegistry {
         registerCustomMob(dispatcher);
         registerModHelp(dispatcher);
         registerTakeLeadership(dispatcher);
+        registerSpawnProtection(dispatcher);
 
         dispatcher.register(CommandManager.literal("bank")
                 .executes(context -> {
@@ -1554,9 +1555,15 @@ public class CommandRegistry {
     // SHOP PRICE COMMANDS (OP Level 4)
     // ============================================================
     private static void registerShopPriceCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        // /setprice <item_id> <sellPrice>
+        // /setprice (no args) → opens GUI
         dispatcher.register(CommandManager.literal("setprice")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(ctx -> {
+                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+                    if (player == null) return 0;
+                    SetPriceGui.openMainMenu(player);
+                    return 1;
+                })
                 .then(CommandManager.argument("item", com.mojang.brigadier.arguments.StringArgumentType.word())
                         .then(CommandManager.argument("sellPrice", IntegerArgumentType.integer(0))
                                 .executes(ctx -> {
@@ -1899,5 +1906,104 @@ public class CommandRegistry {
                     player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
                     return 1;
                 }));
+    }
+
+    // ── /spawnprotection ─────────────────────────────────────────────────────
+    /**
+     * Defines or manages a server-wide spawn-protection zone.
+     *
+     * <p>Usage:
+     * <pre>
+     *   /spawnprotection &lt;x1&gt; &lt;y1&gt; &lt;z1&gt; &lt;x2&gt; &lt;y2&gt; &lt;z2&gt;        — set region with explicit Y bounds
+     *   /spawnprotection &lt;x1&gt; &lt;y1&gt; &lt;z1&gt; &lt;x2&gt; &lt;y2&gt; &lt;z2&gt; true   — set region, full world height
+     *   /spawnprotection clear                                    — remove protection
+     *   /spawnprotection info                                     — show current region
+     * </pre>
+     *
+     * <p>Only server operators (permission level 4) can run these sub-commands.
+     * Non-operators are blocked from breaking/placing blocks or dealing PvP damage
+     * inside the protected region.
+     */
+    private static void registerSpawnProtection(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("spawnprotection")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+
+                // /spawnprotection clear
+                .then(CommandManager.literal("clear")
+                        .executes(context -> {
+                            SpawnProtectionManager.clearRegion();
+                            context.getSource().sendFeedback(() ->
+                                    Text.literal("✓ Spawn protection cleared.").formatted(Formatting.GREEN), true);
+                            return 1;
+                        })
+                )
+
+                // /spawnprotection info
+                .then(CommandManager.literal("info")
+                        .executes(context -> {
+                            ServerCommandSource src = context.getSource();
+                            if (!SpawnProtectionManager.isActive()) {
+                                src.sendFeedback(() -> Text.literal("Spawn protection is currently inactive.")
+                                        .formatted(Formatting.YELLOW), false);
+                            } else {
+                                src.sendFeedback(() -> Text.literal("§aSpawn protection is ACTIVE§r:").formatted(Formatting.GREEN), false);
+                                src.sendFeedback(() -> Text.literal(String.format(
+                                        "  X: %d to %d  |  Y: %d to %d  |  Z: %d to %d",
+                                        SpawnProtectionManager.getMinX(), SpawnProtectionManager.getMaxX(),
+                                        SpawnProtectionManager.getMinY(), SpawnProtectionManager.getMaxY(),
+                                        SpawnProtectionManager.getMinZ(), SpawnProtectionManager.getMaxZ()
+                                )).formatted(Formatting.AQUA), false);
+                            }
+                            return 1;
+                        })
+                )
+
+                // /spawnprotection <x1> <y1> <z1> <x2> <y2> <z2> [true]
+                .then(CommandManager.argument("x1", IntegerArgumentType.integer())
+                        .then(CommandManager.argument("y1", IntegerArgumentType.integer())
+                                .then(CommandManager.argument("z1", IntegerArgumentType.integer())
+                                        .then(CommandManager.argument("x2", IntegerArgumentType.integer())
+                                                .then(CommandManager.argument("y2", IntegerArgumentType.integer())
+                                                        .then(CommandManager.argument("z2", IntegerArgumentType.integer())
+                                                                // without 'true' — use given Y values
+                                                                .executes(context -> {
+                                                                    int x1 = IntegerArgumentType.getInteger(context, "x1");
+                                                                    int y1 = IntegerArgumentType.getInteger(context, "y1");
+                                                                    int z1 = IntegerArgumentType.getInteger(context, "z1");
+                                                                    int x2 = IntegerArgumentType.getInteger(context, "x2");
+                                                                    int y2 = IntegerArgumentType.getInteger(context, "y2");
+                                                                    int z2 = IntegerArgumentType.getInteger(context, "z2");
+                                                                    SpawnProtectionManager.setRegion(x1, y1, z1, x2, y2, z2);
+                                                                    context.getSource().sendFeedback(() -> Text.literal(
+                                                                            String.format("✓ Spawn protection set: (%d,%d,%d) → (%d,%d,%d)",
+                                                                                    x1, y1, z1, x2, y2, z2)
+                                                                    ).formatted(Formatting.GREEN), true);
+                                                                    return 1;
+                                                                })
+                                                                // with 'true' — span full world height
+                                                                .then(CommandManager.literal("true")
+                                                                        .executes(context -> {
+                                                                            int x1 = IntegerArgumentType.getInteger(context, "x1");
+                                                                            int z1 = IntegerArgumentType.getInteger(context, "z1");
+                                                                            int x2 = IntegerArgumentType.getInteger(context, "x2");
+                                                                            int z2 = IntegerArgumentType.getInteger(context, "z2");
+                                                                            ServerWorld world = context.getSource().getWorld();
+                                                                            int yMin = world.getBottomY();
+                                                                            int yMax = world.getTopYInclusive();
+                                                                            SpawnProtectionManager.setRegion(x1, yMin, z1, x2, yMax, z2);
+                                                                            context.getSource().sendFeedback(() -> Text.literal(
+                                                                                    String.format("✓ Spawn protection set (full height): (%d,%d) → (%d,%d) Y: %d to %d",
+                                                                                            x1, z1, x2, z2, yMin, yMax)
+                                                                            ).formatted(Formatting.GREEN), true);
+                                                                            return 1;
+                                                                        })
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 }

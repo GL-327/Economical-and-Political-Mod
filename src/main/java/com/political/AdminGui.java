@@ -1506,16 +1506,18 @@ public class AdminGui {
                 .addLoreLine(Text.literal("Choose a bounty type, then armor piece").formatted(Formatting.GRAY))
                 .build());
 
-        // Slayer type buttons (excluding Enderman)
+        // Slayer type buttons
         SlayerManager.SlayerType[] types = {
                 SlayerManager.SlayerType.ZOMBIE,
                 SlayerManager.SlayerType.SPIDER,
                 SlayerManager.SlayerType.SKELETON,
                 SlayerManager.SlayerType.SLIME,
-                SlayerManager.SlayerType.WARDEN
+                SlayerManager.SlayerType.ENDERMAN,
+                SlayerManager.SlayerType.WARDEN,
+                SlayerManager.SlayerType.PIGLIN
         };
 
-        int[] slots = {19, 21, 22, 23, 25};
+        int[] slots = {19, 20, 21, 22, 23, 24, 25};
 
         for (int i = 0; i < types.length; i++) {
             SlayerManager.SlayerType type = types[i];
@@ -1642,7 +1644,7 @@ public class AdminGui {
                 .build());
 
         SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
-        int[] t1Slots = {19, 20, 21, 22, 23, 24};
+        int[] t1Slots = {19, 20, 21, 22, 23, 24, 25};
 
         for (int i = 0; i < types.length && i < t1Slots.length; i++) {
             SlayerManager.SlayerType type = types[i];
@@ -1668,7 +1670,7 @@ public class AdminGui {
                 .glow()
                 .build());
 
-        int[] t2Slots = {28, 29, 30, 31, 32, 33};
+        int[] t2Slots = {28, 29, 30, 31, 32, 33, 34};
 
         for (int i = 0; i < types.length && i < t2Slots.length; i++) {
             SlayerManager.SlayerType type = types[i];
@@ -1829,13 +1831,21 @@ public class AdminGui {
 // ═══════════════════════════════════════════════════════════
 
     private static void openPiglinItemsGui(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("👑 Piglin Items"));
 
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Piglin-themed bounty items").formatted(Formatting.YELLOW))
+                .glow()
+                .build());
 
         // Crown of Greed
         gui.setSlot(10, new GuiElementBuilder(Items.GOLDEN_HELMET)
@@ -1853,7 +1863,7 @@ public class AdminGui {
                 .build());
 
         // Piglin Core
-        gui.setSlot(13, new GuiElementBuilder(Items.GOLD_NUGGET)
+        gui.setSlot(11, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("✦ Piglin Core ✦").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Used to craft Crown of Greed").formatted(Formatting.GRAY))
@@ -1868,7 +1878,7 @@ public class AdminGui {
                 .build());
 
         // Piglin Flesh
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLD_NUGGET)
+        gui.setSlot(12, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("Piglin Flesh").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Crafting material from Piglins").formatted(Formatting.GRAY))
@@ -1880,8 +1890,80 @@ public class AdminGui {
                 })
                 .build());
 
+        // Separator
+        gui.setSlot(18, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("━ Piglin T1 Armor ━").formatted(Formatting.GOLD, Formatting.BOLD))
+                .build());
+
+        // Piglin T1 Armor pieces
+        String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
+        Item[] pieceIcons = {Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS};
+        int[] t1Slots = {19, 20, 21, 22};
+        int[] t2Slots = {28, 29, 30, 31};
+
+        for (int i = 0; i < pieceNames.length; i++) {
+            final String pieceName = pieceNames[i];
+            gui.setSlot(t1Slots[i], new GuiElementBuilder(pieceIcons[i])
+                    .setName(Text.literal("Piglin T1 " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to receive").formatted(Formatting.GREEN))
+                    .setCallback((idx, type, action) -> {
+                        player.getInventory().insertStack(SlayerItems.createT1Armor(SlayerManager.SlayerType.PIGLIN, pieceName));
+                        player.sendMessage(Text.literal("✓ Gave Piglin T1 " + pieceName).formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+        }
+
+        // Give T1 Full Set
+        gui.setSlot(24, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("Give T1 Full Set").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give all 4 T1 Piglin armor pieces").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    for (String p : pieceNames) {
+                        player.getInventory().insertStack(SlayerItems.createT1Armor(SlayerManager.SlayerType.PIGLIN, p));
+                    }
+                    player.sendMessage(Text.literal("✓ Gave full Piglin T1 armor set!").formatted(Formatting.GREEN), false);
+                })
+                .build());
+
+        // Separator
+        gui.setSlot(27, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("━ Piglin T2 Armor ━").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .glow()
+                .build());
+
+        // Piglin T2 Armor pieces
+        for (int i = 0; i < pieceNames.length; i++) {
+            final String pieceName = pieceNames[i];
+            gui.setSlot(t2Slots[i], new GuiElementBuilder(pieceIcons[i])
+                    .setName(Text.literal("Piglin T2 " + pieceName + " II").formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to receive").formatted(Formatting.GREEN))
+                    .setCallback((idx, type, action) -> {
+                        player.getInventory().insertStack(SlayerItems.createT2Armor(SlayerManager.SlayerType.PIGLIN, pieceName));
+                        player.sendMessage(Text.literal("✓ Gave Piglin T2 " + pieceName).formatted(Formatting.GREEN), false);
+                    })
+                    .glow()
+                    .build());
+        }
+
+        // Give T2 Full Set
+        gui.setSlot(33, new GuiElementBuilder(Items.ENDER_CHEST)
+                .setName(Text.literal("Give T2 Full Set").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give all 4 T2 Piglin armor pieces").formatted(Formatting.GOLD))
+                .setCallback((idx, type, action) -> {
+                    for (String p : pieceNames) {
+                        player.getInventory().insertStack(SlayerItems.createT2Armor(SlayerManager.SlayerType.PIGLIN, p));
+                    }
+                    player.sendMessage(Text.literal("✓ Gave full Piglin T2 armor set!").formatted(Formatting.GREEN), false);
+                })
+                .glow()
+                .build());
+
         // Back button
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.GRAY))
                 .setCallback((idx, type, action) -> openSlayerAdminGui(player))
                 .build());

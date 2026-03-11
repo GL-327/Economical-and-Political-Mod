@@ -4,6 +4,7 @@ import com.political.BountyArmorHandler;
 import com.political.CustomItemHandler;
 import com.political.SlayerItems;
 import com.political.SlayerManager;
+import com.political.SpawnProtectionManager;
 import com.political.T2ArmorAbilityHandler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
@@ -37,6 +38,18 @@ public class LivingEntityMixin {
         LivingEntity self = (LivingEntity)(Object)this;
         if (!(self instanceof ServerPlayerEntity player)) return amount;
 
+        // Spawn protection: cancel PvP damage (player-vs-player) when either party is in the zone
+        if (source.getAttacker() instanceof ServerPlayerEntity attacker) {
+            if (SpawnProtectionManager.isPosProtected(player.getX(), player.getY(), player.getZ())
+                    || SpawnProtectionManager.isPosProtected(attacker.getX(), attacker.getY(), attacker.getZ())) {
+                // Operators bypass protection
+                if (!SpawnProtectionManager.isOperator(attacker)) {
+                    attacker.sendMessage(Text.literal("⛔ PvP is disabled in the spawn-protected area!").formatted(Formatting.RED), true);
+                    return 0.0f;
+                }
+            }
+        }
+
         // Teleport dodge for Enderman T2 armor
         if (T2ArmorAbilityHandler.tryTeleportDodge(player, amount)) {
             return 0.0f;
@@ -49,9 +62,10 @@ public class LivingEntityMixin {
             amount *= multiplier;
         }
 
-        // Projectile damage reduction for Skeleton T2 armor
+        // Projectile damage reduction for Skeleton armor (T1: -10%, T2 set: -15%/piece)
         if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
             float multiplier = T2ArmorAbilityHandler.getProjectileDamageReduction(player);
+            multiplier *= BountyArmorHandler.getProjectileDamageResistance(player);
             amount *= multiplier;
         }
 

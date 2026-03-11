@@ -45,6 +45,7 @@ public class BountyArmorHandler {
             tickSlimeArmorEffects(player);
             tickEndermanArmorEffects(player);
             tickWardenArmorEffects(player);
+            tickPiglinArmorEffects(player);
         }
     }
 
@@ -237,6 +238,30 @@ public class BountyArmorHandler {
     }
 
     // =========================================================
+    // PIGLIN ARMOR (Gilded Ravager)
+    // =========================================================
+
+    private static void tickPiglinArmorEffects(ServerPlayerEntity player) {
+        // T1 Helmet & T2 Helmet: Fire Resistance
+        String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
+        if ("piglin_t1_helmet".equals(helmetId) || "piglin_t2_helmet".equals(helmetId)) {
+            if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE, 40, 0, true, false, false));
+            }
+        }
+
+        // T1 Boots & T2 Boots: Fire Resistance
+        String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
+        if ("piglin_t1_boots".equals(bootsId) || "piglin_t2_boots".equals(bootsId)) {
+            if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE, 40, 0, true, false, false));
+            }
+        }
+    }
+
+    // =========================================================
     // LEGENDARY: Venomous Crawler Leggings
     // =========================================================
 
@@ -314,5 +339,19 @@ public class BountyArmorHandler {
         if (SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD))) return false;
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
         return "skeleton_t2_helmet".equals(helmetId);
+    }
+
+    /**
+     * Returns the projectile damage INCOMING multiplier for the player based on skeleton T1 chestplate.
+     * Skeleton T1 Chestplate: 0.90 (-10%).
+     * T2 chestplate resistance is handled by T2ArmorAbilityHandler.getProjectileDamageReduction().
+     *
+     * <p>Crown of Greed suppresses all bounty-gear bonuses, including this resistance.
+     */
+    public static float getProjectileDamageResistance(ServerPlayerEntity player) {
+        if (SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD))) return 1.0f;
+        String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
+        if ("skeleton_t1_chestplate".equals(chestId)) return 0.90f;
+        return 1.0f;
     }
 }
