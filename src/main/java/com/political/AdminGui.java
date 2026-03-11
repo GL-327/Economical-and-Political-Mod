@@ -1872,8 +1872,7 @@ public class AdminGui {
                 .setName(Text.literal("Piglin Flesh").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Crafting material from Piglins").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("")
-)
+                .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to receive").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> {
                     player.getInventory().insertStack(SlayerItems.createPiglinFlesh());
