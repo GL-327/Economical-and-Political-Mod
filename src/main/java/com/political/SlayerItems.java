@@ -2093,10 +2093,10 @@ public class SlayerItems {
         stack.set(DataComponentTypes.MAX_DAMAGE, T1_ARMOR_DURABILITY);
         stack.set(DataComponentTypes.DAMAGE, 0);
 
-        // ADD ACTUAL ARMOR ATTRIBUTES
+        // ADD ACTUAL ARMOR ATTRIBUTES (health is applied separately by SlayerArmorHandler)
         AttributeModifierSlot slot = getSlotForPiece(pieceName);
-        double healthValue = getT1ArmorHealth(type, pieceName);
-        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+        double healthValue = getT1ArmorHealth(type, pieceName); // used for lore display only
+        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "t1_" + pieceName.toLowerCase() + "_armor"),
@@ -2110,17 +2110,8 @@ public class SlayerItems {
                                 toughnessValue,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
-                        slot);
-        if (healthValue > 0) {
-            attrBuilder.add(EntityAttributes.MAX_HEALTH,
-                    new EntityAttributeModifier(
-                            Identifier.of("politicalserver", "t1_" + pieceName.toLowerCase() + "_health"),
-                            healthValue,
-                            EntityAttributeModifier.Operation.ADD_VALUE
-                    ),
-                    slot);
-        }
-        AttributeModifiersComponent attributes = attrBuilder.build();
+                        slot)
+                .build();
         stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
 
         // Compute per-piece boss defense from ArmorStats * pieceMult
@@ -2241,10 +2232,10 @@ public class SlayerItems {
         stack.set(DataComponentTypes.MAX_DAMAGE, T2_ARMOR_DURABILITY);
         stack.set(DataComponentTypes.DAMAGE, 0);
 
-        // ADD ACTUAL ARMOR ATTRIBUTES
+        // ADD ACTUAL ARMOR ATTRIBUTES (health is applied separately by SlayerArmorHandler)
         AttributeModifierSlot slot = getSlotForPiece(pieceName);
-        double t2HealthValue = getT2ArmorHealth(type, pieceName);
-        AttributeModifiersComponent.Builder t2AttrBuilder = AttributeModifiersComponent.builder()
+        double t2HealthValue = getT2ArmorHealth(type, pieceName); // used for lore display only
+        AttributeModifiersComponent t2Attributes = AttributeModifiersComponent.builder()
                 .add(EntityAttributes.ARMOR,
                         new EntityAttributeModifier(
                                 Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_armor"),
@@ -2258,18 +2249,10 @@ public class SlayerItems {
                                 toughnessValue,
                                 EntityAttributeModifier.Operation.ADD_VALUE
                         ),
-                        slot);
-        if (t2HealthValue > 0) {
-            t2AttrBuilder.add(EntityAttributes.MAX_HEALTH,
-                    new EntityAttributeModifier(
-                            Identifier.of("politicalserver", "t2_" + pieceName.toLowerCase() + "_health"),
-                            t2HealthValue,
-                            EntityAttributeModifier.Operation.ADD_VALUE
-                    ),
-                    slot);
-        }
+                        slot)
+                .build();
 
-        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, t2AttrBuilder.build());
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, t2Attributes);
 
         // Compute per-piece boss defense from ArmorStats * pieceMult
         ArmorStats stats = getArmorStats(type, 2);

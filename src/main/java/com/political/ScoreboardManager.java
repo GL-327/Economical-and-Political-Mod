@@ -34,7 +34,7 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Minecraft's sidebar scoreboard supports a maximum of 15 visible lines
+    // Design limit: keep sidebar at 15 lines for readability and to guarantee the footer is always visible
     private static final int MAX_LINES = 15;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
@@ -504,12 +504,11 @@ public class ScoreboardManager {
             }
         }
 
-        // Compute final combined defence (universal + specific, capped at 85) into s[1]
-        for (int[] s : stats.values()) {
-            int combined = Math.min(85, s[2] + s[1]);
-            s[1] = combined; // s[1] now = total specific (vs matching boss, = combined)
-            // s[2] remains as universal-only value
-        }
+        // Keep s[1] as boss-specific defence and s[2] as universal — do NOT combine them.
+        // This matches the lore which lists them separately:
+        //   "This piece: -X% vs Boss / -Y% vs All Bosses"
+        // The actual in-game damage model adds specificDef + universalDef when fighting the
+        // matching boss, so the player can mentally add s[1] + s[2] for the full picture.
 
         // Remove entries that have no meaningful stats to display
         stats.entrySet().removeIf(e -> e.getValue()[0] == 0 && e.getValue()[1] == 0 && e.getValue()[2] == 0);
