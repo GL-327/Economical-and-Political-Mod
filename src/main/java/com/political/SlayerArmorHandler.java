@@ -158,17 +158,60 @@ public class SlayerArmorHandler {
             String name = customName != null ? customName.getString() : "";
             boolean isT2 = name.contains(" II");
 
-            // Items that ship with their own ATTRIBUTE_MODIFIERS data component (e.g. items
-            // created by createSlayerHelmet/Chestplate/Leggings/Boots, createT1Helmet,
-            // createT2Helmet, createSpiderLeggings, createSlimeBoots, createWardenChestplate)
-            // already have the correct armor/toughness/health baked in.  Applying the handler
-            // on top of those would double every stat, so we skip them here.
-            // Only items WITHOUT built-in modifiers (e.g. Berserker Helmet, legacy T2 pieces)
-            // fall through to the name-based stat blocks below.
+            // Standard T1/T2 bounty armor items have armor+toughness baked into
+            // ATTRIBUTE_MODIFIERS. We still need to add the EXTRA attributes
+            // (health, speed, knockback resist) using the custom item ID.
             AttributeModifiersComponent builtIn = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
             if (builtIn != null && !builtIn.modifiers().isEmpty()) {
+                String cid = SlayerItems.getCustomItemId(stack);
+                if (cid != null) {
+                    switch (cid) {
+                        // ── ZOMBIE ──────────────────────────────────────
+                        case "zombie_t1_helmet"      -> bonusHealth += 4.0;   // +2 hearts
+                        case "zombie_t2_helmet"      -> bonusHealth += 8.0;   // +4 hearts
+                        case "zombie_t1_chestplate"  -> bonusHealth += 4.0;   // +2 hearts
+                        case "zombie_t2_chestplate"  -> bonusHealth += 8.0;   // +4 hearts
+                        case "zombie_t1_boots"       -> bonusKnockbackResist += 0.1;  // +10%
+                        case "zombie_t2_boots"       -> bonusKnockbackResist += 0.2;  // +20%
+                        // ── SPIDER ──────────────────────────────────────
+                        case "spider_t1_helmet"      -> bonusSpeed += 0.05;   // +5%
+                        case "spider_t2_helmet"      -> bonusSpeed += 0.10;   // +10%
+                        case "spider_t1_boots"       -> bonusSpeed += 0.10;   // +10%
+                        case "spider_t2_boots"       -> bonusSpeed += 0.15;   // +15%
+                        // ── SKELETON ─────────────────────────────────────
+                        case "skeleton_t1_leggings"  -> bonusSpeed += 0.05;   // +5%
+                        case "skeleton_t1_boots"     -> bonusSpeed += 0.05;   // +5%
+                        case "skeleton_t2_leggings"  -> bonusSpeed += 0.10;   // +10%
+                        case "skeleton_t2_boots"     -> bonusSpeed += 0.10;   // +10%
+                        // ── SLIME ────────────────────────────────────────
+                        case "slime_t1_helmet"       -> bonusHealth += 4.0;   // +2 hearts
+                        case "slime_t2_helmet"       -> bonusHealth += 8.0;   // +4 hearts
+                        case "slime_t1_chestplate"   -> bonusHealth += 8.0;   // +4 hearts
+                        case "slime_t2_chestplate"   -> bonusHealth += 12.0;  // +6 hearts
+                        // ── ENDERMAN ─────────────────────────────────────
+                        case "enderman_t1_chestplate" -> bonusSpeed += 0.05;  // +5%
+                        case "enderman_t2_chestplate" -> bonusSpeed += 0.10;  // +10%
+                        case "enderman_t1_leggings"   -> bonusSpeed += 0.05;  // +5%
+                        case "enderman_t2_leggings"   -> bonusSpeed += 0.10;  // +10%
+                        case "enderman_t2_boots"      -> bonusSpeed += 0.20;  // +20%
+                        // ── WARDEN ───────────────────────────────────────
+                        case "warden_t1_chestplate"  -> bonusKnockbackResist += 0.10; // +10%
+                        case "warden_t2_chestplate"  -> bonusKnockbackResist += 0.25; // +25%
+                        case "warden_t1_leggings"    -> bonusKnockbackResist += 0.10; // +10%
+                        case "warden_t2_leggings"    -> {
+                            bonusKnockbackResist += 0.25; // +25%
+                            bonusHealth += 12.0;           // +6 hearts
+                        }
+                        case "warden_t1_boots"       -> bonusKnockbackResist += 0.05; // +5% (lore)
+                        case "warden_t2_boots"       -> bonusKnockbackResist += 0.10; // +10%
+                        default -> {}
+                    }
+                }
                 continue;
             }
+
+            // ── Legacy / special items without built-in attribute modifiers ──
+            // (e.g. Berserker Helmet crafted before custom ID system)
 
             // ===== ZOMBIE ARMOR =====
             if (name.contains("Berserker") && name.contains("Helmet")) {
@@ -179,17 +222,16 @@ public class SlayerArmorHandler {
             if ((name.contains("Undying") || name.contains("Outlaw")) && name.contains("Helmet")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
                 bonusToughness += isT2 ? 3.0 : 2.0;
-                bonusHealth += isT2 ? 4.0 : 2.0;
+                bonusHealth += isT2 ? 8.0 : 4.0;
             }
             if ((name.contains("Undying") || name.contains("Outlaw")) && name.contains("Chestplate")) {
                 bonusArmor += isT2 ? 10.0 : 6.0;
                 bonusToughness += isT2 ? 4.0 : 2.0;
-                bonusHealth += isT2 ? 6.0 : 4.0;
+                bonusHealth += isT2 ? 8.0 : 4.0;
             }
             if ((name.contains("Undying") || name.contains("Outlaw")) && name.contains("Leggings")) {
                 bonusArmor += isT2 ? 8.0 : 5.0;
                 bonusToughness += isT2 ? 3.0 : 2.0;
-                bonusHealth += isT2 ? 4.0 : 2.0;
             }
             if ((name.contains("Undying") || name.contains("Outlaw")) && name.contains("Boots")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
@@ -199,8 +241,8 @@ public class SlayerArmorHandler {
 
             // ===== SPIDER ARMOR =====
             if (name.contains("Venomous") && name.contains("Leggings")) {
-                bonusArmor += isT2 ? 10.0 : 10.0;      // buffed: T1 6→10, T2 8→10
-                bonusToughness += isT2 ? 4.0 : 4.0;    // buffed: T1 2→4, T2 3→4
+                bonusArmor += isT2 ? 10.0 : 10.0;
+                bonusToughness += isT2 ? 4.0 : 4.0;
             }
             if ((name.contains("Venomous") || name.contains("Bandit")) && name.contains("Helmet")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
@@ -229,26 +271,28 @@ public class SlayerArmorHandler {
             if ((name.contains("Bone") || name.contains("Desperado")) && name.contains("Leggings")) {
                 bonusArmor += isT2 ? 8.0 : 6.0;
                 bonusToughness += isT2 ? 3.0 : 2.0;
+                bonusSpeed += isT2 ? 0.10 : 0.05;
             }
             if ((name.contains("Bone") || name.contains("Desperado")) && name.contains("Boots")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
                 bonusToughness += isT2 ? 3.0 : 2.0;
+                bonusSpeed += isT2 ? 0.10 : 0.05;
             }
 
             // ===== SLIME ARMOR =====
             if ((name.contains("Slime") || name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Boots")) {
-                bonusArmor += isT2 ? 6.0 : 6.0;        // buffed: T1 3→6, T2 5→6
-                bonusToughness += isT2 ? 3.0 : 3.0;    // buffed: T1 2→3, T2 3→3
+                bonusArmor += isT2 ? 6.0 : 6.0;
+                bonusToughness += isT2 ? 3.0 : 3.0;
             }
             if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Helmet")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
                 bonusToughness += isT2 ? 3.0 : 2.0;
-                bonusHealth += isT2 ? 4.0 : 2.0;
+                bonusHealth += isT2 ? 8.0 : 4.0;
             }
             if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Chestplate")) {
                 bonusArmor += isT2 ? 10.0 : 7.0;
                 bonusToughness += isT2 ? 4.0 : 2.0;
-                bonusHealth += isT2 ? 6.0 : 4.0;
+                bonusHealth += isT2 ? 12.0 : 8.0;
             }
             if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Leggings")) {
                 bonusArmor += isT2 ? 8.0 : 6.0;
@@ -270,14 +314,12 @@ public class SlayerArmorHandler {
             }
         }
 
-        // Apply armor modifier
+        // Apply modifiers
         applyModifier(player, EntityAttributes.ARMOR, SLAYER_ARMOR_ID, bonusArmor);
         applyModifier(player, EntityAttributes.ARMOR_TOUGHNESS, SLAYER_TOUGHNESS_ID, bonusToughness);
         applyModifier(player, EntityAttributes.MAX_HEALTH, SLAYER_HEALTH_ID, bonusHealth);
         applyModifier(player, EntityAttributes.KNOCKBACK_RESISTANCE, SLAYER_KB_ID, bonusKnockbackResist);
         applyModifier(player, EntityAttributes.MOVEMENT_SPEED, SLAYER_SPEED_ID, bonusSpeed);
-
-        // Vitality enchantment removed — custom enchantments are disabled.
     }
 
     private static void applyModifier(ServerPlayerEntity player,

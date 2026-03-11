@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Max sidebar lines — Minecraft sidebar shows up to 15 entries
-    private static final int MAX_LINES = 15;
+    // Max sidebar lines — increased to 30 to display all bounty buff lines
+    private static final int MAX_LINES = 30;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -261,7 +261,7 @@ public class ScoreboardManager {
         String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
         lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
 
-        // Lines 10-13: Compact bounty stats / quest info
+        // Lines 10+: Compact bounty stats / quest info
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
 
@@ -289,7 +289,7 @@ public class ScoreboardManager {
             // Aggregate stats across all gear types
             int universalDef = 0;
             int weaponBonus = 0;
-            // Collect (type, specificDef%) pairs for display (only show non-zero specific defs)
+            // Collect ALL (type, specificDef%) pairs for display
             java.util.List<String> specificLines = new java.util.ArrayList<>();
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
                 int[] s = entry.getValue();
@@ -303,13 +303,17 @@ public class ScoreboardManager {
             if (universalDef > 0) {
                 lines.add("§7  DEF all: §a-" + Math.min(universalDef, 85) + "%");
             }
-            // Show specific defence for at most 1 type (space constrained)
-            if (!specificLines.isEmpty()) {
-                lines.add(specificLines.get(0) + " §7(vs boss)");
+            // Show ALL specific defence lines (no truncation)
+            for (String specificLine : specificLines) {
+                lines.add(specificLine + " §7(vs boss)");
             }
             // Weapon bonus
             if (weaponBonus > 0) {
                 lines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");
+            }
+            // Individual piece buffs
+            for (String buffLine : collectActivePieceBuffs(player)) {
+                lines.add(buffLine);
             }
         } else {
             lines.add("§8  No bounty gear");
@@ -476,5 +480,101 @@ public class ScoreboardManager {
         // Remove entries that have no meaningful stats to display
         stats.entrySet().removeIf(e -> e.getValue()[0] == 0 && e.getValue()[1] == 0 && e.getValue()[2] == 0);
         return stats;
+    }
+
+    /**
+     * Scans all equipped armor slots and returns a list of active per-piece buff display strings.
+     * Each entry is prefixed with "§b  ✦ " and lists the buff name/description.
+     * Crown of Greed suppresses all buffs.
+     */
+    private static List<String> collectActivePieceBuffs(ServerPlayerEntity player) {
+        List<String> buffs = new ArrayList<>();
+
+        // Crown of Greed disables all buffs
+        if (SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD))) return buffs;
+
+        EquipmentSlot[] slots = {
+            EquipmentSlot.HEAD,
+            EquipmentSlot.CHEST,
+            EquipmentSlot.LEGS,
+            EquipmentSlot.FEET
+        };
+
+        for (EquipmentSlot slot : slots) {
+            ItemStack stack = player.getEquippedStack(slot);
+            String id = SlayerItems.getCustomItemId(stack);
+            if (id == null) {
+                // Check legendary special pieces
+                if (SlayerItems.isSpiderLeggings(stack))    { buffs.add("§b  ✦ §fPoison Immune §7| Web Immune §7| §aSpeed II"); }
+                else if (SlayerItems.isZombieBerserkerHelmet(stack)) { buffs.add("§b  ✦ §fBerserker"); }
+                else if (SlayerItems.isSlimeBoots(stack))   { buffs.add("§b  ✦ §fNo Fall Dmg §7| Death Save"); }
+                else if (SlayerItems.isWardenChestplate(stack)) { buffs.add("§b  ✦ §fKB Immune §7| Sonic Pulse"); }
+                continue;
+            }
+            String buff = getPieceBuff(id);
+            if (buff != null) buffs.add("§b  ✦ §f" + buff);
+        }
+        return buffs;
+    }
+
+    /** Returns the short buff description for a given custom item ID, or null if none. */
+    private static String getPieceBuff(String id) {
+        return switch (id) {
+            // ── ZOMBIE ───────────────────────────────────────────────────────
+            case "zombie_t1_helmet"       -> "Hunger Immune";
+            case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";
+            case "zombie_t1_chestplate"   -> "+2 Hearts";
+            case "zombie_t2_chestplate"   -> "+4 Hearts §7| §aRegen I";
+            case "zombie_t1_leggings"     -> "-10% Undead Dmg";
+            case "zombie_t2_leggings"     -> "-20% Undead Dmg";
+            case "zombie_t1_boots"        -> "+10% KB Resist";
+            case "zombie_t2_boots"        -> "+20% KB Resist §7| §aSpeed I (<50% HP)";
+            // ── SPIDER ────────────────────────────────────────────────────────
+            case "spider_t1_helmet"       -> "+5% Speed";
+            case "spider_t2_helmet"       -> "+10% Speed §7| §bNight Vision";
+            case "spider_t1_chestplate"   -> "Weakness Immune";
+            case "spider_t2_chestplate"   -> "Weakness Immune §7| Poison Thorns";
+            case "spider_t1_leggings"     -> "Poison Immune";
+            case "spider_t2_leggings"     -> "Poison Immune §7| §aSpeed II";
+            case "spider_t1_boots"        -> "+10% Speed";
+            case "spider_t2_boots"        -> "+15% Speed §7| Safe Fall +3";
+            // ── SKELETON ──────────────────────────────────────────────────────
+            case "skeleton_t1_helmet"     -> "+10% Proj Dmg";
+            case "skeleton_t2_helmet"     -> "+20% Proj Dmg §7| Glow Arrows";
+            case "skeleton_t1_chestplate" -> "+10% Proj Resist";
+            case "skeleton_t2_chestplate" -> "+25% Proj Resist";
+            case "skeleton_t1_leggings"   -> "+5% Speed";
+            case "skeleton_t2_leggings"   -> "+10% Speed";
+            case "skeleton_t1_boots"      -> "+5% Speed";
+            case "skeleton_t2_boots"      -> "+10% Speed";
+            // ── SLIME ─────────────────────────────────────────────────────────
+            case "slime_t1_helmet"        -> "+2 Hearts";
+            case "slime_t2_helmet"        -> "+4 Hearts §7| §aSaturation";
+            case "slime_t1_chestplate"    -> "+4 Hearts";
+            case "slime_t2_chestplate"    -> "+6 Hearts §7| Absorption /30s";
+            case "slime_t1_leggings"      -> "Jump Boost I";
+            case "slime_t2_leggings"      -> "Jump Boost II";
+            case "slime_t1_boots"         -> "No Fall Dmg";
+            case "slime_t2_boots"         -> "No Fall Dmg §7| Jump Boost II";
+            // ── ENDERMAN ──────────────────────────────────────────────────────
+            case "enderman_t1_helmet"     -> "Night Vision";
+            case "enderman_t2_helmet"     -> "Night Vision";
+            case "enderman_t1_chestplate" -> "+5% Speed";
+            case "enderman_t2_chestplate" -> "+10% Speed §7| 20% Teleport Dodge";
+            case "enderman_t1_leggings"   -> "+5% Speed";
+            case "enderman_t2_leggings"   -> "+10% Speed";
+            case "enderman_t1_boots"      -> "Safe Fall +3";
+            case "enderman_t2_boots"      -> "No Fall Dmg §7| +20% Speed";
+            // ── WARDEN ────────────────────────────────────────────────────────
+            case "warden_t1_helmet"       -> "Darkness Immune";
+            case "warden_t2_helmet"       -> "Darkness Immune §7| Vibration Sense";
+            case "warden_t1_chestplate"   -> "+10% KB Resist";
+            case "warden_t2_chestplate"   -> "+25% KB Resist §7| Sonic Pulse";
+            case "warden_t1_leggings"     -> "+10% KB Resist";
+            case "warden_t2_leggings"     -> "+25% KB Resist §7| +6 Hearts";
+            case "warden_t1_boots"        -> "Vibration Sense (8 blocks)";
+            case "warden_t2_boots"        -> "+10% KB Resist";
+            default -> null;
+        };
     }
 }
