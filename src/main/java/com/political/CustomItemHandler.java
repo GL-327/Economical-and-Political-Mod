@@ -319,6 +319,9 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> levelWarningCooldowns = new HashMap<>();
 
     public static ItemStack createHPEBM(int mk) {
+        // mk 6 and 7 are both the Ultra Overclocked (Mk.VI) — the max tier
+        if (mk >= 6) return createUltraOverclockedBeam();
+
         ItemStack weapon = new ItemStack(Items.IRON_SHOVEL);
 
         // Unique names per tier
@@ -1110,12 +1113,6 @@ public class CustomItemHandler {
                 Text.literal(""),
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
                         .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
-                Text.literal(""),
-                Text.literal("━ Compatible Enchants ━").formatted(Formatting.AQUA),
-                Text.literal("✦ Bounty Sharpness III").formatted(Formatting.AQUA),
-                Text.literal("✦ Boss Hunter II").formatted(Formatting.AQUA),
-                Text.literal("✦ Thunderbolt I").formatted(Formatting.AQUA),
-                Text.literal("✦ Execute II").formatted(Formatting.AQUA),
                 Text.literal(""),
                 Text.literal("§8[MFLUX: Judicial enforcement weapon | Contractor-grade]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)

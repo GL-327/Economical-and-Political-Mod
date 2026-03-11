@@ -225,7 +225,7 @@ public class CustomItemsGui {
         items.add(CustomItemHandler.createHarveysStick());
         items.add(CustomItemHandler.createHermesShoes());
         for (int mk = 1; mk <= 5; mk++) items.add(CustomItemHandler.createHPEBM(mk));
-        items.add(CustomItemHandler.createHPEBM(7));
+        items.add(CustomItemHandler.createUltraOverclockedBeam());
         openSubPage(player, "🗡 Special Weapons", items, 0);
     }
 

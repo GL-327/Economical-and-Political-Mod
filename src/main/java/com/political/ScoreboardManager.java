@@ -287,21 +287,26 @@ public class ScoreboardManager {
             lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
 
             // Aggregate stats across all gear types
+            // First pass: compute totals
             int universalDef = 0;
             int weaponBonus = 0;
-            // Collect ALL (type, specificDef%) pairs for display
+            for (int[] s : bountyStats.values()) {
+                universalDef += s[2]; // sum universal defence from all equipped gear
+                if (s[0] > weaponBonus) weaponBonus = s[0];
+            }
+            int cappedUniversal = Math.min(universalDef, 85);
+            // Second pass: build specific boss lines using the TOTAL protection (universal + extra specific)
             java.util.List<String> specificLines = new java.util.ArrayList<>();
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
                 int[] s = entry.getValue();
-                universalDef += s[2]; // sum universal defence from all equipped gear
-                if (s[0] > weaponBonus) weaponBonus = s[0];
                 if (s[1] > 0) {
-                    specificLines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + s[1] + "%");
+                    int totalVsBoss = Math.min(85, s[1] + universalDef);
+                    specificLines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + totalVsBoss + "%");
                 }
             }
-            // Universal defence line
+            // Universal defence line (applies to all bosses)
             if (universalDef > 0) {
-                lines.add("§7  DEF all: §a-" + Math.min(universalDef, 85) + "%");
+                lines.add("§7  DEF all: §a-" + cappedUniversal + "%");
             }
             // Show ALL specific defence lines (no truncation)
             for (String specificLine : specificLines) {
