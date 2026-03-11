@@ -96,6 +96,33 @@ public class RecipesGui {
         return display(item, count, name, Formatting.WHITE);
     }
 
+    /**
+     * Item #8 – /setrecipe ↔ /recipe sync.
+     * Checks RecipeConfigManager for a custom admin recipe whose result matches
+     * the custom item ID of {@code resultStack}. If one is found the recipe page
+     * is opened with the admin-configured ingredients instead of the hardcoded
+     * ones. Returns true when the custom recipe was shown, false when the caller
+     * should fall through to its own hardcoded recipe.
+     */
+    private static boolean tryOpenCustomRecipe(ServerPlayerEntity player,
+                                               ItemStack resultStack,
+                                               String title,
+                                               Runnable backAction) {
+        String customId = SlayerItems.getCustomItemId(resultStack);
+        if (customId == null) return false;
+
+        for (SlayerRecipes.Recipe r : RecipeConfigManager.getCustomRecipes()) {
+            String rId = SlayerItems.getCustomItemId(r.result);
+            if (customId.equals(rId)) {
+                Text headerName = r.result.get(DataComponentTypes.CUSTOM_NAME);
+                if (headerName == null) headerName = Text.literal(r.name).formatted(Formatting.WHITE);
+                openRecipePage(player, title, headerName, r.ingredients, r.result, backAction);
+                return true;
+            }
+        }
+        return false;
+    }
+
     // ============================================================
     // MAIN MENU
     // ============================================================
@@ -260,6 +287,11 @@ public class RecipesGui {
     }
 
     private static void openT1SwordRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        ItemStack result = SlayerItems.createSlayerSword(type);
+        String pageTitle = "⚔ " + type.displayName + " Sword";
+        // Item #8: show admin-configured recipe if one exists for this result
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openBountySwordsT1(player))) return;
+
         ItemStack core = SlayerItems.createCore(type);
         // T1 Sword grid: 3 Cores + 1 Iron Sword + 2 Sticks
         // Layout: [Core, _, Core] / [ISword, Core, _] / [Stick, _, Stick]
@@ -268,9 +300,8 @@ public class RecipesGui {
                 new ItemStack(Items.IRON_SWORD), core.copy(), ItemStack.EMPTY,
                 new ItemStack(Items.STICK), ItemStack.EMPTY, new ItemStack(Items.STICK)
         };
-        ItemStack result = SlayerItems.createSlayerSword(type);
         Text headerName = Text.literal("⚔ " + type.displayName + " Bounty Sword Recipe").formatted(type.color, Formatting.BOLD);
-        openRecipePage(player, "⚔ " + type.displayName + " Sword", headerName, grid, result,
+        openRecipePage(player, pageTitle, headerName, grid, result,
                 () -> openBountySwordsT1(player));
     }
 
@@ -318,6 +349,11 @@ public class RecipesGui {
     }
 
     private static void openT2SwordRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        ItemStack result = SlayerItems.createUpgradedSlayerSword(type);
+        String pageTitle = "⚔ T2 " + type.displayName + " Sword";
+        // Item #8: show admin-configured recipe if one exists for this result
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openBountySwordsT2(player))) return;
+
         ItemStack core = SlayerItems.createCore(type);
         ItemStack t1Sword = SlayerItems.createSlayerSword(type);
         // T2 Sword grid: 3 Cores + 1 Diamond Sword + 1 T1 Sword = 5 items
@@ -327,9 +363,8 @@ public class RecipesGui {
                 new ItemStack(Items.DIAMOND_SWORD), t1Sword,     ItemStack.EMPTY,
                 ItemStack.EMPTY,                   ItemStack.EMPTY,  ItemStack.EMPTY
         };
-        ItemStack result = SlayerItems.createUpgradedSlayerSword(type);
         Text headerName = Text.literal("⚔ " + type.displayName + " Bounty Sword II Recipe").formatted(type.color, Formatting.BOLD);
-        openRecipePage(player, "⚔ T2 " + type.displayName + " Sword", headerName, grid, result,
+        openRecipePage(player, pageTitle, headerName, grid, result,
                 () -> openBountySwordsT2(player));
     }
 
@@ -398,6 +433,10 @@ public class RecipesGui {
     }
 
     private static void openZombieHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createZombieBerserkerHelmet();
+        String pageTitle = "💀 Zombie Berserker Helmet";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.ZOMBIE);
         // 3 Zombie Cores + 2 Rotten Flesh + 1 Zombie Head = 6 items
         // Grid: [Core, Core, Core] / [Flesh, Head, Flesh] / [_, _, _]
@@ -406,13 +445,16 @@ public class RecipesGui {
                 new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.ZOMBIE_HEAD), new ItemStack(Items.ROTTEN_FLESH),
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
         };
-        ItemStack result = SlayerItems.createZombieBerserkerHelmet();
         openRecipePage(player, "💀 Zombie Berserker Helmet",
                 Text.literal("💀 Zombie Berserker Helmet Recipe").formatted(Formatting.DARK_GREEN, Formatting.BOLD),
                 grid, result, () -> openArmorRecipes(player));
     }
 
     private static void openSpiderLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSpiderLeggings();
+        String pageTitle = "🕷 Venomous Crawler Leggings";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SPIDER);
         // 3 Spider Cores + 2 String + 1 Spider Eye = 6 items
         // Grid: [Core, Core, Core] / [String, Eye, String] / [_, _, _]
@@ -421,13 +463,16 @@ public class RecipesGui {
                 new ItemStack(Items.STRING), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.STRING),
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
         };
-        ItemStack result = SlayerItems.createSpiderLeggings();
         openRecipePage(player, "🕷 Venomous Crawler Leggings",
                 Text.literal("🕷 Venomous Crawler Leggings Recipe").formatted(Formatting.DARK_RED, Formatting.BOLD),
                 grid, result, () -> openArmorRecipes(player));
     }
 
     private static void openSkeletonBowRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSkeletonBow();
+        String pageTitle = "🏹 Bone Desperado's Longbow";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SKELETON);
         // 3 Skeleton Cores + 1 Bow + 2 Bones = 6 items
         // Grid: [Core, Core, Core] / [Bone, Bow, Bone] / [_, _, _]
@@ -436,13 +481,16 @@ public class RecipesGui {
                 new ItemStack(Items.BONE), new ItemStack(Items.BOW), new ItemStack(Items.BONE),
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
         };
-        ItemStack result = SlayerItems.createSkeletonBow();
         openRecipePage(player, "🏹 Bone Desperado's Longbow",
                 Text.literal("🏹 Bone Desperado's Longbow Recipe").formatted(Formatting.WHITE, Formatting.BOLD),
                 grid, result, () -> openArmorRecipes(player));
     }
 
     private static void openSlimeBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSlimeBoots();
+        String pageTitle = "🟢 Gelatinous Rustler Boots";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SLIME);
         // 3 Slime Cores + 2 Slime Balls + 1 Leather Boots = 6 items
         // Grid: [Core, Core, Core] / [SBall, Boots, SBall] / [_, _, _]
@@ -451,13 +499,16 @@ public class RecipesGui {
                 new ItemStack(Items.SLIME_BALL), new ItemStack(Items.LEATHER_BOOTS), new ItemStack(Items.SLIME_BALL),
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
         };
-        ItemStack result = SlayerItems.createSlimeBoots();
         openRecipePage(player, "🟢 Gelatinous Rustler Boots",
                 Text.literal("🟢 Gelatinous Rustler Boots Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
                 grid, result, () -> openArmorRecipes(player));
     }
 
     private static void openWardenChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createWardenChestplate();
+        String pageTitle = "💀 Sculk Terror Chestplate";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
         ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.WARDEN);
         // 3 Warden Cores + 2 Echo Shards + 1 Netherite Chestplate = 6 items
         // Grid: [Core, Core, Core] / [EShard, Chest, EShard] / [_, _, _]
@@ -466,7 +517,6 @@ public class RecipesGui {
                 new ItemStack(Items.ECHO_SHARD), new ItemStack(Items.NETHERITE_CHESTPLATE), new ItemStack(Items.ECHO_SHARD),
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
         };
-        ItemStack result = SlayerItems.createWardenChestplate();
         openRecipePage(player, "💀 Sculk Terror Chestplate",
                 Text.literal("💀 Sculk Terror Chestplate Recipe").formatted(Formatting.DARK_AQUA, Formatting.BOLD),
                 grid, result, () -> openArmorRecipes(player));

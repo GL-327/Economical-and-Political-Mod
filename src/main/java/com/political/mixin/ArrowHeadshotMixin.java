@@ -23,17 +23,25 @@ public class ArrowHeadshotMixin {
             return damage;
         }
 
+        // Only apply headshot bonus for critical (fully-charged) shots.
+        // Instant-fire arrows fired by the Skeleton Bow's instant-shot mode
+        // are tagged "instant_shot" and must never trigger headshots even though
+        // they are also marked critical for visual particles.
+        if (!arrow.isCritical() || arrow.getCommandTags().contains("instant_shot")) {
+            return damage;
+        }
+
         Entity owner = arrow.getOwner();
         if (!(owner instanceof ServerPlayerEntity player)) return damage;
 
         Entity target = hitResult.getEntity();
         if (!(target instanceof LivingEntity living)) return damage;
 
-        // Headshot: arrow hit the upper 25% of the entity's height (the head region)
-        // Entity bounding box bottom is getY(), top is getY() + getHeight()
+        // Headshot: arrow hit the upper 15% of the entity's height (true head region).
+        // Using the entity bounding box bottom + height to compute the head threshold.
         double entityBottom = living.getY();
         double entityHeight = living.getHeight();
-        double headThreshold = entityBottom + entityHeight * 0.75;  // top 25% = head
+        double headThreshold = entityBottom + entityHeight * 0.85; // top 15% = head
 
         double hitY = arrow.getY();
 

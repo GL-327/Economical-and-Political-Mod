@@ -5,9 +5,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Manages the custom tab list (player list) header and footer shown to all players.
- * Updated periodically so the player count and auction timer stay fresh.
+ * Updated periodically so the player count, auction timer, and active perks stay fresh.
  */
 public class TabListManager {
 
@@ -50,21 +53,94 @@ public class TabListManager {
             auctionLine = "§6🏪 Underground Auction: §f" + formatDuration(ms);
         }
 
+        // Build header
         Text header = Text.literal(
-            "§6§l✦ CivilCraft ✦\n" +
+            "§6§l✦ CivilCraft ✦§r\n" +
             "§8────────────────────────\n" +
             "§7Players: §e" + playerCount + "§7/§e" + maxPlayers
         );
 
+        // Build perks section
+        String perksSection = buildPerksSection();
+
+        // Build footer
         Text footer = Text.literal(
             "§8────────────────────────\n" +
-            "§a⚖ Chair: §c" + chairName + "  §9Vice: " + viceName + "\n" +
+            "§a⚖ §7Chair: §c" + chairName + "  §9Vice: §b" + viceName + "\n" +
             auctionLine + "\n" +
+            "§8────────────────────────\n" +
+            perksSection +
             "§8────────────────────────\n" +
             "§7play.§bcivil§7craft.net"
         );
 
         player.networkHandler.sendPacket(new PlayerListHeaderS2CPacket(header, footer));
+    }
+
+    /**
+     * Builds a formatted string listing all active perks, colour-coded by type.
+     * Positive perks → green, Negative perks → red, Neutral perks → yellow.
+     * Returns an empty string (without its own newline) when no perks are active,
+     * so the footer stays compact.
+     */
+    private static String buildPerksSection() {
+        List<String> activePerks = PerkManager.getActivePerks();
+        if (activePerks.isEmpty()) {
+            return "§8No active perks this term\n";
+        }
+
+        List<String> positiveLines = new ArrayList<>();
+        List<String> negativeLines = new ArrayList<>();
+        List<String> neutralLines  = new ArrayList<>();
+
+        for (String perkId : activePerks) {
+            Perk perk = PerkManager.getPerk(perkId);
+            if (perk == null) continue;
+            switch (perk.type) {
+                case POSITIVE -> positiveLines.add("§a+ " + perk.name);
+                case NEGATIVE -> negativeLines.add("§c- " + perk.name);
+                default       -> neutralLines .add("§e~ " + perk.name);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("§d§l⚡ Active Perks§r\n");
+
+        // Show positive perks
+        if (!positiveLines.isEmpty()) {
+            // Pair them two-per-line to keep the footer compact
+            for (int i = 0; i < positiveLines.size(); i += 2) {
+                sb.append("  ").append(positiveLines.get(i));
+                if (i + 1 < positiveLines.size()) {
+                    sb.append("  ").append(positiveLines.get(i + 1));
+                }
+                sb.append("\n");
+            }
+        }
+
+        // Show neutral perks
+        if (!neutralLines.isEmpty()) {
+            for (int i = 0; i < neutralLines.size(); i += 2) {
+                sb.append("  ").append(neutralLines.get(i));
+                if (i + 1 < neutralLines.size()) {
+                    sb.append("  ").append(neutralLines.get(i + 1));
+                }
+                sb.append("\n");
+            }
+        }
+
+        // Show negative perks
+        if (!negativeLines.isEmpty()) {
+            for (int i = 0; i < negativeLines.size(); i += 2) {
+                sb.append("  ").append(negativeLines.get(i));
+                if (i + 1 < negativeLines.size()) {
+                    sb.append("  ").append(negativeLines.get(i + 1));
+                }
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
     }
 
     private static String formatDuration(long ms) {

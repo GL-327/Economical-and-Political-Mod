@@ -354,6 +354,8 @@ public class CustomItemHandler {
         lore.add(Text.literal("for the Chair holder.").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Right-click to use powers").formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Contractor-issued judicial armament]").formatted(Formatting.DARK_GRAY));
 
         gavel.set(DataComponentTypes.LORE, new LoreComponent(lore));
         gavel.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -933,6 +935,7 @@ public class CustomItemHandler {
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
                         .append(Text.literal("Lightning Strike").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
+                Text.literal("§8[MFLUX: Contractor-issued armament | CRD-experimental]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.GOLD)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -959,19 +962,18 @@ public class CustomItemHandler {
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
                         .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
+                Text.literal("━ Compatible Enchants ━").formatted(Formatting.AQUA),
                 Text.literal("✦ Bounty Sharpness III").formatted(Formatting.AQUA),
                 Text.literal("✦ Boss Hunter II").formatted(Formatting.AQUA),
                 Text.literal("✦ Thunderbolt I").formatted(Formatting.AQUA),
                 Text.literal("✦ Execute II").formatted(Formatting.AQUA),
                 Text.literal(""),
+                Text.literal("§8[MFLUX: Judicial enforcement weapon | Contractor-grade]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        // Custom enchantments: Bounty Sharpness 3, Boss Hunter 2, Thunderbolt 1, Execute 2
-        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.SLAYER_SHARPNESS, 3);
-        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.BOSS_HUNTER, 2);
-        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.THUNDERBOLT, 1);
-        CustomEnchantmentManager.addEnchantment(stack, CustomEnchantmentManager.EXECUTE, 2);
+        // Custom enchantments are NOT pre-applied — players apply them via the enchanting table.
+        // The lore above lists compatible enchantments as a guide only.
         return stack;
     }
 
@@ -992,6 +994,7 @@ public class CustomItemHandler {
                 Text.literal("Speed Bonus: ").formatted(Formatting.GRAY)
                         .append(Text.literal("+60%").formatted(Formatting.GREEN, Formatting.BOLD)),
                 Text.literal(""),
+                Text.literal("§8[MFLUX: Field-tested containment gear | Contractor Program]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.AQUA)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -1019,6 +1022,7 @@ public class CustomItemHandler {
                         .append(Text.literal("1.0").formatted(Formatting.RED, Formatting.BOLD))
                         .append(Text.literal(" per tick").formatted(Formatting.GRAY)),
                 Text.literal(""),
+                Text.literal("§8[MFLUX: Experimental energy weapon | Mk.I prototype]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Tier I」").formatted(Formatting.GREEN)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -1047,6 +1051,7 @@ public class CustomItemHandler {
                 Text.literal(""),
                 Text.literal("Used to craft Ultra weapons").formatted(Formatting.LIGHT_PURPLE),
                 Text.literal(""),
+                Text.literal("§8[MFLUX: CRD-006 specimen core | Anomalous biological residue]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Crafting Material」").formatted(Formatting.DARK_AQUA)
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -1081,7 +1086,8 @@ public class CustomItemHandler {
                 Text.literal("Left-click: Sonic Devastation").formatted(Formatting.DARK_PURPLE),
                 Text.literal("  └ AOE devastation, 10s cooldown").formatted(Formatting.GRAY),
                 Text.literal(""),
-                Text.literal("「Tier VII — Mythic」").formatted(Formatting.DARK_PURPLE)
+                Text.literal("「Tier VII — Mythic」").formatted(Formatting.DARK_PURPLE),
+                Text.literal("§8[MFLUX: Mk.VII beyond-class weapon | Containment VOID]").formatted(Formatting.DARK_GRAY)
         )));
         beam.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         beam.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
@@ -1458,9 +1464,9 @@ public class CustomItemHandler {
             return;
         }
 
-        // Jump Boost II
+        // Jump Boost III (buffed from II → III for Item #6)
         player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.JUMP_BOOST, 40, 1, true, false, false));
+                StatusEffects.JUMP_BOOST, 40, 2, true, false, false));
 
         // Check if shrunk state should end
         UUID uuid = player.getUuid();

@@ -1,6 +1,7 @@
 package com.political;
 
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -22,36 +23,35 @@ public class SlayerArmorHandler {
     private static final Identifier VITALITY_ID = Identifier.of("political", "custom_vitality");
 
     /**
-     * Calculate total boss damage reduction from armor
+     * Calculate total boss damage reduction from armor.
+     * Uses per-piece ArmorStats values weighted by slot (Helmet 20%, Chest 40%, Legs 25%, Boots 15%)
+     * to exactly match what the per-piece lore displays (Items #5 and #18).
      */
     public static float getBossDamageReduction(ServerPlayerEntity player, SlayerManager.SlayerType bossType) {
         float reduction = 0.0f;
         int t1MatchingPieces = 0;
         int t2MatchingPieces = 0;
 
-        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
-        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+        // Weights must match SlayerItems.getPieceBossMultiplier()
+        float[] weights = {0.20f, 0.40f, 0.25f, 0.15f}; // HEAD, CHEST, LEGS, FEET
+        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
-        List<ItemStack> armor = List.of(helmet, chestplate, leggings, boots);
-
-        for (ItemStack stack : armor) {
+        for (int i = 0; i < slots.length; i++) {
+            ItemStack stack = player.getEquippedStack(slots[i]);
             Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
             if (customName == null) continue;
             String name = customName.getString();
 
-            // Check T2 first (contains " II")
-            if (name.contains(" II") && isMatchingSlayerArmor(name, bossType)) {
-                t2MatchingPieces++;
-            } else if (isMatchingSlayerArmor(name, bossType)) {
-                t1MatchingPieces++;
-            }
-        }
+            boolean isT2 = name.contains(" II");
+            if (!isMatchingSlayerArmor(name, bossType)) continue;
 
-        // T1: 10% per piece, T2: 20% per piece
-        reduction += t1MatchingPieces * 0.10f;
-        reduction += t2MatchingPieces * 0.20f;
+            int tier = isT2 ? 2 : 1;
+            SlayerItems.ArmorStats stats = SlayerItems.getArmorStats(bossType, tier);
+            reduction += (float) stats.bossReduction * weights[i];
+
+            if (isT2) t2MatchingPieces++;
+            else t1MatchingPieces++;
+        }
 
         // Full set bonus
         if (t1MatchingPieces >= 4) {
@@ -105,10 +105,23 @@ public class SlayerArmorHandler {
             String name = customName != null ? customName.getString() : "";
             boolean isT2 = name.contains(" II");
 
+            // Items that ship with their own ATTRIBUTE_MODIFIERS data component (e.g. items
+            // created by createSlayerHelmet/Chestplate/Leggings/Boots, createT1Helmet,
+            // createT2Helmet, createSpiderLeggings, createSlimeBoots, createWardenChestplate)
+            // already have the correct armor/toughness/health baked in.  Applying the handler
+            // on top of those would double every stat, so we skip them here.
+            // Only items WITHOUT built-in modifiers (e.g. Berserker Helmet, legacy T2 pieces)
+            // fall through to the name-based stat blocks below.
+            AttributeModifiersComponent builtIn = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
+            if (builtIn != null && !builtIn.modifiers().isEmpty()) {
+                continue;
+            }
+
             // ===== ZOMBIE ARMOR =====
             if (name.contains("Berserker") && name.contains("Helmet")) {
-                bonusArmor += 3.0;
-                bonusToughness += 2.0;
+                bonusArmor += 10.0;      // buffed from 3 → 10
+                bonusToughness += 5.0;   // buffed from 2 → 5
+                bonusHealth += 8.0;      // +4 hearts bonus health
             }
             if ((name.contains("Undying") || name.contains("Outlaw")) && name.contains("Helmet")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
@@ -133,8 +146,8 @@ public class SlayerArmorHandler {
 
             // ===== SPIDER ARMOR =====
             if (name.contains("Venomous") && name.contains("Leggings")) {
-                bonusArmor += isT2 ? 8.0 : 6.0;
-                bonusToughness += isT2 ? 3.0 : 2.0;
+                bonusArmor += isT2 ? 10.0 : 10.0;      // buffed: T1 6→10, T2 8→10
+                bonusToughness += isT2 ? 4.0 : 4.0;    // buffed: T1 2→4, T2 3→4
             }
             if ((name.contains("Venomous") || name.contains("Bandit")) && name.contains("Helmet")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
@@ -171,8 +184,8 @@ public class SlayerArmorHandler {
 
             // ===== SLIME ARMOR =====
             if ((name.contains("Slime") || name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Boots")) {
-                bonusArmor += isT2 ? 5.0 : 3.0;
-                bonusToughness += isT2 ? 3.0 : 2.0;
+                bonusArmor += isT2 ? 6.0 : 6.0;        // buffed: T1 3→6, T2 5→6
+                bonusToughness += isT2 ? 3.0 : 3.0;    // buffed: T1 2→3, T2 3→3
             }
             if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Helmet")) {
                 bonusArmor += isT2 ? 5.0 : 3.0;
@@ -201,88 +214,6 @@ public class SlayerArmorHandler {
                 bonusArmor += isT2 ? 8.0 : 7.0;
                 bonusToughness += isT2 ? 3.0 : 2.5;
                 bonusSpeed += isT2 ? 0.1 : 0.05;
-            }
-            // ===== T2 SKELETON ARMOR (Bone Desperado II) =====
-            if ((name.contains("Bone") || name.contains("Desperado")) && name.contains(" II")) {
-                if (name.contains("Helmet")) {
-                    bonusArmor += 5.0;
-                    bonusToughness += 3.0;
-                } else if (name.contains("Chestplate")) {
-                    bonusArmor += 10.0;
-                    bonusToughness += 4.0;
-                } else if (name.contains("Leggings")) {
-                    bonusArmor += 8.0;
-                    bonusToughness += 3.0;
-                } else if (name.contains("Boots")) {
-                    bonusArmor += 5.0;
-                    bonusToughness += 3.0;
-                    bonusSpeed += 0.1;
-                }
-            }
-
-// ===== T2 SLIME ARMOR (Gelatinous Rustler II) =====
-            if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains(" II")) {
-                if (name.contains("Helmet")) {
-                    bonusArmor += 5.0;
-                    bonusToughness += 3.0;
-                    bonusHealth += 6.0;
-                } else if (name.contains("Chestplate")) {
-                    bonusArmor += 10.0;
-                    bonusToughness += 4.0;
-                    bonusHealth += 10.0;
-                } else if (name.contains("Leggings")) {
-                    bonusArmor += 8.0;
-                    bonusToughness += 3.0;
-                    bonusHealth += 6.0;
-                } else if (name.contains("Boots")) {
-                    bonusArmor += 5.0;
-                    bonusToughness += 3.0;
-                    // Fall damage immunity handled in mixin
-                }
-            }
-
-// ===== T2 ENDERMAN ARMOR (Void Phantom II) =====
-            if ((name.contains("Void") || name.contains("Phantom")) && name.contains(" II")) {
-                if (name.contains("Helmet")) {
-                    bonusArmor += 5.0;
-                    bonusToughness += 3.0;
-                    bonusSpeed += 0.15;
-                } else if (name.contains("Chestplate")) {
-                    bonusArmor += 10.0;
-                    bonusToughness += 4.0;
-                    bonusSpeed += 0.1;
-                } else if (name.contains("Leggings")) {
-                    bonusArmor += 8.0;
-                    bonusToughness += 3.0;
-                    bonusSpeed += 0.1;
-                } else if (name.contains("Boots")) {
-                    bonusArmor += 5.0;
-                    bonusToughness += 3.0;
-                    bonusSpeed += 0.2;
-                }
-            }
-
-// ===== T2 WARDEN ARMOR (Sculk Terror II) - BEST SET =====
-            if ((name.contains("Sculk") || name.contains("Terror")) && name.contains(" II")) {
-                if (name.contains("Helmet")) {
-                    bonusArmor += 6.0;
-                    bonusToughness += 4.0;
-                    bonusKnockbackResist += 0.25;
-                } else if (name.contains("Chestplate")) {
-                    bonusArmor += 12.0;
-                    bonusToughness += 5.0;
-                    bonusKnockbackResist += 0.4;
-                    bonusHealth += 8.0;
-                } else if (name.contains("Leggings")) {
-                    bonusArmor += 10.0;
-                    bonusToughness += 4.0;
-                    bonusKnockbackResist += 0.25;
-                    bonusHealth += 6.0;
-                } else if (name.contains("Boots")) {
-                    bonusArmor += 6.0;
-                    bonusToughness += 4.0;
-                    bonusKnockbackResist += 0.1;
-                }
             }
         }
 

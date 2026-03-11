@@ -57,10 +57,14 @@ public class SkeletonBowHandler {
 
         // Full-power shot — 50% faster than a normal fully-drawn bow (3.0 -> 4.5)
         arrow.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, 4.5f, 0.5f);
+        // Keep critical flag for visual crit particles, but tag this arrow so the
+        // headshot mixin knows it is an instant shot (not a fully-drawn headshot).
         arrow.setCritical(true);
 
         // Tag for homing behavior (checked in ArrowHomingMixin)
         arrow.getCommandTags().add("skeleton_bow_arrow");
+        // Instant shots are never headshots — headshots require a fully-drawn right-click hold.
+        arrow.getCommandTags().add("instant_shot");
 
         world.spawnEntity(arrow);
 
