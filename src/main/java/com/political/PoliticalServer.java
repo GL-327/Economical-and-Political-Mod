@@ -101,6 +101,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				if (!saved.isEmpty()) {
 					pendingSoulboundItems.put(dying.getUuid(), saved);
 				}
+				// Deduct 25% of coins on death (floor), skip creative mode
+				if (!dying.isCreative()) {
+					int coins = CoinManager.getCoins(dying);
+					int penalty = (int) Math.floor(coins * 0.25);
+					if (penalty > 0) {
+						CoinManager.removeCoins(dying, penalty);
+						dying.sendMessage(Text.literal("You lost " + penalty + " coins on death!").formatted(Formatting.RED));
+					}
+				}
 			}
 			return true; // always allow death
 		});
@@ -518,6 +527,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		}
 
 		player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.GOLD));
+		player.sendMessage(Text.literal("Use /modhelp to see all available commands!").formatted(Formatting.AQUA));
 	}
 
 	public static String formatTime(long millis) {
