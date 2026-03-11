@@ -465,51 +465,40 @@ public class ScoreboardManager {
             }
         }
 
-        // Apply set bonus for each type using the highest tier detected
+        // Apply set bonus for each type using the highest tier detected.
+        // Use a single pass per type: count pieces and accumulate per-piece contributions together.
+        String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
         for (Map.Entry<SlayerManager.SlayerType, Integer> entry : highestTier.entrySet()) {
             SlayerManager.SlayerType type = entry.getKey();
             int tier = entry.getValue();
             SlayerItems.ArmorStats armorStats = SlayerItems.getArmorStats(type, tier);
             int[] s = stats.computeIfAbsent(type, k -> new int[3]);
+            String pfx = type.name().toLowerCase();
 
-            // Count how many pieces of this type the player has equipped
+            // Single loop: count equipped pieces and accumulate per-piece contributions
             int pieces = 0;
-            for (ItemStack armor : armorSlots) {
+            int bossContrib = 0;
+            int allContrib = 0;
+            for (int pi = 0; pi < armorSlots.length; pi++) {
+                ItemStack armor = armorSlots[pi];
                 if (armor.isEmpty()) continue;
                 String cid = SlayerItems.getCustomItemId(armor);
                 if (cid == null) continue;
-                String pfx = type.name().toLowerCase();
-                if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) pieces++;
+                if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) {
+                    pieces++;
+                    double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
+                    bossContrib += (int) Math.round(armorStats.bossReduction * mult * 100);
+                    allContrib  += (int) Math.round(armorStats.allBossReduction * mult * 100);
+                }
             }
 
             if (pieces >= 4) {
-                // Full set: apply cap
+                // Full set bonus: apply cap (60% T1, 80% T2) instead of plain sum
                 int capPct = tier == 2 ? 80 : 60;
                 s[1] = Math.max(s[1], capPct);
                 s[2] += (int)(armorStats.allBossReduction * 100);
             } else {
-                // Partial set: sum per-piece contributions
-                int bossContrib = 0;
-                int allContrib = 0;
-                EquipmentSlot[] equipSlots = {
-                    net.minecraft.entity.EquipmentSlot.HEAD,
-                    net.minecraft.entity.EquipmentSlot.CHEST,
-                    net.minecraft.entity.EquipmentSlot.LEGS,
-                    net.minecraft.entity.EquipmentSlot.FEET
-                };
-                String[] pieceNames = {"Helmet", "Chestplate", "Leggings", "Boots"};
-                for (int pi = 0; pi < armorSlots.length; pi++) {
-                    ItemStack armor = armorSlots[pi];
-                    if (armor.isEmpty()) continue;
-                    String cid = SlayerItems.getCustomItemId(armor);
-                    if (cid == null) continue;
-                    String pfx = type.name().toLowerCase();
-                    if (cid.startsWith(pfx + "_t1_") || cid.startsWith(pfx + "_t2_")) {
-                        double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
-                        bossContrib += (int) Math.round(armorStats.bossReduction * mult * 100);
-                        allContrib  += (int) Math.round(armorStats.allBossReduction * mult * 100);
-                    }
-                }
+                // Partial set: sum of the per-piece contributions only
                 s[1] = Math.max(s[1], bossContrib);
                 s[2] += allContrib;
             }

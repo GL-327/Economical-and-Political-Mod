@@ -147,9 +147,10 @@ public class CustomItemHandler {
             ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
             if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
 
+            // Only trigger when player right-clicks with empty hand to avoid
+            // conflicting with vanilla item use (e.g. eating, placing blocks)
             ItemStack heldItem = player.getStackInHand(hand);
-            // Only trigger on right-click with an empty hand or the helmet itself (avoid interfering)
-            if (!heldItem.isEmpty() && heldItem != helmet) return ActionResult.PASS;
+            if (!heldItem.isEmpty()) return ActionResult.PASS;
 
             long now = System.currentTimeMillis();
             UUID uuid = serverPlayer.getUuid();
@@ -180,10 +181,12 @@ public class CustomItemHandler {
 
                 // Activate Ender Phase Mode
                 enderPhaseActiveUntil.put(uuid, now + ENDER_PHASE_DURATION_MS);
+                // ambient=false, showParticles=false, showIcon=true
                 serverPlayer.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.INVISIBILITY, Integer.MAX_VALUE, 0, false, false, true));
+                // Brief blindness flash (purple tint) to signal mode activation; ambient=false, showParticles=true, showIcon=false
                 serverPlayer.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.BLINDNESS, 300, 3, false, false, false));
+                        StatusEffects.BLINDNESS, 300, 3, false, true, false));
                 serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode ACTIVE — 15 seconds!")
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
                 return ActionResult.CONSUME;
@@ -206,7 +209,7 @@ public class CustomItemHandler {
                                 serverPlayer));
 
                 Vec3d dest = hitResult.getPos();
-                // Place player above the hit surface
+                // Place player slightly above the hit surface to avoid clipping
                 serverPlayer.teleport(serverWorld,
                         dest.x, dest.y + 0.1, dest.z,
                         Set.of(), serverPlayer.getYaw(), serverPlayer.getPitch(), false);
@@ -573,12 +576,13 @@ public class CustomItemHandler {
         } else {
             // Still in phase — show countdown
             long remainMs = activeUntil - now;
-            if (remainMs % 1000 < 50) { // Update roughly every second
+            // Show countdown roughly once per second (~50ms window accounts for tick-timing variance)
+            if (remainMs % 1000 < 50) {
                 long remainSec = remainMs / 1000;
                 player.sendMessage(Text.literal("⟡ Ender Phase: " + remainSec + "s")
                         .formatted(Formatting.DARK_PURPLE), true);
             }
-            // Ensure invisibility is maintained
+            // Ensure invisibility is maintained; ambient=false, showParticles=false, showIcon=true
             if (!player.hasStatusEffect(StatusEffects.INVISIBILITY)) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.INVISIBILITY, 60, 0, false, false, true));
