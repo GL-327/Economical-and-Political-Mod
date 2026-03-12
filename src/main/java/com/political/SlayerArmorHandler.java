@@ -185,20 +185,20 @@ public class SlayerArmorHandler {
                         case "slime_t1_helmet"       -> bonusHealth += 4.0;   // +2 hearts
                         case "slime_t2_helmet"       -> bonusHealth += 8.0;   // +4 hearts
                         case "slime_t1_chestplate"   -> bonusHealth += 8.0;   // +4 hearts
-                        case "slime_t2_chestplate"   -> bonusHealth += 12.0;  // +6 hearts
+                        case "slime_t2_chestplate"   -> bonusHealth += 8.0;   // +4 hearts
                         // ── ENDERMAN ─────────────────────────────────────
                         case "enderman_t1_chestplate" -> bonusSpeed += 0.05;  // +5%
                         case "enderman_t2_chestplate" -> bonusSpeed += 0.10;  // +10%
                         case "enderman_t1_leggings"   -> bonusSpeed += 0.05;  // +5%
                         case "enderman_t2_leggings"   -> bonusSpeed += 0.10;  // +10%
-                        case "enderman_t2_boots"      -> bonusSpeed += 0.20;  // +20%
+                        case "enderman_t2_boots"      -> bonusSpeed += 0.10;  // +10%
                         // ── WARDEN ───────────────────────────────────────
                         case "warden_t1_chestplate"  -> bonusKnockbackResist += 0.10; // +10%
                         case "warden_t2_chestplate"  -> bonusKnockbackResist += 0.25; // +25%
                         case "warden_t1_leggings"    -> bonusKnockbackResist += 0.10; // +10%
                         case "warden_t2_leggings"    -> {
-                            bonusKnockbackResist += 0.25; // +25%
-                            bonusHealth += 12.0;           // +6 hearts
+                            bonusKnockbackResist += 0.15; // +15%
+                            bonusHealth += 8.0;            // +4 hearts
                         }
                         // warden_t1_boots: Vibration Sense only — no KB resist
                         case "warden_t2_boots"       -> bonusKnockbackResist += 0.10; // +10%
@@ -207,7 +207,7 @@ public class SlayerArmorHandler {
                         case "piglin_t2_chestplate"  -> bonusHealth += 8.0;    // +4 hearts
                         case "piglin_t1_leggings"    -> bonusSpeed  += 0.05;   // +5%
                         case "piglin_t2_leggings"    -> bonusSpeed  += 0.10;   // +10%
-                        case "piglin_t2_boots"       -> bonusSpeed  += 0.15;   // +15%
+                        case "piglin_t2_boots"       -> bonusSpeed  += 0.10;   // +10%
                         default -> {}
                     }
                 }
@@ -296,7 +296,7 @@ public class SlayerArmorHandler {
             if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Chestplate")) {
                 bonusArmor += isT2 ? 10.0 : 7.0;
                 bonusToughness += isT2 ? 4.0 : 2.0;
-                bonusHealth += isT2 ? 12.0 : 8.0;
+                bonusHealth += 8.0;  // +4 hearts for both T1 and T2
             }
             if ((name.contains("Gelatinous") || name.contains("Rustler")) && name.contains("Leggings")) {
                 bonusArmor += isT2 ? 8.0 : 6.0;

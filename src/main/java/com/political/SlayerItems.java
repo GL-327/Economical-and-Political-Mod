@@ -1904,11 +1904,11 @@ public class SlayerItems {
             };
             case SLIME -> switch (piece) {
                 case "Helmet"     -> 8.0;   // +4 Hearts
-                case "Chestplate" -> 12.0;  // +6 Hearts
+                case "Chestplate" -> 8.0;   // +4 Hearts
                 default           -> 0.0;
             };
             case WARDEN -> switch (piece) {
-                case "Leggings"   -> 12.0;  // +6 Hearts
+                case "Leggings"   -> 8.0;   // +4 Hearts
                 default           -> 0.0;
             };
             case PIGLIN -> switch (piece) {
@@ -2150,15 +2150,15 @@ public class SlayerItems {
         return switch (type) {
             case ZOMBIE -> switch (piece) {
                 case "Helmet"     -> "Hunger Immunity + Fire Resistance";
-                case "Chestplate" -> "+4 Hearts Health + Regeneration I";
+                case "Chestplate" -> "+4 Hearts Health";
                 case "Leggings"   -> "-20% Damage from Undead Mobs";
                 case "Boots"      -> "+20% Knockback Resistance + Speed I below 50% HP";
                 default           -> null;
             };
             case SPIDER -> switch (piece) {
-                case "Helmet"     -> "+10% Movement Speed + Night Vision";
+                case "Helmet"     -> "+10% Movement Speed";
                 case "Chestplate" -> "Weakness Immunity + Poison Thorns (attackers get Poison I)";
-                case "Leggings"   -> "Poison Immunity + Speed II";
+                case "Leggings"   -> "Poison Immunity + Speed I";
                 case "Boots"      -> "+15% Movement Speed + Safe Fall +3 Blocks";
                 default           -> null;
             };
@@ -2171,7 +2171,7 @@ public class SlayerItems {
             };
             case SLIME -> switch (piece) {
                 case "Helmet"     -> "+4 Hearts Health + Saturation";
-                case "Chestplate" -> "+6 Hearts Health + Absorption I every 30s";
+                case "Chestplate" -> "+4 Hearts Health + Absorption I every 30s";
                 case "Leggings"   -> "Jump Boost II";
                 case "Boots"      -> "No Fall Damage + Jump Boost II";
                 default           -> null;
@@ -2180,13 +2180,13 @@ public class SlayerItems {
                 case "Helmet"     -> "Night Vision (Permanent)";
                 case "Chestplate" -> "+10% Movement Speed + 20% Teleport Dodge on Hit";
                 case "Leggings"   -> "+10% Movement Speed";
-                case "Boots"      -> "No Fall Damage + +20% Movement Speed";
+                case "Boots"      -> "No Fall Damage + +10% Movement Speed";
                 default           -> null;
             };
             case WARDEN -> switch (piece) {
                 case "Helmet"     -> "Darkness Immunity + Vibration Sense (wider range)";
                 case "Chestplate" -> "+25% Knockback Resistance + Sonic Pulse (Shift+Attack)";
-                case "Leggings"   -> "+25% Knockback Resistance + +6 Hearts Health";
+                case "Leggings"   -> "+15% Knockback Resistance + +4 Hearts Health";
                 case "Boots"      -> "+10% Knockback Resistance";
                 default           -> null;
             };
@@ -2194,7 +2194,7 @@ public class SlayerItems {
                 case "Helmet"     -> "Fire Resistance";
                 case "Chestplate" -> "+4 Hearts Health";
                 case "Leggings"   -> "+10% Movement Speed";
-                case "Boots"      -> "Fire Resistance + +15% Movement Speed";
+                case "Boots"      -> "Fire Resistance + +10% Movement Speed";
                 default           -> null;
             };
         };
