@@ -312,6 +312,18 @@ public class BountyGui {
                 .setCallback((idx, clickType, action) -> openRewardsMenu(player, type))
                 .build());
 
+        // Drop Rates button
+        gui.setSlot(41, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("📊 Drop Rates")
+                        .formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("View drop rates for each tier!")
+                        .formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, clickType, action) -> openDropRatesTierSelect(player, type))
+                .build());
+
         // Back button
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Bounty Board")
@@ -322,8 +334,46 @@ public class BountyGui {
         gui.open();
     }
     // ============================================================
-// DROP TABLE GUI - Shows boss loot and drop chances
-// ============================================================
+    // DROP RATES TIER SELECTOR
+    // ============================================================
+    public static void openDropRatesTierSelect(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("📊 " + type.displayName + " Drop Rates — Select Tier"));
+
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.SPRUCE_PLANKS).setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("📊 Select a Tier").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click a tier to view its drop rates").formatted(Formatting.GRAY))
+                .glow().build());
+
+        int maxTiers = SlayerManager.TIERS.length;
+        int[] tierSlots = {10, 11, 12, 13, 14};
+        Formatting[] tierColors = {Formatting.WHITE, Formatting.GREEN, Formatting.BLUE, Formatting.GOLD, Formatting.LIGHT_PURPLE};
+        for (int t = 1; t <= maxTiers && t <= tierSlots.length; t++) {
+            final int tier = t;
+            SlayerManager.TierConfig cfg = SlayerManager.getTierConfig(tier);
+            gui.setSlot(tierSlots[t - 1], new GuiElementBuilder(Items.CARVED_PUMPKIN)
+                    .setName(Text.literal("Tier " + tier + " — " + type.bossName).formatted(tierColors[t - 1], Formatting.BOLD))
+                    .addLoreLine(Text.literal("Kills req: " + cfg.killsRequired).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to view drops").formatted(Formatting.YELLOW))
+                    .setCallback((idx, clickType, action) -> openDropTableGui(player, type, tier))
+                    .build());
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> openBountyTypeMenu(player, type))
+                .build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // DROP TABLE GUI - Shows boss loot and drop chances
+    // ============================================================
     public static void openDropTableGui(ServerPlayerEntity player, SlayerManager.SlayerType type, int tier) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("☠ " + type.bossName + " T" + tier + " Drops"));
@@ -515,8 +565,8 @@ public class BountyGui {
                     .formatted(Formatting.AQUA));
             lore.add(Text.literal(""));
             lore.add(Text.literal("Rewards:").formatted(Formatting.YELLOW));
-            lore.add(Text.literal("  +" + formatNumber(creditReward) + " credits")
-                    .formatted(Formatting.AQUA));
+            lore.add(Text.literal("  +" + formatNumber(creditReward) + " coins")
+                    .formatted(Formatting.GOLD));
 
             lore.add(Text.literal(""));
             if (unlocked) {

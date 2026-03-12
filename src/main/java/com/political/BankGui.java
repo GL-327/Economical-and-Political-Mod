@@ -2,6 +2,7 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
+import eu.pb4.sgui.api.gui.SignGui;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -188,6 +189,22 @@ public class BankGui {
         }
         gui.setSlot(23, withdrawBtn.build());
 
+        // Custom Deposit button (slot 25)
+        gui.setSlot(25, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("Custom Deposit").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Enter a custom amount to deposit").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to open sign input").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openMainCustomDeposit(player))
+                .build());
+
+        // Custom Withdraw button (slot 26)
+        gui.setSlot(26, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("Custom Withdraw").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Enter a custom amount to withdraw").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to open sign input").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openMainCustomWithdraw(player))
+                .build());
+
         // Back button (slot 49)
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.GRAY))
@@ -195,6 +212,66 @@ public class BankGui {
                 .build());
 
         gui.open();
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // MAIN ACCOUNT CUSTOM AMOUNT SIGN GUIs
+    // ════════════════════════════════════════════════════════════
+
+    private static void openMainCustomDeposit(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String input = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (input.isEmpty()) { openMainAccount(player); return; }
+                try {
+                    int amount = Integer.parseInt(input);
+                    if (amount <= 0) { player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false); openMainAccount(player); return; }
+                    int cur = DataManager.getBankMain(uuid);
+                    int purse = CoinManager.getCoins(player);
+                    if (cur >= MAIN_MAX) { player.sendMessage(Text.literal("✗ Main account is at cap!").formatted(Formatting.RED), false); openMainAccount(player); return; }
+                    if (purse < amount) { player.sendMessage(Text.literal("✗ Not enough coins in purse!").formatted(Formatting.RED), false); openMainAccount(player); return; }
+                    int space = MAIN_MAX - cur;
+                    int actual = Math.min(amount, space);
+                    CoinManager.removeCoins(player, actual);
+                    DataManager.setBankMain(uuid, cur + actual);
+                    player.sendMessage(Text.literal("✓ Deposited " + fmt(actual) + " coins into Main Account.").formatted(Formatting.GREEN), false);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                }
+                openMainAccount(player);
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.setLine(1, Text.literal("to deposit"));
+        signGui.open();
+    }
+
+    private static void openMainCustomWithdraw(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String input = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (input.isEmpty()) { openMainAccount(player); return; }
+                try {
+                    int amount = Integer.parseInt(input);
+                    if (amount <= 0) { player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false); openMainAccount(player); return; }
+                    int bal = DataManager.getBankMain(uuid);
+                    if (bal < amount) { player.sendMessage(Text.literal("✗ Not enough in Main Account! Balance: " + fmt(bal)).formatted(Formatting.RED), false); openMainAccount(player); return; }
+                    DataManager.setBankMain(uuid, bal - amount);
+                    CoinManager.giveCoins(player, amount);
+                    player.sendMessage(Text.literal("✓ Withdrew " + fmt(amount) + " coins from Main Account.").formatted(Formatting.GREEN), false);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                }
+                openMainAccount(player);
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.setLine(1, Text.literal("to withdraw"));
+        signGui.open();
     }
 
     // ════════════════════════════════════════════════════════════
@@ -298,6 +375,24 @@ public class BankGui {
         }
         gui.setSlot(23, withdrawBtn.build());
 
+        // Custom Deposit button (slot 25)
+        gui.setSlot(25, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("Custom Deposit").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Enter a custom amount to deposit").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to open sign input").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openSavingsCustomDeposit(player))
+                .build());
+
+        // Custom Withdraw button (slot 26, only if not on cooldown)
+        if (!onCooldown) {
+            gui.setSlot(26, new GuiElementBuilder(Items.BOOK)
+                    .setName(Text.literal("Custom Withdraw").formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Enter a custom amount to withdraw").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to open sign input").formatted(Formatting.YELLOW))
+                    .setCallback((index, type, action) -> openSavingsCustomWithdraw(player))
+                    .build());
+        }
+
         // Back button (slot 49)
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.GRAY))
@@ -305,6 +400,71 @@ public class BankGui {
                 .build());
 
         gui.open();
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // SAVINGS ACCOUNT CUSTOM AMOUNT SIGN GUIs
+    // ════════════════════════════════════════════════════════════
+
+    private static void openSavingsCustomDeposit(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String input = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (input.isEmpty()) { openSavingsAccount(player); return; }
+                try {
+                    int amount = Integer.parseInt(input);
+                    if (amount <= 0) { player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false); openSavingsAccount(player); return; }
+                    int purse = CoinManager.getCoins(player);
+                    if (purse < amount) { player.sendMessage(Text.literal("✗ Not enough coins in purse!").formatted(Formatting.RED), false); openSavingsAccount(player); return; }
+                    CoinManager.removeCoins(player, amount);
+                    DataManager.setBankSavings(uuid, DataManager.getBankSavings(uuid) + amount);
+                    player.sendMessage(Text.literal("✓ Deposited " + fmt(amount) + " coins into Savings Account.").formatted(Formatting.GREEN), false);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                }
+                openSavingsAccount(player);
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.setLine(1, Text.literal("to deposit"));
+        signGui.open();
+    }
+
+    private static void openSavingsCustomWithdraw(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String input = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (input.isEmpty()) { openSavingsAccount(player); return; }
+                try {
+                    int amount = Integer.parseInt(input);
+                    if (amount <= 0) { player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false); openSavingsAccount(player); return; }
+                    long nowCheck = System.currentTimeMillis();
+                    long lastW = DataManager.getBankSavingsWithdrawTime(uuid);
+                    if (lastW > 0 && (nowCheck - lastW) < SAVINGS_COOLDOWN_MS) {
+                        long rem = SAVINGS_COOLDOWN_MS - (nowCheck - lastW);
+                        long h = rem / 3_600_000L; long m = (rem % 3_600_000L) / 60_000L;
+                        player.sendMessage(Text.literal("✗ Withdrawal on cooldown! Wait " + h + "h " + m + "m.").formatted(Formatting.RED), false);
+                        openSavingsAccount(player); return;
+                    }
+                    int bal = DataManager.getBankSavings(uuid);
+                    if (bal < amount) { player.sendMessage(Text.literal("✗ Not enough in Savings! Balance: " + fmt(bal)).formatted(Formatting.RED), false); openSavingsAccount(player); return; }
+                    DataManager.setBankSavings(uuid, bal - amount);
+                    DataManager.setBankSavingsWithdrawTime(uuid, nowCheck);
+                    CoinManager.giveCoins(player, amount);
+                    player.sendMessage(Text.literal("✓ Withdrew " + fmt(amount) + " coins from Savings Account.").formatted(Formatting.GREEN), false);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                }
+                openSavingsAccount(player);
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.setLine(1, Text.literal("to withdraw"));
+        signGui.open();
     }
 
     // ════════════════════════════════════════════════════════════
@@ -389,6 +549,14 @@ public class BankGui {
                 });
             }
             gui.setSlot(22, payBtn.build());
+
+            // Custom partial repayment (slot 24)
+            gui.setSlot(24, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                    .setName(Text.literal("Custom Repayment").formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Enter a custom amount to repay").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to open sign input").formatted(Formatting.YELLOW))
+                    .setCallback((index, type, action) -> openLoanCustomRepay(player))
+                    .build());
         }
 
         // Back button (slot 49)
@@ -398,6 +566,39 @@ public class BankGui {
                 .build());
 
         gui.open();
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // LOAN CUSTOM REPAYMENT SIGN GUI
+    // ════════════════════════════════════════════════════════════
+
+    private static void openLoanCustomRepay(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String input = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (input.isEmpty()) { openLoans(player); return; }
+                try {
+                    int amount = Integer.parseInt(input);
+                    if (amount <= 0) { player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false); openLoans(player); return; }
+                    int owed = DataManager.getBankLoan(uuid);
+                    int purse = CoinManager.getCoins(player);
+                    if (owed <= 0) { player.sendMessage(Text.literal("✗ No active loan!").formatted(Formatting.RED), false); openLoans(player); return; }
+                    int toPay = Math.min(amount, Math.min(owed, purse));
+                    if (toPay <= 0) { player.sendMessage(Text.literal("✗ Not enough coins in purse!").formatted(Formatting.RED), false); openLoans(player); return; }
+                    CoinManager.removeCoins(player, toPay);
+                    DataManager.setBankLoan(uuid, owed - toPay);
+                    player.sendMessage(Text.literal("✓ Repaid " + fmt(toPay) + " coins toward loan. Remaining: " + fmt(owed - toPay) + ".").formatted(Formatting.GREEN), false);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                }
+                openLoans(player);
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.setLine(1, Text.literal("to repay"));
+        signGui.open();
     }
 
     // ════════════════════════════════════════════════════════════

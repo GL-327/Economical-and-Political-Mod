@@ -147,10 +147,13 @@ public class CustomItemHandler {
             ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
             if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
 
-            // Only trigger when player right-clicks with empty hand to avoid
-            // conflicting with vanilla item use (e.g. eating, placing blocks)
-            ItemStack heldItem = player.getStackInHand(hand);
-            if (!heldItem.isEmpty()) return ActionResult.PASS;
+            // Check level requirement
+            if (!SlayerItems.canUseEnderPhaseHelmet(serverPlayer)) {
+                int req = SlayerItems.ENDER_PHASE_HELMET_LEVEL_REQ;
+                serverPlayer.sendMessage(
+                    Text.literal("⛔ Requires Enderman Bounty Level " + req + " to use!").formatted(Formatting.RED), true);
+                return ActionResult.PASS;
+            }
 
             long now = System.currentTimeMillis();
             UUID uuid = serverPlayer.getUuid();
@@ -470,22 +473,23 @@ public class CustomItemHandler {
 
         ServerWorld world = player.getEntityWorld();
 
-        world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER,
-                player.getX(), player.getY() + 1, player.getZ(),
-                3, 2.0, 1.0, 2.0, 0.0);
+        // Fling the player upward
+        player.setVelocity(player.getVelocity().add(0, 1.5, 0));
+        player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(player));
 
-        world.playSoundFromEntity(null, player, SoundEvents.ENTITY_GENERIC_EXPLODE.value(),
-                SoundCategory.PLAYERS, 1.0f, 1.0f);
+        // Wind/cloud particles
+        world.spawnParticles(ParticleTypes.CLOUD,
+                player.getX(), player.getY() + 0.5, player.getZ(),
+                20, 0.5, 0.2, 0.5, 0.05);
+        world.spawnParticles(ParticleTypes.POOF,
+                player.getX(), player.getY(), player.getZ(),
+                15, 0.6, 0.1, 0.6, 0.1);
 
-        Box box = new Box(
-                player.getX() - 4.5, player.getY() - 4.5, player.getZ() - 4.5,
-                player.getX() + 4.5, player.getY() + 4.5, player.getZ() + 4.5);
+        // Launch sound
+        world.playSoundFromEntity(null, player, SoundEvents.ITEM_TRIDENT_THROW.value(),
+                SoundCategory.PLAYERS, 1.0f, 0.6f);
 
-        for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, box, ent -> ent != player)) {
-            e.damage(world, player.getDamageSources().playerAttack(player), 25.0f);
-        }
-
-        player.sendMessage(Text.literal("⚡ GAVEL STRIKE! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
+        player.sendMessage(Text.literal("⚡ GAVEL LAUNCH! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
         return true;
     }
 
@@ -945,7 +949,42 @@ public class CustomItemHandler {
             }
         }
 
+        // Crown of Greed: multiply damage by number of digits in coin count
+        if (SlayerItems.isCrownOfGreed(attacker.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD))) {
+            int coins = CoinManager.getCoins(attacker);
+            int digits = coins > 0 ? String.valueOf(coins).length() : 1;
+            modifiedDamage *= digits;
+        }
+
         return modifiedDamage;
+    }
+
+    /** Tick handler for Crown of Greed: enforces 4 HP max health and suppresses potion effects. */
+    public static void tickCrownOfGreed(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD);
+        net.minecraft.util.Identifier modId = net.minecraft.util.Identifier.of("political", "crown_of_greed_hp");
+        var healthAttr = player.getAttributeInstance(net.minecraft.entity.attribute.EntityAttributes.MAX_HEALTH);
+
+        if (!SlayerItems.isCrownOfGreed(helmet)) {
+            // Remove the modifier if crown is no longer worn
+            if (healthAttr != null && healthAttr.getModifier(modId) != null) {
+                healthAttr.removeModifier(modId);
+            }
+            return;
+        }
+
+        // Enforce 4 HP max health (2 hearts) via attribute modifier
+        if (healthAttr != null && healthAttr.getModifier(modId) == null) {
+            healthAttr.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
+                    modId, -16.0, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADD_VALUE));
+        }
+        // Cap health to 4 if it somehow exceeds it
+        if (player.getHealth() > 4.0f) player.setHealth(4.0f);
+
+        // Suppress all potion effects every second
+        if (player.age % 20 == 0) {
+            player.clearStatusEffects();
+        }
     }
 
     public static void tickSlayerSystems(ServerPlayerEntity player) {
@@ -1095,13 +1134,10 @@ public class CustomItemHandler {
                 Text.literal(""),
                 Text.literal("◆ JUDICIAL AUTHORITY ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
                 Text.literal(""),
-                Text.literal("Right-click: Gavel Strike").formatted(Formatting.RED),
-                Text.literal("  └ AOE explosion (4.5 block radius)").formatted(Formatting.GRAY),
+                Text.literal("Right-click: Gavel Launch").formatted(Formatting.AQUA),
+                Text.literal("  └ Flings you high into the air").formatted(Formatting.GRAY),
                 Text.literal("  └ Consumes 1 Wind Charge").formatted(Formatting.GRAY),
                 Text.literal("  └ 3s cooldown").formatted(Formatting.GRAY),
-                Text.literal(""),
-                Text.literal("Damage: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
                 Text.literal("§8[MFLUX: Judicial enforcement weapon | Contractor-grade]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)

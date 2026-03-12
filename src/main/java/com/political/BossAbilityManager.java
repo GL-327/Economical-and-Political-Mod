@@ -192,8 +192,8 @@ public class BossAbilityManager {
                 StatusEffects.SPEED, 160, 1, true, true, true
         ));
 
-        // Heal 20% HP
-        boss.heal(boss.getMaxHealth() * 0.2f);
+        // Heal 5% HP
+        boss.heal(boss.getMaxHealth() * 0.05f);
 
         // Notify nearby players
         String bossName = boss.hasCustomName() ? boss.getCustomName().getString() : "The Boss";
@@ -310,12 +310,12 @@ public class BossAbilityManager {
         if (world.getServer().getTicks() % 40 != 0) return;
 
         float regenAmount = switch (tier) {
-            case 1 -> 2.0f;
-            case 2 -> 5.0f;
-            case 3 -> 15.0f;
-            case 4 -> 40.0f;
-            case 5 -> 100.0f;
-            default -> 1.0f;
+            case 1 -> 0.5f;
+            case 2 -> 1.0f;
+            case 3 -> 2.0f;
+            case 4 -> 4.0f;
+            case 5 -> 8.0f;
+            default -> 0.5f;
         };
 
         boss.setHealth(Math.min(boss.getMaxHealth(), boss.getHealth() + regenAmount));
@@ -331,9 +331,9 @@ public class BossAbilityManager {
         if (tier < 3) return;
 
         float lifestealPercent = switch (tier) {
-            case 3 -> 0.05f;
-            case 4 -> 0.10f;
-            case 5 -> 0.15f;
+            case 3 -> 0.02f;
+            case 4 -> 0.03f;
+            case 5 -> 0.05f;
             default -> 0f;
         };
 

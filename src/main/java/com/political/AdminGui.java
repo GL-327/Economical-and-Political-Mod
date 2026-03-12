@@ -183,6 +183,17 @@ public class AdminGui {
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openPage(player, AdminPage.UNDERGROUND_AUCTION))
                 .build());
+        gui.setSlot(32, new GuiElementBuilder(Items.COMPARATOR)
+                .setName(Text.literal("⚙ Game Settings").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Boss settings (HP, damage, kills)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Item level requirements").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Defence settings").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Drop rates & mob settings").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openGameSettingsPage(player))
+                .build());
         // Close button
         gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED))
@@ -4461,5 +4472,423 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
         player.sendMessage(Text.literal("✦ Applied ").formatted(Formatting.GOLD)
                 .append(Text.literal(name + " " + roman).formatted(Formatting.AQUA, Formatting.BOLD))
                 .append(Text.literal(" to held item!").formatted(Formatting.GOLD)), false);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // GAME SETTINGS MAIN PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openGameSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, player, false);
+        gui.setTitle(Text.literal("⚙ Game Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.COMPARATOR)
+                .setName(Text.literal("⚙ Game Settings").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Configure all custom game systems").formatted(Formatting.GRAY))
+                .glow().build());
+
+        gui.setSlot(10, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("Boss Settings").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("• HP multipliers per boss type").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Damage multipliers").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Kill requirements multiplier").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Ability toggle per type").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to configure").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openBossSettingsPage(player)).build());
+
+        gui.setSlot(12, new GuiElementBuilder(Items.DIAMOND_HELMET)
+                .setName(Text.literal("Item Settings").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("• Level requirements per item").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Ability toggles per item").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to configure").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openItemSettingsPage(player)).build());
+
+        gui.setSlot(14, new GuiElementBuilder(Items.SHIELD)
+                .setName(Text.literal("Defence Settings").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal("• Armour defence cap").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Set bonus percentages (T1/T2)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Weapon bonus percentages").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to configure").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openDefenceSettingsPage(player)).build());
+
+        gui.setSlot(16, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("Drop Settings").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("• Chunk drop rate multiplier").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Core drop rate multiplier").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Coin reward multiplier").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to configure").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openDropSettingsPage(player)).build());
+
+        gui.setSlot(28, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("Mob Settings").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("• Health scaling multiplier").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to configure").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openMobSettingsPage(player)).build());
+
+        gui.setSlot(30, new GuiElementBuilder(Items.OAK_SIGN)
+                .setName(Text.literal("Scoreboard Settings").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("• Toggle scoreboard sections on/off").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to configure").formatted(Formatting.YELLOW))
+                .setCallback((i, t, a) -> openScoreboardSettingsPage(player)).build());
+
+        addBackButton(gui, player);
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // BOSS SETTINGS PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openBossSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("Boss Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("Boss Settings").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Left: +0.1, Right: -0.1, Shift: ±0.5").formatted(Formatting.GRAY))
+                .glow().build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] hpSlots =   {10, 11, 12, 13, 14, 15, 16};
+        int[] dmgSlots =  {19, 20, 21, 22, 23, 24, 25};
+        int[] abilSlots = {28, 29, 30, 31, 32, 33, 34};
+
+        for (int i = 0; i < types.length && i < 7; i++) {
+            SlayerManager.SlayerType t = types[i];
+            float hpMult  = DataManager.getBossHpMultiplier(t);
+            float dmgMult = DataManager.getBossDamageMultiplier(t);
+            boolean abilEnabled = DataManager.isBossAbilitiesEnabled(t);
+
+            gui.setSlot(hpSlots[i], new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                    .setName(Text.literal(t.displayName + " HP").formatted(Formatting.RED, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Multiplier: §f" + String.format("%.1f", hpMult) + "x").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                    .setCallback((idx, clickType, action) -> {
+                        float delta = clickType.isLeft ? 0.1f : -0.1f;
+                        if (clickType.shift) delta *= 5;
+                        DataManager.setBossHpMultiplier(t, DataManager.getBossHpMultiplier(t) + delta);
+                        DataManager.save(PoliticalServer.server);
+                        openBossSettingsPage(player);
+                    }).build());
+
+            gui.setSlot(dmgSlots[i], new GuiElementBuilder(Items.ORANGE_STAINED_GLASS_PANE)
+                    .setName(Text.literal(t.displayName + " DMG").formatted(Formatting.GOLD, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Multiplier: §f" + String.format("%.1f", dmgMult) + "x").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                    .setCallback((idx, clickType, action) -> {
+                        float delta = clickType.isLeft ? 0.1f : -0.1f;
+                        if (clickType.shift) delta *= 5;
+                        DataManager.setBossDamageMultiplier(t, DataManager.getBossDamageMultiplier(t) + delta);
+                        DataManager.save(PoliticalServer.server);
+                        openBossSettingsPage(player);
+                    }).build());
+
+            gui.setSlot(abilSlots[i], new GuiElementBuilder(abilEnabled ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE)
+                    .setName(Text.literal(t.displayName + " Abilities").formatted(abilEnabled ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Status: " + (abilEnabled ? "§aENABLED" : "§cDISABLED")).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to toggle").formatted(Formatting.YELLOW))
+                    .setCallback((idx, clickType, action) -> {
+                        DataManager.setBossAbilitiesEnabled(t, !DataManager.isBossAbilitiesEnabled(t));
+                        DataManager.save(PoliticalServer.server);
+                        openBossSettingsPage(player);
+                    }).build());
+        }
+
+        float killMult = DataManager.getBossKillsRequiredMultiplier();
+        gui.setSlot(40, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("Kill Requirement Multiplier").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Global multiplier: §f" + String.format("%.1f", killMult) + "x").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    float delta = clickType.isLeft ? 0.1f : -0.1f;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setBossKillsRequiredMultiplier(DataManager.getBossKillsRequiredMultiplier() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openBossSettingsPage(player);
+                }).build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // ITEM SETTINGS PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openItemSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("Item Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_HELMET)
+                .setName(Text.literal("Item Level Requirements").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("L: +1 level | R: -1 | Shift: ±5").formatted(Formatting.GRAY))
+                .glow().build());
+
+        Object[][] itemConfigs = {
+            {"voidwalker_crown",        "Voidwalker's Crown",   Items.RECOVERY_COMPASS,  7},
+            {"zombie_berserker_helmet", "Berserker Helmet",     Items.ZOMBIE_HEAD,        7},
+            {"spider_leggings",         "Spider Leggings",      Items.SPIDER_EYE,         5},
+            {"slime_boots",             "Slime Boots",          Items.SLIME_BALL,         5},
+            {"warden_chestplate",       "Warden Chestplate",    Items.SCULK_SENSOR,       8},
+            {"zombie_t1_helmet",        "Zombie T1 Helm",       Items.CHAINMAIL_HELMET,   1},
+            {"zombie_t2_helmet",        "Zombie T2 Helm",       Items.IRON_HELMET,        5},
+            {"spider_t1_helmet",        "Spider T1 Helm",       Items.CHAINMAIL_HELMET,   1},
+            {"spider_t2_helmet",        "Spider T2 Helm",       Items.IRON_HELMET,        5},
+        };
+
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20};
+        for (int i = 0; i < itemConfigs.length && i < slots.length; i++) {
+            String itemId = (String) itemConfigs[i][0];
+            String dispName = (String) itemConfigs[i][1];
+            Item icon = (Item) itemConfigs[i][2];
+            int defLevel = (int) itemConfigs[i][3];
+            int curLevel = DataManager.getItemLevelRequirement(itemId, defLevel);
+
+            gui.setSlot(slots[i], new GuiElementBuilder(icon)
+                    .setName(Text.literal(dispName).formatted(Formatting.AQUA, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Level req: §f" + curLevel + " §8(default: " + defLevel + ")").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                    .setCallback((idx, clickType, action) -> {
+                        int delta = clickType.isLeft ? 1 : -1;
+                        if (clickType.shift) delta *= 5;
+                        DataManager.setItemLevelRequirement(itemId, DataManager.getItemLevelRequirement(itemId, defLevel) + delta);
+                        DataManager.save(PoliticalServer.server);
+                        openItemSettingsPage(player);
+                    }).build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // DEFENCE SETTINGS PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openDefenceSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("Defence Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.SHIELD)
+                .setName(Text.literal("Defence Settings").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal("L: +1% | R: -1% | Shift: ±5%").formatted(Formatting.GRAY))
+                .glow().build());
+
+        int defCap = DataManager.getDefenceCapPct();
+        gui.setSlot(10, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+                .setName(Text.literal("Defence Cap").formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + defCap + "%").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Max damage reduction from bounty def").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    int delta = clickType.isLeft ? 1 : -1;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setDefenceCapPct(DataManager.getDefenceCapPct() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openDefenceSettingsPage(player);
+                }).build());
+
+        int t1Bonus = DataManager.getT1SetBonusPct();
+        gui.setSlot(12, new GuiElementBuilder(Items.CHAINMAIL_CHESTPLATE)
+                .setName(Text.literal("T1 Full Set Bonus").formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + t1Bonus + "% §7boss-specific def").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    int delta = clickType.isLeft ? 1 : -1;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setT1SetBonusPct(DataManager.getT1SetBonusPct() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openDefenceSettingsPage(player);
+                }).build());
+
+        int t2Bonus = DataManager.getT2SetBonusPct();
+        gui.setSlot(14, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+                .setName(Text.literal("T2 Full Set Bonus").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + t2Bonus + "% §7boss-specific def").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    int delta = clickType.isLeft ? 1 : -1;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setT2SetBonusPct(DataManager.getT2SetBonusPct() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openDefenceSettingsPage(player);
+                }).build());
+
+        int t1SwordSpec = DataManager.getData().t1SwordSpecificPct;
+        gui.setSlot(20, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("T1 Sword Specific Def").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + t1SwordSpec + "% §7vs matching boss").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    int delta = clickType.isLeft ? 1 : -1;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.getData().t1SwordSpecificPct = Math.max(0, Math.min(100, DataManager.getData().t1SwordSpecificPct + delta));
+                    DataManager.save(PoliticalServer.server);
+                    openDefenceSettingsPage(player);
+                }).build());
+
+        int t2SwordSpec = DataManager.getData().t2SwordSpecificPct;
+        gui.setSlot(22, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("T2 Sword Specific Def").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + t2SwordSpec + "% §7vs matching boss").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    int delta = clickType.isLeft ? 1 : -1;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.getData().t2SwordSpecificPct = Math.max(0, Math.min(100, DataManager.getData().t2SwordSpecificPct + delta));
+                    DataManager.save(PoliticalServer.server);
+                    openDefenceSettingsPage(player);
+                }).build());
+
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // DROP SETTINGS PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openDropSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("Drop Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("Drop Settings").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("L: +0.1x | R: -0.1x | Shift: ±0.5x").formatted(Formatting.GRAY))
+                .glow().build());
+
+        float chunkMult = DataManager.getChunkDropMultiplier();
+        gui.setSlot(10, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("Chunk Drop Rate Multiplier").formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + String.format("%.1f", chunkMult) + "x").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Multiplies chunk drop chance").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    float delta = clickType.isLeft ? 0.1f : -0.1f;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setChunkDropMultiplier(DataManager.getChunkDropMultiplier() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openDropSettingsPage(player);
+                }).build());
+
+        float coreMult = DataManager.getCoreDropMultiplier();
+        gui.setSlot(12, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("Core Drop Rate Multiplier").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + String.format("%.1f", coreMult) + "x").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Multiplies core drop chance").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    float delta = clickType.isLeft ? 0.1f : -0.1f;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setCoreDropMultiplier(DataManager.getCoreDropMultiplier() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openDropSettingsPage(player);
+                }).build());
+
+        float coinMult = DataManager.getCoinRewardMultiplier();
+        gui.setSlot(14, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Text.literal("Coin Reward Multiplier").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + String.format("%.1f", coinMult) + "x").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Multiplies coin rewards from kills").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    float delta = clickType.isLeft ? 0.1f : -0.1f;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setCoinRewardMultiplier(DataManager.getCoinRewardMultiplier() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openDropSettingsPage(player);
+                }).build());
+
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // MOB SETTINGS PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openMobSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("Mob Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("Mob Settings").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("L: +0.1x | R: -0.1x | Shift: ±0.5x").formatted(Formatting.GRAY))
+                .glow().build());
+
+        float healthMult = DataManager.getMobHealthScalingMultiplier();
+        gui.setSlot(12, new GuiElementBuilder(Items.APPLE)
+                .setName(Text.literal("Health Scaling Multiplier").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: §f" + String.format("%.1f", healthMult) + "x").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Multiplies health of all scaled mobs").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                .setCallback((idx, clickType, action) -> {
+                    float delta = clickType.isLeft ? 0.1f : -0.1f;
+                    if (clickType.shift) delta *= 5;
+                    DataManager.setMobHealthScalingMultiplier(DataManager.getMobHealthScalingMultiplier() + delta);
+                    DataManager.save(PoliticalServer.server);
+                    openMobSettingsPage(player);
+                }).build());
+
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // SCOREBOARD SETTINGS PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openScoreboardSettingsPage(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("Scoreboard Settings"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.OAK_SIGN)
+                .setName(Text.literal("Scoreboard Settings").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Toggle scoreboard sections").formatted(Formatting.GRAY))
+                .glow().build());
+
+        boolean showAuction = DataManager.isScoreboardShowAuction();
+        gui.setSlot(11, new GuiElementBuilder(showAuction ? Items.LIME_DYE : Items.GRAY_DYE)
+                .setName(Text.literal("Show Auction Timer").formatted(showAuction ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Status: " + (showAuction ? "§aVISIBLE" : "§cHIDDEN")).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to toggle").formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> {
+                    DataManager.setScoreboardShowAuction(!DataManager.isScoreboardShowAuction());
+                    DataManager.save(PoliticalServer.server);
+                    openScoreboardSettingsPage(player);
+                }).build());
+
+        boolean showBounty = DataManager.isScoreboardShowBountyGear();
+        gui.setSlot(13, new GuiElementBuilder(showBounty ? Items.LIME_DYE : Items.GRAY_DYE)
+                .setName(Text.literal("Show Bounty Gear Stats").formatted(showBounty ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Status: " + (showBounty ? "§aVISIBLE" : "§cHIDDEN")).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to toggle").formatted(Formatting.YELLOW))
+                .setCallback((idx, clickType, action) -> {
+                    DataManager.setScoreboardShowBountyGear(!DataManager.isScoreboardShowBountyGear());
+                    DataManager.save(PoliticalServer.server);
+                    openScoreboardSettingsPage(player);
+                }).build());
+
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
     }
 }

@@ -89,6 +89,8 @@ public class TaxManager {
 
         if (toPay > 0 && CreditItem.removeCredits(player, toPay)) {
             setTaxOwed(uuid, owed - toPay);
+            // Deposit tax revenue into Government Treasury
+            DataManager.addGovernmentTreasury(toPay);
 
             if (getTaxOwed(uuid) < 50 && player.interactionManager.getGameMode() == GameMode.ADVENTURE) {
                 player.changeGameMode(GameMode.SURVIVAL);
@@ -109,6 +111,8 @@ public class TaxManager {
 
         if (toPay > 0 && CoinManager.removeCoins(player, toPay)) {
             setTaxOwed(uuid, owed - toPay);
+            // Deposit tax revenue into Government Treasury
+            DataManager.addGovernmentTreasury(toPay);
 
             if (getTaxOwed(uuid) < 50 && player.interactionManager.getGameMode() == GameMode.ADVENTURE) {
                 player.changeGameMode(GameMode.SURVIVAL);
@@ -166,6 +170,8 @@ public class TaxManager {
 
             // Remove coins directly
             if (CoinManager.removeCoins(uuid, taxAmount)) {
+                // Deposit tax revenue into Government Treasury
+                DataManager.addGovernmentTreasury(taxAmount);
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(java.util.UUID.fromString(uuid));
                 if (player != null) {
                     player.sendMessage(Text.literal("Daily tax deducted: " + taxAmount + " coins (" +

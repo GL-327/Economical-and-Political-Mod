@@ -103,13 +103,19 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				if (!saved.isEmpty()) {
 					pendingSoulboundItems.put(dying.getUuid(), saved);
 				}
-				// Deduct 25% of coins on death (floor), skip creative mode
+				// Deduct coins on death — Crown of Greed = lose ALL, otherwise 25%
 				if (!dying.isCreative()) {
 					int coins = CoinManager.getCoins(dying);
-					int penalty = (int) Math.floor(coins * 0.25);
+					boolean hasCrown = SlayerItems.isCrownOfGreed(dying.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD));
+					int penalty = hasCrown ? coins : (int) Math.floor(coins * 0.25);
 					if (penalty > 0) {
 						CoinManager.removeCoins(dying, penalty);
-						dying.sendMessage(Text.literal("You lost " + penalty + " coins on death!").formatted(Formatting.RED));
+						if (hasCrown) {
+							dying.sendMessage(Text.literal("👑 Crown of Greed: You lost ALL " + penalty + " coins on death!")
+									.formatted(Formatting.DARK_RED, Formatting.BOLD));
+						} else {
+							dying.sendMessage(Text.literal("You lost " + penalty + " coins on death!").formatted(Formatting.RED));
+						}
 					}
 				}
 			}
@@ -125,6 +131,13 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, DhitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+			// Spawn protection: prevent non-operators from attacking entities in the zone
+			if (!SpawnProtectionManager.isOperator(serverPlayer)
+					&& SpawnProtectionManager.isPosProtected(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ())) {
+				serverPlayer.sendMessage(Text.literal("⛔ This area is under Government Protection!").formatted(Formatting.RED), true);
+				return ActionResult.FAIL;
+			}
 
 			ItemStack heldItem = player.getStackInHand(hand);
 
@@ -366,6 +379,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			AuctionHouseGui.onPlayerDisconnect(player);
 			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
 			ScoreboardManager.onPlayerDisconnect(player);
+			SpawnProtectionManager.onPlayerDisconnect(player.getUuid());
 		});
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
@@ -428,6 +442,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickEnderPhaseHelmet(player);
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
 				T2ArmorAbilityHandler.tick(player);
+				CustomItemHandler.tickCrownOfGreed(player);
+				SpawnProtectionManager.tickPlayerBoundary(player);
 
 			}
 

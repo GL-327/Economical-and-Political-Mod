@@ -1560,6 +1560,11 @@ public class SlayerItems {
         return level >= WARDEN_CHESTPLATE_LEVEL_REQ;
     }
 
+    public static boolean canUseEnderPhaseHelmet(ServerPlayerEntity player) {
+        int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ENDERMAN);
+        return level >= ENDER_PHASE_HELMET_LEVEL_REQ;
+    }
+
     // Level requirements
 
 
