@@ -194,6 +194,17 @@ public class AdminGui {
                 .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openGameSettingsPage(player))
                 .build());
+
+        gui.setSlot(11, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Perk Management").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Activate/deactivate any perk").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• View all active perks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Reset all perks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPerkManagementPage(player))
+                .build());
         // Close button
         gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED))
@@ -1158,6 +1169,37 @@ public class AdminGui {
                 .setCallback((index, type, action) -> openPlayerSelector(player, "smite"))
                 .build());
 
+        // Give Coins
+        gui.setSlot(14, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("Give Coins").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Add coins to a player").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("L: +100 | R: -100 | Shift: ±1000").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click player to select").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "give_coins"))
+                .build());
+
+        // Set Slayer Level
+        gui.setSlot(15, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
+                .setName(Text.literal("Set Slayer Level").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Adjust bounty slayer levels/XP").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to select player").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "slayer_level"))
+                .build());
+
+        // Teleport to Player
+        gui.setSlot(16, new GuiElementBuilder(Items.ENDER_EYE)
+                .setName(Text.literal("Teleport to Player").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Teleport yourself to a player").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to select").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "tp_to"))
+                .build());
+
         addBackButton(gui, player);
         gui.open();
     }
@@ -1221,6 +1263,35 @@ public class AdminGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to view").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> RulerGui.openDebtorsPage(player, "admin"))
+                .build());
+
+        // Auction House Toggle
+        boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
+        gui.setSlot(13, new GuiElementBuilder(auctionActive ? Items.LIME_STAINED_GLASS_PANE : Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("Underground Auction").formatted(auctionActive ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Status: " + (auctionActive ? "§aACTIVE" : "§cINACTIVE")).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Next: §f" + PoliticalServer.formatTime(UndergroundAuctionManager.getTimeUntilNextAuction())).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click: Force start/stop auction").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> {
+                    if (auctionActive) {
+                        UndergroundAuctionManager.forceEndAuction();
+                        player.sendMessage(Text.literal("✓ Auction forcibly ended!").formatted(Formatting.RED));
+                    } else {
+                        UndergroundAuctionManager.forceStartAuction(PoliticalServer.server);
+                        player.sendMessage(Text.literal("✓ Auction forcibly started!").formatted(Formatting.GREEN));
+                    }
+                    openPage(player, AdminPage.ECONOMY);
+                })
+                .build());
+
+        // Give Coins to Player
+        gui.setSlot(14, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("Give Coins to Player").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Add coins to an online player").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to select player").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "give_coins"))
                 .build());
 
         addBackButton(gui, player);
@@ -1300,6 +1371,81 @@ public class AdminGui {
                     UndergroundAuctionManager.spawnAuctioneer(world, player.getX(), player.getY(), player.getZ(), player.getYaw());
                     player.sendMessage(Text.literal("✓ Underground Auctioneer spawned!").formatted(Formatting.LIGHT_PURPLE));
                     gui.close();
+                })
+                .build());
+
+        // Spawn Protection Region
+        gui.setSlot(21, new GuiElementBuilder(SpawnProtectionManager.isActive() ? Items.ORANGE_TERRACOTTA : Items.WHITE_TERRACOTTA)
+                .setName(Text.literal("Spawn Protection").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Status: " + (SpawnProtectionManager.isActive() ? "§aACTIVE" : "§cINACTIVE")).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Min: " + SpawnProtectionManager.getMinX() + "," + SpawnProtectionManager.getMinY() + "," + SpawnProtectionManager.getMinZ()).formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Max: " + SpawnProtectionManager.getMaxX() + "," + SpawnProtectionManager.getMaxY() + "," + SpawnProtectionManager.getMaxZ()).formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Left: Set corner 1 here | Right: Set corner 2 here").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Shift-click: Toggle active").formatted(Formatting.DARK_GRAY))
+                .setCallback((index, type, action) -> {
+                    if (type.shift) {
+                        if (SpawnProtectionManager.isActive()) SpawnProtectionManager.clearRegion();
+                        else SpawnProtectionManager.setRegion(SpawnProtectionManager.getMinX(), SpawnProtectionManager.getMinY(), SpawnProtectionManager.getMinZ(), SpawnProtectionManager.getMaxX(), SpawnProtectionManager.getMaxY(), SpawnProtectionManager.getMaxZ());
+                        player.sendMessage(Text.literal("✓ Spawn protection " + (SpawnProtectionManager.isActive() ? "enabled" : "disabled") + "!").formatted(Formatting.GREEN));
+                    } else if (type.isLeft) {
+                        int x = (int) player.getX(), y = (int) player.getY(), z = (int) player.getZ();
+                        SpawnProtectionManager.setRegion(x, y, z, SpawnProtectionManager.getMaxX(), SpawnProtectionManager.getMaxY(), SpawnProtectionManager.getMaxZ());
+                        player.sendMessage(Text.literal("✓ Corner 1 set to " + x + "," + y + "," + z + "!").formatted(Formatting.GREEN));
+                    } else {
+                        int x = (int) player.getX(), y = (int) player.getY(), z = (int) player.getZ();
+                        SpawnProtectionManager.setRegion(SpawnProtectionManager.getMinX(), SpawnProtectionManager.getMinY(), SpawnProtectionManager.getMinZ(), x, y, z);
+                        player.sendMessage(Text.literal("✓ Corner 2 set to " + x + "," + y + "," + z + "!").formatted(Formatting.GREEN));
+                    }
+                    openPage(player, AdminPage.WORLD);
+                })
+                .build());
+
+        // Weather Override
+        net.minecraft.server.world.ServerWorld overworld = PoliticalServer.server.getOverworld();
+        boolean isRaining = overworld.isRaining();
+        boolean isThundering = overworld.isThundering();
+        gui.setSlot(22, new GuiElementBuilder(isRaining ? Items.WATER_BUCKET : Items.SUNFLOWER)
+                .setName(Text.literal("Weather Control").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: " + (isThundering ? "§cThunder" : isRaining ? "§bRain" : "§eClear")).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Left: Clear | Right: Rain | Shift: Thunder").formatted(Formatting.DARK_GRAY))
+                .setCallback((index, type, action) -> {
+                    if (type.shift) {
+                        PoliticalServer.server.getOverworld().setWeather(0, 24000, true, true);
+                        player.sendMessage(Text.literal("✓ Weather set to Thunder!").formatted(Formatting.AQUA));
+                    } else if (type.isLeft) {
+                        PoliticalServer.server.getOverworld().setWeather(24000, 0, false, false);
+                        player.sendMessage(Text.literal("✓ Weather set to Clear!").formatted(Formatting.YELLOW));
+                    } else {
+                        PoliticalServer.server.getOverworld().setWeather(0, 24000, true, false);
+                        player.sendMessage(Text.literal("✓ Weather set to Rain!").formatted(Formatting.AQUA));
+                    }
+                    openPage(player, AdminPage.WORLD);
+                })
+                .build());
+
+        // Time Control
+        long currentTime = overworld.getTimeOfDay() % 24000;
+        gui.setSlot(23, new GuiElementBuilder(currentTime >= 13000 ? Items.ENDER_PEARL : Items.GLOWSTONE)
+                .setName(Text.literal("Time Control").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current time: §f" + currentTime).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Left: Daytime (1000) | Right: Midnight (18000)").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Shift+Left: Sunrise (23000) | Shift+Right: Sunset (13000)").formatted(Formatting.DARK_GRAY))
+                .setCallback((index, type, action) -> {
+                    long day = overworld.getTimeOfDay() / 24000;
+                    if (type.shift && type.isLeft) {
+                        overworld.setTimeOfDay(day * 24000 + 23000);
+                        player.sendMessage(Text.literal("✓ Time set to sunrise!").formatted(Formatting.YELLOW));
+                    } else if (type.shift) {
+                        overworld.setTimeOfDay(day * 24000 + 13000);
+                        player.sendMessage(Text.literal("✓ Time set to sunset!").formatted(Formatting.GOLD));
+                    } else if (type.isLeft) {
+                        overworld.setTimeOfDay(day * 24000 + 1000);
+                        player.sendMessage(Text.literal("✓ Time set to day!").formatted(Formatting.YELLOW));
+                    } else {
+                        overworld.setTimeOfDay(day * 24000 + 18000);
+                        player.sendMessage(Text.literal("✓ Time set to midnight!").formatted(Formatting.DARK_BLUE));
+                    }
+                    openPage(player, AdminPage.WORLD);
                 })
                 .build());
 
@@ -1449,6 +1595,22 @@ public class AdminGui {
             }
             case "credits" -> {
                 openCreditsAmountSelector(admin, target);
+                return;
+            }
+            case "give_coins" -> {
+                openGiveCoinsSelector(admin, target);
+                return;
+            }
+            case "slayer_level" -> {
+                openSlayerLevelSelector(admin, target);
+                return;
+            }
+            case "tp_to" -> {
+                admin.teleport(
+                    (net.minecraft.server.world.ServerWorld) target.getEntityWorld(),
+                    target.getX(), target.getY(), target.getZ(),
+                    java.util.Set.of(), admin.getYaw(), admin.getPitch(), false);
+                admin.sendMessage(Text.literal("✓ Teleported to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
                 return;
             }
         }
@@ -4889,6 +5051,154 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.GRAY))
                 .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // PERK MANAGEMENT PAGE
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openPerkManagementPage(ServerPlayerEntity player) {
+        java.util.Collection<Perk> allPerks = PerkManager.getAllPerks();
+        java.util.List<String> activePerks = PerkManager.getActivePerks();
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✦ Perk Management"));
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Perk Management").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Active: §a" + activePerks.size() + " §7/ §f" + allPerks.size()).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Left: Activate | Right: Deactivate").formatted(Formatting.DARK_GRAY))
+                .glow().build());
+
+        // Reset All Perks button
+        gui.setSlot(8, new GuiElementBuilder(Items.TNT)
+                .setName(Text.literal("Reset All Perks").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Deactivates ALL perks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to reset").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    PerkManager.clearAllPerks();
+                    DataManager.save(PoliticalServer.server);
+                    player.sendMessage(Text.literal("✓ All perks reset!").formatted(Formatting.RED));
+                    openPerkManagementPage(player);
+                }).build());
+
+        int slot = 10;
+        for (Perk perk : allPerks) {
+            if (slot >= 53) break;
+            if (slot % 9 == 0) slot++;
+            if (slot % 9 == 8) { slot++; continue; }
+
+            boolean active = activePerks.contains(perk.id);
+            net.minecraft.item.Item perkIcon = active ? Items.LIME_DYE : Items.GRAY_DYE;
+            final Perk finalPerk = perk;
+            gui.setSlot(slot, new GuiElementBuilder(perkIcon)
+                    .setName(Text.literal(perk.name).formatted(active ? Formatting.GREEN : Formatting.GRAY, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Status: " + (active ? "§aACTIVE" : "§cINACTIVE")).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("ID: §7" + perk.id).formatted(Formatting.DARK_GRAY))
+                    .addLoreLine(Text.literal(active ? "Right-click: Deactivate" : "Left-click: Activate").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, clickAction) -> {
+                        java.util.List<String> current = new java.util.ArrayList<>(PerkManager.getActivePerks());
+                        if (current.contains(finalPerk.id)) {
+                            current.remove(finalPerk.id);
+                        } else {
+                            current.add(finalPerk.id);
+                        }
+                        PerkManager.setActivePerks(current);
+                        PerkManager.applyActivePerks(player);
+                        DataManager.save(PoliticalServer.server);
+                        openPerkManagementPage(player);
+                    }).build());
+            slot++;
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openMainPage(player)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // GIVE COINS SELECTOR
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openGiveCoinsSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
+        gui.setTitle(Text.literal("Give Coins — " + target.getName().getString()));
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build());
+        }
+
+        int currentCoins = CoinManager.getCoins(target);
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal(target.getName().getString()).formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current coins: §f" + currentCoins).formatted(Formatting.GOLD))
+                .glow().build());
+
+        int[] amounts = {100, 500, 1000, 5000, 10000};
+        int[] slots   = {10, 11, 12, 13, 14};
+        for (int i = 0; i < amounts.length; i++) {
+            final int amount = amounts[i];
+            gui.setSlot(slots[i], new GuiElementBuilder(Items.GOLD_NUGGET)
+                    .setName(Text.literal("+" + amount + " Coins").formatted(Formatting.GOLD, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Left: Give  |  Right: Remove").formatted(Formatting.GRAY))
+                    .setCallback((idx, type, action) -> {
+                        if (type.isLeft) {
+                            CoinManager.giveCoins(target, amount);
+                            admin.sendMessage(Text.literal("✓ Gave " + amount + " coins to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
+                        } else {
+                            CoinManager.removeCoins(target, amount);
+                            admin.sendMessage(Text.literal("✓ Removed " + amount + " coins from " + target.getName().getString() + "!").formatted(Formatting.RED));
+                        }
+                        openGiveCoinsSelector(admin, target);
+                    }).build());
+        }
+
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openPlayersPage(admin)).build());
+        gui.open();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // SLAYER LEVEL SELECTOR
+    // ═══════════════════════════════════════════════════════════
+
+    private static void openSlayerLevelSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, admin, false);
+        gui.setTitle(Text.literal("Slayer Levels — " + target.getName().getString()));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
+                .setName(Text.literal(target.getName().getString()).formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Left: +1 level  |  Right: -1 level").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Shift: ±5 levels").formatted(Formatting.DARK_GRAY))
+                .glow().build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] slotPositions = {10, 11, 12, 13, 14, 15, 16};
+        for (int i = 0; i < types.length && i < slotPositions.length; i++) {
+            SlayerManager.SlayerType t = types[i];
+            int currentLevel = SlayerData.getSlayerLevel(target.getUuidAsString(), t);
+            gui.setSlot(slotPositions[i], new GuiElementBuilder(Items.BOOK)
+                    .setName(Text.literal(t.displayName + " Lvl " + currentLevel).formatted(Formatting.AQUA, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Current: §f" + currentLevel).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                    .setCallback((idx, clickType, action) -> {
+                        int delta = clickType.isLeft ? 1 : -1;
+                        if (clickType.shift) delta *= 5;
+                        int newLevel = Math.max(0, currentLevel + delta);
+                        SlayerData.setSlayerLevel(target.getUuidAsString(), t, newLevel);
+                        DataManager.save(PoliticalServer.server);
+                        admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s " + t.displayName + " level to " + newLevel + "!").formatted(Formatting.GREEN));
+                        openSlayerLevelSelector(admin, target);
+                    }).build());
+        }
+
+        addBackButton(gui, admin);
         gui.open();
     }
 }

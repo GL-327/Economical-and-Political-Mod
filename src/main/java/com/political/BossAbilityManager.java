@@ -1329,6 +1329,8 @@ public class BossAbilityManager {
     // TICK HANDLERS - Call these from your main server tick
     // ============================================================
 
+    private static int cleanupTickCounter = 0;
+
     public static void tickAllBossAbilities(MinecraftServer server) {
         long now = System.currentTimeMillis();
 
@@ -1339,7 +1341,12 @@ public class BossAbilityManager {
         tickAbyssalRoar(server, now);
         tickSculkInfestations(server, now);
         tickShieldEffects(now);
-        cleanupDespawnedBosses(server);
+        // Only run the expensive entity-existence sweep every 1200 ticks (~60 seconds)
+        cleanupTickCounter++;
+        if (cleanupTickCounter >= 1200) {
+            cleanupTickCounter = 0;
+            cleanupDespawnedBosses(server);
+        }
     }
 
     private static void tickEnrageEffects(long now) {

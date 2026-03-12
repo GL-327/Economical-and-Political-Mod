@@ -17,6 +17,7 @@ public class ArmorAbilityHandler {
     private static final Map<UUID, Long> entityNoiseTimestamps = new HashMap<>();
     private static final long NOISE_FADE_TIME_MS = 5000; // 5 seconds after last noise
     private static final Set<UUID> espGlowingMobs = new HashSet<>();
+    private static int armorAbilityTickCounter = 0;
 
     // Call this every tick from PoliticalServer.java
     public static void tick(ServerPlayerEntity player) {
@@ -24,6 +25,19 @@ public class ArmorAbilityHandler {
         tickSlimeBoots(player);
         tickWardenChestplate(player);
         tickBerserkerHelmet(player);
+    }
+
+    /**
+     * Called every server tick for world-level housekeeping.
+     * Periodically purges expired noise timestamps so they don't accumulate
+     * when no player is wearing the Warden Chestplate.
+     */
+    public static void tickWorld() {
+        armorAbilityTickCounter++;
+        if (armorAbilityTickCounter < 200) return; // run every 200 ticks (~10 seconds)
+        armorAbilityTickCounter = 0;
+        long now = System.currentTimeMillis();
+        entityNoiseTimestamps.entrySet().removeIf(e -> now - e.getValue() > NOISE_FADE_TIME_MS);
     }
 
     // Track death save cooldowns

@@ -45,6 +45,7 @@ public class PerkManager {
     private static final Identifier GRAVITY_MODIFIER_ID = Identifier.of("political", "heavy_gravity");
 
     private static int tickCounter = 0;
+    private static int perkCycleCounter = 0;
     private static int witheringEconomyCounter = 0;
     private static final Random random = new Random();
 
@@ -504,8 +505,9 @@ public class PerkManager {
         tickCounter++;
         if (tickCounter < 100) return;
         tickCounter = 0;
-// Nightvision Decree - refresh every 200 ticks
-        if (activePerks.contains("NIGHTVISION_DECREE") && tickCounter % 200 == 0) {
+        perkCycleCounter++;
+// Nightvision Decree - refresh every 200 ticks (every other cycle)
+        if (activePerks.contains("NIGHTVISION_DECREE") && perkCycleCounter % 2 == 0) {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
@@ -513,7 +515,7 @@ public class PerkManager {
         }
 
 // Chaos Lottery (diamond) - already handled by DIAMOND_RAIN / CHAOS_LOTTERY
-        if (activePerks.contains("CHAOS_LOTTERY") && tickCounter % 100 == 0) {
+        if (activePerks.contains("CHAOS_LOTTERY")) {
             if (random.nextInt(120) == 0) { // ~once per 10 min
                 List<ServerPlayerEntity> players = new ArrayList<>(server.getPlayerManager().getPlayerList());
                 if (!players.isEmpty()) {
@@ -526,7 +528,7 @@ public class PerkManager {
         }
 
 // Blood Moon - permanent night
-        if (activePerks.contains("BLOOD_MOON") && tickCounter % 100 == 0) {
+        if (activePerks.contains("BLOOD_MOON")) {
             for (ServerWorld world : server.getWorlds()) {
                 if (world.getTimeOfDay() % 24000 < 13000) {
                     world.setTimeOfDay(18000);
@@ -534,8 +536,8 @@ public class PerkManager {
             }
         }
 
-// Mirror World - reverse time (move backwards)
-        if (activePerks.contains("MIRROR_WORLD") && tickCounter % 20 == 0) {
+// Mirror World - reverse time (move backwards) - every 100 ticks
+        if (activePerks.contains("MIRROR_WORLD")) {
             for (ServerWorld world : server.getWorlds()) {
                 long time = world.getTimeOfDay();
                 world.setTimeOfDay(time - 40); // Go back 2x speed
@@ -543,7 +545,7 @@ public class PerkManager {
         }
 
 // Eternal Dawn - lock to sunrise
-        if (activePerks.contains("ETERNAL_DAWN") && tickCounter % 100 == 0) {
+        if (activePerks.contains("ETERNAL_DAWN")) {
             for (ServerWorld world : server.getWorlds()) {
                 world.setTimeOfDay(23000); // Sunrise
                 if (world.isRaining()) {

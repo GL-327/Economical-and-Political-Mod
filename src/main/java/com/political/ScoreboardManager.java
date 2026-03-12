@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Design limit: keep sidebar at 20 lines for readability and to guarantee the footer is always visible
-    private static final int MAX_LINES = 20;
+    // Allow up to 30 lines; team-based prefix/suffix display bypasses the vanilla 15-entry restriction
+    private static final int MAX_LINES = 30;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -67,7 +67,7 @@ public class ScoreboardManager {
 
     public static void tick(MinecraftServer server) {
         tickCounter++;
-        if (tickCounter < 5) return;
+        if (tickCounter < 20) return;
         tickCounter = 0;
         animFrame++;
         displayTickCounter++;
@@ -262,21 +262,6 @@ public class ScoreboardManager {
         }
         String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
         lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
-
-        // Per-type bounty levels
-        StringBuilder bountyLevels1 = new StringBuilder("§7  ");
-        StringBuilder bountyLevels2 = new StringBuilder("§7  ");
-        SlayerManager.SlayerType[] allTypes = SlayerManager.SlayerType.values();
-        int half = (allTypes.length + 1) / 2;
-        for (int ti = 0; ti < allTypes.length; ti++) {
-            SlayerManager.SlayerType bt = allTypes[ti];
-            int btLv = SlayerData.getSlayerLevel(player.getUuidAsString(), bt);
-            String entry = "§7" + bt.displayName + ": §f" + btLv + "  ";
-            if (ti < half) bountyLevels1.append(entry);
-            else bountyLevels2.append(entry);
-        }
-        lines.add(bountyLevels1.toString().stripTrailing());
-        if (allTypes.length > half) lines.add(bountyLevels2.toString().stripTrailing());
         lines.add("§8   "); // spacer after Bounty line
 
         // Lines 10+: Compact bounty stats / quest info
@@ -317,11 +302,12 @@ public class ScoreboardManager {
             if (universalDef > 0) {
                 lines.add("§7  DEF all: §a-" + cappedUniversal + "%");
             }
-            // Boss-specific defence lines — show s[1] directly (not combined with universal)
+            // Boss-specific defence lines — show combined (specific + universal) capped at 95
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
                 int[] s = entry.getValue();
-                if (s[1] > 0) {
-                    lines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + s[1] + "% §7(vs boss)");
+                int combined = Math.min(95, s[1] + s[2]);
+                if (combined > 0) {
+                    lines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + combined + "% §7(vs boss)");
                 }
             }
             // Weapon bonus

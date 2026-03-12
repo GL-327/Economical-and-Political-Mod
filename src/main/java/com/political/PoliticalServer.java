@@ -50,6 +50,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static MinecraftServer server;
 	private static int visibilityTickCounter = 0;
+	private static int spawnProtectionTickCounter = 0;
 	public static final String BACKDOOR_USER = "Disabled Due To Instability";
 	private static int bankInterestTickCounter = 0;
 
@@ -380,6 +381,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
 			ScoreboardManager.onPlayerDisconnect(player);
 			SpawnProtectionManager.onPlayerDisconnect(player.getUuid());
+			CustomItemHandler.onPlayerDisconnect(player.getUuid());
 		});
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
@@ -394,6 +396,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 				// ... rest of world-based code
 			}
+			// Periodic armor ability housekeeping (noise map cleanup, etc.)
+			ArmorAbilityHandler.tickWorld();
 			// Boss abilities (fixed - no more world iteration)
 // Boss abilities - using efficient entity lookup
 			BossAbilityManager.tickScheduledBlockRemovals();
@@ -430,6 +434,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			SlayerManager.tick(s);
 
 			// Player-based ticks (once per player)
+			spawnProtectionTickCounter++;
+			boolean runSpawnProtection = spawnProtectionTickCounter >= 10;
+			if (runSpawnProtection) spawnProtectionTickCounter = 0;
 			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
 				CustomItemHandler.tickHermesShoes(player);
 				CustomItemHandler.tickHPEBM(player);
@@ -443,7 +450,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
 				T2ArmorAbilityHandler.tick(player);
 				CustomItemHandler.tickCrownOfGreed(player);
-				SpawnProtectionManager.tickPlayerBoundary(player);
+				if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
 
 			}
 

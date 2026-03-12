@@ -109,10 +109,16 @@ public class VanishManager {
         }
     }
 
+    private static int vanishTickCounter = 0;
+
     /**
      * Called every server tick to maintain invisibility on vanished players.
+     * Only runs the check every 40 ticks (~2 seconds) since the effect duration is very long.
      */
     public static void tick(MinecraftServer server) {
+        vanishTickCounter++;
+        if (vanishTickCounter < 40) return;
+        vanishTickCounter = 0;
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             if (isVanished(player)) {
                 StatusEffectInstance effect = player.getStatusEffect(StatusEffects.INVISIBILITY);

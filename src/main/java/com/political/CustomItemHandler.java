@@ -159,6 +159,39 @@ public class CustomItemHandler {
                 return ActionResult.PASS;
             }
 
+            return handleEnderPhaseActivation(serverPlayer);
+        });
+
+        // Ender Phase Helmet - also trigger when right-clicking a block with the helmet
+        // (fallback for cases where UseItemCallback does not fire with empty hands)
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
+
+            // Only intercept when main hand is empty
+            if (!serverPlayer.getMainHandStack().isEmpty()) return ActionResult.PASS;
+
+            ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
+            if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
+
+            if (!SlayerItems.canUseEnderPhaseHelmet(serverPlayer)) {
+                int req = SlayerItems.ENDER_PHASE_HELMET_LEVEL_REQ;
+                serverPlayer.sendMessage(
+                    Text.literal("⛔ Requires Enderman Bounty Level " + req + " to use!").formatted(Formatting.RED), true);
+                return ActionResult.PASS;
+            }
+
+            return handleEnderPhaseActivation(serverPlayer);
+        });
+    }
+
+    /**
+     * Core logic for Voidwalker Crown right-click and sneak+right-click abilities.
+     * Called from both UseItemCallback and UseBlockCallback so it fires reliably
+     * regardless of what (if anything) is in the player's hands.
+     */
+    private static ActionResult handleEnderPhaseActivation(ServerPlayerEntity serverPlayer) {
             long now = System.currentTimeMillis();
             UUID uuid = serverPlayer.getUuid();
 
@@ -198,7 +231,7 @@ public class CustomItemHandler {
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
                 return ActionResult.CONSUME;
             } else {
-                // Normal right-click: Ender Warp (teleport to where player is looking)
+                // Normal right-click: Ender Warp (Phase Teleport — teleport up to 8 blocks in look direction)
                 Long cooldownUntil = enderWarpCooldowns.get(uuid);
                 if (cooldownUntil != null && now < cooldownUntil) {
                     return ActionResult.CONSUME;
@@ -207,7 +240,7 @@ public class CustomItemHandler {
                 ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
                 Vec3d eyePos = serverPlayer.getEyePos();
                 Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
-                Vec3d targetPos = eyePos.add(lookVec.multiply(100.0));
+                Vec3d targetPos = eyePos.add(lookVec.multiply(8.0)); // 8 blocks
 
                 net.minecraft.util.hit.BlockHitResult hitResult = serverWorld.raycast(
                         new RaycastContext(eyePos, targetPos,
@@ -215,11 +248,17 @@ public class CustomItemHandler {
                                 RaycastContext.FluidHandling.NONE,
                                 serverPlayer));
 
-                Vec3d dest = hitResult.getPos();
+                Vec3d dest = hitResult.getType() == net.minecraft.util.hit.HitResult.Type.MISS
+                        ? targetPos
+                        : hitResult.getPos();
                 // Place player slightly above the hit surface to avoid clipping
                 serverPlayer.teleport(serverWorld,
                         dest.x, dest.y + 0.1, dest.z,
                         Set.of(), serverPlayer.getYaw(), serverPlayer.getPitch(), false);
+
+                // Ender particles at destination
+                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.PORTAL,
+                        dest.x, dest.y + 0.5, dest.z, 15, 0.3, 0.5, 0.3, 0.05);
 
                 serverWorld.playSound(null, serverPlayer.getBlockPos(),
                         SoundEvents.ENTITY_ENDERMAN_TELEPORT,
@@ -228,7 +267,20 @@ public class CustomItemHandler {
                 enderWarpCooldowns.put(uuid, now + ENDER_WARP_COOLDOWN_MS);
                 return ActionResult.CONSUME;
             }
-        });
+    }
+
+    /** Called on player disconnect to clean up per-player state and prevent memory leaks. */
+    public static void onPlayerDisconnect(UUID uuid) {
+        enderWarpCooldowns.remove(uuid);
+        enderPhaseCooldowns.remove(uuid);
+        enderPhaseActiveUntil.remove(uuid);
+        gavelCooldowns.remove(uuid);
+        ultraOverclockedCooldowns.remove(uuid);
+        berserkerHelmetActive.remove(uuid);
+        berserkerWarningCooldown.remove(uuid);
+        hpebmUseTicks.remove(uuid);
+        hpebmLastRightClick.remove(uuid);
+        wasSwinging.remove(uuid);
     }
 
     // ============================================================
