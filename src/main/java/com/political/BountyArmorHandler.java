@@ -197,9 +197,9 @@ public class BountyArmorHandler {
     // =========================================================
 
     private static void tickEndermanArmorEffects(ServerPlayerEntity player) {
-        // T1 Helmet: Night Vision
+        // T1 and T2 Helmet: Night Vision
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
-        if ("enderman_t1_helmet".equals(helmetId)) {
+        if ("enderman_t1_helmet".equals(helmetId) || "enderman_t2_helmet".equals(helmetId)) {
             if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) ||
                     player.getStatusEffect(StatusEffects.NIGHT_VISION).getDuration() < 30) {
                 player.addStatusEffect(new StatusEffectInstance(
@@ -213,21 +213,21 @@ public class BountyArmorHandler {
     // =========================================================
 
     private static void tickWardenArmorEffects(ServerPlayerEntity player) {
-        // T1 Helmet: Darkness immunity (remove Darkness effect)
+        // T1 and T2 Helmet: Darkness immunity (remove Darkness effect)
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
-        if ("warden_t1_helmet".equals(helmetId)) {
+        if ("warden_t1_helmet".equals(helmetId) || "warden_t2_helmet".equals(helmetId)) {
             if (player.hasStatusEffect(StatusEffects.DARKNESS)) {
                 player.removeStatusEffect(StatusEffects.DARKNESS);
             }
         }
 
-        // T1 Boots: Vibration sense — Glowing applied to hostile entities within 8 blocks
-        // Use StatusEffects.GLOWING with a short duration so it expires naturally
+        // T1 Boots: Vibration sense (8 blocks), T2 Boots: wider vibration sense (12 blocks)
         String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
-        if ("warden_t1_boots".equals(bootsId)) {
+        if ("warden_t1_boots".equals(bootsId) || "warden_t2_boots".equals(bootsId)) {
+            int vibrationRange = "warden_t2_boots".equals(bootsId) ? 12 : 8;
             ServerWorld world = player.getEntityWorld();
             if (world.getTime() % 20 == 0) {
-                Box searchBox = player.getBoundingBox().expand(8.0);
+                Box searchBox = player.getBoundingBox().expand(vibrationRange);
                 for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, searchBox,
                         e -> e instanceof HostileEntity)) {
                     entity.addStatusEffect(new StatusEffectInstance(

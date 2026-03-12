@@ -974,7 +974,7 @@ public class SlayerItems {
     }
 
     public static ItemStack createTheGavel() {
-        return CustomItemHandler.createGavel();
+        return CustomItemHandler.createTheGavel();
     }
 
     public static ItemStack createZombieHelmet() {
@@ -1680,31 +1680,10 @@ public class SlayerItems {
     }
 
 
+    /** @deprecated Use {@link #createSpiderLeggings()} instead. */
+    @Deprecated
     public static ItemStack createVenomousCrawlerLeggings() {
-        ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
-
-
-        leggings.set(DataComponentTypes.DYED_COLOR,
-                new net.minecraft.component.type.DyedColorComponent(0x2E8B57));
-        leggings.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("🕷 Venomous Crawler Leggings")
-                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("BOUNTY ARMOR").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Wall Climbing").formatted(Formatting.GREEN));
-        lore.add(Text.literal("Poison Aura").formatted(Formatting.GREEN));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        setCustomItemId(leggings, "spider_leggings");
-        return leggings;
+        return createSpiderLeggings();
     }
 
 

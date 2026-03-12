@@ -149,6 +149,17 @@ public class AdminGui {
                 .addLoreLine(Text.literal("Manage the bounty system").formatted(Formatting.GRAY))
                 .setCallback((idx, type, action) -> openSlayerAdminGui(player))
                 .build());
+        gui.setSlot(30, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Custom Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Give custom items to yourself").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Armor, swords, legendary gear").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Special weapons & materials").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .glow()
+                .setCallback((idx, type, action) -> openCustomItemsPage(player))
+                .build());
         // Server status
         String chair = DataManager.getChair();
         String viceChair = DataManager.getViceChair();
@@ -427,26 +438,335 @@ public class AdminGui {
     }
 
     private static void openCustomItemsPage(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
-        gui.setTitle(Text.literal("Custom Items"));
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✦ Custom Items ✦"));
         fillBackground(gui);
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("Custom Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("✦ Custom Items ✦").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Select a category to give items").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // Bounty Swords
+        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Bounty Swords").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("T1 & T2 swords for all 7 types").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAdminCustomSwords(player))
+                .build());
+
+        // T1 Armor
+        gui.setSlot(11, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("T1 Armor").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("T1 armor sets for all 7 types").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAdminArmorSelector(player, 1))
+                .build());
+
+        // T2 Armor
+        gui.setSlot(12, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal("T2 Armor").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("T2 armor sets for all 7 types").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .glow()
+                .setCallback((idx, type, action) -> openAdminArmorSelector(player, 2))
+                .build());
+
+        // Legendary Gear
+        gui.setSlot(13, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("★ Legendary Gear").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Berserker Helmet").formatted(Formatting.DARK_GREEN))
+                .addLoreLine(Text.literal("• Spider Leggings").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("• Skeleton Bow").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal("• Slime Boots").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• Warden Chestplate").formatted(Formatting.DARK_AQUA))
+                .addLoreLine(Text.literal("• Voidwalker's Crown").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .glow()
+                .setCallback((idx, type, action) -> openAdminLegendary(player))
+                .build());
+
+        // Special Weapons
+        gui.setSlot(14, new GuiElementBuilder(Items.GOLDEN_AXE)
+                .setName(Text.literal("⚡ Special Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Harvey's Stick").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• The Gavel").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Hermes Shoes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• HPEBM Mk1–Mk5").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Ultra Overclocked Beam").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAdminSpecialWeapons(player))
+                .build());
+
+        // Materials (Chunks & Cores)
+        gui.setSlot(15, new GuiElementBuilder(Items.ECHO_SHARD)
+                .setName(Text.literal("◈ Materials").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Chunks & Cores for all 7 types").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAdminMaterials(player))
+                .build());
+
+        // Piglin Items
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Crown of Greed").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("• Piglin Core & Flesh").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• Piglin T1 & T2 Armor").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to open").formatted(Formatting.YELLOW))
+                .glow()
+                .setCallback((idx, type, action) -> openAdminPiglinItems(player))
+                .build());
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openPage(player, AdminPage.UNDERGROUND_AUCTION))
+                .build());
+
+        // Close button
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> gui.close())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openAdminCustomSwords(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ Bounty Swords"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Bounty Swords").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click any sword to receive it").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        // Row 1 (slots 10–16): T1 swords
+        // Row 2 (slots 19–25): T2 swords
+        int[] t1Slots = {10, 11, 12, 13, 14, 15, 16};
+        int[] t2Slots = {19, 20, 21, 22, 23, 24, 25};
+
+        for (int i = 0; i < types.length && i < t1Slots.length; i++) {
+            final SlayerManager.SlayerType t = types[i];
+            ItemStack sword = SlayerItems.createSlayerSword(t);
+            String name = sword.getName().getString();
+            gui.setSlot(t1Slots[i], new GuiElementBuilder(sword.getItem())
+                    .setName(Text.literal(name).formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("T1 Sword").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                    .setCallback((idx, type2, action) -> {
+                        player.giveItemStack(SlayerItems.createSlayerSword(t));
+                        player.sendMessage(Text.literal("✓ Given " + t.name() + " T1 sword!").formatted(Formatting.GREEN));
+                    })
+                    .build());
+
+            ItemStack t2sword = SlayerItems.createUpgradedSlayerSword(t);
+            String t2name = t2sword.getName().getString();
+            gui.setSlot(t2Slots[i], new GuiElementBuilder(t2sword.getItem())
+                    .setName(Text.literal(t2name).formatted(Formatting.LIGHT_PURPLE))
+                    .addLoreLine(Text.literal("T2 Upgraded Sword").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                    .glow()
+                    .setCallback((idx, type2, action) -> {
+                        player.giveItemStack(SlayerItems.createUpgradedSlayerSword(t));
+                        player.sendMessage(Text.literal("✓ Given " + t.name() + " T2 sword!").formatted(Formatting.GREEN));
+                    })
+                    .build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type2, action) -> openCustomItemsPage(player))
+                .build());
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type2, action) -> gui.close())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openAdminArmorSelector(ServerPlayerEntity player, int tier) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("T" + tier + " Armor — Select Type"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(tier == 1 ? Items.LEATHER_CHESTPLATE : Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal("T" + tier + " Armor").formatted(tier == 1 ? Formatting.BLUE : Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Select a bounty type to receive full set").formatted(Formatting.GRAY))
+                .build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] slots = {10, 11, 12, 13, 14, 15, 16};
+        net.minecraft.item.Item[] icons = {Items.ROTTEN_FLESH, Items.SPIDER_EYE, Items.BONE, Items.SLIME_BALL,
+                Items.ENDER_PEARL, Items.ECHO_SHARD, Items.GOLD_INGOT};
+
+        for (int i = 0; i < types.length && i < slots.length; i++) {
+            final SlayerManager.SlayerType t = types[i];
+            final int finalTier = tier;
+            gui.setSlot(slots[i], new GuiElementBuilder(icons[i])
+                    .setName(Text.literal(capitalize(t) + " T" + tier)
+                            .formatted(tier == 1 ? Formatting.BLUE : Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Give full T" + tier + " " + t.name().toLowerCase() + " armor set").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("▶ Click to receive all 4 pieces").formatted(Formatting.GREEN))
+                    .setCallback((idx, type2, action) -> {
+                        player.giveItemStack(SlayerItems.createSlayerHelmet(t, finalTier));
+                        player.giveItemStack(SlayerItems.createSlayerChestplate(t, finalTier));
+                        player.giveItemStack(SlayerItems.createSlayerLeggings(t, finalTier));
+                        player.giveItemStack(SlayerItems.createSlayerBoots(t, finalTier));
+                        player.sendMessage(Text.literal("✓ Given T" + finalTier + " " + t.name().toLowerCase() + " armor set!").formatted(Formatting.GREEN));
+                    })
+                    .build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type2, action) -> openCustomItemsPage(player))
+                .build());
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type2, action) -> gui.close())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openAdminLegendary(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("★ Legendary Gear"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.ZOMBIE_HEAD)
+                .setName(Text.literal("★ Legendary Gear").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click any item to receive it").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // Zombie Berserker Helmet
+        gui.setSlot(10, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("Zombie Berserker Helmet").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Zombie Bounty Helmet").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createZombieBerserkerHelmet());
+                    player.sendMessage(Text.literal("✓ Given Zombie Berserker Helmet!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Spider Leggings
+        gui.setSlot(11, new GuiElementBuilder(Items.LEATHER_LEGGINGS)
+                .setName(Text.literal("Spider Leggings").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Spider Bounty Leggings").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createSpiderLeggings());
+                    player.sendMessage(Text.literal("✓ Given Spider Leggings!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Skeleton Bow
+        gui.setSlot(12, new GuiElementBuilder(Items.BOW)
+                .setName(Text.literal("Skeleton Bow").formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Skeleton Bounty Bow").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createSkeletonBow());
+                    player.sendMessage(Text.literal("✓ Given Skeleton Bow!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Slime Boots
+        gui.setSlot(13, new GuiElementBuilder(Items.LEATHER_BOOTS)
+                .setName(Text.literal("Slime Boots").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Slime Bounty Boots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createSlimeBoots());
+                    player.sendMessage(Text.literal("✓ Given Slime Boots!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Warden Chestplate
+        gui.setSlot(14, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("Warden Chestplate").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Warden Bounty Chestplate").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createWardenChestplate());
+                    player.sendMessage(Text.literal("✓ Given Warden Chestplate!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Voidwalker's Crown
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Enderman Bounty Helmet").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createVoidwalkerCrown());
+                    player.sendMessage(Text.literal("✓ Given Voidwalker's Crown!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type2, action) -> openCustomItemsPage(player))
+                .build());
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type2, action) -> gui.close())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openAdminSpecialWeapons(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚡ Special Weapons"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLDEN_AXE)
+                .setName(Text.literal("⚡ Special Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click any item to receive it").formatted(Formatting.GRAY))
                 .glow()
                 .build());
 
         // Harvey's Stick
         gui.setSlot(10, new GuiElementBuilder(Items.STICK)
                 .setName(Text.literal("Harvey's Stick").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("◆ LEGENDARY WEAPON ◆").formatted(Formatting.GOLD))
                 .addLoreLine(Text.literal("Summons lightning on hit").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
-                .setCallback((index, type, action) -> {
+                .setCallback((idx, type2, action) -> {
                     player.giveItemStack(CustomItemHandler.createHarveysStick());
                     player.sendMessage(Text.literal("✓ Given Harvey's Stick!").formatted(Formatting.GREEN));
                 })
@@ -455,14 +775,10 @@ public class AdminGui {
         // The Gavel
         gui.setSlot(11, new GuiElementBuilder(Items.MACE)
                 .setName(Text.literal("The Gavel").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("◆ JUDICIAL AUTHORITY ◆").formatted(Formatting.LIGHT_PURPLE))
                 .addLoreLine(Text.literal("AOE explosion attack").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Consumes Wind Charge").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
-                .setCallback((index, type, action) -> {
+                .setCallback((idx, type2, action) -> {
                     player.giveItemStack(CustomItemHandler.createTheGavel());
                     player.sendMessage(Text.literal("✓ Given The Gavel!").formatted(Formatting.GREEN));
                 })
@@ -471,68 +787,189 @@ public class AdminGui {
         // Hermes Shoes
         gui.setSlot(12, new GuiElementBuilder(Items.IRON_BOOTS)
                 .setName(Text.literal("Hermes Shoes").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("◆ DIVINE FOOTWEAR ◆").formatted(Formatting.AQUA))
                 .addLoreLine(Text.literal("Permanent Speed III").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
-                .setCallback((index, type, action) -> {
+                .setCallback((idx, type2, action) -> {
                     player.giveItemStack(CustomItemHandler.createHermesShoes());
                     player.sendMessage(Text.literal("✓ Given Hermes Shoes!").formatted(Formatting.GREEN));
                 })
                 .build());
 
-        // HPEBM
-        gui.setSlot(14, new GuiElementBuilder(Items.IRON_SHOVEL)
-                .setName(Text.literal("H.P.E.B.M.").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("◆ PLASMA WEAPON ◆").formatted(Formatting.GREEN))
-                .addLoreLine(Text.literal("Continuous beam attack").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Costs XP to fire").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
-                .glow()
-                .setCallback((index, type, action) -> {
-                    player.giveItemStack(CustomItemHandler.createHPEBM());
-                    player.sendMessage(Text.literal("✓ Given H.P.E.B.M.!").formatted(Formatting.GREEN));
-                })
-                .build());
+        // HPEBM Mk1–Mk5
+        int[] hpebmSlots = {19, 20, 21, 22, 23};
+        for (int mk = 1; mk <= 5; mk++) {
+            final int finalMk = mk;
+            gui.setSlot(hpebmSlots[mk - 1], new GuiElementBuilder(Items.IRON_SHOVEL)
+                    .setName(Text.literal("H.P.E.B.M. Mk" + mk).formatted(Formatting.GREEN, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Plasma beam — Mk" + mk + " variant").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                    .glow()
+                    .setCallback((idx, type2, action) -> {
+                        player.giveItemStack(CustomItemHandler.createHPEBM(finalMk));
+                        player.sendMessage(Text.literal("✓ Given HPEBM Mk" + finalMk + "!").formatted(Formatting.GREEN));
+                    })
+                    .build());
+        }
 
-        // Warden's Core
-        gui.setSlot(16, new GuiElementBuilder(Items.ECHO_SHARD)
-                .setName(Text.literal("Warden's Core").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("◆ ANCIENT ARTIFACT ◆").formatted(Formatting.DARK_AQUA))
-                .addLoreLine(Text.literal("Ultra weapon crafting material").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
+        // Ultra Overclocked Beam
+        gui.setSlot(25, new GuiElementBuilder(Items.GOLDEN_SHOVEL)
+                .setName(Text.literal("Ultra Overclocked Beam").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Ultimate beam weapon").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
-                .setCallback((index, type, action) -> {
-                    player.giveItemStack(SlayerItems.createCore(SlayerManager.SlayerType.WARDEN));
-                    player.sendMessage(Text.literal("✓ Given Warden's Core!").formatted(Formatting.GREEN));
-                })
-                .build());
-
-        // Ultra Overclocked
-        gui.setSlot(22, new GuiElementBuilder(Items.GOLDEN_SHOVEL)
-                .setName(Text.literal("Ultra Overclocked").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("◆ ULTIMATE WEAPON ◆").formatted(Formatting.LIGHT_PURPLE))
-                .addLoreLine(Text.literal("Devastating beam + Sonic Devastation").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
-                .glow()
-                .setCallback((index, type, action) -> {
+                .setCallback((idx, type2, action) -> {
                     player.giveItemStack(CustomItemHandler.createUltraOverclockedBeam());
-                    player.sendMessage(Text.literal("✓ Given Ultra Overclocked!").formatted(Formatting.GREEN));
+                    player.sendMessage(Text.literal("✓ Given Ultra Overclocked Beam!").formatted(Formatting.GREEN));
                 })
                 .build());
 
-        // Back button
-        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Back").formatted(Formatting.GRAY))
-                .setCallback((index, type, action) -> openPage(player, AdminPage.UNDERGROUND_AUCTION))
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type2, action) -> openCustomItemsPage(player))
+                .build());
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type2, action) -> gui.close())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openAdminMaterials(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("◈ Materials"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.ECHO_SHARD)
+                .setName(Text.literal("◈ Materials").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Chunks & Cores for all 7 bounty types").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        // Row 1 (slots 10–16): Chunks
+        // Row 2 (slots 19–25): Cores
+        int[] chunkSlots = {10, 11, 12, 13, 14, 15, 16};
+        int[] coreSlots  = {19, 20, 21, 22, 23, 24, 25};
+
+        for (int i = 0; i < types.length && i < chunkSlots.length; i++) {
+            final SlayerManager.SlayerType t = types[i];
+            ItemStack chunk = SlayerItems.createChunk(t);
+            gui.setSlot(chunkSlots[i], new GuiElementBuilder(chunk.getItem())
+                    .setName(Text.literal(capitalize(t) + " Chunk").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                    .setCallback((idx, type2, action) -> {
+                        player.giveItemStack(SlayerItems.createChunk(t));
+                        player.sendMessage(Text.literal("✓ Given " + t.name().toLowerCase() + " chunk!").formatted(Formatting.GREEN));
+                    })
+                    .build());
+
+            ItemStack core = SlayerItems.createCore(t);
+            gui.setSlot(coreSlots[i], new GuiElementBuilder(core.getItem())
+                    .setName(Text.literal(capitalize(t) + " Core").formatted(Formatting.AQUA))
+                    .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                    .glow()
+                    .setCallback((idx, type2, action) -> {
+                        player.giveItemStack(SlayerItems.createCore(t));
+                        player.sendMessage(Text.literal("✓ Given " + t.name().toLowerCase() + " core!").formatted(Formatting.GREEN));
+                    })
+                    .build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type2, action) -> openCustomItemsPage(player))
+                .build());
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type2, action) -> gui.close())
+                .build());
+
+        gui.open();
+    }
+
+    private static void openAdminPiglinItems(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("👑 Piglin Items"));
+        fillBackground(gui);
+
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click any item to receive it").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // Crown of Greed
+        gui.setSlot(10, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Legendary Piglin item").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createCrownOfGreed());
+                    player.sendMessage(Text.literal("✓ Given Crown of Greed!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Piglin Core
+        gui.setSlot(11, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("Piglin Core").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Piglin crafting material").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createPiglinCore());
+                    player.sendMessage(Text.literal("✓ Given Piglin Core!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Piglin Flesh
+        gui.setSlot(12, new GuiElementBuilder(Items.PORKCHOP)
+                .setName(Text.literal("Piglin Flesh").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Piglin crafting material").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createPiglinFlesh());
+                    player.sendMessage(Text.literal("✓ Given Piglin Flesh!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Piglin T1 full armor set
+        gui.setSlot(14, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+                .setName(Text.literal("Piglin T1 Armor Set").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Give full Piglin T1 armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createSlayerHelmet(SlayerManager.SlayerType.PIGLIN, 1));
+                    player.giveItemStack(SlayerItems.createSlayerChestplate(SlayerManager.SlayerType.PIGLIN, 1));
+                    player.giveItemStack(SlayerItems.createSlayerLeggings(SlayerManager.SlayerType.PIGLIN, 1));
+                    player.giveItemStack(SlayerItems.createSlayerBoots(SlayerManager.SlayerType.PIGLIN, 1));
+                    player.sendMessage(Text.literal("✓ Given Piglin T1 armor set!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        // Piglin T2 full armor set
+        gui.setSlot(15, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+                .setName(Text.literal("Piglin T2 Armor Set").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Give full Piglin T2 armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
+                .glow()
+                .setCallback((idx, type2, action) -> {
+                    player.giveItemStack(SlayerItems.createSlayerHelmet(SlayerManager.SlayerType.PIGLIN, 2));
+                    player.giveItemStack(SlayerItems.createSlayerChestplate(SlayerManager.SlayerType.PIGLIN, 2));
+                    player.giveItemStack(SlayerItems.createSlayerLeggings(SlayerManager.SlayerType.PIGLIN, 2));
+                    player.giveItemStack(SlayerItems.createSlayerBoots(SlayerManager.SlayerType.PIGLIN, 2));
+                    player.sendMessage(Text.literal("✓ Given Piglin T2 armor set!").formatted(Formatting.GREEN));
+                })
+                .build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type2, action) -> openCustomItemsPage(player))
+                .build());
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setCallback((idx, type2, action) -> gui.close())
                 .build());
 
         gui.open();
@@ -890,6 +1327,11 @@ public class AdminGui {
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openMainPage(player))
                 .build());
+    }
+
+    private static String capitalize(SlayerManager.SlayerType type) {
+        String name = type.name();
+        return name.charAt(0) + name.substring(1).toLowerCase();
     }
 
     private static void openPlayerSelector(ServerPlayerEntity admin, String action) {

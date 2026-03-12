@@ -398,7 +398,7 @@ public class ScoreboardManager {
                 if (t != null) {
                     int[] s = stats.computeIfAbsent(t, k -> new int[3]);
                     s[0] = 300;
-                    s[1] = Math.max(s[1], 60); // -60% specific vs matching boss
+                    s[1] += 60;                 // -60% specific vs matching boss (additive like BountyDefenseMixin)
                     s[2] += 15;                 // -15% universal vs all bosses
                 }
             } else if (SlayerItems.isSlayerSword(weapon)) {
@@ -406,7 +406,7 @@ public class ScoreboardManager {
                 if (t != null) {
                     int[] s = stats.computeIfAbsent(t, k -> new int[3]);
                     s[0] = 200;
-                    s[1] = Math.max(s[1], 50); // -50% specific vs matching boss
+                    s[1] += 50;                 // -50% specific vs matching boss (additive like BountyDefenseMixin)
                     s[2] += 10;                 // -10% universal vs all bosses
                 }
             }
