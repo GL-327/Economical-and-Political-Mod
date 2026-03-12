@@ -297,6 +297,55 @@ public class DataManager {
     }
 
     // ============================================================
+    // GAME SETTINGS
+    // ============================================================
+
+    public static float getBossHpMultiplier(SlayerManager.SlayerType type) {
+        return data.bossHpMultipliers.getOrDefault(type.name(), 1.0f);
+    }
+    public static void setBossHpMultiplier(SlayerManager.SlayerType type, float mult) {
+        data.bossHpMultipliers.put(type.name(), Math.max(0.1f, Math.min(10.0f, mult)));
+    }
+    public static float getBossDamageMultiplier(SlayerManager.SlayerType type) {
+        return data.bossDamageMultipliers.getOrDefault(type.name(), 1.0f);
+    }
+    public static void setBossDamageMultiplier(SlayerManager.SlayerType type, float mult) {
+        data.bossDamageMultipliers.put(type.name(), Math.max(0.1f, Math.min(10.0f, mult)));
+    }
+    public static float getBossKillsRequiredMultiplier() { return data.bossKillsRequiredMultiplier; }
+    public static void setBossKillsRequiredMultiplier(float mult) { data.bossKillsRequiredMultiplier = Math.max(0.1f, Math.min(10.0f, mult)); }
+    public static boolean isBossAbilitiesEnabled(SlayerManager.SlayerType type) {
+        return data.bossAbilitiesEnabled.getOrDefault(type.name(), true);
+    }
+    public static void setBossAbilitiesEnabled(SlayerManager.SlayerType type, boolean enabled) {
+        data.bossAbilitiesEnabled.put(type.name(), enabled);
+    }
+    public static int getItemLevelRequirement(String itemId, int defaultLevel) {
+        return data.itemLevelRequirements.getOrDefault(itemId, defaultLevel);
+    }
+    public static void setItemLevelRequirement(String itemId, int level) {
+        data.itemLevelRequirements.put(itemId, Math.max(0, level));
+    }
+    public static int getDefenceCapPct() { return data.defenceCapPct; }
+    public static void setDefenceCapPct(int pct) { data.defenceCapPct = Math.max(1, Math.min(100, pct)); }
+    public static int getT1SetBonusPct() { return data.t1SetBonusPct; }
+    public static void setT1SetBonusPct(int pct) { data.t1SetBonusPct = Math.max(0, Math.min(100, pct)); }
+    public static int getT2SetBonusPct() { return data.t2SetBonusPct; }
+    public static void setT2SetBonusPct(int pct) { data.t2SetBonusPct = Math.max(0, Math.min(100, pct)); }
+    public static float getChunkDropMultiplier() { return data.chunkDropMultiplier; }
+    public static void setChunkDropMultiplier(float mult) { data.chunkDropMultiplier = Math.max(0.0f, Math.min(10.0f, mult)); }
+    public static float getCoreDropMultiplier() { return data.coreDropMultiplier; }
+    public static void setCoreDropMultiplier(float mult) { data.coreDropMultiplier = Math.max(0.0f, Math.min(10.0f, mult)); }
+    public static float getCoinRewardMultiplier() { return data.coinRewardMultiplier; }
+    public static void setCoinRewardMultiplier(float mult) { data.coinRewardMultiplier = Math.max(0.0f, Math.min(10.0f, mult)); }
+    public static float getMobHealthScalingMultiplier() { return data.mobHealthScalingMultiplier; }
+    public static void setMobHealthScalingMultiplier(float mult) { data.mobHealthScalingMultiplier = Math.max(0.1f, Math.min(10.0f, mult)); }
+    public static boolean isScoreboardShowAuction() { return data.scoreboardShowAuction; }
+    public static void setScoreboardShowAuction(boolean show) { data.scoreboardShowAuction = show; }
+    public static boolean isScoreboardShowBountyGear() { return data.scoreboardShowBountyGear; }
+    public static void setScoreboardShowBountyGear(boolean show) { data.scoreboardShowBountyGear = show; }
+
+    // ============================================================
     // DATA ACCESS
     // ============================================================
 
@@ -399,5 +448,35 @@ public class DataManager {
 
         // Government Treasury
         public int governmentTreasury = 0;
+
+        // Game settings - Boss
+        public Map<String, Float> bossHpMultipliers = new HashMap<>();
+        public Map<String, Float> bossDamageMultipliers = new HashMap<>();
+        public float bossKillsRequiredMultiplier = 1.0f;
+        public Map<String, Boolean> bossAbilitiesEnabled = new HashMap<>();
+
+        // Game settings - Item level requirements
+        public Map<String, Integer> itemLevelRequirements = new HashMap<>();
+
+        // Game settings - Defence
+        public int defenceCapPct = 85;
+        public int t1SetBonusPct = 60;
+        public int t2SetBonusPct = 80;
+        public int t1SwordSpecificPct = 50;
+        public int t2SwordSpecificPct = 60;
+        public int t1SwordUniversalPct = 10;
+        public int t2SwordUniversalPct = 15;
+
+        // Game settings - Drops
+        public float chunkDropMultiplier = 1.0f;
+        public float coreDropMultiplier = 1.0f;
+        public float coinRewardMultiplier = 1.0f;
+
+        // Game settings - Mobs
+        public float mobHealthScalingMultiplier = 1.0f;
+
+        // Game settings - Scoreboard
+        public boolean scoreboardShowAuction = true;
+        public boolean scoreboardShowBountyGear = true;
     }
 }

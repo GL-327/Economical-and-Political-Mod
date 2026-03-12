@@ -244,13 +244,15 @@ public class ScoreboardManager {
         lines.add("§8  ");
 
         // Line 8: Underground Auction timer
-        boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
-        if (auctionActive) {
-            String auctionPulse = (animFrame % 4 < 2) ? "§6§l" : "§e§l";
-            lines.add(auctionPulse + " 🏪 §r§aAuction: §l§aLIVE");
-        } else {
-            long msLeft = UndergroundAuctionManager.getTimeUntilNextAuction();
-            lines.add("§6 🏪 §7Auction: §f" + formatDuration(msLeft));
+        if (DataManager.isScoreboardShowAuction()) {
+            boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
+            if (auctionActive) {
+                String auctionPulse = (animFrame % 4 < 2) ? "§6§l" : "§e§l";
+                lines.add(auctionPulse + " 🏪 §r§aAuction: §l§aLIVE");
+            } else {
+                long msLeft = UndergroundAuctionManager.getTimeUntilNextAuction();
+                lines.add("§6 🏪 §7Auction: §f" + formatDuration(msLeft));
+            }
         }
 
         // Line 9: Bounty level
@@ -263,6 +265,7 @@ public class ScoreboardManager {
         lines.add("§8   "); // spacer after Bounty line
 
         // Lines 10+: Compact bounty stats / quest info
+        if (DataManager.isScoreboardShowBountyGear()) {
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
         SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
 
@@ -317,6 +320,7 @@ public class ScoreboardManager {
             }
         } else {
             lines.add("§8  No bounty gear");
+        }
         }
 
         // Lines 14-15: Footer
