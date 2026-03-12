@@ -516,7 +516,10 @@ public class BankGui {
                         .addLoreLine(Text.literal("Click to pay in full").formatted(Formatting.YELLOW))
                         .setCallback((index, type, action) -> {
                             java.util.List<DataManager.LoanEntry> current = DataManager.getLoans(uuid);
-                            if (loanIndex >= current.size()) { openLoans(player); return; }
+                            if (loanIndex >= current.size()) {
+                                player.sendMessage(Text.literal("✗ Loan no longer exists!").formatted(Formatting.RED), false);
+                                openLoans(player); return;
+                            }
                             int owed = current.get(loanIndex).amount;
                             int p = CoinManager.getCoins(player);
                             if (p < owed) {

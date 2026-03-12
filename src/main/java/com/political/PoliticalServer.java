@@ -516,54 +516,60 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			ServerPlayerEntity onlinePlayer = server.getPlayerManager().getPlayer(playerUUID);
 			if (onlinePlayer == null) continue;
 
-			// Sort loans by interest rate descending (highest interest first)
-			final java.util.List<DataManager.LoanEntry> loansForSort = DataManager.getLoans(uuid);
-			java.util.List<Integer> sortedIndices = new java.util.ArrayList<>();
-			for (int i = 0; i < loansForSort.size(); i++) sortedIndices.add(i);
-			sortedIndices.sort((a, b) -> Double.compare(loansForSort.get(b).interestRate, loansForSort.get(a).interestRate));
+			// Each iteration picks the current highest-interest loan and attempts collection
+			for (int attempt = 0; attempt < DataManager.getLoans(uuid).size() + 1; attempt++) {
+				java.util.List<DataManager.LoanEntry> currentLoans = DataManager.getLoans(uuid);
+				if (currentLoans.isEmpty()) break;
 
-			for (int idx : sortedIndices) {
-				DataManager.LoanEntry loan = DataManager.getLoans(uuid).get(idx);
-				int owed = loan.amount;
+				// Find highest-interest loan index
+				int highestIdx = 0;
+				for (int i = 1; i < currentLoans.size(); i++) {
+					if (currentLoans.get(i).interestRate > currentLoans.get(highestIdx).interestRate) {
+						highestIdx = i;
+					}
+				}
+				int owed = currentLoans.get(highestIdx).amount;
 				if (owed <= 0) {
-					DataManager.removeLoan(uuid, idx);
+					DataManager.removeLoan(uuid, highestIdx);
 					continue;
 				}
 				// Try main account first
 				int mainBal = DataManager.getBankMain(uuid);
 				if (mainBal >= owed) {
 					DataManager.setBankMain(uuid, mainBal - owed);
-					DataManager.removeLoan(uuid, idx);
+					DataManager.removeLoan(uuid, highestIdx);
 					onlinePlayer.sendMessage(Text.literal("🏦 Loan of " + owed + " coins auto-collected from your Main Account.").formatted(Formatting.YELLOW), false);
 					continue;
 				} else if (mainBal > 0) {
 					owed -= mainBal;
 					DataManager.setBankMain(uuid, 0);
-					DataManager.setLoanAmount(uuid, idx, owed);
+					DataManager.setLoanAmount(uuid, highestIdx, owed);
 				}
 				// Try savings
 				int savingsBal = DataManager.getBankSavings(uuid);
 				if (savingsBal >= owed) {
 					DataManager.setBankSavings(uuid, savingsBal - owed);
-					DataManager.removeLoan(uuid, idx);
+					DataManager.removeLoan(uuid, highestIdx);
 					onlinePlayer.sendMessage(Text.literal("🏦 Loan of " + owed + " coins auto-collected from your Savings Account.").formatted(Formatting.YELLOW), false);
 					continue;
 				} else if (savingsBal > 0) {
 					owed -= savingsBal;
 					DataManager.setBankSavings(uuid, 0);
-					DataManager.setLoanAmount(uuid, idx, owed);
+					DataManager.setLoanAmount(uuid, highestIdx, owed);
 				}
 				// Try purse
 				int purse = CoinManager.getCoins(onlinePlayer);
 				if (purse >= owed) {
 					CoinManager.removeCoins(onlinePlayer, owed);
-					DataManager.removeLoan(uuid, idx);
+					DataManager.removeLoan(uuid, highestIdx);
 					onlinePlayer.sendMessage(Text.literal("🏦 Loan of " + owed + " coins auto-collected from your purse.").formatted(Formatting.YELLOW), false);
 				} else if (purse > 0) {
 					CoinManager.removeCoins(onlinePlayer, purse);
-					DataManager.setLoanAmount(uuid, idx, owed - purse);
+					DataManager.setLoanAmount(uuid, highestIdx, owed - purse);
 					onlinePlayer.sendMessage(Text.literal("⚠ Partial loan payment of " + purse + " coins collected. Remaining: " + (owed - purse) + " coins.").formatted(Formatting.RED), false);
 				}
+				// No more funds — stop trying
+				break;
 			}
 		}
 	}

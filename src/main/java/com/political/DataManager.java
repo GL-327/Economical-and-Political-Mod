@@ -179,7 +179,7 @@ public class DataManager {
     public static void setLoanAmount(String uuid, int index, int amount) {
         List<LoanEntry> loans = new ArrayList<>(getLoans(uuid));
         if (index >= 0 && index < loans.size()) {
-            loans.get(index).amount = amount;
+            loans.set(index, new LoanEntry(amount, loans.get(index).interestRate));
             data.playerBankLoans.put(uuid, loans);
         }
     }
