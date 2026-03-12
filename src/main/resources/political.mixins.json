@@ -34,7 +34,8 @@
         "BountyDamageMixin",
         "ArrowDamageMixin",
         "GrindstoneScreenHandlerMixin",
-        "SmithingScreenHandlerMixin"
+        "SmithingScreenHandlerMixin",
+        "EndGatewayMixin"
     ],
     "injectors": {
         "defaultRequire": 1

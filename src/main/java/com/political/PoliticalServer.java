@@ -61,9 +61,11 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
+		com.political.backrooms.BackroomsDimensionManager.registerCodecs();
 		BountyCraftingHandler.register();
 		BeamCraftingHandler.register();
 		CustomMobRegistry.registerAll();
+		com.political.backrooms.BackroomsMobs.registerAll();
 		com.political.backrooms.BackroomsItems.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
