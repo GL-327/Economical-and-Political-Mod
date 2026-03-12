@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * Applies bounty-gear damage reduction when a player takes damage from a bounty boss.
  *
- * Defence model (additive stacking, capped at 85%):
+ * Defence model (additive stacking, capped at 95%):
  *   universalDef  — % reduction vs ALL bounty bosses (always active when worn/held)
  *   specificDef   — EXTRA % reduction vs the MATCHING boss type (stacks with universalDef)
- *   totalDef      = min(0.85, universalDef + specificDef)
+ *   totalDef      = min(0.95, universalDef + specificDef)
  *   finalDamage   = incomingDamage × (1 - totalDef)
  *
  * Crown of Greed: disables ALL bounty gear defence.
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(LivingEntity.class)
 public class BountyDefenseMixin {
 
-    private static final float MAX_TOTAL_REDUCTION = 0.85f;
+    private static final float MAX_TOTAL_REDUCTION = 0.95f;
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private float reduceBossDamage(float amount, ServerWorld world, DamageSource source) {
@@ -96,8 +96,13 @@ public class BountyDefenseMixin {
             }
         }
 
-        // Voidwalker's Crown (Ender Phase Helmet) — treated as a special piece, not standard Enderman set
-        // No defence contribution from wearing this item — its stats come purely from attributes
+        // Voidwalker's Crown (Ender Phase Helmet)
+        if (SlayerItems.isEnderPhaseHelmet(helmet) && SlayerItems.canUseEnderPhaseHelmet(player)) {
+            universalDef += (float) SlayerItems.VOIDWALKER_ALL_REDUCTION;
+            if (bossType == SlayerManager.SlayerType.ENDERMAN) {
+                specificDef += (float) SlayerItems.VOIDWALKER_BOSS_REDUCTION;
+            }
+        }
 
         // ── Standard T1 / T2 armour sets ────────────────────────────────
         if (bossType != null) {

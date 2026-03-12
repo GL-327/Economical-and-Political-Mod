@@ -34,8 +34,8 @@ public class ScoreboardManager {
     // Per-player data: line index → team name
     private static final Map<UUID, String[]> playerTeamNames = new ConcurrentHashMap<>();
 
-    // Design limit: keep sidebar at 15 lines for readability and to guarantee the footer is always visible
-    private static final int MAX_LINES = 15;
+    // Design limit: keep sidebar at 20 lines for readability and to guarantee the footer is always visible
+    private static final int MAX_LINES = 20;
     // Color codes used as invisible score holder names in the sidebar
     private static final String[] HOLDER_COLOR_CODES = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","r","k"};
 
@@ -262,6 +262,21 @@ public class ScoreboardManager {
         }
         String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
         lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
+
+        // Per-type bounty levels
+        StringBuilder bountyLevels1 = new StringBuilder("§7  ");
+        StringBuilder bountyLevels2 = new StringBuilder("§7  ");
+        SlayerManager.SlayerType[] allTypes = SlayerManager.SlayerType.values();
+        int half = (allTypes.length + 1) / 2;
+        for (int ti = 0; ti < allTypes.length; ti++) {
+            SlayerManager.SlayerType bt = allTypes[ti];
+            int btLv = SlayerData.getSlayerLevel(player.getUuidAsString(), bt);
+            String entry = "§7" + bt.displayName + ": §f" + btLv + "  ";
+            if (ti < half) bountyLevels1.append(entry);
+            else bountyLevels2.append(entry);
+        }
+        lines.add(bountyLevels1.toString().stripTrailing());
+        if (allTypes.length > half) lines.add(bountyLevels2.toString().stripTrailing());
         lines.add("§8   "); // spacer after Bounty line
 
         // Lines 10+: Compact bounty stats / quest info
@@ -297,7 +312,7 @@ public class ScoreboardManager {
                 universalDef += s[2];
                 if (s[0] > weaponBonus) weaponBonus = s[0];
             }
-            int cappedUniversal = Math.min(universalDef, 85);
+            int cappedUniversal = Math.min(universalDef, 95);
             // Universal defence line
             if (universalDef > 0) {
                 lines.add("§7  DEF all: §a-" + cappedUniversal + "%");
@@ -371,7 +386,7 @@ public class ScoreboardManager {
      * Scans the player's main hand and all armour slots for bounty gear.
      * Returns a LinkedHashMap keyed by SlayerType, each entry being int[3]:
      *   [0] = weapon damage % bonus (e.g. 200 for T1 sword = +100% more)
-     *   [1] = total specific boss defence % vs that type (universalDef + specificDef combined, capped at 85)
+     *   [1] = total specific boss defence % vs that type (universalDef + specificDef combined, capped at 95)
      *   [2] = universal (all-boss) defence % from this type's pieces
      *
      * Crown of Greed: if worn, returns empty map (all defence disabled).
@@ -505,7 +520,7 @@ public class ScoreboardManager {
             if (pieces >= 4) {
                 // Full set bonus: add the cap as additive specific def so weapon bonuses stack correctly
                 int capPct = maxTier == 2 ? 80 : 60;
-                s[1] = Math.min(85, s[1] + capPct);
+                s[1] = Math.min(95, s[1] + capPct);
                 // Universal defence: use exact allBossReduction of the set's primary tier
                 SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, maxTier);
                 s[2] += (int)(setStats.allBossReduction * 100);
