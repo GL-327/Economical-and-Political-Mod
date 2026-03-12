@@ -497,9 +497,10 @@ public class ScoreboardManager {
 
             // Single loop: count equipped pieces and accumulate per-piece contributions
             // using each piece's ACTUAL tier (not the highest tier) for accuracy
-            int pieces = 0;
+            int t1Pieces = 0;
+            int t2Pieces = 0;
             int bossContrib = 0;
-            int allContrib = 0;
+            int allContrib  = 0;
             for (int pi = 0; pi < armorSlots.length; pi++) {
                 ItemStack armor = armorSlots[pi];
                 if (armor.isEmpty()) continue;
@@ -509,7 +510,8 @@ public class ScoreboardManager {
                 if (cid.startsWith(pfx + "_t2_")) pieceTier = 2;
                 else if (cid.startsWith(pfx + "_t1_")) pieceTier = 1;
                 if (pieceTier > 0) {
-                    pieces++;
+                    if (pieceTier == 1) t1Pieces++;
+                    else t2Pieces++;
                     SlayerItems.ArmorStats pieceStats = SlayerItems.getArmorStats(type, pieceTier);
                     double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
                     bossContrib += (int) Math.round(pieceStats.bossReduction * mult * 100);
@@ -517,12 +519,13 @@ public class ScoreboardManager {
                 }
             }
 
-            if (pieces >= 4) {
-                // Full set bonus: add the cap as additive specific def so weapon bonuses stack correctly
-                int capPct = maxTier == 2 ? 80 : 60;
+            if (t1Pieces == 4 || t2Pieces == 4) {
+                // Full same-tier set bonus: only when ALL 4 pieces are the same tier (no mixed-set bonus)
+                int capPct = t2Pieces == 4 ? 80 : 60;
                 s[1] = Math.min(95, s[1] + capPct);
                 // Universal defence: use exact allBossReduction of the set's primary tier
-                SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, maxTier);
+                int setTier = t2Pieces == 4 ? 2 : 1;
+                SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, setTier);
                 s[2] += (int)(setStats.allBossReduction * 100);
             } else {
                 // Partial set: sum of the per-piece contributions only

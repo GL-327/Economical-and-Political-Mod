@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * Applies bounty-gear damage reduction when a player takes damage from a bounty boss.
  *
- * Defence model (additive stacking, capped at 95%):
+ * Defence model (additive stacking, uncapped):
  *   universalDef  — % reduction vs ALL bounty bosses (always active when worn/held)
  *   specificDef   — EXTRA % reduction vs the MATCHING boss type (stacks with universalDef)
- *   totalDef      = min(0.95, universalDef + specificDef)
+ *   totalDef      = min(1.0, universalDef + specificDef)
  *   finalDamage   = incomingDamage × (1 - totalDef)
  *
  * Crown of Greed: disables ALL bounty gear defence.
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(LivingEntity.class)
 public class BountyDefenseMixin {
 
-    private static final float MAX_TOTAL_REDUCTION = 0.95f;
+    private static final float MAX_TOTAL_REDUCTION = 1.0f;
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private float reduceBossDamage(float amount, ServerWorld world, DamageSource source) {
@@ -127,7 +127,7 @@ public class BountyDefenseMixin {
             universalDef += 0.10f; // Skeleton bow: -10% universal
         }
 
-        // ── Apply total (additive, capped at 85%) ────────────────────────
+        // ── Apply total (additive, capped at 100%) ──────────────────────
         float totalDef = Math.min(MAX_TOTAL_REDUCTION, universalDef + specificDef);
         if (totalDef <= 0) return amount;
         return amount * (1.0f - totalDef);
