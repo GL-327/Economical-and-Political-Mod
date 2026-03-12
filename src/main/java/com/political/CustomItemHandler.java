@@ -949,7 +949,42 @@ public class CustomItemHandler {
             }
         }
 
+        // Crown of Greed: multiply damage by number of digits in coin count
+        if (SlayerItems.isCrownOfGreed(attacker.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD))) {
+            int coins = CoinManager.getCoins(attacker);
+            int digits = coins > 0 ? String.valueOf(coins).length() : 1;
+            modifiedDamage *= digits;
+        }
+
         return modifiedDamage;
+    }
+
+    /** Tick handler for Crown of Greed: enforces 4 HP max health and suppresses potion effects. */
+    public static void tickCrownOfGreed(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD);
+        net.minecraft.util.Identifier modId = net.minecraft.util.Identifier.of("political", "crown_of_greed_hp");
+        var healthAttr = player.getAttributeInstance(net.minecraft.entity.attribute.EntityAttributes.MAX_HEALTH);
+
+        if (!SlayerItems.isCrownOfGreed(helmet)) {
+            // Remove the modifier if crown is no longer worn
+            if (healthAttr != null && healthAttr.getModifier(modId) != null) {
+                healthAttr.removeModifier(modId);
+            }
+            return;
+        }
+
+        // Enforce 4 HP max health (2 hearts) via attribute modifier
+        if (healthAttr != null && healthAttr.getModifier(modId) == null) {
+            healthAttr.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
+                    modId, -16.0, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADD_VALUE));
+        }
+        // Cap health to 4 if it somehow exceeds it
+        if (player.getHealth() > 4.0f) player.setHealth(4.0f);
+
+        // Suppress all potion effects every second
+        if (player.age % 20 == 0) {
+            player.clearStatusEffects();
+        }
     }
 
     public static void tickSlayerSystems(ServerPlayerEntity player) {

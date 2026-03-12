@@ -898,14 +898,14 @@ public class SlayerManager {
             for (int lvl = oldLevel + 1; lvl <= newLevel; lvl++) {
                 int creditReward = LEVEL_CREDIT_REWARDS[lvl - 1];
 
-                // Give credits instead of coins
-                CreditItem.giveCredits(owner, creditReward);
+                // Give coins as level-up reward
+                CoinManager.giveCoins(owner, creditReward);
 
                 owner.sendMessage(Text.literal(""), false);
                 owner.sendMessage(Text.literal("  ⬆ LEVEL UP! " + type.displayName + " Bounty " + lvl)
                         .formatted(Formatting.YELLOW, Formatting.BOLD), false);
-                owner.sendMessage(Text.literal("  +" + creditReward + " credits")
-                        .formatted(Formatting.AQUA), false);
+                owner.sendMessage(Text.literal("  +" + creditReward + " coins")
+                        .formatted(Formatting.GOLD), false);
 
                 // Sound effect
                 owner.getEntityWorld().playSound(null, owner.getBlockPos(),
