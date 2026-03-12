@@ -76,7 +76,7 @@ public class CustomItemHandler {
     // Ender Phase Helmet state tracking
     private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
     private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
-    private static final double PHASE_TELEPORT_MAX_DISTANCE = 100.0; // blocks (matches item lore)
+    private static final double ENDER_WARP_MAX_DISTANCE = 100.0; // blocks (matches item lore: "up to 100 blocks")
     /** Debounce to prevent UseItemCallback + UseBlockCallback both firing on the same interaction. */
     private static final Map<UUID, Long> helmetInteractionDebounce = new HashMap<>();
     private static final long HELMET_DEBOUNCE_MS = 300; // 300ms window
@@ -248,7 +248,7 @@ public class CustomItemHandler {
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
                 return ActionResult.CONSUME;
             } else {
-                // Normal right-click: Ender Warp (Phase Teleport — teleport up to 8 blocks in look direction)
+                // Normal right-click: Ender Warp (Phase Teleport — teleport up to 100 blocks in look direction)
                 Long cooldownUntil = enderWarpCooldowns.get(uuid);
                 if (cooldownUntil != null && now < cooldownUntil) {
                     return ActionResult.CONSUME;
@@ -257,7 +257,7 @@ public class CustomItemHandler {
                 ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
                 Vec3d eyePos = serverPlayer.getEyePos();
                 Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
-                Vec3d targetPos = eyePos.add(lookVec.multiply(PHASE_TELEPORT_MAX_DISTANCE));
+                Vec3d targetPos = eyePos.add(lookVec.multiply(ENDER_WARP_MAX_DISTANCE));
 
                 net.minecraft.util.hit.BlockHitResult hitResult = serverWorld.raycast(
                         new RaycastContext(eyePos, targetPos,

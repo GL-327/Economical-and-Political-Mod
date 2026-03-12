@@ -1672,20 +1672,35 @@ public class AdminGui {
         open(admin);
     }
 
+    /**
+     * Parse the first line of a sign input.
+     * @param raw the raw sign line text
+     * @param allowNegative if true strips everything except digits and minus sign;
+     *                      if false strips everything except digits (for 'set exact' operations)
+     * @return the parsed integer, or null if the input is empty or unparseable
+     */
+    private static Integer parseSignAmount(String raw, boolean allowNegative) {
+        String cleaned = allowNegative
+                ? raw.trim().replaceAll("[^0-9\\-]", "")
+                : raw.trim().replaceAll("[^0-9]", "");
+        if (cleaned.isEmpty()) return null;
+        try {
+            return Integer.parseInt(cleaned);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     private static void openSetCoinsSign(ServerPlayerEntity admin, ServerPlayerEntity target) {
         int current = CoinManager.getCoins(target);
         SignGui signGui = new SignGui(admin) {
             @Override
             public void onClose() {
-                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
-                if (raw.isEmpty()) { openPlayersPage(admin); return; }
-                try {
-                    int amount = Integer.parseInt(raw);
-                    CoinManager.setCoins(target.getUuidAsString(), amount);
-                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s coins to " + amount + "!").formatted(Formatting.GREEN));
-                } catch (NumberFormatException ignored) {
-                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
-                }
+                // 'set exact' — only accepts non-negative integers
+                Integer amount = parseSignAmount(this.getLine(0).getString(), false);
+                if (amount == null) { openPlayersPage(admin); return; }
+                CoinManager.setCoins(target.getUuidAsString(), Math.max(0, amount));
+                admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s coins to " + amount + "!").formatted(Formatting.GREEN));
                 openPlayersPage(admin);
             }
         };
@@ -1701,16 +1716,12 @@ public class AdminGui {
         SignGui signGui = new SignGui(admin) {
             @Override
             public void onClose() {
-                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
-                if (raw.isEmpty()) { openPlayersPage(admin); return; }
-                try {
-                    int amount = Integer.parseInt(raw);
-                    DataManager.setCredits(target.getUuidAsString(), amount);
-                    DataManager.save(PoliticalServer.server);
-                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s credits to " + amount + "!").formatted(Formatting.GREEN));
-                } catch (NumberFormatException ignored) {
-                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
-                }
+                // 'set exact' — only accepts non-negative integers
+                Integer amount = parseSignAmount(this.getLine(0).getString(), false);
+                if (amount == null) { openPlayersPage(admin); return; }
+                DataManager.setCredits(target.getUuidAsString(), Math.max(0, amount));
+                DataManager.save(PoliticalServer.server);
+                admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s credits to " + amount + "!").formatted(Formatting.GREEN));
                 openPlayersPage(admin);
             }
         };
@@ -1788,20 +1799,16 @@ public class AdminGui {
         SignGui signGui = new SignGui(admin) {
             @Override
             public void onClose() {
-                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9\\-]", "");
-                if (raw.isEmpty()) { openCreditsGui(admin); return; }
-                try {
-                    int amount = Integer.parseInt(raw);
-                    if (amount > 0) {
-                        CreditItem.giveCredits(target, amount);
-                        admin.sendMessage(Text.literal("✓ Gave " + amount + " credits to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
-                        target.sendMessage(Text.literal("An admin gave you " + amount + " credits!").formatted(Formatting.GREEN));
-                    } else if (amount < 0) {
-                        CreditItem.removeCredits(target, -amount);
-                        admin.sendMessage(Text.literal("✓ Removed " + (-amount) + " credits from " + target.getName().getString() + "!").formatted(Formatting.RED));
-                    }
-                } catch (NumberFormatException ignored) {
-                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                // allow negative to mean "remove" — e.g. "-100" removes 100 credits
+                Integer amount = parseSignAmount(this.getLine(0).getString(), true);
+                if (amount == null) { openCreditsGui(admin); return; }
+                if (amount > 0) {
+                    CreditItem.giveCredits(target, amount);
+                    admin.sendMessage(Text.literal("✓ Gave " + amount + " credits to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
+                    target.sendMessage(Text.literal("An admin gave you " + amount + " credits!").formatted(Formatting.GREEN));
+                } else if (amount < 0) {
+                    CreditItem.removeCredits(target, -amount);
+                    admin.sendMessage(Text.literal("✓ Removed " + (-amount) + " credits from " + target.getName().getString() + "!").formatted(Formatting.RED));
                 }
                 openCreditsGui(admin);
             }
@@ -5237,19 +5244,15 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
         SignGui signGui = new SignGui(admin) {
             @Override
             public void onClose() {
-                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9\\-]", "");
-                if (raw.isEmpty()) { openPlayersPage(admin); return; }
-                try {
-                    int amount = Integer.parseInt(raw);
-                    if (amount > 0) {
-                        CoinManager.giveCoins(target, amount);
-                        admin.sendMessage(Text.literal("✓ Gave " + amount + " coins to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
-                    } else if (amount < 0) {
-                        CoinManager.removeCoins(target, -amount);
-                        admin.sendMessage(Text.literal("✓ Removed " + (-amount) + " coins from " + target.getName().getString() + "!").formatted(Formatting.RED));
-                    }
-                } catch (NumberFormatException ignored) {
-                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                // allow negative to mean "remove" — e.g. "-500" removes 500 coins
+                Integer amount = parseSignAmount(this.getLine(0).getString(), true);
+                if (amount == null) { openPlayersPage(admin); return; }
+                if (amount > 0) {
+                    CoinManager.giveCoins(target, amount);
+                    admin.sendMessage(Text.literal("✓ Gave " + amount + " coins to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
+                } else if (amount < 0) {
+                    CoinManager.removeCoins(target, -amount);
+                    admin.sendMessage(Text.literal("✓ Removed " + (-amount) + " coins from " + target.getName().getString() + "!").formatted(Formatting.RED));
                 }
                 openPlayersPage(admin);
             }

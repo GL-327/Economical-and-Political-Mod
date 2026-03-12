@@ -530,7 +530,7 @@ public class AuctionHouseGui {
         // buyer and leave the listing intact rather than silently eating their currency.
         if (item.isEmpty()) {
             PoliticalServer.LOGGER.error("Auction purchase failed: could not deserialize item for listing " + listingId);
-            // Refund the buyer
+            // Refund exactly what was charged — same capping as the charge above
             if (payWithCoins) {
                 CoinManager.giveCoins(buyer, (int) Math.min(coinPrice, Integer.MAX_VALUE));
             } else {
