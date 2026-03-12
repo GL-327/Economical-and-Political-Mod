@@ -61,8 +61,10 @@ public class BackroomsDimensionManager {
     /**
      * Teleport a player into the Backrooms via an End Gateway event.
      * Requires a Warden Core item for reliable entry; without it the chance is 1-in-1000.
+     *
+     * @return true if the player was teleported (caller should cancel the original Gateway teleport)
      */
-    public static void teleportToBackrooms(ServerPlayerEntity player, boolean hasWardenCore) {
+    public static boolean teleportToBackrooms(ServerPlayerEntity player, boolean hasWardenCore) {
         MinecraftServer server = player.getEntityWorld().getServer();
 
         Random rng = new Random();
@@ -73,7 +75,7 @@ public class BackroomsDimensionManager {
             targetKey = (rng.nextInt(10) < 9) ? BACKROOMS_KEY : POOLROOMS_KEY;
         } else {
             // 1-in-1000 chance of accidental entry
-            if (rng.nextInt(1000) != 0) return;
+            if (rng.nextInt(1000) != 0) return false;
             int roll = rng.nextInt(100);
             if (roll < 1)       targetKey = POOLROOMS_KEY;
             else if (roll < 2)  targetKey = INDUSTRIAL_KEY;
@@ -81,7 +83,7 @@ public class BackroomsDimensionManager {
         }
 
         ServerWorld targetWorld = server.getWorld(targetKey);
-        if (targetWorld == null) return;
+        if (targetWorld == null) return false;
 
         int x = rng.nextInt(4000) - 2000;
         int z = rng.nextInt(4000) - 2000;
@@ -89,6 +91,7 @@ public class BackroomsDimensionManager {
         player.teleport(targetWorld, x, 2.0, z,
             Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
         player.sendMessage(Text.literal("§8You slip through the cracks of reality..."), false);
+        return true;
     }
 
     /**

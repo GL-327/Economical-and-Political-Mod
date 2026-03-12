@@ -55,9 +55,8 @@ public class LevelRunManager {
     }
 
     private static void spawnHorde(ServerPlayerEntity player, ServerWorld world) {
-        for (int i = 0; i < 5; i++) {
-            if (Math.random() >= 0.5) continue;
-
+        int count = 3 + new java.util.Random().nextInt(3); // 3-5 hounds per wave
+        for (int i = 0; i < count; i++) {
             double offsetX = (Math.random() - 0.5) * 8;
             double offsetZ = -5 - (Math.random() * 5);
             BlockPos spawnPos = BlockPos.ofFloored(

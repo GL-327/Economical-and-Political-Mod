@@ -23,18 +23,13 @@ public class EndGatewayMixin {
         if (!(entity instanceof ServerPlayerEntity player)) return;
         if (!(world instanceof ServerWorld serverWorld)) return;
 
-        boolean hasWardenCore = false;
-        for (net.minecraft.item.ItemStack stack : player.getInventory().getMainStacks()) {
-            if (com.political.CustomItemHandler.isWardenCore(stack)) {
-                hasWardenCore = true;
-                break;
-            }
-        }
-        if (!hasWardenCore && com.political.CustomItemHandler.isWardenCore(player.getOffHandStack())) {
-            hasWardenCore = true;
-        }
+        boolean hasWardenCore = player.getInventory().getMainStacks().stream()
+                .anyMatch(com.political.CustomItemHandler::isWardenCore)
+            || com.political.CustomItemHandler.isWardenCore(player.getOffHandStack());
 
-        BackroomsDimensionManager.teleportToBackrooms(player, hasWardenCore);
-        ci.cancel();
+        boolean teleported = BackroomsDimensionManager.teleportToBackrooms(player, hasWardenCore);
+        if (teleported) {
+            ci.cancel();
+        }
     }
 }
