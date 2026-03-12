@@ -63,6 +63,7 @@ public class CommandRegistry {
         registerModHelp(dispatcher);
         registerTakeLeadership(dispatcher);
         registerSpawnProtection(dispatcher);
+        com.political.backrooms.command.MfluxCommand.register(dispatcher);
 
         dispatcher.register(CommandManager.literal("bank")
                 .executes(context -> {
