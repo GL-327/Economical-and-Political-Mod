@@ -42,7 +42,7 @@ public class BlockItemMixin {
             if (SpawnProtectionManager.isBlockProtected(targetPos.getX(), targetPos.getY(), targetPos.getZ())) {
                 cir.setReturnValue(ActionResult.FAIL);
                 serverPlayer.sendMessage(
-                        Text.literal("⛔ This area is spawn-protected!").formatted(Formatting.RED),
+                        Text.literal("⛔ This area is under Government Protection!").formatted(Formatting.RED),
                         true
                 );
             }

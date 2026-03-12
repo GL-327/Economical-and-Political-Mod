@@ -116,6 +116,16 @@ public class ChairGui {
                 .addLoreLine(Text.literal(ElectionManager.isImpeachmentActive() ? "Vote in progress!" : "No active vote").formatted(ElectionManager.isImpeachmentActive() ? Formatting.RED : Formatting.GREEN))
                 .build());
 
+        int treasury = DataManager.getGovernmentTreasury();
+        gui.setSlot(24, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("🏛 Government Treasury").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Balance: " + String.format("%,d", treasury) + " coins").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to manage treasury").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> GovernmentTreasuryGui.open(player))
+                .build());
+
         gui.open();
     }
 }

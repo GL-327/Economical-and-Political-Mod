@@ -126,6 +126,13 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			if (world.isClient()) return ActionResult.PASS;
 			if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
 
+			// Spawn protection: prevent non-operators from attacking entities in the zone
+			if (!SpawnProtectionManager.isOperator(serverPlayer)
+					&& SpawnProtectionManager.isPosProtected(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ())) {
+				serverPlayer.sendMessage(Text.literal("⛔ This area is under Government Protection!").formatted(Formatting.RED), true);
+				return ActionResult.FAIL;
+			}
+
 			ItemStack heldItem = player.getStackInHand(hand);
 
 			// Skeleton Bow: instant left-click fire (intercept entity attacks)
@@ -366,6 +373,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			AuctionHouseGui.onPlayerDisconnect(player);
 			UndergroundAuctionGui.onPlayerDisconnect(player);  // <-- ADD THIS LINE
 			ScoreboardManager.onPlayerDisconnect(player);
+			SpawnProtectionManager.onPlayerDisconnect(player.getUuid());
 		});
 		ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
 			server = s;
@@ -428,6 +436,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				CustomItemHandler.tickEnderPhaseHelmet(player);
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
 				T2ArmorAbilityHandler.tick(player);
+				SpawnProtectionManager.tickPlayerBoundary(player);
 
 			}
 

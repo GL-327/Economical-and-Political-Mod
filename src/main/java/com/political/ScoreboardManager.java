@@ -260,6 +260,7 @@ public class ScoreboardManager {
         }
         String levelColor = totalLevel >= 30 ? "§d" : totalLevel >= 15 ? "§b" : "§7";
         lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
+        lines.add("§8   "); // spacer after Bounty line
 
         // Lines 10+: Compact bounty stats / quest info
         Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
@@ -287,37 +288,31 @@ public class ScoreboardManager {
             lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
 
             // Aggregate stats across all gear types
-            // First pass: compute totals
             int universalDef = 0;
             int weaponBonus = 0;
             for (int[] s : bountyStats.values()) {
-                universalDef += s[2]; // sum universal defence from all equipped gear
+                universalDef += s[2];
                 if (s[0] > weaponBonus) weaponBonus = s[0];
             }
             int cappedUniversal = Math.min(universalDef, 85);
-            // Second pass: build specific boss lines using the TOTAL protection (universal + extra specific)
-            java.util.List<String> specificLines = new java.util.ArrayList<>();
-            for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
-                int[] s = entry.getValue();
-                if (s[1] > 0) {
-                    int totalVsBoss = Math.min(85, s[1] + universalDef);
-                    specificLines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + totalVsBoss + "%");
-                }
-            }
-            // Universal defence line (applies to all bosses)
+            // Universal defence line
             if (universalDef > 0) {
                 lines.add("§7  DEF all: §a-" + cappedUniversal + "%");
             }
-            // Show ALL specific defence lines (no truncation)
-            for (String specificLine : specificLines) {
-                lines.add(specificLine + " §7(vs boss)");
+            // Boss-specific defence lines — show s[1] directly (not combined with universal)
+            for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
+                int[] s = entry.getValue();
+                if (s[1] > 0) {
+                    lines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + s[1] + "% §7(vs boss)");
+                }
             }
             // Weapon bonus
             if (weaponBonus > 0) {
                 lines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");
             }
-            // Individual piece buffs
-            for (String buffLine : collectActivePieceBuffs(player)) {
+            // Individual piece buffs — condensed to avoid cutoff
+            List<String> pieceBuffs = collectActivePieceBuffs(player);
+            for (String buffLine : pieceBuffs) {
                 lines.add(buffLine);
             }
         } else {
@@ -504,9 +499,9 @@ public class ScoreboardManager {
             }
 
             if (pieces >= 4) {
-                // Full set bonus: apply cap based on the highest tier present
+                // Full set bonus: add the cap as additive specific def so weapon bonuses stack correctly
                 int capPct = maxTier == 2 ? 80 : 60;
-                s[1] = Math.max(s[1], capPct);
+                s[1] = Math.min(85, s[1] + capPct);
                 // Universal defence: use exact allBossReduction of the set's primary tier
                 SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, maxTier);
                 s[2] += (int)(setStats.allBossReduction * 100);

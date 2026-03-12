@@ -470,22 +470,23 @@ public class CustomItemHandler {
 
         ServerWorld world = player.getEntityWorld();
 
-        world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER,
-                player.getX(), player.getY() + 1, player.getZ(),
-                3, 2.0, 1.0, 2.0, 0.0);
+        // Fling the player upward
+        player.setVelocity(player.getVelocity().add(0, 1.5, 0));
+        player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(player));
 
-        world.playSoundFromEntity(null, player, SoundEvents.ENTITY_GENERIC_EXPLODE.value(),
-                SoundCategory.PLAYERS, 1.0f, 1.0f);
+        // Wind/cloud particles
+        world.spawnParticles(ParticleTypes.CLOUD,
+                player.getX(), player.getY() + 0.5, player.getZ(),
+                20, 0.5, 0.2, 0.5, 0.05);
+        world.spawnParticles(ParticleTypes.POOF,
+                player.getX(), player.getY(), player.getZ(),
+                15, 0.6, 0.1, 0.6, 0.1);
 
-        Box box = new Box(
-                player.getX() - 4.5, player.getY() - 4.5, player.getZ() - 4.5,
-                player.getX() + 4.5, player.getY() + 4.5, player.getZ() + 4.5);
+        // Launch sound
+        world.playSoundFromEntity(null, player, SoundEvents.ITEM_TRIDENT_THROW.value(),
+                SoundCategory.PLAYERS, 1.0f, 0.6f);
 
-        for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, box, ent -> ent != player)) {
-            e.damage(world, player.getDamageSources().playerAttack(player), 25.0f);
-        }
-
-        player.sendMessage(Text.literal("⚡ GAVEL STRIKE! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
+        player.sendMessage(Text.literal("⚡ GAVEL LAUNCH! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
         return true;
     }
 
@@ -1095,13 +1096,10 @@ public class CustomItemHandler {
                 Text.literal(""),
                 Text.literal("◆ JUDICIAL AUTHORITY ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
                 Text.literal(""),
-                Text.literal("Right-click: Gavel Strike").formatted(Formatting.RED),
-                Text.literal("  └ AOE explosion (4.5 block radius)").formatted(Formatting.GRAY),
+                Text.literal("Right-click: Gavel Launch").formatted(Formatting.AQUA),
+                Text.literal("  └ Flings you high into the air").formatted(Formatting.GRAY),
                 Text.literal("  └ Consumes 1 Wind Charge").formatted(Formatting.GRAY),
                 Text.literal("  └ 3s cooldown").formatted(Formatting.GRAY),
-                Text.literal(""),
-                Text.literal("Damage: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("25").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
                 Text.literal("§8[MFLUX: Judicial enforcement weapon | Contractor-grade]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)

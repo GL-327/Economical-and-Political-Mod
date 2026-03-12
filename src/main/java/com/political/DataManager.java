@@ -275,6 +275,28 @@ public class DataManager {
     }
 
     // ============================================================
+    // GOVERNMENT TREASURY
+    // ============================================================
+
+    public static int getGovernmentTreasury() {
+        return data.governmentTreasury;
+    }
+
+    public static void setGovernmentTreasury(int amount) {
+        data.governmentTreasury = Math.max(0, amount);
+    }
+
+    public static void addGovernmentTreasury(int amount) {
+        data.governmentTreasury = Math.max(0, data.governmentTreasury + amount);
+    }
+
+    public static boolean removeGovernmentTreasury(int amount) {
+        if (data.governmentTreasury < amount) return false;
+        data.governmentTreasury -= amount;
+        return true;
+    }
+
+    // ============================================================
     // DATA ACCESS
     // ============================================================
 
@@ -374,5 +396,8 @@ public class DataManager {
         public int spawnProtectionMaxY = 320;
         public int spawnProtectionMinZ = 0;
         public int spawnProtectionMaxZ = 0;
+
+        // Government Treasury
+        public int governmentTreasury = 0;
     }
 }

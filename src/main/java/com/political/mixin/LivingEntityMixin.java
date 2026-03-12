@@ -44,10 +44,16 @@ public class LivingEntityMixin {
                     || SpawnProtectionManager.isPosProtected(attacker.getX(), attacker.getY(), attacker.getZ())) {
                 // Operators bypass protection
                 if (!SpawnProtectionManager.isOperator(attacker)) {
-                    attacker.sendMessage(Text.literal("⛔ PvP is disabled in the spawn-protected area!").formatted(Formatting.RED), true);
+                    attacker.sendMessage(Text.literal("⛔ This area is under Government Protection!").formatted(Formatting.RED), true);
                     return 0.0f;
                 }
             }
+        }
+
+        // Spawn protection: cancel ALL damage to players inside the zone (non-operators)
+        if (SpawnProtectionManager.isPosProtected(player.getX(), player.getY(), player.getZ())
+                && !SpawnProtectionManager.isOperator(player)) {
+            return 0.0f;
         }
 
         // Teleport dodge for Enderman T2 armor

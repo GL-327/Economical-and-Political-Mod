@@ -29,7 +29,7 @@ public class ServerPlayerInteractionManagerMixin {
 
         cir.setReturnValue(false);
         player.sendMessage(
-                Text.literal("⛔ This area is spawn-protected!").formatted(Formatting.RED),
+                Text.literal("⛔ This area is under Government Protection!").formatted(Formatting.RED),
                 true);
     }
 }
