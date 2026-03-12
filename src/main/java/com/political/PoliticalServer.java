@@ -64,6 +64,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		BountyCraftingHandler.register();
 		BeamCraftingHandler.register();
 		CustomMobRegistry.registerAll();
+		com.political.backrooms.BackroomsItems.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			// Check for any beam weapon (including Ultra Overclocked)
