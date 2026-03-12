@@ -295,9 +295,15 @@ public class SlayerItems {
 // ============================================================
     public static final int ENDER_PHASE_HELMET_LEVEL_REQ = 7;
 
+    /** Returns true if the stack is a Voidwalker's Crown (accepts both current and legacy IDs). */
     public static boolean isEnderPhaseHelmet(ItemStack stack) {
         // Accept both the new canonical ID and any legacy items with the old ID
         return hasCustomItemId(stack, "voidwalker_crown") || hasCustomItemId(stack, "ender_phase_helmet");
+    }
+
+    /** Alias for {@link #isEnderPhaseHelmet(ItemStack)}. */
+    public static boolean isVoidwalkerCrown(ItemStack stack) {
+        return isEnderPhaseHelmet(stack);
     }
 
     /** Canonical creation method for the Voidwalker's Crown. */

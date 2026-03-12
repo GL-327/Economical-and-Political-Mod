@@ -1331,7 +1331,7 @@ public class AdminGui {
 
     private static String capitalize(SlayerManager.SlayerType type) {
         String name = type.name();
-        return name.charAt(0) + name.substring(1).toLowerCase();
+        return Character.toString(name.charAt(0)) + name.substring(1).toLowerCase();
     }
 
     private static void openPlayerSelector(ServerPlayerEntity admin, String action) {
