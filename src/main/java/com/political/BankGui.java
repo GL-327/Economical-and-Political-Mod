@@ -17,6 +17,12 @@ public class BankGui {
     private static final int MAIN_MAX = 100_000;
     private static final long SAVINGS_COOLDOWN_MS = TimeUnit.HOURS.toMillis(6);
 
+    /** Formats a fractional rate (e.g. 0.05) as a percent string like "5%". */
+    private static String fmtRate(double rate) {
+        int pct = (int) Math.round(rate * 100);
+        return pct + "%";
+    }
+
     // ════════════════════════════════════════════════════════════
     // MAIN BANK MENU
     // ════════════════════════════════════════════════════════════
@@ -49,7 +55,7 @@ public class BankGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Balance: " + fmt(main) + " coins").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal("Cap: " + fmt(MAIN_MAX) + " coins").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Interest: 1% per hour").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Interest: " + fmtRate(DataManager.getMainAccountInterestRate()) + " per hour").formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to manage").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openMainAccount(player))
@@ -62,6 +68,7 @@ public class BankGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Balance: " + fmt(savings) + " coins").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal("No deposit cap").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Interest: " + fmtRate(DataManager.getSavingsAccountInterestRate()) + " per hour").formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal("⚠ Withdraw cooldown: 6 hours").formatted(Formatting.RED))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to manage").formatted(Formatting.YELLOW))
@@ -117,7 +124,7 @@ public class BankGui {
                 .addLoreLine(Text.literal("Balance: " + fmt(main) + " coins").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal("Your purse: " + fmt(purse) + " coins").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Cap: " + fmt(MAIN_MAX) + " coins").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Earns 1% interest per hour").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Earns " + fmtRate(DataManager.getMainAccountInterestRate()) + " interest per hour").formatted(Formatting.GREEN))
                 .glow()
                 .build());
 
@@ -304,6 +311,7 @@ public class BankGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Balance: " + fmt(savings) + " coins").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal("Your purse: " + fmt(purse) + " coins").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("💰 Earns " + fmtRate(DataManager.getSavingsAccountInterestRate()) + " interest per hour!").formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚠ You can only withdraw once every 6 hours!").formatted(Formatting.RED))
                 .glow()

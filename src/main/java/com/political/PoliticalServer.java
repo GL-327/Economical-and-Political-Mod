@@ -492,12 +492,21 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				continue;
 			}
 
-			// Main account: 1% interest, floored
+			// Main account: interest at government-set rate, floored
 			int main = DataManager.getBankMain(uuid);
 			if (main > 0) {
-				int interest = (int) Math.floor(main * 0.01);
+				int interest = (int) Math.floor(main * DataManager.getMainAccountInterestRate());
 				if (interest > 0) {
 					DataManager.setBankMain(uuid, main + interest);
+				}
+			}
+
+			// Savings account: interest at government-set rate (high yield for the withdrawal cooldown tradeoff)
+			int savings = DataManager.getBankSavings(uuid);
+			if (savings > 0) {
+				int savingsInterest = (int) Math.floor(savings * DataManager.getSavingsAccountInterestRate());
+				if (savingsInterest > 0) {
+					DataManager.setBankSavings(uuid, savings + savingsInterest);
 				}
 			}
 

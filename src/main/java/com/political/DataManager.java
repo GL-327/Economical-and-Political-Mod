@@ -211,6 +211,24 @@ public class DataManager {
     public static void setBankSavingsWithdrawTime(String uuid, long timestamp) {
         data.playerBankSavingsWithdrawTime.put(uuid, timestamp);
     }
+
+    // ── Government-controlled interest rates ────────────────────────────────
+
+    public static double getMainAccountInterestRate() {
+        return data.mainAccountInterestRate;
+    }
+
+    public static void setMainAccountInterestRate(double rate) {
+        data.mainAccountInterestRate = Math.max(0.0, Math.min(0.20, rate));
+    }
+
+    public static double getSavingsAccountInterestRate() {
+        return data.savingsAccountInterestRate;
+    }
+
+    public static void setSavingsAccountInterestRate(double rate) {
+        data.savingsAccountInterestRate = Math.max(0.0, Math.min(0.50, rate));
+    }
     private static Path getDataPath(MinecraftServer server) {
         return server.getSavePath(WorldSavePath.ROOT).resolve("political_data.json");
     }
@@ -497,6 +515,10 @@ public class DataManager {
         public Map<String, Integer> playerBankLoan = new HashMap<>();
         public Map<String, List<LoanEntry>> playerBankLoans = new HashMap<>();
         public Map<String, Long> playerBankSavingsWithdrawTime = new HashMap<>();
+
+        // Government-controlled interest rates (set via /chair)
+        public double mainAccountInterestRate = 0.01;    // 1% per hour default
+        public double savingsAccountInterestRate = 0.05; // 5% per hour default
 
         // Dictator
         public boolean dictatorActive = false;

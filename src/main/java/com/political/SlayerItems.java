@@ -1318,6 +1318,7 @@ public class SlayerItems {
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
         lore.add(Text.literal("🏹 Standard arrow mechanics").formatted(Formatting.WHITE));
         lore.add(Text.literal("✦ +2x damage to Skeleton Bosses").formatted(Formatting.AQUA));
+        lore.add(Text.literal("💀 Headshot: 500% damage (fully-charged)").formatted(Formatting.RED));
         lore.add(Text.literal("⏱ Infinite Durability").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Research Division").formatted(Formatting.DARK_GRAY));

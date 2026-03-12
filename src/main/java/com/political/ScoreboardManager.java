@@ -12,6 +12,7 @@ import net.minecraft.entity.EquipmentSlot;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 // SlayerData is in the same package
 
@@ -312,11 +313,21 @@ public class ScoreboardManager {
                 if (universalDef > 0) {
                     gearLines.add("§7  DEF all: §a-" + universalDef + "%");
                 }
-                for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
-                    int[] s = entry.getValue();
-                    if (s[1] > 0) {
-                        gearLines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + s[1] + "% §7(vs boss)");
+                // Condense per-boss defence entries: pair 2 per line to save sidebar space
+                List<Map.Entry<SlayerManager.SlayerType, int[]>> bossEntries = bountyStats.entrySet().stream()
+                        .filter(e -> e.getValue()[1] > 0)
+                        .collect(Collectors.toList());
+                for (int i = 0; i < bossEntries.size(); i += 2) {
+                    Map.Entry<SlayerManager.SlayerType, int[]> first = bossEntries.get(i);
+                    StringBuilder sb = new StringBuilder("§7  vs §f")
+                            .append(first.getKey().displayName)
+                            .append("§7: §a-").append(first.getValue()[1]).append("%");
+                    if (i + 1 < bossEntries.size()) {
+                        Map.Entry<SlayerManager.SlayerType, int[]> second = bossEntries.get(i + 1);
+                        sb.append(" §7| §f").append(second.getKey().displayName)
+                                .append("§7: §a-").append(second.getValue()[1]).append("%");
                     }
+                    gearLines.add(sb.toString());
                 }
                 if (weaponBonus > 0) {
                     gearLines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");

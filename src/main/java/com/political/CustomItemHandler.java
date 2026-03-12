@@ -77,9 +77,11 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
     private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
     private static final double ENDER_WARP_MAX_DISTANCE = 100.0; // blocks (matches item lore: "up to 100 blocks")
-    /** Debounce to prevent UseItemCallback + UseBlockCallback both firing on the same interaction. */
+    /** Debounce to prevent UseItemCallback + UseBlockCallback both firing on the same interaction.
+     *  Stores the server tick of the last processed interaction; both callbacks fire within the
+     *  same tick, so a tick-based comparison is 100% reliable unlike millisecond-based timings. */
     private static final Map<UUID, Long> helmetInteractionDebounce = new HashMap<>();
-    private static final long HELMET_DEBOUNCE_MS = 300; // 300ms window
+    private static final long HELMET_DEBOUNCE_TICKS = 2; // reject calls within the same 2-tick window
     private static final Map<UUID, Long> enderPhaseCooldowns = new HashMap<>();
     private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
     private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
@@ -213,22 +215,26 @@ public class CustomItemHandler {
      * Called from both UseItemCallback and UseBlockCallback so it fires reliably
      * regardless of what (if anything) is in the player's hands.
      *
-     * <p>A 300ms debounce prevents the double-fire that occurs when the player
+     * <p>A tick-based debounce prevents the double-fire that occurs when the player
      * right-clicks on a block with empty hands: Minecraft sends both a
      * UseItemCallback AND a UseBlockCallback for the same interaction in that case.
-     * Without the debounce, Sneak+RClick would activate Phase Mode and then the
-     * second callback would immediately see it as active and deactivate it.</p>
+     * Both callbacks always fire within the same server tick, so storing the last
+     * processed tick and rejecting calls within 2 ticks is 100% reliable.</p>
      */
     private static ActionResult handleEnderPhaseActivation(ServerPlayerEntity serverPlayer) {
-            long now = System.currentTimeMillis();
+            long currentTick = serverPlayer.getEntityWorld().getTime();
             UUID uuid = serverPlayer.getUuid();
 
-            // Debounce — skip duplicate invocations from the same user interaction
-            Long lastInteraction = helmetInteractionDebounce.get(uuid);
-            if (lastInteraction != null && now - lastInteraction < HELMET_DEBOUNCE_MS) {
+            // Debounce — skip duplicate invocations from the same user interaction.
+            // Both UseItemCallback and UseBlockCallback fire within the same server tick,
+            // so comparing tick counts is 100% reliable (unlike ms which can match on same tick).
+            Long lastTick = helmetInteractionDebounce.get(uuid);
+            if (lastTick != null && currentTick - lastTick < HELMET_DEBOUNCE_TICKS) {
                 return ActionResult.CONSUME;
             }
-            helmetInteractionDebounce.put(uuid, now);
+            helmetInteractionDebounce.put(uuid, currentTick);
+
+            long now = System.currentTimeMillis();
 
             if (serverPlayer.isSneaking()) {
                 // Sneak + right-click: Toggle Ender Phase Mode
