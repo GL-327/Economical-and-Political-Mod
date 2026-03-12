@@ -79,7 +79,14 @@ public class PerksGui {
             case "AUCTION_TAX_FREE"            -> Items.GOLD_BLOCK;
             case "AUCTION_TAX_REDUCTION"       -> Items.GOLD_INGOT;
             case "AUCTION_TAX_INCREASE"        -> Items.IRON_INGOT;
-            // Bounty perks
+            // Bounty perks (V2.0)
+            case "BOUNTY_HUNTER_SURGE"         -> Items.BLAZE_POWDER;
+            case "SLAYER_CONTRACTS"            -> Items.NETHER_STAR;
+            case "WEAKENED_QUARRY"             -> Items.SPIDER_SPAWN_EGG;
+            case "HUNTERS_INSTINCT"            -> Items.BOW;
+            case "BOUNTY_TAX"                  -> Items.GOLD_NUGGET;
+            case "HARDENED_QUARRY"             -> Items.OBSIDIAN;
+            // Legacy bounty perks (kept for save compatibility)
             case "BOUNTY_HUNTERS_ZEAL"         -> Items.BLAZE_POWDER;
             case "SLAYERS_FORTUNE"             -> Items.NETHER_STAR;
             case "QUICK_CONTRACTS"             -> Items.CLOCK;

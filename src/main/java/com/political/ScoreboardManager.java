@@ -451,10 +451,8 @@ public class ScoreboardManager {
                 s[1] = Math.max(s[1], (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100));
                 continue;
             }
-            // Voidwalker's Crown — skip standard set processing (no set bonus)
-            if (SlayerItems.isEnderPhaseHelmet(armor)) {
-                continue;
-            }
+            // Voidwalker's Crown is a special piece with no set bonus — skip standard processing
+            if (SlayerItems.isEnderPhaseHelmet(armor)) continue;
 
             // Standard T1/T2 set pieces (identified via custom_item_id prefix)
             String customId = SlayerItems.getCustomItemId(armor);
@@ -486,8 +484,6 @@ public class ScoreboardManager {
             // Single loop: count equipped pieces and accumulate per-piece contributions
             // using each piece's ACTUAL tier (not the highest tier) for accuracy
             int pieces = 0;
-            int t1Pieces = 0;
-            int t2Pieces = 0;
             int bossContrib = 0;
             int allContrib = 0;
             for (int pi = 0; pi < armorSlots.length; pi++) {
@@ -500,7 +496,6 @@ public class ScoreboardManager {
                 else if (cid.startsWith(pfx + "_t1_")) pieceTier = 1;
                 if (pieceTier > 0) {
                     pieces++;
-                    if (pieceTier == 2) t2Pieces++; else t1Pieces++;
                     SlayerItems.ArmorStats pieceStats = SlayerItems.getArmorStats(type, pieceTier);
                     double mult = SlayerItems.getPieceBossMultiplier(pieceNames[pi]);
                     bossContrib += (int) Math.round(pieceStats.bossReduction * mult * 100);

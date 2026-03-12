@@ -97,10 +97,7 @@ public class BountyDefenseMixin {
         }
 
         // Voidwalker's Crown (Ender Phase Helmet) — treated as a special piece, not standard Enderman set
-        if (SlayerItems.isEnderPhaseHelmet(helmet)) {
-            // Voidwalker's Crown provides no boss reduction by itself; its stats are from attributes
-            // We do nothing here so it doesn't accidentally count towards standard Enderman set defence
-        }
+        // No defence contribution from wearing this item — its stats come purely from attributes
 
         // ── Standard T1 / T2 armour sets ────────────────────────────────
         if (bossType != null) {

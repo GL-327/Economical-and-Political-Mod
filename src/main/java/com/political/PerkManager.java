@@ -765,6 +765,7 @@ public class PerkManager {
     public static float getBountyXpMultiplier() {
         float m = 1.0f;
         if (activePerks.contains("BOUNTY_HUNTER_SURGE")) m += 0.25f;
+        // BOUNTY_DROUGHT is a legacy perk id; no longer registered but kept for old save compatibility
         if (activePerks.contains("BOUNTY_DROUGHT"))      m -= 0.50f;
         return Math.max(0.1f, m);
     }

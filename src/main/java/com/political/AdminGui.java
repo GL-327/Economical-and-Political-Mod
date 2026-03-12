@@ -509,7 +509,7 @@ public class AdminGui {
                 .addLoreLine(Text.literal("▶ Click to receive").formatted(Formatting.GREEN))
                 .glow()
                 .setCallback((index, type, action) -> {
-                    player.giveItemStack(CustomItemHandler.createWardenCore());
+                    player.giveItemStack(SlayerItems.createCore(SlayerManager.SlayerType.WARDEN));
                     player.sendMessage(Text.literal("✓ Given Warden's Core!").formatted(Formatting.GREEN));
                 })
                 .build());
