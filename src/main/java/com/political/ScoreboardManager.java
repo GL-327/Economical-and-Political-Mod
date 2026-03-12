@@ -88,6 +88,7 @@ public class ScoreboardManager {
 
     public static void onPlayerDisconnect(ServerPlayerEntity player) {
         cleanupPlayerScoreboard(player);
+        playerOverflowLines.remove(player.getUuid());
     }
 
     // ── Setup / Cleanup ──────────────────────────────────────────
@@ -220,21 +221,34 @@ public class ScoreboardManager {
 
     // ── Line builder ─────────────────────────────────────────────
 
+    // Sidebar content budget (excluding the header separator and footer)
+    private static final int SIDEBAR_LINE_BUDGET = 15;
+
+    // Per-player overflow lines sent to the Tab List footer
+    private static final Map<UUID, List<String>> playerOverflowLines = new ConcurrentHashMap<>();
+
+    /** Returns the current overflow lines for the given player (used by TabListManager). */
+    public static List<String> getOverflowLines(UUID playerUuid) {
+        return playerOverflowLines.getOrDefault(playerUuid, Collections.emptyList());
+    }
+
     private static List<String> buildLines(ServerPlayerEntity player) {
         List<String> lines = new ArrayList<>();
 
-        // Line 1: Animated separator
+        // Header separator (not counted toward the budget)
         String sep = SEPARATOR_FRAMES[animFrame % SEPARATOR_FRAMES.length];
         lines.add(sep);
 
-        // Lines 2-3: Economy (combined credits/coins to save space)
+        // ── Core lines (always on sidebar, counted toward the 15-line budget) ──
+
+        // Economy
         int coins = CoinManager.getCoins(player);
         int credits = CreditItem.countCredits(player);
         lines.add("§e Coins: §f" + formatNumber(coins));
         lines.add("§b Credits: §f" + credits);
         lines.add("§8 ");
 
-        // Lines 5-7: Government
+        // Government
         String chairUuid = DataManager.getChair();
         String viceUuid  = DataManager.getViceChair();
         String chairName = chairUuid != null ? DataManager.getPlayerName(chairUuid) : null;
@@ -243,7 +257,7 @@ public class ScoreboardManager {
         lines.add("§7  Vice: " + (viceName  != null ? "§9" + viceName  : "§8None"));
         lines.add("§8  ");
 
-        // Line 8: Underground Auction timer
+        // Underground Auction timer
         if (DataManager.isScoreboardShowAuction()) {
             boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
             if (auctionActive) {
@@ -255,7 +269,7 @@ public class ScoreboardManager {
             }
         }
 
-        // Line 9: Bounty level
+        // Bounty level
         int totalLevel = 0;
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             totalLevel += SlayerData.getSlayerLevel(player.getUuidAsString(), type);
@@ -264,79 +278,72 @@ public class ScoreboardManager {
         lines.add("§e ⭐ §7Bounty: " + levelColor + totalLevel);
         lines.add("§8   "); // spacer after Bounty line
 
-        // Lines 10+: Compact bounty stats / quest info
+        // ── Gear / quest lines (may overflow to Tab List) ──────────────────
+        List<String> gearLines = new ArrayList<>();
         if (DataManager.isScoreboardShowBountyGear()) {
-        Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
-        SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
+            Map<SlayerManager.SlayerType, int[]> bountyStats = collectBountyGearStats(player);
+            SlayerManager.ActiveQuest quest = SlayerManager.getActiveQuest(player);
+            boolean hasCrown = SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD));
 
-        // Crown of Greed indicator
-        boolean hasCrown = SlayerItems.isCrownOfGreed(player.getEquippedStack(EquipmentSlot.HEAD));
+            if (quest != null) {
+                String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
+                gearLines.add(questColor + "§l ⚔ §r§7Quest: §c" + quest.slayerType.bossName);
+                int required = quest.getKillsRequired();
+                int progress = required > 0 ? (quest.killCount * 5 / Math.max(1, required)) : 5;
+                StringBuilder bar = new StringBuilder("§f  ");
+                for (int i = 0; i < 5; i++) bar.append(i < progress ? "§a█" : "§8█");
+                gearLines.add(bar + " §e" + quest.killCount + "/" + required);
+                gearLines.add("§7  T" + quest.tier + " " + quest.slayerType.displayName + (quest.bossSpawned ? " §cBoss Active!" : ""));
+            } else if (hasCrown) {
+                gearLines.add("§6§l 👑 §r§7Crown of Greed");
+                gearLines.add("§c  ✗ All defence DISABLED");
+            } else if (!bountyStats.isEmpty()) {
+                String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
+                gearLines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
 
-        if (quest != null) {
-            // Bounty quest takes priority over gear stats when active
-            String questColor = (animFrame % 6 < 3) ? "§d" : "§5";
-            lines.add(questColor + "§l ⚔ §r§7Quest: §c" + quest.slayerType.bossName);
-            int required = quest.getKillsRequired();
-            int progress = required > 0 ? (quest.killCount * 5 / Math.max(1, required)) : 5;
-            StringBuilder bar = new StringBuilder("§f  ");
-            for (int i = 0; i < 5; i++) bar.append(i < progress ? "§a█" : "§8█");
-            lines.add(bar + " §e" + quest.killCount + "/" + required);
-            lines.add("§7  T" + quest.tier + " " + quest.slayerType.displayName + (quest.bossSpawned ? " §cBoss Active!" : ""));
-        } else if (hasCrown) {
-            lines.add("§6§l 👑 §r§7Crown of Greed");
-            lines.add("§c  ✗ All defence DISABLED");
-        } else if (!bountyStats.isEmpty()) {
-            // Show compact bounty stats
-            String gearColor = (animFrame % 4 < 2) ? "§c" : "§4";
-            lines.add(gearColor + "§l ⚔ §r§7Bounty Gear");
-
-            // Aggregate stats across all gear types
-            int universalDef = 0;
-            int weaponBonus = 0;
-            for (int[] s : bountyStats.values()) {
-                universalDef += s[2];
-                if (s[0] > weaponBonus) weaponBonus = s[0];
-            }
-            int cappedUniversal = Math.min(universalDef, 95);
-            // Universal defence line
-            if (universalDef > 0) {
-                lines.add("§7  DEF all: §a-" + cappedUniversal + "%");
-            }
-            // Boss-specific defence lines — show combined (specific + universal) capped at 95
-            // The 95% cap prevents complete damage immunity while still being very effective
-            for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
-                int[] s = entry.getValue();
-                int combined = Math.min(95, s[1] + s[2]); // cap at 95% to prevent full immunity
-                if (combined > 0) {
-                    lines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + combined + "% §7(vs boss)");
+                int universalDef = 0;
+                int weaponBonus = 0;
+                for (int[] s : bountyStats.values()) {
+                    universalDef += s[2];
+                    if (s[0] > weaponBonus) weaponBonus = s[0];
                 }
+                if (universalDef > 0) {
+                    gearLines.add("§7  DEF all: §a-" + universalDef + "%");
+                }
+                for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
+                    int[] s = entry.getValue();
+                    if (s[1] > 0) {
+                        gearLines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + s[1] + "% §7(vs boss)");
+                    }
+                }
+                if (weaponBonus > 0) {
+                    gearLines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");
+                }
+                List<String> pieceBuffs = collectActivePieceBuffs(player);
+                gearLines.addAll(pieceBuffs);
+            } else {
+                gearLines.add("§8  No bounty gear");
             }
-            // Weapon bonus
-            if (weaponBonus > 0) {
-                lines.add("§7  DMG: §c+" + (weaponBonus - 100) + "% to boss");
-            }
-            // Individual piece buffs — condensed to avoid cutoff
-            List<String> pieceBuffs = collectActivePieceBuffs(player);
-            for (String buffLine : pieceBuffs) {
-                lines.add(buffLine);
-            }
+        }
+
+        // Split gear lines between sidebar and overflow.
+        // Budget = 15 content lines (lines already added minus the 1 header sep).
+        int coreContentCount = lines.size() - 1;
+        int gearBudget = Math.max(0, SIDEBAR_LINE_BUDGET - coreContentCount);
+        List<String> overflow;
+        if (gearLines.size() <= gearBudget) {
+            lines.addAll(gearLines);
+            overflow = Collections.emptyList();
         } else {
-            lines.add("§8  No bounty gear");
+            lines.addAll(gearLines.subList(0, gearBudget));
+            overflow = new ArrayList<>(gearLines.subList(gearBudget, gearLines.size()));
         }
-        }
+        playerOverflowLines.put(player.getUuid(), overflow);
 
-        // Lines 14-15: Footer
+        // Footer (not counted toward the budget)
         String footSep = SEPARATOR_FRAMES[(animFrame + SEPARATOR_FRAMES.length / 2) % SEPARATOR_FRAMES.length];
-        List<String> footer = new ArrayList<>();
-        footer.add(footSep);
-        footer.add("§eplay.civilcraft.net");
-
-        // Trim content to fit MAX_LINES, always preserving the footer
-        int maxContent = MAX_LINES - footer.size();
-        while (lines.size() > maxContent) {
-            lines.remove(lines.size() - 1);
-        }
-        lines.addAll(footer);
+        lines.add(footSep);
+        lines.add("§eplay.civilcraft.net");
 
         return lines;
     }
@@ -509,7 +516,7 @@ public class ScoreboardManager {
             if (t1Pieces == 4 || t2Pieces == 4) {
                 // Full same-tier set bonus: only when ALL 4 pieces are the same tier (no mixed-set bonus)
                 int capPct = t2Pieces == 4 ? 80 : 60;
-                s[1] = Math.min(95, s[1] + capPct);
+                s[1] += capPct;
                 // Universal defence: use exact allBossReduction of the set's primary tier
                 int setTier = t2Pieces == 4 ? 2 : 1;
                 SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, setTier);

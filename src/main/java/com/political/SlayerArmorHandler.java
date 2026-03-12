@@ -72,9 +72,7 @@ public class SlayerArmorHandler {
         }
         // No mixed/hybrid set bonus — mixed sets do not grant a full set bonus
 
-        // Cap at 80% for T2, 60% for T1 only
-        float cap = t2MatchingPieces > 0 ? 0.80f : 0.60f;
-        return Math.min(cap, reduction);
+        return reduction;
     }
 
     /**
@@ -118,7 +116,7 @@ public class SlayerArmorHandler {
             reduction += (float) stats.allBossReduction * weights[i];
         }
 
-        return Math.min(0.60f, reduction); // Cap universal-only reduction at 60%
+        return reduction;
     }
 
     private static boolean isMatchingSlayerArmor(String name, SlayerManager.SlayerType type) {

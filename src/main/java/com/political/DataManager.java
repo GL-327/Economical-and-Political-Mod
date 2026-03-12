@@ -47,6 +47,21 @@ public class DataManager {
                 SpawnManager.loadFromData(data);  // ADD THIS LINE
                 SpawnProtectionManager.loadFromData(data);
 
+                // Migrate old single-loan playerBankLoan → playerBankLoans
+                if (data.playerBankLoans == null) {
+                    data.playerBankLoans = new java.util.HashMap<>();
+                }
+                if (data.playerBankLoan != null) {
+                    for (Map.Entry<String, Integer> e : data.playerBankLoan.entrySet()) {
+                        if (e.getValue() > 0 && !data.playerBankLoans.containsKey(e.getKey())) {
+                            List<LoanEntry> migrated = new ArrayList<>();
+                            migrated.add(new LoanEntry(e.getValue(), 0.05));
+                            data.playerBankLoans.put(e.getKey(), migrated);
+                        }
+                    }
+                    data.playerBankLoan.clear();
+                }
+
             } catch (IOException e) {
                 PoliticalServer.LOGGER.error("Failed to load data", e);
             }
@@ -122,11 +137,71 @@ public class DataManager {
     }
 
     public static int getBankLoan(String uuid) {
-        return data.playerBankLoan.getOrDefault(uuid, 0);
+        List<LoanEntry> loans = getLoans(uuid);
+        return loans.stream().mapToInt(l -> l.amount).sum();
     }
 
     public static void setBankLoan(String uuid, int amount) {
-        data.playerBankLoan.put(uuid, Math.max(0, amount));
+        // Legacy setter: replace all loans with a single loan at 5% if amount > 0
+        if (amount <= 0) {
+            data.playerBankLoans.remove(uuid);
+        } else {
+            List<LoanEntry> loans = new ArrayList<>();
+            loans.add(new LoanEntry(amount, 0.05));
+            data.playerBankLoans.put(uuid, loans);
+        }
+    }
+
+    // ── Multi-loan helpers ───────────────────────────────────────────────────
+
+    public static List<LoanEntry> getLoans(String uuid) {
+        return data.playerBankLoans.getOrDefault(uuid, new ArrayList<>());
+    }
+
+    public static void addLoan(String uuid, int amount, double interestRate) {
+        List<LoanEntry> loans = new ArrayList<>(getLoans(uuid));
+        loans.add(new LoanEntry(amount, interestRate));
+        data.playerBankLoans.put(uuid, loans);
+    }
+
+    public static void removeLoan(String uuid, int index) {
+        List<LoanEntry> loans = new ArrayList<>(getLoans(uuid));
+        if (index >= 0 && index < loans.size()) {
+            loans.remove(index);
+            if (loans.isEmpty()) {
+                data.playerBankLoans.remove(uuid);
+            } else {
+                data.playerBankLoans.put(uuid, loans);
+            }
+        }
+    }
+
+    public static void setLoanAmount(String uuid, int index, int amount) {
+        List<LoanEntry> loans = new ArrayList<>(getLoans(uuid));
+        if (index >= 0 && index < loans.size()) {
+            loans.set(index, new LoanEntry(amount, loans.get(index).interestRate));
+            data.playerBankLoans.put(uuid, loans);
+        }
+    }
+
+    /** Returns the interest rate (as a fraction) for the next new loan based on current loan count. */
+    public static double getNextLoanInterestRate(String uuid) {
+        int count = getLoans(uuid).size();
+        // 5%, 10%, 20%, 40%, 80% for loans 1-5
+        return 0.05 * Math.pow(2, count);
+    }
+
+    /** A single bank loan entry with its own amount and interest rate. */
+    public static class LoanEntry {
+        public int amount;
+        public double interestRate; // e.g. 0.05 for 5% per hour
+
+        public LoanEntry() {} // for GSON
+
+        public LoanEntry(int amount, double interestRate) {
+            this.amount = amount;
+            this.interestRate = interestRate;
+        }
     }
 
     public static long getBankSavingsWithdrawTime(String uuid) {
@@ -418,7 +493,9 @@ public class DataManager {
         // Bank system
         public Map<String, Integer> playerBankMain = new HashMap<>();
         public Map<String, Integer> playerBankSavings = new HashMap<>();
+        // Legacy single-loan field kept for backward compatibility (migrated on load)
         public Map<String, Integer> playerBankLoan = new HashMap<>();
+        public Map<String, List<LoanEntry>> playerBankLoans = new HashMap<>();
         public Map<String, Long> playerBankSavingsWithdrawTime = new HashMap<>();
 
         // Dictator
