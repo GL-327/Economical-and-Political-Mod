@@ -158,7 +158,7 @@ public class T2ArmorAbilityHandler {
 
         ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
         if (isT2WardenHelmet(helmet)) {
-            if (player.hasStatusEffect(StatusEffects.DARKNESS)) {
+            if (player.hasStatusEffect(StatusEffects.DARKNESS) && !CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
                 player.removeStatusEffect(StatusEffects.DARKNESS);
             }
         }

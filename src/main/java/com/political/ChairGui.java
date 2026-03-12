@@ -110,6 +110,16 @@ public class ChairGui {
                     .build());
         }
 
+        gui.setSlot(20, buildInterestRateButton(
+                "Main Account Interest Rate", Items.GOLD_INGOT,
+                DataManager.getMainAccountInterestRate(), 0.01, 0.20, 0.01, 0.05,
+                player, true));
+
+        gui.setSlot(26, buildInterestRateButton(
+                "Savings Account Interest Rate", Items.BARREL,
+                DataManager.getSavingsAccountInterestRate(), 0.01, 0.50, 0.01, 0.05,
+                player, false));
+
         gui.setSlot(25, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Impeachment Status").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -127,5 +137,70 @@ public class ChairGui {
                 .build());
 
         gui.open();
+    }
+
+    /** Formats a fractional rate (e.g. 0.05) as a percent string (e.g. "5%"). */
+    private static String formatRate(double rate) {
+        int pct = (int) Math.round(rate * 100);
+        return pct + "%";
+    }
+
+    /**
+     * Builds a clickable GUI element for adjusting a government interest rate.
+     *
+     * @param label        Display name
+     * @param icon         Item icon
+     * @param currentRate  Current rate as a fraction (e.g. 0.05)
+     * @param min          Minimum allowed rate
+     * @param max          Maximum allowed rate
+     * @param step         Step per click
+     * @param shiftStep    Step per shift-click
+     * @param player       The Chair player
+     * @param isMain       true = main account rate, false = savings account rate
+     */
+    private static eu.pb4.sgui.api.elements.GuiElement buildInterestRateButton(
+            String label, net.minecraft.item.Item icon,
+            double currentRate, double min, double max, double step, double shiftStep,
+            ServerPlayerEntity player, boolean isMain) {
+        return new GuiElementBuilder(icon)
+                .setName(Text.literal(label).formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Current: " + formatRate(currentRate) + " per hour").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Min: " + formatRate(min) + "  Max: " + formatRate(max)).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left-click: +" + formatRate(step)).formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Right-click: -" + formatRate(step)).formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Shift-click: ±" + formatRate(shiftStep)).formatted(Formatting.AQUA))
+                .setCallback((index, type, action) -> {
+                    double change = type.isLeft ? step : -step;
+                    if (type.shift) change = type.isLeft ? shiftStep : -shiftStep;
+                    if (isMain) {
+                        DataManager.setMainAccountInterestRate(DataManager.getMainAccountInterestRate() + change);
+                        DataManager.save(PoliticalServer.server);
+                        double newRate = DataManager.getMainAccountInterestRate();
+                        broadcastInterestRateChange(player, "Main Account", newRate);
+                    } else {
+                        DataManager.setSavingsAccountInterestRate(DataManager.getSavingsAccountInterestRate() + change);
+                        DataManager.save(PoliticalServer.server);
+                        double newRate = DataManager.getSavingsAccountInterestRate();
+                        broadcastInterestRateChange(player, "Savings Account", newRate);
+                    }
+                    open(player);
+                })
+                .build();
+    }
+
+    /** Broadcasts a server-wide announcement when an interest rate changes. */
+    private static void broadcastInterestRateChange(ServerPlayerEntity chair, String accountType, double newRate) {
+        if (PoliticalServer.server == null) return;
+        String chairName = chair.getName().getString();
+        Text message = Text.literal("📢 [Government] ")
+                .formatted(Formatting.GOLD)
+                .append(Text.literal(chairName).formatted(Formatting.YELLOW))
+                .append(Text.literal(" has set the ").formatted(Formatting.GOLD))
+                .append(Text.literal(accountType).formatted(Formatting.AQUA))
+                .append(Text.literal(" interest rate to ").formatted(Formatting.GOLD))
+                .append(Text.literal(formatRate(newRate) + " per hour").formatted(Formatting.GREEN, Formatting.BOLD));
+        PoliticalServer.server.getPlayerManager().broadcast(message, false);
     }
 }

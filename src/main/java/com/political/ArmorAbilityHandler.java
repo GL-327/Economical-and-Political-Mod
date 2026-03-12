@@ -240,8 +240,8 @@ public class ArmorAbilityHandler {
             return;
         }
 
-        // Passive 1: Darkness immunity
-        if (player.hasStatusEffect(StatusEffects.DARKNESS)) {
+        // Passive 1: Darkness immunity — suppressed during Ender Phase Mode (which intentionally applies Darkness)
+        if (player.hasStatusEffect(StatusEffects.DARKNESS) && !CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
             player.removeStatusEffect(StatusEffects.DARKNESS);
         }
 

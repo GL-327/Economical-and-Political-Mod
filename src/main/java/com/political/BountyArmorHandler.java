@@ -213,10 +213,10 @@ public class BountyArmorHandler {
     // =========================================================
 
     private static void tickWardenArmorEffects(ServerPlayerEntity player) {
-        // T1 and T2 Helmet: Darkness immunity (remove Darkness effect)
+        // T1 and T2 Helmet: Darkness immunity (remove Darkness effect), suppressed during Ender Phase Mode
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
         if ("warden_t1_helmet".equals(helmetId) || "warden_t2_helmet".equals(helmetId)) {
-            if (player.hasStatusEffect(StatusEffects.DARKNESS)) {
+            if (player.hasStatusEffect(StatusEffects.DARKNESS) && !CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
                 player.removeStatusEffect(StatusEffects.DARKNESS);
             }
         }
