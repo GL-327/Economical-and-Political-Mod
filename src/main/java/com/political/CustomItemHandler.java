@@ -76,7 +76,10 @@ public class CustomItemHandler {
     // Ender Phase Helmet state tracking
     private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
     private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
-    private static final double PHASE_TELEPORT_MAX_DISTANCE = 8.0; // blocks
+    private static final double PHASE_TELEPORT_MAX_DISTANCE = 100.0; // blocks (matches item lore)
+    /** Debounce to prevent UseItemCallback + UseBlockCallback both firing on the same interaction. */
+    private static final Map<UUID, Long> helmetInteractionDebounce = new HashMap<>();
+    private static final long HELMET_DEBOUNCE_MS = 300; // 300ms window
     private static final Map<UUID, Long> enderPhaseCooldowns = new HashMap<>();
     private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
     private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
@@ -191,10 +194,23 @@ public class CustomItemHandler {
      * Core logic for Voidwalker Crown right-click and sneak+right-click abilities.
      * Called from both UseItemCallback and UseBlockCallback so it fires reliably
      * regardless of what (if anything) is in the player's hands.
+     *
+     * <p>A 300ms debounce prevents the double-fire that occurs when the player
+     * right-clicks on a block with empty hands: Minecraft sends both a
+     * UseItemCallback AND a UseBlockCallback for the same interaction in that case.
+     * Without the debounce, Sneak+RClick would activate Phase Mode and then the
+     * second callback would immediately see it as active and deactivate it.</p>
      */
     private static ActionResult handleEnderPhaseActivation(ServerPlayerEntity serverPlayer) {
             long now = System.currentTimeMillis();
             UUID uuid = serverPlayer.getUuid();
+
+            // Debounce — skip duplicate invocations from the same user interaction
+            Long lastInteraction = helmetInteractionDebounce.get(uuid);
+            if (lastInteraction != null && now - lastInteraction < HELMET_DEBOUNCE_MS) {
+                return ActionResult.CONSUME;
+            }
+            helmetInteractionDebounce.put(uuid, now);
 
             if (serverPlayer.isSneaking()) {
                 // Sneak + right-click: Toggle Ender Phase Mode
@@ -275,6 +291,7 @@ public class CustomItemHandler {
         enderWarpCooldowns.remove(uuid);
         enderPhaseCooldowns.remove(uuid);
         enderPhaseActiveUntil.remove(uuid);
+        helmetInteractionDebounce.remove(uuid);
         gavelCooldowns.remove(uuid);
         ultraOverclockedCooldowns.remove(uuid);
         berserkerHelmetActive.remove(uuid);

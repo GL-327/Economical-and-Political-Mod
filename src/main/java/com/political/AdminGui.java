@@ -1,6 +1,7 @@
 package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.gui.SignGui;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.item.*;
@@ -1200,6 +1201,40 @@ public class AdminGui {
                 .setCallback((index, type, action) -> openPlayerSelector(player, "tp_to"))
                 .build());
 
+        // Row 2 — additional player management
+        // Reset Bounty Data
+        gui.setSlot(19, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Reset Bounty Data").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Resets ALL slayer levels + XP").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("to 0 for a player").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to select").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "reset_bounty"))
+                .build());
+
+        // Set Exact Coins
+        gui.setSlot(20, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("Set Exact Coins").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Set a player's coin balance to").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("an exact amount via sign").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to select").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "set_coins"))
+                .build());
+
+        // Set Exact Credits
+        gui.setSlot(21, new GuiElementBuilder(Items.EMERALD)
+                .setName(Text.literal("Set Exact Credits").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Set a player's credit balance to").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("an exact amount via sign").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("▶ Click to select").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> openPlayerSelector(player, "set_credits"))
+                .build());
+
         addBackButton(gui, player);
         gui.open();
     }
@@ -1615,8 +1650,75 @@ public class AdminGui {
                 admin.sendMessage(Text.literal("✓ Teleported to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
                 return;
             }
+            case "reset_bounty" -> {
+                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+                    SlayerData.setSlayerLevel(target.getUuidAsString(), t, 0);
+                    SlayerData.setSlayerXp(target.getUuidAsString(), t, 0);
+                }
+                DataManager.save(PoliticalServer.server);
+                admin.sendMessage(Text.literal("✓ Reset all bounty data for " + target.getName().getString() + "!").formatted(Formatting.RED));
+                target.sendMessage(Text.literal("An admin has reset your bounty progress.").formatted(Formatting.RED));
+                return;
+            }
+            case "set_coins" -> {
+                openSetCoinsSign(admin, target);
+                return;
+            }
+            case "set_credits" -> {
+                openSetCreditsSign(admin, target);
+                return;
+            }
         }
         open(admin);
+    }
+
+    private static void openSetCoinsSign(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        int current = CoinManager.getCoins(target);
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (raw.isEmpty()) { openPlayersPage(admin); return; }
+                try {
+                    int amount = Integer.parseInt(raw);
+                    CoinManager.setCoins(target.getUuidAsString(), amount);
+                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s coins to " + amount + "!").formatted(Formatting.GREEN));
+                } catch (NumberFormatException ignored) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openPlayersPage(admin);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Set exact coins for"));
+        signGui.setLine(2, Text.literal(target.getName().getString()));
+        signGui.setLine(3, Text.literal("Current: " + current));
+        signGui.open();
+    }
+
+    private static void openSetCreditsSign(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        int current = DataManager.getCredits(target.getUuidAsString());
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (raw.isEmpty()) { openPlayersPage(admin); return; }
+                try {
+                    int amount = Integer.parseInt(raw);
+                    DataManager.setCredits(target.getUuidAsString(), amount);
+                    DataManager.save(PoliticalServer.server);
+                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s credits to " + amount + "!").formatted(Formatting.GREEN));
+                } catch (NumberFormatException ignored) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openPlayersPage(admin);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Set exact credits for"));
+        signGui.setLine(2, Text.literal(target.getName().getString()));
+        signGui.setLine(3, Text.literal("Current: " + current));
+        signGui.open();
     }
 
     private static void openCreditsGui(ServerPlayerEntity admin) {
@@ -1682,101 +1784,38 @@ public class AdminGui {
     }
 
     private static void openCreditsAmountSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Give Credits to " + target.getName().getString()));
-
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Text.literal(""))
-                    .build());
-        }
-
         int currentCredits = DataManager.getCredits(target.getUuidAsString());
-        gui.setSlot(4, new GuiElementBuilder(Items.PLAYER_HEAD)
-                .setSkullOwner(target.getGameProfile(), PoliticalServer.server)
-                .setName(Text.literal(target.getName().getString()).formatted(Formatting.WHITE, Formatting.BOLD))
-                .addLoreLine(Text.literal("Current: " + currentCredits).formatted(Formatting.YELLOW))
-                .build());
-
-        int[] amounts = {10, 50, 100, 500, 1000};
-        int[] slots = {10, 11, 12, 13, 14};
-
-        for (int i = 0; i < amounts.length; i++) {
-            final int amount = amounts[i];
-            gui.setSlot(slots[i], new GuiElementBuilder(Items.GOLD_NUGGET)
-                    .setName(Text.literal("+" + amount + " Credits").formatted(Formatting.GREEN, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("▶ Click to give").formatted(Formatting.YELLOW))
-                    .setCallback((index, type, action) -> {
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9\\-]", "");
+                if (raw.isEmpty()) { openCreditsGui(admin); return; }
+                try {
+                    int amount = Integer.parseInt(raw);
+                    if (amount > 0) {
                         CreditItem.giveCredits(target, amount);
-                        admin.sendMessage(Text.literal("✓ Gave " + amount + " credits!").formatted(Formatting.GREEN));
-                        target.sendMessage(Text.literal("You received " + amount + " credits!").formatted(Formatting.GREEN));
-                        openCreditsAmountSelector(admin, target);
-                    })
-                    .build());
-        }
-
-        gui.setSlot(16, new GuiElementBuilder(Items.REDSTONE)
-                .setName(Text.literal("Remove Credits").formatted(Formatting.RED, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("▶ Click for options").formatted(Formatting.YELLOW))
-                .setCallback((index, type, action) -> {
-                    openCreditsRemoveSelector(admin, target);
-                })
-                .build());
-
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Back").formatted(Formatting.GRAY))
-                .setCallback((index, type, action) -> {
-                    openCreditsGui(admin);
-                })
-                .build());
-
-        gui.open();
+                        admin.sendMessage(Text.literal("✓ Gave " + amount + " credits to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
+                        target.sendMessage(Text.literal("An admin gave you " + amount + " credits!").formatted(Formatting.GREEN));
+                    } else if (amount < 0) {
+                        CreditItem.removeCredits(target, -amount);
+                        admin.sendMessage(Text.literal("✓ Removed " + (-amount) + " credits from " + target.getName().getString() + "!").formatted(Formatting.RED));
+                    }
+                } catch (NumberFormatException ignored) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openCreditsGui(admin);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("+ give / - remove"));
+        signGui.setLine(2, Text.literal(target.getName().getString()));
+        signGui.setLine(3, Text.literal("Credits: " + currentCredits));
+        signGui.open();
     }
 
     private static void openCreditsRemoveSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Remove Credits from " + target.getName().getString()));
-
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Text.literal(""))
-                    .build());
-        }
-
-        int currentCredits = DataManager.getCredits(target.getUuidAsString());
-        gui.setSlot(4, new GuiElementBuilder(Items.PLAYER_HEAD)
-                .setSkullOwner(target.getGameProfile(), PoliticalServer.server)
-                .setName(Text.literal(target.getName().getString()).formatted(Formatting.WHITE, Formatting.BOLD))
-                .addLoreLine(Text.literal("Current: " + currentCredits).formatted(Formatting.YELLOW))
-                .build());
-
-        int[] amounts = {10, 50, 100, 500, 1000};
-        int[] slots = {10, 11, 12, 13, 14};
-
-        for (int i = 0; i < amounts.length; i++) {
-            final int amount = amounts[i];
-            gui.setSlot(slots[i], new GuiElementBuilder(Items.REDSTONE)
-                    .setName(Text.literal("-" + amount + " Credits").formatted(Formatting.RED, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("▶ Click to remove").formatted(Formatting.YELLOW))
-                    .setCallback((index, type, action) -> {
-                        CreditItem.removeCredits(target, amount);
-                        admin.sendMessage(Text.literal("✓ Removed " + amount + " credits!").formatted(Formatting.RED));
-                        openCreditsRemoveSelector(admin, target);
-                    })
-                    .build());
-        }
-
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Back").formatted(Formatting.GRAY))
-                .setCallback((index, type, action) -> {
-                    openCreditsAmountSelector(admin, target);
-                })
-                .build());
-
-        gui.open();
+        // Delegate to the combined sign-based selector
+        openCreditsAmountSelector(admin, target);
     }
     private static void openBasicSwordsMenu(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
@@ -4727,24 +4766,34 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
 
             gui.setSlot(hpSlots[i], new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
                     .setName(Text.literal(t.displayName + " HP").formatted(Formatting.RED, Formatting.BOLD))
-                    .addLoreLine(Text.literal("Multiplier: §f" + String.format("%.1f", hpMult) + "x").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Multiplier: §f" + String.format("%.2f", hpMult) + "x").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                    .addLoreLine(Text.literal("Middle-click: set exact value").formatted(Formatting.AQUA))
                     .setCallback((idx, clickType, action) -> {
+                        if (clickType == eu.pb4.sgui.api.ClickType.MOUSE_MIDDLE) {
+                            openBossMultiplierSign(player, t, true, DataManager.getBossHpMultiplier(t));
+                            return;
+                        }
                         float delta = clickType.isLeft ? 0.1f : -0.1f;
                         if (clickType.shift) delta *= 5;
-                        DataManager.setBossHpMultiplier(t, DataManager.getBossHpMultiplier(t) + delta);
+                        DataManager.setBossHpMultiplier(t, Math.max(0.1f, DataManager.getBossHpMultiplier(t) + delta));
                         DataManager.save(PoliticalServer.server);
                         openBossSettingsPage(player);
                     }).build());
 
             gui.setSlot(dmgSlots[i], new GuiElementBuilder(Items.ORANGE_STAINED_GLASS_PANE)
                     .setName(Text.literal(t.displayName + " DMG").formatted(Formatting.GOLD, Formatting.BOLD))
-                    .addLoreLine(Text.literal("Multiplier: §f" + String.format("%.1f", dmgMult) + "x").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Multiplier: §f" + String.format("%.2f", dmgMult) + "x").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                    .addLoreLine(Text.literal("Middle-click: set exact value").formatted(Formatting.AQUA))
                     .setCallback((idx, clickType, action) -> {
+                        if (clickType == eu.pb4.sgui.api.ClickType.MOUSE_MIDDLE) {
+                            openBossMultiplierSign(player, t, false, DataManager.getBossDamageMultiplier(t));
+                            return;
+                        }
                         float delta = clickType.isLeft ? 0.1f : -0.1f;
                         if (clickType.shift) delta *= 5;
-                        DataManager.setBossDamageMultiplier(t, DataManager.getBossDamageMultiplier(t) + delta);
+                        DataManager.setBossDamageMultiplier(t, Math.max(0.1f, DataManager.getBossDamageMultiplier(t) + delta));
                         DataManager.save(PoliticalServer.server);
                         openBossSettingsPage(player);
                     }).build());
@@ -4763,12 +4812,17 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
         float killMult = DataManager.getBossKillsRequiredMultiplier();
         gui.setSlot(40, new GuiElementBuilder(Items.BOOK)
                 .setName(Text.literal("Kill Requirement Multiplier").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal("Global multiplier: §f" + String.format("%.1f", killMult) + "x").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Global multiplier: §f" + String.format("%.2f", killMult) + "x").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Middle-click: set exact value").formatted(Formatting.AQUA))
                 .setCallback((idx, clickType, action) -> {
+                    if (clickType == eu.pb4.sgui.api.ClickType.MOUSE_MIDDLE) {
+                        openKillMultiplierSign(player, DataManager.getBossKillsRequiredMultiplier());
+                        return;
+                    }
                     float delta = clickType.isLeft ? 0.1f : -0.1f;
                     if (clickType.shift) delta *= 5;
-                    DataManager.setBossKillsRequiredMultiplier(DataManager.getBossKillsRequiredMultiplier() + delta);
+                    DataManager.setBossKillsRequiredMultiplier(Math.max(0.1f, DataManager.getBossKillsRequiredMultiplier() + delta));
                     DataManager.save(PoliticalServer.server);
                     openBossSettingsPage(player);
                 }).build());
@@ -4777,6 +4831,57 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
                 .setName(Text.literal("← Back").formatted(Formatting.GRAY))
                 .setCallback((i, t, a) -> openGameSettingsPage(player)).build());
         gui.open();
+    }
+
+    private static void openBossMultiplierSign(ServerPlayerEntity player, SlayerManager.SlayerType slayerType, boolean isHp, float current) {
+        String label = isHp ? (slayerType.displayName + " HP multiplier") : (slayerType.displayName + " DMG multiplier");
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9.]", "");
+                if (raw.isEmpty()) { openBossSettingsPage(player); return; }
+                try {
+                    float val = Float.parseFloat(raw);
+                    val = Math.max(0.1f, val);
+                    if (isHp) DataManager.setBossHpMultiplier(slayerType, val);
+                    else DataManager.setBossDamageMultiplier(slayerType, val);
+                    DataManager.save(PoliticalServer.server);
+                    player.sendMessage(Text.literal("✓ Set " + label + " to " + String.format("%.2f", val) + "x!").formatted(Formatting.GREEN));
+                } catch (NumberFormatException ignored) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openBossSettingsPage(player);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Set " + label));
+        signGui.setLine(2, Text.literal("(e.g. 2.5)"));
+        signGui.setLine(3, Text.literal("Current: " + String.format("%.2f", current)));
+        signGui.open();
+    }
+
+    private static void openKillMultiplierSign(ServerPlayerEntity player, float current) {
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9.]", "");
+                if (raw.isEmpty()) { openBossSettingsPage(player); return; }
+                try {
+                    float val = Math.max(0.1f, Float.parseFloat(raw));
+                    DataManager.setBossKillsRequiredMultiplier(val);
+                    DataManager.save(PoliticalServer.server);
+                    player.sendMessage(Text.literal("✓ Kill requirement multiplier set to " + String.format("%.2f", val) + "x!").formatted(Formatting.GREEN));
+                } catch (NumberFormatException ignored) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openBossSettingsPage(player);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Kill multiplier"));
+        signGui.setLine(2, Text.literal("(e.g. 1.5)"));
+        signGui.setLine(3, Text.literal("Current: " + String.format("%.2f", current)));
+        signGui.open();
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -5124,49 +5229,40 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
     }
 
     // ═══════════════════════════════════════════════════════════
-    // GIVE COINS SELECTOR
+    // GIVE COINS SELECTOR — sign-based input
     // ═══════════════════════════════════════════════════════════
 
     private static void openGiveCoinsSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Give Coins — " + target.getName().getString()));
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build());
-        }
-
         int currentCoins = CoinManager.getCoins(target);
-        gui.setSlot(4, new GuiElementBuilder(Items.GOLD_INGOT)
-                .setName(Text.literal(target.getName().getString()).formatted(Formatting.WHITE, Formatting.BOLD))
-                .addLoreLine(Text.literal("Current coins: §f" + currentCoins).formatted(Formatting.GOLD))
-                .glow().build());
-
-        int[] amounts = {100, 500, 1000, 5000, 10000};
-        int[] slots   = {10, 11, 12, 13, 14};
-        for (int i = 0; i < amounts.length; i++) {
-            final int amount = amounts[i];
-            gui.setSlot(slots[i], new GuiElementBuilder(Items.GOLD_NUGGET)
-                    .setName(Text.literal("+" + amount + " Coins").formatted(Formatting.GOLD, Formatting.BOLD))
-                    .addLoreLine(Text.literal("Left: Give  |  Right: Remove").formatted(Formatting.GRAY))
-                    .setCallback((idx, type, action) -> {
-                        if (type.isLeft) {
-                            CoinManager.giveCoins(target, amount);
-                            admin.sendMessage(Text.literal("✓ Gave " + amount + " coins to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
-                        } else {
-                            CoinManager.removeCoins(target, amount);
-                            admin.sendMessage(Text.literal("✓ Removed " + amount + " coins from " + target.getName().getString() + "!").formatted(Formatting.RED));
-                        }
-                        openGiveCoinsSelector(admin, target);
-                    }).build());
-        }
-
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
-                .setCallback((i, t, a) -> openPlayersPage(admin)).build());
-        gui.open();
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9\\-]", "");
+                if (raw.isEmpty()) { openPlayersPage(admin); return; }
+                try {
+                    int amount = Integer.parseInt(raw);
+                    if (amount > 0) {
+                        CoinManager.giveCoins(target, amount);
+                        admin.sendMessage(Text.literal("✓ Gave " + amount + " coins to " + target.getName().getString() + "!").formatted(Formatting.GREEN));
+                    } else if (amount < 0) {
+                        CoinManager.removeCoins(target, -amount);
+                        admin.sendMessage(Text.literal("✓ Removed " + (-amount) + " coins from " + target.getName().getString() + "!").formatted(Formatting.RED));
+                    }
+                } catch (NumberFormatException ignored) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openPlayersPage(admin);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("+ give / - remove"));
+        signGui.setLine(2, Text.literal(target.getName().getString()));
+        signGui.setLine(3, Text.literal("Coins: " + currentCoins));
+        signGui.open();
     }
 
     // ═══════════════════════════════════════════════════════════
-    // SLAYER LEVEL SELECTOR
+    // SLAYER LEVEL SELECTOR — sign-based input per type
     // ═══════════════════════════════════════════════════════════
 
     private static void openSlayerLevelSelector(ServerPlayerEntity admin, ServerPlayerEntity target) {
@@ -5176,8 +5272,7 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
 
         gui.setSlot(4, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
                 .setName(Text.literal(target.getName().getString()).formatted(Formatting.WHITE, Formatting.BOLD))
-                .addLoreLine(Text.literal("Left: +1 level  |  Right: -1 level").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Shift: ±5 levels").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click a type to set its level via sign").formatted(Formatting.GRAY))
                 .glow().build());
 
         SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
@@ -5185,22 +5280,41 @@ private static void openArmorAdminMenu(ServerPlayerEntity player) {
         for (int i = 0; i < types.length && i < slotPositions.length; i++) {
             SlayerManager.SlayerType t = types[i];
             int currentLevel = SlayerData.getSlayerLevel(target.getUuidAsString(), t);
+            final SlayerManager.SlayerType finalType = t;
             gui.setSlot(slotPositions[i], new GuiElementBuilder(Items.BOOK)
                     .setName(Text.literal(t.displayName + " Lvl " + currentLevel).formatted(Formatting.AQUA, Formatting.BOLD))
                     .addLoreLine(Text.literal("Current: §f" + currentLevel).formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal("L: +1 | R: -1 | Shift: ±5").formatted(Formatting.DARK_GRAY))
+                    .addLoreLine(Text.literal("▶ Click to set level").formatted(Formatting.YELLOW))
                     .setCallback((idx, clickType, action) -> {
-                        int delta = clickType.isLeft ? 1 : -1;
-                        if (clickType.shift) delta *= 5;
-                        int newLevel = Math.max(0, currentLevel + delta);
-                        SlayerData.setSlayerLevel(target.getUuidAsString(), t, newLevel);
-                        DataManager.save(PoliticalServer.server);
-                        admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s " + t.displayName + " level to " + newLevel + "!").formatted(Formatting.GREEN));
-                        openSlayerLevelSelector(admin, target);
-                    }).build());
-        }
+                        openSlayerLevelSign(admin, target, finalType);
+                    }).build());        }
 
         addBackButton(gui, admin);
         gui.open();
     }
-}
+
+    private static void openSlayerLevelSign(ServerPlayerEntity admin, ServerPlayerEntity target, SlayerManager.SlayerType slayerType) {
+        int currentLevel = SlayerData.getSlayerLevel(target.getUuidAsString(), slayerType);
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                String raw = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (raw.isEmpty()) { openSlayerLevelSelector(admin, target); return; }
+                try {
+                    int newLevel = Integer.parseInt(raw);
+                    if (newLevel < 0) { admin.sendMessage(Text.literal("✗ Level must be >= 0!").formatted(Formatting.RED)); openSlayerLevelSelector(admin, target); return; }
+                    SlayerData.setSlayerLevel(target.getUuidAsString(), slayerType, newLevel);
+                    DataManager.save(PoliticalServer.server);
+                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s " + slayerType.displayName + " level to " + newLevel + "!").formatted(Formatting.GREEN));
+                } catch (NumberFormatException ignored) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED));
+                }
+                openSlayerLevelSelector(admin, target);
+            }
+        };
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal(slayerType.displayName + " Level"));
+        signGui.setLine(2, Text.literal(target.getName().getString()));
+        signGui.setLine(3, Text.literal("Current: " + currentLevel));
+        signGui.open();
+    }}
