@@ -3,6 +3,7 @@ package com.political.backrooms;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.RedstoneLampBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -120,7 +121,8 @@ public class IndustrialChunkGenerator extends ChunkGenerator {
         BlockState grayConcrete = Blocks.GRAY_CONCRETE.getDefaultState();
         BlockState redConcrete  = Blocks.RED_CONCRETE.getDefaultState();
         BlockState ironBars     = Blocks.IRON_BARS.getDefaultState();
-        BlockState redstoneLamp = Blocks.REDSTONE_LAMP.getDefaultState();
+        BlockState redstoneLamp = Blocks.REDSTONE_LAMP.getDefaultState()
+                                        .with(RedstoneLampBlock.LIT, true);
 
         BlockPos.Mutable mpos = new BlockPos.Mutable();
 

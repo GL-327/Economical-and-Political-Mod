@@ -101,9 +101,6 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
 
         if (!onNorth && !onSouth && !onWest && !onEast) return false; // interior
 
-        boolean inGate = (lx >= GATE_MIN && lx <= GATE_MAX) ||
-                         (lz >= GATE_MIN && lz <= GATE_MAX);
-
         if (onNorth && !onEast && !onWest) return !(north && lx >= GATE_MIN && lx <= GATE_MAX);
         if (onSouth && !onEast && !onWest) return !(south && lx >= GATE_MIN && lx <= GATE_MAX);
         if (onWest  && !onNorth && !onSouth) return !(west  && lz >= GATE_MIN && lz <= GATE_MAX);
