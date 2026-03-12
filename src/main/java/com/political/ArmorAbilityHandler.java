@@ -17,6 +17,8 @@ public class ArmorAbilityHandler {
     private static final Map<UUID, Long> entityNoiseTimestamps = new HashMap<>();
     private static final long NOISE_FADE_TIME_MS = 5000; // 5 seconds after last noise
     private static final Set<UUID> espGlowingMobs = new HashSet<>();
+    /** How often (in server ticks) to sweep expired noise timestamps. */
+    private static final int NOISE_CLEANUP_INTERVAL = 200; // ~10 seconds
     private static int armorAbilityTickCounter = 0;
 
     // Call this every tick from PoliticalServer.java
@@ -34,7 +36,7 @@ public class ArmorAbilityHandler {
      */
     public static void tickWorld() {
         armorAbilityTickCounter++;
-        if (armorAbilityTickCounter < 200) return; // run every 200 ticks (~10 seconds)
+        if (armorAbilityTickCounter < NOISE_CLEANUP_INTERVAL) return;
         armorAbilityTickCounter = 0;
         long now = System.currentTimeMillis();
         entityNoiseTimestamps.entrySet().removeIf(e -> now - e.getValue() > NOISE_FADE_TIME_MS);

@@ -1386,7 +1386,9 @@ public class AdminGui {
                     if (type.shift) {
                         if (SpawnProtectionManager.isActive()) SpawnProtectionManager.clearRegion();
                         else SpawnProtectionManager.setRegion(SpawnProtectionManager.getMinX(), SpawnProtectionManager.getMinY(), SpawnProtectionManager.getMinZ(), SpawnProtectionManager.getMaxX(), SpawnProtectionManager.getMaxY(), SpawnProtectionManager.getMaxZ());
-                        player.sendMessage(Text.literal("✓ Spawn protection " + (SpawnProtectionManager.isActive() ? "enabled" : "disabled") + "!").formatted(Formatting.GREEN));
+                        boolean nowActive = SpawnProtectionManager.isActive();
+                        player.sendMessage(Text.literal("✓ Spawn protection " + (nowActive ? "enabled" : "disabled") + "!")
+                                .formatted(nowActive ? Formatting.GREEN : Formatting.RED));
                     } else if (type.isLeft) {
                         int x = (int) player.getX(), y = (int) player.getY(), z = (int) player.getZ();
                         SpawnProtectionManager.setRegion(x, y, z, SpawnProtectionManager.getMaxX(), SpawnProtectionManager.getMaxY(), SpawnProtectionManager.getMaxZ());

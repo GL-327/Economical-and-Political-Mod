@@ -303,9 +303,10 @@ public class ScoreboardManager {
                 lines.add("§7  DEF all: §a-" + cappedUniversal + "%");
             }
             // Boss-specific defence lines — show combined (specific + universal) capped at 95
+            // The 95% cap prevents complete damage immunity while still being very effective
             for (Map.Entry<SlayerManager.SlayerType, int[]> entry : bountyStats.entrySet()) {
                 int[] s = entry.getValue();
-                int combined = Math.min(95, s[1] + s[2]);
+                int combined = Math.min(95, s[1] + s[2]); // cap at 95% to prevent full immunity
                 if (combined > 0) {
                     lines.add("§7  vs §f" + entry.getKey().displayName + "§7: §a-" + combined + "% §7(vs boss)");
                 }

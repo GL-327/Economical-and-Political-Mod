@@ -76,6 +76,7 @@ public class CustomItemHandler {
     // Ender Phase Helmet state tracking
     private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
     private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
+    private static final double PHASE_TELEPORT_MAX_DISTANCE = 8.0; // blocks
     private static final Map<UUID, Long> enderPhaseCooldowns = new HashMap<>();
     private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
     private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
@@ -240,7 +241,7 @@ public class CustomItemHandler {
                 ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
                 Vec3d eyePos = serverPlayer.getEyePos();
                 Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
-                Vec3d targetPos = eyePos.add(lookVec.multiply(8.0)); // 8 blocks
+                Vec3d targetPos = eyePos.add(lookVec.multiply(PHASE_TELEPORT_MAX_DISTANCE));
 
                 net.minecraft.util.hit.BlockHitResult hitResult = serverWorld.raycast(
                         new RaycastContext(eyePos, targetPos,
