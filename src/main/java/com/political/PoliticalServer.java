@@ -427,6 +427,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				BountySpawnManager.tick(world);
 				HealthScalingManager.tickUpgradedMobDespawn(world);
 
+				// Backrooms exit beacon detection
+				if (com.political.backrooms.BackroomsDimensionManager.isBackroomsDimension(world)) {
+					for (ServerPlayerEntity player : world.getPlayers()) {
+						if (com.political.backrooms.BackroomsDimensionManager.isAtExitBeacon(player.getBlockPos())) {
+							com.political.backrooms.BackroomsDimensionManager.escapeBackrooms(player);
+						}
+					}
+				}
+
 				// Player ticks for this world
 				for (ServerPlayerEntity player : world.getPlayers()) {
 					ArmorAbilityHandler.tick(player);

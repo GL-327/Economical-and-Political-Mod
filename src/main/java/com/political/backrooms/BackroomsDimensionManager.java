@@ -10,6 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import com.political.PoliticalServer;
 
 import java.util.Random;
@@ -92,6 +93,40 @@ public class BackroomsDimensionManager {
             Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
         player.sendMessage(Text.literal("§8You slip through the cracks of reality..."), false);
         return true;
+    }
+
+    /**
+     * Returns the world position of the exit beacon's top block in the Backrooms dimension.
+     * This is the block players must stand on to escape.
+     */
+    public static BlockPos getExitBeaconPos() {
+        int wx = EXIT_CHUNK_X * 16 + 8; // centre of the exit chunk
+        int wz = EXIT_CHUNK_Z * 16 + 8;
+        return new BlockPos(wx, BackroomsChunkGenerator.EXIT_BEACON_Y, wz);
+    }
+
+    /** Chunk coordinate constants mirrored from the chunk generator for easy access. */
+    private static final int EXIT_CHUNK_X = BackroomsChunkGenerator.EXIT_CHUNK_X;
+    private static final int EXIT_CHUNK_Z = BackroomsChunkGenerator.EXIT_CHUNK_Z;
+
+    /**
+     * Returns true when {@code pos} is at or within 1 block horizontally of the
+     * exit beacon.  Used by the server-tick exit detector.
+     */
+    public static boolean isAtExitBeacon(BlockPos pos) {
+        BlockPos exit = getExitBeaconPos();
+        return pos.getY() == exit.getY()
+            && Math.abs(pos.getX() - exit.getX()) <= 1
+            && Math.abs(pos.getZ() - exit.getZ()) <= 1;
+    }
+
+    /**
+     * Teleports {@code player} from the Backrooms back to the overworld spawn.
+     * Call this when the player activates the exit beacon.
+     */
+    public static void escapeBackrooms(ServerPlayerEntity player) {
+        player.sendMessage(Text.literal("§a✦ You have escaped the Backrooms."), false);
+        com.political.SpawnManager.teleportToSpawn(player);
     }
 
     /**
