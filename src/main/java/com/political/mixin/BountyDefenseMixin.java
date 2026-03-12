@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * Applies bounty-gear damage reduction when a player takes damage from a bounty boss.
  *
- * Defence model (additive stacking, uncapped):
+ * Defence model (additive stacking, capped at 100%):
  *   universalDef  — % reduction vs ALL bounty bosses (always active when worn/held)
  *   specificDef   — EXTRA % reduction vs the MATCHING boss type (stacks with universalDef)
  *   totalDef      = min(1.0, universalDef + specificDef)

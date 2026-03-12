@@ -80,7 +80,6 @@ public class CustomItemHandler {
     private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
     private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
     private static final long ENDER_PHASE_DURATION_MS = 15_000; // 15 seconds
-    private static final Map<UUID, Long> enderPhaseLastRightClick = new HashMap<>();
 
     public static void register() {
         registerBountyItemRestrictions();
@@ -140,8 +139,13 @@ public class CustomItemHandler {
         });
 
         // Ender Phase Helmet - right-click handler
+        // Guard against the OFF_HAND duplicate: Minecraft sends PlayerInteractItemC2SPacket
+        // for both hands when right-clicking with empty hands. Without this guard the
+        // MAIN_HAND call would activate Ender Phase Mode and the OFF_HAND call (fired
+        // immediately after) would see the mode as active and deactivate it again.
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClient()) return ActionResult.PASS;
+            if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
 
             ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
@@ -203,7 +207,7 @@ public class CustomItemHandler {
                 ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
                 Vec3d eyePos = serverPlayer.getEyePos();
                 Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
-                Vec3d targetPos = eyePos.add(lookVec.multiply(50.0));
+                Vec3d targetPos = eyePos.add(lookVec.multiply(100.0));
 
                 net.minecraft.util.hit.BlockHitResult hitResult = serverWorld.raycast(
                         new RaycastContext(eyePos, targetPos,
