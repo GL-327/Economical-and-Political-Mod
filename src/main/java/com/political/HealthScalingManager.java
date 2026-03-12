@@ -467,10 +467,27 @@ public class HealthScalingManager {
 
     public static void tickCleanup() {
         cleanupTickCounter++;
-        if (cleanupTickCounter >= 6000) {
-            cleanupTickCounter = 0;
+        if (cleanupTickCounter < 1200) return;
+        cleanupTickCounter = 0;
+        // Sweep all UUID-keyed maps and remove entries for entities that no longer
+        // exist in any loaded world.
+        MinecraftServer server = PoliticalServer.server;
+        if (server == null) {
             checkedEntities.clear();
+            return;
         }
+        java.util.function.Predicate<UUID> isDead = uuid -> {
+            for (ServerWorld world : server.getWorlds()) {
+                Entity e = world.getEntity(uuid);
+                if (e != null && e.isAlive()) return false;
+            }
+            return true;
+        };
+        scaledEntities.removeIf(isDead);
+        checkedEntities.removeIf(isDead);
+        mobTiers.keySet().removeIf(isDead);
+        extraDropsCount.keySet().removeIf(isDead);
+        upgradedMobSpawnTimes.keySet().removeIf(isDead);
     }
 
     public static void setExtraDrops(UUID uuid, int count) {

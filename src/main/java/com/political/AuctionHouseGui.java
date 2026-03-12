@@ -525,10 +525,31 @@ public class AuctionHouseGui {
         }
 
         ItemStack item = listing.getItemStack();
+
+        // Guard: if the item failed to deserialize (e.g., corrupt NBT), refund the
+        // buyer and leave the listing intact rather than silently eating their currency.
+        if (item.isEmpty()) {
+            PoliticalServer.LOGGER.error("Auction purchase failed: could not deserialize item for listing " + listingId);
+            // Refund exactly what was charged — same capping as the charge above
+            if (payWithCoins) {
+                CoinManager.giveCoins(buyer, (int) Math.min(coinPrice, Integer.MAX_VALUE));
+            } else {
+                CreditItem.giveCredits(buyer, (int) Math.min(creditPrice, Integer.MAX_VALUE));
+            }
+            buyer.sendMessage(Text.literal("✗ Purchase failed: item could not be loaded. Your payment was refunded.").formatted(Formatting.RED));
+            return;
+        }
+
         AuctionHouseManager.removeListing(listingId);
 
-        if (!buyer.getInventory().insertStack(item.copy())) {
-            buyer.dropItem(item.copy(), false);
+        // insertStack modifies the stack in place; if the stack is not fully inserted,
+        // drop whatever remains so the buyer never loses the item.
+        ItemStack toGive = item.copy();
+        if (!buyer.getInventory().insertStack(toGive)) {
+            // toGive may have a reduced count after a partial insert — drop what's left
+            if (!toGive.isEmpty()) {
+                buyer.dropItem(toGive, false);
+            }
         }
 
         String currencyUsed = payWithCoins ? "coins" : "credits";

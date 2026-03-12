@@ -27,33 +27,14 @@ public class AnvilCraftingMixin {
         ItemStack first = handler.getSlot(0).getStack();
         ItemStack second = handler.getSlot(1).getStack();
 
-        // Check if either item is a custom item
-        boolean firstIsCustom = isCustomItem(first);
-        boolean secondIsCustom = isCustomItem(second);
-        boolean firstIsNormalSword = isNormalSword(first);
-        boolean secondIsNormalSword = isNormalSword(second);
-        boolean firstIsNormalShovel = isNormalShovel(first);
-        boolean secondIsNormalShovel = isNormalShovel(second);
-
-        // Prevent combining custom sword with normal iron sword
-        if ((firstIsCustom && secondIsNormalSword) || (secondIsCustom && firstIsNormalSword)) {
+        // Block any operation that involves a protected custom item as an input.
+        // This prevents: renaming (which consumes the item), combining, repairing, etc.
+        if (CustomItemHandler.isProtectedItem(first) || CustomItemHandler.isProtectedItem(second)) {
+            // Allow rename-only when only the first slot has a custom item and the
+            // second slot is empty — admins may still want to rename via commands,
+            // but an anvil rename would also consume the item, so we block it.
             handler.getSlot(2).setStack(ItemStack.EMPTY);
             ci.cancel();
-            return;
-        }
-
-        // Prevent combining HPEBM with normal shovel
-        if ((isHPEBM(first) && secondIsNormalShovel) || (isHPEBM(second) && firstIsNormalShovel)) {
-            handler.getSlot(2).setStack(ItemStack.EMPTY);
-            ci.cancel();
-            return;
-        }
-
-        // Prevent combining different custom items together
-        if (firstIsCustom && secondIsCustom && !isSameCustomType(first, second)) {
-            handler.getSlot(2).setStack(ItemStack.EMPTY);
-            ci.cancel();
-            return;
         }
     }
 
