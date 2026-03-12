@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(LivingEntity.class)
 public class BountyDefenseMixin {
 
-    private static final float MAX_TOTAL_REDUCTION = 1.0f;
-
     @ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private float reduceBossDamage(float amount, ServerWorld world, DamageSource source) {
         LivingEntity self = (LivingEntity)(Object)this;
@@ -127,8 +125,8 @@ public class BountyDefenseMixin {
             universalDef += 0.10f; // Skeleton bow: -10% universal
         }
 
-        // ── Apply total (additive, capped at 100%) ──────────────────────
-        float totalDef = Math.min(MAX_TOTAL_REDUCTION, universalDef + specificDef);
+        // ── Apply total (additive, no cap) ──────────────────────────────
+        float totalDef = universalDef + specificDef;
         if (totalDef <= 0) return amount;
         return amount * (1.0f - totalDef);
     }

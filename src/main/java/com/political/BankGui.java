@@ -471,6 +471,11 @@ public class BankGui {
     // LOANS SUB-MENU
     // ════════════════════════════════════════════════════════════
 
+    private static final int MAX_LOANS = 5;
+    private static final int MAX_LOAN_AMOUNT = 250_000;
+    // Interest rates for each loan slot (5%, 10%, 20%, 40%, 80%)
+    private static final double[] LOAN_RATES = {0.05, 0.10, 0.20, 0.40, 0.80};
+
     private static void openLoans(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("📜 Loans"));
@@ -481,81 +486,87 @@ public class BankGui {
         }
 
         String uuid = player.getUuidAsString();
-        int loan = DataManager.getBankLoan(uuid);
+        java.util.List<DataManager.LoanEntry> loans = DataManager.getLoans(uuid);
         int purse = CoinManager.getCoins(player);
 
-        if (loan <= 0) {
-            // No active loan — offer to take one
-            gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
-                    .setName(Text.literal("No Active Loan").formatted(Formatting.GREEN, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("You have no outstanding loan.").formatted(Formatting.GRAY))
-                    .build());
+        // Show each active loan
+        int[] loanSlots = {10, 12, 14, 16, 18};
+        for (int i = 0; i < loans.size(); i++) {
+            DataManager.LoanEntry loan = loans.get(i);
+            int slot = loanSlots[i];
+            int ratePct = (int) Math.round(loan.interestRate * 100);
+            final int loanIndex = i;
 
-            gui.setSlot(22, new GuiElementBuilder(Items.GOLD_NUGGET)
-                    .setName(Text.literal("Take Loan: 10,000 coins").formatted(Formatting.YELLOW, Formatting.BOLD))
+            boolean canPayFull = purse >= loan.amount;
+            GuiElementBuilder loanItem = new GuiElementBuilder(Items.PAPER)
+                    .setName(Text.literal("Loan #" + (i + 1)).formatted(Formatting.RED, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Amount: 10,000 coins").formatted(Formatting.WHITE))
-                    .addLoreLine(Text.literal("Interest: 5% per hour").formatted(Formatting.RED))
-                    .addLoreLine(Text.literal("Debt is automatically collected").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal("from your accounts when online.").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Click to accept loan").formatted(Formatting.GREEN))
-                    .setCallback((index, type, action) -> {
-                        int existingLoan = DataManager.getBankLoan(uuid);
-                        if (existingLoan > 0) {
-                            player.sendMessage(Text.literal("✗ You already have an active loan!").formatted(Formatting.RED), false);
-                        } else {
-                            DataManager.setBankLoan(uuid, 10_000);
-                            CoinManager.giveCoins(player, 10_000);
-                            player.sendMessage(Text.literal("✓ Loan of 10,000 coins issued. Repay with 5% interest per hour!").formatted(Formatting.GREEN), false);
-                        }
-                        openLoans(player);
-                    })
-                    .build());
-
-        } else {
-            // Active loan
-            gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
-                    .setName(Text.literal("Active Loan").formatted(Formatting.RED, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Amount owed: " + fmt(loan) + " coins").formatted(Formatting.RED))
-                    .addLoreLine(Text.literal("Interest: 5% per hour").formatted(Formatting.DARK_RED))
+                    .addLoreLine(Text.literal("Amount owed: " + fmt(loan.amount) + " coins").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Interest: " + ratePct + "% per hour").formatted(Formatting.DARK_RED))
                     .addLoreLine(Text.literal("Your purse: " + fmt(purse) + " coins").formatted(Formatting.GRAY))
-                    .glow()
-                    .build());
+                    .glow();
+            gui.setSlot(slot, loanItem.build());
 
-            boolean canPay = purse >= loan;
-            GuiElementBuilder payBtn = new GuiElementBuilder(Items.EMERALD)
-                    .setName(Text.literal("Pay Back Loan").formatted(canPay ? Formatting.GREEN : Formatting.DARK_GRAY, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Full amount: " + fmt(loan) + " coins").formatted(Formatting.WHITE));
-            if (!canPay) {
-                payBtn.addLoreLine(Text.literal("✗ Not enough coins in purse").formatted(Formatting.RED));
-                payBtn.addLoreLine(Text.literal("Need " + fmt(loan - purse) + " more coins").formatted(Formatting.YELLOW));
+            // Repay button
+            int repaySlot = slot + 9;
+            if (canPayFull) {
+                gui.setSlot(repaySlot, new GuiElementBuilder(Items.EMERALD)
+                        .setName(Text.literal("Pay Back Loan #" + (i + 1)).formatted(Formatting.GREEN, Formatting.BOLD))
+                        .addLoreLine(Text.literal("Full amount: " + fmt(loan.amount) + " coins").formatted(Formatting.WHITE))
+                        .addLoreLine(Text.literal("Click to pay in full").formatted(Formatting.YELLOW))
+                        .setCallback((index, type, action) -> {
+                            java.util.List<DataManager.LoanEntry> current = DataManager.getLoans(uuid);
+                            if (loanIndex >= current.size()) { openLoans(player); return; }
+                            int owed = current.get(loanIndex).amount;
+                            int p = CoinManager.getCoins(player);
+                            if (p < owed) {
+                                player.sendMessage(Text.literal("✗ Not enough coins to pay back the loan!").formatted(Formatting.RED), false);
+                            } else {
+                                CoinManager.removeCoins(player, owed);
+                                DataManager.removeLoan(uuid, loanIndex);
+                                player.sendMessage(Text.literal("✓ Loan #" + (loanIndex + 1) + " of " + fmt(owed) + " coins repaid in full!").formatted(Formatting.GREEN), false);
+                            }
+                            openLoans(player);
+                        })
+                        .build());
             } else {
-                payBtn.addLoreLine(Text.literal("Click to pay in full").formatted(Formatting.YELLOW));
-                payBtn.setCallback((index, type, action) -> {
-                    int owed = DataManager.getBankLoan(uuid);
-                    int p = CoinManager.getCoins(player);
-                    if (p < owed) {
-                        player.sendMessage(Text.literal("✗ Not enough coins to pay back the loan!").formatted(Formatting.RED), false);
-                    } else {
-                        CoinManager.removeCoins(player, owed);
-                        DataManager.setBankLoan(uuid, 0);
-                        player.sendMessage(Text.literal("✓ Loan of " + fmt(owed) + " coins repaid in full!").formatted(Formatting.GREEN), false);
-                    }
-                    openLoans(player);
-                });
+                gui.setSlot(repaySlot, new GuiElementBuilder(Items.EMERALD)
+                        .setName(Text.literal("Pay Back Loan #" + (i + 1)).formatted(Formatting.DARK_GRAY, Formatting.BOLD))
+                        .addLoreLine(Text.literal("✗ Not enough coins in purse").formatted(Formatting.RED))
+                        .addLoreLine(Text.literal("Need " + fmt(loan.amount - purse) + " more coins").formatted(Formatting.YELLOW))
+                        .build());
             }
-            gui.setSlot(22, payBtn.build());
 
-            // Custom partial repayment (slot 24)
-            gui.setSlot(24, new GuiElementBuilder(Items.WRITABLE_BOOK)
-                    .setName(Text.literal("Custom Repayment").formatted(Formatting.YELLOW, Formatting.BOLD))
+            // Custom repay button
+            int customSlot = repaySlot + 9;
+            gui.setSlot(customSlot, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                    .setName(Text.literal("Custom Repay Loan #" + (i + 1)).formatted(Formatting.YELLOW, Formatting.BOLD))
                     .addLoreLine(Text.literal("Enter a custom amount to repay").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("Click to open sign input").formatted(Formatting.YELLOW))
-                    .setCallback((index, type, action) -> openLoanCustomRepay(player))
+                    .setCallback((index, type, action) -> openLoanCustomRepay(player, loanIndex))
+                    .build());
+        }
+
+        // "Take New Loan" button (if fewer than MAX_LOANS active)
+        if (loans.size() < MAX_LOANS) {
+            int nextLoanIndex = loans.size();
+            double nextRate = LOAN_RATES[nextLoanIndex];
+            int nextRatePct = (int) Math.round(nextRate * 100);
+            gui.setSlot(4, new GuiElementBuilder(Items.GOLD_NUGGET)
+                    .setName(Text.literal("Take New Loan").formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Custom amount: 1 – " + fmt(MAX_LOAN_AMOUNT) + " coins").formatted(Formatting.WHITE))
+                    .addLoreLine(Text.literal("Interest: " + nextRatePct + "% per hour").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Active loans: " + loans.size() + "/" + MAX_LOANS).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to enter amount via sign").formatted(Formatting.GREEN))
+                    .setCallback((index, type, action) -> openLoanAmountSign(player))
+                    .build());
+        } else {
+            gui.setSlot(4, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("Maximum Loans Reached").formatted(Formatting.RED, Formatting.BOLD))
+                    .addLoreLine(Text.literal("You have " + MAX_LOANS + "/" + MAX_LOANS + " active loans.").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Repay a loan before taking another.").formatted(Formatting.GRAY))
                     .build());
         }
 
@@ -569,10 +580,52 @@ public class BankGui {
     }
 
     // ════════════════════════════════════════════════════════════
+    // TAKE NEW LOAN — SIGN INPUT
+    // ════════════════════════════════════════════════════════════
+
+    private static void openLoanAmountSign(ServerPlayerEntity player) {
+        String uuid = player.getUuidAsString();
+        SignGui signGui = new SignGui(player) {
+            @Override
+            public void onClose() {
+                String input = this.getLine(0).getString().trim().replaceAll("[^0-9]", "");
+                if (input.isEmpty()) { openLoans(player); return; }
+                try {
+                    int amount = Integer.parseInt(input);
+                    if (amount <= 0) {
+                        player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false);
+                        openLoans(player); return;
+                    }
+                    if (amount > MAX_LOAN_AMOUNT) {
+                        player.sendMessage(Text.literal("✗ Maximum loan amount is " + fmt(MAX_LOAN_AMOUNT) + " coins!").formatted(Formatting.RED), false);
+                        openLoans(player); return;
+                    }
+                    java.util.List<DataManager.LoanEntry> existing = DataManager.getLoans(uuid);
+                    if (existing.size() >= MAX_LOANS) {
+                        player.sendMessage(Text.literal("✗ You already have the maximum " + MAX_LOANS + " loans!").formatted(Formatting.RED), false);
+                        openLoans(player); return;
+                    }
+                    double rate = LOAN_RATES[existing.size()];
+                    int ratePct = (int) Math.round(rate * 100);
+                    DataManager.addLoan(uuid, amount, rate);
+                    CoinManager.giveCoins(player, amount);
+                    player.sendMessage(Text.literal("✓ Loan of " + fmt(amount) + " coins issued at " + ratePct + "% interest per hour!").formatted(Formatting.GREEN), false);
+                } catch (NumberFormatException e) {
+                    player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                }
+                openLoans(player);
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.setLine(1, Text.literal("(max " + fmt(MAX_LOAN_AMOUNT) + ")"));
+        signGui.open();
+    }
+
+    // ════════════════════════════════════════════════════════════
     // LOAN CUSTOM REPAYMENT SIGN GUI
     // ════════════════════════════════════════════════════════════
 
-    private static void openLoanCustomRepay(ServerPlayerEntity player) {
+    private static void openLoanCustomRepay(ServerPlayerEntity player, int loanIndex) {
         String uuid = player.getUuidAsString();
         SignGui signGui = new SignGui(player) {
             @Override
@@ -582,14 +635,21 @@ public class BankGui {
                 try {
                     int amount = Integer.parseInt(input);
                     if (amount <= 0) { player.sendMessage(Text.literal("✗ Amount must be positive!").formatted(Formatting.RED), false); openLoans(player); return; }
-                    int owed = DataManager.getBankLoan(uuid);
+                    java.util.List<DataManager.LoanEntry> loans = DataManager.getLoans(uuid);
+                    if (loanIndex >= loans.size()) { player.sendMessage(Text.literal("✗ Loan no longer exists!").formatted(Formatting.RED), false); openLoans(player); return; }
+                    int owed = loans.get(loanIndex).amount;
                     int purse = CoinManager.getCoins(player);
-                    if (owed <= 0) { player.sendMessage(Text.literal("✗ No active loan!").formatted(Formatting.RED), false); openLoans(player); return; }
                     int toPay = Math.min(amount, Math.min(owed, purse));
                     if (toPay <= 0) { player.sendMessage(Text.literal("✗ Not enough coins in purse!").formatted(Formatting.RED), false); openLoans(player); return; }
                     CoinManager.removeCoins(player, toPay);
-                    DataManager.setBankLoan(uuid, owed - toPay);
-                    player.sendMessage(Text.literal("✓ Repaid " + fmt(toPay) + " coins toward loan. Remaining: " + fmt(owed - toPay) + ".").formatted(Formatting.GREEN), false);
+                    int remaining = owed - toPay;
+                    if (remaining <= 0) {
+                        DataManager.removeLoan(uuid, loanIndex);
+                        player.sendMessage(Text.literal("✓ Loan #" + (loanIndex + 1) + " fully repaid!").formatted(Formatting.GREEN), false);
+                    } else {
+                        DataManager.setLoanAmount(uuid, loanIndex, remaining);
+                        player.sendMessage(Text.literal("✓ Repaid " + fmt(toPay) + " coins toward loan #" + (loanIndex + 1) + ". Remaining: " + fmt(remaining) + ".").formatted(Formatting.GREEN), false);
+                    }
                 } catch (NumberFormatException e) {
                     player.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
                 }

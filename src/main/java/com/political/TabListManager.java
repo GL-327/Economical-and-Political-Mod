@@ -63,6 +63,10 @@ public class TabListManager {
         // Build perks section
         String perksSection = buildPerksSection();
 
+        // Build overflow section from scoreboard (bounty gear lines that didn't fit)
+        List<String> overflow = ScoreboardManager.getOverflowLines(player.getUuid());
+        String overflowSection = buildOverflowSection(overflow);
+
         // Build footer
         Text footer = Text.literal(
             "§8────────────────────────\n" +
@@ -70,11 +74,26 @@ public class TabListManager {
             auctionLine + "\n" +
             "§8────────────────────────\n" +
             perksSection +
+            overflowSection +
             "§8────────────────────────\n" +
             "§7play.§bcivil§7craft.net"
         );
 
         player.networkHandler.sendPacket(new PlayerListHeaderS2CPacket(header, footer));
+    }
+
+    /**
+     * Builds a section for scoreboard overflow lines (bounty gear stats that didn't fit
+     * on the sidebar). Returns an empty string when there are no overflow lines.
+     */
+    private static String buildOverflowSection(List<String> overflow) {
+        if (overflow == null || overflow.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("§c§l⚔ Bounty Gear §r\n");
+        for (String line : overflow) {
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
     }
 
     /**
