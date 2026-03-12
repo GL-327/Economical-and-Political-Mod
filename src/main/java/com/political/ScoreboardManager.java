@@ -221,8 +221,10 @@ public class ScoreboardManager {
 
     // ── Line builder ─────────────────────────────────────────────
 
-    // Sidebar content budget (excluding the header separator and footer)
-    private static final int SIDEBAR_LINE_BUDGET = 15;
+    // Sidebar content budget (excluding the header separator and footer).
+    // Budget of 12 keeps total active lines at ≤15 (1 sep + 9 core + 3 gear + 2 footer),
+    // ensuring the cosmetic footer never gets cut off on vanilla clients.
+    private static final int SIDEBAR_LINE_BUDGET = 12;
 
     // Per-player overflow lines sent to the Tab List footer
     private static final Map<UUID, List<String>> playerOverflowLines = new ConcurrentHashMap<>();
@@ -400,22 +402,22 @@ public class ScoreboardManager {
             if (SlayerItems.isSkeletonBow(weapon)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SKELETON, k -> new int[3]);
                 s[0] = 500;
-                s[2] += 10; // Skeleton bow: -10% universal
+                s[2] += 4; // Skeleton bow: -4% universal
             } else if (SlayerItems.isUpgradedSlayerSword(weapon)) {
                 SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
                 if (t != null) {
                     int[] s = stats.computeIfAbsent(t, k -> new int[3]);
                     s[0] = 300;
-                    s[1] += 60;                 // -60% specific vs matching boss (additive like BountyDefenseMixin)
-                    s[2] += 15;                 // -15% universal vs all bosses
+                    s[1] += 20;                 // -20% specific vs matching boss
+                    s[2] += 6;                  // -6% universal vs all bosses
                 }
             } else if (SlayerItems.isSlayerSword(weapon)) {
                 SlayerManager.SlayerType t = SlayerItems.getSwordSlayerType(weapon);
                 if (t != null) {
                     int[] s = stats.computeIfAbsent(t, k -> new int[3]);
                     s[0] = 200;
-                    s[1] += 50;                 // -50% specific vs matching boss (additive like BountyDefenseMixin)
-                    s[2] += 10;                 // -10% universal vs all bosses
+                    s[1] += 15;                 // -15% specific vs matching boss
+                    s[2] += 4;                  // -4% universal vs all bosses
                 }
             }
         }
@@ -438,25 +440,25 @@ public class ScoreboardManager {
             if (SlayerItems.isZombieBerserkerHelmet(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.ZOMBIE, k -> new int[3]);
                 s[2] += (int)(SlayerItems.BERSERKER_HELMET_ALL_REDUCTION * 100);
-                s[1] = Math.max(s[1], (int)(SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION * 100));
+                s[1] += (int)(SlayerItems.BERSERKER_HELMET_BOSS_REDUCTION * 100);
                 continue;
             }
             if (SlayerItems.isSpiderLeggings(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SPIDER, k -> new int[3]);
                 s[2] += (int)(SlayerItems.SPIDER_LEGS_ALL_REDUCTION * 100);
-                s[1] = Math.max(s[1], (int)(SlayerItems.SPIDER_LEGS_BOSS_REDUCTION * 100));
+                s[1] += (int)(SlayerItems.SPIDER_LEGS_BOSS_REDUCTION * 100);
                 continue;
             }
             if (SlayerItems.isSlimeBoots(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.SLIME, k -> new int[3]);
                 s[2] += (int)(SlayerItems.SLIME_BOOTS_ALL_REDUCTION * 100);
-                s[1] = Math.max(s[1], (int)(SlayerItems.SLIME_BOOTS_BOSS_REDUCTION * 100));
+                s[1] += (int)(SlayerItems.SLIME_BOOTS_BOSS_REDUCTION * 100);
                 continue;
             }
             if (SlayerItems.isWardenChestplate(armor)) {
                 int[] s = stats.computeIfAbsent(SlayerManager.SlayerType.WARDEN, k -> new int[3]);
                 s[2] += (int)(SlayerItems.WARDEN_CHEST_ALL_REDUCTION * 100);
-                s[1] = Math.max(s[1], (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100));
+                s[1] += (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100);
                 continue;
             }
             // Voidwalker's Crown is a special piece with no set bonus — skip standard processing
@@ -515,15 +517,15 @@ public class ScoreboardManager {
 
             if (t1Pieces == 4 || t2Pieces == 4) {
                 // Full same-tier set bonus: only when ALL 4 pieces are the same tier (no mixed-set bonus)
-                int capPct = t2Pieces == 4 ? 80 : 60;
+                int capPct = t2Pieces == 4 ? 38 : 26;
                 s[1] += capPct;
                 // Universal defence: use exact allBossReduction of the set's primary tier
                 int setTier = t2Pieces == 4 ? 2 : 1;
                 SlayerItems.ArmorStats setStats = SlayerItems.getArmorStats(type, setTier);
                 s[2] += (int)(setStats.allBossReduction * 100);
             } else {
-                // Partial set: sum of the per-piece contributions only
-                s[1] = Math.max(s[1], bossContrib);
+                // Partial set: sum of the per-piece contributions, always additive
+                s[1] += bossContrib;
                 s[2] += allContrib;
             }
         }

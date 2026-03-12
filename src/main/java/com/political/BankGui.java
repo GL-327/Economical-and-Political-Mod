@@ -243,8 +243,9 @@ public class BankGui {
                 openMainAccount(player);
             }
         };
-        signGui.setLine(0, Text.literal("Enter amount:"));
-        signGui.setLine(1, Text.literal("to deposit"));
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Enter amount:"));
+        signGui.setLine(2, Text.literal("to deposit"));
         signGui.open();
     }
 
@@ -269,8 +270,9 @@ public class BankGui {
                 openMainAccount(player);
             }
         };
-        signGui.setLine(0, Text.literal("Enter amount:"));
-        signGui.setLine(1, Text.literal("to withdraw"));
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Enter amount:"));
+        signGui.setLine(2, Text.literal("to withdraw"));
         signGui.open();
     }
 
@@ -427,8 +429,9 @@ public class BankGui {
                 openSavingsAccount(player);
             }
         };
-        signGui.setLine(0, Text.literal("Enter amount:"));
-        signGui.setLine(1, Text.literal("to deposit"));
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Enter amount:"));
+        signGui.setLine(2, Text.literal("to deposit"));
         signGui.open();
     }
 
@@ -462,8 +465,9 @@ public class BankGui {
                 openSavingsAccount(player);
             }
         };
-        signGui.setLine(0, Text.literal("Enter amount:"));
-        signGui.setLine(1, Text.literal("to withdraw"));
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Enter amount:"));
+        signGui.setLine(2, Text.literal("to withdraw"));
         signGui.open();
     }
 
@@ -619,8 +623,9 @@ public class BankGui {
                 openLoans(player);
             }
         };
-        signGui.setLine(0, Text.literal("Enter amount:"));
-        signGui.setLine(1, Text.literal("(max " + fmt(MAX_LOAN_AMOUNT) + ")"));
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Enter amount:"));
+        signGui.setLine(2, Text.literal("(max " + fmt(MAX_LOAN_AMOUNT) + ")"));
         signGui.open();
     }
 
@@ -659,8 +664,9 @@ public class BankGui {
                 openLoans(player);
             }
         };
-        signGui.setLine(0, Text.literal("Enter amount:"));
-        signGui.setLine(1, Text.literal("to repay"));
+        signGui.setLine(0, Text.literal(""));
+        signGui.setLine(1, Text.literal("Enter amount:"));
+        signGui.setLine(2, Text.literal("to repay"));
         signGui.open();
     }
 

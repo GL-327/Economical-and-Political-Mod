@@ -218,9 +218,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DEFENCE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-10% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-4% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal("vs " + type.displayName + " Boss: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-60% total (-10 + -50 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-19% total (-4 + -15 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Contractor Program").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + BASIC_SWORD_LEVEL_REQ)
@@ -358,8 +358,8 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("👁 Ender Phase Mode").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         lore.add(Text.literal("  Sneak + Right-click to activate.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Become invisible & untargetable").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  (only Endermen can still sense you).").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Become invisible, invincible &").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  untargetable by all entities.").formatted(Formatting.GRAY));
         lore.add(Text.literal("  Duration: §e15 seconds  §8Cooldown: §72 min").formatted(Formatting.GRAY));
         lore.add(Text.literal("  §c⚠ Overstaying amplifies Wither!").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
@@ -436,9 +436,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-6% damage").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-50% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-20% damage").formatted(Formatting.GREEN)));
 
         // Only show requirement if not met [1]
         if (!meetsRequirement) {
@@ -482,9 +482,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DEFENCE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-15% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-6% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal("vs " + type.displayName + " Boss: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% total (-15 + -60 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-26% total (-6 + -20 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("MFLUX Classified: Charadrius Mk.II").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("⚠ Requires: " + type.displayName + " Bounty Lvl " + UPGRADED_SWORD_LEVEL_REQ)
@@ -1005,27 +1005,27 @@ public class SlayerItems {
     }
 
     // ── Defence constants for special (non-set) armour pieces ──
-    // These deliberately have HIGHER universal defence than boss-specific defence.
-    public static final double BERSERKER_HELMET_BOSS_REDUCTION = 0.15;  // 15% vs zombie boss
-    public static final double BERSERKER_HELMET_ALL_REDUCTION  = 0.50;  // 50% vs all bosses
-    public static final double WARDEN_CHEST_BOSS_REDUCTION     = 0.35;  // 35% vs warden boss
-    public static final double WARDEN_CHEST_ALL_REDUCTION      = 0.65;  // 65% vs all bosses
-    public static final double SPIDER_LEGS_BOSS_REDUCTION      = 0.20;  // 20% vs spider boss
-    public static final double SPIDER_LEGS_ALL_REDUCTION       = 0.55;  // 55% vs all bosses
-    public static final double SLIME_BOOTS_BOSS_REDUCTION      = 0.20;  // 20% vs slime boss
-    public static final double SLIME_BOOTS_ALL_REDUCTION       = 0.55;  // 55% vs all bosses
-    public static final double VOIDWALKER_ALL_REDUCTION        = 0.10;  // 10% vs all bosses
-    public static final double VOIDWALKER_BOSS_REDUCTION       = 0.30;  // 30% extra vs Enderman boss
+    // Reduced to ~40% of original values so full BiS stacking stays below 85%.
+    public static final double BERSERKER_HELMET_BOSS_REDUCTION = 0.06;  // 6% vs zombie boss
+    public static final double BERSERKER_HELMET_ALL_REDUCTION  = 0.20;  // 20% vs all bosses
+    public static final double WARDEN_CHEST_BOSS_REDUCTION     = 0.14;  // 14% vs warden boss
+    public static final double WARDEN_CHEST_ALL_REDUCTION      = 0.25;  // 25% vs all bosses
+    public static final double SPIDER_LEGS_BOSS_REDUCTION      = 0.08;  // 8% vs spider boss
+    public static final double SPIDER_LEGS_ALL_REDUCTION       = 0.22;  // 22% vs all bosses
+    public static final double SLIME_BOOTS_BOSS_REDUCTION      = 0.08;  // 8% vs slime boss
+    public static final double SLIME_BOOTS_ALL_REDUCTION       = 0.22;  // 22% vs all bosses
+    public static final double VOIDWALKER_ALL_REDUCTION        = 0.04;  // 4% vs all bosses
+    public static final double VOIDWALKER_BOSS_REDUCTION       = 0.12;  // 12% extra vs Enderman boss
 
     public static ArmorStats getArmorStats(SlayerManager.SlayerType type, int tier) {
         return switch (type) {
-            case ZOMBIE -> tier == 1 ? new ArmorStats(6, 1, 0.50, 0.10) : new ArmorStats(10, 3, 0.70, 0.20);
-            case SPIDER -> tier == 1 ? new ArmorStats(6, 1, 0.50, 0.10) : new ArmorStats(10, 3, 0.70, 0.20);
-            case SKELETON -> tier == 1 ? new ArmorStats(8, 2, 0.50, 0.10) : new ArmorStats(12, 4, 0.70, 0.25);
-            case SLIME -> tier == 1 ? new ArmorStats(10, 3, 0.60, 0.15) : new ArmorStats(14, 5, 0.80, 0.30);
-            case ENDERMAN -> tier == 1 ? new ArmorStats(10, 3, 0.60, 0.15) : new ArmorStats(14, 5, 0.80, 0.30);
-            case WARDEN -> tier == 1 ? new ArmorStats(12, 4, 0.70, 0.20) : new ArmorStats(16, 6, 0.90, 0.35);
-            case PIGLIN -> tier == 1 ? new ArmorStats(10, 3, 0.60, 0.15) : new ArmorStats(14, 5, 0.80, 0.30);
+            case ZOMBIE -> tier == 1 ? new ArmorStats(6, 1, 0.20, 0.04) : new ArmorStats(10, 3, 0.28, 0.08);
+            case SPIDER -> tier == 1 ? new ArmorStats(6, 1, 0.20, 0.04) : new ArmorStats(10, 3, 0.28, 0.08);
+            case SKELETON -> tier == 1 ? new ArmorStats(8, 2, 0.20, 0.04) : new ArmorStats(12, 4, 0.28, 0.10);
+            case SLIME -> tier == 1 ? new ArmorStats(10, 3, 0.24, 0.06) : new ArmorStats(14, 5, 0.32, 0.12);
+            case ENDERMAN -> tier == 1 ? new ArmorStats(10, 3, 0.24, 0.06) : new ArmorStats(14, 5, 0.32, 0.12);
+            case WARDEN -> tier == 1 ? new ArmorStats(12, 4, 0.28, 0.08) : new ArmorStats(16, 6, 0.36, 0.14);
+            case PIGLIN -> tier == 1 ? new ArmorStats(10, 3, 0.24, 0.06) : new ArmorStats(14, 5, 0.32, 0.12);
         };
     }
 
@@ -1100,8 +1100,8 @@ public class SlayerItems {
         if (pieceAllDef < 1) pieceAllDef = 1;
 
         // Full-set boss reductions (actual capped values)
-        // T1 full set always caps at 60%, T2 full set always caps at 80%
-        int fullSetBossDef = (tier == 1) ? 60 : 80;
+        // T1 full set caps at 26% (20% per-piece + 6% set bonus), T2 at 38% (28% + 10%)
+        int fullSetBossDef = (tier == 1) ? 26 : 38;
         int fullSetAllDef  = (int) Math.round(stats.allBossReduction * 100);
 
         lore.add(Text.literal("This piece: ")
@@ -1215,9 +1215,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-65% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-25% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal("vs Warden Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-85% capped (-65 + -35 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-39% total (-25 + -14 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Warden Bounty Lvl " + WARDEN_CHESTPLATE_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1285,9 +1285,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-55% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-22% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal("vs Spider Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% total (-55 + -20 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-30% total (-22 + -8 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1394,9 +1394,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-55% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-22% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal("vs Slime Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-75% total (-55 + -20 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-30% total (-22 + -8 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Slime Bounty Lvl " + SLIME_BOOTS_LEVEL_REQ)
                 .formatted(Formatting.RED));
@@ -1611,9 +1611,9 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ BOSS DEFENSE ━━━").formatted(Formatting.GOLD));
         lore.add(Text.literal("vs All Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-50% damage").formatted(Formatting.GREEN)));
+                .append(Text.literal("-20% damage").formatted(Formatting.GREEN)));
         lore.add(Text.literal("vs Zombie Bosses: ").formatted(Formatting.GRAY)
-                .append(Text.literal("-65% total (-50 + -15 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
+                .append(Text.literal("-26% total (-20 + -6 extra)").formatted(Formatting.GREEN, Formatting.BOLD)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8[MFLUX: CRD-001 augmented containment helm | Berserker-class]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
@@ -1964,8 +1964,8 @@ public class SlayerItems {
         double pieceMult = getPieceBossMultiplier(pieceName);
         int pieceBossDef  = Math.max(1, (int) Math.round(stats.bossReduction * pieceMult * 100));
         int pieceAllDef   = Math.max(1, (int) Math.round(stats.allBossReduction * pieceMult * 100));
-        // T1 full set always caps at 60% boss-specific; all-boss is sum of all pieces
-        int fullSetBoss   = 60;
+        // T1 full set caps at 26% boss-specific (20% per-piece + 6% set bonus); all-boss is sum of all pieces
+        int fullSetBoss   = 26;
         int fullSetAll    = (int) Math.round(stats.allBossReduction * 100);
 
         List<Text> lore = new ArrayList<>();
@@ -2104,8 +2104,8 @@ public class SlayerItems {
         double pieceMult = getPieceBossMultiplier(pieceName);
         int pieceBossDef  = Math.max(1, (int) Math.round(stats.bossReduction * pieceMult * 100));
         int pieceAllDef   = Math.max(1, (int) Math.round(stats.allBossReduction * pieceMult * 100));
-        // T2 full set always caps at 80% boss-specific; all-boss is sum of all pieces
-        int fullSetBoss   = 80;
+        // T2 full set caps at 38% boss-specific (28% + 10% set bonus); all-boss is sum of all pieces
+        int fullSetBoss   = 38;
         int fullSetAll    = (int) Math.round(stats.allBossReduction * 100);
 
         List<Text> lore = new ArrayList<>();
