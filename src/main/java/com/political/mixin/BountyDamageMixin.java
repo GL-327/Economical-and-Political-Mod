@@ -60,6 +60,8 @@ public abstract class BountyDamageMixin {
                 double multiplier = SlayerManager.getLevelDamageMultiplier(player, bossType);
                 modifiedAmount *= (float) multiplier;
             }
+            // Apply HUNTERS_INSTINCT perk damage bonus against any bounty boss
+            modifiedAmount *= com.political.PerkManager.getBountyBossDamageMultiplier();
         }
 
         // Check slayer sword level requirement

@@ -437,27 +437,10 @@ public class CustomItemHandler {
         return weapon;
     }
 
+    /** @deprecated Use {@link #createTheGavel()} instead. */
+    @Deprecated
     public static ItemStack createGavel() {
-        ItemStack gavel = new ItemStack(Items.WOODEN_AXE);
-
-        gavel.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⚖ The Gavel")
-                        .formatted(Formatting.GOLD, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("The symbol of authority").formatted(Formatting.GRAY));
-        lore.add(Text.literal("for the Chair holder.").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Right-click to use powers").formatted(Formatting.YELLOW));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[MFLUX: Contractor-issued judicial armament]").formatted(Formatting.DARK_GRAY));
-
-        gavel.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        gavel.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        SlayerItems.setCustomItemId(gavel, "the_gavel");
-        return gavel;
+        return createTheGavel();
     }
 
     public static boolean useGavelAbility(ServerPlayerEntity player, ItemStack gavelStack) {
@@ -535,6 +518,12 @@ public class CustomItemHandler {
         if (isHermesShoes(boots)) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 40, 2, true, false, false));
         }
+    }
+
+    /** Returns true if the given player is currently in Ender Phase Mode. */
+    public static boolean isInEnderPhaseMode(java.util.UUID uuid) {
+        Long activeUntil = enderPhaseActiveUntil.get(uuid);
+        return activeUntil != null && System.currentTimeMillis() < activeUntil;
     }
 
     public static void tickEnderPhaseHelmet(ServerPlayerEntity player) {
@@ -1148,33 +1137,10 @@ public class CustomItemHandler {
         return stack;
     }
 
+    /** @deprecated Use {@link #createHPEBM(int)} with mk=1 instead. */
+    @Deprecated
     public static ItemStack createHPEBM() {
-        ItemStack stack = new ItemStack(Items.IRON_SHOVEL);
-        NbtCompound nbt = new NbtCompound();
-        nbt.putByte("hpebm", (byte) 1);
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
-        stack.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("H.P.E.B.M.").formatted(Formatting.GREEN, Formatting.BOLD));
-        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
-                Text.literal(""),
-                Text.literal("◆ PLASMA WEAPON ◆").formatted(Formatting.GREEN, Formatting.BOLD),
-                Text.literal(""),
-                Text.literal("High Powered Energy Based Plasma Emitter").formatted(Formatting.DARK_GREEN),
-                Text.literal(""),
-                Text.literal("Right-click: Continuous beam attack").formatted(Formatting.RED),
-                Text.literal("  └ Costs 1 XP level per second").formatted(Formatting.GRAY),
-                Text.literal(""),
-                Text.literal("Damage: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("1.0").formatted(Formatting.RED, Formatting.BOLD))
-                        .append(Text.literal(" per tick").formatted(Formatting.GRAY)),
-                Text.literal(""),
-                Text.literal("§8[MFLUX: Experimental energy weapon | Mk.I prototype]").formatted(Formatting.DARK_GRAY),
-                Text.literal("「Tier I」").formatted(Formatting.GREEN)
-        )));
-        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        stack.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
-        stack.set(DataComponentTypes.DAMAGE, 0);
-        return stack;
+        return createHPEBM(1);
     }
 
     public static ItemStack createWardenCore() {

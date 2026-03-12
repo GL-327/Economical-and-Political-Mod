@@ -80,6 +80,7 @@ public class CustomItemsGui {
                 .addLoreLine(Text.literal("• Bone Desperado's Bow").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal("• Gelatinous Rustler Boots").formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal("• Sculk Terror Chestplate").formatted(Formatting.DARK_AQUA))
+                .addLoreLine(Text.literal("• Voidwalker's Crown").formatted(Formatting.DARK_PURPLE))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openLegendaryMenu(player))
@@ -212,6 +213,7 @@ public class CustomItemsGui {
         items.add(SlayerItems.createSkeletonBow());
         items.add(SlayerItems.createSlimeBoots());
         items.add(SlayerItems.createWardenChestplate());
+        items.add(SlayerItems.createVoidwalkerCrown());
         openSubPage(player, "⭐ Legendary Gear", items, 0);
     }
 

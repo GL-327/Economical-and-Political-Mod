@@ -291,19 +291,27 @@ public class SlayerItems {
     public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
 
     // ============================================================
-// ENDER PHASE HELMET - T7 Enderman Requirement
+// VOIDWALKER'S CROWN - T7 Enderman Requirement
 // ============================================================
     public static final int ENDER_PHASE_HELMET_LEVEL_REQ = 7;
 
+    /** Returns true if the stack is a Voidwalker's Crown (accepts both current and legacy IDs). */
     public static boolean isEnderPhaseHelmet(ItemStack stack) {
-        return hasCustomItemId(stack, "ender_phase_helmet");
+        // Accept both the new canonical ID and any legacy items with the old ID
+        return hasCustomItemId(stack, "voidwalker_crown") || hasCustomItemId(stack, "ender_phase_helmet");
     }
 
-    public static ItemStack createEnderPhaseHelmet() {
+    /** Alias for {@link #isEnderPhaseHelmet(ItemStack)}. */
+    public static boolean isVoidwalkerCrown(ItemStack stack) {
+        return isEnderPhaseHelmet(stack);
+    }
+
+    /** Canonical creation method for the Voidwalker's Crown. */
+    public static ItemStack createVoidwalkerCrown() {
         ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
 
         helmet.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⟡ Ender Phase Helmet")
+                Text.literal("👁 Voidwalker's Crown")
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
 
         AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
@@ -336,35 +344,38 @@ public class SlayerItems {
 
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[MFLUX: CRD-005 Enderman-class dimensional gear]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("§8[MFLUX: CRD-005 Enderman-class phase-shift helmet | NEVER SUCCESSFULLY TESTED]"));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal("🛡 Armor: +5").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("💎 Toughness: +4").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("❤ Health: +4 Hearts").formatted(Formatting.RED));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("⟡ Ender Warp").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("👁 Phase Teleport").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
         lore.add(Text.literal("  Right-click to teleport to where").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  you are looking. No cost.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Cooldown: 2 seconds").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("  you are looking (up to 100 blocks).").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  No cost.  Cooldown: 2 seconds").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("⟡ Ender Phase Mode").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal("  Sneak + Right-click to enter").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Ender Phase Mode. Screen turns").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  purple. No players or mobs can").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  interact with you (except Endermen).").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  You become translucent/invisible.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Duration: 15 seconds").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("  Cooldown: 2 minutes").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("  ⚠ Overstaying causes Wither!").formatted(Formatting.RED));
+        lore.add(Text.literal("👁 Ender Phase Mode").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("  Sneak + Right-click to activate.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Become invisible & untargetable").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  (only Endermen can still sense you).").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Duration: §e15 seconds  §8Cooldown: §72 min").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  §c⚠ Overstaying amplifies Wither!").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + ENDER_PHASE_HELMET_LEVEL_REQ)
                 .formatted(Formatting.RED));
 
         helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
         helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(helmet, "ender_phase_helmet");
+        setCustomItemId(helmet, "voidwalker_crown");
         return helmet;
+    }
+
+    /** @deprecated Use {@link #createVoidwalkerCrown()} instead. */
+    @Deprecated
+    public static ItemStack createEnderPhaseHelmet() {
+        return createVoidwalkerCrown();
     }
 
 
@@ -969,7 +980,7 @@ public class SlayerItems {
     }
 
     public static ItemStack createTheGavel() {
-        return CustomItemHandler.createGavel();
+        return CustomItemHandler.createTheGavel();
     }
 
     public static ItemStack createZombieHelmet() {
@@ -1179,13 +1190,15 @@ public class SlayerItems {
         // FIXED LORE
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[MFLUX: CRD-006 | Warden-class containment chestplate]"));
-        lore.add(Text.literal("§7Forged from the heart of The Sculk Terror."));
-        lore.add(Text.literal("§7MFLUX Field Test Status: §c§lFAILED"));
-        lore.add(Text.literal("§8Every operative deployed with this unit"));
-        lore.add(Text.literal("§8was either KIA or listed MIA within 48 hours."));
-        lore.add(Text.literal("§8Containment integrity: UNSTABLE."));
-        lore.add(Text.literal("§8Use at your own risk."));
+        lore.add(Text.literal("§8[MFLUX: CRD-006 | Warden-class containment armor]"));
+        lore.add(Text.literal("§8[STATUS: All field tests resulted in operator fatality]"));
+        lore.add(Text.literal("§8[NOTE: \"It doesn't protect you. It makes the Warden hesitate.\"]"));
+        lore.add(Text.literal("§7\"Recovered from MFLUX Research Station Sigma-7.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"No operative has successfully worn this in combat\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"and survived to file a report.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"The containment field appears to disrupt the\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"Warden's echolocation — but at tremendous cost\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"to the wearer's nervous system.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
         lore.add(Text.literal("🛡 Armor: +12").formatted(Formatting.BLUE));
@@ -1673,31 +1686,10 @@ public class SlayerItems {
     }
 
 
+    /** @deprecated Use {@link #createSpiderLeggings()} instead. */
+    @Deprecated
     public static ItemStack createVenomousCrawlerLeggings() {
-        ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
-
-
-        leggings.set(DataComponentTypes.DYED_COLOR,
-                new net.minecraft.component.type.DyedColorComponent(0x2E8B57));
-        leggings.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("🕷 Venomous Crawler Leggings")
-                        .formatted(Formatting.DARK_RED, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("BOUNTY ARMOR").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Wall Climbing").formatted(Formatting.GREEN));
-        lore.add(Text.literal("Poison Aura").formatted(Formatting.GREEN));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Spider Bounty Lvl " + SPIDER_LEGGINGS_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        setCustomItemId(leggings, "spider_leggings");
-        return leggings;
+        return createSpiderLeggings();
     }
 
 

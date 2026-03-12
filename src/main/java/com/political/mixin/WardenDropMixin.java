@@ -1,6 +1,7 @@
 package com.political.mixin;
 
-import com.political.CustomItemHandler;
+import com.political.SlayerItems;
+import com.political.SlayerManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WardenEntity;
@@ -25,7 +26,7 @@ public class WardenDropMixin {
         if (self instanceof WardenEntity && source.getAttacker() instanceof PlayerEntity) {
             // 0.1% chance = 1 in 100000
             if (random.nextInt(100000) == 0) {
-                self.dropStack(world, CustomItemHandler.createWardenCore());
+                self.dropStack(world, SlayerItems.createCore(SlayerManager.SlayerType.WARDEN));
             }
         }
     }
