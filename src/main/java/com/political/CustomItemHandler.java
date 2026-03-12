@@ -84,14 +84,32 @@ public class CustomItemHandler {
     private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
     private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
     private static final long ENDER_PHASE_DURATION_MS = 15_000; // 15 seconds
+    /** Entity IDs hidden from each phased player via EntitiesDestroyS2CPacket. */
+    private static final Map<UUID, Set<Integer>> hiddenEntityIds = new HashMap<>();
 
     public static void register() {
         registerBountyItemRestrictions();
-        // Harvey's Stick - Lightning on attack
+
+        // Ender Phase: block attacks on players and block damage while in phase
+        net.fabricmc.fabric.api.event.player.AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
+            if (isInEnderPhaseMode(sp.getUuid())) {
+                return ActionResult.FAIL; // cannot break blocks while in phase
+            }
+            return ActionResult.PASS;
+        });
+
+        // Harvey's Stick - Lightning on attack / Ender Phase - block attacks on players
 
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity)) return ActionResult.PASS;
+            if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
+
+            // Ender Phase: cannot attack other players while in phase
+            if (isInEnderPhaseMode(sp.getUuid()) && entity instanceof PlayerEntity) {
+                return ActionResult.FAIL;
+            }
 
             ItemStack held = player.getStackInHand(hand);
             if (isHarveysStick(held) && entity instanceof LivingEntity target) {
@@ -222,7 +240,9 @@ public class CustomItemHandler {
                     enderPhaseActiveUntil.remove(uuid);
                     enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
                     serverPlayer.removeStatusEffect(StatusEffects.INVISIBILITY);
+                    serverPlayer.removeStatusEffect(StatusEffects.DARKNESS);
                     serverPlayer.removeStatusEffect(StatusEffects.WITHER);
+                    hiddenEntityIds.remove(uuid);
                     serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode deactivated.")
                             .formatted(Formatting.DARK_PURPLE), true);
                     return ActionResult.CONSUME;
@@ -238,12 +258,13 @@ public class CustomItemHandler {
 
                 // Activate Ender Phase Mode
                 enderPhaseActiveUntil.put(uuid, now + ENDER_PHASE_DURATION_MS);
+                hiddenEntityIds.put(uuid, new HashSet<>());
                 // ambient=false, showParticles=false, showIcon=true
                 serverPlayer.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.INVISIBILITY, Integer.MAX_VALUE, 0, false, false, true));
-                // Brief blindness flash (purple tint) to signal mode activation; ambient=false, showParticles=true, showIcon=false
+                // Darkness effect gives a purple-ish vignette during phase
                 serverPlayer.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.BLINDNESS, 300, 3, false, true, false));
+                        StatusEffects.DARKNESS, Integer.MAX_VALUE, 0, false, false, true));
                 serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode ACTIVE — 15 seconds!")
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
                 return ActionResult.CONSUME;
@@ -292,6 +313,7 @@ public class CustomItemHandler {
         enderPhaseCooldowns.remove(uuid);
         enderPhaseActiveUntil.remove(uuid);
         helmetInteractionDebounce.remove(uuid);
+        hiddenEntityIds.remove(uuid);
         gavelCooldowns.remove(uuid);
         ultraOverclockedCooldowns.remove(uuid);
         berserkerHelmetActive.remove(uuid);
@@ -612,7 +634,9 @@ public class CustomItemHandler {
             if (enderPhaseActiveUntil.containsKey(uuid)) {
                 enderPhaseActiveUntil.remove(uuid);
                 player.removeStatusEffect(StatusEffects.INVISIBILITY);
+                player.removeStatusEffect(StatusEffects.DARKNESS);
                 player.removeStatusEffect(StatusEffects.WITHER);
+                hiddenEntityIds.remove(uuid);
                 enderPhaseCooldowns.put(uuid, System.currentTimeMillis() + ENDER_PHASE_COOLDOWN_MS);
             }
             return;
@@ -635,6 +659,8 @@ public class CustomItemHandler {
                 // Forcibly end phase after 30 extra seconds
                 enderPhaseActiveUntil.remove(uuid);
                 player.removeStatusEffect(StatusEffects.INVISIBILITY);
+                player.removeStatusEffect(StatusEffects.DARKNESS);
+                hiddenEntityIds.remove(uuid);
                 enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
                 player.sendMessage(Text.literal("⟡ Ender Phase Mode forcibly ended!")
                         .formatted(Formatting.DARK_RED, Formatting.BOLD), true);
@@ -656,6 +682,30 @@ public class CustomItemHandler {
             if (!player.hasStatusEffect(StatusEffects.INVISIBILITY)) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.INVISIBILITY, 60, 0, false, false, true));
+            }
+            // Ensure darkness is maintained for purple hue
+            if (!player.hasStatusEffect(StatusEffects.DARKNESS)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.DARKNESS, 60, 0, false, false, true));
+            }
+
+            // Hide all nearby entities (mobs and other players) from the phased player
+            if (!(player.getEntityWorld() instanceof ServerWorld serverWorld)) return;
+            Set<Integer> hidden = hiddenEntityIds.computeIfAbsent(uuid, k -> new HashSet<>());
+            it.unimi.dsi.fastutil.ints.IntArrayList toHide = new it.unimi.dsi.fastutil.ints.IntArrayList();
+            double px = player.getX(), py = player.getY(), pz = player.getZ();
+            net.minecraft.util.math.Box searchBox = new net.minecraft.util.math.Box(
+                    px - 64, py - 32, pz - 64, px + 64, py + 32, pz + 64);
+            for (Entity nearby : serverWorld.getOtherEntities(player, searchBox, e -> !e.isSpectator())) {
+                int eid = nearby.getId();
+                if (!hidden.contains(eid)) {
+                    toHide.add(eid);
+                    hidden.add(eid);
+                }
+            }
+            if (!toHide.isEmpty()) {
+                player.networkHandler.sendPacket(
+                        new net.minecraft.network.packet.s2c.play.EntitiesDestroyS2CPacket(toHide));
             }
         }
     }

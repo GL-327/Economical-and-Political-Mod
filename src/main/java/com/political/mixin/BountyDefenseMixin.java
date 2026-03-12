@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * Applies bounty-gear damage reduction when a player takes damage from a bounty boss.
  *
- * Defence model (additive stacking, capped at 100%):
+ * Defence model (additive stacking, capped at 95%):
  *   universalDef  — % reduction vs ALL bounty bosses (always active when worn/held)
  *   specificDef   — EXTRA % reduction vs the MATCHING boss type (stacks with universalDef)
- *   totalDef      = min(1.0, universalDef + specificDef)
+ *   totalDef      = min(0.95, universalDef + specificDef)
  *   finalDamage   = incomingDamage × (1 - totalDef)
  *
  * Crown of Greed: disables ALL bounty gear defence.
@@ -33,16 +33,14 @@ public class BountyDefenseMixin {
 
         // Only applies when a player is the one being hit
         if (!(self instanceof ServerPlayerEntity player)) return amount;
+
+        // Ender Phase Mode: cancel ALL damage (full invincibility)
+        if (com.political.CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
+            return 0.0f;
+        }
+
         if (source.getAttacker() == null) return amount;
         if (!(source.getAttacker() instanceof LivingEntity attacker)) return amount;
-
-        // Ender Phase Mode: cancel all damage except from Endermen
-        if (com.political.CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
-            boolean attackerIsEnderman = attacker instanceof net.minecraft.entity.mob.EndermanEntity;
-            if (!attackerIsEnderman) {
-                return 0.0f; // Fully block damage while in Ender Phase Mode
-            }
-        }
 
         // Must be a bounty boss attacker
         SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(attacker.getUuid());
@@ -110,23 +108,23 @@ public class BountyDefenseMixin {
 
         // ── Weapon (bounty swords / bow) ─────────────────────────────────
         if (SlayerItems.isUpgradedSlayerSword(weapon)) {
-            universalDef += 0.15f; // T2 sword: -15% vs all bosses
+            universalDef += 0.06f; // T2 sword: -6% vs all bosses
             SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(weapon);
             if (swordType != null && swordType == bossType) {
-                specificDef += 0.60f; // T2 sword: -60% extra vs matching boss
+                specificDef += 0.20f; // T2 sword: -20% extra vs matching boss
             }
         } else if (SlayerItems.isSlayerSword(weapon)) {
-            universalDef += 0.10f; // T1 sword: -10% vs all bosses
+            universalDef += 0.04f; // T1 sword: -4% vs all bosses
             SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(weapon);
             if (swordType != null && swordType == bossType) {
-                specificDef += 0.50f; // T1 sword: -50% extra vs matching boss
+                specificDef += 0.15f; // T1 sword: -15% extra vs matching boss
             }
         } else if (SlayerItems.isSkeletonBow(weapon)) {
-            universalDef += 0.10f; // Skeleton bow: -10% universal
+            universalDef += 0.04f; // Skeleton bow: -4% universal
         }
 
-        // ── Apply total (additive, no cap) ──────────────────────────────
-        float totalDef = universalDef + specificDef;
+        // ── Apply total (additive, capped at 95% as safety net) ─────────
+        float totalDef = Math.min(0.95f, universalDef + specificDef);
         if (totalDef <= 0) return amount;
         return amount * (1.0f - totalDef);
     }
