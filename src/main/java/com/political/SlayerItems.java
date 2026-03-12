@@ -1014,6 +1014,8 @@ public class SlayerItems {
     public static final double SPIDER_LEGS_ALL_REDUCTION       = 0.55;  // 55% vs all bosses
     public static final double SLIME_BOOTS_BOSS_REDUCTION      = 0.20;  // 20% vs slime boss
     public static final double SLIME_BOOTS_ALL_REDUCTION       = 0.55;  // 55% vs all bosses
+    public static final double VOIDWALKER_ALL_REDUCTION        = 0.10;  // 10% vs all bosses
+    public static final double VOIDWALKER_BOSS_REDUCTION       = 0.30;  // 30% extra vs Enderman boss
 
     public static ArmorStats getArmorStats(SlayerManager.SlayerType type, int tier) {
         return switch (type) {
@@ -1923,7 +1925,9 @@ public class SlayerItems {
         String armorName = getT1ArmorName(type);
 
         // Dye the leather
-        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getArmorColor(type)));
+        int color = getArmorColor(type);
+        int lighterColor = brightenColor(brightenColor(color)); // Double brighten for T1 = lighter than T2
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(lighterColor));
 
         // Set custom name
         stack.set(DataComponentTypes.CUSTOM_NAME,

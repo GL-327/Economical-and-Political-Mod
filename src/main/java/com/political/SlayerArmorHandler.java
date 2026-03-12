@@ -63,18 +63,14 @@ public class SlayerArmorHandler {
             else t1MatchingPieces++;
         }
 
-        // Full set bonus
-        if (t1MatchingPieces >= 4) {
+        // Full set bonus — only when ALL 4 pieces are the same tier
+        if (t1MatchingPieces == 4) {
             reduction += 0.15f; // T1 full set: +15%
         }
-        if (t2MatchingPieces >= 4) {
+        if (t2MatchingPieces == 4) {
             reduction += 0.25f; // T2 full set: +25%
         }
-
-        // Mixed set bonus (T1 + T2)
-        if (t1MatchingPieces + t2MatchingPieces >= 4 && t2MatchingPieces >= 1) {
-            reduction += 0.10f; // Hybrid bonus
-        }
+        // No mixed/hybrid set bonus — mixed sets do not grant a full set bonus
 
         // Cap at 80% for T2, 60% for T1 only
         float cap = t2MatchingPieces > 0 ? 0.80f : 0.60f;
