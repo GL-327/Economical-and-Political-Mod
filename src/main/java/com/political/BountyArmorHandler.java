@@ -68,14 +68,7 @@ public class BountyArmorHandler {
             }
         }
 
-        // Chestplate: T2 = Regeneration I (slow regen)
-        String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
-        if ("zombie_t2_chestplate".equals(chestId)) {
-            if (!player.hasStatusEffect(StatusEffects.REGENERATION)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.REGENERATION, 40, 0, true, false, false));
-            }
-        }
+        // Chestplate: T2 = +4 Hearts (applied via SlayerArmorHandler attributes)
 
         // Boots: T2 = Speed I when below 50% health
         String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
@@ -97,16 +90,6 @@ public class BountyArmorHandler {
     // =========================================================
 
     private static void tickSpiderStandardArmorEffects(ServerPlayerEntity player) {
-        // Helmet: T2 = Night Vision
-        String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
-        if ("spider_t2_helmet".equals(helmetId)) {
-            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) ||
-                    player.getStatusEffect(StatusEffects.NIGHT_VISION).getDuration() < 30) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
-            }
-        }
-
         // Chestplate: T1 = Weakness immunity | T2 = Weakness immunity
         String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
         if ("spider_t1_chestplate".equals(chestId) || "spider_t2_chestplate".equals(chestId)) {
@@ -115,7 +98,7 @@ public class BountyArmorHandler {
             }
         }
 
-        // Leggings: T1 = Poison immunity | T2 = Poison immunity + Speed II
+        // Leggings: T1 = Poison immunity | T2 = Poison immunity + Speed I
         String legsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.LEGS));
         if ("spider_t1_leggings".equals(legsId)) {
             if (player.hasStatusEffect(StatusEffects.POISON)) {
@@ -127,9 +110,9 @@ public class BountyArmorHandler {
                 player.removeStatusEffect(StatusEffects.POISON);
             }
             if (!player.hasStatusEffect(StatusEffects.SPEED) ||
-                    player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 1) {
+                    player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED, 40, 1, true, false, false));
+                        StatusEffects.SPEED, 40, 0, true, false, false));
             }
         }
     }

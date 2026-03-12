@@ -193,9 +193,6 @@ public class CustomItemHandler {
             if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
 
-            // Only intercept when main hand is empty
-            if (!serverPlayer.getMainHandStack().isEmpty()) return ActionResult.PASS;
-
             ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
             if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
 
@@ -661,11 +658,18 @@ public class CustomItemHandler {
             player.addStatusEffect(new StatusEffectInstance(
                     StatusEffects.WITHER, 60, witherAmplifier, false, true, true));
 
+            // Ensure darkness is maintained during wither overstay
+            if (!player.hasStatusEffect(StatusEffects.DARKNESS)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.DARKNESS, 60, 0, false, false, true));
+            }
+
             if (overstayMs > 30_000) {
                 // Forcibly end phase after 30 extra seconds
                 enderPhaseActiveUntil.remove(uuid);
                 player.removeStatusEffect(StatusEffects.INVISIBILITY);
                 player.removeStatusEffect(StatusEffects.DARKNESS);
+                player.removeStatusEffect(StatusEffects.WITHER);
                 hiddenEntityIds.remove(uuid);
                 enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
                 player.sendMessage(Text.literal("⟡ Ender Phase Mode forcibly ended!")

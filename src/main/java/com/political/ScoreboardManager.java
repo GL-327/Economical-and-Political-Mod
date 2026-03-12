@@ -601,18 +601,18 @@ public class ScoreboardManager {
             case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";
             case "zombie_t1_chestplate"   -> "+2 Hearts";
-            case "zombie_t2_chestplate"   -> "+4 Hearts §7| §aRegen I";
+            case "zombie_t2_chestplate"   -> "+4 Hearts";
             case "zombie_t1_leggings"     -> "-10% Undead Dmg";
             case "zombie_t2_leggings"     -> "-20% Undead Dmg";
             case "zombie_t1_boots"        -> "+10% KB Resist";
             case "zombie_t2_boots"        -> "+20% KB Resist §7| §aSpeed I (<50% HP)";
             // ── SPIDER ────────────────────────────────────────────────────────
             case "spider_t1_helmet"       -> "+5% Speed";
-            case "spider_t2_helmet"       -> "+10% Speed §7| §bNight Vision";
+            case "spider_t2_helmet"       -> "+10% Speed";
             case "spider_t1_chestplate"   -> "Weakness Immune";
             case "spider_t2_chestplate"   -> "Weakness Immune §7| Poison Thorns";
             case "spider_t1_leggings"     -> "Poison Immune";
-            case "spider_t2_leggings"     -> "Poison Immune §7| §aSpeed II";
+            case "spider_t2_leggings"     -> "Poison Immune §7| §aSpeed I";
             case "spider_t1_boots"        -> "+10% Speed";
             case "spider_t2_boots"        -> "+15% Speed §7| Safe Fall +3";
             // ── SKELETON ──────────────────────────────────────────────────────
@@ -628,7 +628,7 @@ public class ScoreboardManager {
             case "slime_t1_helmet"        -> "+2 Hearts";
             case "slime_t2_helmet"        -> "+4 Hearts §7| §aSaturation";
             case "slime_t1_chestplate"    -> "+4 Hearts";
-            case "slime_t2_chestplate"    -> "+6 Hearts §7| Absorption /30s";
+            case "slime_t2_chestplate"    -> "+4 Hearts §7| Absorption /30s";
             case "slime_t1_leggings"      -> "Jump Boost I";
             case "slime_t2_leggings"      -> "Jump Boost II";
             case "slime_t1_boots"         -> "No Fall Dmg";
@@ -641,14 +641,14 @@ public class ScoreboardManager {
             case "enderman_t1_leggings"   -> "+5% Speed";
             case "enderman_t2_leggings"   -> "+10% Speed";
             case "enderman_t1_boots"      -> "Safe Fall +3";
-            case "enderman_t2_boots"      -> "No Fall Dmg §7| +20% Speed";
+            case "enderman_t2_boots"      -> "No Fall Dmg §7| +10% Speed";
             // ── WARDEN ────────────────────────────────────────────────────────
             case "warden_t1_helmet"       -> "Darkness Immune";
             case "warden_t2_helmet"       -> "Darkness Immune §7| Vibration Sense";
             case "warden_t1_chestplate"   -> "+10% KB Resist";
             case "warden_t2_chestplate"   -> "+25% KB Resist §7| Sonic Pulse";
             case "warden_t1_leggings"     -> "+10% KB Resist";
-            case "warden_t2_leggings"     -> "+25% KB Resist §7| +6 Hearts";
+            case "warden_t2_leggings"     -> "+15% KB Resist §7| +4 Hearts";
             case "warden_t1_boots"        -> "Vibration Sense (8 blocks, 3s glow)";
             case "warden_t2_boots"        -> "+10% KB Resist";
             // ── PIGLIN ────────────────────────────────────────────────────────
@@ -659,7 +659,7 @@ public class ScoreboardManager {
             case "piglin_t1_leggings"     -> "+5% Speed";
             case "piglin_t2_leggings"     -> "+10% Speed";
             case "piglin_t1_boots"        -> "Fire Resist";
-            case "piglin_t2_boots"        -> "Fire Resist §7| +15% Speed";
+            case "piglin_t2_boots"        -> "Fire Resist §7| +10% Speed";
             default -> null;
         };
     }
