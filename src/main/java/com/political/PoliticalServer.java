@@ -501,6 +501,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				}
 			}
 
+			// Savings account: 5% interest per hour (high yield for the withdrawal cooldown tradeoff)
+			int savings = DataManager.getBankSavings(uuid);
+			if (savings > 0) {
+				int savingsInterest = (int) Math.floor(savings * 0.05);
+				if (savingsInterest > 0) {
+					DataManager.setBankSavings(uuid, savings + savingsInterest);
+				}
+			}
+
 			// Loans: apply each loan's individual interest rate
 			java.util.List<DataManager.LoanEntry> loans = DataManager.getLoans(uuid);
 			if (loans.isEmpty()) continue;
