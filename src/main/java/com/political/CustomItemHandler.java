@@ -147,10 +147,13 @@ public class CustomItemHandler {
             ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
             if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
 
-            // Only trigger when player right-clicks with empty hand to avoid
-            // conflicting with vanilla item use (e.g. eating, placing blocks)
-            ItemStack heldItem = player.getStackInHand(hand);
-            if (!heldItem.isEmpty()) return ActionResult.PASS;
+            // Check level requirement
+            if (!SlayerItems.canUseEnderPhaseHelmet(serverPlayer)) {
+                int req = SlayerItems.ENDER_PHASE_HELMET_LEVEL_REQ;
+                serverPlayer.sendMessage(
+                    Text.literal("⛔ Requires Enderman Bounty Level " + req + " to use!").formatted(Formatting.RED), true);
+                return ActionResult.PASS;
+            }
 
             long now = System.currentTimeMillis();
             UUID uuid = serverPlayer.getUuid();
