@@ -204,6 +204,80 @@ public class SlayerRecipes {
                 },
                 SlayerManager.SlayerType.WARDEN, 9
         ));
+        
+        // ===== BACKROOMS RECIPES =====
+        
+        // Almond Water
+        RECIPES.add(new Recipe(
+                "Almond Water",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("almond_water"),
+                new ItemStack[] {
+                        new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.SUGAR), new ItemStack(Items.GLASS_BOTTLE),
+                        new ItemStack(Items.AZURE_BLUET), new ItemStack(Items.WHEAT), new ItemStack(Items.GLASS_BOTTLE),
+                        ItemStack.EMPTY, new ItemStack(Items.SUGAR), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+        
+        // Energy Drink
+        RECIPES.add(new Recipe(
+                "Energy Drink",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("energy_drink"),
+                new ItemStack[] {
+                        new ItemStack(Items.SUGAR), new ItemStack(Items.REDSTONE), new ItemStack(Items.GLASS_BOTTLE),
+                        new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.SUGAR), new ItemStack(Items.GLASS_BOTTLE),
+                        ItemStack.EMPTY, new ItemStack(Items.REDSTONE), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+        
+        // Crawler Hide to Leather
+        RECIPES.add(new Recipe(
+                "Crawler Hide Processing",
+                new ItemStack(Items.LEATHER, 3),
+                new ItemStack[] {
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("crawler_hide"), new ItemStack(Items.WATER_BUCKET), ItemStack.EMPTY,
+                        ItemStack.EMPTY, new ItemStack(Items.FLINT_AND_STEEL), ItemStack.EMPTY,
+                        ItemStack.EMPTY, new ItemStack(Items.AIR), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+        
+        // Backrooms Iodine Block
+        RECIPES.add(new Recipe(
+                "Backrooms Iodine Block",
+                new ItemStack(Items.AMETHYST_BLOCK),
+                new ItemStack[] {
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine")
+                },
+                null, 0
+        ));
+        
+        // Memory Fragment to Experience Bottle
+        RECIPES.add(new Recipe(
+                "Memory Extraction",
+                new ItemStack(Items.EXPERIENCE_BOTTLE, 3),
+                new ItemStack[] {
+                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("memory_fragment"), ItemStack.EMPTY,
+                        new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.GLASS_BOTTLE),
+                        ItemStack.EMPTY, new ItemStack(Items.DIAMOND), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+        
+        // Reality Anchor to Compass
+        RECIPES.add(new Recipe(
+                "Reality Anchor Calibration",
+                new ItemStack(Items.COMPASS),
+                new ItemStack[] {
+                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("reality_anchor"), ItemStack.EMPTY,
+                        new ItemStack(Items.REDSTONE), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.REDSTONE),
+                        ItemStack.EMPTY, new ItemStack(Items.COPPER_INGOT), ItemStack.EMPTY
+                },
+                null, 0
+        ));
     }
 
     public static List<Recipe> getRecipes() {

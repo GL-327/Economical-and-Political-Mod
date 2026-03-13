@@ -13,6 +13,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import com.political.PoliticalServer;
 
 import java.util.Random;
@@ -54,7 +56,7 @@ public class BackroomsDimensionManager {
     /**
      * Teleport a player to a specific fracture.
      * fracture 1 = Poolrooms, 2 = Industrial, default = Backrooms (Level 0).
-     * Uses overworld simulation to avoid registry sync issues.
+     * Uses procedural generation in overworld to create authentic backrooms experience.
      */
     public static void teleportToFracture(ServerPlayerEntity player, int fracture) {
         MinecraftServer server = player.getEntityWorld().getServer();
@@ -71,34 +73,133 @@ public class BackroomsDimensionManager {
             default -> BACKROOMS_NAME;
         };
 
-        // Generate random coordinates far from spawn
+        // Generate coordinates for procedural backrooms area
         java.util.Random rng = new java.util.Random();
-        int x = rng.nextInt(20000) - 10000;
-        int z = rng.nextInt(20000) - 10000;
-        int y = 200; // High in the sky
+        int x = rng.nextInt(50000) - 25000; // Larger area for backrooms
+        int z = rng.nextInt(50000) - 25000;
+        int y = 55; // Inside the backrooms level
 
-        // Teleport to overworld with dimension-specific effects
+        // Teleport to overworld with procedural generation
         player.teleport(overworld, x, y, z,
             java.util.Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
         
         player.sendMessage(Text.literal("§6⟳ You are entering Fracture " + fracture + "..."), false);
-        player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(dimensionName) + " - simulated in overworld)"), false);
+        player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(dimensionName) + " - procedurally generated)"), false);
         player.sendMessage(Text.literal("§7Coordinates: " + x + ", " + y + ", " + z), false);
+        
+        // Generate immediate backrooms structure around player
+        generateImmediateBackrooms(overworld, x, y, z, fracture);
         
         // Apply dimension-specific effects
         switch (fracture) {
             case 1 -> { // Poolrooms - water effects
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6000, 0, true, false, false));
                 player.sendMessage(Text.literal("§bYou feel the weight of water..."), false);
+                generateImmediatePoolrooms(overworld, x, y, z);
             }
             case 2 -> { // Industrial - mining effects
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 3000, 0, true, false, false));
                 player.sendMessage(Text.literal("§8The industrial air fills your lungs..."), false);
+                generateImmediateIndustrial(overworld, x, y, z);
             }
             default -> { // Backrooms - confusion effects
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0, true, false, false));
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 2000, 0, true, false, false));
                 player.sendMessage(Text.literal("§8You slip through the cracks of reality..."), false);
+            }
+        }
+    }
+    
+    /**
+     * Generate immediate backrooms structure around player position
+     */
+    private static void generateImmediateBackrooms(ServerWorld world, int centerX, int centerY, int centerZ, int fracture) {
+        // Generate a 32x32 area around the player
+        for (int x = centerX - 16; x <= centerX + 16; x++) {
+            for (int z = centerZ - 16; z <= centerZ + 16; z++) {
+                for (int y = 50; y < 70; y++) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    generateBackroomsBlock(world, pos, x - centerX, z - centerZ, fracture);
+                }
+            }
+        }
+        
+        // Generate exit beacon far from player
+        int beaconX = centerX + 100;
+        int beaconZ = centerZ + 100;
+        com.political.backrooms.generator.BackroomsProceduralGenerator.generateExitBeacon(world, new BlockPos(beaconX, 68, beaconZ));
+    }
+    
+    /**
+     * Generate individual backrooms blocks
+     */
+    private static void generateBackroomsBlock(ServerWorld world, BlockPos pos, int relX, int relZ, int fracture) {
+        int roomX = Math.floorMod(relX + 8, 10);
+        int roomZ = Math.floorMod(relZ + 8, 10);
+        boolean isWall = roomX < 2 || roomX >= 8 || roomZ < 2 || roomZ >= 8;
+        
+        Block wallBlock = switch (fracture) {
+            case 1 -> Blocks.BLUE_CONCRETE; // Poolrooms
+            case 2 -> Blocks.STONE_BRICKS;  // Industrial
+            default -> Blocks.YELLOW_CONCRETE; // Backrooms
+        };
+        
+        Block floorBlock = switch (fracture) {
+            case 1 -> Blocks.LIGHT_BLUE_CONCRETE;
+            case 2 -> Blocks.COBBLESTONE;
+            default -> Blocks.LIGHT_GRAY_CONCRETE;
+        };
+        
+        if (pos.getY() == 50) {
+            world.setBlockState(pos, floorBlock.getDefaultState(), 3);
+        } else if (pos.getY() == 69) {
+            world.setBlockState(pos, wallBlock.getDefaultState(), 3);
+            // Add lights
+            if (!isWall && (roomX == 5 || roomZ == 5)) {
+                world.setBlockState(pos, Blocks.SEA_LANTERN.getDefaultState(), 3);
+            }
+        } else if (isWall) {
+            world.setBlockState(pos, wallBlock.getDefaultState(), 3);
+        } else {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+        }
+    }
+    
+    /**
+     * Generate poolrooms-specific features
+     */
+    private static void generateImmediatePoolrooms(ServerWorld world, int centerX, int centerY, int centerZ) {
+        // Add water pools in some rooms
+        java.util.Random rng = new java.util.Random(centerX + centerZ);
+        for (int x = centerX - 12; x <= centerX + 12; x += 10) {
+            for (int z = centerZ - 12; z <= centerZ + 12; z += 10) {
+                if (rng.nextInt(3) == 0) {
+                    // Create water pool
+                    for (int dx = 2; dx <= 7; dx++) {
+                        for (int dz = 2; dz <= 7; dz++) {
+                            BlockPos waterPos = new BlockPos(x + dx, 51, z + dz);
+                            world.setBlockState(waterPos, Blocks.WATER.getDefaultState(), 3);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Generate industrial-specific features
+     */
+    private static void generateImmediateIndustrial(ServerWorld world, int centerX, int centerY, int centerZ) {
+        // Add machinery and industrial elements
+        java.util.Random rng = new java.util.Random(centerX * centerZ);
+        for (int x = centerX - 12; x <= centerX + 12; x += 10) {
+            for (int z = centerZ - 12; z <= centerZ + 12; z += 10) {
+                if (rng.nextInt(3) == 0) {
+                    // Add industrial machinery
+                    BlockPos machinePos = new BlockPos(x + 5, 51, z + 5);
+                    world.setBlockState(machinePos, Blocks.FURNACE.getDefaultState(), 3);
+                    world.setBlockState(machinePos.up(), Blocks.HOPPER.getDefaultState(), 3);
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CustomItemsGui {
 
@@ -100,8 +101,21 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openSpecialWeaponsMenu(player))
                 .build());
 
+        // 🌀 Backrooms Items
+        gui.setSlot(15, new GuiElementBuilder(Items.END_STONE)
+                .setName(Text.literal("🌀 Backrooms Items").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Consumables & Food").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Materials & Tools").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Dimensional artifacts").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openBackroomsMenu(player))
+                .glow()
+                .build());
+
         // ✦ Materials
-        gui.setSlot(15, new GuiElementBuilder(Items.GOLD_NUGGET)
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("✦ Materials").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Chunks & Cores for all slayer types").formatted(Formatting.GRAY))
@@ -260,6 +274,21 @@ public class CustomItemsGui {
             items.add(SlayerItems.createSlayerBoots(SlayerManager.SlayerType.PIGLIN, tier));
         }
         openSubPage(player, "👑 Piglin Items", items, 0);
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // BACKROOMS ITEMS MENU
+    // ════════════════════════════════════════════════════════════
+
+    private static void openBackroomsMenu(ServerPlayerEntity player) {
+        List<ItemStack> items = new ArrayList<>();
+        
+        // Add all backrooms items from the manager
+        for (ItemStack item : com.political.backrooms.items.BackroomsItemsManager.getAllItems().values()) {
+            items.add(item);
+        }
+        
+        openSubPage(player, "🌀 Backrooms Items", items, 0);
     }
 
     // ════════════════════════════════════════════════════════════
