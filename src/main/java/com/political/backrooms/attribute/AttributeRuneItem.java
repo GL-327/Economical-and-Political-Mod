@@ -32,18 +32,28 @@ public class AttributeRuneItem extends Item {
         return attribute;
     }
 
-    /** Returns the ArmorAttribute stored in an ItemStack's NBT, or null if absent. */
+    /** Returns the ArmorAttribute stored in an ItemStack's NBT, or null if absent.
+     *  Falls back to the item's baked-in attribute when no NBT data is present
+     *  (e.g. items given via /give without explicit NBT). */
     public static ArmorAttribute getAttributeFromStack(ItemStack stack) {
+        // First, try reading from CUSTOM_DATA NBT (createRune() path)
         NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
-        if (data == null) return null;
-        NbtCompound nbt = data.copyNbt();
-        String name = nbt.getString(ATTRIBUTE_KEY, null);
-        if (name == null || name.isEmpty()) return null;
-        try {
-            return ArmorAttribute.valueOf(name);
-        } catch (IllegalArgumentException e) {
-            return null;
+        if (data != null) {
+            NbtCompound nbt = data.copyNbt();
+            String name = nbt.getString(ATTRIBUTE_KEY, null);
+            if (name != null && !name.isEmpty()) {
+                try {
+                    return ArmorAttribute.valueOf(name);
+                } catch (IllegalArgumentException ignored) {
+                    // fall through to item-class attribute
+                }
+            }
         }
+        // Fall back to the attribute baked into the item type itself
+        if (stack.getItem() instanceof AttributeRuneItem rune) {
+            return rune.getAttribute();
+        }
+        return null;
     }
 
     @Override
