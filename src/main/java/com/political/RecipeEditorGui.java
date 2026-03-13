@@ -1,9 +1,11 @@
 package com.political;
 
+import com.political.backrooms.BackroomsItems;
 import eu.pb4.sgui.api.ClickType;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -44,7 +46,13 @@ public class RecipeEditorGui {
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
-        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY);
+        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY),
+        BR_SPECIAL   ("🔦 Backrooms — Special",             Items.ENDER_EYE,          Formatting.DARK_PURPLE),
+        BR_WEAPONS   ("🗡 Backrooms — Weapons",             Items.IRON_SWORD,         Formatting.RED),
+        BR_TOOLS     ("⛏ Backrooms — Tools",               Items.IRON_PICKAXE,       Formatting.DARK_RED),
+        BR_FOOD      ("🍖 Backrooms — Food",                Items.COOKED_BEEF,        Formatting.YELLOW),
+        BR_MATERIALS ("📦 Backrooms — Materials",           Items.BONE,               Formatting.DARK_GRAY),
+        BR_RUNES     ("✨ Backrooms — Armor Runes",         Items.NAME_TAG,           Formatting.LIGHT_PURPLE);
 
         final String label;
         final net.minecraft.item.Item icon;
@@ -114,8 +122,74 @@ public class RecipeEditorGui {
                     items.add(SlayerItems.createChunk(t));
                 }
             }
+            case BR_SPECIAL -> {
+                items.add(brItem(BackroomsItems.INFUSED_ECHO_SHARD, "Infused Echo Shard",  Formatting.AQUA));
+                items.add(brItem(BackroomsItems.ALMOND_WATER,       "Almond Water",         Formatting.WHITE));
+                items.add(brItem(BackroomsItems.ENERGY_DRINK,       "Energy Drink",         Formatting.GREEN));
+                items.add(brItem(BackroomsItems.DETERRENT_TORCH,    "Deterrent Torch",      Formatting.YELLOW));
+            }
+            case BR_WEAPONS -> {
+                items.add(brItem(BackroomsItems.BONE_SHIV,         "Bone Shiv",         Formatting.GRAY));
+                items.add(brItem(BackroomsItems.CRAWLER_SPIKE,     "Crawler Spike",     Formatting.DARK_GREEN));
+                items.add(brItem(BackroomsItems.VOID_BLADE,        "Void Blade",        Formatting.DARK_PURPLE));
+                items.add(brItem(BackroomsItems.FACELESS_MACE,     "Faceless Mace",     Formatting.WHITE));
+                items.add(brItem(BackroomsItems.SKULK_REAPER,      "Skulk Reaper",      Formatting.DARK_AQUA));
+                items.add(brItem(BackroomsItems.ARANEA_FANG_DAGGER,"Aranea Fang Dagger",Formatting.GREEN));
+                items.add(brItem(BackroomsItems.ECHO_SCYTHE,       "Echo Scythe",       Formatting.AQUA));
+            }
+            case BR_TOOLS -> {
+                items.add(brItem(BackroomsItems.VOID_PICKAXE, "Void Pickaxe", Formatting.DARK_PURPLE));
+                items.add(brItem(BackroomsItems.SKULK_DRILL,  "Skulk Drill",  Formatting.DARK_AQUA));
+                items.add(brItem(BackroomsItems.ECHO_AXE,     "Echo Axe",     Formatting.AQUA));
+            }
+            case BR_FOOD -> {
+                items.add(brItem(BackroomsItems.RAW_CRAWLER_MEAT,   "Raw Crawler Meat",   Formatting.RED));
+                items.add(brItem(BackroomsItems.COOKED_CRAWLER_MEAT,"Cooked Crawler Meat",Formatting.GOLD));
+                items.add(brItem(BackroomsItems.RAW_HOUND_MEAT,     "Raw Hound Meat",     Formatting.RED));
+                items.add(brItem(BackroomsItems.COOKED_HOUND_MEAT,  "Cooked Hound Meat",  Formatting.GOLD));
+                items.add(brItem(BackroomsItems.VOID_JERKY,         "Void Jerky",         Formatting.DARK_GRAY));
+                items.add(brItem(BackroomsItems.SKULK_STEW,         "Skulk Stew",         Formatting.DARK_AQUA));
+            }
+            case BR_MATERIALS -> {
+                items.add(brItem(BackroomsItems.CRAWLER_HIDE,   "Crawler Hide",   Formatting.DARK_GREEN));
+                items.add(brItem(BackroomsItems.HOUND_PELT,     "Hound Pelt",     Formatting.YELLOW));
+                items.add(brItem(BackroomsItems.VOID_ESSENCE,   "Void Essence",   Formatting.DARK_PURPLE));
+                items.add(brItem(BackroomsItems.SKULK_FRAGMENT, "Skulk Fragment", Formatting.DARK_AQUA));
+                items.add(brItem(BackroomsItems.ECHO_RESIDUE,   "Echo Residue",   Formatting.AQUA));
+                items.add(brItem(BackroomsItems.WARDEN_BONE,    "Warden Bone",    Formatting.DARK_GRAY));
+                items.add(brItem(BackroomsItems.TATTERED_CLOTH, "Tattered Cloth", Formatting.GRAY));
+                items.add(brItem(BackroomsItems.WRETCH_CLAWS,   "Wretch Claws",   Formatting.RED));
+                items.add(brItem(BackroomsItems.WRETCH_EYE,     "Wretch Eye",     Formatting.LIGHT_PURPLE));
+                items.add(brItem(BackroomsItems.HOUND_FANG,     "Hound Fang",     Formatting.YELLOW));
+            }
+            case BR_RUNES -> {
+                items.add(brItem(BackroomsItems.RUNE_PYROMANIAC,    "Rune: Pyromaniac",      Formatting.RED));
+                items.add(brItem(BackroomsItems.RUNE_BERSERKERS_RAGE,"Rune: Berserker's Rage",Formatting.DARK_RED));
+                items.add(brItem(BackroomsItems.RUNE_NIGHTSTALKER,  "Rune: Nightstalker",    Formatting.DARK_GRAY));
+                items.add(brItem(BackroomsItems.RUNE_HEAVYWEIGHT,   "Rune: Heavyweight",     Formatting.GRAY));
+                items.add(brItem(BackroomsItems.RUNE_VAMPIRIC,      "Rune: Vampiric",        Formatting.DARK_PURPLE));
+                items.add(brItem(BackroomsItems.RUNE_ECHO_WALKER,   "Rune: Echo Walker",     Formatting.AQUA));
+                items.add(brItem(BackroomsItems.RUNE_SKULK_INFUSED, "Rune: Skulk Infused",   Formatting.DARK_AQUA));
+                items.add(brItem(BackroomsItems.RUNE_FEATHERWEIGHT, "Rune: Featherweight",   Formatting.WHITE));
+                items.add(brItem(BackroomsItems.RUNE_THORNED,       "Rune: Thorned",         Formatting.GREEN));
+                items.add(brItem(BackroomsItems.RUNE_GLUTTON,       "Rune: Glutton",         Formatting.GOLD));
+            }
         }
         return items;
+    }
+
+    /**
+     * Creates a labelled {@link ItemStack} for a Backrooms item with a human-readable
+     * display name and a stable {@code custom_item_id} so recipes can be matched.
+     * The id is derived from the item's registry path, e.g. {@code "politicalserver:bone_shiv"}.
+     */
+    private static ItemStack brItem(Item item, String displayName, Formatting colour) {
+        ItemStack stack = new ItemStack(item);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(displayName).formatted(colour));
+        // Use the registry path as the stable id (e.g. "politicalserver:bone_shiv")
+        net.minecraft.util.Identifier id = net.minecraft.registry.Registries.ITEM.getId(item);
+        SlayerItems.setCustomItemId(stack, id.toString());
+        return stack;
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -215,16 +289,33 @@ public class RecipeEditorGui {
 
             final ItemStack finalItem = item;
             final SlayerRecipes.Recipe finalRecipe = existingRecipe;
+            final String finalRecipeName = existingRecipe != null ? existingRecipe.name : null;
+            final boolean finalHasRecipe = hasRecipe;
+            final boolean recipeEnabled = finalRecipeName != null && RecipeConfigManager.isRecipeEnabled(finalRecipeName);
 
-            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+            GuiElementBuilder elem = new GuiElementBuilder(item.getItem())
                     .setName(displayName != null ? displayName
                             : Text.literal("§e" + (customId != null ? customId : "Unknown")))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(hasRecipe
-                            ? Text.literal("§a✔ Has recipe — click to edit")
-                            : Text.literal("§e➕ No recipe — click to create"))
-                    .setCallback((i, t, a) -> openRecipeEditor(player, finalItem, finalRecipe, cat))
-                    .build());
+                    .addLoreLine(Text.literal(""));
+            if (finalHasRecipe) {
+                elem.addLoreLine(recipeEnabled
+                        ? Text.literal("§a✔ Recipe ENABLED")
+                        : Text.literal("§c✘ Recipe DISABLED"));
+                elem.addLoreLine(Text.literal("§7Left-click: edit  |  Right-click: toggle on/off"));
+            } else {
+                elem.addLoreLine(Text.literal("§e➕ No recipe — click to create"));
+            }
+            elem.setCallback((i, t, a) -> {
+                if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
+                    boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
+                    String status = nowEnabled ? "§aENABLED" : "§cDISABLED";
+                    player.sendMessage(Text.literal("Recipe '" + finalRecipeName + "' is now " + status), false);
+                    openCategoryPage(player, cat, clampedPage);
+                } else {
+                    openRecipeEditor(player, finalItem, finalRecipe, cat);
+                }
+            });
+            gui.setSlot(slot, elem.build());
             shown++;
         }
 

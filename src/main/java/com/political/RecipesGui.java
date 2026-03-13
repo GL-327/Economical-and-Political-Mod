@@ -1,8 +1,12 @@
 package com.political;
 
+import com.political.backrooms.BackroomsItems;
+import com.political.backrooms.attribute.ArmorAttribute;
+import com.political.backrooms.attribute.AttributeRuneItem;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -204,6 +208,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("ONLY from Underground Auctions!").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click to view HPEBM upgrades!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
+
+        gui.setSlot(32, new GuiElementBuilder(Items.NAME_TAG)
+                .setName(Text.literal("✨ Backrooms — Armor Runes").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft attribute runes for your armor!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click armor while holding a rune to apply it.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openRuneRecipes(player)).build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED))
@@ -877,5 +889,82 @@ public class RecipesGui {
         openRecipePage(player, pageTitle,
                 Text.literal("👑 Crown of Greed Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
                 grid, result, () -> openMainMenu(player));
+    }
+
+    // ============================================================
+    // ARMOR RUNE RECIPES
+    // ============================================================
+
+    /** Opens a list of all armor runes and their crafting recipes. */
+    public static void openRuneRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✨ Armor Rune Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NAME_TAG)
+                .setName(Text.literal("✨ Armor Rune Recipes").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Right-click armor while holding a rune to apply it.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Only 1 rune per armor piece, and the slot must match!").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Rune entries: [item, display name, colour, slot desc]
+        Object[][] runes = {
+            { BackroomsItems.RUNE_PYROMANIAC,     ArmorAttribute.PYROMANIAC,     "Pyromaniac",     Formatting.RED,          "Chestplate" },
+            { BackroomsItems.RUNE_BERSERKERS_RAGE,ArmorAttribute.BERSERKERS_RAGE,"Berserker's Rage",Formatting.DARK_RED,    "Chestplate" },
+            { BackroomsItems.RUNE_NIGHTSTALKER,   ArmorAttribute.NIGHTSTALKER,   "Nightstalker",   Formatting.DARK_GRAY,    "Leggings"   },
+            { BackroomsItems.RUNE_HEAVYWEIGHT,    ArmorAttribute.HEAVYWEIGHT,    "Heavyweight",    Formatting.GRAY,         "Leggings"   },
+            { BackroomsItems.RUNE_VAMPIRIC,        ArmorAttribute.VAMPIRIC,       "Vampiric",       Formatting.DARK_PURPLE,  "Chestplate" },
+            { BackroomsItems.RUNE_ECHO_WALKER,    ArmorAttribute.ECHO_WALKER,    "Echo Walker",    Formatting.AQUA,         "Boots"      },
+            { BackroomsItems.RUNE_SKULK_INFUSED,  ArmorAttribute.SKULK_INFUSED,  "Skulk Infused",  Formatting.DARK_AQUA,    "Helmet"     },
+            { BackroomsItems.RUNE_FEATHERWEIGHT,  ArmorAttribute.FEATHERWEIGHT,  "Featherweight",  Formatting.WHITE,        "Boots"      },
+            { BackroomsItems.RUNE_THORNED,         ArmorAttribute.THORNED,        "Thorned",        Formatting.GREEN,        "Chestplate" },
+            { BackroomsItems.RUNE_GLUTTON,         ArmorAttribute.GLUTTON,        "Glutton",        Formatting.GOLD,         "Helmet"     },
+        };
+
+        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30, 38};
+        for (int i = 0; i < runes.length; i++) {
+            Item runeItem  = (Item) runes[i][0];
+            ArmorAttribute attr   = (ArmorAttribute) runes[i][1];
+            String name    = (String) runes[i][2];
+            Formatting color = (Formatting) runes[i][3];
+            String slotDesc = (String) runes[i][4];
+
+            ItemStack stack = AttributeRuneItem.createRune(runeItem, attr);
+            gui.setSlot(slots[i], new GuiElementBuilder(runeItem)
+                    .setName(Text.literal("✦ " + name + " Rune").formatted(color))
+                    .addLoreLine(Text.literal("§7Applies to: §e" + slotDesc))
+                    .addLoreLine(Text.literal("§7Click to see crafting recipe!").formatted(Formatting.GREEN))
+                    .setCallback((idx2, t, a) -> openSingleRuneRecipe(player, runeItem, attr, name, color, slotDesc))
+                    .build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx2, t, a) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    /** Shows the crafting recipe for a single rune. */
+    private static void openSingleRuneRecipe(ServerPlayerEntity player, Item runeItem,
+                                              ArmorAttribute attr, String name, Formatting color, String slotDesc) {
+        ItemStack result = AttributeRuneItem.createRune(runeItem, attr);
+        // Set the custom_item_id so tryOpenCustomRecipe can match it
+        net.minecraft.util.Identifier regId = net.minecraft.registry.Registries.ITEM.getId(runeItem);
+        SlayerItems.setCustomItemId(result, regId.toString());
+
+        String pageTitle = "✨ " + name + " Rune Recipe";
+
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openRuneRecipes(player))) return;
+
+        // No custom recipe set — show placeholder informing the admin to use /setrecipe
+        openRecipePage(player, pageTitle,
+                Text.literal("✦ " + name + " Rune").formatted(color),
+                null, result,
+                () -> openRuneRecipes(player));
     }
 }

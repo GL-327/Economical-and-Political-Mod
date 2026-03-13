@@ -38,6 +38,7 @@ public class BountyCraftingHandler {
 
         // ─── Check custom recipes from RecipeConfigManager first ───────────
         for (SlayerRecipes.Recipe customRecipe : RecipeConfigManager.getCustomRecipes()) {
+            if (!RecipeConfigManager.isRecipeEnabled(customRecipe.name)) continue;
             if (matchesCustomRecipeShapeless(grid, customRecipe)) {
                 int reqLevel = customRecipe.requiredLevel;
                 SlayerManager.SlayerType reqType = customRecipe.requiredSlayer;
