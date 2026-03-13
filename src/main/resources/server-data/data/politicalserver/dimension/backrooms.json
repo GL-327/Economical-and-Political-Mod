@@ -1,7 +1,0 @@
-{
-  "type": "politicalserver:backrooms_type",
-  "generator": {
-    "type": "politicalserver:backrooms",
-    "biome": "politicalserver:backrooms_biome"
-  }
-}

@@ -59,18 +59,17 @@ public class CommandRegistry {
         registerIntercom(dispatcher);
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
-        registerCustomMob(dispatcher);
         registerModHelp(dispatcher);
         registerTakeLeadership(dispatcher);
         registerSpawnProtection(dispatcher);
         com.political.backrooms.command.MfluxCommand.register(dispatcher);
 
-        // /overworld — admin command to return to the overworld from backrooms dimensions
+        // /overworld — admin command to return to the overworld from Fracture 3
         dispatcher.register(CommandManager.literal("overworld")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    com.political.backrooms.BackroomsDimensionManager.teleportToOverworld(player);
+                    com.political.backrooms.fracture3.Fracture3DimensionManager.teleportToOverworld(player);
                     return 1;
                 })
         );
@@ -1759,50 +1758,7 @@ public class CommandRegistry {
         );
     }
 
-    // ============================================================
-    // CUSTOM MOB COMMANDS
-    // /custommob spawn <typeId>  (operator-only)
-    // /custommob list            (operator-only)
-    // ============================================================
-    private static void registerCustomMob(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("custommob")
-                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
-                .then(CommandManager.literal("spawn")
-                        .then(CommandManager.argument("type", com.mojang.brigadier.arguments.StringArgumentType.word())
-                                .suggests((ctx, builder) -> {
-                                    for (String id : CustomMobRegistry.getAllIds()) {
-                                        builder.suggest(id);
-                                    }
-                                    return builder.buildFuture();
-                                })
-                                .executes(ctx -> {
-                                    ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                                    String typeId = com.mojang.brigadier.arguments.StringArgumentType.getString(ctx, "type");
-                                    net.minecraft.util.math.BlockPos pos = player.getBlockPos().up();
-                                    CustomMobManager.spawnMob(
-                                            (ServerWorld) player.getEntityWorld(), typeId, pos, player);
-                                    return 1;
-                                })
-                        )
-                )
-                .then(CommandManager.literal("list")
-                        .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                            Set<String> ids = CustomMobRegistry.getAllIds();
-                            if (ids.isEmpty()) {
-                                player.sendMessage(Text.literal("No custom mob types registered.")
-                                        .formatted(Formatting.GRAY), false);
-                            } else {
-                                player.sendMessage(Text.literal("§6Custom Mob Types (§f" + ids.size() + "§6):"), false);
-                                for (String id : ids) {
-                                    player.sendMessage(Text.literal("  §7- §f" + id), false);
-                                }
-                            }
-                            return 1;
-                        })
-                )
-        );
-    }
+    // Custom mob commands removed - no longer needed
 
     private static void registerModHelp(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("modhelp")

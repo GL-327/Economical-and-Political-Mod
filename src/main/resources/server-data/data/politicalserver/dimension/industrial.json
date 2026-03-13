@@ -1,7 +1,0 @@
-{
-  "type": "politicalserver:industrial_type",
-  "generator": {
-    "type": "politicalserver:industrial",
-    "biome": "politicalserver:industrial_biome"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "type": "politicalserver:poolrooms_type",
-  "generator": {
-    "type": "politicalserver:poolrooms",
-    "biome": "politicalserver:poolrooms_biome"
-  }
-}

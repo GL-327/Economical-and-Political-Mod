@@ -6,6 +6,7 @@ import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
 import com.political.PoliticalServer;
 
 import java.util.ArrayList;
@@ -184,17 +185,19 @@ public class BackroomsItemsManager {
         BackroomsItemDefinition definition = new BackroomsItemDefinition(id, name, description, baseItem);
         ITEMS.put(id, definition);
         
-        // Create ItemStack
+        // Create ItemStack with detailed lore
         ItemStack stack = new ItemStack(baseItem);
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.YELLOW));
+        
+        // Build detailed lore
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal(description).formatted(Formatting.GRAY));
+        lore.add(Text.literal(description.replace("§", "").replaceAll("\\d", ""))
+                .formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("§7Backrooms Item"));
-        // Skip lore for now to avoid component issues
-        // Simplified - store item ID in custom name for now
-        // TODO: Implement proper NBT storage when API is figured out
+        lore.add(Text.literal("「Fracture Relic」").formatted(Formatting.DARK_AQUA));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         
         ITEM_STACKS.put(id, stack);
     }

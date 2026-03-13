@@ -61,14 +61,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
-		// Enable dimension functionality with server-side only approach
-		com.political.backrooms.BackroomsDimensionManager.registerCodecs();
+		// Register Fracture 3 dimension codecs
+		com.political.backrooms.fracture3.Fracture3Registry.register();
 		BountyCraftingHandler.register();
 		BeamCraftingHandler.register();
-		CustomMobRegistry.registerAll();
-		com.political.backrooms.BackroomsMobs.registerAll();
-		// BackroomsItemsManager uses static initialization - no registration needed
-		com.political.backrooms.inventory.BackroomsSpawnManager.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			// Check for any beam weapon (including Ultra Overclocked)

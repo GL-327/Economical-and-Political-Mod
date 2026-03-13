@@ -156,10 +156,8 @@ public class BackroomsDimensionManager {
             }
         }
         
-        // Generate exit beacon far from player
-        int beaconX = centerX + 100;
-        int beaconZ = centerZ + 100;
-        com.political.backrooms.generator.BackroomsProceduralGenerator.generateExitBeacon(world, new BlockPos(beaconX, 68, beaconZ));
+        // Generate exit beacon far from player - removed (old generator deleted)
+        // Exit now handled by Fracture3ChunkGenerator
     }
     
     /**
@@ -288,16 +286,11 @@ public class BackroomsDimensionManager {
     /**
      * Returns the world position of the exit beacon's top block in the Backrooms dimension.
      * This is the block players must stand on to escape.
+     * Now uses Fracture3 spawn position.
      */
     public static BlockPos getExitBeaconPos() {
-        int wx = EXIT_CHUNK_X * 16 + 8; // centre of the exit chunk
-        int wz = EXIT_CHUNK_Z * 16 + 8;
-        return new BlockPos(wx, BackroomsChunkGenerator.EXIT_BEACON_Y, wz);
+        return com.political.backrooms.fracture3.Fracture3DimensionManager.SPAWN_POS;
     }
-
-    /** Chunk coordinate constants mirrored from the chunk generator for easy access. */
-    private static final int EXIT_CHUNK_X = BackroomsChunkGenerator.EXIT_CHUNK_X;
-    private static final int EXIT_CHUNK_Z = BackroomsChunkGenerator.EXIT_CHUNK_Z;
 
     /**
      * Returns true when {@code pos} is at or within 1 block horizontally of the
@@ -315,23 +308,7 @@ public class BackroomsDimensionManager {
      * Call this when the player activates the exit beacon.
      */
     public static void escapeBackrooms(ServerPlayerEntity player) {
-        var server = player.getEntityWorld().getServer();
-        if (server == null) return;
-        
-        ServerWorld overworld = server.getOverworld();
-        if (overworld == null) {
-            player.sendMessage(Text.literal("§cCannot return to overworld!"), false);
-            return;
-        }
-        
-        // Get spawn point - use world spawn or (0,100,0) as fallback
-        BlockPos spawnPos = new BlockPos(0, 100, 0);
-        
-        // Teleport to overworld spawn
-        player.teleport(overworld, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
-            java.util.Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
-        
-        player.sendMessage(Text.literal("§a✦ You have escaped the Backrooms."), false);
+        com.political.backrooms.fracture3.Fracture3DimensionManager.teleportToOverworld(player);
         
         // Remove backrooms effects
         player.removeStatusEffect(StatusEffects.BLINDNESS);
@@ -339,40 +316,23 @@ public class BackroomsDimensionManager {
     }
 
     /**
-     * Register the three chunk-generator MapCodecs so Minecraft can deserialize
-     * the dimension JSON files that reference "politicalserver:backrooms" etc.
-     * Call this during mod initialisation (before the server loads worlds).
-     * ENABLED - Registering codecs for proper dimension support
+     * Register the chunk-generator MapCodecs - now handled by Fracture3Registry
      */
     public static void registerCodecs() {
-        // Register chunk generator codecs for dimension support
-        try {
-            net.minecraft.registry.Registry.register(
-                net.minecraft.registry.Registries.CHUNK_GENERATOR,
-                Identifier.of("politicalserver", "backrooms"),
-                BackroomsChunkGenerator.CODEC
-            );
-            PoliticalServer.LOGGER.info("Registered Backrooms chunk generator codec");
-        } catch (Exception e) {
-            PoliticalServer.LOGGER.error("Failed to register Backrooms codec: " + e.getMessage());
-        }
+        // Codec registration moved to Fracture3Registry
     }
     
     /**
      * Teleport player from any backrooms dimension to overworld
      */
     public static void teleportToOverworld(ServerPlayerEntity player) {
-        if (!isInAnyBackrooms(player)) {
-            player.sendMessage(Text.literal("§cYou are not in the Backrooms!"), false);
-            return;
-        }
-        escapeBackrooms(player);
+        com.political.backrooms.fracture3.Fracture3DimensionManager.teleportToOverworld(player);
     }
     
     /**
      * Check if player is in any backrooms dimension
      */
     public static boolean isInAnyBackrooms(ServerPlayerEntity player) {
-        return isBackroomsDimension((ServerWorld) player.getEntityWorld());
+        return com.political.backrooms.fracture3.Fracture3DimensionManager.isInFracture3(player);
     }
 }

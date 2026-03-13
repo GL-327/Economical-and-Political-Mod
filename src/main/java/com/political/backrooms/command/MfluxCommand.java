@@ -2,9 +2,7 @@ package com.political.backrooms.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.political.backrooms.BackroomsDimensionManager;
-import com.political.backrooms.testing.BackroomsTestSuite;
-import com.political.backrooms.verification.BackroomsVerificationSuite;
+import com.political.backrooms.fracture3.Fracture3DimensionManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -17,13 +15,12 @@ public class MfluxCommand {
         dispatcher.register(CommandManager.literal("mflux")
             .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
             .then(CommandManager.literal("fracture")
-                .then(CommandManager.argument("number", IntegerArgumentType.integer(1, 3))
+                .then(CommandManager.argument("number", IntegerArgumentType.integer(3, 3))
                     .executes(ctx -> {
                         ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                        int fracture = IntegerArgumentType.getInteger(ctx, "number");
-                        BackroomsDimensionManager.teleportToFracture(player, fracture);
+                        Fracture3DimensionManager.teleportToFracture3(player);
                         ctx.getSource().sendFeedback(() ->
-                            Text.literal("Teleporting to Fracture " + fracture + "...")
+                            Text.literal("Teleporting to Fracture 3...")
                                 .formatted(Formatting.GOLD),
                             true);
                         return 1;
@@ -32,40 +29,14 @@ public class MfluxCommand {
             )
         );
         
-        // Add test commands
-        dispatcher.register(CommandManager.literal("backrooms-test")
+        // Direct command to enter Fracture 3
+        dispatcher.register(CommandManager.literal("fracture3")
             .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
             .executes(ctx -> {
                 ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                BackroomsTestSuite.runFullTestSuite(player);
+                Fracture3DimensionManager.teleportToFracture3(player);
                 ctx.getSource().sendFeedback(() ->
-                    Text.literal("Backrooms test suite completed!")
-                        .formatted(Formatting.GREEN),
-                    true);
-                return 1;
-            })
-        );
-        
-        dispatcher.register(CommandManager.literal("backrooms-health")
-            .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
-            .executes(ctx -> {
-                ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                BackroomsTestSuite.quickHealthCheck(player);
-                ctx.getSource().sendFeedback(() ->
-                    Text.literal("Health check completed!")
-                        .formatted(Formatting.GREEN),
-                    true);
-                return 1;
-            })
-        );
-        
-        dispatcher.register(CommandManager.literal("backrooms-verify")
-            .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
-            .executes(ctx -> {
-                ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                BackroomsVerificationSuite.runCompleteVerification(player);
-                ctx.getSource().sendFeedback(() ->
-                    Text.literal("Comprehensive verification completed!")
+                    Text.literal("Teleporting to Fracture 3...")
                         .formatted(Formatting.GOLD),
                     true);
                 return 1;
