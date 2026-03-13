@@ -34,11 +34,11 @@ public class BackroomsItemsManager {
         
         // SECTION 1: CONSUMABLES
         addItem("infused_echo_shard", "Infused Echo Shard", 
-            "§7Mystical shard infused with backrooms energy", Items.AMETHYST_SHARD);
+            "§7Projectile that creates blue explosion to stun enemies", Items.AMETHYST_SHARD);
         addItem("almond_water", "Almond Water", 
-            "§bPure water with almond essence", Items.POTION);
+            "§bGives Saturation III for 25 seconds", Items.POTION);
         addItem("energy_drink", "Energy Drink", 
-            "§eHigh-caffeine energy beverage", Items.POTION);
+            "§eGives Speed II and Saturation II for 25 seconds", Items.POTION);
         addItem("liquid_pain", "Liquid Pain", 
             "§cDangerous concoction of suffering", Items.POTION);
         addItem("memory_juice", "Memory Juice", 
@@ -149,6 +149,8 @@ public class BackroomsItemsManager {
             "§eDevice that manipulates time", Items.CLOCK);
         addItem("memory_bank", "Memory Bank", 
             "§6Stores memories safely", Items.ENDER_PEARL);
+        addItem("special_torch", "Special Torch", 
+            "§aBright light that deters light-sensitive enemies", Items.TORCH);
         
         PoliticalServer.LOGGER.info("Loaded " + ITEMS.size() + " backrooms items");
     }
