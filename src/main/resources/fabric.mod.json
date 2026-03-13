@@ -9,6 +9,11 @@
 	"license": "MIT",
 	"icon": "assets/politicalserver/icon.png",
 	"environment": "server",
+	"custom": {
+		"fabric:registry_sync": {
+			"skip": true
+		}
+	},
 	"entrypoints": {
 		"server": ["com.political.PoliticalServer"]
 	},

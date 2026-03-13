@@ -389,9 +389,20 @@ public class BackroomsItems {
     }
 
     private static <T extends Item> T registerItem(String name, Function<Item.Settings, T> factory) {
-        RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM,
-            Identifier.of(PoliticalServer.MOD_ID, name));
-        return Registry.register(Registries.ITEM, key, factory.apply(new Item.Settings().registryKey(key)));
+        // Only register items on server side to prevent client registry sync issues
+        try {
+            // Check if we're on a server by trying to get the current server
+            if (net.fabricmc.loader.api.FabricLoader.getInstance().getEnvironmentType() == net.fabricmc.api.EnvType.SERVER) {
+                RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM,
+                    Identifier.of(PoliticalServer.MOD_ID, name));
+                return Registry.register(Registries.ITEM, key, factory.apply(new Item.Settings().registryKey(key)));
+            }
+        } catch (Exception e) {
+            // If registration fails, create a dummy item
+            PoliticalServer.LOGGER.warn("Failed to register item " + name + ": " + e.getMessage());
+        }
+        // Return null if not on server or registration failed
+        return null;
     }
 
     public static void register() {

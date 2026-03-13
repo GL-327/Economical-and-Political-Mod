@@ -135,17 +135,20 @@ public class BackroomsDimensionManager {
      * Call this during mod initialisation (before the server loads worlds).
      */
     public static void registerCodecs() {
-        Registry.register(
-            Registries.CHUNK_GENERATOR,
-            Identifier.of(PoliticalServer.MOD_ID, "backrooms"),
-            BackroomsChunkGenerator.CODEC);
-        Registry.register(
-            Registries.CHUNK_GENERATOR,
-            Identifier.of(PoliticalServer.MOD_ID, "poolrooms"),
-            PoolroomsChunkGenerator.CODEC);
-        Registry.register(
-            Registries.CHUNK_GENERATOR,
-            Identifier.of(PoliticalServer.MOD_ID, "industrial"),
-            IndustrialChunkGenerator.CODEC);
+        // Only register chunk generators on server side to prevent client registry sync issues
+        if (net.fabricmc.loader.api.FabricLoader.getInstance().getEnvironmentType() == net.fabricmc.api.EnvType.SERVER) {
+            Registry.register(
+                Registries.CHUNK_GENERATOR,
+                Identifier.of(PoliticalServer.MOD_ID, "backrooms"),
+                BackroomsChunkGenerator.CODEC);
+            Registry.register(
+                Registries.CHUNK_GENERATOR,
+                Identifier.of(PoliticalServer.MOD_ID, "poolrooms"),
+                PoolroomsChunkGenerator.CODEC);
+            Registry.register(
+                Registries.CHUNK_GENERATOR,
+                Identifier.of(PoliticalServer.MOD_ID, "industrial"),
+                IndustrialChunkGenerator.CODEC);
+        }
     }
 }
