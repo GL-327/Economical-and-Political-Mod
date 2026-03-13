@@ -308,7 +308,7 @@ public class SlayerItems {
 
     /** Canonical creation method for the Voidwalker's Crown. */
     public static ItemStack createVoidwalkerCrown() {
-        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
 
         helmet.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("👁 Voidwalker's Crown")
@@ -339,6 +339,7 @@ public class SlayerItems {
                 .build();
         helmet.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
 
+        helmet.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x5A0080));
         helmet.set(DataComponentTypes.MAX_DAMAGE, 4071);
         helmet.set(DataComponentTypes.DAMAGE, 0);
 
@@ -391,7 +392,8 @@ public class SlayerItems {
                 isSkeletonBow(stack) ||
                 isSlimeBoots(stack) ||
                 isWardenChestplate(stack) ||
-                isEnderPhaseHelmet(stack);
+                isEnderPhaseHelmet(stack) ||
+                isCrownOfGreed(stack);
     }
 
     public static boolean isZombieBerserkerHelmet(ItemStack stack) {
@@ -411,7 +413,8 @@ public class SlayerItems {
 
     // Update lore dynamically based on player level
     public static ItemStack createZombieBerserkerHelmetForPlayer(ServerPlayerEntity player) {
-        ItemStack helmet = new ItemStack(Items.ZOMBIE_HEAD);
+        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
+        helmet.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x1A6600));
 
         int playerLevel = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.ZOMBIE);
         boolean meetsRequirement = playerLevel >= BERSERKER_HELMET_LEVEL_REQ;
@@ -1146,7 +1149,8 @@ public class SlayerItems {
 // ============================================================
 
     public static ItemStack createWardenChestplate() {
-        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x004D4D));
 
         chestplate.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("💀 Sculk Terror Chestplate")
@@ -1586,7 +1590,8 @@ public class SlayerItems {
 // ============================================================
 
     public static ItemStack createZombieBerserkerHelmet() {
-        ItemStack helmet = new ItemStack(Items.ZOMBIE_HEAD);
+        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
+        helmet.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x1A6600));
 
         helmet.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("☠ Zombie Berserker Helmet")
@@ -2245,7 +2250,8 @@ public class SlayerItems {
     }
 
     public static ItemStack createCrownOfGreed() {
-        ItemStack crown = new ItemStack(Items.GOLDEN_HELMET);
+        ItemStack crown = new ItemStack(Items.LEATHER_HELMET);
+        crown.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xD4AF00));
         crown.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("👑 Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();

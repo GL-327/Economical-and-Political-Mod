@@ -34,8 +34,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -91,6 +93,18 @@ public class CustomItemHandler {
 
     public static void register() {
         registerBountyItemRestrictions();
+
+        // Prevent custom leather armor from being washed/undyed in a cauldron
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (world.isClient()) return ActionResult.PASS;
+            if (world.getBlockState(hitResult.getBlockPos()).getBlock() instanceof AbstractCauldronBlock) {
+                ItemStack held = player.getStackInHand(hand);
+                if (isProtectedItem(held)) {
+                    return ActionResult.FAIL;
+                }
+            }
+            return ActionResult.PASS;
+        });
 
         // Ender Phase: block attacks on players and block damage while in phase
         net.fabricmc.fabric.api.event.player.AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
