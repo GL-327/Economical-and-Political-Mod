@@ -1,6 +1,6 @@
 package com.political;
 
-import com.political.backrooms.BackroomsItems;
+import com.political.backrooms.items.BackroomsItemsManager;
 import com.political.backrooms.attribute.ArmorAttribute;
 import com.political.backrooms.attribute.AttributeRuneItem;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
@@ -913,16 +913,16 @@ public class RecipesGui {
 
         // Rune entries: [item, display name, colour, slot desc]
         Object[][] runes = {
-            { BackroomsItems.RUNE_PYROMANIAC,     ArmorAttribute.PYROMANIAC,     "Pyromaniac",     Formatting.RED,          "Chestplate" },
-            { BackroomsItems.RUNE_BERSERKERS_RAGE,ArmorAttribute.BERSERKERS_RAGE,"Berserker's Rage",Formatting.DARK_RED,    "Chestplate" },
-            { BackroomsItems.RUNE_NIGHTSTALKER,   ArmorAttribute.NIGHTSTALKER,   "Nightstalker",   Formatting.DARK_GRAY,    "Leggings"   },
-            { BackroomsItems.RUNE_HEAVYWEIGHT,    ArmorAttribute.HEAVYWEIGHT,    "Heavyweight",    Formatting.GRAY,         "Leggings"   },
-            { BackroomsItems.RUNE_VAMPIRIC,        ArmorAttribute.VAMPIRIC,       "Vampiric",       Formatting.DARK_PURPLE,  "Chestplate" },
-            { BackroomsItems.RUNE_ECHO_WALKER,    ArmorAttribute.ECHO_WALKER,    "Echo Walker",    Formatting.AQUA,         "Boots"      },
-            { BackroomsItems.RUNE_SKULK_INFUSED,  ArmorAttribute.SKULK_INFUSED,  "Skulk Infused",  Formatting.DARK_AQUA,    "Helmet"     },
-            { BackroomsItems.RUNE_FEATHERWEIGHT,  ArmorAttribute.FEATHERWEIGHT,  "Featherweight",  Formatting.WHITE,        "Boots"      },
-            { BackroomsItems.RUNE_THORNED,         ArmorAttribute.THORNED,        "Thorned",        Formatting.GREEN,        "Chestplate" },
-            { BackroomsItems.RUNE_GLUTTON,         ArmorAttribute.GLUTTON,        "Glutton",        Formatting.GOLD,         "Helmet"     },
+            { BackroomsItemsManager.getItem("rune_pyromaniac"),     ArmorAttribute.PYROMANIAC,     "Pyromaniac",     Formatting.RED,          "Chestplate" },
+            { BackroomsItemsManager.getItem("rune_berserkers_rage"),ArmorAttribute.BERSERKERS_RAGE,"Berserker's Rage",Formatting.DARK_RED,    "Chestplate" },
+            { BackroomsItemsManager.getItem("rune_nightstalker"),   ArmorAttribute.NIGHTSTALKER,   "Nightstalker",   Formatting.DARK_GRAY,    "Leggings"   },
+            { BackroomsItemsManager.getItem("rune_heavyweight"),    ArmorAttribute.HEAVYWEIGHT,    "Heavyweight",    Formatting.GRAY,         "Leggings"   },
+            { BackroomsItemsManager.getItem("rune_vampiric"),        ArmorAttribute.VAMPIRIC,       "Vampiric",       Formatting.DARK_PURPLE,  "Chestplate" },
+            { BackroomsItemsManager.getItem("rune_echo_walker"),    ArmorAttribute.ECHO_WALKER,    "Echo Walker",    Formatting.AQUA,         "Boots"      },
+            { BackroomsItemsManager.getItem("rune_skulk_infused"),  ArmorAttribute.SKULK_INFUSED,  "Skulk Infused",  Formatting.DARK_AQUA,    "Helmet"     },
+            { BackroomsItemsManager.getItem("rune_featherweight"),  ArmorAttribute.FEATHERWEIGHT,  "Featherweight",  Formatting.WHITE,        "Boots"      },
+            { BackroomsItemsManager.getItem("rune_thorned"),         ArmorAttribute.THORNED,        "Thorned",        Formatting.GREEN,        "Chestplate" },
+            { BackroomsItemsManager.getItem("rune_glutton"),         ArmorAttribute.GLUTTON,        "Glutton",        Formatting.GOLD,         "Helmet"     },
         };
 
         int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30, 38};
@@ -933,7 +933,7 @@ public class RecipesGui {
             Formatting color = (Formatting) runes[i][3];
             String slotDesc = (String) runes[i][4];
 
-            ItemStack stack = AttributeRuneItem.createRune(runeItem, attr);
+            AttributeRuneItem.createRune(runeItem, attr);
             gui.setSlot(slots[i], new GuiElementBuilder(runeItem)
                     .setName(Text.literal("✦ " + name + " Rune").formatted(color))
                     .addLoreLine(Text.literal("§7Applies to: §e" + slotDesc))

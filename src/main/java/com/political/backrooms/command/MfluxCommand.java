@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.political.backrooms.BackroomsDimensionManager;
 import com.political.backrooms.testing.BackroomsTestSuite;
+import com.political.backrooms.verification.BackroomsVerificationSuite;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -53,6 +54,19 @@ public class MfluxCommand {
                 ctx.getSource().sendFeedback(() ->
                     Text.literal("Health check completed!")
                         .formatted(Formatting.GREEN),
+                    true);
+                return 1;
+            })
+        );
+        
+        dispatcher.register(CommandManager.literal("backrooms-verify")
+            .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+            .executes(ctx -> {
+                ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                BackroomsVerificationSuite.runCompleteVerification(player);
+                ctx.getSource().sendFeedback(() ->
+                    Text.literal("Comprehensive verification completed!")
+                        .formatted(Formatting.GOLD),
                     true);
                 return 1;
             })

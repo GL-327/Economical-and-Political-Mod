@@ -1,8 +1,6 @@
 package com.political.backrooms;
 
 import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;

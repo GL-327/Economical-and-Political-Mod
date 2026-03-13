@@ -152,6 +152,28 @@ public class BackroomsItemsManager {
         addItem("special_torch", "Special Torch", 
             "§aBright light that deters light-sensitive enemies", Items.TORCH);
         
+        // SECTION 13: ARMOR RUNES
+        addItem("rune_pyromaniac", "Rune of Pyromaniac", 
+            "§cGrants fire-based abilities", Items.NETHERITE_SCRAP);
+        addItem("rune_berserkers_rage", "Rune of Berserker's Rage", 
+            "§4Grants immense strength in battle", Items.NETHERITE_SCRAP);
+        addItem("rune_nightstalker", "Rune of Nightstalker", 
+            "§8Grants enhanced night vision", Items.NETHERITE_SCRAP);
+        addItem("rune_heavyweight", "Rune of Heavyweight", 
+            "§7Grants immense durability", Items.NETHERITE_SCRAP);
+        addItem("rune_vampiric", "Rune of Vampiric", 
+            "§5Grants life steal abilities", Items.NETHERITE_SCRAP);
+        addItem("rune_echo_walker", "Rune of Echo Walker", 
+            "§bGrants silent movement", Items.NETHERITE_SCRAP);
+        addItem("rune_skulk_infused", "Rune of Skulk Infusion", 
+            "§3Grants sculk-based powers", Items.NETHERITE_SCRAP);
+        addItem("rune_featherweight", "Rune of Featherweight", 
+            "§fGrants enhanced agility", Items.NETHERITE_SCRAP);
+        addItem("rune_thorned", "Rune of Thorns", 
+            "§2Grants defensive thorns", Items.NETHERITE_SCRAP);
+        addItem("rune_glutton", "Rune of Glutton", 
+            "§6Grants enhanced consumption", Items.NETHERITE_SCRAP);
+        
         PoliticalServer.LOGGER.info("Loaded " + ITEMS.size() + " backrooms items");
     }
     

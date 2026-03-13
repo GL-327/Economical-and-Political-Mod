@@ -67,7 +67,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		BeamCraftingHandler.register();
 		CustomMobRegistry.registerAll();
 		com.political.backrooms.BackroomsMobs.registerAll();
-		com.political.backrooms.BackroomsItems.register();
+		// BackroomsItemsManager uses static initialization - no registration needed
 		com.political.backrooms.inventory.BackroomsSpawnManager.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
