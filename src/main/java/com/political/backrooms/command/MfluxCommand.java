@@ -3,6 +3,7 @@ package com.political.backrooms.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.political.backrooms.BackroomsDimensionManager;
+import com.political.backrooms.testing.BackroomsTestSuite;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -28,6 +29,33 @@ public class MfluxCommand {
                     })
                 )
             )
+        );
+        
+        // Add test commands
+        dispatcher.register(CommandManager.literal("backrooms-test")
+            .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+            .executes(ctx -> {
+                ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                BackroomsTestSuite.runFullTestSuite(player);
+                ctx.getSource().sendFeedback(() ->
+                    Text.literal("Backrooms test suite completed!")
+                        .formatted(Formatting.GREEN),
+                    true);
+                return 1;
+            })
+        );
+        
+        dispatcher.register(CommandManager.literal("backrooms-health")
+            .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+            .executes(ctx -> {
+                ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                BackroomsTestSuite.quickHealthCheck(player);
+                ctx.getSource().sendFeedback(() ->
+                    Text.literal("Health check completed!")
+                        .formatted(Formatting.GREEN),
+                    true);
+                return 1;
+            })
         );
     }
 }
