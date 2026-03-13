@@ -14,7 +14,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import com.political.PoliticalServer;
-import com.political.backrooms.generator.AdvancedBackroomsGenerator;
 
 import java.util.Random;
 import java.util.Set;
