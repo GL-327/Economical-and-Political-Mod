@@ -46,62 +46,78 @@ public class BackroomsDimensionManager {
 
     /** Returns true if the given world is one of the Backrooms dimensions. */
     public static boolean isBackroomsDimension(ServerWorld world) {
-        // Check if world is overworld and player is in a simulated dimension
-        // We use world name check since we're simulating dimensions in overworld
-        String worldName = world.getRegistryKey().getValue().toString();
-        return "minecraft:overworld".equals(worldName);
+        var worldKey = world.getRegistryKey();
+        return worldKey.equals(BACKROOMS_KEY) || 
+               worldKey.equals(POOLROOMS_KEY) || 
+               worldKey.equals(INDUSTRIAL_KEY);
+    }
+    
+    /**
+     * Get the backrooms world, creating it if necessary
+     */
+    public static ServerWorld getBackroomsWorld(MinecraftServer server) {
+        ServerWorld world = server.getWorld(BACKROOMS_KEY);
+        if (world == null) {
+            PoliticalServer.LOGGER.error("Backrooms world not found! Using overworld fallback.");
+            return server.getOverworld();
+        }
+        return world;
     }
 
     /**
      * Teleport a player to a specific fracture.
      * fracture 1 = Poolrooms, 2 = Industrial, default = Backrooms (Level 0).
-     * Uses procedural generation in overworld to create authentic backrooms experience.
+     * Uses the ACTUAL backrooms dimension with proper chunk generation.
      */
     public static void teleportToFracture(ServerPlayerEntity player, int fracture) {
-        MinecraftServer server = player.getEntityWorld().getServer();
-        ServerWorld overworld = server.getOverworld();
-        
-        if (overworld == null) {
-            player.sendMessage(Text.literal("§cOverworld not available!"), false);
+        var server = player.getEntityWorld().getServer();
+        if (server == null) {
+            player.sendMessage(Text.literal("§cServer not available!"), false);
             return;
         }
 
+        RegistryKey<net.minecraft.world.World> targetKey = switch (fracture) {
+            case 1 -> POOLROOMS_KEY;
+            case 2 -> INDUSTRIAL_KEY;
+            default -> BACKROOMS_KEY;
+        };
+
+        ServerWorld targetWorld = server.getWorld(targetKey);
+        if (targetWorld == null) {
+            // Fallback to backrooms if specific dimension not available
+            targetWorld = server.getWorld(BACKROOMS_KEY);
+            if (targetWorld == null) {
+                player.sendMessage(Text.literal("§cBackrooms dimension not available!"), false);
+                return;
+            }
+        }
+
+        // Find a safe spawn location in the backrooms
+        java.util.Random random = new java.util.Random();
+        BlockPos spawnPos = findSafeSpawnLocation(targetWorld, random);
+        
+        // Teleport to backrooms dimension
+        player.teleport(targetWorld, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
+            java.util.Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
+        
         String dimensionName = switch (fracture) {
             case 1 -> POOLROOMS_NAME;
             case 2 -> INDUSTRIAL_NAME;
             default -> BACKROOMS_NAME;
         };
-
-        // Generate coordinates for procedural backrooms area
-        java.util.Random rng = new java.util.Random();
-        int x = rng.nextInt(50000) - 25000; // Larger area for backrooms
-        int z = rng.nextInt(50000) - 25000;
-        int y = 55; // Inside the backrooms level
-
-        // Teleport to overworld with procedural generation
-        player.teleport(overworld, x, y, z,
-            java.util.Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
         
         player.sendMessage(Text.literal("§6⟳ You are entering Fracture " + fracture + "..."), false);
-        player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(dimensionName) + " - procedurally generated)"), false);
-        player.sendMessage(Text.literal("§7Coordinates: " + x + ", " + y + ", " + z), false);
-        
-        // Generate advanced backrooms structure around player
-        AdvancedBackroomsGenerator.generateBackroomsStructure(
-            overworld, player.getBlockPos(), 
-            AdvancedBackroomsGenerator.DimensionType.MAIN_BACKROOMS);
+        player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(dimensionName) + ")"), false);
         
         // Apply dimension-specific effects
         switch (fracture) {
             case 1 -> { // Poolrooms - water effects
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 6000, 0, true, false, false));
                 player.sendMessage(Text.literal("§bYou feel the weight of water..."), false);
-                generateImmediatePoolrooms(overworld, x, y, z);
             }
             case 2 -> { // Industrial - mining effects
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 3000, 0, true, false, false));
                 player.sendMessage(Text.literal("§8The industrial air fills your lungs..."), false);
-                generateImmediateIndustrial(overworld, x, y, z);
             }
             default -> { // Backrooms - confusion effects
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0, true, false, false));
@@ -109,6 +125,22 @@ public class BackroomsDimensionManager {
                 player.sendMessage(Text.literal("§8You slip through the cracks of reality..."), false);
             }
         }
+    }
+    
+    /**
+     * Find a safe spawn location in backrooms (on a floor, not in a wall)
+     */
+    private static BlockPos findSafeSpawnLocation(ServerWorld world, java.util.Random random) {
+        // Use random chunk coordinates within reasonable range
+        int chunkX = random.nextInt(100) - 50;
+        int chunkZ = random.nextInt(100) - 50;
+        
+        // Get Y level for first floor (level 0 = Y=0 to Y=5)
+        int spawnY = 1; // Standing on floor
+        int worldX = chunkX * 16 + 8; // Center of chunk
+        int worldZ = chunkZ * 16 + 8;
+        
+        return new BlockPos(worldX, spawnY, worldZ);
     }
     
     /**
@@ -208,15 +240,19 @@ public class BackroomsDimensionManager {
     /**
      * Teleport a player into the Backrooms via an End Gateway event.
      * Requires a Warden Core item for reliable entry; without it the chance is 1-in-1000.
-     * Uses overworld simulation to avoid registry sync issues.
+     * Uses the ACTUAL backrooms dimension.
      *
      * @return true if the player was teleported (caller should cancel the original Gateway teleport)
      */
     public static boolean teleportToBackrooms(ServerPlayerEntity player, boolean hasWardenCore) {
-        MinecraftServer server = player.getEntityWorld().getServer();
-        ServerWorld overworld = server.getOverworld();
+        var server = player.getEntityWorld().getServer();
+        if (server == null) return false;
         
-        if (overworld == null) return false;
+        ServerWorld backroomsWorld = server.getWorld(BACKROOMS_KEY);
+        if (backroomsWorld == null) {
+            PoliticalServer.LOGGER.error("Cannot teleport to backrooms - dimension not available");
+            return false;
+        }
 
         Random rng = new Random();
         String targetDimension;
@@ -233,17 +269,15 @@ public class BackroomsDimensionManager {
             else                targetDimension = BACKROOMS_NAME;
         }
 
-        // Generate random coordinates far from spawn
-        int x = rng.nextInt(40000) - 20000;
-        int z = rng.nextInt(40000) - 20000;
-        int y = 200;
+        // Find safe spawn location
+        BlockPos spawnPos = findSafeSpawnLocation(backroomsWorld, rng);
 
-        // Teleport to overworld with backrooms effects
-        player.teleport(overworld, x, y, z,
+        // Teleport to backrooms dimension
+        player.teleport(backroomsWorld, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
             Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
         
         player.sendMessage(Text.literal("§8You slip through the cracks of reality..."), false);
-        player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(targetDimension) + " - simulated in overworld)"), false);
+        player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(targetDimension) + ")"), false);
         
         // Apply confusion effects
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 0, true, false, false));
@@ -268,33 +302,78 @@ public class BackroomsDimensionManager {
 
     /**
      * Returns true when {@code pos} is at or within 1 block horizontally of the
-     * exit beacon.  Used by the server-tick exit detector.
-     * ENABLED with simulation approach - players can escape by reaching high altitude
+     * exit beacon. Used by the server-tick exit detector.
      */
     public static boolean isAtExitBeacon(BlockPos pos) {
-        // In simulation mode, allow players to escape by reaching high altitude
-        // This simulates finding the exit beacon in the generated world
-        return pos.getY() >= 200; // Escape by reaching Y=200 or higher
+        BlockPos beaconPos = getExitBeaconPos();
+        int dx = Math.abs(pos.getX() - beaconPos.getX());
+        int dz = Math.abs(pos.getZ() - beaconPos.getZ());
+        return dx <= 1 && dz <= 1 && pos.getY() == beaconPos.getY();
     }
 
     /**
      * Teleports {@code player} from the Backrooms back to the overworld spawn.
      * Call this when the player activates the exit beacon.
-     * Uses simulation approach.
      */
     public static void escapeBackrooms(ServerPlayerEntity player) {
+        var server = player.getEntityWorld().getServer();
+        if (server == null) return;
+        
+        ServerWorld overworld = server.getOverworld();
+        if (overworld == null) {
+            player.sendMessage(Text.literal("§cCannot return to overworld!"), false);
+            return;
+        }
+        
+        // Get spawn point - use world spawn or (0,100,0) as fallback
+        BlockPos spawnPos = new BlockPos(0, 100, 0);
+        
+        // Teleport to overworld spawn
+        player.teleport(overworld, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
+            java.util.Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
+        
         player.sendMessage(Text.literal("§a✦ You have escaped the Backrooms."), false);
-        com.political.SpawnManager.teleportToSpawn(player);
+        
+        // Remove backrooms effects
+        player.removeStatusEffect(StatusEffects.BLINDNESS);
+        player.removeStatusEffect(StatusEffects.SLOWNESS);
     }
 
     /**
      * Register the three chunk-generator MapCodecs so Minecraft can deserialize
      * the dimension JSON files that reference "politicalserver:backrooms" etc.
      * Call this during mod initialisation (before the server loads worlds).
-     * COMPLETELY DISABLED - no registry operations to prevent client sync issues
+     * ENABLED - Registering codecs for proper dimension support
      */
     public static void registerCodecs() {
-        // COMPLETELY DISABLED - no registry operations whatsoever
-        PoliticalServer.LOGGER.info("Skipping dimension codec registration - disabled for server-side compatibility");
+        // Register chunk generator codecs for dimension support
+        try {
+            net.minecraft.registry.Registry.register(
+                net.minecraft.registry.Registries.CHUNK_GENERATOR,
+                Identifier.of("politicalserver", "backrooms"),
+                BackroomsChunkGenerator.CODEC
+            );
+            PoliticalServer.LOGGER.info("Registered Backrooms chunk generator codec");
+        } catch (Exception e) {
+            PoliticalServer.LOGGER.error("Failed to register Backrooms codec: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Teleport player from any backrooms dimension to overworld
+     */
+    public static void teleportToOverworld(ServerPlayerEntity player) {
+        if (!isInAnyBackrooms(player)) {
+            player.sendMessage(Text.literal("§cYou are not in the Backrooms!"), false);
+            return;
+        }
+        escapeBackrooms(player);
+    }
+    
+    /**
+     * Check if player is in any backrooms dimension
+     */
+    public static boolean isInAnyBackrooms(ServerPlayerEntity player) {
+        return isBackroomsDimension((ServerWorld) player.getEntityWorld());
     }
 }

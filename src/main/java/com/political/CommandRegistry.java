@@ -65,12 +65,12 @@ public class CommandRegistry {
         registerSpawnProtection(dispatcher);
         com.political.backrooms.command.MfluxCommand.register(dispatcher);
 
-        // /overworld — admin command to return to the overworld from any dimension
+        // /overworld — admin command to return to the overworld from backrooms dimensions
         dispatcher.register(CommandManager.literal("overworld")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    com.political.backrooms.BackroomsDimensionManager.escapeBackrooms(player);
+                    com.political.backrooms.BackroomsDimensionManager.teleportToOverworld(player);
                     return 1;
                 })
         );

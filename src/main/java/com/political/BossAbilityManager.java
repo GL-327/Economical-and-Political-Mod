@@ -1,6 +1,5 @@
 package com.political;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -8,7 +7,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
 import net.minecraft.item.ItemStack;
@@ -17,7 +15,6 @@ import java.util.Set;
 import java.util.HashSet;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.boss.BossBar;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,8 +26,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import java.util.*;
 
 
