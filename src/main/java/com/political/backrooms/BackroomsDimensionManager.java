@@ -167,10 +167,12 @@ public class BackroomsDimensionManager {
     /**
      * Returns true when {@code pos} is at or within 1 block horizontally of the
      * exit beacon.  Used by the server-tick exit detector.
-     * DISABLED: Custom dimensions disabled
+     * ENABLED with simulation approach - players can escape by reaching high altitude
      */
     public static boolean isAtExitBeacon(BlockPos pos) {
-        return false; // Disabled
+        // In simulation mode, allow players to escape by reaching high altitude
+        // This simulates finding the exit beacon in the generated world
+        return pos.getY() >= 200; // Escape by reaching Y=200 or higher
     }
 
     /**
