@@ -23,6 +23,9 @@ public class AttributeEffectHandler {
     private static final Identifier HEAVYWEIGHT_SPEED_ID =
         Identifier.of("politicalserver", "heavyweight_speed");
 
+    /** Each armor piece contributes this fraction of the stated bonus. (4 pieces = full bonus) */
+    private static final double PER_PIECE_SCALE = 0.25;
+
     public static void onServerTick(MinecraftServer server) {
         long tick = server.getTicks();
         // Process every 20 ticks (once per second) to reduce overhead
@@ -45,8 +48,8 @@ public class AttributeEffectHandler {
             if (speedInst != null) {
                 speedInst.removeModifier(NIGHTSTALKER_SPEED_ID);
                 double modifier = lightLevel <= 7
-                    ? 0.20 * nightstalkerPieces * 0.3  // +20% per piece in dark (scaled)
-                    : -0.15 * nightstalkerPieces * 0.3; // -15% per piece in bright light
+                    ? 0.20 * nightstalkerPieces * PER_PIECE_SCALE  // +20%/piece in darkness
+                    : -0.15 * nightstalkerPieces * PER_PIECE_SCALE; // -15%/piece in bright light
                 speedInst.addTemporaryModifier(new EntityAttributeModifier(
                     NIGHTSTALKER_SPEED_ID, modifier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
@@ -58,17 +61,17 @@ public class AttributeEffectHandler {
             EntityAttributeInstance speedInst = player.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
             if (speedInst != null) {
                 speedInst.removeModifier(HEAVYWEIGHT_SPEED_ID);
-                double modifier = -0.20 * heavyweightPieces * 0.3;
+                double modifier = -0.20 * heavyweightPieces * PER_PIECE_SCALE;
                 speedInst.addTemporaryModifier(new EntityAttributeModifier(
                     HEAVYWEIGHT_SPEED_ID, modifier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
 
-        // --- VAMPIRIC: fire damage double (2x fire dmg handled in mixin) ---
-        // Status effects applied elsewhere
+        // VAMPIRIC: fire damage amplification is handled in BackroomsAttributeMixin.applyDamage()
+        // TODO: Detect fire damage type and double it for VAMPIRIC wearers
 
-        // --- FEATHERWEIGHT: no fall damage with 4 pieces ---
-        // TODO: override fall damage handling via mixin
+        // FEATHERWEIGHT: no fall damage with 4 pieces
+        // TODO: Implement via mixin to PlayerEntity's fall damage logic
 
         // --- GLUTTON: extra food effects ---
         int gluttonPieces = ArmorAttributeManager.countArmorWithAttribute(player, ArmorAttribute.GLUTTON);

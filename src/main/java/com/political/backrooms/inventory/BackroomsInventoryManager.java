@@ -90,6 +90,7 @@ public class BackroomsInventoryManager {
         RegistryOps<NbtElement> ops = server.getRegistryManager().getOps(NbtOps.INSTANCE);
         player.setExperienceLevel(save.xpLevel);
         player.setExperiencePoints(0);
+        player.experienceProgress = save.xpProgress; // restore fractional XP bar progress
 
         for (SlotData slotData : save.slots) {
             try {

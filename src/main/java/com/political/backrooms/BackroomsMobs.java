@@ -9,6 +9,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
@@ -212,8 +213,8 @@ public class BackroomsMobs {
                 List<ServerPlayerEntity> nearby = world.getEntitiesByClass(
                     ServerPlayerEntity.class, detectBox, p -> {
                         // Player is "looking at" mob if their yaw/pitch points roughly at mob
-                        net.minecraft.util.math.Vec3d lookVec = p.getRotationVec(1.0f);
-                    net.minecraft.util.math.Vec3d toMob = new net.minecraft.util.math.Vec3d(
+                        Vec3d lookVec = p.getRotationVec(1.0f);
+                    Vec3d toMob = new Vec3d(
                             mob.getX(), mob.getY(), mob.getZ()).subtract(p.getEyePos()).normalize();
                         return lookVec.dotProduct(toMob) > 0.98;
                     });
@@ -226,7 +227,7 @@ public class BackroomsMobs {
             })
             .build());
 
-        // 8. Wretch - Item thief that flees after stealing
+        // 8. Wretch - Aggressive scavenger; item-theft mechanic TODO
         CustomMobRegistry.register("wretch", CustomMobManager.builder("Wretch")
             .baseEntity(EntityType.ZOMBIE)
             .health(30.0)

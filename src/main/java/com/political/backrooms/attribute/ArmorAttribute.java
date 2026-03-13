@@ -19,9 +19,9 @@ public enum ArmorAttribute {
     ECHO_WALKER,
     /** +15% dmg in Backrooms dimensions; -20% dmg in Overworld */
     SKULK_INFUSED,
-    /** +30% jump height (with 4 pieces: no fall damage); -15% knockback resist */
+    /** +30% jump height (with 4 pieces: no fall damage - TODO pending mixin); -15% knockback resist */
     FEATHERWEIGHT,
-    /** Attackers take 20% dmg back per piece; 5% self-dmg when attacking */
+    /** Attackers take 20% dmg back per piece; TODO: implement 5% self-dmg when attacking */
     THORNED,
     /** +50% food restore per piece; hunger 25% faster */
     GLUTTON
