@@ -214,7 +214,7 @@ public class BackroomsMobs {
                     ServerPlayerEntity.class, detectBox, p -> {
                         // Player is "looking at" mob if their yaw/pitch points roughly at mob
                         Vec3d lookVec = p.getRotationVec(1.0f);
-                    Vec3d toMob = new Vec3d(
+                        Vec3d toMob = new Vec3d(
                             mob.getX(), mob.getY(), mob.getZ()).subtract(p.getEyePos()).normalize();
                         return lookVec.dotProduct(toMob) > 0.98;
                     });

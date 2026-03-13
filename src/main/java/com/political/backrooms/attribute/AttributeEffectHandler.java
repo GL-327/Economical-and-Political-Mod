@@ -67,7 +67,7 @@ public class AttributeEffectHandler {
             }
         }
 
-        // VAMPIRIC: fire damage amplification is handled in BackroomsAttributeMixin.applyDamage()
+        // VAMPIRIC: fire damage amplification is handled in BackroomsAttributeMixin.backrooms_onDamage()
         // TODO: Detect fire damage type and double it for VAMPIRIC wearers
 
         // FEATHERWEIGHT: no fall damage with 4 pieces
