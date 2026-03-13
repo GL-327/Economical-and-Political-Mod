@@ -399,29 +399,28 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			// Boss abilities - iterate worlds
 			for (ServerWorld world : s.getWorlds()) {
 				ArmorAbilityHandler.detectEntityNoise(world);  // NOW world is defined
-
-				// ... rest of world-based code
 			}
 			// Periodic armor ability housekeeping (noise map cleanup, etc.)
 			ArmorAbilityHandler.tickWorld();
-			// Boss abilities (fixed - no more world iteration)
-// Boss abilities - using efficient entity lookup
-			BossAbilityManager.tickScheduledBlockRemovals();
-			BossAbilityManager.tickAllBossAbilities(s);
-			for (ServerWorld world : s.getWorlds()) {
-				for (UUID bossId : BossAbilityManager.getActiveBosses()) {
-					Entity entity = world.getEntity(bossId);  // O(1) lookup!
-					if (entity instanceof LivingEntity boss && boss.isAlive()) {
-						ServerPlayerEntity target = (ServerPlayerEntity) world.getClosestPlayer(
-								boss.getX(), boss.getY(), boss.getZ(), 30, false);
+			// Boss abilities (OPTIMIZED: Only process every 10 ticks to reduce overhead)
+			if (s.getTicks() % 10 == 0) {
+				BossAbilityManager.tickScheduledBlockRemovals();
+				BossAbilityManager.tickAllBossAbilities(s);
+				for (ServerWorld world : s.getWorlds()) {
+					for (UUID bossId : BossAbilityManager.getActiveBosses()) {
+						Entity entity = world.getEntity(bossId);  // O(1) lookup!
+						if (entity instanceof LivingEntity boss && boss.isAlive()) {
+							ServerPlayerEntity target = (ServerPlayerEntity) world.getClosestPlayer(
+									boss.getX(), boss.getY(), boss.getZ(), 30, false);
 
-						if (target != null) {
-							BossAbilityManager.BossAbilityState state = BossAbilityManager.getBossState(bossId);
-							if (state != null) {
-								BossAbilityManager.tickBossAbilities(boss, target, state.type, state.tier);
+							if (target != null) {
+								BossAbilityManager.BossAbilityState state = BossAbilityManager.getBossState(bossId);
+								if (state != null) {
+									BossAbilityManager.tickBossAbilities(boss, target, state.type, state.tier);
+								}
 							}
+							break; // Found in this world, skip other worlds
 						}
-						break; // Found in this world, skip other worlds
 					}
 				}
 			}

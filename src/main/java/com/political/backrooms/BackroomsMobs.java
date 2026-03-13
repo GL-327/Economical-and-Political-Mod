@@ -34,7 +34,8 @@ public class BackroomsMobs {
                 mob.setCustomNameVisible(true);
             })
             .onTick((mob, world) -> {
-                if (mob.getTarget() == null) {
+                // OPTIMIZED: Only check for targets every 20 ticks (1 second) instead of every tick
+                if (mob.getTarget() == null && world.getTime() % 20 == 0) {
                     Box detectBox = new Box(mob.getX() - 32, mob.getY() - 10, mob.getZ() - 32,
                         mob.getX() + 32, mob.getY() + 10, mob.getZ() + 32);
                     List<ServerPlayerEntity> players = world.getEntitiesByClass(
@@ -58,20 +59,23 @@ public class BackroomsMobs {
                 mob.setInvisible(true);
             })
             .onTick((mob, world) -> {
-                int lightLevel = world.getLightLevel(mob.getBlockPos());
-                if (lightLevel >= 7) {
-                    mob.discard();
-                    return;
-                }
-                Box aoeBox = new Box(mob.getX() - 4, mob.getY() - 4, mob.getZ() - 4,
-                    mob.getX() + 4, mob.getY() + 4, mob.getZ() + 4);
-                world.getEntitiesByClass(ServerPlayerEntity.class, aoeBox, p ->
-                    world.getLightLevel(p.getBlockPos()) <= 2
-                ).forEach(player -> {
-                    if (world.getTime() % 20 == 0) {
-                        player.damage(world, world.getDamageSources().mobAttack(mob), 8.0f);
+                // OPTIMIZED: Only check light level and damage every 10 ticks (0.5 seconds)
+                if (world.getTime() % 10 == 0) {
+                    int lightLevel = world.getLightLevel(mob.getBlockPos());
+                    if (lightLevel >= 7) {
+                        mob.discard();
+                        return;
                     }
-                });
+                    Box aoeBox = new Box(mob.getX() - 4, mob.getY() - 4, mob.getZ() - 4,
+                        mob.getX() + 4, mob.getY() + 4, mob.getZ() + 4);
+                    world.getEntitiesByClass(ServerPlayerEntity.class, aoeBox, p ->
+                        world.getLightLevel(p.getBlockPos()) <= 2
+                    ).forEach(player -> {
+                        if (world.getTime() % 20 == 0) {
+                            player.damage(world, world.getDamageSources().mobAttack(mob), 8.0f);
+                        }
+                    });
+                }
             })
             .build());
 
@@ -91,7 +95,8 @@ public class BackroomsMobs {
                 }
             })
             .onTick((mob, world) -> {
-                if (mob.getTarget() == null) {
+                // OPTIMIZED: Only check for targets every 15 ticks (0.75 seconds) instead of every tick
+                if (mob.getTarget() == null && world.getTime() % 15 == 0) {
                     Box wideBox = new Box(mob.getX() - 40, mob.getY() - 5, mob.getZ() - 40,
                         mob.getX() + 40, mob.getY() + 5, mob.getZ() + 40);
                     List<ServerPlayerEntity> nearby = world.getEntitiesByClass(
@@ -125,7 +130,8 @@ public class BackroomsMobs {
                 }
             })
             .onTick((mob, world) -> {
-                if (mob.getTarget() == null) {
+                // OPTIMIZED: Only check for targets every 25 ticks (1.25 seconds) instead of every tick
+                if (mob.getTarget() == null && world.getTime() % 25 == 0) {
                     Box detectBox = new Box(mob.getX() - 48, mob.getY() - 8, mob.getZ() - 48,
                         mob.getX() + 48, mob.getY() + 8, mob.getZ() + 48);
                     world.getEntitiesByClass(ServerPlayerEntity.class, detectBox, p -> true)
@@ -148,7 +154,8 @@ public class BackroomsMobs {
                 mob.setCustomNameVisible(false);
             })
             .onTick((mob, world) -> {
-                if (mob.getTarget() == null) {
+                // OPTIMIZED: Only check for targets every 30 ticks (1.5 seconds) instead of every tick
+                if (mob.getTarget() == null && world.getTime() % 30 == 0) {
                     Box detectBox = new Box(mob.getX() - 16, mob.getY() - 4, mob.getZ() - 16,
                         mob.getX() + 16, mob.getY() + 4, mob.getZ() + 16);
                     List<ServerPlayerEntity> players = world.getEntitiesByClass(
@@ -177,7 +184,8 @@ public class BackroomsMobs {
                 mob.setCustomNameVisible(true);
             })
             .onTick((mob, world) -> {
-                if (mob.getTarget() == null) {
+                // OPTIMIZED: Only check for targets every 18 ticks (0.9 seconds) instead of every tick
+                if (mob.getTarget() == null && world.getTime() % 18 == 0) {
                     Box detectBox = new Box(mob.getX() - 40, mob.getY() - 6, mob.getZ() - 40,
                         mob.getX() + 40, mob.getY() + 6, mob.getZ() + 40);
                     List<ServerPlayerEntity> players = world.getEntitiesByClass(
@@ -207,21 +215,24 @@ public class BackroomsMobs {
             })
             .onTick((mob, world) -> {
                 if (mob.getTarget() != null) return;
-                // Becomes hostile if a player looks directly at it
-                Box detectBox = new Box(mob.getX() - 24, mob.getY() - 4, mob.getZ() - 24,
-                    mob.getX() + 24, mob.getY() + 4, mob.getZ() + 24);
-                List<ServerPlayerEntity> nearby = world.getEntitiesByClass(
-                    ServerPlayerEntity.class, detectBox, p -> {
-                        // Player is "looking at" mob if their yaw/pitch points roughly at mob
-                        Vec3d lookVec = p.getRotationVec(1.0f);
-                        Vec3d toMob = new Vec3d(
-                            mob.getX(), mob.getY(), mob.getZ()).subtract(p.getEyePos()).normalize();
-                        return lookVec.dotProduct(toMob) > 0.98;
-                    });
-                if (!nearby.isEmpty()) {
-                    mob.setTarget(nearby.get(0));
-                    if (mob.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED) != null) {
-                        mob.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.7);
+                // OPTIMIZED: Only check for eye contact every 12 ticks (0.6 seconds) instead of every tick
+                if (world.getTime() % 12 == 0) {
+                    // Becomes hostile if a player looks directly at it
+                    Box detectBox = new Box(mob.getX() - 24, mob.getY() - 4, mob.getZ() - 24,
+                        mob.getX() + 24, mob.getY() + 4, mob.getZ() + 24);
+                    List<ServerPlayerEntity> nearby = world.getEntitiesByClass(
+                        ServerPlayerEntity.class, detectBox, p -> {
+                            // Player is "looking at" mob if their yaw/pitch points roughly at mob
+                            Vec3d lookVec = p.getRotationVec(1.0f);
+                            Vec3d toMob = new Vec3d(
+                                mob.getX(), mob.getY(), mob.getZ()).subtract(p.getEyePos()).normalize();
+                            return lookVec.dotProduct(toMob) > 0.98;
+                        });
+                    if (!nearby.isEmpty()) {
+                        mob.setTarget(nearby.get(0));
+                        if (mob.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED) != null) {
+                            mob.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.7);
+                        }
                     }
                 }
             })
@@ -245,7 +256,8 @@ public class BackroomsMobs {
             })
             .onTick((mob, world) -> {
                 // TODO: Implement item theft logic via inventory event
-                if (mob.getTarget() == null) {
+                // OPTIMIZED: Only check for targets every 22 ticks (1.1 seconds) instead of every tick
+                if (mob.getTarget() == null && world.getTime() % 22 == 0) {
                     Box detectBox = new Box(mob.getX() - 20, mob.getY() - 4, mob.getZ() - 20,
                         mob.getX() + 20, mob.getY() + 4, mob.getZ() + 20);
                     List<ServerPlayerEntity> players = world.getEntitiesByClass(
