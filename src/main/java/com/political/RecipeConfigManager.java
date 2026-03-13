@@ -25,9 +25,13 @@ public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_FILE = Path.of("config/political/custom_recipes.json");
+    private static final Path DISABLED_FILE = Path.of("config/political/disabled_recipes.json");
 
     /** Custom recipes added via /setrecipe (in addition to hardcoded ones). */
     private static final List<SlayerRecipes.Recipe> CUSTOM_RECIPES = new ArrayList<>();
+
+    /** Names of recipes (hardcoded or custom) that are currently disabled. */
+    private static final java.util.Set<String> DISABLED_RECIPES = new java.util.HashSet<>();
 
     // ── Lifecycle ──────────────────────────────────────────────
 
@@ -45,6 +49,7 @@ public class RecipeConfigManager {
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to load custom recipes: " + e.getMessage());
         }
+        loadDisabled();
     }
 
     /** Save current custom recipes to disk. */
@@ -60,6 +65,35 @@ public class RecipeConfigManager {
             }
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save custom recipes: " + e.getMessage());
+        }
+    }
+
+    /** Load the set of disabled recipe names from disk. */
+    private static void loadDisabled() {
+        DISABLED_RECIPES.clear();
+        if (!Files.exists(DISABLED_FILE)) return;
+        try (Reader reader = Files.newBufferedReader(DISABLED_FILE)) {
+            JsonArray arr = GSON.fromJson(reader, JsonArray.class);
+            if (arr == null) return;
+            for (var elem : arr) {
+                DISABLED_RECIPES.add(elem.getAsString());
+            }
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to load disabled recipes: " + e.getMessage());
+        }
+    }
+
+    /** Persist the set of disabled recipe names to disk. */
+    private static void saveDisabled() {
+        try {
+            Files.createDirectories(DISABLED_FILE.getParent());
+            JsonArray arr = new JsonArray();
+            for (String name : DISABLED_RECIPES) arr.add(name);
+            try (Writer writer = Files.newBufferedWriter(DISABLED_FILE)) {
+                GSON.toJson(arr, writer);
+            }
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to save disabled recipes: " + e.getMessage());
         }
     }
 
@@ -91,6 +125,40 @@ public class RecipeConfigManager {
         boolean removed = CUSTOM_RECIPES.removeIf(r -> r.name.equalsIgnoreCase(name));
         if (removed) save();
         return removed;
+    }
+
+    /** Returns true if a recipe with this name is currently enabled. */
+    public static boolean isRecipeEnabled(String name) {
+        return !DISABLED_RECIPES.contains(normalise(name));
+    }
+
+    /**
+     * Toggles a recipe between enabled and disabled.
+     * @return true if the recipe is now enabled, false if now disabled.
+     */
+    public static boolean toggleRecipe(String name) {
+        String key = normalise(name);
+        if (DISABLED_RECIPES.contains(key)) {
+            DISABLED_RECIPES.remove(key);
+        } else {
+            DISABLED_RECIPES.add(key);
+        }
+        saveDisabled();
+        return !DISABLED_RECIPES.contains(key);
+    }
+
+    /**
+     * Returns all enabled crafting recipes — both hardcoded SlayerRecipes and custom ones,
+     * excluding any that have been disabled via {@link #toggleRecipe}.
+     */
+    public static List<SlayerRecipes.Recipe> getEnabledRecipes() {
+        List<SlayerRecipes.Recipe> all = getRecipes();
+        all.removeIf(r -> !isRecipeEnabled(r.name));
+        return all;
+    }
+
+    private static String normalise(String name) {
+        return name == null ? "" : name.trim().toLowerCase();
     }
 
     /** Finds a recipe by name (searches both hardcoded and custom). */
@@ -204,6 +272,16 @@ public class RecipeConfigManager {
         if ("skeleton_bow".equals(customId)) return SlayerItems.createSkeletonBow();
         if ("slime_boots".equals(customId)) return SlayerItems.createSlimeBoots();
         if ("warden_chestplate".equals(customId)) return SlayerItems.createWardenChestplate();
+        // Backrooms rune items — try direct registry lookup for any politicalserver: item
+        try {
+            Identifier itemId = Identifier.of(customId);
+            Item item = Registries.ITEM.get(itemId);
+            if (item != Items.AIR) return new ItemStack(item);
+        } catch (net.minecraft.util.InvalidIdentifierException ignored) {
+            // malformed identifier — ignore silently
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Unexpected error resolving item '" + customId + "': " + e.getMessage());
+        }
         return ItemStack.EMPTY;
     }
 }

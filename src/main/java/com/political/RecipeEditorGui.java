@@ -289,16 +289,33 @@ public class RecipeEditorGui {
 
             final ItemStack finalItem = item;
             final SlayerRecipes.Recipe finalRecipe = existingRecipe;
+            final String finalRecipeName = existingRecipe != null ? existingRecipe.name : null;
+            final boolean finalHasRecipe = hasRecipe;
+            final boolean recipeEnabled = finalRecipeName != null && RecipeConfigManager.isRecipeEnabled(finalRecipeName);
 
-            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+            GuiElementBuilder elem = new GuiElementBuilder(item.getItem())
                     .setName(displayName != null ? displayName
                             : Text.literal("§e" + (customId != null ? customId : "Unknown")))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(hasRecipe
-                            ? Text.literal("§a✔ Has recipe — click to edit")
-                            : Text.literal("§e➕ No recipe — click to create"))
-                    .setCallback((i, t, a) -> openRecipeEditor(player, finalItem, finalRecipe, cat))
-                    .build());
+                    .addLoreLine(Text.literal(""));
+            if (finalHasRecipe) {
+                elem.addLoreLine(recipeEnabled
+                        ? Text.literal("§a✔ Recipe ENABLED")
+                        : Text.literal("§c✘ Recipe DISABLED"));
+                elem.addLoreLine(Text.literal("§7Left-click: edit  |  Right-click: toggle on/off"));
+            } else {
+                elem.addLoreLine(Text.literal("§e➕ No recipe — click to create"));
+            }
+            elem.setCallback((i, t, a) -> {
+                if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
+                    boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
+                    String status = nowEnabled ? "§aENABLED" : "§cDISABLED";
+                    player.sendMessage(Text.literal("Recipe '" + finalRecipeName + "' is now " + status), false);
+                    openCategoryPage(player, cat, clampedPage);
+                } else {
+                    openRecipeEditor(player, finalItem, finalRecipe, cat);
+                }
+            });
+            gui.setSlot(slot, elem.build());
             shown++;
         }
 
