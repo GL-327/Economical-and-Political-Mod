@@ -106,48 +106,22 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
 
-        // Attribute Rune application: right-click while holding a rune applies it to
-        // the armor piece in the matching slot. Only 1 rune per armor piece allowed.
+        // Attribute Rune application: runes are applied ONLY via the anvil (see AnvilCraftingMixin).
+        // Right-clicking a rune now just informs the player of the correct method.
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClient()) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
             ItemStack held = player.getStackInHand(hand);
-            if (!(held.getItem() instanceof com.political.backrooms.attribute.AttributeRuneItem)) return ActionResult.PASS;
+            if (!(held.getItem() instanceof com.political.backrooms.attribute.AttributeRuneItem rune))
+                return ActionResult.PASS;
 
-            com.political.backrooms.attribute.ArmorAttribute attr =
-                    com.political.backrooms.attribute.AttributeRuneItem.getAttributeFromStack(held);
-            if (attr == null) return ActionResult.PASS;
-
-            net.minecraft.entity.EquipmentSlot targetSlot = attr.requiredSlot;
-            ItemStack armor = sp.getEquippedStack(targetSlot);
-
-            if (armor.isEmpty()) {
-                String slotName = targetSlot == net.minecraft.entity.EquipmentSlot.HEAD ? "helmet"
-                        : targetSlot == net.minecraft.entity.EquipmentSlot.CHEST ? "chestplate"
-                        : targetSlot == net.minecraft.entity.EquipmentSlot.LEGS ? "leggings" : "boots";
-                sp.sendMessage(net.minecraft.text.Text.literal("§cYou must be wearing a §e" + slotName
-                        + "§c to apply this rune!"), false);
-                return ActionResult.FAIL;
-            }
-
-            // Check the armor piece is actually equippable armor (has EQUIPPABLE component)
-            if (armor.get(DataComponentTypes.EQUIPPABLE) == null) {
-                sp.sendMessage(net.minecraft.text.Text.literal("§cThis rune can only be applied to an armor piece!"), false);
-                return ActionResult.FAIL;
-            }
-
-            // Check that armor piece doesn't already have a rune
-            if (com.political.backrooms.attribute.ArmorAttributeManager.getArmorAttribute(armor) != null) {
-                sp.sendMessage(net.minecraft.text.Text.literal("§cThis armor piece already has a rune applied! (Only 1 rune per piece)"), false);
-                return ActionResult.FAIL;
-            }
-
-            // Apply the rune
-            com.political.backrooms.attribute.ArmorAttributeManager.setArmorAttribute(armor, attr);
-            held.decrement(1);
-            net.minecraft.text.Text customName = held.get(DataComponentTypes.CUSTOM_NAME);
-            String runeName = customName != null ? customName.getString() : attr.name();
-            sp.sendMessage(net.minecraft.text.Text.literal("§a✔ Applied §d" + runeName + "§a to your armor!"), false);
+            com.political.backrooms.attribute.ArmorAttribute attr = rune.getAttribute();
+            String slotName = attr.requiredSlot == net.minecraft.entity.EquipmentSlot.HEAD ? "helmet"
+                    : attr.requiredSlot == net.minecraft.entity.EquipmentSlot.CHEST ? "chestplate"
+                    : attr.requiredSlot == net.minecraft.entity.EquipmentSlot.LEGS ? "leggings" : "boots";
+            sp.sendMessage(net.minecraft.text.Text.literal(
+                    "§6Place your §e" + slotName + " §6in an §eanvil §6with this rune to apply it. "
+                    + "§7(Costs §e" + attr.getXpCost() + " XP levels§7)"), false);
             return ActionResult.SUCCESS;
         });
 
