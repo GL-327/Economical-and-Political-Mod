@@ -32,9 +32,6 @@ public class CraftingMixin {
                                                   CallbackInfo ci) {
 
         boolean hasProtectedItem = false;
-        boolean hasNormalSword = false;
-        boolean hasNormalShovel = false;
-        boolean hasHPEBM = false;
 
         for (int i = 0; i < craftingInventory.size(); i++) {
             ItemStack stack = craftingInventory.getStack(i);
@@ -42,24 +39,23 @@ public class CraftingMixin {
 
             if (CustomItemHandler.isProtectedItem(stack)) {
                 hasProtectedItem = true;
-                if (CustomItemHandler.isHPEBM(stack)) hasHPEBM = true;
+                break; // No need to check further
             }
-            if (isNormalSword(stack)) hasNormalSword = true;
-            if (isNormalShovel(stack)) hasNormalShovel = true;
         }
 
-        // Prevent combining protected items with normal swords/shovels
-        // or prevent protected items from being consumed in any vanilla recipe.
-        // BUT: if the grid matches a valid custom recipe, let the TAIL mixin handle it.
-        if (hasProtectedItem && (hasNormalSword || (hasHPEBM && hasNormalShovel))) {
-            // Check if this grid matches a valid custom recipe before blocking
+        // If any protected item is in the grid, check if it's a valid custom recipe
+        // If NOT a valid custom recipe, block the result to prevent vanilla usage
+        if (hasProtectedItem) {
             List<ItemStack> grid = new ArrayList<>();
             for (int i = 0; i < craftingInventory.size(); i++) {
                 grid.add(craftingInventory.getStack(i));
             }
-            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return;
-            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return;
-
+            
+            // Check if this grid matches a valid custom recipe
+            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return; // Allow beam recipes
+            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return; // Allow bounty recipes
+            
+            // No valid custom recipe found - block vanilla crafting
             resultInventory.setStack(0, ItemStack.EMPTY);
             ci.cancel();
         }

@@ -78,7 +78,7 @@ public class CustomItemHandler {
     // Ender Phase Helmet state tracking
     private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
     private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
-    private static final double ENDER_WARP_MAX_DISTANCE = 100.0; // blocks (matches item lore: "up to 100 blocks")
+    private static final double ENDER_WARP_MAX_DISTANCE = 10.0; // blocks (limited to 10 blocks max)
     /** Debounce to prevent UseItemCallback + UseBlockCallback both firing on the same interaction.
      *  Stores the server tick of the last processed interaction; both callbacks fire within the
      *  same tick, so a tick-based comparison is 100% reliable unlike millisecond-based timings. */
@@ -268,6 +268,25 @@ public class CustomItemHandler {
 
             if (serverPlayer.isSneaking()) {
                 // Sneak + right-click: Toggle Ender Phase Mode
+                // Only works when NOT looking at a block (must be looking at air/void)
+                ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
+                Vec3d eyePos = serverPlayer.getEyePos();
+                Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
+                Vec3d targetPos = eyePos.add(lookVec.multiply(5.0)); // Check up to 5 blocks
+                
+                net.minecraft.util.hit.BlockHitResult hitResult = serverWorld.raycast(
+                        new RaycastContext(eyePos, targetPos,
+                                RaycastContext.ShapeType.OUTLINE,
+                                RaycastContext.FluidHandling.NONE,
+                                serverPlayer));
+                
+                // Block activation if looking at a block
+                if (hitResult.getType() != net.minecraft.util.hit.HitResult.Type.MISS) {
+                    serverPlayer.sendMessage(Text.literal("⟡ Look at the air to activate!")
+                            .formatted(Formatting.RED), true);
+                    return ActionResult.CONSUME;
+                }
+                
                 Long activeUntil = enderPhaseActiveUntil.get(uuid);
                 boolean isInPhaseMode = activeUntil != null && now < activeUntil;
 
@@ -305,7 +324,8 @@ public class CustomItemHandler {
                         .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
                 return ActionResult.CONSUME;
             } else {
-                // Normal right-click: Ender Warp (Phase Teleport — teleport up to 100 blocks in look direction)
+                // Normal right-click: Ender Warp (Phase Teleport — teleport up to 10 blocks in look direction)
+                // Only works when NOT looking at a block (must be looking at air/void)
                 Long cooldownUntil = enderWarpCooldowns.get(uuid);
                 if (cooldownUntil != null && now < cooldownUntil) {
                     return ActionResult.CONSUME;
@@ -322,9 +342,14 @@ public class CustomItemHandler {
                                 RaycastContext.FluidHandling.NONE,
                                 serverPlayer));
 
-                Vec3d dest = hitResult.getType() == net.minecraft.util.hit.HitResult.Type.MISS
-                        ? targetPos
-                        : hitResult.getPos();
+                // Only teleport if NOT looking at a block (must be looking at air/void)
+                if (hitResult.getType() != net.minecraft.util.hit.HitResult.Type.MISS) {
+                    serverPlayer.sendMessage(Text.literal("⟡ Look at the air to warp!")
+                            .formatted(Formatting.RED), true);
+                    return ActionResult.CONSUME;
+                }
+
+                Vec3d dest = targetPos;
                 // Place player slightly above the hit surface to avoid clipping
                 serverPlayer.teleport(serverWorld,
                         dest.x, dest.y + 0.1, dest.z,
