@@ -189,9 +189,10 @@ public class BackroomsDimensionManager {
      * Register the three chunk-generator MapCodecs so Minecraft can deserialize
      * the dimension JSON files that reference "politicalserver:backrooms" etc.
      * Call this during mod initialisation (before the server loads worlds).
+     * COMPLETELY DISABLED - no registry operations to prevent client sync issues
      */
     public static void registerCodecs() {
-        // Don't register any codecs to prevent client registry sync issues
-        // We'll handle dimensions programmatically without using data pack registry system
+        // COMPLETELY DISABLED - no registry operations whatsoever
+        PoliticalServer.LOGGER.info("Skipping dimension codec registration - disabled for server-side compatibility");
     }
 }

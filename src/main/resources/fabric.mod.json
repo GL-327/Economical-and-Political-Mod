@@ -12,7 +12,8 @@
 	"custom": {
 		"fabric:registry_sync": {
 			"skip": true
-		}
+		},
+		"fabric-api:server-side-only": true
 	},
 	"entrypoints": {
 		"server": ["com.political.PoliticalServer"]
