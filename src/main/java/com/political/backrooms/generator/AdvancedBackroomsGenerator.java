@@ -5,6 +5,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.chunk.Chunk;
 import com.political.backrooms.protection.BackroomsProtectionManager;
 import com.political.PoliticalServer;
 
@@ -565,6 +566,81 @@ public class AdvancedBackroomsGenerator {
                 }
             }
         }
+    }
+    
+    /**
+     * Generate room chunk for chunk generator integration
+     */
+    public static void generateRoomChunk(Chunk chunk, int chunkX, int chunkZ, int startX, int startZ, BlockPos.Mutable mpos) {
+        // Get dimension type based on chunk position
+        DimensionType dimensionType = getDimensionTypeForChunk(chunkX, chunkZ);
+        RoomMaterials materials = dimensionMaterials.get(dimensionType);
+        
+        // Generate base floor and ceiling
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                // Floor at Y=50
+                chunk.setBlockState(mpos.set(startX + x, 50, startZ + z), materials.floorBlock.getDefaultState());
+                // Ceiling at Y=56
+                chunk.setBlockState(mpos.set(startX + x, 56, startZ + z), materials.ceilingBlock.getDefaultState());
+            }
+        }
+        
+        // Generate walls around perimeter
+        for (int x = 0; x < 16; x++) {
+            for (int y = 51; y <= 55; y++) {
+                // North wall
+                chunk.setBlockState(mpos.set(startX + x, y, startZ), materials.wallBlock.getDefaultState());
+                // South wall
+                chunk.setBlockState(mpos.set(startX + x, y, startZ + 15), materials.wallBlock.getDefaultState());
+            }
+        }
+        
+        for (int z = 1; z < 15; z++) {
+            for (int y = 51; y <= 55; y++) {
+                // West wall
+                chunk.setBlockState(mpos.set(startX, y, startZ + z), materials.wallBlock.getDefaultState());
+                // East wall
+                chunk.setBlockState(mpos.set(startX + 15, y, startZ + z), materials.wallBlock.getDefaultState());
+            }
+        }
+        
+        // Add some interior features
+        Random random = Random.create();
+        
+        // Add pillars occasionally
+        if (random.nextInt(3) == 0) {
+            int pillarX = startX + 4 + random.nextInt(8);
+            int pillarZ = startZ + 4 + random.nextInt(8);
+            for (int y = 51; y <= 55; y++) {
+                chunk.setBlockState(mpos.set(pillarX, y, pillarZ), materials.wallBlock.getDefaultState());
+            }
+        }
+        
+        // Add lighting
+        for (int x = 2; x < 14; x += 4) {
+            for (int z = 2; z < 14; z += 4) {
+                chunk.setBlockState(mpos.set(startX + x, 55, startZ + z), materials.lightBlock.getDefaultState());
+            }
+        }
+        
+        // Add some random decorations
+        for (int i = 0; i < 3; i++) {
+            int decorX = startX + 1 + random.nextInt(14);
+            int decorZ = startZ + 1 + random.nextInt(14);
+            if (materials.decorBlock != null) {
+                chunk.setBlockState(mpos.set(decorX, 51, decorZ), materials.decorBlock.getDefaultState());
+            }
+        }
+    }
+    
+    /**
+     * Get dimension type for chunk position
+     */
+    private static DimensionType getDimensionTypeForChunk(int chunkX, int chunkZ) {
+        // Use chunk coordinates to determine dimension type
+        int hash = Math.abs(chunkX * 31 + chunkZ);
+        return DimensionType.values()[hash % DimensionType.values().length];
     }
     
     /**

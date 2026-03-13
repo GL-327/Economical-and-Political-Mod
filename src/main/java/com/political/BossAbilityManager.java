@@ -1375,28 +1375,27 @@ public class BossAbilityManager {
             DeathMark mark = entry.getValue();
 
             if (now >= mark.triggerTime) {
-                for (ServerWorld world : server.getWorlds()) {
-                    ServerPlayerEntity player = (ServerPlayerEntity) world.getEntity(entry.getKey());
-                    if (player != null) {
-                        Entity bossEntity = world.getEntity(mark.bossUuid);
-                        if (bossEntity instanceof LivingEntity boss) {
-                            double dist = player.distanceTo(boss);
+                // OPTIMIZED: Use server.getPlayerManager() for direct player lookup instead of iterating worlds
+                ServerPlayerEntity player = server.getPlayerManager().getPlayer(entry.getKey());
+                if (player != null) {
+                    ServerWorld world = (ServerWorld) player.getEntityWorld();
+                    Entity bossEntity = world.getEntity(mark.bossUuid);
+                    if (bossEntity instanceof LivingEntity boss) {
+                        double dist = player.distanceTo(boss);
 
-                            if (dist < 10) {
-                                player.damage(world, player.getDamageSources().magic(), mark.damage);
+                        if (dist < 10) {
+                            player.damage(world, player.getDamageSources().magic(), mark.damage);
 
-                                world.spawnParticles(ParticleTypes.SOUL,
-                                        player.getX(), player.getY() + 1, player.getZ(),
-                                        30, 0.5, 0.5, 0.5, 0.1);
+                            world.spawnParticles(ParticleTypes.SOUL,
+                                    player.getX(), player.getY() + 1, player.getZ(),
+                                    30, 0.5, 0.5, 0.5, 0.1);
 
-                                player.sendMessage(Text.literal("💀 DEATH MARK TRIGGERED!")
-                                        .formatted(Formatting.DARK_RED, Formatting.BOLD), false);
-                            } else {
-                                player.sendMessage(Text.literal("✓ You escaped the death mark!")
-                                        .formatted(Formatting.GREEN), true);
-                            }
+                            player.sendMessage(Text.literal("💀 DEATH MARK TRIGGERED!")
+                                    .formatted(Formatting.DARK_RED, Formatting.BOLD), false);
+                        } else {
+                            player.sendMessage(Text.literal("✓ You escaped the death mark!")
+                                    .formatted(Formatting.GREEN), true);
                         }
-                        break;
                     }
                 }
                 iter.remove();

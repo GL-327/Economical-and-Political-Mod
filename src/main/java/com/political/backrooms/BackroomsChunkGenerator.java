@@ -20,6 +20,7 @@ import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.noise.NoiseConfig;
+import com.political.backrooms.generator.AdvancedBackroomsGenerator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -274,15 +275,24 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
 
         BlockPos.Mutable mpos = new BlockPos.Mutable();
 
-        // Generate each stacked floor
-        for (int level = 0; level < NUM_LEVELS; level++) {
-            generateLevel(chunk, cx, cz, level, startX, startZ, mpos);
-        }
+        // INTEGRATED: Use AdvancedBackroomsGenerator for complex procedural generation
+        try {
+            // Generate advanced backrooms structures first
+            AdvancedBackroomsGenerator.generateRoomChunk(chunk, cx, cz, startX, startZ, mpos);
+        } catch (Exception e) {
+            // Fallback to basic generation if advanced fails
+            System.err.println("Advanced generation failed, using fallback: " + e.getMessage());
+            
+            // Generate each stacked floor (fallback)
+            for (int level = 0; level < NUM_LEVELS; level++) {
+                generateLevel(chunk, cx, cz, level, startX, startZ, mpos);
+            }
 
-        // Vertical ladder shafts between adjacent floors
-        for (int level = 0; level < NUM_LEVELS - 1; level++) {
-            if (hasVerticalShaft(cx, cz, level)) {
-                generateShaft(chunk, level, startX, startZ, mpos);
+            // Vertical ladder shafts between adjacent floors
+            for (int level = 0; level < NUM_LEVELS - 1; level++) {
+                if (hasVerticalShaft(cx, cz, level)) {
+                    generateShaft(chunk, level, startX, startZ, mpos);
+                }
             }
         }
 
