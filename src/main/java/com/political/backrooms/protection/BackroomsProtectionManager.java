@@ -12,6 +12,7 @@ import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import com.political.PoliticalServer;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,6 +24,8 @@ public class BackroomsProtectionManager {
     
     private static final Map<UUID, ProtectedArea> protectedAreas = new HashMap<>();
     private static final Map<BlockPos, String> interactiveBlocks = new HashMap<>();
+    private static final long MAX_PROTECTION_AGE = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    private static int cleanupCounter = 0;
     
     /**
      * Register a protected area
@@ -45,8 +48,15 @@ public class BackroomsProtectionManager {
     
     /**
      * Check if a block can be broken at the position
+     * Includes automatic cleanup of old protections every 100 calls
      */
     public static boolean canBreakBlock(ServerWorld world, BlockPos pos, PlayerEntity player) {
+        cleanupCounter++;
+        if (cleanupCounter >= 100) {
+            cleanupCounter = 0;
+            cleanupOldProtections();
+        }
+        
         // Check if position is in any protected area
         for (ProtectedArea area : protectedAreas.values()) {
             if (area.contains(pos)) {
@@ -185,6 +195,30 @@ public class BackroomsProtectionManager {
      */
     public static Map<UUID, ProtectedArea> getProtectedAreas() {
         return new HashMap<>(protectedAreas);
+    }
+    
+    /**
+     * Clean up old protections to prevent memory leaks
+     */
+    private static void cleanupOldProtections() {
+        long now = System.currentTimeMillis();
+        Iterator<Map.Entry<UUID, ProtectedArea>> iter = protectedAreas.entrySet().iterator();
+        int removed = 0;
+        
+        while (iter.hasNext()) {
+            Map.Entry<UUID, ProtectedArea> entry = iter.next();
+            ProtectedArea area = entry.getValue();
+            
+            // Remove protections older than 24 hours
+            if (now - area.createdTime > MAX_PROTECTION_AGE) {
+                iter.remove();
+                removed++;
+            }
+        }
+        
+        if (removed > 0) {
+            PoliticalServer.LOGGER.info("Cleaned up " + removed + " old backrooms protections");
+        }
     }
     
     /**

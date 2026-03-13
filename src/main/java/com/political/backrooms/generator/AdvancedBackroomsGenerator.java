@@ -1,6 +1,7 @@
 package com.political.backrooms.generator;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -570,67 +571,183 @@ public class AdvancedBackroomsGenerator {
     
     /**
      * Generate room chunk for chunk generator integration
+     * FIXED: Now generates at correct Y levels matching BackroomsChunkGenerator (8 levels, 6 blocks each)
      */
     public static void generateRoomChunk(Chunk chunk, int chunkX, int chunkZ, int startX, int startZ, BlockPos.Mutable mpos) {
+        // Generate all 8 levels matching BackroomsChunkGenerator's LEVEL_SPAN=6, NUM_LEVELS=8
+        for (int level = 0; level < 8; level++) {
+            int baseY = level * 6; // LEVEL_SPAN = 6
+            generateLevelForChunk(chunk, chunkX, chunkZ, startX, startZ, mpos, level, baseY);
+        }
+    }
+    
+    /**
+     * Generate a single level for chunk generation
+     */
+    private static void generateLevelForChunk(Chunk chunk, int chunkX, int chunkZ, int startX, int startZ, 
+                                               BlockPos.Mutable mpos, int level, int baseY) {
         // Get dimension type based on chunk position
         DimensionType dimensionType = getDimensionTypeForChunk(chunkX, chunkZ);
         RoomMaterials materials = dimensionMaterials.get(dimensionType);
         
-        // Generate base floor and ceiling
+        // Use deterministic random based on chunk coordinates for consistency
+        long seed = chunkX * 1234567L + chunkZ * 7654321L + level * 0xFEED1337L;
+        java.util.Random random = new java.util.Random(seed);
+        
+        // Determine maze connectivity (matching BackroomsChunkGenerator logic)
+        boolean north = (seed & 1L) == 1L;
+        boolean south = ((seed + 1) & 1L) == 1L;
+        boolean west = ((seed + 2) & 1L) == 1L;
+        boolean east = ((seed + 3) & 1L) == 1L;
+        
+        // Room type based on chunk position
+        int roomType = (int) Math.abs(seed % 5); // 5 room types
+        
+        // Generate floor and ceiling
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                // Floor at Y=50
-                chunk.setBlockState(mpos.set(startX + x, 50, startZ + z), materials.floorBlock.getDefaultState());
-                // Ceiling at Y=56
-                chunk.setBlockState(mpos.set(startX + x, 56, startZ + z), materials.ceilingBlock.getDefaultState());
+                // Floor at baseY
+                chunk.setBlockState(mpos.set(startX + x, baseY, startZ + z), materials.floorBlock.getDefaultState());
+                
+                // Ceiling at baseY+5
+                BlockState ceilingBlock = (x % 4 == 0 && z % 4 == 0) ? materials.lightBlock.getDefaultState() : materials.ceilingBlock.getDefaultState();
+                chunk.setBlockState(mpos.set(startX + x, baseY + 5, startZ + z), ceilingBlock);
             }
         }
         
-        // Generate walls around perimeter
+        // Generate perimeter walls with doorways
+        int gateMin = 6, gateMax = 8;
         for (int x = 0; x < 16; x++) {
-            for (int y = 51; y <= 55; y++) {
-                // North wall
-                chunk.setBlockState(mpos.set(startX + x, y, startZ), materials.wallBlock.getDefaultState());
-                // South wall
-                chunk.setBlockState(mpos.set(startX + x, y, startZ + 15), materials.wallBlock.getDefaultState());
+            for (int y = 1; y <= 4; y++) {
+                // North wall with doorway
+                if (!(north && x >= gateMin && x <= gateMax)) {
+                    chunk.setBlockState(mpos.set(startX + x, baseY + y, startZ), materials.wallBlock.getDefaultState());
+                }
+                // South wall with doorway
+                if (!(south && x >= gateMin && x <= gateMax)) {
+                    chunk.setBlockState(mpos.set(startX + x, baseY + y, startZ + 15), materials.wallBlock.getDefaultState());
+                }
             }
         }
         
         for (int z = 1; z < 15; z++) {
-            for (int y = 51; y <= 55; y++) {
-                // West wall
-                chunk.setBlockState(mpos.set(startX, y, startZ + z), materials.wallBlock.getDefaultState());
-                // East wall
-                chunk.setBlockState(mpos.set(startX + 15, y, startZ + z), materials.wallBlock.getDefaultState());
+            for (int y = 1; y <= 4; y++) {
+                // West wall with doorway
+                if (!(west && z >= gateMin && z <= gateMax)) {
+                    chunk.setBlockState(mpos.set(startX, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                }
+                // East wall with doorway
+                if (!(east && z >= gateMin && z <= gateMax)) {
+                    chunk.setBlockState(mpos.set(startX + 15, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                }
             }
         }
         
-        // Add some interior features
-        Random random = Random.create();
+        // Generate interior features based on room type
+        generateInteriorFeatures(chunk, startX, startZ, mpos, baseY, roomType, materials, random);
         
-        // Add pillars occasionally
-        if (random.nextInt(3) == 0) {
-            int pillarX = startX + 4 + random.nextInt(8);
-            int pillarZ = startZ + 4 + random.nextInt(8);
-            for (int y = 51; y <= 55; y++) {
-                chunk.setBlockState(mpos.set(pillarX, y, pillarZ), materials.wallBlock.getDefaultState());
-            }
+        // Generate vertical shaft if needed (1 in 5 chance per level)
+        if (level < 7 && Math.abs(seed) % 5 == 0) {
+            generateVerticalShaft(chunk, startX, startZ, mpos, level, baseY, materials);
+        }
+    }
+    
+    /**
+     * Generate interior features for a room
+     */
+    private static void generateInteriorFeatures(Chunk chunk, int startX, int startZ, BlockPos.Mutable mpos, 
+                                                  int baseY, int roomType, RoomMaterials materials, java.util.Random random) {
+        switch (roomType) {
+            case 0: // OPEN - No interior features
+                break;
+                
+            case 1: // PILLARS - Pillars every 4 blocks
+                for (int x = 4; x < 12; x += 4) {
+                    for (int z = 4; z < 12; z += 4) {
+                        // Skip center shaft position
+                        if (x == 7 && z == 7) continue;
+                        for (int y = 1; y <= 4; y++) {
+                            chunk.setBlockState(mpos.set(startX + x, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                        }
+                    }
+                }
+                break;
+                
+            case 2: // NARROW - Central corridor
+                for (int x = 0; x < 6; x++) {
+                    for (int z = 0; z < 16; z++) {
+                        for (int y = 1; y <= 4; y++) {
+                            chunk.setBlockState(mpos.set(startX + x, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                        }
+                    }
+                }
+                for (int x = 10; x < 16; x++) {
+                    for (int z = 0; z < 16; z++) {
+                        for (int y = 1; y <= 4; y++) {
+                            chunk.setBlockState(mpos.set(startX + x, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                        }
+                    }
+                }
+                break;
+                
+            case 3: // OFFICE - T-shaped partition
+                // Vertical part
+                for (int z = 2; z <= 13; z++) {
+                    for (int y = 1; y <= 4; y++) {
+                        chunk.setBlockState(mpos.set(startX + 8, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                    }
+                }
+                // Horizontal part
+                for (int x = 2; x <= 6; x++) {
+                    for (int y = 1; y <= 4; y++) {
+                        chunk.setBlockState(mpos.set(startX + x, baseY + y, startZ + 8), materials.wallBlock.getDefaultState());
+                    }
+                }
+                break;
+                
+            case 4: // ALCOVE - Two stub walls
+                for (int y = 1; y <= 4; y++) {
+                    // First alcove
+                    for (int z = 3; z <= 6; z++) {
+                        chunk.setBlockState(mpos.set(startX + 4, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                    }
+                    // Second alcove
+                    for (int z = 9; z <= 12; z++) {
+                        chunk.setBlockState(mpos.set(startX + 11, baseY + y, startZ + z), materials.wallBlock.getDefaultState());
+                    }
+                }
+                break;
         }
         
-        // Add lighting
-        for (int x = 2; x < 14; x += 4) {
-            for (int z = 2; z < 14; z += 4) {
-                chunk.setBlockState(mpos.set(startX + x, 55, startZ + z), materials.lightBlock.getDefaultState());
+        // Add decorations
+        for (int i = 0; i < 2; i++) {
+            int decorX = 2 + random.nextInt(12);
+            int decorZ = 2 + random.nextInt(12);
+            if (materials.decorBlock != null && random.nextFloat() < 0.3f) {
+                chunk.setBlockState(mpos.set(startX + decorX, baseY + 1, startZ + decorZ), materials.decorBlock.getDefaultState());
             }
         }
+    }
+    
+    /**
+     * Generate vertical shaft between levels
+     */
+    private static void generateVerticalShaft(Chunk chunk, int startX, int startZ, BlockPos.Mutable mpos, 
+                                               int level, int baseY, RoomMaterials materials) {
+        int shaftX = startX + 7;
+        int shaftZ = startZ + 7;
         
-        // Add some random decorations
-        for (int i = 0; i < 3; i++) {
-            int decorX = startX + 1 + random.nextInt(14);
-            int decorZ = startZ + 1 + random.nextInt(14);
-            if (materials.decorBlock != null) {
-                chunk.setBlockState(mpos.set(decorX, 51, decorZ), materials.decorBlock.getDefaultState());
-            }
+        // Remove ceiling of current level
+        chunk.setBlockState(mpos.set(shaftX, baseY + 5, shaftZ), net.minecraft.block.Blocks.AIR.getDefaultState());
+        
+        // Create ladder
+        for (int y = 1; y <= 5; y++) {
+            // Ladder backing
+            chunk.setBlockState(mpos.set(shaftX, baseY + y, shaftZ + 1), materials.wallBlock.getDefaultState());
+            // Ladder
+            chunk.setBlockState(mpos.set(shaftX, baseY + y, shaftZ), 
+                net.minecraft.block.Blocks.LADDER.getDefaultState()
+                    .with(net.minecraft.block.LadderBlock.FACING, net.minecraft.util.math.Direction.NORTH));
         }
     }
     
