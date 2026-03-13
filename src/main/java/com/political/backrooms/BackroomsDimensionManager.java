@@ -16,6 +16,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import com.political.PoliticalServer;
+import com.political.backrooms.generator.AdvancedBackroomsGenerator;
 
 import java.util.Random;
 import java.util.Set;
@@ -87,8 +88,10 @@ public class BackroomsDimensionManager {
         player.sendMessage(Text.literal("§7(" + getDimensionDisplayName(dimensionName) + " - procedurally generated)"), false);
         player.sendMessage(Text.literal("§7Coordinates: " + x + ", " + y + ", " + z), false);
         
-        // Generate immediate backrooms structure around player
-        generateImmediateBackrooms(overworld, x, y, z, fracture);
+        // Generate advanced backrooms structure around player
+        AdvancedBackroomsGenerator.generateBackroomsStructure(
+            overworld, player.getBlockPos(), 
+            AdvancedBackroomsGenerator.DimensionType.MAIN_BACKROOMS);
         
         // Apply dimension-specific effects
         switch (fracture) {

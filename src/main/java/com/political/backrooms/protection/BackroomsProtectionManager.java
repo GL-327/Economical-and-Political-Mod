@@ -214,8 +214,7 @@ public class BackroomsProtectionManager {
         }
         
         public boolean isOwner(PlayerEntity player) {
-            return player.getName().getString().equals(owner) || 
-                   player.getName().getString().equals("admin"); // Simple admin check
+            return player.getName().getString().equals(owner); // Owner only for now
         }
         
         public Box getBoundingBox() {
