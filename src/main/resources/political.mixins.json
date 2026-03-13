@@ -35,7 +35,8 @@
         "ArrowDamageMixin",
         "GrindstoneScreenHandlerMixin",
         "SmithingScreenHandlerMixin",
-        "EndGatewayMixin"
+        "EndGatewayMixin",
+        "BackroomsAttributeMixin"
     ],
     "injectors": {
         "defaultRequire": 1

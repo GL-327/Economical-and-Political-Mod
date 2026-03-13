@@ -67,6 +67,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 		CustomMobRegistry.registerAll();
 		com.political.backrooms.BackroomsMobs.registerAll();
 		com.political.backrooms.BackroomsItems.register();
+		com.political.backrooms.inventory.BackroomsSpawnManager.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			// Check for any beam weapon (including Ultra Overclocked)
@@ -392,6 +393,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TabListManager.tick(s);
 			VanishManager.tick(s);
 			BountyArmorHandler.tick(s);
+			com.political.backrooms.attribute.AttributeEffectHandler.onServerTick(s);
 
 			// Boss abilities - iterate worlds
 			for (ServerWorld world : s.getWorlds()) {
