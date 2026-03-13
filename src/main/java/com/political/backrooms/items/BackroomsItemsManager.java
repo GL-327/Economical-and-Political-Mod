@@ -15,387 +15,322 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Backrooms Items Manager - Manages all backrooms items without registry
+ * Fracture 3 Items Manager - Manages all Fracture 3 dimension items
  * Integrates with CustomItemsGui and recipe systems
  */
 public class BackroomsItemsManager {
     
-    private static final Map<String, BackroomsItemDefinition> ITEMS = new HashMap<>();
+    private static final Map<String, Fracture3ItemDefinition> ITEMS = new HashMap<>();
     private static final Map<String, ItemStack> ITEM_STACKS = new HashMap<>();
     
     static {
         initializeItems();
     }
     
-    /**
-     * Initialize all backrooms items without registry
-     */
     private static void initializeItems() {
-        PoliticalServer.LOGGER.info("Initializing backrooms items without registry...");
+        PoliticalServer.LOGGER.info("Initializing Fracture 3 items...");
         
-        // SECTION 1: CONSUMABLES
-        addItemWithLore("infused_echo_shard", "Infused Echo Shard", 
-            "A crystalline shard pulsating with residual void energy. When thrown, it detonates in a brilliant blue flash that disorients nearby entities.",
-            "Throwable • Stuns enemies in radius", Items.AMETHYST_SHARD);
-            
-        addItemWithLore("almond_water", "Almond Water", 
-            "The most prized discovery of the Fracture. This amber liquid defies analysis—its molecular structure shifts constantly. Survivors report feelings of profound calm and renewed vigor after consumption.",
-            "Saturation III (25s) • Restores sanity", Items.POTION);
-            
-        addItemWithLore("energy_drink", "Energy Drink", 
-            "A metallic can bearing faded logos from forgotten corporations. The contents fizz with unnatural luminescence. One sip and the drinker feels boundless energy coursing through their veins.",
-            "Speed II + Saturation II (25s)", Items.POTION);
-            
-        addItemWithLore("liquid_pain", "Liquid Pain", 
-            "A swirling crimson fluid that seems to absorb light itself. Distilled from the suffering of those lost in the Fracture. Even sealed, its container feels warm with anguish.",
-            "⚠ DANGEROUS • Inflicts suffering", Items.POTION);
-            
-        addItemWithLore("memory_juice", "Memory Juice", 
-            "A golden elixir that tastes of nostalgia and forgotten dreams. Those who drink it report vivid recollections of lives they may never have lived.",
-            "Restores lost memories • Clarity", Items.POTION);
-            
-        addItemWithLore("wanderers_tea", "Wanderer's Tea", 
-            "A soothing herbal brew found occasionally in Fracture supply caches. The leaves are unknown to any botanical database. Warmth spreads through the body, easing the weariness of endless wandering.",
-            "Regeneration • Soothing warmth", Items.POTION);
-            
-        addItemWithLore("null_cola", "Null Cola", 
-            "A carbonated beverage that shouldn't exist. The can shows no manufacturing marks. The liquid inside is darker than black, yet tastes impossibly refreshing.",
-            "Refreshes • Void-touched", Items.POTION);
-            
-        addItemWithLore("filtered_water", "Filtered Water", 
-            "Water purified through Fracture filtration systems. Crystal clear and cold. A rare comfort in an endless maze of hostile geometry.",
-            "Clean hydration • Safe to drink", Items.POTION);
-            
-        addItemWithLore("suspicious_liquid", "Suspicious Liquid", 
-            "An unidentified fluid that shifts between colors. Its origin is unknown. Analysis equipment malfunctions in its presence. Consumption is not recommended.",
-            "⚠ UNKNOWN • Unpredictable effects", Items.POTION);
-            
-        addItemWithLore("adrenaline_shot", "Adrenaline Shot", 
-            "A medical injector containing a synthesized compound. When used, it floods the body with emergency response hormones. Vital for escaping dangerous situations.",
-            "Emergency stim • Burst of energy", Items.SPYGLASS);
-            
-        addItemWithLore("courage_elixir", "Courage Elixir", 
-            "A warm amber liquid that glows faintly in darkness. Ancient recipes speak of liquid bravery—this may be the closest thing to it. Fear fades, replaced by determination.",
-            "Resistance • Fear immunity", Items.POTION);
-            
-        addItemWithLore("night_vision_serum", "Night Vision Serum", 
-            "A luminescent blue serum developed for Fracture exploration. One drop in each eye grants the ability to see in absolute darkness for extended periods.",
-            "Night Vision • Sees through void", Items.POTION);
-            
-        addItemWithLore("clarity_potion", "Clarity Potion", 
-            "A pale silver liquid that seems to flow upward against gravity. Clears the mind of confusion and mental fog. Thoughts become sharp and focused.",
-            "Clears confusion • Mental focus", Items.POTION);
-            
-        addItemWithLore("endurance_brew", "Endurance Brew", 
-            "A thick red mixture that tastes of iron and determination. The body becomes more resilient, able to withstand punishment that would fell lesser beings.",
-            "Resistance + Absorption", Items.POTION);
-            
-        addItemWithLore("haste_tonic", "Haste Tonic", 
-            "A bright yellow effervescent liquid. Time seems to slow around the drinker while their movements accelerate to supernatural speeds.",
-            "Haste II • Rapid actions", Items.POTION);
-            
-        addItemWithLore("featherfall_draught", "Featherfall Draught", 
-            "A light blue liquid that seems to float in its container. Gravity's grip loosens on the drinker, allowing graceful descents from any height.",
-            "Slow Falling • Safe descent", Items.POTION);
+        // ════════════════════════════════════════════════════════════
+        // RAW MATERIALS (6)
+        // ════════════════════════════════════════════════════════════
         
-        // SECTION 2: FOOD
-        addItemWithLore("raw_crawler_meat", "Raw Crawler Meat", 
-            "Raw flesh harvested from crawler entities. Tough, sinewy, and carrying unknown pathogens. Cooking is strongly recommended before consumption.",
-            "⚠ Raw • Low nutrition", Items.ROTTEN_FLESH);
+        addMaterial("wallpaper_fibre", "Wallpaper Fibre", Items.PAPER,
+            "Thin strips of faded wallpaper peeled from Fracture walls.",
+            "Used in Wallpaper Wraps armor crafting.");
             
-        addItemWithLore("cooked_crawler_meat", "Cooked Crawler Meat", 
-            "Properly prepared crawler flesh. The cooking process neutralizes most harmful compounds. Surprisingly nutritious, if one can overcome the texture.",
-            "Good nutrition • Sustenance", Items.COOKED_BEEF);
+        addMaterial("static_residue", "Static Residue", Items.GUNPOWDER,
+            "Crackling dust collected from areas of high dimensional instability.",
+            "Used in Static Shell armor crafting.");
             
-        addItemWithLore("raw_hound_meat", "Raw Hound Meat", 
-            "Cuts from hound entities. Dark red and pungent. The flesh of these aggressive creatures requires thorough cooking to neutralize trace toxins.",
-            "⚠ Raw • Risk of illness", Items.ROTTEN_FLESH);
+        addMaterial("void_shard", "Void Shard", Items.END_CRYSTAL,
+            "A fragment of crystallized nothingness from the deepest void pockets.",
+            "Used in Void Plate armor crafting.");
             
-        addItemWithLore("cooked_hound_meat", "Cooked Hound Meat", 
-            "Properly prepared hound flesh. Rich in protein and surprisingly filling. A staple food source for long-term Fracture survivors.",
-            "High nutrition • Filling", Items.COOKED_PORKCHOP);
+        addMaterial("fluorescent_dust", "Fluorescent Dust", Items.GLOWSTONE_DUST,
+            "Luminescent powder scraped from Fracture lighting fixtures.",
+            "Used in Fluorescent Staff crafting.");
             
-        addItemWithLore("void_jerky", "Void Jerky", 
-            "Dried meat preserved through unknown Fracture processes. It never seems to spoil. The taste is smoky with an otherworldly undertone.",
-            "Long-lasting • Never spoils", Items.BEEF);
+        addMaterial("hound_pelt", "Hound Pelt", Items.RABBIT_HIDE,
+            "Thick dark fur harvested from defeated Hound entities.",
+            "Used in Hound Leather armor crafting.");
             
-        addItemWithLore("skulk_stew", "Skulk Stew", 
-            "A thick stew incorporating sculk compounds found in the deepest Fracture regions. The bowl seems to absorb sound. Eating it is an eerily silent experience.",
-            "Strange nourishment • Silence", Items.MUSHROOM_STEW);
-            
-        addItemWithLore("moldy_bread", "Moldy Bread", 
-            "Ancient bread found in Fracture supply caches. The mold is actually beneficial—a strain that produces natural antibiotics. Better than it looks.",
-            "Cures minor ailments • Filling", Items.BREAD);
-            
-        addItemWithLore("canned_beans", "Canned Beans", 
-            "Preserved beans in a dented can. The label is in an unknown language. Despite appearances, the contents remain perfectly edible after countless years.",
-            "Preserved • Reliable food", Items.RABBIT_STEW);
-            
-        addItemWithLore("protein_bar", "Protein Bar", 
-            "A dense nutritional bar wrapped in faded packaging. Developed for military operations, now scattered throughout the Fracture. Dry but effective.",
-            "Compact nutrition • Energy boost", Items.COOKIE);
-            
-        addItemWithLore("emergency_rations", "Emergency Rations", 
-            "Compact survival food designed for extreme conditions. Tasteless but life-sustaining. Each packet contains a day's worth of nutrition.",
-            "Survival food • Long-lasting", Items.DRIED_KELP);
-            
-        addItemWithLore("mystery_meat", "Mystery Meat", 
-            "Meat of unknown origin. The texture and flavor don't match any known species. It's edible—probably—but questions remain unanswered.",
-            "Unknown source • Edible", Items.COOKED_CHICKEN);
-            
-        addItemWithLore("preserved_fruit", "Preserved Fruit", 
-            "Fruit preserved in a crystalline substance. Sweet and refreshing, a rare pleasure in the Fracture. Some say it brings brief glimpses of sunlight.",
-            "Rare treat • Morale boost", Items.GOLDEN_APPLE);
-            
-        addItemWithLore("nutrient_paste", "Nutrient Paste", 
-            "A viscous green paste containing all essential nutrients. Developed for long-term survival. The taste is... functional. Survival isn't always pleasant.",
-            "Complete nutrition • No taste", Items.SLIME_BALL);
-            
-        addItemWithLore("survival_biscuit", "Survival Biscuit", 
-            "A hard, dry biscuit designed for long-term storage. Nearly impossible to break by hand. Soaking in water is recommended before eating.",
-            "Dense • Hard • Long-lasting", Items.BREAD);
-            
-        addItemWithLore("faceling_steak", "Faceling Steak", 
-            "A cut of meat from uncertain origins. Those who've eaten it report vivid dreams of faces they've never seen. The taste is unsettlingly familiar.",
-            "Strange visions • High quality", Items.COOKED_BEEF);
+        addMaterial("presence_residue", "Presence Residue", Items.PRISMARINE_SHARD,
+            "An eerie substance left behind when a Presence fades.",
+            "Used in advanced Fracture crafting.");
         
-        // SECTION 3: MATERIALS
-        addItemWithLore("crawler_hide", "Crawler Hide", 
-            "Tough leather harvested from crawler entities. Resistant to tearing and water. Valuable for crafting durable equipment.",
-            "Durable leather • Water-resistant", Items.LEATHER);
-            
-        addItemWithLore("hound_pelt", "Hound Pelt", 
-            "A thick fur pelt from hound entities. Surprisingly warm despite its dark color. The fur seems to absorb light.",
-            "Warm • Light-absorbing", Items.RABBIT_HIDE);
-            
-        addItemWithLore("aranea_silk", "Aranea Silk", 
-            "Silk threads from aranea entities. Incredibly strong for their weight. Useful for crafting high-tension applications.",
-            "Strong thread • Versatile", Items.STRING);
-            
-        addItemWithLore("smiler_essence", "Smiler Essence", 
-            "A glowing powder extracted from smiler entities. It emits faint light and seems to shift in brightness. Unsettling to hold.",
-            "Glowing • Unstable light", Items.GLOWSTONE_DUST);
-            
-        addItemWithLore("partygoer_confetti", "Partygoer Confetti", 
-            "Colorful confetti from partygoer entities. It never seems to stop moving, as if caught in an eternal celebration. Slightly warm to the touch.",
-            "Animated • Festive residue", Items.PAPER);
-            
-        addItemWithLore("skinstealer_fabric", "Skinstealer Fabric", 
-            "A pale fabric woven from skinstealer residue. Uncomfortably soft. Those who touch it too long report phantom sensations of other skin.",
-            "Unsettling texture • Soft", Items.WHITE_WOOL);
-            
-        addItemWithLore("faceling_mask", "Faceling Mask", 
-            "A smooth mask worn by faceling entities. Featureless and cold. Wearing it brings a strange sense of anonymity—and loss of identity.",
-            "Identity obscuring • Cold", Items.CARVED_PUMPKIN);
-            
-        addItemWithLore("wretch_scrap", "Wretch Scrap", 
-            "Salvaged metal from wretch entities. Corroded yet somehow still structurally sound. Useful for basic crafting.",
-            "Salvaged metal • Refined", Items.IRON_INGOT);
-            
-        addItemWithLore("backrooms_iodine", "Backrooms Iodine", 
-            "Crystalline iodine found in Fracture medical caches. Useful for purification and treatment. A rare find with practical applications.",
-            "Medical • Purification", Items.AMETHYST_SHARD);
-            
-        addItemWithLore("conduit_fragment", "Conduit Fragment", 
-            "A shard from an unknown conduit system. It hums with residual energy. Perhaps once part of a larger transportation network.",
-            "Energy residue • Conduit part", Items.PRISMARINE_SHARD);
-            
-        addItemWithLore("reality_core", "Reality Core", 
-            "A pulsating core that seems to anchor reality around it. Invaluable for stabilizing dimensional rifts. Extremely rare.",
-            "Stabilizes reality • Anchor", Items.END_CRYSTAL);
-            
-        addItemWithLore("fracture_shard", "Fracture Shard", 
-            "A sharp fragment from a dimensional fracture point. The edges seem to cut through space itself. Handle with extreme caution.",
-            "Dimensional cutting • Sharp", Items.OBSIDIAN);
-            
-        addItemWithLore("echo_dust", "Echo Dust", 
-            "Fine dust that carries whispers of distant sounds. Used in certain Fracture technologies. Listening too closely is not recommended.",
-            "Carries echoes • Whispering", Items.GUNPOWDER);
-            
-        addItemWithLore("static_crystal", "Static Crystal", 
-            "A crystal that crackles with captured static energy. Useful for powering certain devices. The noise can be maddening after extended exposure.",
-            "Static energy • Power source", Items.QUARTZ);
-            
-        addItemWithLore("time_sand", "Time Sand", 
-            "Sand grains that seem to move slower than they should. Each grain allegedly contains a frozen moment. Valuable for temporal applications.",
-            "Time-frozen • Temporal", Items.SAND);
-            
-        addItemWithLore("memory_fragment", "Memory Fragment", 
-            "A crystallized fragment of someone's memory. Gazing into it reveals brief, emotionally-charged moments from an unknown life.",
-            "Contains memories • Emotional", Items.GHAST_TEAR);
+        // ════════════════════════════════════════════════════════════
+        // ARMOR SETS - WALLPAPER WRAPS (Leather-based, Cyan)
+        // ════════════════════════════════════════════════════════════
         
-        // SECTION 4: TOOLS
-        addItemWithLore("reality_anchor", "Reality Anchor", 
-            "A complex device that stabilizes local reality. Prevents dimensional drift in unstable areas. Essential for long-term Fracture survival.",
-            "Stabilizes position • Prevents drift", Items.COMPASS);
+        addArmorPiece("wallpaper_helmet", "Wallpaper Wrap Hood", Items.LEATHER_HELMET,
+            "A hood woven from layered wallpaper strips.", "WALLPAPER_WRAPS",
+            2, 1, 0x00FFFF, "Blends with walls • Slight invisibility in corners");
             
-        addItemWithLore("dimensional_key", "Dimensional Key", 
-            "A key that seems to fit no known lock. It hums when near dimensional boundaries. Perhaps it opens doors that don't exist yet.",
-            "Opens dimensional locks • Humming", Items.TRIPWIRE_HOOK);
+        addArmorPiece("wallpaper_chestplate", "Wallpaper Wrap Cloak", Items.LEATHER_CHESTPLATE,
+            "A cloak of faded patterns and peeling layers.", "WALLPAPER_WRAPS",
+            3, 1, 0x00FFFF, "Blends with walls • Slight invisibility in corners");
             
-        addItemWithLore("void_compass", "Void Compass", 
-            "A compass that points toward the nearest void pocket rather than spawn. The needle moves erratically in stable areas.",
-            "Points to void • Navigation", Items.COMPASS);
+        addArmorPiece("wallpaper_leggings", "Wallpaper Wrap Leggings", Items.LEATHER_LEGGINGS,
+            "Leggings wrapped in yellowed wallpaper strips.", "WALLPAPER_WRAPS",
+            2, 1, 0x00FFFF, "Blends with walls • Slight invisibility in corners");
             
-        addItemWithLore("echo_locator", "Echo Locator", 
-            "A device that detects recent dimensional activity. The dial spins when near Fracture boundaries. Useful for finding exits—or avoiding them.",
-            "Detects rifts • Locates echoes", Items.CLOCK);
-            
-        addItemWithLore("fracture_detector", "Fracture Detector", 
-            "An instrument for measuring dimensional instability. Higher readings indicate proximity to fracture points. Essential for safe exploration.",
-            "Measures instability • Warning", Items.SPYGLASS);
-            
-        addItemWithLore("static_filter", "Static Filter", 
-            "A device that screens out dimensional static. Clarity of perception increases near Fracture zones. The world becomes slightly more real.",
-            "Filters static • Clarity", Items.TOTEM_OF_UNDYING);
-            
-        addItemWithLore("timepiece", "Timepiece", 
-            "A clock that measures local temporal flow rather than absolute time. In the Fracture, time moves strangely. This device helps track it.",
-            "Tracks local time • Temporal", Items.CLOCK);
-            
-        addItemWithLore("memory_bank", "Memory Bank", 
-            "A storage vessel for preserving important memories. In the Fracture, forgetting is easy. This device ensures some things remain remembered.",
-            "Stores memories • Preservation", Items.ENDER_PEARL);
-            
-        addItemWithLore("special_torch", "Special Torch", 
-            "A torch that burns with unusual intensity. Its light repels certain light-sensitive entities. A comfort in the endless dark.",
-            "Bright light • Repels entities", Items.TORCH);
+        addArmorPiece("wallpaper_boots", "Wallpaper Wrap Boots", Items.LEATHER_BOOTS,
+            "Boots covered in faded floral patterns.", "WALLPAPER_WRAPS",
+            1, 1, 0x00FFFF, "Blends with walls • Silent footsteps");
         
-        // SECTION 5: ARMOR RUNES
-        addItemWithLore("rune_pyromaniac", "Rune of Pyromaniac", 
-            "A burning rune etched with flame symbols. When applied to armor, it grants resistance to fire and the ability to walk through flames unburned.",
-            "Fire resistance • Flame walk", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_berserkers_rage", "Rune of Berserker's Rage", 
-            "A blood-red rune that pulses with contained fury. Grants immense strength in battle but clouds judgment. Power has a price.",
-            "Strength boost • Battle fury", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_nightstalker", "Rune of Nightstalker", 
-            "A dark rune that seems to absorb light. Grants enhanced vision in darkness. The shadows become allies rather than threats.",
-            "Night vision • Shadow affinity", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_heavyweight", "Rune of Heavyweight", 
-            "A dense rune that feels impossibly heavy. Grants immense durability and knockback resistance. Movement becomes slower but resilience increases.",
-            "Durability • Knockback resist", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_vampiric", "Rune of Vampiric", 
-            "A crimson rune that seems to pulse with stolen life. Grants life-stealing abilities on hit. What is taken from enemies restores the wielder.",
-            "Life steal • Sustain", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_echo_walker", "Rune of Echo Walker", 
-            "A shimmering rune that leaves afterimages in the air. Grants silent movement and reduced detection. Walk without being heard.",
-            "Silent movement • Stealth", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_skulk_infused", "Rune of Skulk Infusion", 
-            "A dark blue rune that resonates with sculk energy. Grants sensitivity to vibrations and sculk-based abilities. The deep listens.",
-            "Sculk sensitivity • Deep powers", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_featherweight", "Rune of Featherweight", 
-            "A light rune that seems to float in hand. Grants enhanced agility and jump height. The ground becomes merely a suggestion.",
-            "Agility • Jump boost", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_thorned", "Rune of Thorns", 
-            "A spiked rune that pricks the holder. Grants defensive thorns that damage attackers. Pain shared is pain halved.",
-            "Thorns • Damage reflection", Items.NETHERITE_SCRAP);
-            
-        addItemWithLore("rune_glutton", "Rune of Glutton", 
-            "A rune etched with consumption symbols. Grants enhanced consumption benefits. Food and potions become more effective.",
-            "Enhanced consumption • Better food", Items.NETHERITE_SCRAP);
+        // ════════════════════════════════════════════════════════════
+        // ARMOR SETS - STATIC SHELL (Chainmail-based, Yellow)
+        // ════════════════════════════════════════════════════════════
         
-        PoliticalServer.LOGGER.info("Loaded " + ITEMS.size() + " backrooms items");
+        addArmorPiece("static_helmet", "Static Shell Helmet", Items.CHAINMAIL_HELMET,
+            "A crackling helm of compressed static energy.", "STATIC_SHELL",
+            2, 2, 0xFFFF00, "Absorbs lightning • Redirects electrical damage");
+            
+        addArmorPiece("static_chestplate", "Static Shell Chestplate", Items.CHAINMAIL_CHESTPLATE,
+            "A vest that hums with contained static charge.", "STATIC_SHELL",
+            4, 2, 0xFFFF00, "Absorbs lightning • Redirects electrical damage");
+            
+        addArmorPiece("static_leggings", "Static Shell Leggings", Items.CHAINMAIL_LEGGINGS,
+            "Leg armor crackling with residual energy.", "STATIC_SHELL",
+            3, 2, 0xFFFF00, "Absorbs lightning • Speed boost in storms");
+            
+        addArmorPiece("static_boots", "Static Shell Boots", Items.CHAINMAIL_BOOTS,
+            "Boots that spark with each step.", "STATIC_SHELL",
+            1, 2, 0xFFFF00, "Absorbs lightning • Walk on charged blocks");
+        
+        // ════════════════════════════════════════════════════════════
+        // ARMOR SETS - VOID PLATE (Iron-based, Purple)
+        // ════════════════════════════════════════════════════════════
+        
+        addArmorPiece("void_helmet", "Void Plate Helmet", Items.IRON_HELMET,
+            "A helm forged from crystallized void matter.", "VOID_PLATE",
+            2, 3, 0x800080, "Void resistance • Breath in void areas");
+            
+        addArmorPiece("void_chestplate", "Void Plate Chestplate", Items.IRON_CHESTPLATE,
+            "Heavy armor that absorbs light itself.", "VOID_PLATE",
+            5, 3, 0x800080, "Void resistance • 20% damage reduction from void");
+            
+        addArmorPiece("void_leggings", "Void Plate Leggings", Items.IRON_LEGGINGS,
+            "Leg plates that seem to flicker in and out of existence.", "VOID_PLATE",
+            4, 3, 0x800080, "Void resistance • Phase through thin walls");
+            
+        addArmorPiece("void_boots", "Void Plate Boots", Items.IRON_BOOTS,
+            "Boots that anchor you against dimensional drift.", "VOID_PLATE",
+            2, 3, 0x800080, "Void resistance • No fall damage in void");
+        
+        // ════════════════════════════════════════════════════════════
+        // ARMOR SETS - HOUND LEATHER (Leather-based, Dark Red)
+        // ════════════════════════════════════════════════════════════
+        
+        addArmorPiece("hound_helmet", "Hound Leather Hood", Items.LEATHER_HELMET,
+            "A hood crafted from the dark fur of Hound entities.", "HOUND_LEATHER",
+            2, 2, 0x8B0000, "Hound affinity • Intimidation aura");
+            
+        addArmorPiece("hound_chestplate", "Hound Leather Chestplate", Items.LEATHER_CHESTPLATE,
+            "A vest of thick fur that absorbs impact.", "HOUND_LEATHER",
+            4, 2, 0x8B0000, "Hound affinity • Reduced entity detection range");
+            
+        addArmorPiece("hound_leggings", "Hound Leather Leggings", Items.LEATHER_LEGGINGS,
+            "Leg armor of dark, coarse fur.", "HOUND_LEATHER",
+            3, 2, 0x8B0000, "Hound affinity • Scent tracking");
+            
+        addArmorPiece("hound_boots", "Hound Leather Boots", Items.LEATHER_BOOTS,
+            "Boots that muffle all sound.", "HOUND_LEATHER",
+            1, 2, 0x8B0000, "Hound affinity • Silent movement");
+        
+        // ════════════════════════════════════════════════════════════
+        // WEAPONS (5)
+        // ════════════════════════════════════════════════════════════
+        
+        addWeapon("corridor_blade", "Corridor Blade", Items.IRON_SWORD,
+            "A blade that extends infinitely in the wielder's perception.",
+            "Reach +2 blocks • Bonus damage in corridors");
+            
+        addWeapon("static_lance", "Static Lance", Items.TRIDENT,
+            "A crackling spear of compressed lightning.",
+            "Chain lightning on hit • 30% chance to paralyze");
+            
+        addWeapon("mirror_blade", "Mirror Blade", Items.DIAMOND_SWORD,
+            "A reflective sword that shows glimpses of other places.",
+            "Reflects 25% projectile damage • Teleport on critical");
+            
+        addWeapon("hound_fang_dagger", "Hound Fang Dagger", Items.IRON_SWORD,
+            "A jagged dagger carved from a Hound's fang.",
+            "Bleed effect • +50% damage to Hound entities");
+            
+        addWeapon("fluorescent_staff", "Fluorescent Staff", Items.BLAZE_ROD,
+            "A staff that channels the Fracture's eerie lighting.",
+            "Light aura • Blindness on hit • Illuminates hidden entities");
+        
+        // ════════════════════════════════════════════════════════════
+        // TOOLS (3)
+        // ════════════════════════════════════════════════════════════
+        
+        addTool("corridor_lantern", "Corridor Lantern", Items.LANTERN,
+            "A lantern that reveals paths through impossible geometry.",
+            "Reveals hidden doors • Lights 20 block radius");
+            
+        addTool("static_compass", "Static Compass", Items.COMPASS,
+            "A compass that points toward dimensional instabilities.",
+            "Points to nearest Fracture exit • Detects entities through walls");
+            
+        addTool("void_drill", "Void Drill", Items.DIAMOND_PICKAXE,
+            "A mining tool that phases through solid matter.",
+            "Mines 3x3 area • Breaks unbreakable blocks in Fracture");
+        
+        // ════════════════════════════════════════════════════════════
+        // MISC ITEMS (3)
+        // ════════════════════════════════════════════════════════════
+        
+        addMisc("almond_water_flask", "Almond Water Flask", Items.POTION,
+            "A flask of the Fracture's most precious resource.",
+            "Restores 8 hearts • Clears all negative effects • Sanity restore");
+            
+        addMisc("room_number_plaque", "Room Number Plaque", Items.NAME_TAG,
+            "A brass plaque bearing a room number. One of thousands.",
+            "Marks location • Teleport back to marked room");
+            
+        addMisc("the_log", "The Log", Items.WRITTEN_BOOK,
+            "A journal found in the Fracture. The entries are... disturbing.",
+            "Contains survivor notes • Hints at exit locations");
+        
+        PoliticalServer.LOGGER.info("Loaded " + ITEMS.size() + " Fracture 3 items");
     }
     
-    /**
-     * Add an item with detailed lore
-     */
-    private static void addItemWithLore(String id, String name, String description, String effect, Item baseItem) {
-        BackroomsItemDefinition definition = new BackroomsItemDefinition(id, name, description, baseItem);
-        ITEMS.put(id, definition);
-        
-        // Create ItemStack with detailed lore
+    // Helper methods for creating items
+    private static void addMaterial(String id, String name, Item baseItem, String desc, String use) {
         ItemStack stack = new ItemStack(baseItem);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.YELLOW));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.AQUA));
         
-        // Build detailed lore
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        // Wrap description into multiple lines (approx 35 chars per line)
-        int descLen = description.length();
-        for (int i = 0; i < descLen; i += 35) {
-            int end = Math.min(i + 35, descLen);
-            String line = description.substring(i, end);
-            lore.add(Text.literal(line).formatted(Formatting.GRAY));
-        }
+        lore.add(Text.literal(desc).formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("【" + effect + "】").formatted(Formatting.AQUA));
+        lore.add(Text.literal("◆ RAW MATERIAL").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal(use).formatted(Formatting.YELLOW));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("「Fracture Relic」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
+        lore.add(Text.literal("「Fracture 3」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
         
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        
+        ITEMS.put(id, new Fracture3ItemDefinition(id, name, "material", baseItem));
         ITEM_STACKS.put(id, stack);
     }
     
-    /**
-     * Add an item to the registry (legacy method)
-     */
-    private static void addItem(String id, String name, String description, Item baseItem) {
-        addItemWithLore(id, name, description, "Unknown effect", baseItem);
+    private static void addArmorPiece(String id, String name, Item baseItem, String desc, String set, 
+                                       int armor, int toughness, int color, String effect) {
+        ItemStack stack = new ItemStack(baseItem);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.LIGHT_PURPLE));
+        stack.set(DataComponentTypes.DYED_COLOR, new net.minecraft.component.type.DyedColorComponent(color));
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal(desc).formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ " + set.replace("_", " ")).formatted(Formatting.GOLD));
+        lore.add(Text.literal("Armor: +" + armor + "  Toughness: +" + toughness).formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ " + effect).formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Fracture 3」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        ITEMS.put(id, new Fracture3ItemDefinition(id, name, "armor", baseItem));
+        ITEM_STACKS.put(id, stack);
     }
     
-    /**
-     * Get an item by ID
-     */
+    private static void addWeapon(String id, String name, Item baseItem, String desc, String effect) {
+        ItemStack stack = new ItemStack(baseItem);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.RED, Formatting.BOLD));
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal(desc).formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚔ FRACTURE WEAPON").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ " + effect).formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Fracture 3」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        ITEMS.put(id, new Fracture3ItemDefinition(id, name, "weapon", baseItem));
+        ITEM_STACKS.put(id, stack);
+    }
+    
+    private static void addTool(String id, String name, Item baseItem, String desc, String effect) {
+        ItemStack stack = new ItemStack(baseItem);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.GREEN));
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal(desc).formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⛏ FRACTURE TOOL").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ " + effect).formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Fracture 3」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        ITEMS.put(id, new Fracture3ItemDefinition(id, name, "tool", baseItem));
+        ITEM_STACKS.put(id, stack);
+    }
+    
+    private static void addMisc(String id, String name, Item baseItem, String desc, String effect) {
+        ItemStack stack = new ItemStack(baseItem);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(Formatting.GOLD));
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal(desc).formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("★ FRACTURE ARTIFACT").formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ " + effect).formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Fracture 3」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        ITEMS.put(id, new Fracture3ItemDefinition(id, name, "misc", baseItem));
+        ITEM_STACKS.put(id, stack);
+    }
+    
     public static ItemStack getItem(String id) {
         return ITEM_STACKS.getOrDefault(id, ItemStack.EMPTY);
     }
     
-    /**
-     * Get all items
-     */
     public static Map<String, ItemStack> getAllItems() {
         return new HashMap<>(ITEM_STACKS);
     }
     
-    /**
-     * Get item definition
-     */
-    public static BackroomsItemDefinition getDefinition(String id) {
+    public static Fracture3ItemDefinition getDefinition(String id) {
         return ITEMS.get(id);
     }
     
-    /**
-     * Check if an item is a backrooms item
-     */
-    public static boolean isBackroomsItem(ItemStack stack) {
+    public static boolean isFracture3Item(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        // Simplified check - check if item name matches any backrooms item
-        Text name = stack.getName();
-        return name.getString().contains("§"); // All backrooms items have colored names
+        var lore = stack.get(DataComponentTypes.LORE);
+        if (lore == null) return false;
+        for (Text line : lore.lines()) {
+            if (line.getString().contains("Fracture 3")) return true;
+        }
+        return false;
     }
     
-    /**
-     * Get backrooms item ID from stack
-     */
-    public static String getItemId(ItemStack stack) {
-        if (!isBackroomsItem(stack)) return null;
-        // Simplified - return null for now
-        return null;
-    }
-    
-    /**
-     * Item definition class
-     */
-    public static class BackroomsItemDefinition {
+    public static class Fracture3ItemDefinition {
         public final String id;
         public final String name;
-        public final String description;
+        public final String type;
         public final Item baseItem;
         
-        public BackroomsItemDefinition(String id, String name, String description, Item baseItem) {
+        public Fracture3ItemDefinition(String id, String name, String type, Item baseItem) {
             this.id = id;
             this.name = name;
-            this.description = description;
+            this.type = type;
             this.baseItem = baseItem;
         }
     }

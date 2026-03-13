@@ -126,7 +126,7 @@ public class CustomItemsGui {
                 .build());
 
         // 👑 Piglin Items
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        gui.setSlot(17, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• Crown of Greed").formatted(Formatting.GOLD))

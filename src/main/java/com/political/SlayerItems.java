@@ -353,16 +353,15 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal("👁 Phase Teleport").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal("  Right-click while looking at air").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  to teleport up to 10 blocks.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Right-click to teleport up to 10 blocks").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  in your look direction.").formatted(Formatting.GRAY));
         lore.add(Text.literal("  No cost.  Cooldown: 2 seconds").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("👁 Ender Phase Mode").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal("  Sneak + Right-click while looking").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  at air to activate. Become invisible,").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  invincible & untargetable.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Sneak + Right-click to activate.").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  Become invisible, invincible & untargetable.").formatted(Formatting.GRAY));
         lore.add(Text.literal("  Duration: §e15 seconds  §8Cooldown: §72 min").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  §c⚠ Overstaying amplifies Wither!").formatted(Formatting.GRAY));
+        lore.add(Text.literal("  §c⚠ Cannot break blocks while active!").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + ENDER_PHASE_HELMET_LEVEL_REQ)
                 .formatted(Formatting.RED));
