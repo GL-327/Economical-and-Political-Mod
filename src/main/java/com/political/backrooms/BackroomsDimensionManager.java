@@ -27,72 +27,30 @@ public class BackroomsDimensionManager {
 
     /** Returns true if the given world is one of the Backrooms dimensions. */
     public static boolean isBackroomsDimension(ServerWorld world) {
-        RegistryKey<net.minecraft.world.World> key = world.getRegistryKey();
-        return key.equals(BACKROOMS_KEY) || key.equals(POOLROOMS_KEY) || key.equals(INDUSTRIAL_KEY);
+        // Disable custom dimensions to prevent registry sync issues
+        return false;
     }
 
     /**
      * Teleport a player to a specific fracture.
      * fracture 1 = Poolrooms, 2 = Industrial, default = Backrooms (Level 0).
+     * DISABLED: Custom dimensions disabled to prevent registry sync issues
      */
     public static void teleportToFracture(ServerPlayerEntity player, int fracture) {
-        MinecraftServer server = player.getEntityWorld().getServer();
-
-        RegistryKey<net.minecraft.world.World> targetKey = switch (fracture) {
-            case 1 -> POOLROOMS_KEY;
-            case 2 -> INDUSTRIAL_KEY;
-            default -> BACKROOMS_KEY;
-        };
-
-        ServerWorld targetWorld = server.getWorld(targetKey);
-        if (targetWorld == null) {
-            player.sendMessage(Text.literal("§cFracture " + fracture + " is currently unreachable."), false);
-            return;
-        }
-
-        Random rng = new Random();
-        int x = rng.nextInt(2000) - 1000;
-        int z = rng.nextInt(2000) - 1000;
-
-        player.teleport(targetWorld, x, 2.0, z,
-            Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
-        player.sendMessage(Text.literal("§6⟳ You are entering Fracture " + fracture + "..."), false);
+        player.sendMessage(Text.literal("§cCustom dimensions are currently disabled."), false);
+        player.sendMessage(Text.literal("§7This feature is disabled to ensure server-side compatibility."), false);
     }
 
     /**
      * Teleport a player into the Backrooms via an End Gateway event.
      * Requires a Warden Core item for reliable entry; without it the chance is 1-in-1000.
+     * DISABLED: Custom dimensions disabled to prevent registry sync issues
      *
      * @return true if the player was teleported (caller should cancel the original Gateway teleport)
      */
     public static boolean teleportToBackrooms(ServerPlayerEntity player, boolean hasWardenCore) {
-        MinecraftServer server = player.getEntityWorld().getServer();
-
-        Random rng = new Random();
-
-        RegistryKey<net.minecraft.world.World> targetKey;
-        if (hasWardenCore) {
-            // 90% chance main Backrooms, 10% Poolrooms with Warden Core
-            targetKey = (rng.nextInt(10) < 9) ? BACKROOMS_KEY : POOLROOMS_KEY;
-        } else {
-            // 1-in-1000 chance of accidental entry
-            if (rng.nextInt(1000) != 0) return false;
-            int roll = rng.nextInt(100);
-            if (roll < 1)       targetKey = POOLROOMS_KEY;
-            else if (roll < 2)  targetKey = INDUSTRIAL_KEY;
-            else                targetKey = BACKROOMS_KEY;
-        }
-
-        ServerWorld targetWorld = server.getWorld(targetKey);
-        if (targetWorld == null) return false;
-
-        int x = rng.nextInt(4000) - 2000;
-        int z = rng.nextInt(4000) - 2000;
-
-        player.teleport(targetWorld, x, 2.0, z,
-            Set.<PositionFlag>of(), player.getYaw(), player.getPitch(), true);
-        player.sendMessage(Text.literal("§8You slip through the cracks of reality..."), false);
-        return true;
+        // Disabled to prevent registry sync issues
+        return false;
     }
 
     /**
@@ -112,20 +70,19 @@ public class BackroomsDimensionManager {
     /**
      * Returns true when {@code pos} is at or within 1 block horizontally of the
      * exit beacon.  Used by the server-tick exit detector.
+     * DISABLED: Custom dimensions disabled
      */
     public static boolean isAtExitBeacon(BlockPos pos) {
-        BlockPos exit = getExitBeaconPos();
-        return pos.getY() == exit.getY()
-            && Math.abs(pos.getX() - exit.getX()) <= 1
-            && Math.abs(pos.getZ() - exit.getZ()) <= 1;
+        return false; // Disabled
     }
 
     /**
      * Teleports {@code player} from the Backrooms back to the overworld spawn.
      * Call this when the player activates the exit beacon.
+     * DISABLED: Custom dimensions disabled
      */
     public static void escapeBackrooms(ServerPlayerEntity player) {
-        player.sendMessage(Text.literal("§a✦ You have escaped the Backrooms."), false);
+        // Disabled - just teleport to spawn
         com.political.SpawnManager.teleportToSpawn(player);
     }
 
@@ -135,20 +92,7 @@ public class BackroomsDimensionManager {
      * Call this during mod initialisation (before the server loads worlds).
      */
     public static void registerCodecs() {
-        // Only register chunk generators on server side to prevent client registry sync issues
-        if (net.fabricmc.loader.api.FabricLoader.getInstance().getEnvironmentType() == net.fabricmc.api.EnvType.SERVER) {
-            Registry.register(
-                Registries.CHUNK_GENERATOR,
-                Identifier.of(PoliticalServer.MOD_ID, "backrooms"),
-                BackroomsChunkGenerator.CODEC);
-            Registry.register(
-                Registries.CHUNK_GENERATOR,
-                Identifier.of(PoliticalServer.MOD_ID, "poolrooms"),
-                PoolroomsChunkGenerator.CODEC);
-            Registry.register(
-                Registries.CHUNK_GENERATOR,
-                Identifier.of(PoliticalServer.MOD_ID, "industrial"),
-                IndustrialChunkGenerator.CODEC);
-        }
+        // Don't register any codecs to prevent client registry sync issues
+        // We'll handle dimensions programmatically without using data pack registry system
     }
 }

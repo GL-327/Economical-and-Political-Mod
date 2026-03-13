@@ -61,13 +61,14 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
-		com.political.backrooms.BackroomsDimensionManager.registerCodecs();
+		// Disabled dimension-related registrations to prevent client registry sync issues
+		// com.political.backrooms.BackroomsDimensionManager.registerCodecs();
 		BountyCraftingHandler.register();
 		BeamCraftingHandler.register();
 		CustomMobRegistry.registerAll();
 		com.political.backrooms.BackroomsMobs.registerAll();
-		com.political.backrooms.BackroomsItems.register();
-		com.political.backrooms.inventory.BackroomsSpawnManager.register();
+		// com.political.backrooms.BackroomsItems.register();
+		// com.political.backrooms.inventory.BackroomsSpawnManager.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			if (world.isClient()) return ActionResult.PASS;
 			// Check for any beam weapon (including Ultra Overclocked)
@@ -429,19 +430,20 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 				BountySpawnManager.tick(world);
 				HealthScalingManager.tickUpgradedMobDespawn(world);
 
-				// Backrooms exit beacon detection
-				if (com.political.backrooms.BackroomsDimensionManager.isBackroomsDimension(world)) {
-					for (ServerPlayerEntity player : world.getPlayers()) {
-						if (com.political.backrooms.BackroomsDimensionManager.isAtExitBeacon(player.getBlockPos())) {
-							com.political.backrooms.BackroomsDimensionManager.escapeBackrooms(player);
-						}
-					}
-				}
+				// Backrooms exit beacon detection - DISABLED
+				// if (com.political.backrooms.BackroomsDimensionManager.isBackroomsDimension(world)) {
+				//	for (ServerPlayerEntity player : world.getPlayers()) {
+				//		if (com.political.backrooms.BackroomsDimensionManager.isAtExitBeacon(player.getBlockPos())) {
+				//			com.political.backrooms.BackroomsDimensionManager.escapeBackrooms(player);
+				//		}
+				//	}
+				// }
 
 				// Player ticks for this world
 				for (ServerPlayerEntity player : world.getPlayers()) {
 					ArmorAbilityHandler.tick(player);
 				}
+// ... rest of the code ...
 			}
 
 // Slayer manager
