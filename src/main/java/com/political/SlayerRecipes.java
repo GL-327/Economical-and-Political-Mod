@@ -206,75 +206,159 @@ public class SlayerRecipes {
         ));
         
         // ===== BACKROOMS RECIPES =====
-        
-        // Almond Water
+
+        // Almond Water Flask
         RECIPES.add(new Recipe(
-                "Almond Water",
-                com.political.backrooms.items.BackroomsItemsManager.getItem("almond_water"),
+                "Almond Water Flask",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("almond_water_flask"),
                 new ItemStack[] {
-                        new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.SUGAR), new ItemStack(Items.GLASS_BOTTLE),
-                        new ItemStack(Items.AZURE_BLUET), new ItemStack(Items.WHEAT), new ItemStack(Items.GLASS_BOTTLE),
-                        ItemStack.EMPTY, new ItemStack(Items.SUGAR), ItemStack.EMPTY
+                        new ItemStack(Items.POTION), new ItemStack(Items.SUGAR), new ItemStack(Items.WHEAT),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
                 },
                 null, 0
         ));
-        
-        // Energy Drink
+
+        // Wallpaper Wrap Helmet
         RECIPES.add(new Recipe(
-                "Energy Drink",
-                com.political.backrooms.items.BackroomsItemsManager.getItem("energy_drink"),
+                "Wallpaper Wrap Hood",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_helmet"),
                 new ItemStack[] {
-                        new ItemStack(Items.SUGAR), new ItemStack(Items.REDSTONE), new ItemStack(Items.GLASS_BOTTLE),
-                        new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.SUGAR), new ItemStack(Items.GLASS_BOTTLE),
-                        ItemStack.EMPTY, new ItemStack(Items.REDSTONE), ItemStack.EMPTY
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
                 },
                 null, 0
         ));
-        
-        // Crawler Hide to Leather
+
+        // Wallpaper Wrap Chestplate
         RECIPES.add(new Recipe(
-                "Crawler Hide Processing",
-                new ItemStack(Items.LEATHER, 3),
+                "Wallpaper Wrap Cloak",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_chestplate"),
                 new ItemStack[] {
-                        com.political.backrooms.items.BackroomsItemsManager.getItem("crawler_hide"), new ItemStack(Items.WATER_BUCKET), ItemStack.EMPTY,
-                        ItemStack.EMPTY, new ItemStack(Items.FLINT_AND_STEEL), ItemStack.EMPTY,
-                        ItemStack.EMPTY, new ItemStack(Items.AIR), ItemStack.EMPTY
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre")
                 },
                 null, 0
         ));
-        
-        // Backrooms Iodine Block
+
+        // Static Shell Chestplate
         RECIPES.add(new Recipe(
-                "Backrooms Iodine Block",
-                new ItemStack(Items.AMETHYST_BLOCK),
+                "Static Shell Chestplate",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("static_chestplate"),
                 new ItemStack[] {
-                        com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"),
-                        com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"),
-                        com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine"), com.political.backrooms.items.BackroomsItemsManager.getItem("backrooms_iodine")
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue")
                 },
                 null, 0
         ));
-        
-        // Memory Fragment to Experience Bottle
+
+        // Void Plate Chestplate
         RECIPES.add(new Recipe(
-                "Memory Extraction",
-                new ItemStack(Items.EXPERIENCE_BOTTLE, 3),
+                "Void Plate Chestplate",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("void_chestplate"),
                 new ItemStack[] {
-                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("memory_fragment"), ItemStack.EMPTY,
-                        new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.GLASS_BOTTLE),
-                        ItemStack.EMPTY, new ItemStack(Items.DIAMOND), ItemStack.EMPTY
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard")
                 },
                 null, 0
         ));
-        
-        // Reality Anchor to Compass
+
+        // Hound Leather Chestplate
         RECIPES.add(new Recipe(
-                "Reality Anchor Calibration",
-                new ItemStack(Items.COMPASS),
+                "Hound Leather Chestplate",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("hound_chestplate"),
                 new ItemStack[] {
-                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("reality_anchor"), ItemStack.EMPTY,
-                        new ItemStack(Items.REDSTONE), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.REDSTONE),
-                        ItemStack.EMPTY, new ItemStack(Items.COPPER_INGOT), ItemStack.EMPTY
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt")
+                },
+                null, 0
+        ));
+
+        // Corridor Blade
+        RECIPES.add(new Recipe(
+                "Corridor Blade",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("corridor_blade"),
+                new ItemStack[] {
+                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), ItemStack.EMPTY,
+                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("wallpaper_fibre"), ItemStack.EMPTY,
+                        ItemStack.EMPTY, new ItemStack(Items.STICK), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+
+        // Static Lance
+        RECIPES.add(new Recipe(
+                "Static Lance",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("static_lance"),
+                new ItemStack[] {
+                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), ItemStack.EMPTY,
+                        ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), ItemStack.EMPTY,
+                        ItemStack.EMPTY, new ItemStack(Items.BLAZE_ROD), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+
+        // Void Drill
+        RECIPES.add(new Recipe(
+                "Void Drill",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("void_drill"),
+                new ItemStack[] {
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"),
+                        ItemStack.EMPTY, new ItemStack(Items.STICK), ItemStack.EMPTY,
+                        ItemStack.EMPTY, new ItemStack(Items.STICK), ItemStack.EMPTY
+                },
+                null, 0
+        ));
+
+        // Corridor Lantern
+        RECIPES.add(new Recipe(
+                "Corridor Lantern",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("corridor_lantern"),
+                new ItemStack[] {
+                        new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT),
+                        new ItemStack(Items.IRON_INGOT), com.political.backrooms.items.BackroomsItemsManager.getItem("fluorescent_dust"), new ItemStack(Items.IRON_INGOT),
+                        new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT)
+                },
+                null, 0
+        ));
+
+        // Static Shell Helmet
+        RECIPES.add(new Recipe(
+                "Static Shell Helmet",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("static_helmet"),
+                new ItemStack[] {
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("static_residue"),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+                },
+                null, 0
+        ));
+
+        // Void Plate Helmet
+        RECIPES.add(new Recipe(
+                "Void Plate Helmet",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("void_helmet"),
+                new ItemStack[] {
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("void_shard"),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+                },
+                null, 0
+        ));
+
+        // Hound Leather Helmet
+        RECIPES.add(new Recipe(
+                "Hound Leather Helmet",
+                com.political.backrooms.items.BackroomsItemsManager.getItem("hound_helmet"),
+                new ItemStack[] {
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"),
+                        com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"), ItemStack.EMPTY, com.political.backrooms.items.BackroomsItemsManager.getItem("hound_pelt"),
+                        ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
                 },
                 null, 0
         ));

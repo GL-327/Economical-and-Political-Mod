@@ -80,6 +80,18 @@ public class Fracture3PortalInterceptor {
      * Intercept the portal and send player to Fracture 3
      */
     private static void interceptPortal(ServerPlayerEntity player) {
+        // Play sound: backrooms:electrical_hum at player position, volume 0.8, pitch 0.9
+        player.getEntityWorld().playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvent.of(net.minecraft.util.Identifier.of("backrooms", "electrical_hum")), net.minecraft.sound.SoundCategory.AMBIENT, 0.8f, 0.9f);
+        
+        // Apply Nausea II for 5 seconds on arrival
+        player.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.NAUSEA, 100, 1, false, false, true));
+        
+        // Send action bar message: "" (empty - no message. silence is the point.)
+        player.sendMessage(net.minecraft.text.Text.literal(""), true);
+        
+        // Screen fade to white over 1.5 seconds (TitleTimes packet: 10 in, 20 stay, 10 out)
+        player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket(10, 20, 10)); 
+
         // Teleport to Fracture 3
         Fracture3DimensionManager.teleportToFracture3(player);
     }

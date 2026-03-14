@@ -209,7 +209,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view HPEBM upgrades!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
-        gui.setSlot(32, new GuiElementBuilder(Items.NAME_TAG)
+        gui.setSlot(32, new GuiElementBuilder(Items.ENDER_EYE)
+                .setName(Text.literal("🔦 Backrooms Items").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft exclusive Fracture 3 gear!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openBackroomsRecipes(player)).build());
+
+        gui.setSlot(33, new GuiElementBuilder(Items.NAME_TAG)
                 .setName(Text.literal("✨ Backrooms — Armor Runes").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Craft attribute runes for your armor!").formatted(Formatting.GRAY))
@@ -642,6 +649,48 @@ public class RecipesGui {
         gui.open();
     }
 
+    // ============================================================
+    // BACKROOMS RECIPES
+    // ============================================================
+    public static void openBackroomsRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🔦 Backrooms Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.ENDER_EYE)
+                .setName(Text.literal("🔦 Backrooms Recipes").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click an item to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        int[] slots = {19, 20, 21, 22, 23, 24, 28, 29, 30, 31, 32, 33};
+        int slotIdx = 0;
+
+        for (SlayerRecipes.Recipe r : SlayerRecipes.getAllRecipes()) {
+            if (r.requiredSlayer == null && slotIdx < slots.length) {
+                ItemStack icon = r.result.copy();
+                gui.setSlot(slots[slotIdx], new GuiElementBuilder(icon.isEmpty() ? Items.PAPER : icon.getItem())
+                        .setName(Text.literal(r.name).formatted(Formatting.YELLOW, Formatting.BOLD))
+                        .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                        .setCallback((idx, type, action) -> {
+                            openRecipePage(player, r.name,
+                                    Text.literal(r.name + " Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                                    r.ingredients, r.result, () -> openBackroomsRecipes(player));
+                        }).build());
+                slotIdx++;
+            }
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
     private static void openHPEBMUpgradeRecipe(ServerPlayerEntity player, int targetTier,
                                                 net.minecraft.item.Item mat1, int count1,
                                                 net.minecraft.item.Item mat2, int count2) {
@@ -927,7 +976,8 @@ public class RecipesGui {
 
         int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30, 38};
         for (int i = 0; i < runes.length; i++) {
-            Item runeItem  = (Item) runes[i][0];
+            ItemStack runeStack = (ItemStack) runes[i][0];
+            Item runeItem  = runeStack.isEmpty() ? Items.PAPER : runeStack.getItem();
             ArmorAttribute attr   = (ArmorAttribute) runes[i][1];
             String name    = (String) runes[i][2];
             Formatting color = (Formatting) runes[i][3];

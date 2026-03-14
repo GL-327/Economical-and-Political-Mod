@@ -68,13 +68,16 @@ public class VoidRespawnHandler {
             
             // Apply void damage after 3 seconds
             if (fallDuration > VOID_DAMAGE_THRESHOLD) {
-                // 1 heart (2 damage) per second
-                player.damage(player.getEntityWorld(), player.getDamageSources().outOfWorld(), 2.0f);
-            }
-            
-            // Respawn after falling too far (below Y=-64)
-            if (pos.getY() < -64) {
-                respawnPlayer(player);
+                if (player.age % 20 == 0) {
+                    if (player.getHealth() <= 2.0f) {
+                        // Prevent death, trigger handler teleport
+                        player.setHealth(20.0f);
+                        respawnPlayer(player);
+                    } else {
+                        // 1 heart (2 damage) per second
+                        player.damage(player.getEntityWorld(), player.getDamageSources().outOfWorld(), 2.0f);
+                    }
+                }
             }
         } else {
             // Update valid position
