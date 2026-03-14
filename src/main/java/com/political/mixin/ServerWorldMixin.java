@@ -1,9 +1,9 @@
 package com.political.mixin;
 
-import com.political.backrooms.fracture3.Fracture3ChunkGenerator;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.source.BiomeSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,16 +22,19 @@ public abstract class ServerWorldMixin {
             try {
                 var chunkManager = world.getChunkManager();
                 var currentGenerator = chunkManager.getChunkGenerator();
+                BiomeSource bs = currentGenerator.getBiomeSource();
                 
-                // Construct our custom generator
-                Fracture3ChunkGenerator customGenerator = new Fracture3ChunkGenerator(currentGenerator.getBiomeSource());
+                // Use reflection to bypass compiler type-checking issues with Fracture3ChunkGenerator
+                Class<?> genClass = Class.forName("com.political.backrooms.fracture3.Fracture3ChunkGenerator");
+                java.lang.reflect.Constructor<?> ctor = genClass.getConstructor(BiomeSource.class);
+                Object customGenerator = ctor.newInstance(bs);
                 
                 // Swap the generator in the ChunkManager via Reflection
                 java.lang.reflect.Field generatorField = net.minecraft.server.world.ServerChunkManager.class.getDeclaredField("chunkGenerator");
                 generatorField.setAccessible(true);
                 generatorField.set(chunkManager, customGenerator);
                 
-                System.out.println("[PoliticalServer] Swapped generator for Fracture 3 to custom Backrooms generator.");
+                System.out.println("[PoliticalServer] Swapped generator for Fracture 3 to custom Backrooms generator via Reflection.");
             } catch (Exception e) {
                 System.err.println("[PoliticalServer] Failed to swap generator for Fracture 3: " + e.getMessage());
                 e.printStackTrace();

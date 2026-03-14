@@ -4,22 +4,18 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryFixedCodec;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.noise.NoiseConfig;
-import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.StructureAccessor;
-
+import net.minecraft.world.gen.chunk.Blender;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -38,9 +34,9 @@ public class Fracture3ChunkGenerator extends ChunkGenerator {
     public static final int CEILING_Y = 79;
     
     // Perlin noise constants for carpet
-    private final net.minecraft.world.biome.source.BiomeSource biomeSource;
+    private final BiomeSource biomeSource;
 
-    public Fracture3ChunkGenerator(net.minecraft.world.biome.source.BiomeSource biomeSource) {
+    public Fracture3ChunkGenerator(BiomeSource biomeSource) {
         super(biomeSource);
         this.biomeSource = biomeSource;
     }
