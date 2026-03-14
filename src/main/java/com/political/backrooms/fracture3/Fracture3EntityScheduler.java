@@ -41,7 +41,7 @@ public class Fracture3EntityScheduler {
             if (world.getLightLevel(playerPos) <= 2) {
                 // If it's dark near the player, 5% chance to spawn a smiler 10-15 blocks away
                 if (world.getRandom().nextFloat() < 0.05f) {
-                    SmilerEntity smiler = com.political.ModEntities.SMILER.create(world, SpawnReason.NATURAL);
+                    SmilerEntity smiler = new SmilerEntity(EntityType.ENDERMAN, world);
                     if (smiler != null) {
                         smiler.refreshPositionAndAngles(playerPos.getX() + 10, playerPos.getY(), playerPos.getZ() + 10, 0, 0);
                         world.spawnEntity(smiler);
@@ -55,7 +55,7 @@ public class Fracture3EntityScheduler {
                 int length = Math.max(currentNode.get().getWidth(), currentNode.get().getLength());
                 if (length >= 48) {
                     if (world.getRandom().nextFloat() < 0.02f) { // Rare spawn
-                        HoundEntity hound = com.political.ModEntities.HOUND.create(world, SpawnReason.NATURAL);
+                        HoundEntity hound = new HoundEntity(EntityType.ZOMBIE, world);
                         if (hound != null) {
                             hound.refreshPositionAndAngles(currentNode.get().getX() + 2, 65, currentNode.get().getZ() + 2, 0, 0);
                             world.spawnEntity(hound);
