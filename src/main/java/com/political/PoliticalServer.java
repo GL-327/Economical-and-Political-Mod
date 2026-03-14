@@ -391,7 +391,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 			TabListManager.tick(s);
 			VanishManager.tick(s);
 			BountyArmorHandler.tick(s);
-			com.political.backrooms.attribute.AttributeEffectHandler.onServerTick(s);
 
 			// Boss abilities - iterate worlds
 			for (ServerWorld world : s.getWorlds()) {
@@ -426,20 +425,11 @@ for (ServerWorld world : s.getWorlds()) {
     BountySpawnManager.tick(world);
     HealthScalingManager.tickUpgradedMobDespawn(world);
 
-    // Backrooms exit beacon detection - ENABLED with simulation
-    if (com.political.backrooms.BackroomsDimensionManager.isBackroomsDimension(world)) {
-        for (ServerPlayerEntity player : world.getPlayers()) {
-            if (com.political.backrooms.BackroomsDimensionManager.isAtExitBeacon(player.getBlockPos())) {
-                com.political.backrooms.BackroomsDimensionManager.escapeBackrooms(player);
-            }
-        }
-    }
 
     // Player ticks for this world
     for (ServerPlayerEntity player : world.getPlayers()) {
         ArmorAbilityHandler.tick(player);
     }
-// ... rest of the code ...
 			}
 
 // Slayer manager
@@ -458,10 +448,10 @@ for (ServerWorld world : s.getWorlds()) {
 				CustomItemHandler.tickZombieBerserkerHelmet(player);
 				CustomItemHandler.tickSkeletonBow(player);
 				CustomItemHandler.tickUltraOverclockedLeftClick(player);
-				CustomItemHandler.tickEnderPhaseHelmet(player);
 				SlayerArmorHandler.applyCustomArmorAttributes(player);
 				T2ArmorAbilityHandler.tick(player);
 				CustomItemHandler.tickCrownOfGreed(player);
+				ArmourAttributeHandler.tick(player);
 				if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
 
 			}
@@ -479,7 +469,7 @@ for (ServerWorld world : s.getWorlds()) {
 			visibilityTickCounter++;
 			if (visibilityTickCounter >= 10) {
 				visibilityTickCounter = 0;
-				HealthScalingManager.tickNameTagVisibility(s);  // ADD THIS LINE
+				HealthScalingManager.tickNameTagVisibility(s);
 			}
 			HealthScalingManager.tickCleanup();
 

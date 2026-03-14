@@ -3,6 +3,9 @@ package com.political;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.NbtComponent;
@@ -10,18 +13,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LightningEntity;
-import net.minecraft.item.Items;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.util.Identifier;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -34,33 +34,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.block.AbstractCauldronBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.world.RaycastContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import java.util.*;
 
 public class CustomItemHandler {
     private static final Map<UUID, Boolean> wasSwinging = new HashMap<>();
@@ -75,21 +55,9 @@ public class CustomItemHandler {
     private static final Map<UUID, Long> berserkerWarningCooldown = new HashMap<>();
     private static final long WARNING_COOLDOWN_MS = 3000; // 3 seconds between warnings
 
-    // Ender Phase Helmet state tracking
-    private static final Map<UUID, Long> enderWarpCooldowns = new HashMap<>();
-    private static final long ENDER_WARP_COOLDOWN_MS = 2000; // 2 seconds
-    private static final double ENDER_WARP_MAX_DISTANCE = 10.0; // blocks (limited to 10 blocks max)
-    /** Debounce to prevent UseItemCallback + UseBlockCallback both firing on the same interaction.
-     *  Stores the server tick of the last processed interaction; both callbacks fire within the
-     *  same tick, so a tick-based comparison is 100% reliable unlike millisecond-based timings. */
-    private static final Map<UUID, Long> helmetInteractionDebounce = new HashMap<>();
-    private static final long HELMET_DEBOUNCE_TICKS = 2; // reject calls within the same 2-tick window
-    private static final Map<UUID, Long> enderPhaseCooldowns = new HashMap<>();
-    private static final long ENDER_PHASE_COOLDOWN_MS = 120_000; // 2 minutes
-    private static final Map<UUID, Long> enderPhaseActiveUntil = new HashMap<>();
-    private static final long ENDER_PHASE_DURATION_MS = 15_000; // 15 seconds
-    /** Entity IDs hidden from each phased player via EntitiesDestroyS2CPacket. */
-    private static final Map<UUID, Set<Integer>> hiddenEntityIds = new HashMap<>();
+    public static boolean isInEnderPhaseMode(UUID uuid) {
+        return false;
+    }
 
     public static void register() {
         registerBountyItemRestrictions();
@@ -106,35 +74,7 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
 
-        // Attribute Rune application: runes are applied ONLY via the anvil (see AnvilCraftingMixin).
-        // Right-clicking a rune now just informs the player of the correct method.
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
-            ItemStack held = player.getStackInHand(hand);
-            if (!(held.getItem() instanceof com.political.backrooms.attribute.AttributeRuneItem rune))
-                return ActionResult.PASS;
 
-            com.political.backrooms.attribute.ArmorAttribute attr = rune.getAttribute();
-            String slotName = attr.requiredSlot == net.minecraft.entity.EquipmentSlot.HEAD ? "helmet"
-                    : attr.requiredSlot == net.minecraft.entity.EquipmentSlot.CHEST ? "chestplate"
-                    : attr.requiredSlot == net.minecraft.entity.EquipmentSlot.LEGS ? "leggings" : "boots";
-            sp.sendMessage(net.minecraft.text.Text.literal(
-                    "§6Place your §e" + slotName + " §6in an §eanvil §6with this rune to apply it. "
-                    + "§7(Costs §e" + attr.getXpCost() + " XP levels§7)"), false);
-            return ActionResult.SUCCESS;
-        });
-
-        // Ender Phase: block attacks on players and block damage while in phase
-        net.fabricmc.fabric.api.event.player.AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
-            if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
-            // Only block breaking while in active Ender Phase Mode
-            if (isInEnderPhaseMode(sp.getUuid())) {
-                return ActionResult.FAIL; // cannot break blocks while in phase
-            }
-            return ActionResult.PASS;
-        });
 
         // Harvey's Stick - Lightning on attack / Ender Phase - block attacks on players
 
@@ -143,12 +83,12 @@ public class CustomItemHandler {
             if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
 
             // Ender Phase: cannot attack other players while in phase
-            if (isInEnderPhaseMode(sp.getUuid()) && entity instanceof PlayerEntity) {
-                return ActionResult.FAIL;
-            }
+            // if (isInEnderPhaseMode(sp.getUuid()) && entity instanceof PlayerEntity) {
+            //     return ActionResult.FAIL;
+            // }
 
-            ItemStack held = player.getStackInHand(hand);
-            if (isHarveysStick(held) && entity instanceof LivingEntity target) {
+            ItemStack weapon = player.getStackInHand(hand);
+            if (isHarveysStick(weapon) && entity instanceof LivingEntity target) {
                 if (target != player) {
                     LightningEntity lightning = EntityType.LIGHTNING_BOLT.create((ServerWorld) world, SpawnReason.TRIGGERED);
                     if (lightning != null) {
@@ -157,32 +97,60 @@ public class CustomItemHandler {
                     }
                 }
             }
-            return ActionResult.PASS;
-        });
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity)) return ActionResult.PASS;
+            
+            // Ender Sword: Teleport behind target on hit
+            if (SlayerItems.isType(weapon, SlayerItems.ENDER_SWORD) && entity instanceof LivingEntity target) {
+                Vec3d targetDir = target.getRotationVec(1.0f).normalize().multiply(-1.5);
+                Vec3d behind = target.getPos().add(targetDir);
+                sp.teleport((ServerWorld) world, behind.x, behind.y, behind.z, Set.of(), target.getYaw(), target.getPitch(), true);
+                world.playSound(null, sp.getX(), sp.getY(), sp.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            }
 
-            ItemStack held = player.getStackInHand(hand);
-            if (isAnyBeamWeapon(held)) {
-                hpebmLastRightClick.put(player.getUuid(), System.currentTimeMillis());
-                return ActionResult.CONSUME;
+            // Abyssal Blade: Bonus damage to blinded targets
+            if (SlayerItems.isType(weapon, SlayerItems.ABYSSAL_BLADE) && entity instanceof LivingEntity target) {
+                if (target.hasStatusEffect(StatusEffects.BLINDNESS) || target.hasStatusEffect(StatusEffects.DARKNESS)) {
+                    target.damage(world, sp.getDamageSources().playerAttack(sp), 5.0f); // Bonus damage
+                    if (world instanceof ServerWorld sw) {
+                        sw.spawnParticles(ParticleTypes.SOUL, target.getX(), target.getY() + 1.0, target.getZ(), 10, 0.5, 0.5, 0.5, 0.05);
+                    }
+                }
             }
             return ActionResult.PASS;
         });
-        // The Gavel
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClient()) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
 
-            ItemStack heldItem = player.getStackInHand(hand);
+            ItemStack held = player.getStackInHand(hand);
 
-            if (isTheGavel(heldItem)) {
-                if (useGavelAbility(serverPlayer, heldItem)) {
+            // Beam Weapons
+            if (isAnyBeamWeapon(held)) {
+                hpebmLastRightClick.put(player.getUuid(), System.currentTimeMillis());
+                return ActionResult.CONSUME;
+            }
+
+            // The Gavel
+            if (isTheGavel(held)) {
+                if (useGavelAbility(serverPlayer, held)) {
                     return ActionResult.SUCCESS;
                 }
                 return ActionResult.FAIL;
             }
+
+            // Echoing Core: Sonic Boom
+            if (SlayerItems.isType(held, SlayerItems.ECHOING_CORE)) {
+                if (!serverPlayer.getItemCooldownManager().isCoolingDown(held)) {
+                    serverPlayer.getItemCooldownManager().set(held, 100); // 5s cooldown
+                    fireSonicBoom(serverPlayer);
+                    return ActionResult.SUCCESS;
+                }
+            }
+
+            // Bounty Item Restrictions (Cores, etc.)
+            if (isBountyItemRestricted(held)) {
+                return ActionResult.FAIL;
+            }
+
             return ActionResult.PASS;
         });
 
@@ -196,150 +164,32 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
 
-        // Ender Phase Helmet - right-click handler (fires when clicking in air with empty hands)
-        // This is the PRIMARY activation path - works when looking at AIR (not at a block)
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (world.isClient()) return ActionResult.PASS;
-            if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
-
-            ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
-            if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
-
-            // Check level requirement
-            if (!SlayerItems.canUseEnderPhaseHelmet(serverPlayer)) {
-                int req = SlayerItems.ENDER_PHASE_HELMET_LEVEL_REQ;
-                serverPlayer.sendMessage(
-                    Text.literal("⛔ Requires Enderman Bounty Level " + req + " to use!").formatted(Formatting.RED), true);
-                return ActionResult.PASS;
-            }
-
-            return handleEnderPhaseActivation(serverPlayer);
-        });
-
-        // Ender Phase Helmet - UseBlockCallback should NOT trigger ability (looking at block = ground)
-        // Only used for debounce tracking to prevent double-fires
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (world.isClient()) return ActionResult.PASS;
-            if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
-
-            ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
-            if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
-
-            long currentTick = serverPlayer.getEntityWorld().getTime();
-            helmetInteractionDebounce.put(serverPlayer.getUuid(), currentTick);
-            
-            return ActionResult.PASS; // Don't consume, let normal block interaction proceed
-        });
-
-        // Ender Phase Helmet - also trigger when right-clicking a block with the helmet
-        // (fallback for cases where UseItemCallback does not fire with empty hands)
-        // Removed duplicate UseBlockCallback
 
     }
 
-    /**
-     * Core logic for Ender Phase Helmet right-click and sneak+right-click abilities.
-     * Called from UseItemCallback when clicking in air (looking at air, not at a block).
-     *
-     * <p>A tick-based debounce prevents the double-fire that occurs when the player
-     * right-clicks on a block with empty hands: Minecraft sends both a
-     * UseItemCallback AND a UseBlockCallback for the same interaction in that case.
-     * Both callbacks always fire within the same server tick, so storing the last
-     * processed tick and rejecting calls within 2 ticks is 100% reliable.</p>
-     */
-    private static ActionResult handleEnderPhaseActivation(ServerPlayerEntity serverPlayer) {
-            long currentTick = serverPlayer.getEntityWorld().getTime();
-            UUID uuid = serverPlayer.getUuid();
-
-            // Debounce — skip duplicate invocations from the same user interaction.
-            // Both UseItemCallback and UseBlockCallback fire within the same server tick,
-            // so comparing tick counts is 100% reliable (unlike ms which can match on same tick).
-            Long lastTick = helmetInteractionDebounce.get(uuid);
-            if (lastTick != null && currentTick - lastTick < HELMET_DEBOUNCE_TICKS) {
-                return ActionResult.CONSUME;
+    private static void fireSonicBoom(ServerPlayerEntity player) {
+        ServerWorld world = (ServerWorld) player.getWorld();
+        Vec3d start = player.getEyePos();
+        Vec3d direction = player.getRotationVec(1.0f);
+        
+        for (int i = 1; i <= 15; i++) {
+            Vec3d pos = start.add(direction.multiply(i));
+            world.spawnParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+            
+            Box box = new Box(pos.subtract(1.5, 1.5, 1.5), pos.add(1.5, 1.5, 1.5));
+            for (Entity entity : world.getOtherEntities(player, box, e -> e instanceof LivingEntity)) {
+                if (entity instanceof LivingEntity living) {
+                    living.damage(world, player.getDamageSources().sonicBoom(player), 10.0f);
+                    Vec3d push = direction.multiply(1.0).add(0, 0.2, 0);
+                    living.setVelocity(push);
+                }
             }
-            helmetInteractionDebounce.put(uuid, currentTick);
-
-            long now = System.currentTimeMillis();
-
-            if (serverPlayer.isSneaking()) {
-                // Sneak + right-click: Toggle Ender Phase Mode
-                Long activeUntil = enderPhaseActiveUntil.get(uuid);
-                boolean isInPhaseMode = activeUntil != null && now < activeUntil;
-
-                if (isInPhaseMode) {
-                    // Deactivate
-                    enderPhaseActiveUntil.remove(uuid);
-                    enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
-                    serverPlayer.removeStatusEffect(StatusEffects.INVISIBILITY);
-                    serverPlayer.removeStatusEffect(StatusEffects.DARKNESS);
-                    serverPlayer.removeStatusEffect(StatusEffects.WITHER);
-                    hiddenEntityIds.remove(uuid);
-                    serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode deactivated.")
-                            .formatted(Formatting.DARK_PURPLE), true);
-                    return ActionResult.CONSUME;
-                }
-
-                Long cooldownUntil = enderPhaseCooldowns.get(uuid);
-                if (cooldownUntil != null && now < cooldownUntil) {
-                    long remainingSec = (cooldownUntil - now) / 1000;
-                    serverPlayer.sendMessage(Text.literal("⟡ Ender Phase on cooldown: " + remainingSec + "s")
-                            .formatted(Formatting.RED), true);
-                    return ActionResult.CONSUME;
-                }
-
-                // Activate Ender Phase Mode
-                enderPhaseActiveUntil.put(uuid, now + ENDER_PHASE_DURATION_MS);
-                hiddenEntityIds.put(uuid, new HashSet<>());
-                // ambient=false, showParticles=false, showIcon=true
-                serverPlayer.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.INVISIBILITY, Integer.MAX_VALUE, 0, false, false, true));
-                // Darkness effect gives a purple-ish vignette during phase
-                serverPlayer.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.DARKNESS, Integer.MAX_VALUE, 0, false, false, true));
-                serverPlayer.sendMessage(Text.literal("⟡ Ender Phase Mode ACTIVE — 15 seconds!")
-                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD), true);
-                return ActionResult.CONSUME;
-            } else {
-                // Normal right-click: Ender Warp (Phase Teleport — teleport up to 10 blocks in look direction)
-                Long cooldownUntil = enderWarpCooldowns.get(uuid);
-                if (cooldownUntil != null && now < cooldownUntil) {
-                    return ActionResult.CONSUME;
-                }
-
-                ServerWorld serverWorld = (ServerWorld) serverPlayer.getEntityWorld();
-                Vec3d eyePos = serverPlayer.getEyePos();
-                Vec3d lookVec = serverPlayer.getRotationVec(1.0f);
-                Vec3d targetPos = eyePos.add(lookVec.multiply(ENDER_WARP_MAX_DISTANCE));
-
-                Vec3d dest = targetPos;
-                // Place player slightly above the hit surface to avoid clipping
-                serverPlayer.teleport(serverWorld,
-                        dest.x, dest.y + 0.1, dest.z,
-                        Set.of(), serverPlayer.getYaw(), serverPlayer.getPitch(), false);
-
-                // Ender particles at destination
-                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.PORTAL,
-                        dest.x, dest.y + 0.5, dest.z, 15, 0.3, 0.5, 0.3, 0.05);
-
-                serverWorld.playSound(null, serverPlayer.getBlockPos(),
-                        SoundEvents.ENTITY_ENDERMAN_TELEPORT,
-                        SoundCategory.PLAYERS, 1.0f, 1.0f);
-
-                enderWarpCooldowns.put(uuid, now + ENDER_WARP_COOLDOWN_MS);
-                return ActionResult.CONSUME;
-            }
+        }
+        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
     /** Called on player disconnect to clean up per-player state and prevent memory leaks. */
     public static void onPlayerDisconnect(UUID uuid) {
-        enderWarpCooldowns.remove(uuid);
-        enderPhaseCooldowns.remove(uuid);
-        enderPhaseActiveUntil.remove(uuid);
-        helmetInteractionDebounce.remove(uuid);
-        hiddenEntityIds.remove(uuid);
         gavelCooldowns.remove(uuid);
         ultraOverclockedCooldowns.remove(uuid);
         berserkerHelmetActive.remove(uuid);
@@ -609,10 +459,10 @@ public class CustomItemHandler {
         player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(player));
 
         // Wind/cloud particles
-        world.spawnParticles(ParticleTypes.CLOUD,
+        ((ServerWorld) world).spawnParticles(ParticleTypes.CLOUD,
                 player.getX(), player.getY() + 0.5, player.getZ(),
                 20, 0.5, 0.2, 0.5, 0.05);
-        world.spawnParticles(ParticleTypes.POOF,
+        ((ServerWorld) world).spawnParticles(ParticleTypes.POOF,
                 player.getX(), player.getY(), player.getZ(),
                 15, 0.6, 0.1, 0.6, 0.1);
 
@@ -648,109 +498,20 @@ public class CustomItemHandler {
         wasSwinging.put(uuid, isSwinging);
     }
 
-    public static void tickHermesShoes(ServerPlayerEntity player) {
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
-        if (isHermesShoes(boots)) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 40, 2, true, false, false));
+    public static void tickUndeadHeart(ServerPlayerEntity player) {
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if (SlayerItems.isType(main, SlayerItems.UNDEAD_HEART) || SlayerItems.isType(off, SlayerItems.UNDEAD_HEART)) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.HEALTH_BOOST, 40, 4, true, false, false));
+        }
+        
+        // Bouncy Slime: Jump Boost and Fall Resistance
+        if (SlayerItems.isType(main, SlayerItems.BOUNCY_SLIME) || SlayerItems.isType(off, SlayerItems.BOUNCY_SLIME)) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 40, 1, true, false, false));
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 40, 0, true, false, false));
         }
     }
 
-    /** Returns true if the given player is currently in Ender Phase Mode. */
-    public static boolean isInEnderPhaseMode(java.util.UUID uuid) {
-        Long activeUntil = enderPhaseActiveUntil.get(uuid);
-        return activeUntil != null && System.currentTimeMillis() < activeUntil;
-    }
-
-    public static void tickEnderPhaseHelmet(ServerPlayerEntity player) {
-        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
-        if (!SlayerItems.isEnderPhaseHelmet(helmet)) {
-            // If they removed the helmet while in phase, cancel phase
-            UUID uuid = player.getUuid();
-            if (enderPhaseActiveUntil.containsKey(uuid)) {
-                enderPhaseActiveUntil.remove(uuid);
-                player.removeStatusEffect(StatusEffects.INVISIBILITY);
-                player.removeStatusEffect(StatusEffects.DARKNESS);
-                player.removeStatusEffect(StatusEffects.WITHER);
-                hiddenEntityIds.remove(uuid);
-                enderPhaseCooldowns.put(uuid, System.currentTimeMillis() + ENDER_PHASE_COOLDOWN_MS);
-            }
-            return;
-        }
-
-        UUID uuid = player.getUuid();
-        long now = System.currentTimeMillis();
-        Long activeUntil = enderPhaseActiveUntil.get(uuid);
-
-        if (activeUntil == null) return; // Not in phase mode
-
-        if (now >= activeUntil) {
-            // Phase has expired — apply scaling wither based on how long they overstayed
-            long overstayMs = now - activeUntil;
-            int witherAmplifier = (int) Math.min(4, overstayMs / 3000); // +1 level every 3 seconds
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.WITHER, 60, witherAmplifier, false, true, true));
-
-            // Ensure darkness is maintained during wither overstay
-            if (!player.hasStatusEffect(StatusEffects.DARKNESS)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.DARKNESS, 60, 0, false, false, true));
-            }
-
-            if (overstayMs > 30_000) {
-                // Forcibly end phase after 30 extra seconds
-                enderPhaseActiveUntil.remove(uuid);
-                player.removeStatusEffect(StatusEffects.INVISIBILITY);
-                player.removeStatusEffect(StatusEffects.DARKNESS);
-                player.removeStatusEffect(StatusEffects.WITHER);
-                hiddenEntityIds.remove(uuid);
-                enderPhaseCooldowns.put(uuid, now + ENDER_PHASE_COOLDOWN_MS);
-                player.sendMessage(Text.literal("⟡ Ender Phase Mode forcibly ended!")
-                        .formatted(Formatting.DARK_RED, Formatting.BOLD), true);
-            } else {
-                long remainWarning = (activeUntil + 30_000 - now) / 1000;
-                player.sendMessage(Text.literal("⟡ ⚠ Wither Lv" + (witherAmplifier + 1) + " — exit phase! " + remainWarning + "s left")
-                        .formatted(Formatting.DARK_RED), true);
-            }
-        } else {
-            // Still in phase — show countdown
-            long remainMs = activeUntil - now;
-            // Show countdown roughly once per second (~50ms window accounts for tick-timing variance)
-            if (remainMs % 1000 < 50) {
-                long remainSec = remainMs / 1000;
-                player.sendMessage(Text.literal("⟡ Ender Phase: " + remainSec + "s")
-                        .formatted(Formatting.DARK_PURPLE), true);
-            }
-            // Ensure invisibility is maintained; ambient=false, showParticles=false, showIcon=true
-            if (!player.hasStatusEffect(StatusEffects.INVISIBILITY)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.INVISIBILITY, 60, 0, false, false, true));
-            }
-            // Ensure darkness is maintained for purple hue
-            if (!player.hasStatusEffect(StatusEffects.DARKNESS)) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.DARKNESS, 60, 0, false, false, true));
-            }
-
-            // Hide all nearby entities (mobs and other players) from the phased player
-            if (!(player.getEntityWorld() instanceof ServerWorld serverWorld)) return;
-            Set<Integer> hidden = hiddenEntityIds.computeIfAbsent(uuid, k -> new HashSet<>());
-            it.unimi.dsi.fastutil.ints.IntArrayList toHide = new it.unimi.dsi.fastutil.ints.IntArrayList();
-            double px = player.getX(), py = player.getY(), pz = player.getZ();
-            net.minecraft.util.math.Box searchBox = new net.minecraft.util.math.Box(
-                    px - 64, py - 32, pz - 64, px + 64, py + 32, pz + 64);
-            for (Entity nearby : serverWorld.getOtherEntities(player, searchBox, e -> !e.isSpectator())) {
-                int eid = nearby.getId();
-                if (!hidden.contains(eid)) {
-                    toHide.add(eid);
-                    hidden.add(eid);
-                }
-            }
-            if (!toHide.isEmpty()) {
-                player.networkHandler.sendPacket(
-                        new net.minecraft.network.packet.s2c.play.EntitiesDestroyS2CPacket(toHide));
-            }
-        }
-    }
 
 
     public static void tickHPEBM(ServerPlayerEntity player) {
@@ -847,7 +608,7 @@ public class CustomItemHandler {
                 living.timeUntilRegen = 0;
                 living.damage(world, player.getDamageSources().magic(), baseDamage);
 
-                world.spawnParticles(ParticleTypes.CRIT,
+                ((ServerWorld) world).spawnParticles(ParticleTypes.CRIT,
                         living.getX(), living.getY() + living.getHeight() / 2, living.getZ(),
                         3, 0.2, 0.2, 0.2, 0.2);
             }
@@ -909,13 +670,13 @@ public class CustomItemHandler {
             Vec3d perp2 = direction.crossProduct(perp1).normalize();
             double angle = (ticks * spiralSpeed + i * 2) % (Math.PI * 2);
 
-            world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
+            ((ServerWorld) world).spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
 
             Vec3d spiral1 = basePos.add(perp1.multiply(Math.cos(angle) * spiralRadius)).add(perp2.multiply(Math.sin(angle) * spiralRadius));
-            world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral1.x, spiral1.y, spiral1.z, 1, 0, 0, 0, 0.25);
+            ((ServerWorld) world).spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral1.x, spiral1.y, spiral1.z, 1, 0, 0, 0, 0.25);
 
             Vec3d spiral2 = basePos.add(perp1.multiply(Math.cos(angle + Math.PI) * spiralRadius)).add(perp2.multiply(Math.sin(angle + Math.PI) * spiralRadius));
-            world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral2.x, spiral2.y, spiral2.z, 1, 0, 0, 0, 0.25);
+            ((ServerWorld) world).spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral2.x, spiral2.y, spiral2.z, 1, 0, 0, 0, 0.25);
         }
     }
 
@@ -943,31 +704,31 @@ public class CustomItemHandler {
             // Core particles per tier (fast-dissipating, no drop)
             switch (tier) {
                 case 2 ->
-                        world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
+                        ((ServerWorld) world).spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
                 case 3 -> {
                     world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.2);
-                    world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.15);
                 }
                 case 4 -> {
-                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.15);
-                    world.spawnParticles(ParticleTypes.END_ROD, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.01);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.15);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.END_ROD, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.01);
                 }
                 case 5 -> {
-                    world.spawnParticles(ParticleTypes.WITCH, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.01);
-                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.2);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.WITCH, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.01);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.2);
                 }
                 case 6 -> {
-                    world.spawnParticles(ParticleTypes.WITCH, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.01);
-                    world.spawnParticles(ParticleTypes.DAMAGE_INDICATOR, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.05);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.WITCH, basePos.x, basePos.y, basePos.z, 2, 0, 0, 0, 0.01);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.05);
                 }
                 case 7 -> {
                     // Reduced speed: 0.15 -> 0.05 (less movement = tighter beam)
-                    world.spawnParticles(ParticleTypes.BUBBLE, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.015);
-                    world.spawnParticles(ParticleTypes.REVERSE_PORTAL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.5);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.BUBBLE, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.015);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.REVERSE_PORTAL, basePos.x, basePos.y, basePos.z, 1, 0, 0, 0, 0.5);
                     // Reduced delta (0.02 -> 0.0) and speed (0.2 -> 0.05)
-                    world.spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
-                    world.spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
-                    world.spawnParticles(ParticleTypes.WHITE_ASH, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.CRIT, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.ENCHANTED_HIT, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.WHITE_ASH, basePos.x, basePos.y, basePos.z, 1, 0.0, 0.0, 0.0, 0.01);
                 }
             }
 
@@ -977,7 +738,7 @@ public class CustomItemHandler {
                 Vec3d spiral = basePos
                         .add(perp1.multiply(Math.cos(helixAngle) * spiralRadius))
                         .add(perp2.multiply(Math.sin(helixAngle) * spiralRadius));
-                world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral.x, spiral.y, spiral.z, 1, 0, 0, 0, 0.2);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.ELECTRIC_SPARK, spiral.x, spiral.y, spiral.z, 1, 0, 0, 0, 0.2);
             }
 
             if (tier >= 5) {
@@ -986,7 +747,7 @@ public class CustomItemHandler {
                 Vec3d outer = basePos
                         .add(perp1.multiply(Math.cos(outerAngle) * outerRadius))
                         .add(perp2.multiply(Math.sin(outerAngle) * outerRadius));
-                world.spawnParticles(ParticleTypes.CRIT, outer.x, outer.y, outer.z, 1, 0, 0, 0, 0.015);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.CRIT, outer.x, outer.y, outer.z, 1, 0, 0, 0, 0.015);
             }
         }
 
@@ -1006,10 +767,10 @@ public class CustomItemHandler {
                 default -> 4.0f;
             };
 
-            world.spawnParticles(ParticleTypes.EXPLOSION, endPoint.x, endPoint.y, endPoint.z, 1, 0, 0, 0, 0);
+            ((ServerWorld) world).spawnParticles(ParticleTypes.EXPLOSION, endPoint.x, endPoint.y, endPoint.z, 1, 0, 0, 0, 0);
 
             if (tier >= 7) {
-                world.spawnParticles(ParticleTypes.GLOW, endPoint.x, endPoint.y, endPoint.z, 10, 0.5, 0.5, 0.5, 0.3);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.GLOW, endPoint.x, endPoint.y, endPoint.z, 10, 0.5, 0.5, 0.5, 0.3);
             }
 
             Box explosionBox = new Box(
@@ -1605,12 +1366,12 @@ public class CustomItemHandler {
             double y = eyePos.y + (impactPos.y - eyePos.y) * t;
             double z = eyePos.z + (impactPos.z - eyePos.z) * t;
 
-            world.spawnParticles(ParticleTypes.SONIC_BOOM, x, y, z, 1, 0, 0, 0, 0);
+            ((ServerWorld) world).spawnParticles(ParticleTypes.SONIC_BOOM, x, y, z, 1, 0, 0, 0, 0);
 
             if (i % 2 == 0) {
-                world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 2, 0.05, 0.05, 0.05, 0.01);
-                world.spawnParticles(ParticleTypes.GLOW, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
-                world.spawnParticles(ParticleTypes.WAX_OFF, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 2, 0.05, 0.05, 0.05, 0.01);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.GLOW, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.WAX_OFF, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
             }
         }
 
@@ -1623,9 +1384,9 @@ public class CustomItemHandler {
                 8.0f, true, net.minecraft.world.World.ExplosionSourceType.MOB);
 
         // Impact particles
-        world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER, impactPos.x, impactPos.y, impactPos.z, 5, 1, 1, 1, 0);
-        world.spawnParticles(ParticleTypes.SOUL, impactPos.x, impactPos.y, impactPos.z, 30, 2, 2, 2, 0.1);
-        world.spawnParticles(ParticleTypes.SCULK_SOUL, impactPos.x, impactPos.y, impactPos.z, 20, 2, 2, 2, 0.05);
+        ((ServerWorld) world).spawnParticles(ParticleTypes.EXPLOSION_EMITTER, impactPos.x, impactPos.y, impactPos.z, 5, 1, 1, 1, 0);
+        ((ServerWorld) world).spawnParticles(ParticleTypes.SOUL, impactPos.x, impactPos.y, impactPos.z, 30, 2, 2, 2, 0.1);
+        ((ServerWorld) world).spawnParticles(ParticleTypes.SCULK_SOUL, impactPos.x, impactPos.y, impactPos.z, 20, 2, 2, 2, 0.05);
 
         // Damage nearby entities at impact
         List<LivingEntity> nearby = world.getEntitiesByClass(
@@ -1843,7 +1604,7 @@ public class CustomItemHandler {
         // Effects
         world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_SLIME_SQUISH,
                 SoundCategory.PLAYERS, 1.0f, 1.5f);
-        world.spawnParticles(ParticleTypes.ITEM_SLIME,
+        ((ServerWorld) world).spawnParticles(ParticleTypes.ITEM_SLIME,
                 player.getX(), player.getY() + 1, player.getZ(), 20, 0.5, 0.5, 0.5, 0.1);
 
         player.sendMessage(Text.literal("☠ DEATH SAVED! You have 30 seconds at half size!")

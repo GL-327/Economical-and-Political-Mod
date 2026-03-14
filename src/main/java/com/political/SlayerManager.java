@@ -966,10 +966,24 @@ public class SlayerManager {
             player.sendMessage(Text.literal("✦ Piglin Flesh dropped!").formatted(Formatting.YELLOW), false);
         }
 
-        // Ender Phase Helmet drop (for ENDERMAN type, T4+) — now drops Voidwalker's Crown
+        // Voidwalker's Crown drop (for ENDERMAN type, T4+)
         double enderHelmetChance = getArmorDropChance(type, tier);
         if (type == SlayerType.ENDERMAN && enderHelmetChance > 0 && rand.nextDouble() * 100 < enderHelmetChance) {
             drops.add(SlayerItems.createVoidwalkerCrown());
+        }
+
+        // --- NEW BOSS DROPS ---
+        double bossDropChance = 0.05 + (tier * 0.02); // 7% - 15% chance
+        if (rand.nextDouble() < bossDropChance) {
+            switch (type) {
+                case ZOMBIE -> drops.add(SlayerItems.createUndeadHeart());
+                case SKELETON -> drops.add(SlayerItems.createSpectralQuiver());
+                case WARDEN -> drops.add(SlayerItems.createEchoingCore());
+                case ENDERMAN -> drops.add(SlayerItems.createEnderSword());
+                case PIGLIN -> drops.add(SlayerItems.createAbyssalBlade());
+                case SLIME -> drops.add(SlayerItems.createBouncySlime());
+                case SPIDER -> drops.add(SlayerItems.createVenomousDagger());
+            }
         }
 
         // Coins based on tier (with BOUNTY_TAX perk applied)

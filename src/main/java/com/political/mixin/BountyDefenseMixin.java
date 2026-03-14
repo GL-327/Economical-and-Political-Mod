@@ -34,10 +34,6 @@ public class BountyDefenseMixin {
         // Only applies when a player is the one being hit
         if (!(self instanceof ServerPlayerEntity player)) return amount;
 
-        // Ender Phase Mode: cancel ALL damage (full invincibility)
-        if (com.political.CustomItemHandler.isInEnderPhaseMode(player.getUuid())) {
-            return 0.0f;
-        }
 
         if (source.getAttacker() == null) return amount;
         if (!(source.getAttacker() instanceof LivingEntity attacker)) return amount;
@@ -92,13 +88,6 @@ public class BountyDefenseMixin {
             }
         }
 
-        // Voidwalker's Crown (Ender Phase Helmet)
-        if (SlayerItems.isEnderPhaseHelmet(helmet) && SlayerItems.canUseEnderPhaseHelmet(player)) {
-            universalDef += (float) SlayerItems.VOIDWALKER_ALL_REDUCTION;
-            if (bossType == SlayerManager.SlayerType.ENDERMAN) {
-                specificDef += (float) SlayerItems.VOIDWALKER_BOSS_REDUCTION;
-            }
-        }
 
         // ── Standard T1 / T2 armour sets ────────────────────────────────
         if (bossType != null) {

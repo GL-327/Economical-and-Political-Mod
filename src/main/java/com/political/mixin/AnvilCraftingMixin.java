@@ -1,12 +1,11 @@
 package com.political.mixin;
 
+import com.political.ArmourAttribute;
 import com.political.CustomItemHandler;
 import com.political.SlayerItems;
-import com.political.backrooms.attribute.ArmorAttribute;
-import com.political.backrooms.attribute.ArmorAttributeManager;
-import com.political.backrooms.attribute.AttributeRuneItem;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
@@ -18,6 +17,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.entity.EquipmentSlot;
 
 @Mixin(AnvilScreenHandler.class)
 public class AnvilCraftingMixin {
@@ -25,41 +25,50 @@ public class AnvilCraftingMixin {
     @Shadow @Final private Property levelCost;
 
     @Inject(method = "updateResult", at = @At("HEAD"), cancellable = true)
-    private void preventCustomItemAnvil(CallbackInfo ci) {
+    private void handleAttributeApplication(CallbackInfo ci) {
         AnvilScreenHandler handler = (AnvilScreenHandler) (Object) this;
-
         ItemStack first = handler.getSlot(0).getStack();
         ItemStack second = handler.getSlot(1).getStack();
 
-        // --- Rune application: left slot = armor, right slot = AttributeRuneItem ---
-        if (!first.isEmpty() && !second.isEmpty()
-                && second.getItem() instanceof AttributeRuneItem) {
+        if (first.isEmpty() || second.isEmpty()) return;
 
-            // Use getAttributeFromStack to support both baked-in and NBT-stored attributes
-            ArmorAttribute attr = AttributeRuneItem.getAttributeFromStack(second);
-            EquippableComponent equippable = first.get(DataComponentTypes.EQUIPPABLE);
-
-            if (attr != null && equippable != null && equippable.slot() == attr.requiredSlot) {
-                if (ArmorAttributeManager.getArmorAttribute(first) != null) {
-                    // Armor piece already has a rune — cannot apply a second one
-                    handler.getSlot(2).setStack(ItemStack.EMPTY);
-                } else {
-                    // Valid combination: apply the rune to a copy of the armor
-                    ItemStack result = first.copy();
-                    ArmorAttributeManager.setArmorAttribute(result, attr);
-                    handler.getSlot(2).setStack(result);
-                    this.levelCost.set(attr.getXpCost());
-                }
-            } else {
-                // Rune is incompatible with this armor slot
-                handler.getSlot(2).setStack(ItemStack.EMPTY);
+        // Check if second slot is an Attribute Token
+        ArmourAttribute attr = SlayerItems.getAttributeFromToken(second);
+        if (attr != null) {
+            // Validate first slot is armor
+            EquipmentSlot slot = null;
+            if (first.getItem() instanceof ArmorItem armor) {
+                slot = armor.getSlotType();
+            } else if (first.get(DataComponentTypes.EQUIPPABLE) != null) {
+                slot = first.get(DataComponentTypes.EQUIPPABLE).slot();
             }
-            ci.cancel();
+
+            if (slot == null || !attr.isValidSlot(slot)) {
+                handler.getSlot(2).setStack(ItemStack.EMPTY);
+                ci.cancel();
+                return;
+            }
+
+            // Check if piece already has an attribute
+            if (SlayerItems.getAppliedAttribute(first) != null) {
+                handler.getSlot(2).setStack(ItemStack.EMPTY);
+                ci.cancel();
+                return;
+            }
+
+            // SUCCESS: Apply attribute
+            ItemStack result = first.copy();
+            SlayerItems.applyAttribute(result, attr);
+            
+            // Set cost
+            this.levelCost.set(attr.xpCost);
+            
+            handler.getSlot(2).setStack(result);
+            ci.cancel(); // Skip vanilla processing
             return;
         }
 
         // Block any operation that involves a protected custom item as an input.
-        // This prevents: renaming (which consumes the item), combining, repairing, etc.
         if (CustomItemHandler.isProtectedItem(first) || CustomItemHandler.isProtectedItem(second)) {
             handler.getSlot(2).setStack(ItemStack.EMPTY);
             ci.cancel();

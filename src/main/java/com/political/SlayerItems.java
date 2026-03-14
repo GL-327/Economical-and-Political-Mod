@@ -4,6 +4,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.nbt.NbtCompound;
+import com.political.ArmourAttribute;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -62,6 +63,8 @@ public class SlayerItems {
     private static final String SLAYER_CORE_TAG = "BOUNTY_CORE";
     public static final String BOUNTY_SWORD_TYPE_TAG = "bounty_sword_type";
     public static final String BOUNTY_SWORD_UPGRADED_TAG = "bounty_sword_upgraded";
+    public static final String ARMOR_ATTRIBUTE_TOKEN_KEY = "armor_attribute_token";
+    public static final String ARMOR_ATTRIBUTE_KEY = "ArmourAttribute";
 
     /** Returns the thematic display name for a T1 bounty sword of the given type. */
     public static String getSwordDisplayName(SlayerManager.SlayerType type) {
@@ -290,93 +293,8 @@ public class SlayerItems {
 // ============================================================
     public static final int WARDEN_CHESTPLATE_LEVEL_REQ = 12;
 
-    // ============================================================
-// VOIDWALKER'S CROWN - T7 Enderman Requirement
-// ============================================================
-    public static final int ENDER_PHASE_HELMET_LEVEL_REQ = 7;
 
-    /** Returns true if the stack is a Voidwalker's Crown (accepts both current and legacy IDs). */
-    public static boolean isEnderPhaseHelmet(ItemStack stack) {
-        // Accept both the new canonical ID and any legacy items with the old ID
-        return hasCustomItemId(stack, "voidwalker_crown") || hasCustomItemId(stack, "ender_phase_helmet");
-    }
 
-    /** Alias for {@link #isEnderPhaseHelmet(ItemStack)}. */
-    public static boolean isVoidwalkerCrown(ItemStack stack) {
-        return isEnderPhaseHelmet(stack);
-    }
-
-    /** Canonical creation method for the Voidwalker's Crown. */
-    public static ItemStack createVoidwalkerCrown() {
-        ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
-
-        helmet.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("👁 Voidwalker's Crown")
-                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-
-        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
-                .add(EntityAttributes.ARMOR,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "ender_phase_armor"),
-                                5.0,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .add(EntityAttributes.ARMOR_TOUGHNESS,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "ender_phase_toughness"),
-                                4.0,
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .add(EntityAttributes.MAX_HEALTH,
-                        new EntityAttributeModifier(
-                                Identifier.of("politicalserver", "ender_phase_health"),
-                                8.0,  // +4 Hearts
-                                EntityAttributeModifier.Operation.ADD_VALUE
-                        ),
-                        AttributeModifierSlot.HEAD)
-                .build();
-        helmet.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
-
-        helmet.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x5A0080));
-        helmet.set(DataComponentTypes.MAX_DAMAGE, 4071);
-        helmet.set(DataComponentTypes.DAMAGE, 0);
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[MFLUX: CRD-005 Enderman-class phase-shift helmet | NEVER SUCCESSFULLY TESTED]"));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("🛡 Armor: +5").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("💎 Toughness: +4").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("❤ Health: +4 Hearts").formatted(Formatting.RED));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("👁 Phase Teleport").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal("  Right-click to teleport up to 10 blocks").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  in your look direction.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  No cost.  Cooldown: 2 seconds").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("👁 Ender Phase Mode").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal("  Sneak + Right-click to activate.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Become invisible, invincible & untargetable.").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Duration: §e15 seconds  §8Cooldown: §72 min").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  §c⚠ Cannot break blocks while active!").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("⚠ Requires: Enderman Bounty Lvl " + ENDER_PHASE_HELMET_LEVEL_REQ)
-                .formatted(Formatting.RED));
-
-        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(helmet, "voidwalker_crown");
-        return helmet;
-    }
-
-    /** @deprecated Use {@link #createVoidwalkerCrown()} instead. */
-    @Deprecated
-    public static ItemStack createEnderPhaseHelmet() {
-        return createVoidwalkerCrown();
-    }
 
 
     // ============================================================
@@ -389,10 +307,48 @@ public class SlayerItems {
                 isZombieBerserkerHelmet(stack) ||
                 isSpiderLeggings(stack) ||
                 isSkeletonBow(stack) ||
-                isSlimeBoots(stack) ||
                 isWardenChestplate(stack) ||
-                isEnderPhaseHelmet(stack) ||
+                isAttributeToken(stack) ||
                 isCrownOfGreed(stack);
+    }
+
+    public static boolean isAttributeToken(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return false;
+        return data.copyNbt().contains(ARMOR_ATTRIBUTE_TOKEN_KEY);
+    }
+
+    public static ArmourAttribute getAttributeFromToken(ItemStack stack) {
+        if (!isAttributeToken(stack)) return null;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        String id = data.copyNbt().getString(ARMOR_ATTRIBUTE_TOKEN_KEY).orElse("");
+        return ArmourAttribute.fromId(id);
+    }
+
+    public static ArmourAttribute getAppliedAttribute(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return null;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return null;
+        String id = data.copyNbt().getString(ARMOR_ATTRIBUTE_KEY).orElse("");
+        return ArmourAttribute.fromId(id);
+    }
+
+    public static void applyAttribute(ItemStack stack, ArmourAttribute attribute) {
+        NbtComponent existing = stack.get(DataComponentTypes.CUSTOM_DATA);
+        NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
+        nbt.putString(ARMOR_ATTRIBUTE_KEY, attribute.id);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        
+        // Add to lore
+        LoreComponent loreComp = stack.get(DataComponentTypes.LORE);
+        List<Text> lines = new ArrayList<>();
+        if (loreComp != null) {
+            lines.addAll(loreComp.lines());
+        }
+        lines.add(Text.literal(""));
+        lines.add(Text.literal("ATTRIBUTE: " + attribute.displayName).formatted(attribute.color, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lines));
     }
 
     public static boolean isZombieBerserkerHelmet(ItemStack stack) {
@@ -667,67 +623,7 @@ public class SlayerItems {
     }
     // ============================================================
 
-    public static ItemStack createEnderSword() {
-        ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
 
-        sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⚔ Ender Sword")
-                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Forged from the essence of").formatted(Formatting.GRAY));
-        lore.add(Text.literal("the Void Phantom itself.").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Ability: Void Strike").formatted(Formatting.GOLD, Formatting.BOLD));
-        lore.add(Text.literal("  Right-click to teleport behind").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  your target and deal 200% damage").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Cooldown: 10s").formatted(Formatting.RED));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Deals 400% damage to Endermen").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8MFLUX Core-Forged Weapon").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("Crafted with: Void Core").formatted(Formatting.DARK_GRAY));
-
-        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        setCustomItemId(sword, "enderman_sword");
-        return sword;
-    }
-
-    public static ItemStack createAbyssalBlade() {
-        ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
-
-        sword.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⚔ Abyssal Blade")
-                        .formatted(Formatting.DARK_AQUA, Formatting.BOLD));
-
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Born from the depths of the").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Sculk Devourer's domain.").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Ability: Sonic Devastation").formatted(Formatting.GOLD, Formatting.BOLD));
-        lore.add(Text.literal("  Right-click to release a").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  shockwave stunning all enemies").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  within 8 blocks for 3s").formatted(Formatting.GRAY));
-        lore.add(Text.literal("  Cooldown: 30s").formatted(Formatting.RED));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Deals 500% damage to Wardens").formatted(Formatting.DARK_AQUA));
-        lore.add(Text.literal("Immune to Darkness effect").formatted(Formatting.BLUE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8MFLUX Core-Forged Weapon").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("Crafted with: Sculk Core").formatted(Formatting.DARK_GRAY));
-
-        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-        setCustomItemId(sword, "abyssal_blade");
-        return sword;
-    }
 
     public static ItemStack createChunk(SlayerManager.SlayerType type) {
         ItemStack chunk = new ItemStack(type.icon);
@@ -825,12 +721,115 @@ public class SlayerItems {
             case PIGLIN -> "Gilded Shard";
         };
     }
+
 // ============================================================
 // LEVEL REQUIREMENTS FOR SLAYER SWORDS
 // ============================================================
 
     // Sword tiers and their level requirements
     public static final int BASIC_SWORD_LEVEL_REQ = 3;      // T1 sword
+
+    public static final String UNDEAD_HEART = "undead_heart";
+    public static final String SPECTRAL_QUIVER = "spectral_quiver";
+    public static final String ECHOING_CORE = "echoing_core";
+    public static final String ENDER_SWORD = "ender_sword";
+    public static final String ABYSSAL_BLADE = "abyssal_blade";
+    public static final String BOUNCY_SLIME = "bouncy_slime";
+    public static final String VENOMOUS_DAGGER = "venomous_dagger";
+
+    public static final String CUSTOM_TYPE_KEY = "custom_type";
+
+    public static void setCustomItemType(ItemStack stack, String type) {
+        NbtComponent existing = stack.get(DataComponentTypes.CUSTOM_DATA);
+        NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
+        nbt.putString(CUSTOM_TYPE_KEY, type);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    }
+
+    public static String getCustomItemType(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return null;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return null;
+        return data.copyNbt().getString(CUSTOM_TYPE_KEY).orElse("");
+    }
+
+    public static boolean isType(ItemStack stack, String type) {
+        return type.equals(getCustomItemType(stack));
+    }
+
+    public static void setSlayerLore(ItemStack stack, List<String> lines) {
+        List<Text> lore = new ArrayList<>();
+        for (String line : lines) {
+            lore.add(Text.literal(line));
+        }
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+    }
+
+    public static ItemStack createUndeadHeart() {
+        ItemStack stack = new ItemStack(Items.NETHER_STAR);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("❤ Undead Heart").formatted(Formatting.RED, Formatting.BOLD));
+        setSlayerLore(stack, List.of(
+            "§7A pulsating heart from a powerful Undead boss.",
+            "§7Increases maximum health when held."
+        ));
+        setCustomItemType(stack, UNDEAD_HEART);
+        return stack;
+    }
+
+    public static ItemStack createSpectralQuiver() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HORSE_ARMOR); 
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("🏹 Spectral Quiver").formatted(Formatting.AQUA, Formatting.BOLD));
+        setSlayerLore(stack, List.of(
+            "§7A quiver from the Spectral Archer.",
+            "§7Arrows have a chance to phase through walls."
+        ));
+        setCustomItemType(stack, SPECTRAL_QUIVER);
+        return stack;
+    }
+
+    public static ItemStack createEchoingCore() {
+        ItemStack stack = new ItemStack(Items.ECHO_SHARD);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("🌀 Echoing Core").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        setSlayerLore(stack, List.of(
+            "§7The pulsating core of a Deep Dark boss.",
+            "§7Emits a sonic boom when used."
+        ));
+        setCustomItemType(stack, ECHOING_CORE);
+        return stack;
+    }
+
+    public static ItemStack createBouncySlime() {
+        ItemStack stack = new ItemStack(Items.SLIME_BALL);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("🟢 Bouncy Slime").formatted(Formatting.GREEN, Formatting.BOLD));
+        setSlayerLore(stack, List.of(
+            "§7A concentrated blob of slime.",
+            "§7Gives jump boost and fall resistance."
+        ));
+        setCustomItemType(stack, BOUNCY_SLIME);
+        return stack;
+    }
+
+    public static ItemStack createEnderSword() {
+        ItemStack stack = new ItemStack(Items.NETHERITE_SWORD);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Ender Sword").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        setSlayerLore(stack, List.of(
+            "§7A blade forged from the ender dragon's breath.",
+            "§7Teleports you behind your target on hit."
+        ));
+        setCustomItemType(stack, ENDER_SWORD);
+        return stack;
+    }
+
+    public static ItemStack createAbyssalBlade() {
+        ItemStack stack = new ItemStack(Items.NETHERITE_SWORD);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("🌑 Abyssal Blade").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        setSlayerLore(stack, List.of(
+            "§7A blade from the deepest abyss.",
+            "§7Deals bonus damage to blinded targets."
+        ));
+        setCustomItemType(stack, ABYSSAL_BLADE);
+        return stack;
+    }
 
     public static boolean canUseSlayerSword(ServerPlayerEntity player, ItemStack sword) {
         if (!isSlayerSword(sword)) return true;
@@ -914,12 +913,6 @@ public class SlayerItems {
 
 
     public static boolean craftSlayerSword(ServerPlayerEntity player, SlayerManager.SlayerType type) {
-        if (!canCraftSlayerSword(player, type)) {
-            player.sendMessage(Text.literal("✖ Need 2x " + getChunkName(type) + " to craft!")
-                    .formatted(Formatting.RED), false);
-            return false;
-        }
-
         // Remove 2 chunks
         int toRemove = 2;
         for (int i = 0; i < player.getInventory().size() && toRemove > 0; i++) {
@@ -2249,6 +2242,134 @@ public class SlayerItems {
         return flesh;
     }
 
+
+    public static ItemStack createAttributeToken(ArmourAttribute attr) {
+        ItemStack token = new ItemStack(Items.PAPER);
+        token.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ " + attr.displayName + " Attribute Token ✧")
+                        .formatted(attr.color, Formatting.BOLD));
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Apply to: ").formatted(Formatting.GRAY)
+                .append(Text.literal(attr.slot == null ? "Any Armor Piece" : attr.slot.getName().toUpperCase())
+                        .formatted(Formatting.AQUA)));
+        lore.add(Text.literal(attr.xpCost + " Level Cost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        
+        lore.add(Text.literal("BUFF: ").formatted(Formatting.GOLD)
+                .append(Text.literal(attr.buffSummary).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("DEBUFF: ").formatted(Formatting.RED)
+                .append(Text.literal(attr.debuffSummary).formatted(Formatting.DARK_RED)));
+        
+        lore.add(Te    public static ItemStack createSlayerHelmet(SlayerManager.SlayerType type, int tier) {
+        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_HELMET : Items.DIAMOND_HELMET);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Helmet T" + tier).formatted(type.color, Formatting.BOLD));
+        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
+        setCustomItemId(stack, type.name().toLowerCase() + "_helmet_t" + tier);
+        return stack;
+    }
+
+    public static ItemStack createSlayerChestplate(SlayerManager.SlayerType type, int tier) {
+        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_CHESTPLATE : Items.DIAMOND_CHESTPLATE);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Chestplate T" + tier).formatted(type.color, Formatting.BOLD));
+        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
+        setCustomItemId(stack, type.name().toLowerCase() + "_chestplate_t" + tier);
+        return stack;
+    }
+
+    public static ItemStack createSlayerLeggings(SlayerManager.SlayerType type, int tier) {
+        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_LEGGINGS : Items.DIAMOND_LEGGINGS);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Leggings T" + tier).formatted(type.color, Formatting.BOLD));
+        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
+        setCustomItemId(stack, type.name().toLowerCase() + "_leggings_t" + tier);
+        return stack;
+    }
+
+    public static ItemStack createSlayerBoots(SlayerManager.SlayerType type, int tier) {
+        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_BOOTS : Items.DIAMOND_BOOTS);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Boots T" + tier).formatted(type.color, Formatting.BOLD));
+        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
+        setCustomItemId(stack, type.name().toLowerCase() + "_boots_t" + tier);
+        return stack;
+    }
+
+    public static ItemStack createZombieBerserkerHelmet() {
+        return createZombieBerserkerHelmetForPlayer(null); // Simple fallback
+    }
+
+    public static boolean isSpiderLeggings(ItemStack stack) {
+        return hasCustomItemId(stack, "spider_leggings");
+    }
+
+    public static ItemStack createSpiderLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Spider Leggings").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x4D0000));
+        setCustomItemId(stack, "spider_leggings");
+        return stack;
+    }
+
+    public static boolean isSkeletonBow(ItemStack stack) {
+        return stack.isOf(Items.BOW) && hasCustomItemId(stack, "skeleton_bow");
+    }
+
+    public static ItemStack createSkeletonBow() {
+        ItemStack stack = new ItemStack(Items.BOW);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Skeleton Bow").formatted(Formatting.WHITE, Formatting.BOLD));
+        setCustomItemId(stack, "skeleton_bow");
+        return stack;
+    }
+
+    public static boolean isSlimeBoots(ItemStack stack) {
+        return hasCustomItemId(stack, "slime_boots");
+    }
+
+    public static ItemStack createSlimeBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Slime Boots").formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x00FF00));
+        setCustomItemId(stack, "slime_boots");
+        return stack;
+    }
+
+    public static boolean isWardenChestplate(ItemStack stack) {
+        return hasCustomItemId(stack, "warden_chestplate");
+    }
+
+    public static ItemStack createWardenChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Warden Chestplate").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x004D4D));
+        setCustomItemId(stack, "warden_chestplate");
+        return stack;
+    }
+
+    public static ItemStack createVoidwalkerCrown() {
+        ItemStack stack = new ItemStack(Items.NETHERITE_HELMET);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        setCustomItemId(stack, "voidwalker_crown");
+        return stack;
+    }
+
+    public static ItemStack createEnderPhaseHelmet() {
+        ItemStack stack = new ItemStack(Items.NETHERITE_HELMET);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Ender Phase Helmet").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        setCustomItemId(stack, "ender_phase_helmet");
+        return stack;
+    }
+
+    public static ItemStack createVenomousDagger() {
+        ItemStack stack = new ItemStack(Items.IRON_SWORD);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Venomous Dagger").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        setCustomItemId(stack, "venomous_dagger");
+        return stack;
+    }
+
+    public static boolean isCrownOfGreed(ItemStack stack) {
+        return hasCustomItemId(stack, "crown_of_greed");
+    }
+
     public static ItemStack createCrownOfGreed() {
         ItemStack crown = new ItemStack(Items.LEATHER_HELMET);
         crown.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xD4AF00));
@@ -2274,7 +2395,26 @@ public class SlayerItems {
         lore.add(Text.literal("\"Wealth is power — and power devours.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         crown.set(DataComponentTypes.LORE, new LoreComponent(lore));
         crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        crown.set(DataComponentTypes.MAX_DAMAGE, 2000);
+        setCustomItemId(crown, "crown_of_greed");
+        return crown;
+    }
+
+    public static boolean isAbyssalBlade(ItemStack stack) {
+        return hasCustomItemId(stack, "abyssal_blade");
+    }
+
+    public static boolean isEnderSword(ItemStack stack) {
+        return hasCustomItemId(stack, "ender_sword");
+    }
+}
+� ON DEATH: Lose ALL coins!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Wealth is power — and power devours.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        crown.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         crown.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.builder().build());
+        crown.set(DataComponentTypes.MAX_DAMAGE, 2000);
         setCustomItemId(crown, "crown_of_greed");
         return crown;
     }

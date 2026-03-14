@@ -1,7 +1,6 @@
 package com.political.mixin;
 
 import com.political.SpawnProtectionManager;
-import com.political.backrooms.BackroomsDimensionManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
@@ -25,16 +24,6 @@ public class ServerPlayerInteractionManagerMixin {
 
     @Inject(method = "tryBreakBlock", at = @At("HEAD"), cancellable = true)
     private void political_preventBreakInProtectedZone(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        // Block-break prevention in Backrooms dimensions
-        if (player.getEntityWorld() instanceof ServerWorld world
-                && BackroomsDimensionManager.isBackroomsDimension(world)
-                && !SpawnProtectionManager.isOperator(player)) {
-            cir.setReturnValue(false);
-            player.sendMessage(
-                Text.literal("⛔ You cannot break blocks here.").formatted(Formatting.RED),
-                true);
-            return;
-        }
 
         // Block-break prevention in spawn-protection region
         if (!SpawnProtectionManager.isBlockProtected(pos.getX(), pos.getY(), pos.getZ())) return;

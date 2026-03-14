@@ -472,8 +472,6 @@ public class ScoreboardManager {
                 s[1] += (int)(SlayerItems.WARDEN_CHEST_BOSS_REDUCTION * 100);
                 continue;
             }
-            // Voidwalker's Crown is a special piece with no set bonus — skip standard processing
-            if (SlayerItems.isEnderPhaseHelmet(armor)) continue;
 
             // Standard T1/T2 set pieces (identified via custom_item_id prefix)
             String customId = SlayerItems.getCustomItemId(armor);
@@ -595,8 +593,6 @@ public class ScoreboardManager {
             case "zombie_berserker_helmet" -> "Berserker §7| +300% Dmg";
             case "slime_boots"             -> "No Fall Dmg §7| Death Save";
             case "warden_chestplate"       -> "KB Immune §7| NightVis §7| ESP 64blk";
-            case "voidwalker_crown",
-                 "ender_phase_helmet"      -> "Phase Warp §7| Phase Mode §7| §d+4 Hearts";
             // ── ZOMBIE ───────────────────────────────────────────────────────
             case "zombie_t1_helmet"       -> "Hunger Immune §7| +2 Hearts";
             case "zombie_t2_helmet"       -> "Hunger Immune §7| §6Fire Resist";

@@ -101,16 +101,15 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openSpecialWeaponsMenu(player))
                 .build());
 
-        // 🌀 Backrooms Items
-        gui.setSlot(15, new GuiElementBuilder(Items.END_STONE)
-                .setName(Text.literal("🌀 Backrooms Items").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+        // ✦ Boss Drops
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Boss Drops").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• Consumables & Food").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• Materials & Tools").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• Dimensional artifacts").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Unique items dropped by bounty bosses").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Undead Heart, Echoing Core, etc.").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openBackroomsMenu(player))
+                .setCallback((idx, type, action) -> openBossDropsMenu(player))
                 .glow()
                 .build());
 
@@ -280,15 +279,16 @@ public class CustomItemsGui {
     // BACKROOMS ITEMS MENU
     // ════════════════════════════════════════════════════════════
 
-    private static void openBackroomsMenu(ServerPlayerEntity player) {
+    private static void openBossDropsMenu(ServerPlayerEntity player) {
         List<ItemStack> items = new ArrayList<>();
-        
-        // Add all backrooms items from the manager
-        for (ItemStack item : com.political.backrooms.items.BackroomsItemsManager.getAllItems().values()) {
-            items.add(item);
-        }
-        
-        openSubPage(player, "🌀 Backrooms Items", items, 0);
+        items.add(SlayerItems.createUndeadHeart());
+        items.add(SlayerItems.createSpectralQuiver());
+        items.add(SlayerItems.createEchoingCore());
+        items.add(SlayerItems.createBouncySlime());
+        items.add(SlayerItems.createEnderSword());
+        items.add(SlayerItems.createAbyssalBlade());
+        items.add(SlayerItems.createVenomousDagger());
+        openSubPage(player, "✦ Boss Drops", items, 0);
     }
 
     // ════════════════════════════════════════════════════════════

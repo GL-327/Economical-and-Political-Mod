@@ -1,6 +1,5 @@
 package com.political;
 
-import com.political.backrooms.items.BackroomsItemsManager;
 import eu.pb4.sgui.api.ClickType;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -46,8 +45,7 @@ public class RecipeEditorGui {
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
-        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY),
-        BACKROOMS    ("🔦 Backrooms Items",             Items.ENDER_EYE,          Formatting.DARK_PURPLE);
+        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY);
 
         final String label;
         final net.minecraft.item.Item icon;
@@ -105,6 +103,15 @@ public class RecipeEditorGui {
                 items.add(CustomItemHandler.createGavel());
                 items.add(CustomItemHandler.createHarveysStick());
                 items.add(CustomItemHandler.createHermesShoes());
+                
+                // NEW BOSS DROPS
+                items.add(SlayerItems.createUndeadHeart());
+                items.add(SlayerItems.createSpectralQuiver());
+                items.add(SlayerItems.createEchoingCore());
+                items.add(SlayerItems.createEnderSword());
+                items.add(SlayerItems.createAbyssalBlade());
+                items.add(SlayerItems.createBouncySlime());
+                items.add(SlayerItems.createVenomousDagger());
             }
             case PIGLIN -> {
                 items.add(SlayerItems.createCrownOfGreed());
@@ -117,28 +124,10 @@ public class RecipeEditorGui {
                     items.add(SlayerItems.createChunk(t));
                 }
             }
-            case BACKROOMS -> {
-                for (ItemStack brStack : BackroomsItemsManager.getAllItems().values()) {
-                    items.add(brStack.copy());
-                }
-            }
         }
         return items;
     }
 
-    /**
-     * Creates a labelled {@link ItemStack} for a Backrooms item with a human-readable
-     * display name and a stable {@code custom_item_id} so recipes can be matched.
-     * The id is derived from the item's registry path, e.g. {@code "politicalserver:bone_shiv"}.
-     */
-    private static ItemStack brItem(Item item, String displayName, Formatting colour) {
-        ItemStack stack = new ItemStack(item);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(displayName).formatted(colour));
-        // Use the registry path as the stable id (e.g. "politicalserver:bone_shiv")
-        net.minecraft.util.Identifier id = net.minecraft.registry.Registries.ITEM.getId(item);
-        SlayerItems.setCustomItemId(stack, id.toString());
-        return stack;
-    }
 
     // ──────────────────────────────────────────────────────────────
     // Page 0: Main Category Menu
@@ -160,7 +149,7 @@ public class RecipeEditorGui {
 
         // Place category buttons (skip slot 4 = header)
         Category[] cats = Category.values();
-        int[] catSlots = {0, 1, 2, 3, 5, 6, 7, 8, 18};
+        int[] catSlots = {0, 1, 2, 3, 5, 6, 7, 8};
         for (int i = 0; i < cats.length && i < catSlots.length; i++) {
             Category cat = cats[i];
             int slot = catSlots[i];

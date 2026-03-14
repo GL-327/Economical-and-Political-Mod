@@ -10,8 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.entity.attribute.EntityAttribute;
 
 import java.util.List;
+import com.political.ArmourAttribute;
 
 public class SlayerArmorHandler {
 
@@ -211,9 +214,14 @@ public class SlayerArmorHandler {
                         default -> {}
                     }
                 }
-                continue;
             }
 
+            // Armour Attribute system: Cursed (+6 HP)
+            ArmourAttribute attribute = SlayerItems.getAppliedAttribute(stack);
+            if (attribute == ArmourAttribute.CURSED) {
+                bonusHealth += 6.0;
+            }
+            
             // ── Legacy / special items without built-in attribute modifiers ──
             // (e.g. Berserker Helmet crafted before custom ID system)
 
@@ -327,7 +335,7 @@ public class SlayerArmorHandler {
     }
 
     private static void applyModifier(ServerPlayerEntity player,
-                                      net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.attribute.EntityAttribute> attribute,
+                                      RegistryEntry<EntityAttribute> attribute,
                                       Identifier id, double value) {
         EntityAttributeInstance instance = player.getAttributeInstance(attribute);
         if (instance == null) return;

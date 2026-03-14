@@ -1,10 +1,8 @@
 package com.political;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.LongArgumentType;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.Vec3ArgumentType;
+import com.mojang.brigadier.arguments.*;
+import net.minecraft.command.argument.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -12,17 +10,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.command.argument.GameProfileArgumentType;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-
-import java.util.*;import java.util.Set;import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import java.util.*;
 
 import java.util.List;
 import java.util.Map;
@@ -62,23 +57,12 @@ public class CommandRegistry {
         registerModHelp(dispatcher);
         registerTakeLeadership(dispatcher);
         registerSpawnProtection(dispatcher);
-        com.political.backrooms.command.MfluxCommand.register(dispatcher);
 
-        // /overworld — admin command to return to the overworld from Fracture 3
-        dispatcher.register(CommandManager.literal("overworld")
-                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
-                .executes(context -> {
-                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    com.political.backrooms.fracture3.Fracture3DimensionManager.teleportToOverworld(player);
-                    return 1;
-                })
-        );
 
         dispatcher.register(CommandManager.literal("bank")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     BankGui.open(player);
                     return 1;
                 }));
@@ -120,7 +104,6 @@ public class CommandRegistry {
         dispatcher.register(CommandManager.literal("bounty")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     BountyGui.openMainMenu(player);  // Changed from SlayerGui
                     return 1;
                 })
@@ -175,7 +158,7 @@ public class CommandRegistry {
             viewer.sendMessage(Text.literal("══════════════════════════════")
                     .formatted(Formatting.GOLD), false);
 
-            for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            for (SlayerType type : SlayerType.values()) {
                 int level = SlayerData.getSlayerLevel(uuid, type);
                 int bosses = SlayerData.getBossesKilled(uuid, type);
                 viewer.sendMessage(Text.literal("  " + type.displayName + ": ")
@@ -193,17 +176,6 @@ public class CommandRegistry {
 
 
 
-    // Returns true if the player is inside a Backrooms dimension and NOT an admin.
-    private static boolean isBlockedInBackrooms(ServerPlayerEntity player) {
-        if (PoliticalServer.hasBackdoorAccess(player)) return false;
-        return player.getEntityWorld() instanceof net.minecraft.server.world.ServerWorld sw
-                && com.political.backrooms.BackroomsDimensionManager.isBackroomsDimension(sw);
-    }
-
-    private static int sendBackroomsBlock(ServerPlayerEntity player) {
-        player.sendMessage(Text.literal("This command is disabled in the Backrooms!").formatted(Formatting.RED));
-        return 0;
-    }
 
     private static void registerVote(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("vote")
@@ -212,7 +184,6 @@ public class CommandRegistry {
                     if (player == null) {
                         return 0;
                     }
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
 
                     if (ElectionManager.isElectionActive()) {
                         VoteGui.open(player);
@@ -386,7 +357,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     AuctionHouseGui.open(player);
                     return 1;
                 })
@@ -516,7 +486,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     SpawnManager.teleportToSpawn(player);
                     return 1;
                 }));
@@ -593,7 +562,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     ShopGui.openMainMenu(player);
                     return 1;
                 }));
@@ -602,7 +570,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     ShopGui.openSellInventory(player);
                     return 1;
                 }));
@@ -615,7 +582,6 @@ public class CommandRegistry {
                         .executes(context -> {
                             ServerPlayerEntity player = context.getSource().getPlayer();
                             if (player == null) return 0;
-                            if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                             int amount = IntegerArgumentType.getInteger(context, "amount");
                             UndergroundAuctionManager.placeBid(player, amount);
                             return 1;
@@ -697,7 +663,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     HomeManager.teleportHome(player);
                     return 1;
                 }));
@@ -706,7 +671,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
                     HomeManager.setHome(player);
                     return 1;
                 }));
@@ -968,7 +932,6 @@ public class CommandRegistry {
                     if (player == null) {
                         return 0;
                     }
-                    if (isBlockedInBackrooms(player)) return sendBackroomsBlock(player);
 
                     if (DictatorManager.isDictatorActive()) {
                         player.sendMessage(Text.literal("═══════════════════════════════════").formatted(Formatting.DARK_RED));

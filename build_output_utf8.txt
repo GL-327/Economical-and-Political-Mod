@@ -1,0 +1,368 @@
+﻿
+> Configure project :
+Fabric Loom: 1.15.5
+
+> Task :compileJava FAILED
+.\gradlew : C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\Fake
+PlayerPacketHandler.java:4: error: cannot find symbol
+At line:1 char:1
++ .\gradlew compileJava > build_output.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Gathe\...not find symbol:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+import net.minecraft.network.packet.s2c.play.EntityDespawnS2CPacket;
+                                            ^
+  symbol:   class EntityDespawnS2CPacket
+  location: package net.minecraft.network.packet.s2c.play
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+21: error: cannot find symbol
+        this.setAngerTime(99999); // Always angry
+            ^
+  symbol: method setAngerTime(int)
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+28: error: cannot find symbol
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0);
+                                     ^
+  symbol:   variable GENERIC_ATTACK_KNOCKBACK
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+27: error: cannot find symbol
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
+                                     ^
+  symbol:   variable GENERIC_ATTACK_DAMAGE
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+26: error: cannot find symbol
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4) // Base patrol speed
+                                     ^
+  symbol:   variable GENERIC_MOVEMENT_SPEED
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+46: error: cannot find symbol
+        if (this.getWorld().isClient()) return;
+                ^
+  symbol: method getWorld()
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+48: error: cannot find symbol
+        PlayerEntity target = this.getWorld().getClosestPlayer(this, 16.0);
+                                  ^
+  symbol: method getWorld()
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+65: error: cannot find symbol
+            this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.8); // Fast sprint
+                                                      ^
+  symbol:   variable GENERIC_MOVEMENT_SPEED
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.java:
+69: error: cannot find symbol
+                this.playSound(SoundEvents.ENTITY_WOLF_GROWL, 0.5f, this.getSoundPitch());
+                                          ^
+  symbol:   variable ENTITY_WOLF_GROWL
+  location: class SoundEvents
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.java
+:37: error: cannot find symbol
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0);
+                                     ^
+  symbol:   variable GENERIC_FOLLOW_RANGE
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.java
+:36: error: cannot find symbol
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
+                                     ^
+  symbol:   variable GENERIC_MAX_HEALTH
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.java
+:35: error: cannot find symbol
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15)
+                                     ^
+  symbol:   variable GENERIC_MOVEMENT_SPEED
+  location: class EntityAttributes
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.java
+:50: error: cannot find symbol
+        if (this.getWorld().isClient()) return;
+                ^
+  symbol: method getWorld()
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.java
+:52: error: cannot find symbol
+        ServerWorld serverWorld = (ServerWorld) this.getWorld();
+                                                    ^
+  symbol: method getWorld()
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\FakePlayerPacket
+Handler.java:94: error: cannot find symbol
+                    player.networkHandler.sendPacket(new EntityDespawnS2CPacket(fakeId));
+                                                         ^
+  symbol:   class EntityDespawnS2CPacket
+  location: class FakePlayerPacketHandler
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\FloorDecayHandle
+r.java:92: error: cannot find symbol
+                        BlockPos spawn = overworld.getSpawnPos();
+                                                  ^
+  symbol:   method getSpawnPos()
+  location: variable overworld of type ServerWorld
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\Fracture3ChunkGe
+nerator.java:231: error: cannot find symbol
+        for (UUID connectedId : room.getConnectedNodes()) {
+             ^
+  symbol:   class UUID
+  location: class Fracture3ChunkGenerator
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:85: error: cannot find symbol
+        nbt.putUuid("Id", id);
+           ^
+  symbol:   method putUuid(String,UUID)
+  location: variable nbt of type NbtCompound
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:97: error: cannot find symbol
+            conn.putUuid("TargetId", connectedId);
+                ^
+  symbol:   method putUuid(String,UUID)
+  location: variable conn of type NbtCompound
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:106: error: cannot find symbol
+        UUID id = nbt.getUuid("Id");
+                     ^
+  symbol:   method getUuid(String)
+  location: variable nbt of type NbtCompound
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:107: error: no suitable method found for valueOf(Optional<String>)
+        RoomType type = RoomType.valueOf(nbt.getString("Type"));
+                                ^
+    method Enum.<T>valueOf(Class<T>,String) is not applicable
+      (cannot infer type-variable(s) T
+        (actual and formal argument lists differ in length))
+    method RoomType.valueOf(String) is not applicable
+      (argument mismatch; Optional<String> cannot be converted to String)
+  where T is a type-variable:
+    T extends Enum<T> declared in method <T>valueOf(Class<T>,String)
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:108: error: incompatible types: Optional<Integer> cannot be converted to int
+        int x = nbt.getInt("X");
+                          ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:109: error: incompatible types: Optional<Integer> cannot be converted to int
+        int z = nbt.getInt("Z");
+                          ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:110: error: incompatible types: Optional<Integer> cannot be converted to int
+        int width = nbt.getInt("Width");
+                              ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:111: error: incompatible types: Optional<Integer> cannot be converted to int
+        int length = nbt.getInt("Length");
+                               ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:112: error: incompatible types: Optional<Boolean> cannot be converted to boolean
+        boolean generated = nbt.getBoolean("Generated");
+                                          ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:113: error: incompatible types: Optional<Long> cannot be converted to long
+        long lastVisitedTime = nbt.getLong("LastVisitedTime");
+                                          ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:117: error: method getList in class NbtCompound cannot be applied to given types;
+        NbtList connections = nbt.getList("Connections", NbtElement.COMPOUND_TYPE);
+                                 ^
+  required: String
+  found:    String,byte
+  reason: actual and formal argument lists differ in length
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:119: error: incompatible types: Optional<NbtCompound> cannot be converted to NbtCompound
+
+[Incubating] Problems report is available at: file:///C:/Users/Gathe/Videos/Economical-and-Political-Mod/build/reports/problems/problems-report.html
+            NbtCompound conn = connections.getCompound(i);
+                                                      ^
+C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.ja
+va:120: error: cannot find symbol
+            node.addConnection(conn.getUuid("TargetId"));
+                                   ^
+  symbol:   method getUuid(String)
+  location: variable conn of type NbtCompound
+30 errors
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:117: error: method getList in class NbtCompound cannot be applied to given types;
+          NbtList connections = nbt.getList("Connections", NbtElement.COMPOUND_TYPE);
+                                   ^
+    required: String
+    found:    String,byte
+    reason: actual and formal argument lists differ in length
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:107: error: no suitable method found for valueOf(Optional<String>)
+          RoomType type = RoomType.valueOf(nbt.getString("Type"));
+                                  ^
+      method Enum.<T>valueOf(Class<T>,String) is not applicable
+        (cannot infer type-variable(s) T
+          (actual and formal argument lists differ in length))
+      method RoomType.valueOf(String) is not applicable
+        (argument mismatch; Optional<String> cannot be converted to String)
+    where T is a type-variable:
+      T extends Enum<T> declared in method <T>valueOf(Class<T>,String)
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:21: error: cannot find symbol
+          this.setAngerTime(99999); // Always angry
+              ^
+    symbol: method setAngerTime(int)
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:46: error: cannot find symbol
+          if (this.getWorld().isClient()) return;
+                  ^
+    symbol: method getWorld()
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:48: error: cannot find symbol
+          PlayerEntity target = this.getWorld().getClosestPlayer(this, 16.0);
+                                    ^
+    symbol: method getWorld()
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.ja
+va:50: error: cannot find symbol
+          if (this.getWorld().isClient()) return;
+                  ^
+    symbol: method getWorld()
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.ja
+va:52: error: cannot find symbol
+          ServerWorld serverWorld = (ServerWorld) this.getWorld();
+                                                      ^
+    symbol: method getWorld()
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:108: error: incompatible types: Optional<Integer> cannot be converted to int
+          int x = nbt.getInt("X");
+                            ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:109: error: incompatible types: Optional<Integer> cannot be converted to int
+          int z = nbt.getInt("Z");
+                            ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:110: error: incompatible types: Optional<Integer> cannot be converted to int
+          int width = nbt.getInt("Width");
+                                ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:111: error: incompatible types: Optional<Integer> cannot be converted to int
+          int length = nbt.getInt("Length");
+                                 ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:112: error: incompatible types: Optional<Boolean> cannot be converted to boolean
+          boolean generated = nbt.getBoolean("Generated");
+                                            ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:113: error: incompatible types: Optional<Long> cannot be converted to long
+          long lastVisitedTime = nbt.getLong("LastVisitedTime");
+                                            ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:119: error: incompatible types: Optional<NbtCompound> cannot be converted to NbtCompound
+              NbtCompound conn = connections.getCompound(i);
+                                                        ^
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\FakePlayerPack
+etHandler.java:4: error: cannot find symbol
+  import net.minecraft.network.packet.s2c.play.EntityDespawnS2CPacket;
+                                              ^
+    symbol:   class EntityDespawnS2CPacket
+    location: package net.minecraft.network.packet.s2c.play
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:28: error: cannot find symbol
+                  .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0);
+                                       ^
+    symbol:   variable GENERIC_ATTACK_KNOCKBACK
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:27: error: cannot find symbol
+                  .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
+                                       ^
+    symbol:   variable GENERIC_ATTACK_DAMAGE
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:26: error: cannot find symbol
+                  .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4) // Base patrol speed
+                                       ^
+    symbol:   variable GENERIC_MOVEMENT_SPEED
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:65: error: cannot find symbol
+              this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.8); // Fast sprint
+                                                        ^
+    symbol:   variable GENERIC_MOVEMENT_SPEED
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.jav
+a:69: error: cannot find symbol
+                  this.playSound(SoundEvents.ENTITY_WOLF_GROWL, 0.5f, this.getSoundPitch());
+                                            ^
+    symbol:   variable ENTITY_WOLF_GROWL
+    location: class SoundEvents
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.ja
+va:37: error: cannot find symbol
+                  .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0);
+                                       ^
+    symbol:   variable GENERIC_FOLLOW_RANGE
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.ja
+va:36: error: cannot find symbol
+                  .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0)
+                                       ^
+    symbol:   variable GENERIC_MAX_HEALTH
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\SmilerEntity.ja
+va:35: error: cannot find symbol
+                  .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15)
+                                       ^
+    symbol:   variable GENERIC_MOVEMENT_SPEED
+    location: class EntityAttributes
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\FakePlayerPack
+etHandler.java:94: error: cannot find symbol
+                      player.networkHandler.sendPacket(new EntityDespawnS2CPacket(fakeId));
+                                                           ^
+    symbol:   class EntityDespawnS2CPacket
+    location: class FakePlayerPacketHandler
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\Fracture3Chunk
+Generator.java:231: error: cannot find symbol
+          for (UUID connectedId : room.getConnectedNodes()) {
+               ^
+    symbol:   class UUID
+    location: class Fracture3ChunkGenerator
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\FloorDecayHand
+ler.java:92: error: cannot find symbol
+                          BlockPos spawn = overworld.getSpawnPos();
+                                                    ^
+    symbol:   method getSpawnPos()
+    location: variable overworld of type ServerWorld
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:85: error: cannot find symbol
+          nbt.putUuid("Id", id);
+             ^
+    symbol:   method putUuid(String,UUID)
+    location: variable nbt of type NbtCompound
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:97: error: cannot find symbol
+              conn.putUuid("TargetId", connectedId);
+                  ^
+    symbol:   method putUuid(String,UUID)
+    location: variable conn of type NbtCompound
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:106: error: cannot find symbol
+          UUID id = nbt.getUuid("Id");
+                       ^
+    symbol:   method getUuid(String)
+    location: variable nbt of type NbtCompound
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\fracture3\RoomGraphNode.
+java:120: error: cannot find symbol
+              node.addConnection(conn.getUuid("TargetId"));
+                                     ^
+    symbol:   method getUuid(String)
+    location: variable conn of type NbtCompound
+  30 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 960ms
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.3.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+1 actionable task: 1 executed
