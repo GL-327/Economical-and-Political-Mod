@@ -273,8 +273,6 @@ public class RecipeConfigManager {
         if ("slime_boots".equals(customId)) return SlayerItems.createSlimeBoots();
         if ("warden_chestplate".equals(customId)) return SlayerItems.createWardenChestplate();
         // Backrooms/Fracture 3 items
-        return ItemStack.EMPTY;
-        if (!backroomsItem.isEmpty()) return backroomsItem.copy();
         // Backrooms rune items — try direct registry lookup for any politicalserver: item
         try {
             Identifier itemId = Identifier.of(customId);

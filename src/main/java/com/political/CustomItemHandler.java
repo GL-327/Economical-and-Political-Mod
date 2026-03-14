@@ -109,7 +109,7 @@ public class CustomItemHandler {
             // Abyssal Blade: Bonus damage to blinded targets
             if (SlayerItems.isType(weapon, SlayerItems.ABYSSAL_BLADE) && entity instanceof LivingEntity target) {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS) || target.hasStatusEffect(StatusEffects.DARKNESS)) {
-                    target.damage(world, sp.getDamageSources().playerAttack(sp), 5.0f); // Bonus damage
+                    target.damage((ServerWorld) world, sp.getDamageSources().playerAttack(sp), 5.0f); // Bonus damage
                     if (world instanceof ServerWorld sw) {
                         sw.spawnParticles(ParticleTypes.SOUL, target.getX(), target.getY() + 1.0, target.getZ(), 10, 0.5, 0.5, 0.5, 0.05);
                     }
