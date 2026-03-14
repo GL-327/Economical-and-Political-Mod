@@ -525,8 +525,17 @@ public class CustomItemHandler {
 
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(color));
+        // Match actual fireBeam() damage values (mk1→tier2, mk2→tier3, etc.)
+        float actualDamage = switch (mk) {
+            case 1 -> 3.0f;
+            case 2 -> 3.6f;
+            case 3 -> 4.2f;
+            case 4 -> 4.8f;
+            case 5 -> 5.4f;
+            default -> 1.0f;
+        };
         lore.add(Text.literal("⚡ Damage/tick: ").formatted(Formatting.WHITE)
-                .append(Text.literal(String.valueOf(5 * mk)).formatted(Formatting.RED, Formatting.BOLD)));
+                .append(Text.literal(String.format("%.1f", actualDamage)).formatted(Formatting.RED, Formatting.BOLD)));
         int xpCost = Math.max(1, mk - 2);
         lore.add(Text.literal("💡 XP Cost: ").formatted(Formatting.WHITE)
                 .append(Text.literal(xpCost + " level(s)/sec").formatted(Formatting.YELLOW)));
@@ -1379,7 +1388,7 @@ public class CustomItemHandler {
                 Text.literal(""),
                 Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE),
                 Text.literal("⚡ Damage/tick: ").formatted(Formatting.WHITE)
-                        .append(Text.literal("35").formatted(Formatting.RED, Formatting.BOLD)),
+                        .append(Text.literal("6.0").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal("💡 XP Cost: ").formatted(Formatting.WHITE)
                         .append(Text.literal("5 levels/sec").formatted(Formatting.YELLOW)),
                 Text.literal("📡 Beam Range: ").formatted(Formatting.WHITE)

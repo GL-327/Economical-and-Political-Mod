@@ -36,7 +36,10 @@
         "GrindstoneScreenHandlerMixin",
         "SmithingScreenHandlerMixin",
         "EndGatewayMixin",
-        "BackroomsAttributeMixin"
+        "BackroomsAttributeMixin",
+        "CustomEnchantDamageMixin",
+        "EnchantmentScreenHandlerMixin",
+        "LootModifierMixin"
     ],
     "injectors": {
         "defaultRequire": 1
