@@ -28,6 +28,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -101,7 +102,7 @@ public class CustomItemHandler {
             // Ender Sword: Teleport behind target on hit
             if (SlayerItems.isType(weapon, SlayerItems.ENDER_SWORD) && entity instanceof LivingEntity target) {
                 Vec3d targetDir = target.getRotationVec(1.0f).normalize().multiply(-1.5);
-                Vec3d behind = target.getPos().add(targetDir);
+                Vec3d behind = new Vec3d(target.getX(), target.getY(), target.getZ()).add(targetDir);
                 sp.teleport((ServerWorld) world, behind.x, behind.y, behind.z, Set.of(), target.getYaw(), target.getPitch(), true);
                 world.playSound(null, sp.getX(), sp.getY(), sp.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
             }
@@ -141,7 +142,7 @@ public class CustomItemHandler {
             if (SlayerItems.isType(held, SlayerItems.ECHOING_CORE)) {
                 if (!serverPlayer.getItemCooldownManager().isCoolingDown(held)) {
                     serverPlayer.getItemCooldownManager().set(held, 100); // 5s cooldown
-                    fireSonicBoom(serverPlayer);
+                    fireSonicBoom(serverPlayer, world);
                     return ActionResult.SUCCESS;
                 }
             }
@@ -167,25 +168,25 @@ public class CustomItemHandler {
 
     }
 
-    private static void fireSonicBoom(ServerPlayerEntity player) {
-        ServerWorld world = (ServerWorld) player.getWorld();
+    private static void fireSonicBoom(ServerPlayerEntity player, World world) {
+        ServerWorld serverWorld = (ServerWorld) world;
         Vec3d start = player.getEyePos();
         Vec3d direction = player.getRotationVec(1.0f);
         
         for (int i = 1; i <= 15; i++) {
             Vec3d pos = start.add(direction.multiply(i));
-            world.spawnParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+            serverWorld.spawnParticles(ParticleTypes.SONIC_BOOM, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
             
             Box box = new Box(pos.subtract(1.5, 1.5, 1.5), pos.add(1.5, 1.5, 1.5));
-            for (Entity entity : world.getOtherEntities(player, box, e -> e instanceof LivingEntity)) {
+            for (Entity entity : serverWorld.getOtherEntities(player, box, e -> e instanceof LivingEntity)) {
                 if (entity instanceof LivingEntity living) {
-                    living.damage(world, player.getDamageSources().sonicBoom(player), 10.0f);
+                    living.damage(serverWorld, player.getDamageSources().sonicBoom(player), 10.0f);
                     Vec3d push = direction.multiply(1.0).add(0, 0.2, 0);
                     living.setVelocity(push);
                 }
             }
         }
-        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        serverWorld.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
     /** Called on player disconnect to clean up per-player state and prevent memory leaks. */

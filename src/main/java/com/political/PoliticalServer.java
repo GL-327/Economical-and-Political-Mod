@@ -434,23 +434,6 @@ for (ServerWorld world : s.getWorlds()) {
 
 // Slayer manager
 			SlayerManager.tick(s);
-
-			// Player-based ticks (once per player)
-			spawnProtectionTickCounter++;
-			boolean runSpawnProtection = spawnProtectionTickCounter >= 10;
-			if (runSpawnProtection) spawnProtectionTickCounter = 0;
-			for (ServerPlayerEntity player : s.getPlayerManager().getPlayerList()) {
-				CustomItemHandler.tickHermesShoes(player);
-				CustomItemHandler.tickHPEBM(player);
-				CustomItemHandler.tickSpiderLeggings(player);
-				CustomItemHandler.tickSlimeBoots(player);
-				CustomItemHandler.tickWardenChestplate(player);
-				CustomItemHandler.tickZombieBerserkerHelmet(player);
-				CustomItemHandler.tickSkeletonBow(player);
-				CustomItemHandler.tickUltraOverclockedLeftClick(player);
-				SlayerArmorHandler.applyCustomArmorAttributes(player);
-				T2ArmorAbilityHandler.tick(player);
-				CustomItemHandler.tickCrownOfGreed(player);
 				ArmourAttributeHandler.tick(player);
 				if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
 
