@@ -272,6 +272,9 @@ public class RecipeConfigManager {
         if ("skeleton_bow".equals(customId)) return SlayerItems.createSkeletonBow();
         if ("slime_boots".equals(customId)) return SlayerItems.createSlimeBoots();
         if ("warden_chestplate".equals(customId)) return SlayerItems.createWardenChestplate();
+        // Backrooms/Fracture 3 items
+        ItemStack backroomsItem = com.political.backrooms.items.BackroomsItemsManager.getItem(customId);
+        if (!backroomsItem.isEmpty()) return backroomsItem.copy();
         // Backrooms rune items — try direct registry lookup for any politicalserver: item
         try {
             Identifier itemId = Identifier.of(customId);

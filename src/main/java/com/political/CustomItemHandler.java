@@ -196,11 +196,8 @@ public class CustomItemHandler {
             return ActionResult.PASS;
         });
 
-        // Ender Phase Helmet - right-click handler
-        // Guard against the OFF_HAND duplicate: Minecraft sends PlayerInteractItemC2SPacket
-        // for both hands when right-clicking with empty hands. Without this guard the
-        // MAIN_HAND call would activate Ender Phase Mode and the OFF_HAND call (fired
-        // immediately after) would see the mode as active and deactivate it again.
+        // Ender Phase Helmet - right-click handler (fires when clicking in air with empty hands)
+        // This is the PRIMARY activation path - works when looking at AIR (not at a block)
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClient()) return ActionResult.PASS;
             if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
@@ -220,8 +217,8 @@ public class CustomItemHandler {
             return handleEnderPhaseActivation(serverPlayer);
         });
 
-        // Ender Phase Helmet - also trigger when right-clicking a block with the helmet
-        // (fallback for cases where UseItemCallback does not fire with empty hands)
+        // Ender Phase Helmet - UseBlockCallback should NOT trigger ability (looking at block = ground)
+        // Only used for debounce tracking to prevent double-fires
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClient()) return ActionResult.PASS;
             if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
@@ -230,21 +227,21 @@ public class CustomItemHandler {
             ItemStack helmet = serverPlayer.getEquippedStack(EquipmentSlot.HEAD);
             if (!SlayerItems.isEnderPhaseHelmet(helmet)) return ActionResult.PASS;
 
-            if (!SlayerItems.canUseEnderPhaseHelmet(serverPlayer)) {
-                int req = SlayerItems.ENDER_PHASE_HELMET_LEVEL_REQ;
-                serverPlayer.sendMessage(
-                    Text.literal("⛔ Requires Enderman Bounty Level " + req + " to use!").formatted(Formatting.RED), true);
-                return ActionResult.PASS;
-            }
-
-            return handleEnderPhaseActivation(serverPlayer);
+            long currentTick = serverPlayer.getEntityWorld().getTime();
+            helmetInteractionDebounce.put(serverPlayer.getUuid(), currentTick);
+            
+            return ActionResult.PASS; // Don't consume, let normal block interaction proceed
         });
+
+        // Ender Phase Helmet - also trigger when right-clicking a block with the helmet
+        // (fallback for cases where UseItemCallback does not fire with empty hands)
+        // Removed duplicate UseBlockCallback
+
     }
 
     /**
-     * Core logic for Voidwalker Crown right-click and sneak+right-click abilities.
-     * Called from both UseItemCallback and UseBlockCallback so it fires reliably
-     * regardless of what (if anything) is in the player's hands.
+     * Core logic for Ender Phase Helmet right-click and sneak+right-click abilities.
+     * Called from UseItemCallback when clicking in air (looking at air, not at a block).
      *
      * <p>A tick-based debounce prevents the double-fire that occurs when the player
      * right-clicks on a block with empty hands: Minecraft sends both a
@@ -1887,6 +1884,18 @@ public class CustomItemHandler {
         // Resistance I for tankiness
         player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.RESISTANCE, 40, 0, true, false, false));
+
+        // Night Vision (permanent while worn)
+        StatusEffectInstance currentNightVision = player.getStatusEffect(StatusEffects.NIGHT_VISION);
+        if (currentNightVision == null || currentNightVision.getDuration() < 220) {
+            player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
+        }
+
+        // Darkness immunity (suppressed during Ender Phase Mode which intentionally applies Darkness)
+        if (player.hasStatusEffect(StatusEffects.DARKNESS) && !isInEnderPhaseMode(player.getUuid())) {
+            player.removeStatusEffect(StatusEffects.DARKNESS);
+        }
 
         // ESP: Glow effect on nearby moving players (every 2 seconds) — 24 block range
         if (player.age % 40 == 0) {

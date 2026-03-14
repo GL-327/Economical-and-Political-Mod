@@ -204,6 +204,16 @@ public class BountyArmorHandler {
             }
         }
 
+        // T2 Chestplate: Resistance I
+        String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
+        if ("warden_t2_chestplate".equals(chestId)) {
+            if (!player.hasStatusEffect(StatusEffects.RESISTANCE) ||
+                    player.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() < 0) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.RESISTANCE, 40, 0, true, false, false));
+            }
+        }
+
         // T1 Boots: Vibration sense (8 blocks), T2 Boots: wider vibration sense (12 blocks)
         String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
         if ("warden_t1_boots".equals(bootsId) || "warden_t2_boots".equals(bootsId)) {

@@ -188,7 +188,7 @@ public class SlayerArmorHandler {
                         case "slime_t2_chestplate"   -> bonusHealth += 8.0;   // +4 hearts
                         // ── ENDERMAN ─────────────────────────────────────
                         case "enderman_t1_chestplate" -> bonusSpeed += 0.05;  // +5%
-                        case "enderman_t2_chestplate" -> bonusSpeed += 0.10;  // +10%
+                        case "enderman_t2_chestplate" -> bonusSpeed += 0.15;  // +15%
                         case "enderman_t1_leggings"   -> bonusSpeed += 0.05;  // +5%
                         case "enderman_t2_leggings"   -> bonusSpeed += 0.10;  // +10%
                         case "enderman_t2_boots"      -> bonusSpeed += 0.10;  // +10%

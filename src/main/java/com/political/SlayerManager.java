@@ -1083,11 +1083,11 @@ public class SlayerManager {
                             .formatted(Formatting.RED), false);
                     iterator.remove();
                     bossOwners.remove(quest.bossEntityUuid);
-                    slayerBossEntities.remove(quest.bossEntityUuid);
                 }
             }
         }
     }
+
     public static boolean hasUnlockedSlayer(String playerUuid, SlayerType type) {
         // Zombie is always unlocked (first slayer)
         if (type == SlayerType.ZOMBIE) return true;
@@ -1096,20 +1096,18 @@ public class SlayerManager {
         SlayerType previous = type.getPreviousSlayer();
         if (previous == null) return true;
 
-        // Check if player completed T3 of previous slayer
-        int highestTier = SlayerData.getHighestTier(playerUuid, previous);
-        return highestTier >= 3;
+        // Check if player has reached level 3+ of previous slayer
+        long xp = SlayerData.getSlayerXp(playerUuid, previous);
+        int level = getLevelForXp(xp);
+        return level >= 3;
     }
 
     public static String getUnlockRequirement(SlayerType type) {
         SlayerType previous = type.getPreviousSlayer();
         if (previous == null) return null;
-        return "Complete " + previous.displayName + " Bounty T3";
+        return "Reach " + previous.displayName + " Bounty Level 3";
     }
 
-
-    // ============================================================
-    // DATA PERSISTENCE HELPERS
     // ============================================================
 
     public static Map<String, ActiveQuest> getActiveQuests() {

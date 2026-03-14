@@ -637,7 +637,7 @@ public class ScoreboardManager {
             case "enderman_t1_helmet"     -> "Night Vision";
             case "enderman_t2_helmet"     -> "Night Vision";
             case "enderman_t1_chestplate" -> "+5% Speed";
-            case "enderman_t2_chestplate" -> "+10% Speed §7| 20% Teleport Dodge";
+            case "enderman_t2_chestplate" -> "+15% Speed §7| Fall Dmg Immune";
             case "enderman_t1_leggings"   -> "+5% Speed";
             case "enderman_t2_leggings"   -> "+10% Speed";
             case "enderman_t1_boots"      -> "Safe Fall +3";
@@ -646,7 +646,7 @@ public class ScoreboardManager {
             case "warden_t1_helmet"       -> "Darkness Immune";
             case "warden_t2_helmet"       -> "Darkness Immune §7| Vibration Sense";
             case "warden_t1_chestplate"   -> "+10% KB Resist";
-            case "warden_t2_chestplate"   -> "+25% KB Resist §7| Sonic Pulse";
+            case "warden_t2_chestplate"   -> "+25% KB Resist §7| Resistance I";
             case "warden_t1_leggings"     -> "+10% KB Resist";
             case "warden_t2_leggings"     -> "+15% KB Resist §7| +4 Hearts";
             case "warden_t1_boots"        -> "Vibration Sense (8 blocks, 3s glow)";

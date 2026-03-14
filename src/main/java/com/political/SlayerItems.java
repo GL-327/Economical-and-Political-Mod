@@ -1530,12 +1530,13 @@ public class SlayerItems {
 
     public static boolean isWardenChestplate(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        // Check custom ID first (preferred)
+        // Check custom ID first (preferred) - only matches legendary chestplate
         if (hasCustomItemId(stack, "warden_chestplate")) return true;
-        // Fallback: name-based for old items
+        // Fallback: name-based for old items - exclude T2 armor (has " II")
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
         if (name == null) return false;
         String n = name.getString();
+        if (n.contains(" II")) return false; // T2 armor, not legendary
         return n.contains("Sculk") || n.contains("Warden") || n.contains("Terror");
     }
 
@@ -2182,14 +2183,14 @@ public class SlayerItems {
             };
             case ENDERMAN -> switch (piece) {
                 case "Helmet"     -> "Night Vision (Permanent)";
-                case "Chestplate" -> "+10% Movement Speed + 20% Teleport Dodge on Hit";
+                case "Chestplate" -> "+15% Movement Speed + Fall Damage Immunity";
                 case "Leggings"   -> "+10% Movement Speed";
                 case "Boots"      -> "No Fall Damage + +10% Movement Speed";
                 default           -> null;
             };
             case WARDEN -> switch (piece) {
-                case "Helmet"     -> "Darkness Immunity + Vibration Sense (wider range)";
-                case "Chestplate" -> "+25% Knockback Resistance + Sonic Pulse (Shift+Attack)";
+                case "Helmet"     -> "Darkness Immunity + Vibration Sense (12 blocks)";
+                case "Chestplate" -> "+25% Knockback Resistance + Resistance I";
                 case "Leggings"   -> "+15% Knockback Resistance + +4 Hearts Health";
                 case "Boots"      -> "+10% Knockback Resistance";
                 default           -> null;

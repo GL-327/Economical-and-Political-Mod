@@ -8,6 +8,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import com.political.PoliticalServer;
+import com.political.SlayerItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +213,7 @@ public class BackroomsItemsManager {
         lore.add(Text.literal("「Fracture 3」").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
         
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        SlayerItems.setCustomItemId(stack, id);
         ITEMS.put(id, new Fracture3ItemDefinition(id, name, "material", baseItem));
         ITEM_STACKS.put(id, stack);
     }
@@ -235,6 +237,7 @@ public class BackroomsItemsManager {
         
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, id);
         ITEMS.put(id, new Fracture3ItemDefinition(id, name, "armor", baseItem));
         ITEM_STACKS.put(id, stack);
     }
@@ -255,6 +258,7 @@ public class BackroomsItemsManager {
         
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, id);
         ITEMS.put(id, new Fracture3ItemDefinition(id, name, "weapon", baseItem));
         ITEM_STACKS.put(id, stack);
     }
@@ -275,6 +279,7 @@ public class BackroomsItemsManager {
         
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, id);
         ITEMS.put(id, new Fracture3ItemDefinition(id, name, "tool", baseItem));
         ITEM_STACKS.put(id, stack);
     }
@@ -295,6 +300,7 @@ public class BackroomsItemsManager {
         
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, id);
         ITEMS.put(id, new Fracture3ItemDefinition(id, name, "misc", baseItem));
         ITEM_STACKS.put(id, stack);
     }

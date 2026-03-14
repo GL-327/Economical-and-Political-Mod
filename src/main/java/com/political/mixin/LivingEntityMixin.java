@@ -145,6 +145,13 @@ public class LivingEntityMixin {
             return;
         }
 
+        // T2 Enderman Chestplate: fall damage immunity
+        String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
+        if ("enderman_t2_chestplate".equals(chestId)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         // Check per-piece fall damage immunity / reduction
         String bootsId = SlayerItems.getCustomItemId(boots);
         if (bootsId != null) {

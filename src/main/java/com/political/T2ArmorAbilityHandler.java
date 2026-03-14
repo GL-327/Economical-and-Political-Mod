@@ -71,54 +71,7 @@ public class T2ArmorAbilityHandler {
     }
 
     public static boolean tryTeleportDodge(ServerPlayerEntity player, float damage) {
-        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (!isT2EndermanChestplate(chestplate)) return false;
-
-        UUID uuid = player.getUuid();
-        long now = System.currentTimeMillis();
-
-        Long lastDodge = teleportDodgeCooldown.get(uuid);
-        if (lastDodge != null && (now - lastDodge) < TELEPORT_DODGE_COOLDOWN_MS) {
-            return false;
-        }
-
-        if (random.nextFloat() > 0.20f) return false;
-
-        teleportDodgeCooldown.put(uuid, now);
-
-        ServerWorld world = player.getEntityWorld();
-        double posX = player.getX();
-        double posY = player.getY();
-        double posZ = player.getZ();
-
-        for (int attempts = 0; attempts < 10; attempts++) {
-            double offsetX = (random.nextDouble() - 0.5) * 10;
-            double offsetZ = (random.nextDouble() - 0.5) * 10;
-            double newX = posX + offsetX;
-            double newZ = posZ + offsetZ;
-
-            if (world.isAir(player.getBlockPos().add((int)offsetX, 0, (int)offsetZ)) &&
-                    world.isAir(player.getBlockPos().add((int)offsetX, 1, (int)offsetZ))) {
-
-                world.spawnParticles(ParticleTypes.REVERSE_PORTAL,
-                        posX, posY + 1, posZ, 20, 0.3, 0.5, 0.3, 0.1);
-
-                player.teleport(world, newX, posY, newZ,
-                        java.util.Set.of(), player.getYaw(), player.getPitch(), false);
-
-                world.spawnParticles(ParticleTypes.REVERSE_PORTAL,
-                        newX, posY + 1, newZ, 20, 0.3, 0.5, 0.3, 0.1);
-
-                world.playSound(null, player.getBlockPos(),
-                        SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
-
-                player.sendMessage(Text.literal("§5§l☍ TELEPORT DODGE!"), true);
-
-                return true;
-            }
-        }
-
-        return false;
+        return false; // T2 armor does not have this ability
     }
 
     // ============================================================
@@ -176,70 +129,7 @@ public class T2ArmorAbilityHandler {
     }
 
     public static boolean trySonicPulse(ServerPlayerEntity player) {
-        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (!isT2WardenChestplate(chestplate)) return false;
-        if (!player.isSneaking()) return false;
-
-        UUID uuid = player.getUuid();
-        long now = System.currentTimeMillis();
-
-        Long lastPulse = sonicPulseCooldown.get(uuid);
-        if (lastPulse != null && (now - lastPulse) < SONIC_PULSE_COOLDOWN_MS) {
-            long remaining = (SONIC_PULSE_COOLDOWN_MS - (now - lastPulse)) / 1000;
-            player.sendMessage(Text.literal("§c⏳ Sonic Pulse cooldown: " + remaining + "s"), true);
-            return false;
-        }
-
-        sonicPulseCooldown.put(uuid, now);
-
-        ServerWorld world = player.getEntityWorld();
-
-        Box pulseBox = player.getBoundingBox().expand(8.0);
-        int hitCount = 0;
-
-        for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, pulseBox,
-                e -> e instanceof HostileEntity && e != player)) {
-
-            entity.damage(world, player.getDamageSources().sonicBoom(player), 20.0f);
-
-            // Knockback
-            double entityX = entity.getX();
-            double entityZ = entity.getZ();
-            double playerX = player.getX();
-            double playerZ = player.getZ();
-
-            double dx = entityX - playerX;
-            double dz = entityZ - playerZ;
-            double dist = Math.sqrt(dx * dx + dz * dz);
-            if (dist > 0) {
-                dx /= dist;
-                dz /= dist;
-            }
-
-            entity.setVelocity(dx * 2.0, 0.8, dz * 2.0);
-
-            entity.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.SLOWNESS, 60, 2, true, true, true
-            ));
-
-            hitCount++;
-        }
-
-        world.playSound(null, player.getBlockPos(),
-                SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 1.5f, 1.0f);
-
-        for (int i = 0; i < 36; i++) {
-            double angle = Math.toRadians(i * 10);
-            for (int r = 2; r <= 8; r += 2) {
-                double x = player.getX() + Math.cos(angle) * r;
-                double z = player.getZ() + Math.sin(angle) * r;
-                world.spawnParticles(ParticleTypes.SONIC_BOOM, x, player.getY() + 1, z, 1, 0, 0, 0, 0);
-            }
-        }
-
-        player.sendMessage(Text.literal("§3§l📡 SONIC PULSE! §7Hit " + hitCount + " enemies"), true);
-
-        return true;
+        return false; // T2 armor does not have this ability
     }
 
     // ============================================================
