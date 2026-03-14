@@ -1,7 +1,8 @@
 {
   "type": "politicalserver:fracture_3_type",
   "generator": {
-    "type": "politicalserver:fracture_3_generator",
+    "type": "minecraft:noise",
+    "settings": "minecraft:overworld",
     "biome": "minecraft:the_void"
   }
 }

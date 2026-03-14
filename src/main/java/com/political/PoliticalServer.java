@@ -61,8 +61,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		LOGGER.info("PoliticalServer initializing...");
-		// Register Fracture 3 dimension codecs
-		com.political.backrooms.fracture3.Fracture3Registry.register();
+		// Register Fracture 3 dimension codecs - DISABLED for server-side only
+		// com.political.backrooms.fracture3.Fracture3Registry.register();
 		BountyCraftingHandler.register();
 		BeamCraftingHandler.register();
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
@@ -188,7 +188,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
 
 
-		ModEntities.register();
+		// ModEntities.register(); - DISABLED for server-side only to stay vanilla client compatible
+		// ModEntities.register();
 		CustomItemHandler.register();
 
 		// Register villager interaction for Auction Master and Underground Auctioneer

@@ -1,27 +1,19 @@
 package com.political.backrooms.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.entity.mob.ZombieEntity;
 
-public class HoundEntity extends WolfEntity {
+public class HoundEntity extends ZombieEntity {
 
     private int freezeTicks = 0;
     private boolean hasDetectedPlayer = false;
 
-    public HoundEntity(EntityType<? extends WolfEntity> entityType, World world) {
+    public HoundEntity(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
+        this.setCanBreakDoors(false);
     }
 
     public static DefaultAttributeContainer.Builder createHoundAttributes() {
-        return WolfEntity.createWolfAttributes()
+        return ZombieEntity.createZombieAttributes()
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.4) // Base patrol speed
                 .add(EntityAttributes.ATTACK_DAMAGE, 3.0)
                 .add(EntityAttributes.ATTACK_KNOCKBACK, 0.0);

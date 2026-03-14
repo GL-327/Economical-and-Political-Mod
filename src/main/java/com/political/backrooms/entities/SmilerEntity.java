@@ -1,37 +1,18 @@
 package com.political.backrooms.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.entity.mob.EndermanEntity;
 
-/**
- * Smiler Entity
- * - Fully transparent body (handled via rendering/invisibility)
- * - Emits glowing white particles at eye height
- * - Moves towards player at 0.15 speed when NO player has line of sight
- * - Freezes if ANY player has line of sight
- * - Despawns instantly if a player comes within 4 blocks
- */
-public class SmilerEntity extends HostileEntity {
+public class SmilerEntity extends EndermanEntity {
 
     private boolean isObserved = false;
 
-    public SmilerEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public SmilerEntity(EntityType<? extends EndermanEntity> entityType, World world) {
         super(entityType, world);
-        // Usually, set invisible if handling visually on client is complex
         this.setInvisible(true);
     }
 
     public static DefaultAttributeContainer.Builder createSmilerAttributes() {
-        return HostileEntity.createHostileAttributes()
+        return EndermanEntity.createEndermanAttributes()
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.15)
                 .add(EntityAttributes.MAX_HEALTH, 100.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 32.0);

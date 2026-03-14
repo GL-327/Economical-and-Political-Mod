@@ -39,7 +39,8 @@
         "BackroomsAttributeMixin",
         "CustomEnchantDamageMixin",
         "EnchantmentScreenHandlerMixin",
-        "LootModifierMixin"
+        "LootModifierMixin",
+        "ServerWorldMixin"
     ],
     "injectors": {
         "defaultRequire": 1
