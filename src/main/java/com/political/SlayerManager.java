@@ -27,8 +27,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.mob.PiglinBruteEntity;
 import net.minecraft.entity.mob.PiglinEntity;
+import com.political.ArmourAttribute;
 
-import java.util.*;import net.minecraft.server.world.ServerWorld;import net.minecraft.entity.attribute.EntityAttributeInstance;
+import java.util.*;
 
 public class SlayerManager {
 
@@ -986,6 +987,23 @@ public class SlayerManager {
             }
         }
 
+        // --- ATTRIBUTE TOKEN DROPS ---
+        // Higher tier slayers have better chances for attribute tokens
+        if (tier >= 3) {
+            double tokenChance = 0.02 + (tier - 3) * 0.01; // T3: 2%, T4: 3%, T5: 4%
+            tokenChance *= PerkManager.getBountyDropMultiplier();
+            
+            if (rand.nextDouble() < tokenChance) {
+                // Drop a random attribute token based on slayer type
+                ArmourAttribute tokenAttr = getRandomAttributeForSlayerType(type, rand);
+                if (tokenAttr != null) {
+                    drops.add(SlayerItems.createAttributeToken(tokenAttr));
+                    player.sendMessage(Text.literal("✦ " + tokenAttr.displayName + " Attribute Token dropped!")
+                            .formatted(tokenAttr.color, Formatting.BOLD), false);
+                }
+            }
+        }
+
         // Coins based on tier (with BOUNTY_TAX perk applied)
         int baseCoinDrop = tier * 25 * (int) type.difficultyMultiplier;
         int coinDrop = PerkManager.applyBountyTax(baseCoinDrop);
@@ -994,10 +1012,67 @@ public class SlayerManager {
         return drops;
     }
 
+    // Helper method to get random attribute for slayer type
+    private static ArmourAttribute getRandomAttributeForSlayerType(SlayerType type, Random rand) {
+        // Different slayer types have different attribute pools
+        return switch (type) {
+            case ZOMBIE -> {
+                // Zombie drops: defensive attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.OVERGROWN, ArmourAttribute.GROUNDED, ArmourAttribute.CURSED
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+            case SPIDER -> {
+                // Spider drops: agility/stealth attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.PHANTOMSTEP, ArmourAttribute.WEBBED, ArmourAttribute.VOLATILE
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+            case SKELETON -> {
+                // Skeleton drops: ranged/combat attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.FRENZIED, ArmourAttribute.SIGHTLESS, ArmourAttribute.VOLATILE
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+            case SLIME -> {
+                // Slime drops: defensive/utility attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.OVERGROWN, ArmourAttribute.GROUNDED, ArmourAttribute.FROST
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+            case ENDERMAN -> {
+                // Enderman drops: mystical/movement attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.PHANTOMSTEP, ArmourAttribute.SIGHTLESS, ArmourAttribute.VOLATILE
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+            case PIGLIN -> {
+                // Piglin drops: combat/wealth attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.FRENZIED, ArmourAttribute.CURSED, ArmourAttribute.VOLATILE
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+            case WARDEN -> {
+                // Warden drops: powerful defensive attributes
+                ArmourAttribute[] attrs = {
+                    ArmourAttribute.OVERGROWN, ArmourAttribute.GROUNDED, ArmourAttribute.BURNING,
+                    ArmourAttribute.FRENZIED, ArmourAttribute.CURSED
+                };
+                yield attrs[rand.nextInt(attrs.length)];
+            }
+        };
+    }
+
     private static void cleanupQuest(String playerUuid) {
         ActiveQuest quest = activeQuests.remove(playerUuid);
         if (quest != null && quest.bossEntityUuid != null) {
-            BossAbilityManager.removeBoss(quest.bossEntityUuid);  // ADD THIS LINE
+            BossAbilityManager.removeBoss(quest.bossEntityUuid);
             bossOwners.remove(quest.bossEntityUuid);
             slayerBossEntities.remove(quest.bossEntityUuid);
         }

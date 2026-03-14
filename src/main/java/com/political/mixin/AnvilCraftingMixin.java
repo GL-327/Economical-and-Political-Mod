@@ -5,7 +5,6 @@ import com.political.CustomItemHandler;
 import com.political.SlayerItems;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
@@ -37,9 +36,7 @@ public class AnvilCraftingMixin {
         if (attr != null) {
             // Validate first slot is armor
             EquipmentSlot slot = null;
-            if (first.getItem() instanceof ArmorItem armor) {
-                slot = armor.getSlotType();
-            } else if (first.get(DataComponentTypes.EQUIPPABLE) != null) {
+            if (first.get(DataComponentTypes.EQUIPPABLE) != null) {
                 slot = first.get(DataComponentTypes.EQUIPPABLE).slot();
             }
 

@@ -1,5 +1,4 @@
 package com.political;
-
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.*;
 import net.minecraft.component.type.NbtComponent;
@@ -842,13 +841,12 @@ public class SlayerItems {
 
         return playerLevel >= requiredLevel;
     }
-// ============================================================
 // SLAYER ARMOR - T1 (Crafted with Chunks)
 // ============================================================
 
     public static final int T1_ARMOR_LEVEL_REQ = 4;
-    public static final int T2_ARMOR_LEVEL_REQ = 8;
-
+    public static final int T2_ARMOR_LEVEL_REQ = 5;
+    public static final int ENDER_PHASE_HELMET_LEVEL_REQ = 7;
 
     // ============================================================
     // ARMOR STAT CONSTANTS
@@ -2262,87 +2260,15 @@ public class SlayerItems {
         lore.add(Text.literal("DEBUFF: ").formatted(Formatting.RED)
                 .append(Text.literal(attr.debuffSummary).formatted(Formatting.DARK_RED)));
         
-        lore.add(Te    public static ItemStack createSlayerHelmet(SlayerManager.SlayerType type, int tier) {
-        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_HELMET : Items.DIAMOND_HELMET);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Helmet T" + tier).formatted(type.color, Formatting.BOLD));
-        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
-        setCustomItemId(stack, type.name().toLowerCase() + "_helmet_t" + tier);
-        return stack;
-    }
-
-    public static ItemStack createSlayerChestplate(SlayerManager.SlayerType type, int tier) {
-        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_CHESTPLATE : Items.DIAMOND_CHESTPLATE);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Chestplate T" + tier).formatted(type.color, Formatting.BOLD));
-        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
-        setCustomItemId(stack, type.name().toLowerCase() + "_chestplate_t" + tier);
-        return stack;
-    }
-
-    public static ItemStack createSlayerLeggings(SlayerManager.SlayerType type, int tier) {
-        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_LEGGINGS : Items.DIAMOND_LEGGINGS);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Leggings T" + tier).formatted(type.color, Formatting.BOLD));
-        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
-        setCustomItemId(stack, type.name().toLowerCase() + "_leggings_t" + tier);
-        return stack;
-    }
-
-    public static ItemStack createSlayerBoots(SlayerManager.SlayerType type, int tier) {
-        ItemStack stack = new ItemStack(tier == 1 ? Items.LEATHER_BOOTS : Items.DIAMOND_BOOTS);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(type.displayName + " Boots T" + tier).formatted(type.color, Formatting.BOLD));
-        if (tier == 1) stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(type.color.getColorValue()));
-        setCustomItemId(stack, type.name().toLowerCase() + "_boots_t" + tier);
-        return stack;
-    }
-
-    public static ItemStack createZombieBerserkerHelmet() {
-        return createZombieBerserkerHelmetForPlayer(null); // Simple fallback
-    }
-
-    public static boolean isSpiderLeggings(ItemStack stack) {
-        return hasCustomItemId(stack, "spider_leggings");
-    }
-
-    public static ItemStack createSpiderLeggings() {
-        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Spider Leggings").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x4D0000));
-        setCustomItemId(stack, "spider_leggings");
-        return stack;
-    }
-
-    public static boolean isSkeletonBow(ItemStack stack) {
-        return stack.isOf(Items.BOW) && hasCustomItemId(stack, "skeleton_bow");
-    }
-
-    public static ItemStack createSkeletonBow() {
-        ItemStack stack = new ItemStack(Items.BOW);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Skeleton Bow").formatted(Formatting.WHITE, Formatting.BOLD));
-        setCustomItemId(stack, "skeleton_bow");
-        return stack;
-    }
-
-    public static boolean isSlimeBoots(ItemStack stack) {
-        return hasCustomItemId(stack, "slime_boots");
-    }
-
-    public static ItemStack createSlimeBoots() {
-        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Slime Boots").formatted(Formatting.GREEN, Formatting.BOLD));
-        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x00FF00));
-        setCustomItemId(stack, "slime_boots");
-        return stack;
-    }
-
-    public static boolean isWardenChestplate(ItemStack stack) {
-        return hasCustomItemId(stack, "warden_chestplate");
-    }
-
-    public static ItemStack createWardenChestplate() {
-        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Warden Chestplate").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
-        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x004D4D));
-        setCustomItemId(stack, "warden_chestplate");
-        return stack;
+        token.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        token.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putString(ARMOR_ATTRIBUTE_TOKEN_KEY, attr.id);
+        token.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        
+        setCustomItemId(token, "attribute_token_" + attr.id);
+        token.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return token;
     }
 
     public static ItemStack createVoidwalkerCrown() {
@@ -2364,10 +2290,6 @@ public class SlayerItems {
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Venomous Dagger").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
         setCustomItemId(stack, "venomous_dagger");
         return stack;
-    }
-
-    public static boolean isCrownOfGreed(ItemStack stack) {
-        return hasCustomItemId(stack, "crown_of_greed");
     }
 
     public static ItemStack createCrownOfGreed() {
@@ -2395,27 +2317,12 @@ public class SlayerItems {
         lore.add(Text.literal("\"Wealth is power — and power devours.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         crown.set(DataComponentTypes.LORE, new LoreComponent(lore));
         crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        crown.set(DataComponentTypes.MAX_DAMAGE, 2000);
+        crown.set(DataComponentTypes.MAX_DAMAGE, 5000); // Buffed durability
         setCustomItemId(crown, "crown_of_greed");
         return crown;
     }
 
-    public static boolean isAbyssalBlade(ItemStack stack) {
-        return hasCustomItemId(stack, "abyssal_blade");
-    }
-
-    public static boolean isEnderSword(ItemStack stack) {
-        return hasCustomItemId(stack, "ender_sword");
-    }
-}
-� ON DEATH: Lose ALL coins!").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("\"Wealth is power — and power devours.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
-        crown.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        crown.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.builder().build());
-        crown.set(DataComponentTypes.MAX_DAMAGE, 2000);
-        setCustomItemId(crown, "crown_of_greed");
-        return crown;
+    public static boolean isEnderPhaseHelmet(ItemStack stack) {
+        return hasCustomItemId(stack, "ender_phase_helmet");
     }
 }

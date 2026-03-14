@@ -26,7 +26,8 @@ public class ArmourAttributeHandler {
         tickCounters.put(uuid, ticks);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() != EquipmentSlot.Type.ARMOR) continue;
+            if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.CHEST && 
+                slot != EquipmentSlot.LEGS && slot != EquipmentSlot.FEET) continue;
             ItemStack stack = player.getEquippedStack(slot);
             ArmourAttribute attr = SlayerItems.getAppliedAttribute(stack);
             if (attr == null) continue;
