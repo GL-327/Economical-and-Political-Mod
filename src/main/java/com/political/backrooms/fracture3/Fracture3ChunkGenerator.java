@@ -12,13 +12,13 @@ import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeAccess;
-import net.minecraft.world.biome.source.FixedBiomeSource;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.StructureAccessor;
-import net.minecraft.world.gen.chunk.Blender;
+import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.noise.NoiseConfig;
+import net.minecraft.world.ChunkRegion;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.StructureAccessor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Fracture3ChunkGenerator extends ChunkGenerator {
 
     public static final MapCodec<Fracture3ChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-            RegistryFixedCodec.of(RegistryKeys.BIOME).fieldOf("biome").forGetter(gen -> gen.biome)
+            net.minecraft.world.biome.source.BiomeSource.CODEC.fieldOf("biome_source").forGetter(gen -> gen.biomeSource)
         ).apply(instance, Fracture3ChunkGenerator::new)
     );
 
@@ -38,13 +38,11 @@ public class Fracture3ChunkGenerator extends ChunkGenerator {
     public static final int CEILING_Y = 79;
     
     // Perlin noise constants for carpet
-    private static final double CARPET_FREQ = 0.15;
+    private final net.minecraft.world.biome.source.BiomeSource biomeSource;
 
-    private final net.minecraft.registry.entry.RegistryEntry<Biome> biome;
-
-    public Fracture3ChunkGenerator(net.minecraft.registry.entry.RegistryEntry<Biome> biome) {
-        super(new FixedBiomeSource(biome));
-        this.biome = biome;
+    public Fracture3ChunkGenerator(net.minecraft.world.biome.source.BiomeSource biomeSource) {
+        super(biomeSource);
+        this.biomeSource = biomeSource;
     }
 
     @Override
