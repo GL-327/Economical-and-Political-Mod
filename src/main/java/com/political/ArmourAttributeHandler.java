@@ -71,7 +71,8 @@ public class ArmourAttributeHandler {
                 }
             }
             case FROST -> {
-                if (player.getEntityWorld().getDimension().ultrawarm()) { // Nether-like
+                // Check if in Nether-like dimension (hot dimension)
+                if (player.getEntityWorld().getDimension().hasCeiling()) { // Nether-like
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1, false, false, true));
                 }
                 // Frost Walker logic (partial)
