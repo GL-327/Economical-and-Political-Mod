@@ -87,7 +87,7 @@ public class CommandRegistry {
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    RecipeEditorGui.open(player);
+                    RecipeEditorGui.openRecipeList(player);
                     return 1;
                 })
         );
