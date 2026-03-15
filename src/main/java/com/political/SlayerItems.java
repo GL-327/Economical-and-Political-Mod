@@ -2591,7 +2591,7 @@ public class SlayerItems {
         lore.add(Text.literal("  (e.g. 999 coins = ×9 damage)").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("✓ Only allows gold items").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Only allows gold items + piglin armor").formatted(Formatting.GREEN));
         lore.add(Text.literal("✗ All bounty buffs/defence disabled").formatted(Formatting.RED));
         lore.add(Text.literal("✗ All armour defence cleared").formatted(Formatting.RED));
         lore.add(Text.literal(""));
