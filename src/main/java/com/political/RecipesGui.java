@@ -987,11 +987,17 @@ public class RecipesGui {
         }
 
         // Recipe grid layout (3x3 crafting grid)
-        // Use a generic core since attributes aren't tied to specific slayer types
+        // Use attribute cores matching the lore description
         ItemStack[] grid = {
-            new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR),
-            new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR),
-            new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR), new ItemStack(Items.PAPER)
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.BURNING),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.SIGHTLESS),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.FRENZIED),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.GROUNDED),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.WEBBED),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.FROST),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.PHANTOMSTEP),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.CURSED),
+            new ItemStack(Items.PAPER)
         };
 
         // Display recipe grid

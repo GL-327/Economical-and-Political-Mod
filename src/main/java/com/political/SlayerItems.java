@@ -2508,6 +2508,23 @@ public class SlayerItems {
         return token;
     }
 
+    public static ItemStack createAttributeCore(ArmourAttribute attr) {
+        ItemStack core = new ItemStack(Items.NETHER_STAR);
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal(attr.displayName + " Core").formatted(attr.color, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Attribute essence containment | Research Division]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("A crystallized essence of").formatted(attr.color));
+        lore.add(Text.literal(attr.displayName.toLowerCase() + " power.").formatted(attr.color));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Used to craft " + attr.displayName + " Attribute Token.").formatted(Formatting.GRAY));
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(core, "attribute_core_" + attr.id);
+        return core;
+    }
+
     public static ItemStack createVoidwalkerCrown() {
         ItemStack stack = new ItemStack(Items.NETHERITE_HELMET);
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
