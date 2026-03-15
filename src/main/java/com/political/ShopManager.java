@@ -1,6 +1,7 @@
 package com.political;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,8 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.*;import net.minecraft.util.math.Box;import net.minecraft.item.ItemStack;
-
+import java.util.*;
 
 public class ShopManager {
 
@@ -24,6 +24,12 @@ public class ShopManager {
 
     // Shop categories
     public static final Map<String, List<Item>> CATEGORIES = new LinkedHashMap<>();
+
+    // Custom price overrides
+    private static final Map<Item, Integer> customPriceOverrides = new LinkedHashMap<>();
+
+    // Items disabled by operators
+    private static final Set<Item> disabledItems = new HashSet<>();
 
     static {
         initializeCategories();
@@ -195,7 +201,7 @@ public class ShopManager {
                 Items.CYAN_CONCRETE, Items.PURPLE_CONCRETE, Items.BLUE_CONCRETE,
                 Items.BROWN_CONCRETE, Items.GREEN_CONCRETE, Items.RED_CONCRETE, Items.BLACK_CONCRETE,
                 Items.WHITE_CONCRETE_POWDER, Items.BLACK_CONCRETE_POWDER,
-                Items.WHITE_TERRACOTTA, Items.ORANGE_TERRACOTTA, Items.BLACK_TERRACOTTA,
+                Items.TERRACOTTA, Items.WHITE_TERRACOTTA, Items.ORANGE_TERRACOTTA, Items.BLACK_TERRACOTTA,
                 Items.TERRACOTTA, Items.WHITE_GLAZED_TERRACOTTA, Items.BLACK_GLAZED_TERRACOTTA,
                 Items.WHITE_STAINED_GLASS, Items.BLACK_STAINED_GLASS
         ));
@@ -351,6 +357,8 @@ public class ShopManager {
         setPrice(Items.IRON_INGOT, 3);
         setPrice(Items.COPPER_INGOT, 2);
         setPrice(Items.GOLD_INGOT, 1);
+        setPrice(Items.IRON_NUGGET, 1);
+        setPrice(Items.GOLD_NUGGET, 1);
         setPrice(Items.DIAMOND, 50);
         setPrice(Items.EMERALD, 30);
         setPrice(Items.LAPIS_LAZULI, 4);
@@ -365,6 +373,7 @@ public class ShopManager {
         // Ore blocks
         setPrice(Items.COAL_BLOCK, 9);
         setPrice(Items.IRON_BLOCK, 27);
+        setPrice(Items.COPPER_BLOCK, 9);
         setPrice(Items.GOLD_BLOCK, 9);
         setPrice(Items.DIAMOND_BLOCK, 450);
         setPrice(Items.EMERALD_BLOCK, 270);
@@ -450,102 +459,62 @@ public class ShopManager {
         setPrice(Items.WITHER_SKELETON_SKULL, 200);
         setPrice(Items.PRISMARINE_SHARD, 3);
         setPrice(Items.PRISMARINE_CRYSTALS, 4);
-        setPrice(Items.SHULKER_SHELL, 150);
-        setPrice(Items.PHANTOM_MEMBRANE, 20);
-        setPrice(Items.DRAGON_BREATH, 100);
-        setPrice(Items.INK_SAC, 2);
-        setPrice(Items.GLOW_INK_SAC, 10);
-        setPrice(Items.HONEYCOMB, 3);
-        setPrice(Items.HONEYCOMB_BLOCK, 12);
-        setPrice(Items.FERMENTED_SPIDER_EYE, 5);
-        setPrice(Items.TURTLE_SCUTE, 20);
-        setPrice(Items.ARMADILLO_SCUTE, 15);
-        setPrice(Items.GOAT_HORN, 40);
-        setPrice(Items.EXPERIENCE_BOTTLE, 30);
-        setPrice(Items.TRIDENT, 600);
-        setPrice(Items.NAUTILUS_SHELL, 100);
-        setPrice(Items.HEART_OF_THE_SEA, 400);
-        setPrice(Items.TURTLE_EGG, 50);
-        setPrice(Items.WHITE_WOOL, 2);
-        setPrice(Items.BLACK_WOOL, 2);
-        setPrice(Items.COBWEB, 5);
+        setPrice(Items.SHULKER_SHELL, 50);
+        setPrice(Items.PHANTOM_MEMBRANE, 5);
+        setPrice(Items.DRAGON_BREATH, 800);
+        setPrice(Items.INK_SAC, 1);
+        setPrice(Items.GLOW_INK_SAC, 1);
+        setPrice(Items.HONEYCOMB, 1);
+        setPrice(Items.HONEYCOMB_BLOCK, 1);
+        setPrice(Items.SPIDER_EYE, 2);
+        setPrice(Items.FERMENTED_SPIDER_EYE, 2);
+        setPrice(Items.TURTLE_SCUTE, 1);
+        setPrice(Items.ARMADILLO_SCUTE, 100);
+        setPrice(Items.GOAT_HORN, 10);
+        setPrice(Items.EXPERIENCE_BOTTLE, 15);
+        setPrice(Items.TOTEM_OF_UNDYING, 500);
+        setPrice(Items.TRIDENT, 400);
+        setPrice(Items.NAUTILUS_SHELL, 5);
+        setPrice(Items.HEART_OF_THE_SEA, 50);
+        setPrice(Items.TURTLE_EGG, 5);
+        setPrice(Items.WHITE_WOOL, 1);
+        setPrice(Items.BLACK_WOOL, 1);
+        setPrice(Items.COBWEB, 1);
 
         // ===== REDSTONE =====
+        setPrice(Items.REDSTONE, 2);
         setPrice(Items.REDSTONE_BLOCK, 18);
-        setPrice(Items.REDSTONE_TORCH, 2);
-        setPrice(Items.REDSTONE_LAMP, 10);
-        setPrice(Items.REPEATER, 5);
-        setPrice(Items.COMPARATOR, 10);
-        setPrice(Items.PISTON, 8);
-        setPrice(Items.STICKY_PISTON, 13);
-        setPrice(Items.HONEY_BLOCK, 20);
-        setPrice(Items.OBSERVER, 10);
-        setPrice(Items.HOPPER, 20);
+        setPrice(Items.REDSTONE_TORCH, 1);
+        setPrice(Items.REDSTONE_LAMP, 6);
+        setPrice(Items.REPEATER, 4);
+        setPrice(Items.COMPARATOR, 4);
+        setPrice(Items.PISTON, 4);
+        setPrice(Items.STICKY_PISTON, 4);
+        setPrice(Items.SLIME_BLOCK, 45);
+        setPrice(Items.HONEY_BLOCK, 4);
+        setPrice(Items.OBSERVER, 4);
+        setPrice(Items.HOPPER, 6);
         setPrice(Items.DROPPER, 6);
-        setPrice(Items.DISPENSER, 7);
-        setPrice(Items.LEVER, 1);
+        setPrice(Items.DISPENSER, 6);
+        setPrice(Items.LEVER, 2);
         setPrice(Items.STONE_BUTTON, 1);
         setPrice(Items.OAK_BUTTON, 1);
         setPrice(Items.STONE_PRESSURE_PLATE, 1);
         setPrice(Items.OAK_PRESSURE_PLATE, 1);
-        setPrice(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 20);
-        setPrice(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 10);
-        setPrice(Items.TRAPPED_CHEST, 6);
-        setPrice(Items.TNT, 20);
-        setPrice(Items.NOTE_BLOCK, 3);
-        setPrice(Items.JUKEBOX, 60);
-        setPrice(Items.DAYLIGHT_DETECTOR, 15);
-        setPrice(Items.TARGET, 10);
-        setPrice(Items.LIGHTNING_ROD, 12);
-        setPrice(Items.SCULK_SENSOR, 30);
-        setPrice(Items.CALIBRATED_SCULK_SENSOR, 40);
+        setPrice(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 4);
+        setPrice(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 4);
+        setPrice(Items.TRIPWIRE_HOOK, 4);
+        setPrice(Items.TRAPPED_CHEST, 8);
+        setPrice(Items.TNT, 4);
+        setPrice(Items.NOTE_BLOCK, 4);
+        setPrice(Items.JUKEBOX, 9);
+        setPrice(Items.DAYLIGHT_DETECTOR, 4);
+        setPrice(Items.TARGET, 4);
+        setPrice(Items.LIGHTNING_ROD, 4);
+        setPrice(Items.SCULK_SENSOR, 5);
+        setPrice(Items.CALIBRATED_SCULK_SENSOR, 4);
 
         // ===== TOOLS & WEAPONS =====
-        setPrice(Items.ARROW, 1);
-        setPrice(Items.SPECTRAL_ARROW, 5);
-        setPrice(Items.TIPPED_ARROW, 10);
-        setPrice(Items.SHIELD, 10);
-        setPrice(Items.FISHING_ROD, 5);
-        setPrice(Items.CARROT_ON_A_STICK, 7);
-        setPrice(Items.WARPED_FUNGUS_ON_A_STICK, 10);
-        setPrice(Items.FLINT_AND_STEEL, 5);
-        setPrice(Items.SHEARS, 7);
-        setPrice(Items.BRUSH, 8);
-        setPrice(Items.SPYGLASS, 30);
-        setPrice(Items.COMPASS, 15);
-        setPrice(Items.CLOCK, 40);
-        setPrice(Items.LEAD, 10);
-        setPrice(Items.NAME_TAG, 40);
-        setPrice(Items.SADDLE, 60);
-        setPrice(Items.FIREWORK_ROCKET, 3);
-
-        // ===== ARMOR =====
-        setPrice(Items.TURTLE_HELMET, 120);
-
-        // ===== DECORATION =====
-        setPrice(Items.TORCH, 1);
-        setPrice(Items.SOUL_TORCH, 1);
-        setPrice(Items.LANTERN, 3);
-        setPrice(Items.SOUL_LANTERN, 4);
-        setPrice(Items.CANDLE, 2);
-        setPrice(Items.WHITE_CANDLE, 2);
-        setPrice(Items.BLACK_CANDLE, 2);
-        setPrice(Items.IRON_CHAIN, 4);
-        setPrice(Items.IRON_BARS, 2);
-        setPrice(Items.LADDER, 1);
-        setPrice(Items.SCAFFOLDING, 1);
-        setPrice(Items.FLOWER_POT, 1);
-        setPrice(Items.PAINTING, 3);
-        setPrice(Items.ITEM_FRAME, 4);
-        setPrice(Items.GLOW_ITEM_FRAME, 14);
-        setPrice(Items.ARMOR_STAND, 6);
-        setPrice(Items.END_ROD, 10);
-        setPrice(Items.BELL, 100);
-        setPrice(Items.DECORATED_POT, 5);
-        setPrice(Items.OAK_SIGN, 1);
-        setPrice(Items.SPRUCE_SIGN, 1);
-        setPrice(Items.BIRCH_SIGN, 1);
-        setPrice(Items.OAK_FENCE, 1);
         setPrice(Items.SPRUCE_FENCE, 1);
         setPrice(Items.NETHER_BRICK_FENCE, 2);
         setPrice(Items.OAK_FENCE_GATE, 2);
@@ -752,7 +721,7 @@ public class ShopManager {
         if (DEFAULT_PRICES.isEmpty()) {
             DEFAULT_PRICES.putAll(SELL_PRICES);
         }
-    } // Added missing closing brace
+    }
 
     private static void setPrice(Item item, int sellPrice) {
         SELL_PRICES.put(item, sellPrice);
@@ -760,15 +729,9 @@ public class ShopManager {
 
     // ===== OPERATOR PRICE CONTROL =====
 
-    // Items disabled by operators
-    private static final Set<Item> disabledItems = new HashSet<>();
-
-    // Custom price overrides (survives resetPrices if saved)
-    private static final Map<Item, Integer> customPriceOverrides = new LinkedHashMap<>();
-
     public static void setCustomPrice(Item item, int sellPrice) {
-        SELL_PRICES.put(item, sellPrice);
         customPriceOverrides.put(item, sellPrice);
+        SELL_PRICES.put(item, sellPrice);
     }
 
     public static void disableItem(Item item) {
@@ -980,19 +943,19 @@ public class ShopManager {
         for (String word : words) {
             if (!word.isEmpty()) {
                 result.append(Character.toUpperCase(word.charAt(0)))
-                        .append(word.substring(1))
-                        .append(" ");
+                        .append(word.substring(1).toLowerCase());
             }
         }
-        return result.toString().trim();
+        return result.toString();
     }
 
-    public static String formatCoins(long amount) {
-        if (amount >= 1_000_000) {
-            return String.format("%.1fM coins", amount / 1_000_000.0);
-        } else if (amount >= 1_000) {
-            return String.format("%.1fK coins", amount / 1_000.0);
+    public static String formatCoins(int coins) {
+        if (coins >= 1000000) {
+            return String.format("%.1fM", coins / 1000000.0);
+        } else if (coins >= 1000) {
+            return String.format("%.1fK", coins / 1000.0);
+        } else {
+            return String.valueOf(coins);
         }
-        return amount + " coins";
     }
 }

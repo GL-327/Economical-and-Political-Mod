@@ -204,6 +204,43 @@ public class SlayerRecipes {
                 },
                 SlayerManager.SlayerType.WARDEN, 9
         ));
+
+        // ===== SPECIAL RECIPES =====
+        
+        // Midas Sword
+        RECIPES.add(new Recipe(
+                "Midas Sword",
+                SlayerItems.createMidasSword(),
+                new ItemStack[] {
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        new ItemStack(Items.GOLDEN_APPLE),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN)
+                },
+                SlayerManager.SlayerType.ENDERMAN, 7
+        ));
+
+        // Voidwalker Crown
+        RECIPES.add(new Recipe(
+                "Voidwalker Crown",
+                SlayerItems.createVoidwalkerCrown(),
+                new ItemStack[] {
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN),
+                        SlayerItems.createChunk(SlayerManager.SlayerType.ENDERMAN)
+                },
+                SlayerManager.SlayerType.ENDERMAN, 9
+        ));
         
     }
 

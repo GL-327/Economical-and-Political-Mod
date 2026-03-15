@@ -287,6 +287,8 @@ public class CustomItemHandler {
                 name.contains("Bandit") ||
                 name.contains("Plasma Emitter") ||
                 name.contains("Enchanted Gilded Blackstone") ||
+                name.contains("Enchanted Compacted") ||
+                name.contains("✦ Enchanted") ||
                 name.contains("Gilded Netherite");
     }
 
