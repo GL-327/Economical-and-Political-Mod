@@ -267,6 +267,10 @@ public class CustomItemsGui {
             items.add(SlayerItems.createChunk(type));
             items.add(SlayerItems.createCore(type));
         }
+        // Add attribute cores
+        for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
+            items.add(SlayerItems.createAttributeCore(attr));
+        }
         openSubPage(player, "✦ Materials", items, 0);
     }
 

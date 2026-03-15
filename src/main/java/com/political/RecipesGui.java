@@ -215,6 +215,13 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openAttributeTokensRecipes(player)).build());
 
         gui.setSlot(31, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Ultra-rare admin items").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openLegendaryItems(player)).build());
+
+        gui.setSlot(32, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("⚠ HPEBM T0 & The Gavel are obtained").formatted(Formatting.YELLOW))
@@ -1031,6 +1038,37 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Use with caution in void").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("environments and end dimensions.").formatted(Formatting.YELLOW))
                 .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openLegendaryItems(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✦ Legendary Items"));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Ultra-rare admin items").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        // Voidwalker Crown
+        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createVoidwalkerCrown().getItem())
+                .setName(SlayerItems.createVoidwalkerCrown().get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("A mysterious crown from the void").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("grants dimensional powers.").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("Click to view full info!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openVoidwalkerCrownRecipe(player)).build());
 
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
