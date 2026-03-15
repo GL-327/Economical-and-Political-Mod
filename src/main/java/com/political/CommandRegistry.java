@@ -101,6 +101,104 @@ public class CommandRegistry {
                     RecipesGui.openMainMenu(player);
                     return 1;
                 })
+                .then(CommandManager.argument("item", StringArgumentType.string())
+                        .suggests((context, builder) -> {
+                            // Suggest common item names and custom items
+                            List<String> suggestions = new ArrayList<>();
+                            
+                            // Add vanilla item suggestions
+                            suggestions.add("iron_ingot");
+                            suggestions.add("gold_ingot");
+                            suggestions.add("diamond");
+                            suggestions.add("emerald");
+                            suggestions.add("netherite_ingot");
+                            suggestions.add("copper_ingot");
+                            suggestions.add("coal");
+                            suggestions.add("lapis_lazuli");
+                            suggestions.add("redstone");
+                            suggestions.add("quartz");
+                            suggestions.add("blackstone");
+                            suggestions.add("ancient_debris");
+                            suggestions.add("amethyst_shard");
+                            
+                            // Add custom item suggestions
+                            suggestions.add("compacted_iron");
+                            suggestions.add("compacted_gold");
+                            suggestions.add("compacted_diamond");
+                            suggestions.add("compacted_emerald");
+                            suggestions.add("compacted_netherite");
+                            suggestions.add("compacted_copper");
+                            suggestions.add("compacted_coal");
+                            suggestions.add("compacted_lapis");
+                            suggestions.add("compacted_redstone");
+                            suggestions.add("compacted_quartz");
+                            suggestions.add("enchanted_compacted_iron");
+                            suggestions.add("enchanted_compacted_gold");
+                            suggestions.add("enchanted_compacted_diamond");
+                            suggestions.add("enchanted_compacted_emerald");
+                            suggestions.add("enchanted_compacted_netherite");
+                            suggestions.add("enchanted_compacted_copper");
+                            suggestions.add("enchanted_compacted_coal");
+                            suggestions.add("enchanted_compacted_lapis");
+                            suggestions.add("enchanted_compacted_redstone");
+                            suggestions.add("enchanted_compacted_quartz");
+                            suggestions.add("enchanted_compacted_blackstone");
+                            suggestions.add("enchanted_compacted_ancient_debris");
+                            suggestions.add("enchanted_compacted_amethyst");
+                            suggestions.add("super_compacted_gold");
+                            suggestions.add("super_compacted_iron");
+                            suggestions.add("super_compacted_diamond");
+                            suggestions.add("super_compacted_emerald");
+                            suggestions.add("super_compacted_netherite");
+                            
+                            // Add gold armor suggestions
+                            suggestions.add("pure_gold_helmet");
+                            suggestions.add("pure_gold_chestplate");
+                            suggestions.add("pure_gold_leggings");
+                            suggestions.add("pure_gold_boots");
+                            suggestions.add("polished_gold_helmet");
+                            suggestions.add("polished_gold_chestplate");
+                            suggestions.add("polished_gold_leggings");
+                            suggestions.add("polished_gold_boots");
+                            suggestions.add("shiny_gold_helmet");
+                            suggestions.add("shiny_gold_chestplate");
+                            suggestions.add("shiny_gold_leggings");
+                            suggestions.add("shiny_gold_boots");
+                            suggestions.add("glistening_gold_helmet");
+                            suggestions.add("glistening_gold_chestplate");
+                            suggestions.add("glistening_gold_leggings");
+                            suggestions.add("glistening_gold_boots");
+                            suggestions.add("gilded_helmet");
+                            suggestions.add("gilded_chestplate");
+                            suggestions.add("gilded_leggings");
+                            suggestions.add("gilded_boots");
+                            
+                            // Filter suggestions based on input
+                            String input = context.getArgument("item", String.class).toLowerCase();
+                            for (String suggestion : suggestions) {
+                                if (suggestion.toLowerCase().contains(input)) {
+                                    builder.suggest(suggestion);
+                                }
+                            }
+                            return builder.buildFuture();
+                        })
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            String itemName = context.getArgument("item", String.class).toLowerCase();
+                            
+                            // Try to find and open the specific recipe
+                            boolean found = RecipesGui.openSpecificRecipe(player, itemName);
+                            
+                            if (!found) {
+                                player.sendMessage(Text.literal("✖ Recipe not found for: " + itemName)
+                                        .formatted(Formatting.RED), false);
+                                player.sendMessage(Text.literal("Use /recipe to browse all available recipes")
+                                        .formatted(Formatting.GRAY), false);
+                            }
+                            
+                            return 1;
+                        })
+                )
         );
         dispatcher.register(CommandManager.literal("bounty")
                 .executes(context -> {

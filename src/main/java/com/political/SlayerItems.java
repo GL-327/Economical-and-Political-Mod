@@ -2835,4 +2835,880 @@ public class SlayerItems {
         setCustomItemId(compacted, "compacted_quartz");
         return compacted;
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ENCHANTED COMPACTED MATERIALS - Enhanced storage with magic
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createEnchantedCompactedIron() {
+        ItemStack compacted = new ItemStack(Items.IRON_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Iron").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of iron").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Iron Ingots").formatted(Formatting.WHITE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_iron");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedGold() {
+        ItemStack compacted = new ItemStack(Items.GOLD_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Gold").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of gold").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Gold Ingots").formatted(Formatting.YELLOW)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_gold");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedDiamond() {
+        ItemStack compacted = new ItemStack(Items.DIAMOND_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Diamond").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of diamonds").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Diamonds").formatted(Formatting.AQUA)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_diamond");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedEmerald() {
+        ItemStack compacted = new ItemStack(Items.EMERALD_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Emerald").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of emeralds").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Emeralds").formatted(Formatting.GREEN)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_emerald");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedNetherite() {
+        ItemStack compacted = new ItemStack(Items.NETHERITE_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Netherite").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of netherite").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Netherite Ingots").formatted(Formatting.DARK_GRAY)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_netherite");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedCopper() {
+        ItemStack compacted = new ItemStack(Items.COPPER_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Copper").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of copper").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Copper Ingots").formatted(Formatting.RED)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_copper");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedCoal() {
+        ItemStack compacted = new ItemStack(Items.COAL_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Coal").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of coal").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Coal").formatted(Formatting.DARK_GRAY)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_coal");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedLapis() {
+        ItemStack compacted = new ItemStack(Items.LAPIS_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Lapis Lazuli").formatted(Formatting.BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.BLUE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of lapis lazuli").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Lapis Lazuli").formatted(Formatting.BLUE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_lapis");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedRedstone() {
+        ItemStack compacted = new ItemStack(Items.REDSTONE_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Redstone").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of redstone").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Redstone").formatted(Formatting.RED)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_redstone");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedQuartz() {
+        ItemStack compacted = new ItemStack(Items.QUARTZ_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Quartz").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of quartz").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Quartz").formatted(Formatting.WHITE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_quartz");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedBlackstone() {
+        ItemStack compacted = new ItemStack(Items.BLACKSTONE);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Blackstone").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of blackstone").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Blackstone").formatted(Formatting.DARK_GRAY)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_blackstone");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedAncientDebris() {
+        ItemStack compacted = new ItemStack(Items.ANCIENT_DEBRIS);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Ancient Debris").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of ancient debris").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Ancient Debris").formatted(Formatting.DARK_RED)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_ancient_debris");
+        return compacted;
+    }
+
+    public static ItemStack createEnchantedCompactedAmethyst() {
+        ItemStack compacted = new ItemStack(Items.AMETHYST_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Compacted Amethyst").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A magically condensed block of amethyst").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Amethyst Shards").formatted(Formatting.LIGHT_PURPLE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "enchanted_compacted_amethyst");
+        return compacted;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SUPER COMPACTED ORES - Ultimate compression
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createSuperCompactedGold() {
+        ItemStack compacted = new ItemStack(Items.GOLD_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Super Compacted Gold").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The ultimate storage for gold").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted compacted gold").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("576 Gold Ingots").formatted(Formatting.GOLD)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "super_compacted_gold");
+        return compacted;
+    }
+
+    public static ItemStack createSuperCompactedIron() {
+        ItemStack compacted = new ItemStack(Items.IRON_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Super Compacted Iron").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The ultimate storage for iron").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted compacted iron").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("576 Iron Ingots").formatted(Formatting.WHITE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "super_compacted_iron");
+        return compacted;
+    }
+
+    public static ItemStack createSuperCompactedDiamond() {
+        ItemStack compacted = new ItemStack(Items.DIAMOND_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Super Compacted Diamond").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The ultimate storage for diamonds").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted compacted diamond").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("576 Diamonds").formatted(Formatting.AQUA)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "super_compacted_diamond");
+        return compacted;
+    }
+
+    public static ItemStack createSuperCompactedEmerald() {
+        ItemStack compacted = new ItemStack(Items.EMERALD_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Super Compacted Emerald").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The ultimate storage for emeralds").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted compacted emerald").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("576 Emeralds").formatted(Formatting.GREEN)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "super_compacted_emerald");
+        return compacted;
+    }
+
+    public static ItemStack createSuperCompactedNetherite() {
+        ItemStack compacted = new ItemStack(Items.NETHERITE_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Super Compacted Netherite").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("The ultimate storage for netherite").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted compacted netherite").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("576 Netherite Ingots").formatted(Formatting.DARK_GRAY)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "super_compacted_netherite");
+        return compacted;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // GOLD ARMOR EVOLUTION - Progressive enhancement tiers
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createPureGoldHelmet() {
+        ItemStack helmet = new ItemStack(Items.GOLDEN_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☀ Pure Gold Helmet").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 1]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 2 HP (1 heart)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 2").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 0").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Basic gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Golden appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✗ No special abilities").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"The beginning of golden excellence\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "pure_gold_helmet");
+        return helmet;
+    }
+
+    public static ItemStack createPureGoldChestplate() {
+        ItemStack chestplate = new ItemStack(Items.GOLDEN_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☀ Pure Gold Chestplate").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 1]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 4 HP (2 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 6").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 0").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Basic gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Golden appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✗ No special abilities").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"The beginning of golden excellence\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "pure_gold_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createPureGoldLeggings() {
+        ItemStack leggings = new ItemStack(Items.GOLDEN_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☀ Pure Gold Leggings").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 1]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 2 HP (1 heart)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 0").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Basic gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Golden appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✗ No special abilities").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"The beginning of golden excellence\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "pure_gold_leggings");
+        return leggings;
+    }
+
+    public static ItemStack createPureGoldBoots() {
+        ItemStack boots = new ItemStack(Items.GOLDEN_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☀ Pure Gold Boots").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 1]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 2 HP (1 heart)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 2").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 0").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Basic gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Golden appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✗ No special abilities").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"The beginning of golden excellence\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "pure_gold_boots");
+        return boots;
+    }
+
+    public static ItemStack createPolishedGoldHelmet() {
+        ItemStack helmet = new ItemStack(Items.GOLDEN_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✨ Polished Gold Helmet").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 2]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 4 HP (2 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 3").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 1").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Enhanced gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Polished golden shine").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +10% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Refined to perfection\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "polished_gold_helmet");
+        return helmet;
+    }
+
+    public static ItemStack createPolishedGoldChestplate() {
+        ItemStack chestplate = new ItemStack(Items.GOLDEN_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✨ Polished Gold Chestplate").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 2]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 6 HP (3 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 7").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 1").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Enhanced gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Polished golden shine").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +10% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Refined to perfection\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "polished_gold_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createPolishedGoldLeggings() {
+        ItemStack leggings = new ItemStack(Items.GOLDEN_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✨ Polished Gold Leggings").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 2]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 4 HP (2 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 6").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 1").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Enhanced gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Polished golden shine").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +10% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Refined to perfection\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "polished_gold_leggings");
+        return leggings;
+    }
+
+    public static ItemStack createPolishedGoldBoots() {
+        ItemStack boots = new ItemStack(Items.GOLDEN_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✨ Polished Gold Boots").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 2]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 4 HP (2 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 3").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 1").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Enhanced gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Polished golden shine").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +10% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Refined to perfection\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "polished_gold_boots");
+        return boots;
+    }
+
+    public static ItemStack createShinyGoldHelmet() {
+        ItemStack helmet = new ItemStack(Items.GOLDEN_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Shiny Gold Helmet").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 3]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 6 HP (3 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 4").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 2").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Superior gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Brilliant golden glow").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +20% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Shines like the sun\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "shiny_gold_helmet");
+        return helmet;
+    }
+
+    public static ItemStack createShinyGoldChestplate() {
+        ItemStack chestplate = new ItemStack(Items.GOLDEN_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Shiny Gold Chestplate").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 3]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 8 HP (4 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 8").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 2").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Superior gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Brilliant golden glow").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +20% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Shines like the sun\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "shiny_gold_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createShinyGoldLeggings() {
+        ItemStack leggings = new ItemStack(Items.GOLDEN_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Shiny Gold Leggings").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 3]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 6 HP (3 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 7").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 2").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Superior gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Brilliant golden glow").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +20% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Shines like the sun\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "shiny_gold_leggings");
+        return leggings;
+    }
+
+    public static ItemStack createShinyGoldBoots() {
+        ItemStack boots = new ItemStack(Items.GOLDEN_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⭐ Shiny Gold Boots").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 3]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 6 HP (3 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 4").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 2").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Superior gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Brilliant golden glow").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +20% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Shines like the sun\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "shiny_gold_boots");
+        return boots;
+    }
+
+    public static ItemStack createGlisteningGoldHelmet() {
+        ItemStack helmet = new ItemStack(Items.GOLDEN_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("💫 Glistening Gold Helmet").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 4]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 8 HP (4 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 3").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Exceptional gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Glistening golden aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +30% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +2 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Glistens with divine light\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "glistening_gold_helmet");
+        return helmet;
+    }
+
+    public static ItemStack createGlisteningGoldChestplate() {
+        ItemStack chestplate = new ItemStack(Items.GOLDEN_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("💫 Glistening Gold Chestplate").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 4]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 10 HP (5 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 9").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 3").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Exceptional gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Glistening golden aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +30% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +2 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Glistens with divine light\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "glistening_gold_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createGlisteningGoldLeggings() {
+        ItemStack leggings = new ItemStack(Items.GOLDEN_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("💫 Glistening Gold Leggings").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 4]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 8 HP (4 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 8").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 3").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Exceptional gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Glistening golden aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +30% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +2 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Glistens with divine light\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "glistening_gold_leggings");
+        return leggings;
+    }
+
+    public static ItemStack createGlisteningGoldBoots() {
+        ItemStack boots = new ItemStack(Items.GOLDEN_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("💫 Glistening Gold Boots").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 4]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 8 HP (4 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 3").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Exceptional gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Glistening golden aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +30% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +2 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Glistens with divine light\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "glistening_gold_boots");
+        return boots;
+    }
+
+    public static ItemStack createGildedHelmet() {
+        ItemStack helmet = new ItemStack(Items.GOLDEN_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("👑 Gilded Helmet").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 5]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("❤ Max Health: 12 HP (6 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 6").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 4").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✓ Ultimate gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Royal gilded appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +40% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +4 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Fit for royalty\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "gilded_helmet");
+        return helmet;
+    }
+
+    public static ItemStack createGildedChestplate() {
+        ItemStack chestplate = new ItemStack(Items.GOLDEN_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("👑 Gilded Chestplate").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 5]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("❤ Max Health: 14 HP (7 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 10").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 4").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✓ Ultimate gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Royal gilded appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +40% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +4 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Fit for royalty\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "gilded_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createGildedLeggings() {
+        ItemStack leggings = new ItemStack(Items.GOLDEN_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("👑 Gilded Leggings").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 5]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("❤ Max Health: 12 HP (6 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 9").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 4").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✓ Ultimate gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Royal gilded appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +40% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +4 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Fit for royalty\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "gilded_leggings");
+        return leggings;
+    }
+
+    public static ItemStack createGildedBoots() {
+        ItemStack boots = new ItemStack(Items.GOLDEN_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("👑 Gilded Boots").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Gold Armor Tier 5]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("❤ Max Health: 12 HP (6 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 6").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 4").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✓ Ultimate gold protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Royal gilded appearance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +40% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +4 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Fit for royalty\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "gilded_boots");
+        return boots;
+    }
+
+    public static ItemStack createEnchantedBlackstone() {
+        ItemStack blackstone = new ItemStack(Items.BLACKSTONE);
+        blackstone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Blackstone").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Blackstone infused with ancient magic").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Used for ultimate armor crafting").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Crafted from 64 blackstone").formatted(Formatting.GRAY));
+        blackstone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        blackstone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(blackstone, "enchanted_blackstone");
+        return blackstone;
+    }
 }

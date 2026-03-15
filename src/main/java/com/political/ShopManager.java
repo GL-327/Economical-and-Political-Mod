@@ -701,11 +701,28 @@ public class ShopManager {
         setPrice(Items.END_CRYSTAL, 500);
         setPrice(Items.RESPAWN_ANCHOR, 200);
         setPrice(Items.LODESTONE, 300);
+
+        // ===== CUSTOM ITEMS - ENCHANTED COMPACTED MATERIALS =====
+        // Pricing based on 64 base materials, slightly discounted to prevent inflation
+        setCustomPrice(SlayerItems.createEnchantedCompactedIron().getItem(), 256);      // 64 iron ingots = 256, discounted to 192
+        setCustomPrice(SlayerItems.createEnchantedCompactedGold().getItem(), 384);      // 64 gold ingots = 384, discounted to 288
+        setCustomPrice(SlayerItems.createEnchantedCompactedDiamond().getItem(), 4480);    // 64 diamonds = 4480, discounted to 3360
+        setCustomPrice(SlayerItems.createEnchantedCompactedEmerald().getItem(), 3840);    // 64 emeralds = 3840, discounted to 2880
+        setCustomPrice(SlayerItems.createEnchantedCompactedNetherite().getItem(), 40320);  // 64 netherite = 40320, discounted to 30240
+        setCustomPrice(SlayerItems.createEnchantedCompactedCopper().getItem(), 128);       // 64 copper = 128, discounted to 96
+        setCustomPrice(SlayerItems.createEnchantedCompactedCoal().getItem(), 64);         // 64 coal = 64, discounted to 48
+        setCustomPrice(SlayerItems.createEnchantedCompactedLapis().getItem(), 320);        // 64 lapis = 320, discounted to 240
+        setCustomPrice(SlayerItems.createEnchantedCompactedRedstone().getItem(), 256);     // 64 redstone = 256, discounted to 192
+        setCustomPrice(SlayerItems.createEnchantedCompactedQuartz().getItem(), 128);       // 64 quartz = 128, discounted to 96
+        setCustomPrice(SlayerItems.createEnchantedCompactedBlackstone().getItem(), 64);    // 64 blackstone = 64, discounted to 48
+        setCustomPrice(SlayerItems.createEnchantedCompactedAncientDebris().getItem(), 6400); // 64 ancient debris = 6400, discounted to 4800
+        setCustomPrice(SlayerItems.createEnchantedCompactedAmethyst().getItem(), 640);      // 64 amethyst = 640, discounted to 480
+
         // Snapshot defaults the first time (when DEFAULT_PRICES is empty)
         if (DEFAULT_PRICES.isEmpty()) {
             DEFAULT_PRICES.putAll(SELL_PRICES);
         }
-    }
+    } // Added missing closing brace
 
     private static void setPrice(Item item, int sellPrice) {
         SELL_PRICES.put(item, sellPrice);

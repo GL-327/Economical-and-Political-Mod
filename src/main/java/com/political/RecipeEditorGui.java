@@ -45,6 +45,7 @@ public class RecipeEditorGui {
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
+        GOLD_ARMOR   ("👑 Gold Armor Evolution",             Items.GOLDEN_CHESTPLATE,  Formatting.GOLD),
         MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY),
         ATTRIBUTE_TOKENS("✧ Attribute Tokens",               Items.PAPER,              Formatting.LIGHT_PURPLE);
 
@@ -120,6 +121,40 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createPiglinCore());
                 items.add(SlayerItems.createPiglinFlesh());
             }
+            case GOLD_ARMOR -> {
+                // Pure Gold Armor (Tier 1)
+                items.add(SlayerItems.createPureGoldHelmet());
+                items.add(SlayerItems.createPureGoldChestplate());
+                items.add(SlayerItems.createPureGoldLeggings());
+                items.add(SlayerItems.createPureGoldBoots());
+                
+                // Polished Gold Armor (Tier 2)
+                items.add(SlayerItems.createPolishedGoldHelmet());
+                items.add(SlayerItems.createPolishedGoldChestplate());
+                items.add(SlayerItems.createPolishedGoldLeggings());
+                items.add(SlayerItems.createPolishedGoldBoots());
+                
+                // Shiny Gold Armor (Tier 3)
+                items.add(SlayerItems.createShinyGoldHelmet());
+                items.add(SlayerItems.createShinyGoldChestplate());
+                items.add(SlayerItems.createShinyGoldLeggings());
+                items.add(SlayerItems.createShinyGoldBoots());
+                
+                // Glistening Gold Armor (Tier 4)
+                items.add(SlayerItems.createGlisteningGoldHelmet());
+                items.add(SlayerItems.createGlisteningGoldChestplate());
+                items.add(SlayerItems.createGlisteningGoldLeggings());
+                items.add(SlayerItems.createGlisteningGoldBoots());
+                
+                // Gilded Armor (Tier 5)
+                items.add(SlayerItems.createGildedHelmet());
+                items.add(SlayerItems.createGildedChestplate());
+                items.add(SlayerItems.createGildedLeggings());
+                items.add(SlayerItems.createGildedBoots());
+                
+                // Add enchanted blackstone for gilded armor crafting
+                items.add(SlayerItems.createEnchantedBlackstone());
+            }
             case MATERIALS -> {
                 for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
                     items.add(SlayerItems.createCore(t));
@@ -140,6 +175,31 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createCompactedLapis());
                 items.add(SlayerItems.createCompactedRedstone());
                 items.add(SlayerItems.createCompactedQuartz());
+                
+                // Add enchanted compacted materials
+                items.add(SlayerItems.createEnchantedCompactedIron());
+                items.add(SlayerItems.createEnchantedCompactedGold());
+                items.add(SlayerItems.createEnchantedCompactedDiamond());
+                items.add(SlayerItems.createEnchantedCompactedEmerald());
+                items.add(SlayerItems.createEnchantedCompactedNetherite());
+                items.add(SlayerItems.createEnchantedCompactedCopper());
+                items.add(SlayerItems.createEnchantedCompactedCoal());
+                items.add(SlayerItems.createEnchantedCompactedLapis());
+                items.add(SlayerItems.createEnchantedCompactedRedstone());
+                items.add(SlayerItems.createEnchantedCompactedQuartz());
+                items.add(SlayerItems.createEnchantedCompactedBlackstone());
+                items.add(SlayerItems.createEnchantedCompactedAncientDebris());
+                items.add(SlayerItems.createEnchantedCompactedAmethyst());
+                
+                // Add super compacted ores
+                items.add(SlayerItems.createSuperCompactedGold());
+                items.add(SlayerItems.createSuperCompactedIron());
+                items.add(SlayerItems.createSuperCompactedDiamond());
+                items.add(SlayerItems.createSuperCompactedEmerald());
+                items.add(SlayerItems.createSuperCompactedNetherite());
+                
+                // Add enchanted blackstone for gilded armor
+                items.add(SlayerItems.createEnchantedBlackstone());
             }
             case ATTRIBUTE_TOKENS -> {
                 // Add all 10 attribute tokens

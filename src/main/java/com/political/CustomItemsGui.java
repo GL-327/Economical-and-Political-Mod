@@ -72,8 +72,20 @@ public class CustomItemsGui {
                 .glow()
                 .build());
 
+        // 👑 Gold Armor Evolution
+        gui.setSlot(13, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+                .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("5 tiers of progressive gold armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Pure → Polished → Shiny → Glistening → Gilded").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openGoldArmorMenu(player))
+                .glow()
+                .build());
+
         // ⭐ Legendary Gear
-        gui.setSlot(13, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(14, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⭐ Legendary Gear").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• Berserker Helmet").formatted(Formatting.DARK_GREEN))
@@ -89,7 +101,7 @@ public class CustomItemsGui {
                 .build());
 
         // 🗡 Special Weapons
-        gui.setSlot(14, new GuiElementBuilder(Items.GOLDEN_AXE)
+        gui.setSlot(15, new GuiElementBuilder(Items.GOLDEN_AXE)
                 .setName(Text.literal("🗡 Special Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• The Gavel").formatted(Formatting.GRAY))
@@ -102,7 +114,7 @@ public class CustomItemsGui {
                 .build());
 
         // ✦ Boss Drops
-        gui.setSlot(15, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(16, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Boss Drops").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Unique items dropped by bounty bosses").formatted(Formatting.GRAY))
@@ -114,7 +126,7 @@ public class CustomItemsGui {
                 .build());
 
         // ✦ Materials
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLD_NUGGET)
+        gui.setSlot(17, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("✦ Materials").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Chunks & Cores for all slayer types").formatted(Formatting.GRAY))
@@ -283,6 +295,32 @@ public class CustomItemsGui {
         items.add(SlayerItems.createCompactedLapis());
         items.add(SlayerItems.createCompactedRedstone());
         items.add(SlayerItems.createCompactedQuartz());
+        
+        // Add enchanted compacted materials
+        items.add(SlayerItems.createEnchantedCompactedIron());
+        items.add(SlayerItems.createEnchantedCompactedGold());
+        items.add(SlayerItems.createEnchantedCompactedDiamond());
+        items.add(SlayerItems.createEnchantedCompactedEmerald());
+        items.add(SlayerItems.createEnchantedCompactedNetherite());
+        items.add(SlayerItems.createEnchantedCompactedCopper());
+        items.add(SlayerItems.createEnchantedCompactedCoal());
+        items.add(SlayerItems.createEnchantedCompactedLapis());
+        items.add(SlayerItems.createEnchantedCompactedRedstone());
+        items.add(SlayerItems.createEnchantedCompactedQuartz());
+        items.add(SlayerItems.createEnchantedCompactedBlackstone());
+        items.add(SlayerItems.createEnchantedCompactedAncientDebris());
+        items.add(SlayerItems.createEnchantedCompactedAmethyst());
+        
+        // Add super compacted ores
+        items.add(SlayerItems.createSuperCompactedGold());
+        items.add(SlayerItems.createSuperCompactedIron());
+        items.add(SlayerItems.createSuperCompactedDiamond());
+        items.add(SlayerItems.createSuperCompactedEmerald());
+        items.add(SlayerItems.createSuperCompactedNetherite());
+        
+        // Add enchanted blackstone for gilded armor
+        items.add(SlayerItems.createEnchantedBlackstone());
+        
         openSubPage(player, "✦ Materials", items, 0);
     }
 
@@ -423,6 +461,46 @@ public class CustomItemsGui {
         items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.VOLATILE));
         
         openSubPage(player, "✧ Attribute Tokens", items, 0);
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // GOLD ARMOR EVOLUTION MENU
+    // ════════════════════════════════════════════════════════════
+
+    private static void openGoldArmorMenu(ServerPlayerEntity player) {
+        List<ItemStack> items = new ArrayList<>();
+        
+        // Pure Gold Armor (Tier 1)
+        items.add(SlayerItems.createPureGoldHelmet());
+        items.add(SlayerItems.createPureGoldChestplate());
+        items.add(SlayerItems.createPureGoldLeggings());
+        items.add(SlayerItems.createPureGoldBoots());
+        
+        // Polished Gold Armor (Tier 2)
+        items.add(SlayerItems.createPolishedGoldHelmet());
+        items.add(SlayerItems.createPolishedGoldChestplate());
+        items.add(SlayerItems.createPolishedGoldLeggings());
+        items.add(SlayerItems.createPolishedGoldBoots());
+        
+        // Shiny Gold Armor (Tier 3)
+        items.add(SlayerItems.createShinyGoldHelmet());
+        items.add(SlayerItems.createShinyGoldChestplate());
+        items.add(SlayerItems.createShinyGoldLeggings());
+        items.add(SlayerItems.createShinyGoldBoots());
+        
+        // Glistening Gold Armor (Tier 4)
+        items.add(SlayerItems.createGlisteningGoldHelmet());
+        items.add(SlayerItems.createGlisteningGoldChestplate());
+        items.add(SlayerItems.createGlisteningGoldLeggings());
+        items.add(SlayerItems.createGlisteningGoldBoots());
+        
+        // Gilded Armor (Tier 5)
+        items.add(SlayerItems.createGildedHelmet());
+        items.add(SlayerItems.createGildedChestplate());
+        items.add(SlayerItems.createGildedLeggings());
+        items.add(SlayerItems.createGildedBoots());
+        
+        openSubPage(player, "👑 Gold Armor Evolution", items, 0);
     }
 }
 
