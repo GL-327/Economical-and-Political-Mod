@@ -2735,7 +2735,7 @@ public class SlayerItems {
         lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("The ultimate storage for gold").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted compacted gold").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted gold").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Gold Ingots").formatted(Formatting.GOLD)));
@@ -2754,7 +2754,7 @@ public class SlayerItems {
         lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("The ultimate storage for iron").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted compacted iron").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted iron").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Iron Ingots").formatted(Formatting.WHITE)));
@@ -2773,7 +2773,7 @@ public class SlayerItems {
         lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("The ultimate storage for diamonds").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted compacted diamond").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted diamond").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Diamonds").formatted(Formatting.AQUA)));
@@ -2792,7 +2792,7 @@ public class SlayerItems {
         lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("The ultimate storage for emeralds").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted compacted emerald").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted emerald").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Emeralds").formatted(Formatting.GREEN)));
@@ -2811,7 +2811,7 @@ public class SlayerItems {
         lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
         lore.add(Text.literal(""));
         lore.add(Text.literal("The ultimate storage for netherite").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted compacted netherite").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 9 enchanted netherite").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Netherite Ingots").formatted(Formatting.DARK_GRAY)));

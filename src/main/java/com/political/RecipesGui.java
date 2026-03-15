@@ -1505,37 +1505,37 @@ public class RecipesGui {
         gui.setSlot(4, new GuiElementBuilder(Items.GOLD_BLOCK)
                 .setName(Text.literal("⭐ Super Compacted Ores").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal("Ultimate storage compression").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Crafted from 9 enchanted compacted blocks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Crafted from 9 enchanted blocks").formatted(Formatting.GRAY))
                 .glow().build());
 
         // Add all super compacted ores
         gui.setSlot(19, new GuiElementBuilder(SlayerItems.createSuperCompactedGold().getItem())
                 .setName(SlayerItems.createSuperCompactedGold().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 9 Enchanted Compacted Gold").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Gold").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSuperCompactedGoldRecipe(player)).build());
 
         gui.setSlot(20, new GuiElementBuilder(SlayerItems.createSuperCompactedIron().getItem())
                 .setName(SlayerItems.createSuperCompactedIron().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 9 Enchanted Compacted Iron").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Iron").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSuperCompactedIronRecipe(player)).build());
 
         gui.setSlot(21, new GuiElementBuilder(SlayerItems.createSuperCompactedDiamond().getItem())
                 .setName(SlayerItems.createSuperCompactedDiamond().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 9 Enchanted Compacted Diamond").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Diamond").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSuperCompactedDiamondRecipe(player)).build());
 
         gui.setSlot(22, new GuiElementBuilder(SlayerItems.createSuperCompactedEmerald().getItem())
                 .setName(SlayerItems.createSuperCompactedEmerald().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 9 Enchanted Compacted Emerald").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Emerald").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSuperCompactedEmeraldRecipe(player)).build());
 
         gui.setSlot(23, new GuiElementBuilder(SlayerItems.createSuperCompactedNetherite().getItem())
                 .setName(SlayerItems.createSuperCompactedNetherite().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 9 Enchanted Compacted Netherite").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Netherite").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openSuperCompactedNetheriteRecipe(player)).build());
 
