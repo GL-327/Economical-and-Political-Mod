@@ -95,6 +95,7 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createSkeletonBow());
                 items.add(SlayerItems.createSlimeBoots());
                 items.add(SlayerItems.createWardenChestplate());
+                items.add(SlayerItems.createVoidwalkerCrown());
             }
             case HPEBM -> {
                 for (int mk = 1; mk <= 5; mk++)
