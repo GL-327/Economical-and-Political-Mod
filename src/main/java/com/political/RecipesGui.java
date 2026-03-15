@@ -201,7 +201,7 @@ public class RecipesGui {
         gui.setSlot(26, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Crown of Midas").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Golden Helmet").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Gold Helmet").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("2x coin digit damage multiplier!").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfMidasRecipe(player)).build());
@@ -222,6 +222,15 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view HPEBM upgrades!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
+
+        gui.setSlot(27, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("🌑 Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("A mysterious crown from the void").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("grants dimensional powers.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openVoidwalkerCrownRecipe(player)).build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED))
@@ -968,52 +977,103 @@ public class RecipesGui {
         String pageTitle = "✧ " + attr.displayName + " Attribute Token";
         if (tryOpenCustomRecipe(player, result, pageTitle, () -> openAttributeTokensRecipes(player))) return;
 
-        // Since attribute tokens are boss drops, they don't have traditional recipes
-        // We'll show a "boss drop" information page instead
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal(pageTitle));
 
+        // Background
         for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
 
-        gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
+        // Recipe grid layout (3x3 crafting grid)
+        // Use a generic core since attributes aren't tied to specific slayer types
+        ItemStack[] grid = {
+            new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR),
+            new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR),
+            new ItemStack(Items.NETHER_STAR), new ItemStack(Items.NETHER_STAR), new ItemStack(Items.PAPER)
+        };
+
+        // Display recipe grid
+        int[] gridSlots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        for (int i = 0; i < grid.length; i++) {
+            String itemName = grid[i].getItem().getName().getString();
+            gui.setSlot(gridSlots[i], new GuiElementBuilder(grid[i].getItem())
+                    .setName(Text.literal(itemName))
+                    .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                    .build());
+        }
+
+        // Result item
+        gui.setSlot(24, new GuiElementBuilder(result.getItem())
                 .setName(result.get(DataComponentTypes.CUSTOM_NAME))
                 .glow()
+                .addLoreLine(Text.literal("XP Cost: " + attr.xpCost + " levels").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Apply to: " + (attr.slot == null ? "Any Armor" : attr.slot.getName())).formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal("Click to view full info!").formatted(Formatting.GREEN))
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
-                .setName(Text.literal("🎯 Boss Drop Only").formatted(Formatting.RED, Formatting.BOLD))
+        // Info panel
+        gui.setSlot(13, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("📜 Attribute Information").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Attribute Tokens are rare drops").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("from high-level bounty bosses!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("◆ LEGENDARY ATTRIBUTE").formatted(attr.color, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Drop chance increases with").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("bounty tier (T3-T5)").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• Boss Drop Only").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("• Drop Chance: 5-15%").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Use with armor in anvil to apply!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Use with caution in void").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("environments and end dimensions.").formatted(Formatting.YELLOW))
                 .build());
-
-        // Display the token's full lore in the GUI
-        var loreComponent = result.get(DataComponentTypes.LORE);
-        if (loreComponent != null) {
-            int[] loreSlots = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-            Text[] loreLines = loreComponent.lines().toArray(new Text[0]);
-            
-            for (int i = 0; i < Math.min(loreLines.length, loreSlots.length); i++) {
-                gui.setSlot(loreSlots[i], new GuiElementBuilder(Items.PAPER)
-                        .setName(Text.literal(""))
-                        .addLoreLine(loreLines[i])
-                        .build());
-            }
-        }
 
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openAttributeTokensRecipes(player)).build());
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
 
         gui.open();
     }
 
+    private static void openVoidwalkerCrownRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createVoidwalkerCrown();
+        String pageTitle = "🌑 Voidwalker's Crown";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(pageTitle));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Result item
+        gui.setSlot(22, new GuiElementBuilder(result.getItem())
+                .setName(result.get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("A mysterious crown from the void").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("grants dimensional powers.").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("Click to view full info!").formatted(Formatting.GREEN))
+                .build());
+
+        // Info panel
+        gui.setSlot(13, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("📜 Voidwalker Information").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("◆ ADMIN ITEM").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Admin-only access").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("• Void manipulation powers").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("• Dimensional traversal").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Use with caution in void").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("environments and end dimensions.").formatted(Formatting.YELLOW))
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
 }

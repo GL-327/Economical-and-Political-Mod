@@ -114,6 +114,7 @@ public class RecipeEditorGui {
             }
             case PIGLIN -> {
                 items.add(SlayerItems.createCrownOfGreed());
+                items.add(SlayerItems.createCrownOfMidas());
                 items.add(SlayerItems.createPiglinCore());
                 items.add(SlayerItems.createPiglinFlesh());
             }
