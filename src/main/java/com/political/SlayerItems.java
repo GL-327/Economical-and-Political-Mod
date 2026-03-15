@@ -2332,8 +2332,55 @@ public class SlayerItems {
                 .append(Text.literal(attr.buffSummary).formatted(Formatting.YELLOW)));
         lore.add(Text.literal("DEBUFF: ").formatted(Formatting.RED)
                 .append(Text.literal(attr.debuffSummary).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal(""));
         
-        token.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        // Add thematic quote based on attribute type
+        switch (attr) {
+            case BURNING -> {
+                lore.add(Text.literal("\"If you want to shine like the sun,").formatted(Formatting.GOLD, Formatting.ITALIC));
+                lore.add(Text.literal("first you have to burn like it.\"").formatted(Formatting.GOLD, Formatting.ITALIC));
+                break;
+            }
+            case SIGHTLESS -> {
+                lore.add(Text.literal("\"In darkness, true vision begins.\"").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC));
+                break;
+            }
+            case FRENZIED -> {
+                lore.add(Text.literal("\"Rage is the weapon of the fierce.\"").formatted(Formatting.RED, Formatting.ITALIC));
+                break;
+            }
+            case GROUNDED -> {
+                lore.add(Text.literal("\"As steady as the mountain itself.\"").formatted(Formatting.GREEN, Formatting.ITALIC));
+                break;
+            }
+            case WEBBED -> {
+                lore.add(Text.literal("\"The web catches all but the spider.\"").formatted(Formatting.DARK_GREEN, Formatting.ITALIC));
+                break;
+            }
+            case FROST -> {
+                lore.add(Text.literal("\"Winter's fury, summer's bane.\"").formatted(Formatting.AQUA, Formatting.ITALIC));
+                break;
+            }
+            case PHANTOMSTEP -> {
+                lore.add(Text.literal("\"Between steps, there is only silence.\"").formatted(Formatting.LIGHT_PURPLE, Formatting.ITALIC));
+                break;
+            }
+            case CURSED -> {
+                lore.add(Text.literal("\"Life given, life taken away.\"").formatted(Formatting.DARK_RED, Formatting.ITALIC));
+                break;
+            }
+            case OVERGROWN -> {
+                lore.add(Text.literal("\"From earth we come, to earth we return.\"").formatted(Formatting.GREEN, Formatting.ITALIC));
+                break;
+            }
+            case VOLATILE -> {
+                lore.add(Text.literal("\"In destruction, there is creation.\"").formatted(Formatting.RED, Formatting.ITALIC));
+                break;
+            }
+        }
+        
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("⚔ Combine with armor in anvil").formatted(Formatting.YELLOW));
         token.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         NbtCompound nbt = new NbtCompound();
         nbt.putString(ARMOR_ATTRIBUTE_TOKEN_KEY, attr.id);

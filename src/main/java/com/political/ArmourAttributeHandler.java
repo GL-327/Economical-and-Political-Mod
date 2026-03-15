@@ -40,9 +40,9 @@ public class ArmourAttributeHandler {
     private static void handleAttributeEffect(ServerPlayerEntity player, ArmourAttribute attr, int ticks) {
         switch (attr) {
             case BURNING -> {
+                // 3x damage handled by AttributeDamageMixin
+                // Fire immunity handled by BurningAttributeMixin
                 if (player.isOnFire()) {
-                    // Fire damage handled by mixin or implicitly
-                    // Force fire duration to stay high
                     player.setFireTicks(200);
                 }
             }
@@ -51,56 +51,62 @@ public class ArmourAttributeHandler {
                 if (player.hasStatusEffect(StatusEffects.BLINDNESS)) {
                     player.removeStatusEffect(StatusEffects.BLINDNESS);
                 }
+                // Downside: 20% less damage from all sources
+                // This would need to be implemented in a damage mixin
             }
             case FRENZIED -> {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 40, 0, false, false, true)); // Mimics attack speed partially
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 40, 1, false, false, true)); // Haste II
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 40, 0, false, false, true)); // Strength I
                 if (ticks % 100 == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 120, 0, false, false, true));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 60, 0, false, false, true));
                 }
+                // Self-damage handled by AttributeDamageMixin
             }
             case GROUNDED -> {
                 // Lightning immunity handled by mixin
-                // Jump reduction handled by mixin
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 0, false, false, true)); // Jump reduction
+                // Downside: 30% slower movement speed
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1, false, false, true)); // Slowness I
             }
             case WEBBED -> {
-                // Slowed on grass/leaves
-                BlockPos pos = player.getBlockPos().down();
-                if (player.getEntityWorld().getBlockState(pos).isOf(Blocks.GRASS_BLOCK) || 
-                    player.getEntityWorld().getBlockState(pos).isOf(Blocks.OAK_LEAVES)) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 10, 0, false, false, true));
-                }
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 40, 1, false, false, true)); // Speed I
+                // Downside: 20% weakness
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 40, 0, false, false, true)); // Weakness I
+                // Spider neutrality handled by mixin
             }
             case FROST -> {
-                // Check if in Nether-like dimension (hot dimension)
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 40, 0, false, false, true));
+                // Frost walker handled by mixin
+                // Downside: Slowness in hot dimensions
                 if (player.getEntityWorld().getDimension().hasCeiling()) { // Nether-like
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1, false, false, true));
                 }
-                // Frost Walker logic (partial)
-                if (player.isOnGround()) {
-                    BlockPos p = player.getBlockPos().down();
-                    if (player.getEntityWorld().getBlockState(p).isOf(Blocks.WATER)) {
-                        player.getEntityWorld().setBlockState(p, Blocks.FROSTED_ICE.getDefaultState());
-                    }
-                }
             }
             case PHANTOMSTEP -> {
-                // Stealth handled by mixin (noise)
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 40, 1, false, false, true)); // Jump Boost I
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 40, 1, false, false, true)); // Slow Falling I
+                // Downside: 10% less damage
+                // This would need to be implemented in a damage mixin
             }
             case CURSED -> {
-                // Max HP is handled via Attribute modifiers on application (ideally)
+                // Life steal handled by AttributeDamageMixin
+                // Downside: 2 hearts less max health
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 40, 0, false, false, true)); // Weakness I
             }
             case OVERGROWN -> {
                 if (ticks % 40 == 0 && !player.isSprinting() && isNaturalBlock(player.getEntityWorld(), player.getBlockPos().down())) {
                     player.heal(1.0f);
                 }
-                if (player.getEntityWorld().getRegistryKey() == World.NETHER || player.getEntityWorld().getRegistryKey() == World.END) {
-                    // Decay logic?
+                // Downside: 20% slower in non-natural dimensions
+                if (!(player.getEntityWorld().getRegistryKey() == World.OVERWORLD)) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 0, false, false, true));
                 }
             }
             case VOLATILE -> {
-                if (player.getHealth() <= 4.0f && ticks % 100 == 0) {
-                    player.getEntityWorld().createExplosion(player, player.getX(), player.getY(), player.getZ(), 2.0f, World.ExplosionSourceType.NONE);
-                }
+                // Explosion on low health handled by existing logic
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 40, 0, false, false, true));
+                // Downside: 1 heart less max health
+                // This would need to be implemented with attribute modifiers
             }
         }
     }

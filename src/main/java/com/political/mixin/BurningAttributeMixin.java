@@ -58,7 +58,7 @@ public class BurningAttributeMixin {
                 
                 // Apply fire resistance to prevent self-damage (but keep visual fire)
                 if (!entity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
-                    entity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 40, 0, false, false, true));
+                    entity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 40, 4, false, false, true));
                 }
             }
             
