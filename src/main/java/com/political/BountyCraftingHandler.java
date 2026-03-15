@@ -282,6 +282,11 @@ public class BountyCraftingHandler {
     private static boolean matchesCustomRecipeShapeless(List<ItemStack> grid, SlayerRecipes.Recipe recipe) {
         if (recipe.ingredients == null) return false;
 
+        // Check slot locks first - if recipe has locked slots, positions must match exactly
+        if (recipe.lockedSlots != null && hasLockedSlots(recipe.lockedSlots)) {
+            return matchesCustomRecipeExact(grid, recipe);
+        }
+
         // Build a count map of what's in the grid
         java.util.Map<String, Integer> gridCounts = new java.util.HashMap<>();
         for (ItemStack stack : grid) {
@@ -299,6 +304,47 @@ public class BountyCraftingHandler {
         }
 
         return gridCounts.equals(recipeCounts);
+    }
+
+    /**
+     * Checks whether the given 9-slot grid exactly matches a recipe (position-sensitive).
+     * Used when the recipe has locked slots.
+     */
+    private static boolean matchesCustomRecipeExact(List<ItemStack> grid, SlayerRecipes.Recipe recipe) {
+        if (recipe.ingredients == null || recipe.ingredients.length != 9) return false;
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack gridItem = grid.get(i);
+            ItemStack recipeItem = recipe.ingredients[i];
+
+            // Check if items match (both empty or same type)
+            if (gridItem.isEmpty() && (recipeItem == null || recipeItem.isEmpty())) {
+                continue; // Both empty - good
+            }
+            if (!gridItem.isEmpty() && recipeItem != null && !recipeItem.isEmpty()) {
+                // Both have items - check if they match
+                String gridKey = getIngredientKey(gridItem);
+                String recipeKey = getIngredientKey(recipeItem);
+                if (!gridKey.equals(recipeKey)) {
+                    return false; // Different items in this slot
+                }
+                continue; // Items match - good
+            }
+            // One is empty, other has item - mismatch
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the recipe has any locked slots.
+     */
+    private static boolean hasLockedSlots(boolean[] lockedSlots) {
+        if (lockedSlots == null) return false;
+        for (boolean locked : lockedSlots) {
+            if (locked) return true;
+        }
+        return false;
     }
 
     /** Returns a stable string key for a given ItemStack for recipe matching. */

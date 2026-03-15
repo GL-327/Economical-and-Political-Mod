@@ -297,19 +297,16 @@ public class CustomItemsGui {
         items.add(SlayerItems.createCompactedQuartz());
         
         // Add enchanted compacted materials
-        items.add(SlayerItems.createEnchantedCompactedIron());
-        items.add(SlayerItems.createEnchantedCompactedGold());
-        items.add(SlayerItems.createEnchantedCompactedDiamond());
-        items.add(SlayerItems.createEnchantedCompactedEmerald());
-        items.add(SlayerItems.createEnchantedCompactedNetherite());
-        items.add(SlayerItems.createEnchantedCompactedCopper());
-        items.add(SlayerItems.createEnchantedCompactedCoal());
-        items.add(SlayerItems.createEnchantedCompactedLapis());
-        items.add(SlayerItems.createEnchantedCompactedRedstone());
-        items.add(SlayerItems.createEnchantedCompactedQuartz());
-        items.add(SlayerItems.createEnchantedCompactedBlackstone());
-        items.add(SlayerItems.createEnchantedCompactedAncientDebris());
-        items.add(SlayerItems.createEnchantedCompactedAmethyst());
+        items.add(SlayerItems.createCompactedIron());
+        items.add(SlayerItems.createCompactedGold());
+        items.add(SlayerItems.createCompactedDiamond());
+        items.add(SlayerItems.createCompactedEmerald());
+        items.add(SlayerItems.createCompactedNetherite());
+        items.add(SlayerItems.createCompactedCopper());
+        items.add(SlayerItems.createCompactedCoal());
+        items.add(SlayerItems.createCompactedLapis());
+        items.add(SlayerItems.createCompactedRedstone());
+        items.add(SlayerItems.createCompactedQuartz());
         
         // Add super compacted ores
         items.add(SlayerItems.createSuperCompactedGold());

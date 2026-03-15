@@ -226,22 +226,31 @@ public class ShopManager {
                 Items.LODESTONE
         ));
 
-        // ===== CUSTOM ITEMS =====
-        CATEGORIES.put("Custom Items", Arrays.asList(
-                SlayerItems.createEnchantedCompactedIron().getItem(),
-                SlayerItems.createEnchantedCompactedGold().getItem(),
-                SlayerItems.createEnchantedCompactedDiamond().getItem(),
-                SlayerItems.createEnchantedCompactedEmerald().getItem(),
-                SlayerItems.createEnchantedCompactedNetherite().getItem(),
-                SlayerItems.createEnchantedCompactedCopper().getItem(),
-                SlayerItems.createEnchantedCompactedCoal().getItem(),
-                SlayerItems.createEnchantedCompactedLapis().getItem(),
-                SlayerItems.createEnchantedCompactedRedstone().getItem(),
-                SlayerItems.createEnchantedCompactedQuartz().getItem(),
-                SlayerItems.createEnchantedCompactedBlackstone().getItem(),
-                SlayerItems.createEnchantedCompactedAncientDebris().getItem(),
-                SlayerItems.createEnchantedCompactedAmethyst().getItem(),
-                SlayerItems.createEnchantedGildedBlackstone().getItem(),
+        // ===== COMPACTED MATERIALS =====
+        CATEGORIES.put("Compacted Materials", Arrays.asList(
+                SlayerItems.createCompactedIron().getItem(),
+                SlayerItems.createCompactedGold().getItem(),
+                SlayerItems.createCompactedDiamond().getItem(),
+                SlayerItems.createCompactedEmerald().getItem(),
+                SlayerItems.createCompactedNetherite().getItem(),
+                SlayerItems.createCompactedCopper().getItem(),
+                SlayerItems.createCompactedCoal().getItem(),
+                SlayerItems.createCompactedLapis().getItem(),
+                SlayerItems.createCompactedRedstone().getItem(),
+                SlayerItems.createCompactedQuartz().getItem()
+        ));
+
+        // ===== SUPER COMPACTED MATERIALS =====
+        CATEGORIES.put("Super Compacted", Arrays.asList(
+                SlayerItems.createSuperCompactedGold().getItem(),
+                SlayerItems.createSuperCompactedIron().getItem(),
+                SlayerItems.createSuperCompactedDiamond().getItem(),
+                SlayerItems.createSuperCompactedEmerald().getItem(),
+                SlayerItems.createSuperCompactedNetherite().getItem()
+        ));
+
+        // ===== GILDED ARMOR =====
+        CATEGORIES.put("Gilded Armor", Arrays.asList(
                 SlayerItems.createGildedNetheriteHelmet().getItem(),
                 SlayerItems.createGildedNetheriteChestplate().getItem(),
                 SlayerItems.createGildedNetheriteLeggings().getItem(),
@@ -694,22 +703,26 @@ public class ShopManager {
         setPrice(Items.RESPAWN_ANCHOR, 200);
         setPrice(Items.LODESTONE, 300);
 
-        // ===== CUSTOM ITEMS - ENCHANTED COMPACTED MATERIALS =====
+        // ===== CUSTOM ITEMS - COMPACTED MATERIALS =====
         // Pricing based on 64 base materials, slightly discounted to prevent inflation
-        setCustomPrice(SlayerItems.createEnchantedCompactedIron().getItem(), 256);      // 64 iron ingots = 256, discounted to 192
-        setCustomPrice(SlayerItems.createEnchantedCompactedGold().getItem(), 384);      // 64 gold ingots = 384, discounted to 288
-        setCustomPrice(SlayerItems.createEnchantedCompactedDiamond().getItem(), 4480);    // 64 diamonds = 4480, discounted to 3360
-        setCustomPrice(SlayerItems.createEnchantedCompactedEmerald().getItem(), 3840);    // 64 emeralds = 3840, discounted to 2880
-        setCustomPrice(SlayerItems.createEnchantedCompactedNetherite().getItem(), 40320);  // 64 netherite = 40320, discounted to 30240
-        setCustomPrice(SlayerItems.createEnchantedCompactedCopper().getItem(), 128);       // 64 copper = 128, discounted to 96
-        setCustomPrice(SlayerItems.createEnchantedCompactedCoal().getItem(), 64);         // 64 coal = 64, discounted to 48
-        setCustomPrice(SlayerItems.createEnchantedCompactedLapis().getItem(), 320);        // 64 lapis = 320, discounted to 240
-        setCustomPrice(SlayerItems.createEnchantedCompactedRedstone().getItem(), 256);     // 64 redstone = 256, discounted to 192
-        setCustomPrice(SlayerItems.createEnchantedCompactedQuartz().getItem(), 128);       // 64 quartz = 128, discounted to 96
-        setCustomPrice(SlayerItems.createEnchantedCompactedBlackstone().getItem(), 64);    // 64 blackstone = 64, discounted to 48
-        setCustomPrice(SlayerItems.createEnchantedCompactedAncientDebris().getItem(), 6400); // 64 ancient debris = 6400, discounted to 4800
-        setCustomPrice(SlayerItems.createEnchantedCompactedAmethyst().getItem(), 640);      // 64 amethyst = 640, discounted to 480
-        setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 96);       // Premium pricing for gilded variant
+        setCustomPrice(SlayerItems.createCompactedIron().getItem(), 192);       // 64 iron ingots = 256, discounted to 192
+        setCustomPrice(SlayerItems.createCompactedGold().getItem(), 288);       // 64 gold ingots = 384, discounted to 288
+        setCustomPrice(SlayerItems.createCompactedDiamond().getItem(), 3360);    // 64 diamonds = 4480, discounted to 3360
+        setCustomPrice(SlayerItems.createCompactedEmerald().getItem(), 2880);    // 64 emeralds = 3840, discounted to 2880
+        setCustomPrice(SlayerItems.createCompactedNetherite().getItem(), 30240);  // 64 netherite = 40320, discounted to 30240
+        setCustomPrice(SlayerItems.createCompactedCopper().getItem(), 96);        // 64 copper = 128, discounted to 96
+        setCustomPrice(SlayerItems.createCompactedCoal().getItem(), 48);         // 64 coal = 64, discounted to 48
+        setCustomPrice(SlayerItems.createCompactedLapis().getItem(), 240);       // 64 lapis = 320, discounted to 240
+        setCustomPrice(SlayerItems.createCompactedRedstone().getItem(), 192);     // 64 redstone = 256, discounted to 192
+        setCustomPrice(SlayerItems.createCompactedQuartz().getItem(), 96);       // 64 quartz = 128, discounted to 96
+
+        // ===== CUSTOM ITEMS - SUPER COMPACTED MATERIALS =====
+        // Pricing based on 576 base materials (9x compacted), heavily discounted
+        setCustomPrice(SlayerItems.createSuperCompactedGold().getItem(), 2592);     // 576 gold ingots = 3456, discounted to 2592
+        setCustomPrice(SlayerItems.createSuperCompactedIron().getItem(), 1728);     // 576 iron ingots = 2304, discounted to 1728
+        setCustomPrice(SlayerItems.createSuperCompactedDiamond().getItem(), 30240); // 576 diamonds = 40320, discounted to 30240
+        setCustomPrice(SlayerItems.createSuperCompactedEmerald().getItem(), 25920); // 576 emeralds = 34560, discounted to 25920
+        setCustomPrice(SlayerItems.createSuperCompactedNetherite().getItem(), 272160); // 576 netherite = 362880, discounted to 272160
 
         // ===== CUSTOM ITEMS - GILDED NETHERITE ARMOR =====
         // Ultimate tier armor with premium pricing
@@ -724,9 +737,8 @@ public class ShopManager {
         }
 
         // ===== DISABLED ITEMS (cannot be bought on shop) =====
-        // Disable gilded blackstone and enchanted gilded blackstone
+        // Disable gilded blackstone
         disableItem(Items.GILDED_BLACKSTONE);
-        disableItem(SlayerItems.createEnchantedGildedBlackstone().getItem());
     }
 
     private static void setPrice(Item item, int sellPrice) {

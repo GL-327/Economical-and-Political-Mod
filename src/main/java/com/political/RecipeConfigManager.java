@@ -187,6 +187,17 @@ public class RecipeConfigManager {
             for (int i = 0; i < 9; i++) grid.add("");
         }
         obj.add("ingredients", grid);
+
+        JsonArray locked = new JsonArray();
+        if (recipe.lockedSlots != null) {
+            for (boolean lockedSlot : recipe.lockedSlots) {
+                locked.add(lockedSlot);
+            }
+        } else {
+            for (int i = 0; i < 9; i++) locked.add(false);
+        }
+        obj.add("lockedSlots", locked);
+
         return obj;
     }
 
@@ -215,7 +226,16 @@ public class RecipeConfigManager {
                 if (grid[i] == null) grid[i] = ItemStack.EMPTY;
             }
 
-            return new SlayerRecipes.Recipe(name, result, grid, slayerType, level);
+            // Deserialize locked slots
+            boolean[] lockedSlots = new boolean[9];
+            if (obj.has("lockedSlots")) {
+                JsonArray lockedArr = obj.getAsJsonArray("lockedSlots");
+                for (int i = 0; i < 9 && i < lockedArr.size(); i++) {
+                    lockedSlots[i] = lockedArr.get(i).getAsBoolean();
+                }
+            }
+
+            return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
         } catch (Exception e) {
             return null;
         }

@@ -16,14 +16,21 @@ public class SlayerRecipes {
         public final String name;
         public final ItemStack result;
         public final ItemStack[] ingredients; // 9 slots (3x3 grid)
+        public final boolean[] lockedSlots; // Which slots are locked (true = locked)
         public final SlayerManager.SlayerType requiredSlayer;
         public final int requiredLevel;
 
         public Recipe(String name, ItemStack result, ItemStack[] ingredients,
                       SlayerManager.SlayerType requiredSlayer, int requiredLevel) {
+            this(name, result, ingredients, null, requiredSlayer, requiredLevel);
+        }
+
+        public Recipe(String name, ItemStack result, ItemStack[] ingredients, boolean[] lockedSlots,
+                      SlayerManager.SlayerType requiredSlayer, int requiredLevel) {
             this.name = name;
             this.result = result;
             this.ingredients = ingredients;
+            this.lockedSlots = lockedSlots != null ? lockedSlots.clone() : new boolean[9];
             this.requiredSlayer = requiredSlayer;
             this.requiredLevel = requiredLevel;
         }

@@ -185,19 +185,16 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createCompactedQuartz());
                 
                 // Add enchanted compacted materials
-                items.add(SlayerItems.createEnchantedCompactedIron());
-                items.add(SlayerItems.createEnchantedCompactedGold());
-                items.add(SlayerItems.createEnchantedCompactedDiamond());
-                items.add(SlayerItems.createEnchantedCompactedEmerald());
-                items.add(SlayerItems.createEnchantedCompactedNetherite());
-                items.add(SlayerItems.createEnchantedCompactedCopper());
-                items.add(SlayerItems.createEnchantedCompactedCoal());
-                items.add(SlayerItems.createEnchantedCompactedLapis());
-                items.add(SlayerItems.createEnchantedCompactedRedstone());
-                items.add(SlayerItems.createEnchantedCompactedQuartz());
-                items.add(SlayerItems.createEnchantedCompactedBlackstone());
-                items.add(SlayerItems.createEnchantedCompactedAncientDebris());
-                items.add(SlayerItems.createEnchantedCompactedAmethyst());
+                items.add(SlayerItems.createCompactedIron());
+                items.add(SlayerItems.createCompactedGold());
+                items.add(SlayerItems.createCompactedDiamond());
+                items.add(SlayerItems.createCompactedEmerald());
+                items.add(SlayerItems.createCompactedNetherite());
+                items.add(SlayerItems.createCompactedCopper());
+                items.add(SlayerItems.createCompactedCoal());
+                items.add(SlayerItems.createCompactedLapis());
+                items.add(SlayerItems.createCompactedRedstone());
+                items.add(SlayerItems.createCompactedQuartz());
                 
                 // Add super compacted ores
                 items.add(SlayerItems.createSuperCompactedGold());
@@ -438,7 +435,7 @@ public class RecipeEditorGui {
                     }
                 }
                 if (index == SLOT_SAVE) {
-                    saveRecipe(player, resultItem, grid);
+                    saveRecipe(player, resultItem, grid, lockedSlots);
                     player.closeHandledScreen();
                     return true;
                 }
@@ -587,7 +584,7 @@ public class RecipeEditorGui {
     }
 
     /** Saves the recipe to RecipeConfigManager. */
-    private static void saveRecipe(ServerPlayerEntity player, ItemStack resultItem, ItemStack[] grid) {
+    private static void saveRecipe(ServerPlayerEntity player, ItemStack resultItem, ItemStack[] grid, boolean[] lockedSlots) {
         Text nameTxt = resultItem.get(DataComponentTypes.CUSTOM_NAME);
         String recipeName = nameTxt != null ? nameTxt.getString() : "Custom Recipe";
 
@@ -607,7 +604,7 @@ public class RecipeEditorGui {
         }
 
         SlayerRecipes.Recipe newRecipe = new SlayerRecipes.Recipe(
-                recipeName, resultItem.copy(), ingredientsCopy, null, 0);
+                recipeName, resultItem.copy(), ingredientsCopy, lockedSlots, null, 0);
         RecipeConfigManager.addCustomRecipe(newRecipe);
         player.sendMessage(Text.literal("§a✔ Recipe saved for §e" + recipeName + "§a!"), false);
     }

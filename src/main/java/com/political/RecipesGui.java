@@ -145,6 +145,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click a category to browse!").formatted(Formatting.GRAY))
                 .glow().build());
 
+        // Row 1: Basic Weapons & Tools
         gui.setSlot(19, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("⚔ Bounty Swords (T1)").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
@@ -166,7 +167,8 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.LEATHER_HELMET)
+        // Row 2: Armor Sets
+        gui.setSlot(28, new GuiElementBuilder(Items.LEATHER_HELMET)
                 .setName(Text.literal("🛡 Bounty Armor T1").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("T1 Armor: 3 Chunks + vanilla armor").formatted(Formatting.GRAY))
@@ -174,7 +176,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openBountyArmorT1(player)).build());
 
-        gui.setSlot(23, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+        gui.setSlot(29, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
                 .setName(Text.literal("🛡 Bounty Armor T2").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("T2 Armor: 3 Cores + T1 piece + 2 Ingots").formatted(Formatting.GRAY))
@@ -182,7 +184,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openBountyArmorT2(player)).build());
 
-        gui.setSlot(24, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+        gui.setSlot(30, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
                 .setName(Text.literal("🛡 Special Bounty Armor").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Berserker Helmet, Venomous Leggings,").formatted(Formatting.GRAY))
@@ -190,7 +192,8 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openArmorRecipes(player)).build());
 
-        gui.setSlot(25, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        // Row 3: Special Items
+        gui.setSlot(37, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Gold Helmet").formatted(Formatting.GRAY))
@@ -198,7 +201,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfGreedRecipe(player)).build());
 
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_SWORD)
+        gui.setSlot(38, new GuiElementBuilder(Items.GOLDEN_SWORD)
                 .setName(Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Golden sword with coin powers").formatted(Formatting.GRAY))
@@ -207,14 +210,31 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openMidasSwordRecipe(player)).build());
 
-        gui.setSlot(17, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        gui.setSlot(39, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Crown of Midas").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("3x coin digit damage multiplier!").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfMidasRecipe(player)).build());
 
-        gui.setSlot(30, new GuiElementBuilder(Items.PAPER)
+        // Row 4: Materials & Storage
+        gui.setSlot(19, new GuiElementBuilder(Items.IRON_BLOCK)
+                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Stack compression for storage efficiency").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft 64 items into 1 compacted block").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedMaterialsRecipes(player)).build());
+
+        gui.setSlot(20, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("⭐ Super Compacted Ores").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Ultimate storage compression").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Crafted from 9 compacted blocks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedOresRecipes(player)).build());
+
+        gui.setSlot(21, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
@@ -223,38 +243,15 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openAttributeTokensRecipes(player)).build());
 
-        gui.setSlot(31, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("⚠ Ultra-rare admin items").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openLegendaryItems(player)).build());
 
-        gui.setSlot(32, new GuiElementBuilder(Items.IRON_BLOCK)
-                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
-                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Stack compression for storage efficiency").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Craft 64 items into 1 compacted block").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openCompactedMaterialsRecipes(player)).build());
-
-        gui.setSlot(33, new GuiElementBuilder(Items.IRON_BLOCK)
-                .setName(Text.literal("✦ Enchanted Compacted Materials").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Magically enhanced storage blocks").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Crafted from 64 base materials").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedMaterialsRecipes(player)).build());
-
-        gui.setSlot(34, new GuiElementBuilder(Items.GOLD_BLOCK)
-                .setName(Text.literal("⭐ Super Compacted Ores").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Ultimate storage compression").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Crafted from 9 enchanted compacted blocks").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openSuperCompactedOresRecipes(player)).build());
-
-        gui.setSlot(35, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+        // Row 5: Advanced Armor
+        gui.setSlot(28, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
                 .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("5 tiers of progressive gold armor").formatted(Formatting.GRAY))
@@ -262,22 +259,15 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openGoldArmorEvolutionRecipes(player)).build());
 
-        gui.setSlot(44, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
+        gui.setSlot(29, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
                 .setName(Text.literal("⚜ Gilded Netherite Armor").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Ultimate armor tier - Beyond legendary").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Crafted with enchanted gilded blackstone").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Crafted with gilded blackstone").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openGildedNetheriteArmorRecipes(player)).build());
 
-        gui.setSlot(36, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚠ HPEBM T0 & The Gavel are obtained").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("ONLY from Underground Auctions!").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("Click to view HPEBM upgrades!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
-
+        // Remove duplicate Auction Items entry (already accessible via HPEBM Weapons)
 
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED))
@@ -285,6 +275,20 @@ public class RecipesGui {
 
         gui.open();
     }
+
+    // ============================================================
+    // ADMIN CUSTOM RECIPES (from /setrecipe) - kept for backward compat
+    // ============================================================
+
+    public static void openAdminCustomRecipes(ServerPlayerEntity player) {
+        // This method is kept for backward compatibility but functionality
+        // has been moved to the main recipe menu
+        openMainMenu(player);
+    }
+
+    // ============================================================
+    // BOUNTY SWORDS RECIPES
+    // ============================================================
 
     // ============================================================
     // ADMIN CUSTOM RECIPES (from /setrecipe) - kept for backward compat
@@ -1484,341 +1488,7 @@ public class RecipesGui {
     }
 
     // ============================================================
-    // ENCHANTED COMPACTED MATERIALS RECIPES
-    // ============================================================
-
-    private static void openEnchantedCompactedMaterialsRecipes(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("✦ Enchanted Compacted Materials"));
-
-        // Background fill
-        for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
-        }
-
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.IRON_BLOCK)
-                .setName(Text.literal("✦ Enchanted Compacted Materials").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal("Magically enhanced storage blocks").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Crafted from 64 base materials").formatted(Formatting.GRAY))
-                .glow().build());
-
-        // Add all enchanted compacted materials
-        gui.setSlot(19, new GuiElementBuilder(SlayerItems.createEnchantedCompactedIron().getItem())
-                .setName(SlayerItems.createEnchantedCompactedIron().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Iron Ingots").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedIronRecipe(player)).build());
-
-        gui.setSlot(20, new GuiElementBuilder(SlayerItems.createEnchantedCompactedGold().getItem())
-                .setName(SlayerItems.createEnchantedCompactedGold().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Gold Ingots").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedGoldRecipe(player)).build());
-
-        gui.setSlot(21, new GuiElementBuilder(SlayerItems.createEnchantedCompactedDiamond().getItem())
-                .setName(SlayerItems.createEnchantedCompactedDiamond().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Diamonds").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedDiamondRecipe(player)).build());
-
-        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createEnchantedCompactedEmerald().getItem())
-                .setName(SlayerItems.createEnchantedCompactedEmerald().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Emeralds").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedEmeraldRecipe(player)).build());
-
-        gui.setSlot(23, new GuiElementBuilder(SlayerItems.createEnchantedCompactedNetherite().getItem())
-                .setName(SlayerItems.createEnchantedCompactedNetherite().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Netherite Ingots").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedNetheriteRecipe(player)).build());
-
-        gui.setSlot(24, new GuiElementBuilder(SlayerItems.createEnchantedCompactedCopper().getItem())
-                .setName(SlayerItems.createEnchantedCompactedCopper().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Copper Ingots").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedCopperRecipe(player)).build());
-
-        gui.setSlot(25, new GuiElementBuilder(SlayerItems.createEnchantedCompactedCoal().getItem())
-                .setName(SlayerItems.createEnchantedCompactedCoal().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Coal").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedCoalRecipe(player)).build());
-
-        gui.setSlot(28, new GuiElementBuilder(SlayerItems.createEnchantedCompactedLapis().getItem())
-                .setName(SlayerItems.createEnchantedCompactedLapis().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Lapis Lazuli").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedLapisRecipe(player)).build());
-
-        gui.setSlot(29, new GuiElementBuilder(SlayerItems.createEnchantedCompactedRedstone().getItem())
-                .setName(SlayerItems.createEnchantedCompactedRedstone().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Redstone").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedRedstoneRecipe(player)).build());
-
-        gui.setSlot(30, new GuiElementBuilder(SlayerItems.createEnchantedCompactedQuartz().getItem())
-                .setName(SlayerItems.createEnchantedCompactedQuartz().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Quartz").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedQuartzRecipe(player)).build());
-
-        gui.setSlot(31, new GuiElementBuilder(SlayerItems.createEnchantedCompactedBlackstone().getItem())
-                .setName(SlayerItems.createEnchantedCompactedBlackstone().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Blackstone").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedBlackstoneRecipe(player)).build());
-
-        gui.setSlot(32, new GuiElementBuilder(SlayerItems.createEnchantedCompactedAncientDebris().getItem())
-                .setName(SlayerItems.createEnchantedCompactedAncientDebris().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Ancient Debris").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedAncientDebrisRecipe(player)).build());
-
-        gui.setSlot(33, new GuiElementBuilder(SlayerItems.createEnchantedCompactedAmethyst().getItem())
-                .setName(SlayerItems.createEnchantedCompactedAmethyst().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal("Craft: 64 Amethyst Shards").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openEnchantedCompactedAmethystRecipe(player)).build());
-
-        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
-                .addLoreLine(Text.literal("Close recipe book").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
-
-        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openMainMenu(player)).build());
-
-        gui.open();
-    }
-
-    // Individual enchanted compacted material recipe methods
-    private static void openEnchantedCompactedIronRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedIron();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[1] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[2] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[3] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[4] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[5] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[6] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[7] = new ItemStack(Items.IRON_INGOT, 64);
-        grid[8] = new ItemStack(Items.IRON_INGOT, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Iron",
-                Text.literal("✦ Enchanted Compacted Iron Recipe").formatted(Formatting.GRAY, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedGoldRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedGold();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[1] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[2] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[3] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[4] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[5] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[6] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[7] = new ItemStack(Items.GOLD_INGOT, 64);
-        grid[8] = new ItemStack(Items.GOLD_INGOT, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Gold",
-                Text.literal("✦ Enchanted Compacted Gold Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedDiamondRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedDiamond();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.DIAMOND, 64);
-        grid[1] = new ItemStack(Items.DIAMOND, 64);
-        grid[2] = new ItemStack(Items.DIAMOND, 64);
-        grid[3] = new ItemStack(Items.DIAMOND, 64);
-        grid[4] = new ItemStack(Items.DIAMOND, 64);
-        grid[5] = new ItemStack(Items.DIAMOND, 64);
-        grid[6] = new ItemStack(Items.DIAMOND, 64);
-        grid[7] = new ItemStack(Items.DIAMOND, 64);
-        grid[8] = new ItemStack(Items.DIAMOND, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Diamond",
-                Text.literal("✦ Enchanted Compacted Diamond Recipe").formatted(Formatting.AQUA, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedEmeraldRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedEmerald();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.EMERALD, 64);
-        grid[1] = new ItemStack(Items.EMERALD, 64);
-        grid[2] = new ItemStack(Items.EMERALD, 64);
-        grid[3] = new ItemStack(Items.EMERALD, 64);
-        grid[4] = new ItemStack(Items.EMERALD, 64);
-        grid[5] = new ItemStack(Items.EMERALD, 64);
-        grid[6] = new ItemStack(Items.EMERALD, 64);
-        grid[7] = new ItemStack(Items.EMERALD, 64);
-        grid[8] = new ItemStack(Items.EMERALD, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Emerald",
-                Text.literal("✦ Enchanted Compacted Emerald Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedNetheriteRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedNetherite();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[1] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[2] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[3] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[4] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[5] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[6] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[7] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        grid[8] = new ItemStack(Items.NETHERITE_INGOT, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Netherite",
-                Text.literal("✦ Enchanted Compacted Netherite Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedCopperRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedCopper();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[1] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[2] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[3] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[4] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[5] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[6] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[7] = new ItemStack(Items.COPPER_INGOT, 64);
-        grid[8] = new ItemStack(Items.COPPER_INGOT, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Copper",
-                Text.literal("✦ Enchanted Compacted Copper Recipe").formatted(Formatting.RED, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedCoalRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedCoal();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.COAL, 64);
-        grid[1] = new ItemStack(Items.COAL, 64);
-        grid[2] = new ItemStack(Items.COAL, 64);
-        grid[3] = new ItemStack(Items.COAL, 64);
-        grid[4] = new ItemStack(Items.COAL, 64);
-        grid[5] = new ItemStack(Items.COAL, 64);
-        grid[6] = new ItemStack(Items.COAL, 64);
-        grid[7] = new ItemStack(Items.COAL, 64);
-        grid[8] = new ItemStack(Items.COAL, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Coal",
-                Text.literal("✦ Enchanted Compacted Coal Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedLapisRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedLapis();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[1] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[2] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[3] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[4] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[5] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[6] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[7] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        grid[8] = new ItemStack(Items.LAPIS_LAZULI, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Lapis Lazuli",
-                Text.literal("✦ Enchanted Compacted Lapis Lazuli Recipe").formatted(Formatting.BLUE, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedRedstoneRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedRedstone();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.REDSTONE, 64);
-        grid[1] = new ItemStack(Items.REDSTONE, 64);
-        grid[2] = new ItemStack(Items.REDSTONE, 64);
-        grid[3] = new ItemStack(Items.REDSTONE, 64);
-        grid[4] = new ItemStack(Items.REDSTONE, 64);
-        grid[5] = new ItemStack(Items.REDSTONE, 64);
-        grid[6] = new ItemStack(Items.REDSTONE, 64);
-        grid[7] = new ItemStack(Items.REDSTONE, 64);
-        grid[8] = new ItemStack(Items.REDSTONE, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Redstone",
-                Text.literal("✦ Enchanted Compacted Redstone Recipe").formatted(Formatting.RED, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedQuartzRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedQuartz();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.QUARTZ, 64);
-        grid[1] = new ItemStack(Items.QUARTZ, 64);
-        grid[2] = new ItemStack(Items.QUARTZ, 64);
-        grid[3] = new ItemStack(Items.QUARTZ, 64);
-        grid[4] = new ItemStack(Items.QUARTZ, 64);
-        grid[5] = new ItemStack(Items.QUARTZ, 64);
-        grid[6] = new ItemStack(Items.QUARTZ, 64);
-        grid[7] = new ItemStack(Items.QUARTZ, 64);
-        grid[8] = new ItemStack(Items.QUARTZ, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Quartz",
-                Text.literal("✦ Enchanted Compacted Quartz Recipe").formatted(Formatting.WHITE, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedBlackstoneRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedBlackstone();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[1] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[2] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[3] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[4] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[5] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[6] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[7] = new ItemStack(Items.BLACKSTONE, 64);
-        grid[8] = new ItemStack(Items.BLACKSTONE, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Blackstone",
-                Text.literal("✦ Enchanted Compacted Blackstone Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedAncientDebrisRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedAncientDebris();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[1] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[2] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[3] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[4] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[5] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[6] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[7] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        grid[8] = new ItemStack(Items.ANCIENT_DEBRIS, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Ancient Debris",
-                Text.literal("✦ Enchanted Compacted Ancient Debris Recipe").formatted(Formatting.DARK_RED, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    private static void openEnchantedCompactedAmethystRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedCompactedAmethyst();
-        ItemStack[] grid = new ItemStack[9];
-        grid[0] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[1] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[2] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[3] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[4] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[5] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[6] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[7] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        grid[8] = new ItemStack(Items.AMETHYST_SHARD, 64);
-        openRecipePage(player, "✦ Enchanted Compacted Amethyst",
-                Text.literal("✦ Enchanted Compacted Amethyst Recipe").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    // ============================================================
-    // SUPER COMPACTED ORES RECIPES
+    // SUPER COMPACTED MATERIALS RECIPES
     // ============================================================
 
     private static void openSuperCompactedOresRecipes(ServerPlayerEntity player) {
@@ -1885,15 +1555,15 @@ public class RecipesGui {
     private static void openSuperCompactedGoldRecipe(ServerPlayerEntity player) {
         ItemStack result = SlayerItems.createSuperCompactedGold();
         ItemStack[] grid = new ItemStack[9];
-        grid[0] = SlayerItems.createEnchantedCompactedGold();
-        grid[1] = SlayerItems.createEnchantedCompactedGold();
-        grid[2] = SlayerItems.createEnchantedCompactedGold();
-        grid[3] = SlayerItems.createEnchantedCompactedGold();
-        grid[4] = SlayerItems.createEnchantedCompactedGold();
-        grid[5] = SlayerItems.createEnchantedCompactedGold();
-        grid[6] = SlayerItems.createEnchantedCompactedGold();
-        grid[7] = SlayerItems.createEnchantedCompactedGold();
-        grid[8] = SlayerItems.createEnchantedCompactedGold();
+        grid[0] = SlayerItems.createCompactedGold();
+        grid[1] = SlayerItems.createCompactedGold();
+        grid[2] = SlayerItems.createCompactedGold();
+        grid[3] = SlayerItems.createCompactedGold();
+        grid[4] = SlayerItems.createCompactedGold();
+        grid[5] = SlayerItems.createCompactedGold();
+        grid[6] = SlayerItems.createCompactedGold();
+        grid[7] = SlayerItems.createCompactedGold();
+        grid[8] = SlayerItems.createCompactedGold();
         openRecipePage(player, "⭐ Super Compacted Gold",
                 Text.literal("⭐ Super Compacted Gold Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
                 grid, result, () -> openSuperCompactedOresRecipes(player));
@@ -1902,15 +1572,15 @@ public class RecipesGui {
     private static void openSuperCompactedIronRecipe(ServerPlayerEntity player) {
         ItemStack result = SlayerItems.createSuperCompactedIron();
         ItemStack[] grid = new ItemStack[9];
-        grid[0] = SlayerItems.createEnchantedCompactedIron();
-        grid[1] = SlayerItems.createEnchantedCompactedIron();
-        grid[2] = SlayerItems.createEnchantedCompactedIron();
-        grid[3] = SlayerItems.createEnchantedCompactedIron();
-        grid[4] = SlayerItems.createEnchantedCompactedIron();
-        grid[5] = SlayerItems.createEnchantedCompactedIron();
-        grid[6] = SlayerItems.createEnchantedCompactedIron();
-        grid[7] = SlayerItems.createEnchantedCompactedIron();
-        grid[8] = SlayerItems.createEnchantedCompactedIron();
+        grid[0] = SlayerItems.createCompactedIron();
+        grid[1] = SlayerItems.createCompactedIron();
+        grid[2] = SlayerItems.createCompactedIron();
+        grid[3] = SlayerItems.createCompactedIron();
+        grid[4] = SlayerItems.createCompactedIron();
+        grid[5] = SlayerItems.createCompactedIron();
+        grid[6] = SlayerItems.createCompactedIron();
+        grid[7] = SlayerItems.createCompactedIron();
+        grid[8] = SlayerItems.createCompactedIron();
         openRecipePage(player, "⭐ Super Compacted Iron",
                 Text.literal("⭐ Super Compacted Iron Recipe").formatted(Formatting.GRAY, Formatting.BOLD),
                 grid, result, () -> openSuperCompactedOresRecipes(player));
@@ -1919,15 +1589,15 @@ public class RecipesGui {
     private static void openSuperCompactedDiamondRecipe(ServerPlayerEntity player) {
         ItemStack result = SlayerItems.createSuperCompactedDiamond();
         ItemStack[] grid = new ItemStack[9];
-        grid[0] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[1] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[2] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[3] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[4] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[5] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[6] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[7] = SlayerItems.createEnchantedCompactedDiamond();
-        grid[8] = SlayerItems.createEnchantedCompactedDiamond();
+        grid[0] = SlayerItems.createCompactedDiamond();
+        grid[1] = SlayerItems.createCompactedDiamond();
+        grid[2] = SlayerItems.createCompactedDiamond();
+        grid[3] = SlayerItems.createCompactedDiamond();
+        grid[4] = SlayerItems.createCompactedDiamond();
+        grid[5] = SlayerItems.createCompactedDiamond();
+        grid[6] = SlayerItems.createCompactedDiamond();
+        grid[7] = SlayerItems.createCompactedDiamond();
+        grid[8] = SlayerItems.createCompactedDiamond();
         openRecipePage(player, "⭐ Super Compacted Diamond",
                 Text.literal("⭐ Super Compacted Diamond Recipe").formatted(Formatting.AQUA, Formatting.BOLD),
                 grid, result, () -> openSuperCompactedOresRecipes(player));
@@ -1936,15 +1606,15 @@ public class RecipesGui {
     private static void openSuperCompactedEmeraldRecipe(ServerPlayerEntity player) {
         ItemStack result = SlayerItems.createSuperCompactedEmerald();
         ItemStack[] grid = new ItemStack[9];
-        grid[0] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[1] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[2] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[3] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[4] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[5] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[6] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[7] = SlayerItems.createEnchantedCompactedEmerald();
-        grid[8] = SlayerItems.createEnchantedCompactedEmerald();
+        grid[0] = SlayerItems.createCompactedEmerald();
+        grid[1] = SlayerItems.createCompactedEmerald();
+        grid[2] = SlayerItems.createCompactedEmerald();
+        grid[3] = SlayerItems.createCompactedEmerald();
+        grid[4] = SlayerItems.createCompactedEmerald();
+        grid[5] = SlayerItems.createCompactedEmerald();
+        grid[6] = SlayerItems.createCompactedEmerald();
+        grid[7] = SlayerItems.createCompactedEmerald();
+        grid[8] = SlayerItems.createCompactedEmerald();
         openRecipePage(player, "⭐ Super Compacted Emerald",
                 Text.literal("⭐ Super Compacted Emerald Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
                 grid, result, () -> openSuperCompactedOresRecipes(player));
@@ -1953,15 +1623,15 @@ public class RecipesGui {
     private static void openSuperCompactedNetheriteRecipe(ServerPlayerEntity player) {
         ItemStack result = SlayerItems.createSuperCompactedNetherite();
         ItemStack[] grid = new ItemStack[9];
-        grid[0] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[1] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[2] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[3] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[4] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[5] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[6] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[7] = SlayerItems.createEnchantedCompactedNetherite();
-        grid[8] = SlayerItems.createEnchantedCompactedNetherite();
+        grid[0] = SlayerItems.createCompactedNetherite();
+        grid[1] = SlayerItems.createCompactedNetherite();
+        grid[2] = SlayerItems.createCompactedNetherite();
+        grid[3] = SlayerItems.createCompactedNetherite();
+        grid[4] = SlayerItems.createCompactedNetherite();
+        grid[5] = SlayerItems.createCompactedNetherite();
+        grid[6] = SlayerItems.createCompactedNetherite();
+        grid[7] = SlayerItems.createCompactedNetherite();
+        grid[8] = SlayerItems.createCompactedNetherite();
         openRecipePage(player, "⭐ Super Compacted Netherite",
                 Text.literal("⭐ Super Compacted Netherite Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
                 grid, result, () -> openSuperCompactedOresRecipes(player));
@@ -2471,22 +2141,6 @@ public class RecipesGui {
     }
 
     // ============================================================
-    // ENCHANTED GILDED BLACKSTONE RECIPE
-    // ============================================================
-
-    private static void openEnchantedGildedBlackstoneRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createEnchantedGildedBlackstone();
-        ItemStack[] grid = new ItemStack[9];
-        // Fill entire grid with blackstone
-        for (int i = 0; i < 9; i++) {
-            grid[i] = new ItemStack(Items.BLACKSTONE);
-        }
-        openRecipePage(player, "✦ Enchanted Gilded Blackstone",
-                Text.literal("✦ Enchanted Gilded Blackstone Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
-                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
-    }
-
-    // ============================================================
     // GILDED NETHERITE ARMOR RECIPES
     // ============================================================
 
@@ -2534,15 +2188,15 @@ public class RecipesGui {
         ItemStack result = SlayerItems.createGildedNetheriteHelmet();
         ItemStack[] grid = new ItemStack[9];
         grid[4] = new ItemStack(Items.NETHERITE_HELMET);
-        // Surround with enchanted gilded blackstone
-        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
         openRecipePage(player, "⚜ Gilded Netherite Helmet",
                 Text.literal("⚜ Gilded Netherite Helmet Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
                 grid, result, () -> openGildedNetheriteArmorRecipes(player));
@@ -2552,15 +2206,15 @@ public class RecipesGui {
         ItemStack result = SlayerItems.createGildedNetheriteChestplate();
         ItemStack[] grid = new ItemStack[9];
         grid[4] = new ItemStack(Items.NETHERITE_CHESTPLATE);
-        // Surround with enchanted gilded blackstone
-        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
         openRecipePage(player, "⚜ Gilded Netherite Chestplate",
                 Text.literal("⚜ Gilded Netherite Chestplate Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
                 grid, result, () -> openGildedNetheriteArmorRecipes(player));
@@ -2570,15 +2224,15 @@ public class RecipesGui {
         ItemStack result = SlayerItems.createGildedNetheriteLeggings();
         ItemStack[] grid = new ItemStack[9];
         grid[4] = new ItemStack(Items.NETHERITE_LEGGINGS);
-        // Surround with enchanted gilded blackstone
-        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
         openRecipePage(player, "⚜ Gilded Netherite Leggings",
                 Text.literal("⚜ Gilded Netherite Leggings Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
                 grid, result, () -> openGildedNetheriteArmorRecipes(player));
@@ -2588,15 +2242,15 @@ public class RecipesGui {
         ItemStack result = SlayerItems.createGildedNetheriteBoots();
         ItemStack[] grid = new ItemStack[9];
         grid[4] = new ItemStack(Items.NETHERITE_BOOTS);
-        // Surround with enchanted gilded blackstone
-        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
-        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
         openRecipePage(player, "⚜ Gilded Netherite Boots",
                 Text.literal("⚜ Gilded Netherite Boots Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
                 grid, result, () -> openGildedNetheriteArmorRecipes(player));
@@ -2613,53 +2267,6 @@ public class RecipesGui {
     public static boolean openSpecificRecipe(ServerPlayerEntity player, String itemName) {
         // Normalize item name
         String normalizedName = itemName.toLowerCase().replace(" ", "_");
-        
-        // Enchanted compacted materials
-        switch (normalizedName) {
-            case "enchanted_compacted_iron":
-                openEnchantedCompactedIronRecipe(player);
-                return true;
-            case "enchanted_compacted_gold":
-                openEnchantedCompactedGoldRecipe(player);
-                return true;
-            case "enchanted_compacted_diamond":
-                openEnchantedCompactedDiamondRecipe(player);
-                return true;
-            case "enchanted_compacted_emerald":
-                openEnchantedCompactedEmeraldRecipe(player);
-                return true;
-            case "enchanted_compacted_netherite":
-                openEnchantedCompactedNetheriteRecipe(player);
-                return true;
-            case "enchanted_compacted_copper":
-                openEnchantedCompactedCopperRecipe(player);
-                return true;
-            case "enchanted_compacted_coal":
-                openEnchantedCompactedCoalRecipe(player);
-                return true;
-            case "enchanted_compacted_lapis":
-            case "enchanted_compacted_lapis_lazuli":
-                openEnchantedCompactedLapisRecipe(player);
-                return true;
-            case "enchanted_compacted_redstone":
-                openEnchantedCompactedRedstoneRecipe(player);
-                return true;
-            case "enchanted_compacted_quartz":
-                openEnchantedCompactedQuartzRecipe(player);
-                return true;
-            case "enchanted_compacted_blackstone":
-                openEnchantedCompactedBlackstoneRecipe(player);
-                return true;
-            case "enchanted_compacted_ancient_debris":
-                openEnchantedCompactedAncientDebrisRecipe(player);
-                return true;
-            case "enchanted_compacted_amethyst":
-                openEnchantedCompactedAmethystRecipe(player);
-                return true;
-            case "enchanted_gilded_blackstone":
-                openEnchantedGildedBlackstoneRecipe(player);
-                return true;
-        }
         
         // Super compacted ores
         switch (normalizedName) {

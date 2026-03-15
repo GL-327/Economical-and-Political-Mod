@@ -2527,14 +2527,95 @@ public class SlayerItems {
 
     public static ItemStack createVoidwalkerCrown() {
         ItemStack stack = new ItemStack(Items.NETHERITE_HELMET);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("👑 Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         setCustomItemId(stack, "voidwalker_crown");
+
+        // CUSTOM ARMOR ATTRIBUTES
+        AttributeModifiersComponent attributes = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "voidwalker_armor"),
+                                8.0,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "voidwalker_toughness"),
+                                4.0,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .add(EntityAttributes.MAX_HEALTH,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "voidwalker_health"),
+                                20.0,  // +10 hearts
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .add(EntityAttributes.ATTACK_DAMAGE,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "voidwalker_damage"),
+                                3.0,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        AttributeModifierSlot.HEAD)
+                .build();
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes);
+
+        // Durability - 8x netherite
+        stack.set(DataComponentTypes.MAX_DAMAGE, 3256);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+
+        // ENHANCED LORE
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: CRD-007 | Void-phase containment circlet]"));
+        lore.add(Text.literal("§8[STATUS: Field testing terminated after 7 disappearances]"));
+        lore.add(Text.literal("§8[NOTE: \"It doesn't teleport you. It makes the void notice you.\"]"));
+        lore.add(Text.literal("§7\"Recovered from the ruins of Research Station Epsilon-3.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"Subjects report hearing whispers from the void\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"and experiencing moments of non-existence.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"The circlet appears to bend spacetime around the wearer\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("§7\"but the void demands its price.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🛡 Armor: +8").formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Toughness: +4").formatted(Formatting.BLUE));
+        lore.add(Text.literal("❤ Health: +10 Hearts").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Damage: +3").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌀 Void Step: Random teleport when hit (10% chance)").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("👁 Void Sight: See through walls in darkness").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌙 Night Vision: Permanent").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚡ Phase Dodge: 15% chance to dodge attacks").formatted(Formatting.AQUA));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ VOID POWERS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌌 In darkness: ").formatted(Formatting.DARK_GRAY)
+                .append(Text.literal("+50% damage").formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("🌌 In void dimension: ").formatted(Formatting.DARK_GRAY)
+                .append(Text.literal("+100% damage").formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("🌌 Endermen: ").formatted(Formatting.DARK_GRAY)
+                .append(Text.literal("Peaceful").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ LEGENDARY ABILITY ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🌀 Void Walker: ").formatted(Formatting.LIGHT_PURPLE)
+                .append(Text.literal("Right-click to teleport 20 blocks").formatted(Formatting.WHITE)));
+        lore.add(Text.literal("   Cooldown: 30 seconds").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§7\"The void remembers. The void waits. The void claims.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        
         return stack;
     }
 
     public static ItemStack createEnderPhaseHelmet() {
         ItemStack stack = new ItemStack(Items.NETHERITE_HELMET);
         stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Ender Phase Helmet").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        // ... (rest of the code remains the same)
         setCustomItemId(stack, "ender_phase_helmet");
         return stack;
     }
@@ -2833,257 +2914,6 @@ public class SlayerItems {
         compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
         compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(compacted, "compacted_quartz");
-        return compacted;
-    }
-
-    // ═══════════════════════════════════════════════════════════════
-    // ENCHANTED COMPACTED MATERIALS - Enhanced storage with magic
-    // ═══════════════════════════════════════════════════════════════
-
-    public static ItemStack createEnchantedCompactedIron() {
-        ItemStack compacted = new ItemStack(Items.IRON_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Iron").formatted(Formatting.GRAY, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of iron").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Iron Ingots").formatted(Formatting.WHITE)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_iron");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedGold() {
-        ItemStack compacted = new ItemStack(Items.GOLD_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Gold").formatted(Formatting.YELLOW, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of gold").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Gold Ingots").formatted(Formatting.YELLOW)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_gold");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedDiamond() {
-        ItemStack compacted = new ItemStack(Items.DIAMOND_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Diamond").formatted(Formatting.AQUA, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of diamonds").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Diamonds").formatted(Formatting.AQUA)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_diamond");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedEmerald() {
-        ItemStack compacted = new ItemStack(Items.EMERALD_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Emerald").formatted(Formatting.GREEN, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of emeralds").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Emeralds").formatted(Formatting.GREEN)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_emerald");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedNetherite() {
-        ItemStack compacted = new ItemStack(Items.NETHERITE_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Netherite").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of netherite").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Netherite Ingots").formatted(Formatting.DARK_GRAY)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_netherite");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedCopper() {
-        ItemStack compacted = new ItemStack(Items.COPPER_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Copper").formatted(Formatting.RED, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of copper").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Copper Ingots").formatted(Formatting.RED)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_copper");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedCoal() {
-        ItemStack compacted = new ItemStack(Items.COAL_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Coal").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of coal").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Coal").formatted(Formatting.DARK_GRAY)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_coal");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedLapis() {
-        ItemStack compacted = new ItemStack(Items.LAPIS_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Lapis Lazuli").formatted(Formatting.BLUE, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.BLUE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of lapis lazuli").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Lapis Lazuli").formatted(Formatting.BLUE)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_lapis");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedRedstone() {
-        ItemStack compacted = new ItemStack(Items.REDSTONE_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Redstone").formatted(Formatting.RED, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of redstone").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Redstone").formatted(Formatting.RED)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_redstone");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedQuartz() {
-        ItemStack compacted = new ItemStack(Items.QUARTZ_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Quartz").formatted(Formatting.WHITE, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.WHITE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of quartz").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Quartz").formatted(Formatting.WHITE)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_quartz");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedBlackstone() {
-        ItemStack compacted = new ItemStack(Items.BLACKSTONE);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Blackstone").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of blackstone").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Blackstone").formatted(Formatting.DARK_GRAY)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_blackstone");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedAncientDebris() {
-        ItemStack compacted = new ItemStack(Items.ANCIENT_DEBRIS);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Ancient Debris").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of ancient debris").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Ancient Debris").formatted(Formatting.DARK_RED)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_ancient_debris");
-        return compacted;
-    }
-
-    public static ItemStack createEnchantedCompactedAmethyst() {
-        ItemStack compacted = new ItemStack(Items.AMETHYST_BLOCK);
-        compacted.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("✦ Enchanted Compacted Amethyst").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ ENCHANTED COMPACTED MATERIAL ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("A magically condensed block of amethyst").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Infused with storage enhancement magic").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Amethyst Shards").formatted(Formatting.LIGHT_PURPLE)));
-        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(compacted, "enchanted_compacted_amethyst");
         return compacted;
     }
 
