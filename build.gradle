@@ -22,19 +22,11 @@ repositories {
 	}
 }
 loom {
-	// This should already be there for yarn
-}
-
-loom {
-	splitEnvironmentSourceSets()
-
 	mods {
 		"politicalserver" {
 			sourceSet sourceSets.main
-			sourceSet sourceSets.client
 		}
 	}
-
 }
 
 dependencies {
