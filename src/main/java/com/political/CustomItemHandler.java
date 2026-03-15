@@ -285,7 +285,9 @@ public class CustomItemHandler {
                 name.contains("Rustler") ||
                 name.contains("Phantom") ||
                 name.contains("Bandit") ||
-                name.contains("Plasma Emitter");
+                name.contains("Plasma Emitter") ||
+                name.contains("Enchanted Gilded Blackstone") ||
+                name.contains("Gilded Netherite");
     }
 
     public static boolean isSlayerCore(ItemStack stack) {
