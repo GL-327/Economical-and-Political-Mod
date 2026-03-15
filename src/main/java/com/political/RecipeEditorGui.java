@@ -100,7 +100,6 @@ public class RecipeEditorGui {
             }
             case SPECIAL_ITEMS -> {
                 items.add(CustomItemHandler.createTheGavel());
-                items.add(CustomItemHandler.createGavel());
                 items.add(CustomItemHandler.createHarveysStick());
                 items.add(CustomItemHandler.createHermesShoes());
                 

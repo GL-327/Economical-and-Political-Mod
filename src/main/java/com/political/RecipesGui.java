@@ -993,8 +993,21 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("bounty tier (T3-T5)").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Use with armor in anvil to apply!").formatted(Formatting.GREEN))
-                .glow()
                 .build());
+
+        // Display the token's full lore in the GUI
+        var loreComponent = result.get(DataComponentTypes.LORE);
+        if (loreComponent != null) {
+            int[] loreSlots = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+            Text[] loreLines = loreComponent.lines().toArray(new Text[0]);
+            
+            for (int i = 0; i < Math.min(loreLines.length, loreSlots.length); i++) {
+                gui.setSlot(loreSlots[i], new GuiElementBuilder(Items.PAPER)
+                        .setName(Text.literal(""))
+                        .addLoreLine(loreLines[i])
+                        .build());
+            }
+        }
 
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
