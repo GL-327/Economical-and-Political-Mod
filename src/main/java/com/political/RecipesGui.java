@@ -132,7 +132,7 @@ public class RecipesGui {
     // ============================================================
     public static void openMainMenu(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("📖 Custom Recipes"));
+        gui.setTitle(Text.literal("📖 Complete Recipe Guide"));
 
         for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
@@ -140,9 +140,17 @@ public class RecipesGui {
         }
 
         gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
-                .setName(Text.literal("📖 Recipe Book").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal("View all custom crafting recipes").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click a category to browse!").formatted(Formatting.GRAY))
+                .setName(Text.literal("📖 Complete Recipe Guide").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("All custom crafting recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Browse categories or create custom recipes").formatted(Formatting.GRAY))
+                .glow().build());
+
+        gui.setSlot(13, new GuiElementBuilder(Items.COMMAND_BLOCK)
+                .setName(Text.literal("⚙ Create Custom Recipe").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Open recipe editor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Create your own custom recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Command: /setrecipe").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> RecipeEditorGui.openRecipeList(player))
                 .glow().build());
 
         // Row 1: Basic Weapons & Tools
