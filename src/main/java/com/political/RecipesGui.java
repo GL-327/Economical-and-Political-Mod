@@ -262,6 +262,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openGoldArmorEvolutionRecipes(player)).build());
 
+        gui.setSlot(44, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
+                .setName(Text.literal("⚜ Gilded Netherite Armor").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Ultimate armor tier - Beyond legendary").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Crafted with enchanted gilded blackstone").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteArmorRecipes(player)).build());
+
         gui.setSlot(36, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
@@ -2463,6 +2471,138 @@ public class RecipesGui {
     }
 
     // ============================================================
+    // ENCHANTED GILDED BLACKSTONE RECIPE
+    // ============================================================
+
+    private static void openEnchantedGildedBlackstoneRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createEnchantedGildedBlackstone();
+        ItemStack[] grid = new ItemStack[9];
+        // Fill entire grid with blackstone
+        for (int i = 0; i < 9; i++) {
+            grid[i] = new ItemStack(Items.BLACKSTONE);
+        }
+        openRecipePage(player, "✦ Enchanted Gilded Blackstone",
+                Text.literal("✦ Enchanted Gilded Blackstone Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openEnchantedCompactedMaterialsRecipes(player));
+    }
+
+    // ============================================================
+    // GILDED NETHERITE ARMOR RECIPES
+    // ============================================================
+
+    private static void openGildedNetheriteArmorRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("⚜ Gilded Netherite Armor Recipes").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        // Gilded Netherite Helmet
+        gui.setSlot(11, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("⚜ Gilded Netherite Helmet").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteHelmetRecipe(player)).build());
+
+        // Gilded Netherite Chestplate
+        gui.setSlot(13, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
+                .setName(Text.literal("⚜ Gilded Netherite Chestplate").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteChestplateRecipe(player)).build());
+
+        // Gilded Netherite Leggings
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHERITE_LEGGINGS)
+                .setName(Text.literal("⚜ Gilded Netherite Leggings").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteLeggingsRecipe(player)).build());
+
+        // Gilded Netherite Boots
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_BOOTS)
+                .setName(Text.literal("⚜ Gilded Netherite Boots").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteBootsRecipe(player)).build());
+
+        // Back button
+        gui.setSlot(18, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openGildedNetheriteHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_HELMET);
+        // Surround with enchanted gilded blackstone
+        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        openRecipePage(player, "⚜ Gilded Netherite Helmet",
+                Text.literal("⚜ Gilded Netherite Helmet Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    private static void openGildedNetheriteChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        // Surround with enchanted gilded blackstone
+        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        openRecipePage(player, "⚜ Gilded Netherite Chestplate",
+                Text.literal("⚜ Gilded Netherite Chestplate Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    private static void openGildedNetheriteLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_LEGGINGS);
+        // Surround with enchanted gilded blackstone
+        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        openRecipePage(player, "⚜ Gilded Netherite Leggings",
+                Text.literal("⚜ Gilded Netherite Leggings Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    private static void openGildedNetheriteBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_BOOTS);
+        // Surround with enchanted gilded blackstone
+        grid[0] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[1] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[2] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[3] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[5] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[6] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[7] = SlayerItems.createEnchantedGildedBlackstone();
+        grid[8] = SlayerItems.createEnchantedGildedBlackstone();
+        openRecipePage(player, "⚜ Gilded Netherite Boots",
+                Text.literal("⚜ Gilded Netherite Boots Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    // ============================================================
     // SPECIFIC RECIPE LOOKUP
     // ============================================================
 
@@ -2515,6 +2655,9 @@ public class RecipesGui {
                 return true;
             case "enchanted_compacted_amethyst":
                 openEnchantedCompactedAmethystRecipe(player);
+                return true;
+            case "enchanted_gilded_blackstone":
+                openEnchantedGildedBlackstoneRecipe(player);
                 return true;
         }
         
@@ -2614,6 +2757,22 @@ public class RecipesGui {
                 return true;
             case "gilded_boots":
                 openGildedBootsRecipe(player);
+                return true;
+        }
+        
+        // Gilded Netherite armor - Ultimate tier
+        switch (normalizedName) {
+            case "gilded_netherite_helmet":
+                openGildedNetheriteHelmetRecipe(player);
+                return true;
+            case "gilded_netherite_chestplate":
+                openGildedNetheriteChestplateRecipe(player);
+                return true;
+            case "gilded_netherite_leggings":
+                openGildedNetheriteLeggingsRecipe(player);
+                return true;
+            case "gilded_netherite_boots":
+                openGildedNetheriteBootsRecipe(player);
                 return true;
         }
         

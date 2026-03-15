@@ -32,6 +32,7 @@ public class RecipeEditorGui {
     private static final int SLOT_RESULT    = 24;
     private static final int SLOT_SAVE      = 33;
     private static final int SLOT_CLEAR     = 34;
+    private static final int SLOT_LOCK      = 35;
     private static final int SLOT_BACK      = 45;
     private static final int SLOT_HEADER    = 4;
 
@@ -154,6 +155,13 @@ public class RecipeEditorGui {
                 
                 // Add enchanted blackstone for gilded armor crafting
                 items.add(SlayerItems.createEnchantedBlackstone());
+                items.add(SlayerItems.createEnchantedGildedBlackstone());
+                
+                // Add gilded netherite armor (ultimate tier)
+                items.add(SlayerItems.createGildedNetheriteHelmet());
+                items.add(SlayerItems.createGildedNetheriteChestplate());
+                items.add(SlayerItems.createGildedNetheriteLeggings());
+                items.add(SlayerItems.createGildedNetheriteBoots());
             }
             case MATERIALS -> {
                 for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
@@ -389,9 +397,11 @@ public class RecipeEditorGui {
     public static void openRecipeEditor(ServerPlayerEntity player, ItemStack resultItem,
                                          SlayerRecipes.Recipe existing, Category backCat) {
         ItemStack[] grid = new ItemStack[9];
+        boolean[] lockedSlots = new boolean[9]; // Track which slots are locked
         for (int i = 0; i < 9; i++) {
             grid[i] = (existing != null && existing.ingredients != null && existing.ingredients[i] != null)
                     ? existing.ingredients[i].copy() : ItemStack.EMPTY;
+            lockedSlots[i] = false; // Start with all slots unlocked
         }
 
         String resultCustomId = SlayerItems.getCustomItemId(resultItem);
@@ -401,6 +411,21 @@ public class RecipeEditorGui {
             public boolean onAnyClick(int index, ClickType type, SlotActionType action) {
                 for (int g = 0; g < 9; g++) {
                     if (index == GRID_SLOTS[g]) {
+                        // Handle middle-click to toggle lock
+                        if (type == ClickType.MOUSE_MIDDLE) {
+                            lockedSlots[g] = !lockedSlots[g];
+                            String status = lockedSlots[g] ? "§aLOCKED" : "§eUNLOCKED";
+                            player.sendMessage(Text.literal("Slot " + (g + 1) + " is now " + status), false);
+                            refreshGrid(this, grid, resultItem, lockedSlots);
+                            return true;
+                        }
+                        
+                        // Prevent modification if slot is locked
+                        if (lockedSlots[g]) {
+                            player.sendMessage(Text.literal("§cThis slot is locked! Use middle-click to unlock."), false);
+                            return true;
+                        }
+                        
                         ItemStack cursor = player.currentScreenHandler.getCursorStack();
                         if (!cursor.isEmpty()) {
                             // Allow full count for compacted materials and other items
@@ -408,7 +433,7 @@ public class RecipeEditorGui {
                         } else {
                             grid[g] = ItemStack.EMPTY;
                         }
-                        refreshGrid(this, grid, resultItem);
+                        refreshGrid(this, grid, resultItem, lockedSlots);
                         return true;
                     }
                 }
@@ -418,8 +443,32 @@ public class RecipeEditorGui {
                     return true;
                 }
                 if (index == SLOT_CLEAR) {
-                    for (int g = 0; g < 9; g++) grid[g] = ItemStack.EMPTY;
-                    refreshGrid(this, grid, resultItem);
+                    for (int g = 0; g < 9; g++) {
+                        if (!lockedSlots[g]) { // Only clear unlocked slots
+                            grid[g] = ItemStack.EMPTY;
+                        }
+                    }
+                    refreshGrid(this, grid, resultItem, lockedSlots);
+                    return true;
+                }
+                if (index == SLOT_LOCK) {
+                    // Toggle all slots lock state
+                    boolean allLocked = true;
+                    for (boolean locked : lockedSlots) {
+                        if (!locked) {
+                            allLocked = false;
+                            break;
+                        }
+                    }
+                    
+                    // If all are locked, unlock all. Otherwise, lock all.
+                    for (int g = 0; g < 9; g++) {
+                        lockedSlots[g] = !allLocked;
+                    }
+                    
+                    String status = allLocked ? "§eAll slots UNLOCKED" : "§aAll slots LOCKED";
+                    player.sendMessage(Text.literal(status), false);
+                    refreshGrid(this, grid, resultItem, lockedSlots);
                     return true;
                 }
                 if (index == SLOT_BACK) {
@@ -463,6 +512,13 @@ public class RecipeEditorGui {
         gui.setSlot(SLOT_CLEAR, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("§c§lClear Grid"))
                 .addLoreLine(Text.literal("§7Click to clear all ingredient slots."))
+                .addLoreLine(Text.literal("§7Locked slots will not be cleared."))
+                .build());
+
+        gui.setSlot(SLOT_LOCK, new GuiElementBuilder(Items.TRIPWIRE_HOOK)
+                .setName(Text.literal("§6§lToggle All Locks"))
+                .addLoreLine(Text.literal("§7Click to lock/unlock all slots."))
+                .addLoreLine(Text.literal("§7Middle-click individual slots to toggle."))
                 .build());
 
         gui.setSlot(SLOT_BACK, new GuiElementBuilder(Items.ARROW)
@@ -470,7 +526,8 @@ public class RecipeEditorGui {
                 .addLoreLine(Text.literal(backCat != null ? "§7Return to " + backCat.label : "§7Return to main menu"))
                 .build());
 
-        refreshGrid(gui, grid, resultItem);
+        // Initial grid display
+        refreshGrid(gui, grid, resultItem, lockedSlots);
         gui.open();
     }
 
@@ -481,23 +538,47 @@ public class RecipeEditorGui {
     }
 
     /** Re-draws the 3×3 grid slots. */
-    private static void refreshGrid(SimpleGui gui, ItemStack[] grid, ItemStack resultItem) {
+    private static void refreshGrid(SimpleGui gui, ItemStack[] grid, ItemStack resultItem, boolean[] lockedSlots) {
         for (int g = 0; g < 9; g++) {
             ItemStack ing = grid[g];
+            boolean isLocked = lockedSlots != null && lockedSlots[g];
+            
             if (ing == null || ing.isEmpty()) {
-                gui.setSlot(GRID_SLOTS[g], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
-                        .setName(Text.literal("§8[Empty — click with item to set]"))
-                        .build());
+                GuiElementBuilder builder = new GuiElementBuilder(
+                    isLocked ? Items.RED_STAINED_GLASS_PANE : Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal(isLocked ? "§c[Locked — middle-click to unlock]" : "§8[Empty — click with item to set]"));
+                
+                if (isLocked) {
+                    builder.addLoreLine(Text.literal("§7Slot is locked"))
+                            .addLoreLine(Text.literal("§7Middle-click to unlock"));
+                } else {
+                    builder.addLoreLine(Text.literal("§7Middle-click to lock slot"));
+                }
+                
+                gui.setSlot(GRID_SLOTS[g], builder.build());
             } else {
                 Text ingName = ing.get(DataComponentTypes.CUSTOM_NAME);
                 GuiElementBuilder builder = new GuiElementBuilder(ing.getItem())
-                        .setName(ingName != null ? ingName : Text.of(ing.getItem().toString()))
-                        .addLoreLine(Text.literal("§7Click with item to replace, empty-hand to clear"));
+                        .setName(ingName != null ? ingName : Text.of(ing.getItem().toString()));
+                
+                // Add lock status to lore
+                if (isLocked) {
+                    builder.addLoreLine(Text.literal("§c§lLOCKED SLOT"));
+                    builder.addLoreLine(Text.literal("§7Middle-click to unlock"));
+                } else {
+                    builder.addLoreLine(Text.literal("§7Click with item to replace, empty-hand to clear"));
+                    builder.addLoreLine(Text.literal("§7Middle-click to lock slot"));
+                }
                 
                 // Show count if more than 1
                 if (ing.getCount() > 1) {
                     builder.setCount(ing.getCount());
                     builder.addLoreLine(Text.literal("§7Amount: " + ing.getCount()).formatted(Formatting.YELLOW));
+                }
+                
+                // Add red dye overlay for locked slots
+                if (isLocked) {
+                    builder.glow();
                 }
                 
                 gui.setSlot(GRID_SLOTS[g], builder.build());

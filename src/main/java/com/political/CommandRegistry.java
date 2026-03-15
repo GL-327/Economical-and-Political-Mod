@@ -173,6 +173,15 @@ public class CommandRegistry {
                             suggestions.add("gilded_leggings");
                             suggestions.add("gilded_boots");
                             
+                            // Add gilded netherite armor suggestions
+                            suggestions.add("gilded_netherite_helmet");
+                            suggestions.add("gilded_netherite_chestplate");
+                            suggestions.add("gilded_netherite_leggings");
+                            suggestions.add("gilded_netherite_boots");
+                            
+                            // Add enchanted gilded blackstone
+                            suggestions.add("enchanted_gilded_blackstone");
+                            
                             // Filter suggestions based on input
                             String input = context.getArgument("item", String.class).toLowerCase();
                             for (String suggestion : suggestions) {

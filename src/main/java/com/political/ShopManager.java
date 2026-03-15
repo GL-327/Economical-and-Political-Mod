@@ -218,6 +218,28 @@ public class ShopManager {
                 Items.END_CRYSTAL, Items.RESPAWN_ANCHOR,
                 Items.LODESTONE
         ));
+
+        // ===== CUSTOM ITEMS =====
+        CATEGORIES.put("Custom Items", Arrays.asList(
+                SlayerItems.createEnchantedCompactedIron().getItem(),
+                SlayerItems.createEnchantedCompactedGold().getItem(),
+                SlayerItems.createEnchantedCompactedDiamond().getItem(),
+                SlayerItems.createEnchantedCompactedEmerald().getItem(),
+                SlayerItems.createEnchantedCompactedNetherite().getItem(),
+                SlayerItems.createEnchantedCompactedCopper().getItem(),
+                SlayerItems.createEnchantedCompactedCoal().getItem(),
+                SlayerItems.createEnchantedCompactedLapis().getItem(),
+                SlayerItems.createEnchantedCompactedRedstone().getItem(),
+                SlayerItems.createEnchantedCompactedQuartz().getItem(),
+                SlayerItems.createEnchantedCompactedBlackstone().getItem(),
+                SlayerItems.createEnchantedCompactedAncientDebris().getItem(),
+                SlayerItems.createEnchantedCompactedAmethyst().getItem(),
+                SlayerItems.createEnchantedGildedBlackstone().getItem(),
+                SlayerItems.createGildedNetheriteHelmet().getItem(),
+                SlayerItems.createGildedNetheriteChestplate().getItem(),
+                SlayerItems.createGildedNetheriteLeggings().getItem(),
+                SlayerItems.createGildedNetheriteBoots().getItem()
+        ));
     }
 
     private static void initializePrices() {
@@ -717,6 +739,14 @@ public class ShopManager {
         setCustomPrice(SlayerItems.createEnchantedCompactedBlackstone().getItem(), 64);    // 64 blackstone = 64, discounted to 48
         setCustomPrice(SlayerItems.createEnchantedCompactedAncientDebris().getItem(), 6400); // 64 ancient debris = 6400, discounted to 4800
         setCustomPrice(SlayerItems.createEnchantedCompactedAmethyst().getItem(), 640);      // 64 amethyst = 640, discounted to 480
+        setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 96);       // Premium pricing for gilded variant
+
+        // ===== CUSTOM ITEMS - GILDED NETHERITE ARMOR =====
+        // Ultimate tier armor with premium pricing
+        setCustomPrice(SlayerItems.createGildedNetheriteHelmet().getItem(), 25000);    // Ultimate protection
+        setCustomPrice(SlayerItems.createGildedNetheriteChestplate().getItem(), 35000); // Ultimate protection  
+        setCustomPrice(SlayerItems.createGildedNetheriteLeggings().getItem(), 30000);  // Ultimate protection
+        setCustomPrice(SlayerItems.createGildedNetheriteBoots().getItem(), 20000);     // Ultimate protection
 
         // Snapshot defaults the first time (when DEFAULT_PRICES is empty)
         if (DEFAULT_PRICES.isEmpty()) {

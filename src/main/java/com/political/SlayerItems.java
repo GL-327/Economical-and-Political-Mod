@@ -3711,4 +3711,137 @@ public class SlayerItems {
         setCustomItemId(blackstone, "enchanted_blackstone");
         return blackstone;
     }
+
+    public static ItemStack createEnchantedGildedBlackstone() {
+        ItemStack blackstone = new ItemStack(Items.BLACKSTONE);
+        blackstone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Gilded Blackstone").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED MATERIAL ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Blackstone infused with gilded magic").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Used for ultimate netherite armor crafting").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Crafted from 64 blackstone").formatted(Formatting.GRAY));
+        blackstone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        blackstone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(blackstone, "enchanted_gilded_blackstone");
+        return blackstone;
+    }
+
+    // GILDED NETHERITE ARMOR - Ultimate protection
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createGildedNetheriteHelmet() {
+        ItemStack helmet = new ItemStack(Items.NETHERITE_HELMET);
+        helmet.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚜ Gilded Netherite Helmet").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Ultimate Armor Tier 6]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("❤ Max Health: 16 HP (8 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 8").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("✓ Ultimate netherite protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Gilded netherite aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +50% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +6 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Knockback resistance +20%").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Beyond legendary\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        helmet.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        helmet.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(helmet, "gilded_netherite_helmet");
+        return helmet;
+    }
+
+    public static ItemStack createGildedNetheriteChestplate() {
+        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚜ Gilded Netherite Chestplate").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Ultimate Armor Tier 6]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("❤ Max Health: 20 HP (10 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 12").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("✓ Ultimate netherite protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Gilded netherite aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +50% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +6 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Knockback resistance +20%").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Beyond legendary\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "gilded_netherite_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createGildedNetheriteLeggings() {
+        ItemStack leggings = new ItemStack(Items.NETHERITE_LEGGINGS);
+        leggings.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚜ Gilded Netherite Leggings").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Ultimate Armor Tier 6]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("❤ Max Health: 16 HP (8 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 11").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("✓ Ultimate netherite protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Gilded netherite aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +50% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +6 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Knockback resistance +20%").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Beyond legendary\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        leggings.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        leggings.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(leggings, "gilded_netherite_leggings");
+        return leggings;
+    }
+
+    public static ItemStack createGildedNetheriteBoots() {
+        ItemStack boots = new ItemStack(Items.NETHERITE_BOOTS);
+        boots.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚜ Gilded Netherite Boots").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Ultimate Armor Tier 6]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("❤ Max Health: 16 HP (8 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 8").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 5").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("✓ Ultimate netherite protection").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Gilded netherite aura").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +50% movement speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Night vision when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ +6 hearts regeneration bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Fire resistance when worn").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Knockback resistance +20%").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Beyond legendary\"").formatted(Formatting.GRAY, Formatting.ITALIC));
+        boots.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(boots, "gilded_netherite_boots");
+        return boots;
+    }
 }

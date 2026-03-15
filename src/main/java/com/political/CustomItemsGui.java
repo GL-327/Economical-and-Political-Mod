@@ -320,6 +320,7 @@ public class CustomItemsGui {
         
         // Add enchanted blackstone for gilded armor
         items.add(SlayerItems.createEnchantedBlackstone());
+        items.add(SlayerItems.createEnchantedGildedBlackstone());
         
         openSubPage(player, "✦ Materials", items, 0);
     }
@@ -499,6 +500,12 @@ public class CustomItemsGui {
         items.add(SlayerItems.createGildedChestplate());
         items.add(SlayerItems.createGildedLeggings());
         items.add(SlayerItems.createGildedBoots());
+        
+        // Gilded Netherite Armor (Tier 6 - Ultimate)
+        items.add(SlayerItems.createGildedNetheriteHelmet());
+        items.add(SlayerItems.createGildedNetheriteChestplate());
+        items.add(SlayerItems.createGildedNetheriteLeggings());
+        items.add(SlayerItems.createGildedNetheriteBoots());
         
         openSubPage(player, "👑 Gold Armor Evolution", items, 0);
     }
