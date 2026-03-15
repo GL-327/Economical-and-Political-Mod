@@ -364,12 +364,23 @@ public class CustomItemsGui {
             int slot = i - start;
             Text customName = item.get(DataComponentTypes.CUSTOM_NAME);
             final ItemStack finalItem = item.copy();
-            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+            
+            GuiElementBuilder builder = new GuiElementBuilder(item.getItem())
                     .setName(customName != null ? customName : Text.literal(item.getName().getString()))
-                    .addLoreLine(Text.literal("§aClick to receive").formatted(Formatting.GREEN))
-                    .setCallback((idx, type, action) ->
-                            player.getInventory().insertStack(finalItem.copy()))
-                    .build());
+                    .addLoreLine(Text.literal("§aClick to receive").formatted(Formatting.GREEN));
+            
+            // Add the item's lore if it exists
+            var loreComponent = item.get(DataComponentTypes.LORE);
+            if (loreComponent != null) {
+                for (Text loreLine : loreComponent.lines()) {
+                    builder.addLoreLine(loreLine);
+                }
+            }
+            
+            builder.setCallback((idx, type, action) ->
+                    player.getInventory().insertStack(finalItem.copy()));
+            
+            gui.setSlot(slot, builder.build());
         }
 
         gui.open();

@@ -198,6 +198,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfGreedRecipe(player)).build());
 
+        gui.setSlot(26, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Crown of Midas").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Golden Helmet").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("2x coin digit damage multiplier!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCrownOfMidasRecipe(player)).build());
+
         gui.setSlot(30, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
@@ -887,6 +895,26 @@ public class RecipesGui {
         };
         openRecipePage(player, pageTitle,
                 Text.literal("👑 Crown of Greed Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openMainMenu(player));
+    }
+
+    // ============================================================
+    // CROWN OF MIDAS RECIPE
+    // ============================================================
+    private static void openCrownOfMidasRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCrownOfMidas();
+        String pageTitle = "👑 Crown of Midas";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        ItemStack piglinCore = SlayerItems.createPiglinCore();
+        ItemStack piglinFlesh = SlayerItems.createPiglinFlesh();
+        ItemStack[] grid = {
+                piglinCore.copy(), piglinCore.copy(), piglinCore.copy(),
+                piglinFlesh.copy(), new ItemStack(Items.GOLDEN_HELMET), piglinFlesh.copy(),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, pageTitle,
+                Text.literal("👑 Crown of Midas Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
                 grid, result, () -> openMainMenu(player));
     }
 
