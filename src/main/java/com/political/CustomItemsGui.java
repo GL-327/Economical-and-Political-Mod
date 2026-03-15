@@ -129,6 +129,7 @@ public class CustomItemsGui {
                 .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• Crown of Greed").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("• Crown of Midas").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("• Piglin Core & Flesh").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("• Piglin T1 & T2 Armor").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
@@ -264,6 +265,7 @@ public class CustomItemsGui {
     private static void openPiglinMenu(ServerPlayerEntity player) {
         List<ItemStack> items = new ArrayList<>();
         items.add(SlayerItems.createCrownOfGreed());
+        items.add(SlayerItems.createCrownOfMidas());
         items.add(SlayerItems.createPiglinCore());
         items.add(SlayerItems.createPiglinFlesh());
         for (int tier = 1; tier <= 2; tier++) {

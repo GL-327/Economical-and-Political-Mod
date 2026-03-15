@@ -473,8 +473,9 @@ public class CustomItemHandler {
         windCharge.setOwner(player);
         windCharge.setPosition(player.getX(), player.getY() + 1.0, player.getZ());
         
-        // Aim the wind charge downward to create upward launch effect
-        windCharge.setVelocity(0, -1.0, 0);
+        // Aim the wind charge downward and slightly backward to create upward and forward launch
+        Vec3d lookDirection = player.getRotationVec(1.0f);
+        windCharge.setVelocity(-lookDirection.x * 0.3, -1.0, -lookDirection.z * 0.3);
         
         world.spawnEntity(windCharge);
 
