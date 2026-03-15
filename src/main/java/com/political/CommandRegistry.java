@@ -49,6 +49,7 @@ public class CommandRegistry {
         registerAuctionHouse(dispatcher);
         registerHome(dispatcher);
         registerShop(dispatcher);
+        registerStore(dispatcher);
         registerUndergroundAuction(dispatcher);
         registerCoins(dispatcher);
         registerSecretCommand(dispatcher);
@@ -679,6 +680,31 @@ public class CommandRegistry {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
                     ShopGui.openSellInventory(player);
+                    return 1;
+                }));
+    }
+
+    private static void registerStore(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("store")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    
+                    // Non-functional store command - just shows a message
+                    player.sendMessage(
+                        Text.literal("🛒 Store")
+                            .formatted(Formatting.GOLD, Formatting.BOLD)
+                            .append(Text.literal("\nThe online store is currently under construction.")
+                                .formatted(Formatting.GRAY))
+                            .append(Text.literal("\n\nVisit our website at: ")
+                                .formatted(Formatting.YELLOW))
+                            .append(Text.literal("https://store.example.com")
+                                .formatted(Formatting.AQUA, Formatting.UNDERLINE))
+                            .append(Text.literal("\n\n")
+                                .formatted(Formatting.RESET))
+                            .append(Text.literal("Note: The store is not yet functional.")
+                                .formatted(Formatting.RED, Formatting.ITALIC))
+                    );
                     return 1;
                 }));
     }

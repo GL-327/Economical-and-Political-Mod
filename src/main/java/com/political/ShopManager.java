@@ -3,6 +3,7 @@ package com.political;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -721,6 +722,11 @@ public class ShopManager {
         if (DEFAULT_PRICES.isEmpty()) {
             DEFAULT_PRICES.putAll(SELL_PRICES);
         }
+
+        // ===== DISABLED ITEMS (cannot be bought on shop) =====
+        // Disable gilded blackstone and enchanted gilded blackstone
+        disableItem(Items.GILDED_BLACKSTONE);
+        disableItem(SlayerItems.createEnchantedGildedBlackstone().getItem());
     }
 
     private static void setPrice(Item item, int sellPrice) {
@@ -824,12 +830,19 @@ public class ShopManager {
             return false;
         }
 
-        // Check if ANY of this item type in inventory is a bounty item
+        // Check if ANY of this item type in inventory is a custom item
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack invStack = player.getInventory().getStack(i);
             if (!invStack.isEmpty() && invStack.isOf(item)) {
                 if (CustomItemHandler.isBountyItem(invStack)) {
                     player.sendMessage(Text.literal("✗ Bounty items can only be sold on /auction!")
+                            .formatted(Formatting.RED), false);
+                    return false;
+                }
+                // Check if it's a custom item (has custom name or NBT)
+                if (invStack.get(DataComponentTypes.CUSTOM_NAME) != null || 
+                    SlayerItems.getCustomItemId(invStack) != null) {
+                    player.sendMessage(Text.literal("✗ Custom items cannot be sold on /shop!")
                             .formatted(Formatting.RED), false);
                     return false;
                 }
