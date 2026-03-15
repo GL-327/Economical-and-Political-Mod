@@ -249,12 +249,10 @@ public class ShopManager {
                 SlayerItems.createSuperCompactedNetherite().getItem()
         ));
 
-        // ===== GILDED ARMOR =====
-        CATEGORIES.put("Gilded Armor", Arrays.asList(
-                SlayerItems.createGildedNetheriteHelmet().getItem(),
-                SlayerItems.createGildedNetheriteChestplate().getItem(),
-                SlayerItems.createGildedNetheriteLeggings().getItem(),
-                SlayerItems.createGildedNetheriteBoots().getItem()
+        // ===== ENCHANTED MATERIALS =====
+        CATEGORIES.put("Enchanted Materials", Arrays.asList(
+                SlayerItems.createEnchantedBlackstone().getItem(),
+                SlayerItems.createEnchantedGildedBlackstone().getItem()
         ));
     }
 
@@ -724,12 +722,10 @@ public class ShopManager {
         setCustomPrice(SlayerItems.createSuperCompactedEmerald().getItem(), 25920); // 576 emeralds = 34560, discounted to 25920
         setCustomPrice(SlayerItems.createSuperCompactedNetherite().getItem(), 272160); // 576 netherite = 362880, discounted to 272160
 
-        // ===== CUSTOM ITEMS - GILDED NETHERITE ARMOR =====
-        // Ultimate tier armor with premium pricing
-        setCustomPrice(SlayerItems.createGildedNetheriteHelmet().getItem(), 25000);    // Ultimate protection
-        setCustomPrice(SlayerItems.createGildedNetheriteChestplate().getItem(), 35000); // Ultimate protection  
-        setCustomPrice(SlayerItems.createGildedNetheriteLeggings().getItem(), 30000);  // Ultimate protection
-        setCustomPrice(SlayerItems.createGildedNetheriteBoots().getItem(), 20000);     // Ultimate protection
+        // ===== CUSTOM ITEMS - ENCHANTED MATERIALS =====
+        // Premium materials for advanced crafting
+        setCustomPrice(SlayerItems.createEnchantedBlackstone().getItem(), 5000);      // Premium crafting material
+        setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 8000); // Ultimate crafting material
 
         // Snapshot defaults the first time (when DEFAULT_PRICES is empty)
         if (DEFAULT_PRICES.isEmpty()) {
