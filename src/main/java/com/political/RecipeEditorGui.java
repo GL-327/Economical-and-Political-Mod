@@ -129,6 +129,17 @@ public class RecipeEditorGui {
                 for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
                     items.add(SlayerItems.createAttributeCore(attr));
                 }
+                // Add compacted materials
+                items.add(SlayerItems.createCompactedIron());
+                items.add(SlayerItems.createCompactedGold());
+                items.add(SlayerItems.createCompactedDiamond());
+                items.add(SlayerItems.createCompactedEmerald());
+                items.add(SlayerItems.createCompactedNetherite());
+                items.add(SlayerItems.createCompactedCopper());
+                items.add(SlayerItems.createCompactedCoal());
+                items.add(SlayerItems.createCompactedLapis());
+                items.add(SlayerItems.createCompactedRedstone());
+                items.add(SlayerItems.createCompactedQuartz());
             }
             case ATTRIBUTE_TOKENS -> {
                 // Add all 10 attribute tokens
@@ -332,7 +343,8 @@ public class RecipeEditorGui {
                     if (index == GRID_SLOTS[g]) {
                         ItemStack cursor = player.currentScreenHandler.getCursorStack();
                         if (!cursor.isEmpty()) {
-                            grid[g] = cursor.copyWithCount(1);
+                            // Allow full count for compacted materials and other items
+                            grid[g] = cursor.copy();
                         } else {
                             grid[g] = ItemStack.EMPTY;
                         }
@@ -418,10 +430,17 @@ public class RecipeEditorGui {
                         .build());
             } else {
                 Text ingName = ing.get(DataComponentTypes.CUSTOM_NAME);
-                gui.setSlot(GRID_SLOTS[g], new GuiElementBuilder(ing.getItem())
+                GuiElementBuilder builder = new GuiElementBuilder(ing.getItem())
                         .setName(ingName != null ? ingName : Text.of(ing.getItem().toString()))
-                        .addLoreLine(Text.literal("§7Click with item to replace, empty-hand to clear"))
-                        .build());
+                        .addLoreLine(Text.literal("§7Click with item to replace, empty-hand to clear"));
+                
+                // Show count if more than 1
+                if (ing.getCount() > 1) {
+                    builder.setCount(ing.getCount());
+                    builder.addLoreLine(Text.literal("§7Amount: " + ing.getCount()).formatted(Formatting.YELLOW));
+                }
+                
+                gui.setSlot(GRID_SLOTS[g], builder.build());
             }
         }
     }

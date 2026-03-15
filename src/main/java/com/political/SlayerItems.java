@@ -2641,4 +2641,198 @@ public class SlayerItems {
     public static boolean isEnderPhaseHelmet(ItemStack stack) {
         return hasCustomItemId(stack, "ender_phase_helmet");
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // COMPACTED MATERIALS - Stack compression for storage efficiency
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createCompactedIron() {
+        ItemStack compacted = new ItemStack(Items.IRON_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Iron").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed iron ingots").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 iron ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Iron Ingots").formatted(Formatting.WHITE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_iron");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedGold() {
+        ItemStack compacted = new ItemStack(Items.GOLD_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Gold").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed gold ingots").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 gold ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Gold Ingots").formatted(Formatting.YELLOW)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_gold");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedDiamond() {
+        ItemStack compacted = new ItemStack(Items.DIAMOND_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Diamond").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed diamonds").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 diamonds").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Diamonds").formatted(Formatting.AQUA)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_diamond");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedEmerald() {
+        ItemStack compacted = new ItemStack(Items.EMERALD_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Emerald").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed emeralds").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 emeralds").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Emeralds").formatted(Formatting.GREEN)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_emerald");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedNetherite() {
+        ItemStack compacted = new ItemStack(Items.NETHERITE_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Netherite").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed netherite ingots").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 netherite ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Netherite Ingots").formatted(Formatting.DARK_GRAY)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_netherite");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedCopper() {
+        ItemStack compacted = new ItemStack(Items.COPPER_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Copper").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed copper ingots").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 copper ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Copper Ingots").formatted(Formatting.RED)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_copper");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedCoal() {
+        ItemStack compacted = new ItemStack(Items.COAL_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Coal").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed coal").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 coal").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Coal").formatted(Formatting.DARK_GRAY)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_coal");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedLapis() {
+        ItemStack compacted = new ItemStack(Items.LAPIS_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Lapis Lazuli").formatted(Formatting.BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.BLUE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed lapis lazuli").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 lapis lazuli").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Lapis Lazuli").formatted(Formatting.BLUE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_lapis");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedRedstone() {
+        ItemStack compacted = new ItemStack(Items.REDSTONE_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Redstone").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed redstone").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 redstone").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Redstone").formatted(Formatting.RED)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_redstone");
+        return compacted;
+    }
+
+    public static ItemStack createCompactedQuartz() {
+        ItemStack compacted = new ItemStack(Items.QUARTZ_BLOCK);
+        compacted.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⬛ Compacted Quartz").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("A dense block of compressed quartz").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 quartz").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
+                .append(Text.literal("64 Quartz").formatted(Formatting.WHITE)));
+        compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(compacted, "compacted_quartz");
+        return compacted;
+    }
 }

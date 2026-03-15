@@ -263,6 +263,7 @@ public class CustomItemsGui {
 
     private static void openMaterialsMenu(ServerPlayerEntity player) {
         List<ItemStack> items = new ArrayList<>();
+        // Add slayer materials
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             items.add(SlayerItems.createChunk(type));
             items.add(SlayerItems.createCore(type));
@@ -271,6 +272,17 @@ public class CustomItemsGui {
         for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
             items.add(SlayerItems.createAttributeCore(attr));
         }
+        // Add compacted materials
+        items.add(SlayerItems.createCompactedIron());
+        items.add(SlayerItems.createCompactedGold());
+        items.add(SlayerItems.createCompactedDiamond());
+        items.add(SlayerItems.createCompactedEmerald());
+        items.add(SlayerItems.createCompactedNetherite());
+        items.add(SlayerItems.createCompactedCopper());
+        items.add(SlayerItems.createCompactedCoal());
+        items.add(SlayerItems.createCompactedLapis());
+        items.add(SlayerItems.createCompactedRedstone());
+        items.add(SlayerItems.createCompactedQuartz());
         openSubPage(player, "✦ Materials", items, 0);
     }
 

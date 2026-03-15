@@ -230,6 +230,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openLegendaryItems(player)).build());
 
+        gui.setSlot(32, new GuiElementBuilder(Items.IRON_BLOCK)
+                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Stack compression for storage efficiency").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft 64 items into 1 compacted block").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedMaterialsRecipes(player)).build());
+
         gui.setSlot(32, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
@@ -1167,5 +1175,279 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openMainMenu(player)).build());
 
         gui.open();
+    }
+
+    // ============================================================
+    // COMPACTED MATERIALS RECIPES
+    // ============================================================
+
+    private static void openCompactedMaterialsRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⬛ Compacted Materials"));
+
+        // Background fill
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_BLOCK)
+                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal("Stack compression for storage efficiency").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft 64 items into 1 compacted block").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Compacted Iron
+        gui.setSlot(19, new GuiElementBuilder(SlayerItems.createCompactedIron().getItem())
+                .setName(SlayerItems.createCompactedIron().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Iron Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedIronRecipe(player)).build());
+
+        // Compacted Gold
+        gui.setSlot(20, new GuiElementBuilder(SlayerItems.createCompactedGold().getItem())
+                .setName(SlayerItems.createCompactedGold().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Gold Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedGoldRecipe(player)).build());
+
+        // Compacted Diamond
+        gui.setSlot(21, new GuiElementBuilder(SlayerItems.createCompactedDiamond().getItem())
+                .setName(SlayerItems.createCompactedDiamond().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Diamonds").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedDiamondRecipe(player)).build());
+
+        // Compacted Emerald
+        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createCompactedEmerald().getItem())
+                .setName(SlayerItems.createCompactedEmerald().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Emeralds").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedEmeraldRecipe(player)).build());
+
+        // Compacted Netherite
+        gui.setSlot(23, new GuiElementBuilder(SlayerItems.createCompactedNetherite().getItem())
+                .setName(SlayerItems.createCompactedNetherite().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Netherite Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedNetheriteRecipe(player)).build());
+
+        // Compacted Copper
+        gui.setSlot(24, new GuiElementBuilder(SlayerItems.createCompactedCopper().getItem())
+                .setName(SlayerItems.createCompactedCopper().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Copper Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedCopperRecipe(player)).build());
+
+        // Compacted Coal
+        gui.setSlot(25, new GuiElementBuilder(SlayerItems.createCompactedCoal().getItem())
+                .setName(SlayerItems.createCompactedCoal().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Coal").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedCoalRecipe(player)).build());
+
+        // Compacted Lapis
+        gui.setSlot(28, new GuiElementBuilder(SlayerItems.createCompactedLapis().getItem())
+                .setName(SlayerItems.createCompactedLapis().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Lapis Lazuli").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedLapisRecipe(player)).build());
+
+        // Compacted Redstone
+        gui.setSlot(29, new GuiElementBuilder(SlayerItems.createCompactedRedstone().getItem())
+                .setName(SlayerItems.createCompactedRedstone().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Redstone").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedRedstoneRecipe(player)).build());
+
+        // Compacted Quartz
+        gui.setSlot(30, new GuiElementBuilder(SlayerItems.createCompactedQuartz().getItem())
+                .setName(SlayerItems.createCompactedQuartz().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Quartz").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedQuartzRecipe(player)).build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Close recipe book").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    // Individual compacted material recipe methods
+    private static void openCompactedIronRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedIron();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[1] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[2] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[3] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[4] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[5] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[6] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[7] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[8] = new ItemStack(Items.IRON_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Iron",
+                Text.literal("⬛ Compacted Iron Recipe").formatted(Formatting.GRAY, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedGoldRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedGold();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[1] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[2] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[3] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[4] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[5] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[6] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[7] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[8] = new ItemStack(Items.GOLD_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Gold",
+                Text.literal("⬛ Compacted Gold Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedDiamondRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedDiamond();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.DIAMOND, 64);
+        grid[1] = new ItemStack(Items.DIAMOND, 64);
+        grid[2] = new ItemStack(Items.DIAMOND, 64);
+        grid[3] = new ItemStack(Items.DIAMOND, 64);
+        grid[4] = new ItemStack(Items.DIAMOND, 64);
+        grid[5] = new ItemStack(Items.DIAMOND, 64);
+        grid[6] = new ItemStack(Items.DIAMOND, 64);
+        grid[7] = new ItemStack(Items.DIAMOND, 64);
+        grid[8] = new ItemStack(Items.DIAMOND, 64);
+        openRecipePage(player, "⬛ Compacted Diamond",
+                Text.literal("⬛ Compacted Diamond Recipe").formatted(Formatting.AQUA, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedEmeraldRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedEmerald();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.EMERALD, 64);
+        grid[1] = new ItemStack(Items.EMERALD, 64);
+        grid[2] = new ItemStack(Items.EMERALD, 64);
+        grid[3] = new ItemStack(Items.EMERALD, 64);
+        grid[4] = new ItemStack(Items.EMERALD, 64);
+        grid[5] = new ItemStack(Items.EMERALD, 64);
+        grid[6] = new ItemStack(Items.EMERALD, 64);
+        grid[7] = new ItemStack(Items.EMERALD, 64);
+        grid[8] = new ItemStack(Items.EMERALD, 64);
+        openRecipePage(player, "⬛ Compacted Emerald",
+                Text.literal("⬛ Compacted Emerald Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedNetheriteRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedNetherite();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[1] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[2] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[3] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[4] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[5] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[6] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[7] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[8] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Netherite",
+                Text.literal("⬛ Compacted Netherite Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedCopperRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedCopper();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[1] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[2] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[3] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[4] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[5] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[6] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[7] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[8] = new ItemStack(Items.COPPER_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Copper",
+                Text.literal("⬛ Compacted Copper Recipe").formatted(Formatting.RED, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedCoalRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedCoal();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.COAL, 64);
+        grid[1] = new ItemStack(Items.COAL, 64);
+        grid[2] = new ItemStack(Items.COAL, 64);
+        grid[3] = new ItemStack(Items.COAL, 64);
+        grid[4] = new ItemStack(Items.COAL, 64);
+        grid[5] = new ItemStack(Items.COAL, 64);
+        grid[6] = new ItemStack(Items.COAL, 64);
+        grid[7] = new ItemStack(Items.COAL, 64);
+        grid[8] = new ItemStack(Items.COAL, 64);
+        openRecipePage(player, "⬛ Compacted Coal",
+                Text.literal("⬛ Compacted Coal Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedLapisRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedLapis();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[1] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[2] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[3] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[4] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[5] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[6] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[7] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[8] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        openRecipePage(player, "⬛ Compacted Lapis Lazuli",
+                Text.literal("⬛ Compacted Lapis Lazuli Recipe").formatted(Formatting.BLUE, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedRedstoneRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedRedstone();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.REDSTONE, 64);
+        grid[1] = new ItemStack(Items.REDSTONE, 64);
+        grid[2] = new ItemStack(Items.REDSTONE, 64);
+        grid[3] = new ItemStack(Items.REDSTONE, 64);
+        grid[4] = new ItemStack(Items.REDSTONE, 64);
+        grid[5] = new ItemStack(Items.REDSTONE, 64);
+        grid[6] = new ItemStack(Items.REDSTONE, 64);
+        grid[7] = new ItemStack(Items.REDSTONE, 64);
+        grid[8] = new ItemStack(Items.REDSTONE, 64);
+        openRecipePage(player, "⬛ Compacted Redstone",
+                Text.literal("⬛ Compacted Redstone Recipe").formatted(Formatting.RED, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedQuartzRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedQuartz();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.QUARTZ, 64);
+        grid[1] = new ItemStack(Items.QUARTZ, 64);
+        grid[2] = new ItemStack(Items.QUARTZ, 64);
+        grid[3] = new ItemStack(Items.QUARTZ, 64);
+        grid[4] = new ItemStack(Items.QUARTZ, 64);
+        grid[5] = new ItemStack(Items.QUARTZ, 64);
+        grid[6] = new ItemStack(Items.QUARTZ, 64);
+        grid[7] = new ItemStack(Items.QUARTZ, 64);
+        grid[8] = new ItemStack(Items.QUARTZ, 64);
+        openRecipePage(player, "⬛ Compacted Quartz",
+                Text.literal("⬛ Compacted Quartz Recipe").formatted(Formatting.WHITE, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
     }
 }
