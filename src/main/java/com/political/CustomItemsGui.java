@@ -249,7 +249,7 @@ public class CustomItemsGui {
 
     private static void openSpecialWeaponsMenu(ServerPlayerEntity player) {
         List<ItemStack> items = new ArrayList<>();
-        items.add(CustomItemHandler.createGavel());
+        items.add(CustomItemHandler.createTheGavel());
         items.add(CustomItemHandler.createHarveysStick());
         items.add(CustomItemHandler.createHermesShoes());
         for (int mk = 1; mk <= 5; mk++) items.add(CustomItemHandler.createHPEBM(mk));
@@ -307,6 +307,7 @@ public class CustomItemsGui {
         items.add(SlayerItems.createEnderSword());
         items.add(SlayerItems.createAbyssalBlade());
         items.add(SlayerItems.createVenomousDagger());
+        items.add(SlayerItems.createTheGavel());
         openSubPage(player, "✦ Boss Drops", items, 0);
     }
 

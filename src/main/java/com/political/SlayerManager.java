@@ -563,10 +563,9 @@ public class SlayerManager {
 
         MobEntity boss;
 
-        // Special handling for Warden - spawn as Iron Golem to prevent burrowing issues
+        // Spawn actual Warden entity
         if (type == SlayerType.WARDEN) {
-            // Use Iron Golem as the Warden boss (per your design decision)
-            boss = (MobEntity) EntityType.IRON_GOLEM.create(world, SpawnReason.MOB_SUMMONED);
+            boss = (MobEntity) EntityType.WARDEN.create(world, SpawnReason.MOB_SUMMONED);
             if (boss == null) {
                 player.sendMessage(Text.literal("✖ Failed to spawn boss!")
                         .formatted(Formatting.RED), false);
@@ -628,7 +627,7 @@ public class SlayerManager {
         // **CRITICAL: Actually spawn the boss into the world**
         world.spawnEntity(boss);
 
-        // Make Iron Golem (Warden boss) aggressive toward the player
+        // Make Warden aggressive toward the player
         if (type == SlayerType.WARDEN) {
             boss.setTarget(player);
         }
@@ -711,7 +710,7 @@ public class SlayerManager {
             case SKELETON -> EntityType.SKELETON;
             case SLIME -> EntityType.SLIME;
             case ENDERMAN -> EntityType.ENDERMAN;
-            case WARDEN -> EntityType.IRON_GOLEM; // Use Iron Golem for Warden
+            case WARDEN -> EntityType.WARDEN;
             case PIGLIN -> EntityType.PIGLIN_BRUTE;
         };
 
