@@ -817,17 +817,22 @@ public class SlayerItems {
         if (data == null) return null;
         return data.copyNbt().getString(CUSTOM_TYPE_KEY).orElse("");
     }
-
     public static boolean isType(ItemStack stack, String type) {
         return type.equals(getCustomItemType(stack));
     }
 
     public static void setSlayerLore(ItemStack stack, List<String> lines) {
         List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
         for (String line : lines) {
-            lore.add(Text.literal(line));
+            // Convert §7 formatting to proper gray formatting
+            String formattedLine = line.replace("§7", "");
+            lore.add(Text.literal(formattedLine).formatted(Formatting.GRAY));
         }
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX: Anomalous boss residue | Charadrius specimen]").formatted(Formatting.DARK_GRAY));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     public static ItemStack createUndeadHeart() {
@@ -2439,6 +2444,8 @@ public class SlayerItems {
                 .append(Text.literal(attr.xpCost + " levels").formatted(Formatting.BOLD, Formatting.RED)));
         lore.add(Text.literal(""));
         lore.add(Text.literal("⚔ Combine with armor in anvil").formatted(Formatting.YELLOW));
+        
+        token.set(DataComponentTypes.LORE, new LoreComponent(lore)); // Moved this line up
         token.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         NbtCompound nbt = new NbtCompound();
         nbt.putString(ARMOR_ATTRIBUTE_TOKEN_KEY, attr.id);
