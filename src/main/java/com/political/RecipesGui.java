@@ -198,16 +198,25 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfGreedRecipe(player)).build());
 
-        gui.setSlot(26, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_SWORD)
+                .setName(Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Golden sword with coin powers").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("1 coin per mob kill!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("4x digit damage multiplier!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openMidasSwordRecipe(player)).build());
+
+        gui.setSlot(17, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Crown of Midas").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Gold Helmet").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("2x coin digit damage multiplier!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("3x coin digit damage multiplier!").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfMidasRecipe(player)).build());
 
         gui.setSlot(30, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("All 10 attribute types!").formatted(Formatting.GRAY))
@@ -1103,6 +1112,54 @@ public class RecipesGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Use with caution in void").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("environments and end dimensions.").formatted(Formatting.YELLOW))
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openMidasSwordRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createMidasSword();
+        String pageTitle = "⚔ Midas's Sword";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(pageTitle));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(SlayerItems.createMidasSword().getItem())
+                .setName(SlayerItems.createMidasSword().get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("Golden sword of immense wealth").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("and devastating power.").formatted(Formatting.YELLOW))
+                .build());
+
+        // Recipe info
+        gui.setSlot(22, new GuiElementBuilder(Items.GOLDEN_SWORD)
+                .setName(Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("• 1x Golden Sword").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• 3x Piglin Core").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• 2x Piglin Flesh").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• 1 coin per mob kill").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• 4x digit damage multiplier").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• Piglin & all boss defence").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• 5000 durability").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("━━━ WARNING ━━━").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("💀 Death: Lose ALL coins!").formatted(Formatting.DARK_RED))
+                .glow()
                 .build());
 
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)

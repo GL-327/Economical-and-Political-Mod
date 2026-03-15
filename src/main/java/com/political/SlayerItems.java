@@ -2561,7 +2561,7 @@ public class SlayerItems {
         lore.add(Text.literal("  (e.g. 999 coins = ×3 damage)").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("✗ Only allows gold items").formatted(Formatting.RED));
+        lore.add(Text.literal("✓ Allows any items (not gold-only)").formatted(Formatting.GREEN));
         lore.add(Text.literal("✗ All bounty buffs/defence disabled").formatted(Formatting.RED));
         lore.add(Text.literal("✗ All armour defence cleared").formatted(Formatting.RED));
         lore.add(Text.literal(""));
@@ -2587,8 +2587,8 @@ public class SlayerItems {
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
         lore.add(Text.literal("❤ Max Health: 10 HP (5 hearts)").formatted(Formatting.RED));
         lore.add(Text.literal("🛡 Armour: 0 (all defence removed)").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Damage: ×(digits of your coins × 2)").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("  (e.g. 999 coins = ×6 damage)").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("⚔ Damage: ×(digits of your coins × 3)").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("  (e.g. 999 coins = ×9 damage)").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
         lore.add(Text.literal("✓ Only allows gold items").formatted(Formatting.GREEN));
@@ -2604,6 +2604,38 @@ public class SlayerItems {
         crown.set(DataComponentTypes.MAX_DAMAGE, 5000); // Buffed durability
         setCustomItemId(crown, "crown_of_midas");
         return crown;
+    }
+
+    public static ItemStack createMidasSword() {
+        ItemStack sword = new ItemStack(Items.GOLDEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Specimen CRD-009-M]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Base Damage: 4 (Golden Sword)").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Mob Kill Bonus: 1 coin").formatted(Formatting.GREEN));
+        lore.add(Text.literal("⚔ Damage Multiplier: ×(digits of coins × 4)").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("  (e.g. 999 coins = ×12 damage)").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ 5000 durability").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Piglin boss defence when held").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ All boss defence when held").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✓ Live coin counter display").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ WARNING ━━━").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("💀 ON DEATH: Lose ALL coins!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("(Only from crowns and this sword)").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"Fortune favors the bold, but").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        lore.add(Text.literal("death claims all.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 5000);
+        setCustomItemId(sword, "midas_sword");
+        return sword;
     }
 
     public static boolean isEnderPhaseHelmet(ItemStack stack) {

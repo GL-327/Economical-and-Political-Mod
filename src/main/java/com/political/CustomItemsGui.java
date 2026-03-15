@@ -282,6 +282,7 @@ public class CustomItemsGui {
         List<ItemStack> items = new ArrayList<>();
         items.add(SlayerItems.createCrownOfGreed());
         items.add(SlayerItems.createCrownOfMidas());
+        items.add(SlayerItems.createMidasSword());
         items.add(SlayerItems.createPiglinCore());
         items.add(SlayerItems.createPiglinFlesh());
         for (int tier = 1; tier <= 2; tier++) {
