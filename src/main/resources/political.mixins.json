@@ -35,8 +35,6 @@
         "ArrowDamageMixin",
         "GrindstoneScreenHandlerMixin",
         "SmithingScreenHandlerMixin",
-        "EndGatewayMixin",
-        "BackroomsAttributeMixin",
         "CustomEnchantDamageMixin",
         "EnchantmentScreenHandlerMixin",
         "LootModifierMixin",

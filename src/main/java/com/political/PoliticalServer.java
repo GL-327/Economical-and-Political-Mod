@@ -3,7 +3,7 @@ package com.political;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.minecraft.server.command.CommandManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -35,7 +35,7 @@ import java.util.UUID;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PoliticalServer implements ModInitializer {
+public class PoliticalServer implements DedicatedServerModInitializer {
     public static final String MOD_ID = "politicalserver";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     
@@ -49,7 +49,7 @@ public class PoliticalServer implements ModInitializer {
     private static final Map<UUID, List<ItemStack>> pendingSoulboundItems = new ConcurrentHashMap<>();
 
     @Override
-    public void onInitialize() {
+    public void onInitializeServer() {
         LOGGER.info("PoliticalServer mod initializing");
 
         // Register custom items
