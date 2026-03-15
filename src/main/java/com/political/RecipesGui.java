@@ -230,15 +230,6 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openHPEBMRecipes(player)).build());
 
 
-        gui.setSlot(27, new GuiElementBuilder(Items.NETHERITE_HELMET)
-                .setName(Text.literal("🌑 Voidwalker's Crown").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("A mysterious crown from the void").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("grants dimensional powers.").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openVoidwalkerCrownRecipe(player)).build());
-
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED))
                 .setCallback((idx, type, action) -> player.closeHandledScreen()).build());

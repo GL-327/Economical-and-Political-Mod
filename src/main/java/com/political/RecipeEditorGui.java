@@ -45,7 +45,8 @@ public class RecipeEditorGui {
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
-        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY);
+        MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY),
+        ATTRIBUTE_TOKENS("✧ Attribute Tokens",               Items.PAPER,              Formatting.LIGHT_PURPLE);
 
         final String label;
         final net.minecraft.item.Item icon;
@@ -123,6 +124,23 @@ public class RecipeEditorGui {
                     items.add(SlayerItems.createCore(t));
                     items.add(SlayerItems.createChunk(t));
                 }
+                // Add attribute cores
+                for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
+                    items.add(SlayerItems.createAttributeCore(attr));
+                }
+            }
+            case ATTRIBUTE_TOKENS -> {
+                // Add all 10 attribute tokens
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.BURNING));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.SIGHTLESS));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.FRENZIED));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.GROUNDED));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.WEBBED));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.FROST));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.PHANTOMSTEP));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.CURSED));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.OVERGROWN));
+                items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.VOLATILE));
             }
         }
         return items;
