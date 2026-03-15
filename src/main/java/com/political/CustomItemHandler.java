@@ -1,46 +1,59 @@
 package com.political;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.minecraft.block.AbstractCauldronBlock;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.WindChargeEntity;
+import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.boss.BossBar;
+import net.minecraft.entity.boss.ServerBossBar;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-
+import net.minecraft.world.World;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.block.AbstractCauldronBlock;
+import com.political.SlayerItems;
+import com.political.SlayerManager;
+import com.political.CoinManager;
 import java.util.*;
 
 public class CustomItemHandler {
@@ -455,21 +468,20 @@ public class CustomItemHandler {
 
         ServerWorld world = player.getEntityWorld();
 
-        // Fling the player upward
-        player.setVelocity(player.getVelocity().add(0, 1.5, 0));
-        player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(player));
+        // Spawn a real wind charge entity at player position
+        WindChargeEntity windCharge = new WindChargeEntity(EntityType.WIND_CHARGE, world);
+        windCharge.setOwner(player);
+        windCharge.setPosition(player.getX(), player.getY() + 1.0, player.getZ());
+        
+        // Aim the wind charge downward to create upward launch effect
+        windCharge.setVelocity(0, -1.0, 0);
+        
+        world.spawnEntity(windCharge);
 
-        // Wind/cloud particles
+        // Additional visual feedback
         ((ServerWorld) world).spawnParticles(ParticleTypes.CLOUD,
                 player.getX(), player.getY() + 0.5, player.getZ(),
-                20, 0.5, 0.2, 0.5, 0.05);
-        ((ServerWorld) world).spawnParticles(ParticleTypes.POOF,
-                player.getX(), player.getY(), player.getZ(),
-                15, 0.6, 0.1, 0.6, 0.1);
-
-        // Launch sound
-        world.playSoundFromEntity(null, player, SoundEvents.ITEM_TRIDENT_THROW.value(),
-                SoundCategory.PLAYERS, 1.0f, 0.6f);
+                10, 0.3, 0.1, 0.3, 0.05);
 
         player.sendMessage(Text.literal("⚡ GAVEL LAUNCH! ⚡").formatted(Formatting.GOLD, Formatting.BOLD), true);
         return true;
@@ -819,39 +831,47 @@ public class CustomItemHandler {
         return stack.isOf(Items.IRON_BOOTS) && hasCustomTag(stack, "hermes_shoes");
     }
 
-    public static void registerSlayerDamageHook() {
-        // Hook into entity damage - Fabric API
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-            // Only process if attacker is a player
-            if (!(source.getAttacker() instanceof ServerPlayerEntity player)) {
-                return true; // Allow damage, no modification
+    /** Checks if player is wearing Crown of Greed or Crown of Midas */
+    private static boolean isWearingCrownOfGreedOrMidas(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
+        return SlayerItems.isCrownOfGreed(helmet) || SlayerItems.isCrownOfMidas(helmet);
+    }
+
+    public static void registerGoldOnlyRestrictions() {
+        // Block non-gold item usage (right-click, interact)
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (isWearingCrownOfGreedOrMidas((ServerPlayerEntity) player)) {
+                ItemStack stack = player.getStackInHand(hand);
+                if (!isGoldItem(stack)) {
+                    player.sendMessage(Text.literal(" Only gold items can be used while wearing the crown!").formatted(Formatting.YELLOW), true);
+                    return ActionResult.FAIL;
+                }
             }
+            return ActionResult.PASS;
+        });
 
-            // Check if target is a slayer boss
-            if (!SlayerManager.isSlayerBoss(entity.getUuid())) {
-                return true;
+        // Block non-gold item usage on entities
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (isWearingCrownOfGreedOrMidas((ServerPlayerEntity) player)) {
+                ItemStack stack = player.getStackInHand(hand);
+                if (!isGoldItem(stack)) {
+                    player.sendMessage(Text.literal(" Only gold items can be used while wearing the crown!").formatted(Formatting.YELLOW), true);
+                    return ActionResult.FAIL;
+                }
             }
+            return ActionResult.PASS;
+        });
 
-            // Get the weapon
-            ItemStack weapon = player.getMainHandStack();
-
-            // Calculate damage resistance bypass
-            double damageResistance = SlayerManager.getDamageResistance(entity.getUuid());
-
-            // Slayer weapons bypass resistance entirely
-            if (SlayerItems.bypassesSlayerResistance(weapon)) {
-                // No resistance applied, allow full damage
-                return true;
+        // Block non-gold item usage (general right-click)
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            if (isWearingCrownOfGreedOrMidas((ServerPlayerEntity) player)) {
+                ItemStack stack = player.getStackInHand(hand);
+                if (!isGoldItem(stack)) {
+                    player.sendMessage(Text.literal(" Only gold items can be used while wearing the crown!").formatted(Formatting.YELLOW), true);
+                    return ActionResult.FAIL;
+                }
             }
-
-            // Non-slayer weapons take resistance penalty
-            if (damageResistance > 0) {
-                // We can't modify damage directly with ALLOW_DAMAGE
-                // Instead we'll use a mixin or apply damage ourselves
-                // For now, return true and handle in modification event
-            }
-
-            return true;
+            return ActionResult.PASS;
         });
     }
 
@@ -884,10 +904,15 @@ public class CustomItemHandler {
             modifiedDamage *= digits;
         }
 
+        // Crown of Midas: multiply damage by 2x number of digits in coin count
+        if (SlayerItems.isCrownOfMidas(attacker.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD))) {
+            int coins = CoinManager.getCoins(attacker);
+            int digits = coins > 0 ? String.valueOf(coins).length() : 1;
+            modifiedDamage *= (digits * 2);
+        }
         return modifiedDamage;
     }
 
-    /** Tick handler for Crown of Greed: enforces 4 HP max health and suppresses potion effects. */
     public static void tickCrownOfGreed(ServerPlayerEntity player) {
         ItemStack helmet = player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD);
         net.minecraft.util.Identifier modId = net.minecraft.util.Identifier.of("political", "crown_of_greed_hp");
@@ -901,6 +926,11 @@ public class CustomItemHandler {
             return;
         }
 
+        // Check for non-gold items in inventory and remove them
+        if (player.age % 20 == 0) { // Check every second
+            removeNonGoldItems(player);
+        }
+
         // Enforce 4 HP max health (2 hearts) via attribute modifier
         if (healthAttr != null && healthAttr.getModifier(modId) == null) {
             healthAttr.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
@@ -908,11 +938,77 @@ public class CustomItemHandler {
         }
         // Cap health to 4 if it somehow exceeds it
         if (player.getHealth() > 4.0f) player.setHealth(4.0f);
+    }
 
-        // Suppress all potion effects every second
-        if (player.age % 20 == 0) {
-            player.clearStatusEffects();
+    /** Tick handler for Crown of Midas: enforces 10 HP max health and gold-only restriction. */
+    public static void tickCrownOfMidas(ServerPlayerEntity player) {
+        ItemStack helmet = player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD);
+        net.minecraft.util.Identifier modId = net.minecraft.util.Identifier.of("political", "crown_of_midas_hp");
+        var healthAttr = player.getAttributeInstance(net.minecraft.entity.attribute.EntityAttributes.MAX_HEALTH);
+
+        if (!SlayerItems.isCrownOfMidas(helmet)) {
+            // Remove the modifier if crown is no longer worn
+            if (healthAttr != null && healthAttr.getModifier(modId) != null) {
+                healthAttr.removeModifier(modId);
+            }
+            return;
         }
+
+        // Check for non-gold items in inventory and remove them
+        if (player.age % 20 == 0) { // Check every second
+            removeNonGoldItems(player);
+        }
+
+        // Enforce 10 HP max health (5 hearts) via attribute modifier
+        if (healthAttr != null && healthAttr.getModifier(modId) == null) {
+            healthAttr.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
+                    modId, -10.0, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADD_VALUE));
+        }
+        // Cap health to 10 if it somehow exceeds it
+        if (player.getHealth() > 10.0f) player.setHealth(10.0f);
+    }
+
+    /** Removes non-gold items from player's inventory (for Crown of Greed/Midas restriction). */
+    private static void removeNonGoldItems(ServerPlayerEntity player) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (!stack.isEmpty() && !isGoldItem(stack)) {
+                // Drop the item on the ground
+                player.dropItem(stack, true, false);
+                player.getInventory().removeStack(i);
+                player.sendMessage(Text.literal(" Only gold items allowed while wearing the crown!").formatted(Formatting.YELLOW), true);
+                break; // Only remove one item per check to avoid spam
+            }
+        }
+    }
+
+    /** Checks if an item is made of gold or is a gold-related item. */
+    private static boolean isGoldItem(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        
+        // Check for gold items by material type
+        Item item = stack.getItem();
+        return item == Items.GOLD_INGOT ||
+               item == Items.GOLD_NUGGET ||
+               item == Items.GOLD_BLOCK ||
+               item == Items.GOLDEN_SWORD ||
+               item == Items.GOLDEN_PICKAXE ||
+               item == Items.GOLDEN_AXE ||
+               item == Items.GOLDEN_SHOVEL ||
+               item == Items.GOLDEN_HOE ||
+               item == Items.GOLDEN_HELMET ||
+               item == Items.GOLDEN_CHESTPLATE ||
+               item == Items.GOLDEN_LEGGINGS ||
+               item == Items.GOLDEN_BOOTS ||
+               item == Items.GOLDEN_APPLE ||
+               item == Items.ENCHANTED_GOLDEN_APPLE ||
+               item == Items.RAW_GOLD ||
+               item == Items.GILDED_BLACKSTONE ||
+               item == Items.LIGHT_WEIGHTED_PRESSURE_PLATE ||
+               item == Items.HEAVY_WEIGHTED_PRESSURE_PLATE ||
+               // Check for custom gold items by name
+               (stack.get(DataComponentTypes.CUSTOM_NAME) != null && 
+                stack.get(DataComponentTypes.CUSTOM_NAME).getString().toLowerCase().contains("gold"));
     }
 
     public static void tickSlayerSystems(ServerPlayerEntity player) {

@@ -54,6 +54,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
         // Register custom items
         CustomItemHandler.register();
+        
+        // Register gold-only restrictions for Crown of Greed/Midas
+        CustomItemHandler.registerGoldOnlyRestrictions();
 
         // Register villager interaction for Auction Master and Underground Auctioneer
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
@@ -274,6 +277,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     SlayerArmorHandler.applyCustomArmorAttributes(player);
                     T2ArmorAbilityHandler.tick(player);
                     CustomItemHandler.tickCrownOfGreed(player);
+                    CustomItemHandler.tickCrownOfMidas(player);
                     ArmourAttributeHandler.tick(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }

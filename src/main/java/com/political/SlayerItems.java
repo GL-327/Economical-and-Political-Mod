@@ -1538,6 +1538,13 @@ public class SlayerItems {
         return name != null && name.getString().contains("Crown of Greed");
     }
 
+    public static boolean isCrownOfMidas(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        if (hasCustomItemId(stack, "crown_of_midas")) return true;
+        Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
+        return name != null && name.getString().contains("Crown of Midas");
+    }
+
     public static boolean canUseSkeletonBow(ServerPlayerEntity player) {
         int level = SlayerData.getSlayerLevel(player.getUuidAsString(), SlayerManager.SlayerType.SKELETON);
         return level >= SKELETON_BOW_LEVEL_REQ;
@@ -2307,7 +2314,7 @@ public class SlayerItems {
         lore.add(Text.literal("  (e.g. 999 coins = ×3 damage)").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.GOLD));
-        lore.add(Text.literal("✗ All potion effects suppressed").formatted(Formatting.RED));
+        lore.add(Text.literal("✗ Only allows gold items").formatted(Formatting.RED));
         lore.add(Text.literal("✗ All bounty buffs/defence disabled").formatted(Formatting.RED));
         lore.add(Text.literal("✗ All armour defence cleared").formatted(Formatting.RED));
         lore.add(Text.literal(""));
@@ -2319,6 +2326,36 @@ public class SlayerItems {
         crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         crown.set(DataComponentTypes.MAX_DAMAGE, 5000); // Buffed durability
         setCustomItemId(crown, "crown_of_greed");
+        return crown;
+    }
+
+    public static ItemStack createCrownOfMidas() {
+        ItemStack crown = new ItemStack(Items.GOLDEN_HELMET);
+        crown.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFFD700));
+        crown.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("👑 Crown of Midas").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[MFLUX Research Division | Specimen CRD-008-M]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("❤ Max Health: 10 HP (5 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 0 (all defence removed)").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: ×(digits of your coins × 2)").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("  (e.g. 999 coins = ×6 damage)").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ EFFECTS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✓ Only allows gold items").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✗ All bounty buffs/defence disabled").formatted(Formatting.RED));
+        lore.add(Text.literal("✗ All armour defence cleared").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ WARNING ━━━").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("💀 ON DEATH: Lose ALL coins!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("\"The golden touch comes at a price.\"").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        crown.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        crown.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        crown.set(DataComponentTypes.MAX_DAMAGE, 5000); // Buffed durability
+        setCustomItemId(crown, "crown_of_midas");
         return crown;
     }
 
