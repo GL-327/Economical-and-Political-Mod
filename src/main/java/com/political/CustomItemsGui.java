@@ -125,7 +125,7 @@ public class CustomItemsGui {
                 .build());
 
         // 👑 Piglin Items
-        gui.setSlot(17, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("• Crown of Greed").formatted(Formatting.GOLD))
@@ -135,6 +135,18 @@ public class CustomItemsGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openPiglinMenu(player))
+                .glow()
+                .build());
+
+        // ✧ Attribute Tokens
+        gui.setSlot(17, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("All 10 armor attribute tokens").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAttributeTokensMenu(player))
                 .glow()
                 .build());
 
@@ -361,6 +373,27 @@ public class CustomItemsGui {
         }
 
         gui.open();
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // ATTRIBUTE TOKENS MENU
+    // ════════════════════════════════════════════════════════════
+
+    private static void openAttributeTokensMenu(ServerPlayerEntity player) {
+        List<ItemStack> items = new ArrayList<>();
+        // Add all 10 attribute tokens
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.BURNING));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.SIGHTLESS));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.FRENZIED));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.GROUNDED));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.WEBBED));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.FROST));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.PHANTOMSTEP));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.CURSED));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.OVERGROWN));
+        items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.VOLATILE));
+        
+        openSubPage(player, "✧ Attribute Tokens", items, 0);
     }
 }
 

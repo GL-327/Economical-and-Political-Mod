@@ -198,6 +198,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openCrownOfGreedRecipe(player)).build());
 
+        gui.setSlot(30, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("All 10 attribute types!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openAttributeTokensRecipes(player)).build());
+
         gui.setSlot(31, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✦ Auction Items").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
@@ -880,6 +888,91 @@ public class RecipesGui {
         openRecipePage(player, pageTitle,
                 Text.literal("👑 Crown of Greed Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
                 grid, result, () -> openMainMenu(player));
+    }
+
+    // ============================================================
+    // ATTRIBUTE TOKENS RECIPES
+    // ============================================================
+    private static void openAttributeTokensRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✧ Attribute Tokens"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click a token to view recipe!").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        // Add all 10 attribute tokens
+        int[] slots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30};
+        com.political.ArmourAttribute[] attributes = com.political.ArmourAttribute.values();
+        
+        for (int i = 0; i < Math.min(attributes.length, slots.length); i++) {
+            final com.political.ArmourAttribute attr = attributes[i];
+            ItemStack token = SlayerItems.createAttributeToken(attr);
+            Text tokenName = token.get(DataComponentTypes.CUSTOM_NAME);
+            
+            GuiElementBuilder eb = new GuiElementBuilder(Items.PAPER)
+                    .setName(tokenName != null ? tokenName : Text.literal(attr.displayName + " Token").formatted(attr.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                    .addLoreLine(Text.literal("• 8x " + attr.displayName + " Cores").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("• 1x Paper").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("XP Cost: " + attr.xpCost + " levels").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openAttributeTokenRecipe(player, attr));
+            gui.setSlot(slots[i], eb.build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openAttributeTokenRecipe(ServerPlayerEntity player, com.political.ArmourAttribute attr) {
+        ItemStack result = SlayerItems.createAttributeToken(attr);
+        String pageTitle = "✧ " + attr.displayName + " Attribute Token";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openAttributeTokensRecipes(player))) return;
+
+        // Since attribute tokens are boss drops, they don't have traditional recipes
+        // We'll show a "boss drop" information page instead
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(pageTitle));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
+                .setName(result.get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .build());
+
+        gui.setSlot(22, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("🎯 Boss Drop Only").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Attribute Tokens are rare drops").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("from high-level bounty bosses!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Drop chance increases with").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("bounty tier (T3-T5)").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Use with armor in anvil to apply!").formatted(Formatting.GREEN))
+                .glow()
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAttributeTokensRecipes(player)).build());
+
+        gui.open();
     }
 
 }
