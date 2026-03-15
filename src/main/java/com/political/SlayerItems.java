@@ -339,15 +339,81 @@ public class SlayerItems {
         nbt.putString(ARMOR_ATTRIBUTE_KEY, attribute.id);
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
         
-        // Add to lore
-        LoreComponent loreComp = stack.get(DataComponentTypes.LORE);
-        List<Text> lines = new ArrayList<>();
-        if (loreComp != null) {
-            lines.addAll(loreComp.lines());
+        // Add enhanced lore to the armor piece
+        List<Text> existingLore = new ArrayList<>();
+        LoreComponent currentLore = stack.get(DataComponentTypes.LORE);
+        if (currentLore != null) {
+            existingLore.addAll(currentLore.lines());
         }
-        lines.add(Text.literal(""));
-        lines.add(Text.literal("ATTRIBUTE: " + attribute.displayName).formatted(attribute.color, Formatting.BOLD));
-        stack.set(DataComponentTypes.LORE, new LoreComponent(lines));
+        
+        // Add attribute lore at the beginning
+        List<Text> newLore = new ArrayList<>();
+        newLore.add(Text.literal(""));
+        newLore.add(Text.literal("◆ " + attribute.displayName + " ATTRIBUTE").formatted(attribute.color, Formatting.BOLD));
+        newLore.add(Text.literal(""));
+        
+        // Add thematic description based on attribute type
+        switch (attribute) {
+            case BURNING -> {
+                newLore.add(Text.literal("✦ Eternal flame courses through this armor").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Immune to fire extinguishment").formatted(Formatting.YELLOW));
+                break;
+            }
+            case SIGHTLESS -> {
+                newLore.add(Text.literal("✦ Darkness reveals all to the wearer").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Visual impairments have no effect").formatted(Formatting.YELLOW));
+                break;
+            }
+            case FRENZIED -> {
+                newLore.add(Text.literal("✦ Berserk rage enhances attack speed").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Occasional nausea from raw power").formatted(Formatting.YELLOW));
+                break;
+            }
+            case GROUNDED -> {
+                newLore.add(Text.literal("✦ Earth's protection against lightning").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Deflect incoming projectiles").formatted(Formatting.YELLOW));
+                break;
+            }
+            case WEBBED -> {
+                newLore.add(Text.literal("✦ Move freely through cobwebs").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Spiders view you as neutral").formatted(Formatting.YELLOW));
+                break;
+            }
+            case FROST -> {
+                newLore.add(Text.literal("✦ Walk on water as frozen ground").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Cold environments no longer harm").formatted(Formatting.YELLOW));
+                break;
+            }
+            case PHANTOMSTEP -> {
+                newLore.add(Text.literal("✦ Walk with spectral silence").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Gravity's pull weakened").formatted(Formatting.YELLOW));
+                break;
+            }
+            case CURSED -> {
+                newLore.add(Text.literal("✦ Vampiric life steal on kills").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Dark power corrupts the soul").formatted(Formatting.YELLOW));
+                break;
+            }
+            case OVERGROWN -> {
+                newLore.add(Text.literal("✦ Regenerate on natural ground").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Earth's vitality flows through").formatted(Formatting.YELLOW));
+                break;
+            }
+            case VOLATILE -> {
+                newLore.add(Text.literal("✦ Explosive death when near defeat").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Blast immunity protects wearer").formatted(Formatting.YELLOW));
+                break;
+            }
+        }
+        
+        newLore.add(Text.literal(""));
+        newLore.add(Text.literal("━━━ ORIGINAL STATS ━━━").formatted(Formatting.DARK_GRAY));
+        
+        // Add existing lore after the attribute section
+        newLore.addAll(existingLore);
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(newLore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     public static boolean isZombieBerserkerHelmet(ItemStack stack) {
