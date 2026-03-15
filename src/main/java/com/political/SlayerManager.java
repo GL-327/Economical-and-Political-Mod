@@ -122,11 +122,11 @@ public class SlayerManager {
 
     public static final TierConfig[] TIERS = {
             //          tier, kills, baseHP, baseDmg, cost,  coinReward, xp,   minLvl, dmgResist, miniBosses
-            new TierConfig(1,  10,    100,    4,       100,   50,         5,    0,      0.0,       0),
+            new TierConfig(1,  3,     100,    4,       100,   50,         5,    0,      0.0,       0),
             new TierConfig(2,  20,    500,    8,       500,   150,        25,   1,      0.15,      1),
             new TierConfig(3,  40,    2000,   15,      2000,  400,        100,  3,      0.30,      2),
             new TierConfig(4,  60,    10000,  25,      10000, 1000,       500,  5,      0.50,      3),
-            new TierConfig(5,  100,   50000,  40,      50000, 3000,       1500, 7,      0.65,      4),
+            new TierConfig(5,  11,    50000,  40,      50000, 3000,       1500, 7,      0.65,      4),
     };
 
     public static int getKillsRequired(SlayerType type, int tier) {

@@ -200,14 +200,14 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openArmorRecipes(player)).build());
 
-        // Row 3: Special Items
+        // Row 3: Special Items & Crowns
         gui.setSlot(37, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Text.literal("👑 Crown of Greed").formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("👑 Legendary Crowns").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("3 Piglin Cores + 2 Piglin Flesh + Gold Helmet").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("The ultimate gamble!").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("Crown of Greed, Crown of Midas").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Voidwalker's Crown").formatted(Formatting.DARK_PURPLE))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openCrownOfGreedRecipe(player)).build());
+                .setCallback((idx, type, action) -> openLegendaryItems(player)).build());
 
         gui.setSlot(38, new GuiElementBuilder(Items.GOLDEN_SWORD)
                 .setName(Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
@@ -217,13 +217,6 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("4x digit damage multiplier!").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
                 .setCallback((idx, type, action) -> openMidasSwordRecipe(player)).build());
-
-        gui.setSlot(39, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Text.literal("👑 Crown of Midas").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("3x coin digit damage multiplier!").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openCrownOfMidasRecipe(player)).build());
 
         // Row 4: Materials & Storage
         gui.setSlot(19, new GuiElementBuilder(Items.IRON_BLOCK)
@@ -245,7 +238,6 @@ public class RecipesGui {
         gui.setSlot(21, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("All 10 attribute types!").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))

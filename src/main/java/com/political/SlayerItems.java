@@ -64,6 +64,8 @@ public class SlayerItems {
     public static final String BOUNTY_SWORD_UPGRADED_TAG = "bounty_sword_upgraded";
     public static final String ARMOR_ATTRIBUTE_TOKEN_KEY = "armor_attribute_token";
     public static final String ARMOR_ATTRIBUTE_KEY = "ArmourAttribute";
+    public static final String WEAPON_ATTRIBUTE_TOKEN_KEY = "weapon_attribute_token";
+    public static final String WEAPON_ATTRIBUTE_KEY = "WeaponAttribute";
 
     /** Returns the thematic display name for a T1 bounty sword of the given type. */
     public static String getSwordDisplayName(SlayerManager.SlayerType type) {
@@ -3664,5 +3666,113 @@ public class SlayerItems {
         boots.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(boots, "gilded_netherite_boots");
         return boots;
+    }
+
+    // ============================================================
+    // WEAPON ATTRIBUTE SYSTEM
+    // ============================================================
+
+    public static boolean isWeaponAttributeToken(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        return data != null && data.copyNbt().contains(WEAPON_ATTRIBUTE_TOKEN_KEY);
+    }
+
+    public static WeaponAttribute getWeaponAttributeFromToken(ItemStack stack) {
+        if (!isWeaponAttributeToken(stack)) return null;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        String id = data.copyNbt().getString(WEAPON_ATTRIBUTE_TOKEN_KEY).orElse("");
+        return WeaponAttribute.fromId(id);
+    }
+
+    public static WeaponAttribute getAppliedWeaponAttribute(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return null;
+        NbtComponent data = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (data == null) return null;
+        String id = data.copyNbt().getString(WEAPON_ATTRIBUTE_KEY).orElse("");
+        return WeaponAttribute.fromId(id);
+    }
+
+    public static void applyWeaponAttribute(ItemStack stack, WeaponAttribute attribute) {
+        NbtComponent existing = stack.get(DataComponentTypes.CUSTOM_DATA);
+        NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
+        nbt.putString(WEAPON_ATTRIBUTE_KEY, attribute.id);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        
+        // Add enhanced lore to the weapon
+        List<Text> existingLore = new ArrayList<>();
+        LoreComponent currentLore = stack.get(DataComponentTypes.LORE);
+        if (currentLore != null) {
+            existingLore.addAll(currentLore.lines());
+        }
+        
+        // Add attribute lore at the beginning
+        List<Text> newLore = new ArrayList<>();
+        newLore.add(Text.literal(""));
+        newLore.add(Text.literal("⚔ " + attribute.displayName + " ATTRIBUTE").formatted(attribute.color, Formatting.BOLD));
+        newLore.add(Text.literal(""));
+        
+        // Add thematic description based on attribute type
+        switch (attribute) {
+            case SHARP -> {
+                newLore.add(Text.literal("✦ Enhanced cutting power").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Critical strikes more frequent").formatted(Formatting.YELLOW));
+                break;
+            }
+            case SWIFT -> {
+                newLore.add(Text.literal("✦ Lightning-fast attacks").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ No cooldown between strikes").formatted(Formatting.YELLOW));
+                break;
+            }
+            case VAMPIRIC -> {
+                newLore.add(Text.literal("✦ Life stolen from victims").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Dark power flows through blade").formatted(Formatting.YELLOW));
+                break;
+            }
+            case FROSTBITE -> {
+                newLore.add(Text.literal("✦ Cold bites at enemies").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Ice forms on impact").formatted(Formatting.YELLOW));
+                break;
+            }
+            case THUNDER -> {
+                newLore.add(Text.literal("✦ Lightning crackles in blade").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Storm power unleashed").formatted(Formatting.YELLOW));
+                break;
+            }
+            case POISON -> {
+                newLore.add(Text.literal("✦ Venom drips from edge").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Toxins infect targets").formatted(Formatting.YELLOW));
+                break;
+            }
+            case EXPLOSIVE -> {
+                newLore.add(Text.literal("✦ Blast radius on impact").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Explosive force applied").formatted(Formatting.YELLOW));
+                break;
+            }
+            case HOLY -> {
+                newLore.add(Text.literal("✦ Sacred light radiates").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Unholy enemies burn").formatted(Formatting.YELLOW));
+                break;
+            }
+            case SHADOW -> {
+                newLore.add(Text.literal("✦ Darkness cloaks wielder").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Shadows conceal movements").formatted(Formatting.YELLOW));
+                break;
+            }
+            case WIND -> {
+                newLore.add(Text.literal("✦ Gale force in strikes").formatted(Formatting.YELLOW));
+                newLore.add(Text.literal("✦ Air currents obey blade").formatted(Formatting.YELLOW));
+                break;
+            }
+        }
+        
+        newLore.add(Text.literal(""));
+        newLore.add(Text.literal("━━━ ORIGINAL STATS ━━━").formatted(Formatting.DARK_GRAY));
+        
+        // Add existing lore after the attribute section
+        newLore.addAll(existingLore);
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(newLore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 }

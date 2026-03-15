@@ -572,7 +572,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Crafting Material」").formatted(Formatting.DARK_AQUA));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 10000, stack);
+        return new AuctionItem(name, "special", 15000000, stack);
     }
     private static AuctionItem createNetheriteArmor() {
         ItemStack stack;
@@ -624,7 +624,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name + " (Prot " + protLevel + ")", "armor", 500 + (protLevel * 50), stack);
+        return new AuctionItem(name + " (Prot " + protLevel + ")", "armor", 15000000 + (protLevel * 1000000), stack);
     }
 
     private static AuctionItem createNetheriteSword() {
@@ -656,7 +656,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name + " (Sharp " + sharpLevel + ")", "weapon", 600 + (sharpLevel * 75), stack);
+        return new AuctionItem(name + " (Sharp " + sharpLevel + ")", "weapon", 15000000 + (sharpLevel * 1000000), stack);
     }
 
     private static AuctionItem createUltimatePotion() {
@@ -686,7 +686,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "potion", 650, stack);
+        return new AuctionItem(name, "potion", 15000000, stack);
     }
 
     private static AuctionItem createHarveysStick() {
@@ -714,7 +714,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 1750, stack);
+        return new AuctionItem(name, "special", 15000000, stack);
     }
 
     private static AuctionItem createTheGavel() {
@@ -746,7 +746,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 5000, stack);
+        return new AuctionItem(name, "special", 15000000, stack);
     }
 
     private static AuctionItem createHermesShoes() {
@@ -779,7 +779,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 3000, stack);
+        return new AuctionItem(name, "special", 15000000, stack);
     }
 
     private static AuctionItem createHPEBM() {
@@ -811,7 +811,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 2500, stack);
+        return new AuctionItem(name, "special", 15000000, stack);
     }
 
     private static AuctionItem createEnchantedElytra() {
@@ -839,7 +839,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "armor", 4000, stack);
+        return new AuctionItem(name, "armor", 15000000, stack);
     }
 
     private static AuctionItem createSuperBow() {
@@ -872,7 +872,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "weapon", 1500, stack);
+        return new AuctionItem(name, "weapon", 15000000, stack);
     }
 
     private static AuctionItem createFortunePick() {
@@ -905,7 +905,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name + " (Fortune " + fortuneLevel + ")", "tool", 800 + (fortuneLevel * 100), stack);
+        return new AuctionItem(name + " (Fortune " + fortuneLevel + ")", "tool", 15000000 + (fortuneLevel * 1000000), stack);
     }
 
     private static void addEnchantment(ItemStack stack, RegistryKey<Enchantment> enchantmentKey, int level) {
