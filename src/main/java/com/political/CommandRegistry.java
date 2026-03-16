@@ -69,14 +69,6 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-        dispatcher.register(CommandManager.literal("recipe")
-                .executes(context -> {
-                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    RecipesGui.openMainMenu(player);
-                    return 1;
-                })
-        );
-
         // Setrecipe command
         dispatcher.register(CommandManager.literal("setrecipe")
                 .executes(context -> {
@@ -93,7 +85,7 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-// Alias
+        // Recipe command with arguments
         dispatcher.register(CommandManager.literal("recipe")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
