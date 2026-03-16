@@ -333,16 +333,6 @@ public class CustomItemsGui {
         player.sendMessage(Text.literal("Special weapons menu coming soon!").formatted(Formatting.YELLOW), false);
     }
 
-    private static void openBossDropsMenu(ServerPlayerEntity player) {
-        // TODO: Implement boss drops menu
-        player.sendMessage(Text.literal("Boss drops menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openMaterialsMenu(ServerPlayerEntity player) {
-        // TODO: Implement materials menu
-        player.sendMessage(Text.literal("Materials menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
     private static void openPiglinMenu(ServerPlayerEntity player) {
         // TODO: Implement piglin menu
         player.sendMessage(Text.literal("Piglin menu coming soon!").formatted(Formatting.YELLOW), false);
@@ -364,7 +354,178 @@ public class CustomItemsGui {
     }
 
     private static void openAttributeTokensMenu(ServerPlayerEntity player) {
-        // TODO: Implement attribute tokens menu
-        player.sendMessage(Text.literal("Attribute tokens menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔️ Weapon Attributes"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_GRAY))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("⚔️ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🔥 Apply weapon abilities").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚡ 10 unique attributes").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // Weapon attribute items
+        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        WeaponAttribute[] attributes = WeaponAttribute.values();
+        
+        for (int i = 0; i < 10 && i < slots.length; i++) {
+            WeaponAttribute attr = attributes[i];
+            ItemStack token = SlayerItems.createAttributeToken(attr);
+            
+            List<Text> lore = new ArrayList<>();
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(attr.displayName).formatted(Formatting.GOLD));
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(attr.buffSummary).formatted(Formatting.GREEN));
+            lore.add(Text.literal(""));
+            if (!attr.debuffSummary.isEmpty()) {
+                lore.add(Text.literal("⚠️ " + attr.debuffSummary).formatted(Formatting.RED));
+            }
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("💰 Cost: " + attr.xpCost + " XP").formatted(Formatting.YELLOW));
+            
+            gui.setSlot(slots[i], new GuiElementBuilder(token)
+                    .setName(Text.literal(attr.displayName).formatted(Formatting.GOLD, Formatting.BOLD))
+                    .setLore(lore)
+                    .glow()
+                    .build());
+        }
+
+        // Navigation
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openBossDropsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("💀 Boss Drops"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_GRAY))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("💀 Boss Drops").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🏆 Rare boss materials").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // Boss drop items
+        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        ItemStack[] drops = {
+            SlayerItems.createWardenHeart(),
+            SlayerItems.createEndermanCore(),
+            SlayerItems.createPiglinCore(),
+            SlayerItems.createSpiderCore(),
+            SlayerItems.createSkeletonCore(),
+            SlayerItems.createSlimeCore(),
+            SlayerItems.createZombieCore(),
+            SlayerItems.createUndeadHeart()
+        };
+
+        for (int i = 0; i < drops.length && i < slots.length; i++) {
+            ItemStack drop = drops[i];
+            List<Text> lore = new ArrayList<>();
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(drop.get(DataComponentTypes.CUSTOM_NAME).getString().orElse("Unknown")));
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("🏆 Boss drop material").formatted(Formatting.GOLD));
+            
+            gui.setSlot(slots[i], new GuiElementBuilder(drop)
+                    .setName(drop.get(DataComponentTypes.CUSTOM_NAME))
+                    .setLore(lore)
+                    .glow()
+                    .build());
+        }
+
+        // Navigation
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openMaterialsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🧱 Slayer Materials"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_GRAY))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_INGOT)
+                .setName(Text.literal("🧱 Slayer Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("📦 All slayer type materials").formatted(Formatting.GOLD))
+                .glow()
+                .build());
+
+        // Material items
+        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        
+        for (int i = 0; i < Math.min(types.length, slots.length); i++) {
+            SlayerManager.SlayerType type = types[i];
+            ItemStack material = SlayerItems.createChunk(type);
+            
+            List<Text> lore = new ArrayList<>();
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(type.toString() + " Core").formatted(Formatting.YELLOW));
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("📦 Essential crafting material").formatted(Formatting.GRAY));
+            
+            gui.setSlot(slots[i], new GuiElementBuilder(material)
+                    .setName(Text.literal(type.toString() + " Core").formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .setLore(lore)
+                    .glow()
+                    .build());
+        }
+
+        // Navigation
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
     }
 }

@@ -131,7 +131,7 @@ public class SlayerManager {
 
     public static int getKillsRequired(SlayerType type, int tier) {
         if (type == SlayerType.WARDEN) {
-            return 1; // Wardens are rare, only need 1
+            return 1; // Wardens are rare, only need 1 kill for any tier
         }
         TierConfig config = getTierConfig(tier);
         return config != null ? config.killsRequired : 0;
@@ -572,6 +572,13 @@ public class SlayerManager {
                 return;
             }
             spawnPos = player.getBlockPos().up(2); // Spawn 2 blocks above
+            // Fix: Prevent Warden from going underground
+            if (boss instanceof net.minecraft.entity.mob.WardenEntity warden) {
+                warden.setPersistent();
+                // Force surface-only behavior
+                warden.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 0, false, false));
+                warden.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 1, 0, false, false));
+            }
         } else {
             // Create boss entity for other types
             boss = createBossEntity(world, type, config);

@@ -756,11 +756,11 @@ public class BankGui {
                 "📥 +50,000 coins - Main Account Deposit",
                 "📤 -25,000 coins - Savings Withdrawal", 
                 "📥 +100,000 coins - Shop Sale",
-                "📤 -75,000 coins - Loan Payment",
-                "📥 +10,000 coins - Interest Payment",
-                "📤 -5,000 coins - Transfer Fee",
-                "📥 +250,000 coins - Auction Winnings",
-                "📤 -50,000 coins - Equipment Purchase"
+                "📤 -50,000 coins - Equipment Purchase",
+                "📥 +25,000 coins - Bounty Reward",
+                "📤 -10,000 coins - Bank Fee",
+                "📥 +75,000 coins - Market Profit",
+                "📤 -15,000 coins - Auction Purchase"
         };
 
         // Display transactions

@@ -66,10 +66,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     if (AuctionMasterManager.isAuctionMaster(villager)) {
                         return AuctionMasterManager.handleInteraction(player, villager);
                     }
-                    // Check Underground Auctioneer
-                    if (UndergroundAuctionManager.isAuctioneer(villager)) {
-                        UndergroundAuctionGui.open(serverPlayer);
-                        return ActionResult.SUCCESS;
+                    // Check Stock Broker
+                    if (StockBrokerManager.isStockBroker(villager)) {
+                        return StockBrokerManager.handleInteraction(serverPlayer, villager);
                     }
                 }
             }
@@ -165,6 +164,71 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                                 } else {
                                     context.getSource().sendFeedback(() ->
                                             Text.literal("✗ No Auction Masters found in this dimension.").formatted(Formatting.RED), false);
+                                }
+                                return removed;
+                            })
+                    )
+            );
+
+            // /placestockbroker command
+            dispatcher.register(CommandManager.literal("placestockbroker")
+                    .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                    .executes(context -> {
+                        ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                        ServerWorld world = context.getSource().getWorld();
+                        StockBrokerManager.spawnStockBroker(world, player.getX(), player.getY(), player.getZ(), player.getYaw());
+                        context.getSource().sendFeedback(() ->
+                                Text.literal("✓ Spawned Stock Broker!").formatted(Formatting.BLUE), true);
+                        return 1;
+                    })
+                    .then(CommandManager.argument("x", DoubleArgumentType.doubleArg())
+                            .then(CommandManager.argument("y", DoubleArgumentType.doubleArg())
+                                    .then(CommandManager.argument("z", DoubleArgumentType.doubleArg())
+                                            .executes(context -> {
+                                                double x = DoubleArgumentType.getDouble(context, "x");
+                                                double y = DoubleArgumentType.getDouble(context, "y");
+                                                double z = DoubleArgumentType.getDouble(context, "z");
+                                                ServerWorld world = context.getSource().getWorld();
+                                                StockBrokerManager.spawnStockBroker(world, x, y, z, 0);
+                                                context.getSource().sendFeedback(() ->
+                                                        Text.literal("✓ Spawned Stock Broker at " + String.format("%.1f, %.1f, %.1f", x, y, z))
+                                                                .formatted(Formatting.BLUE), true);
+                                                return 1;
+                                            })
+                                    )
+                            )
+                    )
+            );
+
+            // /removestockbroker command
+            dispatcher.register(CommandManager.literal("removestockbroker")
+                    .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                    .executes(context -> {
+                        ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                        ServerWorld world = context.getSource().getWorld();
+
+                        if (StockBrokerManager.removeStockBroker(world, player, 5.0)) {
+                            context.getSource().sendFeedback(() ->
+                                    Text.literal("✓ Removed nearby Stock Broker!").formatted(Formatting.BLUE), true);
+                            return 1;
+                        } else {
+                            context.getSource().sendFeedback(() ->
+                                    Text.literal("✗ No Stock Broker found within 5 blocks.").formatted(Formatting.RED), false);
+                            return 0;
+                        }
+                    })
+                    .then(CommandManager.literal("all")
+                            .executes(context -> {
+                                ServerWorld world = context.getSource().getWorld();
+                                int removed = StockBrokerManager.removeAllStockBrokers(world);
+
+                                if (removed > 0) {
+                                    int finalRemoved = removed;
+                                    context.getSource().sendFeedback(() ->
+                                            Text.literal("✓ Removed " + finalRemoved + " Stock Broker(s)!").formatted(Formatting.BLUE), true);
+                                } else {
+                                    context.getSource().sendFeedback(() ->
+                                            Text.literal("✗ No Stock Brokers found in this dimension.").formatted(Formatting.RED), false);
                                 }
                                 return removed;
                             })

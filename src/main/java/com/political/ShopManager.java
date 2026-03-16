@@ -238,13 +238,7 @@ public class ShopManager {
                 CustomItemHandler.createHPEBM(3).getItem(),
                 CustomItemHandler.createHPEBM(4).getItem(),
                 CustomItemHandler.createHPEBM(5).getItem(),
-                CustomItemHandler.createUltraOverclockedBeam().getItem(),
-                // Boss Drops
-                SlayerItems.createUndeadHeart().getItem(),
-                SlayerItems.createEchoingCore().getItem(),
-                // Legendary Items
-                SlayerItems.createVoidwalkerCrown().getItem(),
-                SlayerItems.createCrownOfGreed().getItem()
+                CustomItemHandler.createUltraOverclockedBeam().getItem()
         ));
 
         // ===== COMPACTED MATERIALS =====

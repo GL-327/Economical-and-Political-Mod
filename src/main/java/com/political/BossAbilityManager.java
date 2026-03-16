@@ -1119,14 +1119,14 @@ public class BossAbilityManager {
     }
 
     private static boolean wardenSonicPulse(LivingEntity boss, ServerPlayerEntity target, ServerWorld world) {
-        Box area = boss.getBoundingBox().expand(8);
+        Box area = boss.getBoundingBox().expand(6);
 
         for (ServerPlayerEntity player : world.getEntitiesByClass(ServerPlayerEntity.class, area, p -> true)) {
             double dist = player.distanceTo(boss);
-            float damage = (float) (15.0 * (1 - dist / 8.0));
+            float damage = (float) (8.0 * (1 - dist / 6.0));
             if (damage > 0) {
                 player.damage(world, boss.getDamageSources().sonicBoom(boss), damage);
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20, 0));
             }
         }
 
@@ -1149,13 +1149,13 @@ public class BossAbilityManager {
     }
 
     private static boolean wardenTremor(LivingEntity boss, ServerPlayerEntity target, ServerWorld world) {
-        Box area = boss.getBoundingBox().expand(12);
+        Box area = boss.getBoundingBox().expand(8);
 
         for (ServerPlayerEntity player : world.getEntitiesByClass(ServerPlayerEntity.class, area, p -> true)) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 80, 3));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 80, 128));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 60, 0));
-            player.damage(world, boss.getDamageSources().mobAttack(boss), 8.0f);
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1));
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 40, 64));
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 30, 0));
+            player.damage(world, boss.getDamageSources().mobAttack(boss), 4.0f);
         }
 
         for (int i = 0; i < 50; i++) {
@@ -1235,7 +1235,7 @@ public class BossAbilityManager {
             Box hitBox = new Box(pos.x - 1, pos.y - 1, pos.z - 1, pos.x + 1, pos.y + 1, pos.z + 1);
             for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, hitBox, e -> e != boss)) {
                 if (entity instanceof ServerPlayerEntity player) {
-                    player.damage(world, boss.getDamageSources().sonicBoom(boss), 40.0f);
+                    player.damage(world, boss.getDamageSources().sonicBoom(boss), 20.0f);
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 100, 0));
 
                     // Knockback

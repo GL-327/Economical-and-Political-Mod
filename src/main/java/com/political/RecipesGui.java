@@ -379,8 +379,64 @@ public class RecipesGui {
     }
 
     private static void openWeaponAttributesMenu(ServerPlayerEntity player) {
-        // TODO: Implement weapon attributes menu
-        player.sendMessage(Text.literal("Weapon attributes menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔️ Weapon Attributes"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_GRAY))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("⚔️ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🔥 Apply weapon abilities").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚡ 10 unique attributes").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // Weapon attribute items
+        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        WeaponAttribute[] attributes = WeaponAttribute.values();
+        
+        for (int i = 0; i < 10 && i < slots.length; i++) {
+            WeaponAttribute attr = WeaponAttribute.values()[i];
+            ItemStack token = SlayerItems.createAttributeToken(attr);
+            
+            List<Text> lore = new ArrayList<>();
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(attr.displayName).formatted(Formatting.GOLD));
+            lore.add(Text.literal(""));
+            lore.add(Text.literal(attr.buffSummary).formatted(Formatting.GREEN));
+            lore.add(Text.literal(""));
+            if (!attr.debuffSummary.isEmpty()) {
+                lore.add(Text.literal("⚠️ " + attr.debuffSummary).formatted(Formatting.RED));
+            }
+            lore.add(Text.literal(""));
+            lore.add(Text.literal("💰 Cost: " + attr.xpCost + " XP").formatted(Formatting.YELLOW));
+            
+            gui.setSlot(slots[i], new GuiElementBuilder(token)
+                    .setName(Text.literal(attr.displayName).formatted(Formatting.GOLD, Formatting.BOLD))
+                    .setLore(lore)
+                    .glow()
+                    .build());
+        }
+
+        // Navigation
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
     }
 
     // ============================================================
