@@ -32,17 +32,22 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("⚡ View all categories").formatted(Formatting.GRAY))
                 .glow().build());
 
-        // Link to /setrecipe for admins
-        gui.setSlot(11, new GuiElementBuilder(Items.COMMAND_BLOCK)
-                .setName(Text.literal("⚙ Create Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
+        // T1 Swords category
+        gui.setSlot(11, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ T1 Bounty Swords").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🎨 Design custom recipes").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("🔧 Admin only - opens /setrecipe").formatted(Formatting.RED))
-                .addLoreLine(Text.literal("✨ Click to open recipe editor").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> {
-                    player.sendMessage(Text.literal("Opening recipe editor...").formatted(Formatting.GREEN), false);
-                    RecipeEditorGui.openMainMenu(player);
-                })
+                .addLoreLine(Text.literal("⚔ Tier 1 slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openT1SwordsMenu(player))
+                .build());
+
+        // T2 Swords category
+        gui.setSlot(12, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("⚔ T2 Bounty Swords").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚔ Tier 2 slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openT2SwordsMenu(player))
                 .build());
 
         // Materials category (includes recent additions)
@@ -55,14 +60,277 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openMaterialsMenu(player))
                 .build());
 
-        // Weapon Attributes (recent addition)
-        gui.setSlot(15, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("⚔ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
+        // T1 Armor category
+        gui.setSlot(14, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+                .setName(Text.literal("🛡 T1 Bounty Armor").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚔ Weapon attribute tokens").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ New feature!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("🛡 Tier 1 slayer armor").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openWeaponAttributesMenu(player))
+                .setCallback((idx, type, action) -> openT1ArmorMenu(player))
+                .build());
+
+        // Special Items category
+        gui.setSlot(22, new GuiElementBuilder(Items.STICK)
+                .setName(Text.literal("🎁 Special Items").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎁 Special unique items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSpecialItemsMenu(player))
+                .build());
+
+        // Piglin Items category
+        gui.setSlot(24, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("� Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("� Piglin-themed items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openPiglinItemsMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // CATEGORY MENU METHODS - All custom items
+    // ============================================================
+
+    private static void openT1SwordsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ T1 Bounty Swords"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Add all T1 swords
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (slot > 43) break;
+            gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerSword(type))
+                    .setName(SlayerItems.createSlayerSword(type).get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerSword(type)))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openT2SwordsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ T2 Bounty Swords"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Add all T2 swords
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (slot > 43) break;
+            gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createUpgradedSlayerSword(type))
+                    .setName(SlayerItems.createUpgradedSlayerSword(type).get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createUpgradedSlayerSword(type)))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openT1ArmorMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 T1 Bounty Armor"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Add all T1 armor pieces
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (slot > 43) break;
+            
+            gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerHelmet(type, 1))
+                    .setName(SlayerItems.createSlayerHelmet(type, 1).get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerHelmet(type, 1)))
+                    .build());
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerChestplate(type, 1))
+                        .setName(SlayerItems.createSlayerChestplate(type, 1).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerChestplate(type, 1)))
+                        .build());
+            }
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerLeggings(type, 1))
+                        .setName(SlayerItems.createSlayerLeggings(type, 1).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerLeggings(type, 1)))
+                        .build());
+            }
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerBoots(type, 1))
+                        .setName(SlayerItems.createSlayerBoots(type, 1).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerBoots(type, 1)))
+                        .build());
+            }
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openT2ArmorMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 T2 Bounty Armor"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Add all T2 armor pieces
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (slot > 43) break;
+            
+            gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerHelmet(type, 2))
+                    .setName(SlayerItems.createSlayerHelmet(type, 2).get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerHelmet(type, 2)))
+                    .build());
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerChestplate(type, 2))
+                        .setName(SlayerItems.createSlayerChestplate(type, 2).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerChestplate(type, 2)))
+                        .build());
+            }
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerLeggings(type, 2))
+                        .setName(SlayerItems.createSlayerLeggings(type, 2).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerLeggings(type, 2)))
+                        .build());
+            }
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createSlayerBoots(type, 2))
+                        .setName(SlayerItems.createSlayerBoots(type, 2).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createSlayerBoots(type, 2)))
+                        .build());
+            }
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openSpecialItemsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🎁 Special Items"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Add special items
+        ItemStack[] specialItems = {
+            SlayerItems.createMidasSword(),
+            SlayerItems.createCrownOfGreed(),
+            SlayerItems.createCrownOfMidas(),
+            SlayerItems.createVoidwalkerCrown(),
+            CustomItemHandler.createHermesShoes(),
+            CustomItemHandler.createTheGavel(),
+            CustomItemHandler.createHarveysStick()
+        };
+
+        int slot = 10;
+        for (ItemStack item : specialItems) {
+            if (slot > 43) break;
+            gui.setSlot(slot++, new GuiElementBuilder(item)
+                    .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, item))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static void openPiglinItemsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("👑 Piglin Items"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Add piglin items
+        ItemStack[] piglinItems = {
+            SlayerItems.createPiglinCore(),
+            SlayerItems.createPiglinFlesh(),
+            SlayerItems.createCrownOfGreed(),
+            SlayerItems.createCrownOfMidas(),
+            SlayerItems.createMidasSword()
+        };
+
+        int slot = 10;
+        for (ItemStack item : piglinItems) {
+            if (slot > 43) break;
+            gui.setSlot(slot++, new GuiElementBuilder(item)
+                    .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, item))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
                 .build());
 
         gui.open();

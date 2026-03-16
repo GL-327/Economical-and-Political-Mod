@@ -3984,7 +3984,7 @@ public class SlayerItems {
     }
 
     public static ItemStack createWeaponAttributeToken(WeaponAttribute attr) {
-        ItemStack token = new ItemStack(Items.NETHER_STAR);
+        ItemStack token = new ItemStack(Items.PAPER);
         token.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⚔ " + attr.displayName + " Token").formatted(attr.color, Formatting.BOLD));
         setSlayerLore(token, java.util.List.of(

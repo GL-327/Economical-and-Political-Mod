@@ -24,7 +24,7 @@ public class ShopManager {
     private static final Map<Item, Integer> DEFAULT_PRICES = new LinkedHashMap<>();
 
     // Shop categories
-    public static final Map<String, List<Item>> CATEGORIES = new LinkedHashMap<>();
+    public static final Map<String, List<ItemStack>> CATEGORIES = new LinkedHashMap<>();
 
     // Custom price overrides
     private static final Map<Item, Integer> customPriceOverrides = new LinkedHashMap<>();
@@ -39,7 +39,7 @@ public class ShopManager {
 
     private static void initializeCategories() {
         // ===== COMPACTED MATERIALS =====
-        CATEGORIES.put("Compacted Items", Arrays.asList(
+        List<Item> compactedItems = Arrays.asList(
                 SlayerItems.createCompactedIron().getItem(),
                 SlayerItems.createCompactedGold().getItem(),
                 SlayerItems.createCompactedDiamond().getItem(),
@@ -50,19 +50,21 @@ public class ShopManager {
                 SlayerItems.createCompactedLapis().getItem(),
                 SlayerItems.createCompactedRedstone().getItem(),
                 SlayerItems.createCompactedQuartz().getItem()
-        ));
+        );
+        CATEGORIES.put("Compacted Items", compactedItems);
 
         // ===== SUPER COMPACTED MATERIALS =====
-        CATEGORIES.put("Super Compacted Items", Arrays.asList(
+        List<Item> superCompactedItems = Arrays.asList(
                 SlayerItems.createSuperCompactedGold().getItem(),
                 SlayerItems.createSuperCompactedIron().getItem(),
                 SlayerItems.createSuperCompactedDiamond().getItem(),
                 SlayerItems.createSuperCompactedEmerald().getItem(),
                 SlayerItems.createSuperCompactedNetherite().getItem()
-        ));
+        );
+        CATEGORIES.put("Super Compacted Items", superCompactedItems);
 
         // ===== ENCHANTED ITEMS =====
-        CATEGORIES.put("Enchanted Items", Arrays.asList(
+        List<Item> enchantedItems = Arrays.asList(
                 // Enchanted Blocks
                 SlayerItems.createEnchantedCobblestone().getItem(),
                 SlayerItems.createEnchantedStone().getItem(),
@@ -683,7 +685,12 @@ public class ShopManager {
     }
 
     public static List<Item> getItemsInCategory(String category) {
-        return CATEGORIES.getOrDefault(category, new ArrayList<>());
+        List<ItemStack> itemStacks = CATEGORIES.getOrDefault(category, new ArrayList<>());
+        List<Item> items = new ArrayList<>();
+        for (ItemStack stack : itemStacks) {
+            items.add(stack.getItem());
+        }
+        return items;
     }
 
     // ===== TRANSACTION METHODS =====
