@@ -226,6 +226,27 @@ public class ShopManager {
                 Items.LODESTONE
         ));
 
+        // ===== SPECIAL ITEMS =====
+        CATEGORIES.put("Special Items", Arrays.asList(
+                SlayerItems.createTheGavel().getItem(),
+                CustomItemHandler.createHarveysStick().getItem(),
+                SlayerItems.createMidasSword().getItem(),
+                CustomItemHandler.createHermesShoes().getItem(),
+                // Add all HPEBM marks
+                CustomItemHandler.createHPEBM(1).getItem(),
+                CustomItemHandler.createHPEBM(2).getItem(),
+                CustomItemHandler.createHPEBM(3).getItem(),
+                CustomItemHandler.createHPEBM(4).getItem(),
+                CustomItemHandler.createHPEBM(5).getItem(),
+                CustomItemHandler.createUltraOverclockedBeam().getItem(),
+                // Boss Drops
+                SlayerItems.createUndeadHeart().getItem(),
+                SlayerItems.createEchoingCore().getItem(),
+                // Legendary Items
+                SlayerItems.createVoidwalkerCrown().getItem(),
+                SlayerItems.createCrownOfGreed().getItem()
+        ));
+
         // ===== COMPACTED MATERIALS =====
         CATEGORIES.put("Compacted Materials", Arrays.asList(
                 SlayerItems.createCompactedIron().getItem(),
@@ -252,13 +273,29 @@ public class ShopManager {
         // ===== ENCHANTED MATERIALS =====
         CATEGORIES.put("Enchanted Materials", Arrays.asList(
                 SlayerItems.createEnchantedBlackstone().getItem(),
-                SlayerItems.createEnchantedGildedBlackstone().getItem()
+                SlayerItems.createEnchantedGildedBlackstone().getItem(),
+                // Add all other enchanted materials
+                Items.ENCHANTED_GOLDEN_APPLE,
+                Items.EXPERIENCE_BOTTLE,
+                Items.SPECTRAL_ARROW,
+                Items.TIPPED_ARROW,
+                // Weapon Attribute Tokens (add all 10 types)
+                SlayerItems.createAttributeToken(ArmourAttribute.BURNING).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.SIGHTLESS).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.FRENZIED).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.GROUNDED).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.WEBBED).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.FROST).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.PHANTOMSTEP).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.CURSED).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.OVERGROWN).getItem(),
+                SlayerItems.createAttributeToken(ArmourAttribute.VOLATILE).getItem()
         ));
 
         // ===== ENCHANTED ITEMS =====
         CATEGORIES.put("Enchanted Items", Arrays.asList(
                 // Enchanted Tools
-                Items.ENCHANTED_BOOK,
+                Items.KNOWLEDGE_BOOK,
                 // Enchanted Armor (all variants)
                 Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS,
                 Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS,

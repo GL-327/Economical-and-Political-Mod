@@ -208,8 +208,124 @@ public class CustomItemsGui {
     }
 
     private static void openSwordsMenu(ServerPlayerEntity player) {
-        // TODO: Implement swords menu
-        player.sendMessage(Text.literal("Swords menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔️ Bounty Swords Collection"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_RED))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("⚔️ Bounty Swords").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🗡️ All bounty tier weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🎯 T1 & T2 variants").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // T1 Swords Row
+        int[] t1Slots = {10, 11, 12, 13, 14, 15, 16, 19};
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        
+        for (int i = 0; i < Math.min(types.length, t1Slots.length); i++) {
+            SlayerManager.SlayerType slayerType = types[i];
+            ItemStack sword = SlayerItems.createSlayerSword(slayerType);
+            
+            gui.setSlot(t1Slots[i], new GuiElementBuilder(sword.getItem())
+                    .setName(sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCount(1)
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("🗡️ " + slayerType.toString() + " Slayer").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("⭐ Tier 1 Weapon").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to view details").formatted(Formatting.GREEN))
+                    .setCallback((idx, type, action) -> {
+                        player.sendMessage(Text.literal("Viewing " + slayerType.toString() + " T1 Sword details").formatted(Formatting.AQUA), false);
+                    })
+                    .glow()
+                    .build());
+        }
+
+        // T2 Swords Row
+        int[] t2Slots = {20, 21, 22, 23, 24, 25, 28};
+        for (int i = 0; i < Math.min(types.length, t2Slots.length); i++) {
+            SlayerManager.SlayerType slayerType = types[i];
+            ItemStack sword = SlayerItems.createUpgradedSlayerSword(slayerType);
+            
+            gui.setSlot(t2Slots[i], new GuiElementBuilder(sword.getItem())
+                    .setName(sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCount(1)
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("🗡️ " + slayerType.toString() + " Slayer").formatted(Formatting.AQUA))
+                    .addLoreLine(Text.literal("⭐ Tier 2 Weapon").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Enhanced version").formatted(Formatting.GREEN))
+                    .setCallback((idx, type, action) -> {
+                        player.sendMessage(Text.literal("Viewing " + slayerType.toString() + " T2 Sword details").formatted(Formatting.AQUA), false);
+                    })
+                    .glow()
+                    .build());
+        }
+
+        // Special Weapons
+        gui.setSlot(31, new GuiElementBuilder(SlayerItems.createTheGavel())
+                .setName(SlayerItems.createTheGavel().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚖️ The Gavel").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("🎁 Special judge weapon").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Ultimate authority").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    player.sendMessage(Text.literal("Viewing The Gavel details").formatted(Formatting.GOLD), false);
+                })
+                .glow()
+                .build());
+
+        gui.setSlot(33, new GuiElementBuilder(CustomItemHandler.createHarveysStick())
+                .setName(CustomItemHandler.createHarveysStick().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🪄 Harvey's Stick").formatted(Formatting.LIGHT_PURPLE))
+                .addLoreLine(Text.literal("🎁 Mysterious staff weapon").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Hidden powers").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    player.sendMessage(Text.literal("Viewing Harvey's Stick details").formatted(Formatting.LIGHT_PURPLE), false);
+                })
+                .glow()
+                .build());
+
+        // Midas's Sword
+        gui.setSlot(34, new GuiElementBuilder(SlayerItems.createMidasSword())
+                .setName(SlayerItems.createMidasSword().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚔️ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("🎁 Legendary golden weapon").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Touch of Midas").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> {
+                    player.sendMessage(Text.literal("Viewing Midas's Sword details").formatted(Formatting.YELLOW), false);
+                })
+                .glow()
+                .build());
+
+        // Navigation
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Collection").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Return to main menu").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> open(player))
+                .build());
+
+        gui.open();
     }
 
     private static void openSpecialWeaponsMenu(ServerPlayerEntity player) {

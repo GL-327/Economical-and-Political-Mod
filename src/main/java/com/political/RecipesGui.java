@@ -213,6 +213,18 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openSpecialItemsMenu(player))
                 .build());
 
+        // Midas's Sword
+        gui.setSlot(17, new GuiElementBuilder(SlayerItems.createMidasSword())
+                .setName(SlayerItems.createMidasSword().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚔️ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("🎁 Legendary golden weapon").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Touch of Midas").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openMidasSwordRecipe(player))
+                .glow()
+                .build());
+
         // Second row - Armor categories
         gui.setSlot(19, new GuiElementBuilder(Items.IRON_CHESTPLATE)
                 .setName(Text.literal("🛡️ Bounty Armor (T1)").formatted(Formatting.GREEN, Formatting.BOLD))
@@ -378,5 +390,26 @@ public class RecipesGui {
         // TODO: Implement specific recipe lookup
         player.sendMessage(Text.literal("Specific recipe lookup coming soon!").formatted(Formatting.YELLOW), false);
         return false;
+    }
+
+    // ============================================================
+    // MIDAS SWORD RECIPE
+    // ============================================================
+    private static void openMidasSwordRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createMidasSword();
+        String pageTitle = "⚔ Midas's Sword";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+        
+        // Default recipe if no custom recipe found
+        ItemStack[] ingredients = {
+            display(Items.GOLDEN_SWORD, 1, "Golden Sword"),
+            display(Items.GOLD_BLOCK, 8, "Gold Blocks"),
+            display(Items.GOLD_INGOT, 4, "Gold Ingots"),
+            display(Items.NETHER_STAR, 1, "Nether Star")
+        };
+        
+        openRecipePage(player, pageTitle, 
+            Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD),
+            ingredients, result, () -> openMainMenu(player));
     }
 }
