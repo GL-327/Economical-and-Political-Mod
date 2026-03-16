@@ -198,13 +198,131 @@ public class CustomItemsGui {
     // ════════════════════════════════════════════════════════════
 
     private static void openHPEBMMenu(ServerPlayerEntity player) {
-        // TODO: Implement HPEBM menu
-        player.sendMessage(Text.literal("HPEBM menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚡ HPEBM Weapons Collection"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.LIGHT_PURPLE))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.BLAZE_ROD)
+                .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚡ Energy beam weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🔋 All marks available").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // HPEBM Weapons
+        ItemStack[] hpebmWeapons = {
+            CustomItemHandler.createHPEBM(1),
+            CustomItemHandler.createHPEBM(2),
+            CustomItemHandler.createHPEBM(3),
+            CustomItemHandler.createHPEBM(4),
+            CustomItemHandler.createHPEBM(5),
+            CustomItemHandler.createUltraOverclockedBeam()
+        };
+
+        int[] hpebmSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+
+        for (int i = 0; i < Math.min(hpebmWeapons.length, hpebmSlots.length); i++) {
+            ItemStack weapon = hpebmWeapons[i];
+            gui.setSlot(hpebmSlots[i], new GuiElementBuilder(weapon.getItem())
+                    .setName(weapon.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCount(1)
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("⚡ High-Powered Energy Beam").formatted(Formatting.LIGHT_PURPLE))
+                    .addLoreLine(Text.literal("🔋 Mark " + (i + 1) + " Weapon").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to give").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, action) -> {
+                        player.getInventory().insertStack(weapon.copy());
+                        player.sendMessage(Text.literal("✨ Given " + weapon.get(DataComponentTypes.CUSTOM_NAME).getString() + "!").formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.RED))
+                .setCallback((index, type, action) -> open(player))
+                .build());
+
+        gui.open();
     }
 
     private static void openCompactedMenu(ServerPlayerEntity player) {
-        // TODO: Implement compacted materials menu
-        player.sendMessage(Text.literal("Compacted materials menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⬛ Compacted Materials Collection"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.GRAY))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_BLOCK)
+                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🏭 Compressed ore materials").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("💎 Space-efficient storage").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // Compacted Materials
+        ItemStack[] compactedMaterials = {
+            SlayerItems.createCompactedIron(),
+            SlayerItems.createCompactedGold(),
+            SlayerItems.createCompactedDiamond(),
+            SlayerItems.createCompactedEmerald(),
+            SlayerItems.createCompactedNetherite(),
+            SlayerItems.createCompactedCopper(),
+            SlayerItems.createCompactedCoal(),
+            SlayerItems.createCompactedLapis(),
+            SlayerItems.createCompactedRedstone(),
+            SlayerItems.createCompactedQuartz()
+        };
+
+        int[] compactedSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+
+        for (int i = 0; i < Math.min(compactedMaterials.length, compactedSlots.length); i++) {
+            ItemStack material = compactedMaterials[i];
+            gui.setSlot(compactedSlots[i], new GuiElementBuilder(material.getItem())
+                    .setName(material.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCount(1)
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("🏭 " + material.getItem().toString().replace("_", " ").toUpperCase()).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("✨ Click to give").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, action) -> {
+                        player.getInventory().insertStack(material.copy());
+                        player.sendMessage(Text.literal("✨ Given " + material.get(DataComponentTypes.CUSTOM_NAME).getString() + "!").formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.RED))
+                .setCallback((index, type, action) -> open(player))
+                .build());
+
+        gui.open();
     }
 
     private static void openSwordsMenu(ServerPlayerEntity player) {
