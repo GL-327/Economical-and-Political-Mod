@@ -2720,6 +2720,30 @@ public class SlayerItems {
         setCustomItemId(sword, "midas_sword");
         return sword;
     }
+
+    public static boolean isMidasSword(ItemStack stack) {
+        return "midas_sword".equals(getCustomItemId(stack));
+    }
+
+    public static int getMidasSwordKills(ItemStack sword) {
+        if (!isMidasSword(sword)) return 0;
+        
+        NbtComponent nbt = sword.get(DataComponentTypes.CUSTOM_DATA);
+        if (nbt != null) {
+            return nbt.copyNbt().getInt("midas_kills").orElse(0);
+        }
+        return 0;
+    }
+
+    public static void setMidasSwordKills(ItemStack sword, int kills) {
+        if (!isMidasSword(sword)) return;
+        
+        NbtComponent existing = sword.get(DataComponentTypes.CUSTOM_DATA);
+        NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
+        nbt.putInt("midas_kills", kills);
+        sword.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    }
+
     public static boolean isEnderPhaseHelmet(ItemStack stack) {
         return hasCustomItemId(stack, "ender_phase_helmet");
     }
@@ -3629,6 +3653,111 @@ public class SlayerItems {
         diamondBlock.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(diamondBlock, "enchanted_diamond_block");
         return diamondBlock;
+    }
+
+    public static ItemStack createEnchantedOakLog() {
+        ItemStack log = new ItemStack(Items.OAK_LOG);
+        log.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Oak Log").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced oak log").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 oak logs").formatted(Formatting.GRAY));
+        log.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        log.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(log, "enchanted_oak_log");
+        return log;
+    }
+
+    public static ItemStack createEnchantedRose() {
+        ItemStack rose = new ItemStack(Items.POPPY);
+        rose.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Rose").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED FLOWER ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced rose").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 roses").formatted(Formatting.GRAY));
+        rose.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        rose.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(rose, "enchanted_rose");
+        return rose;
+    }
+
+    public static ItemStack createEnchantedDandelion() {
+        ItemStack dandelion = new ItemStack(Items.DANDELION);
+        dandelion.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Dandelion").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED FLOWER ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced dandelion").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 dandelions").formatted(Formatting.GRAY));
+        dandelion.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        dandelion.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(dandelion, "enchanted_dandelion");
+        return dandelion;
+    }
+
+    public static ItemStack createEnchantedWheat() {
+        ItemStack wheat = new ItemStack(Items.WHEAT);
+        wheat.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Wheat").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED CROP ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced wheat").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 wheat").formatted(Formatting.GRAY));
+        wheat.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        wheat.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(wheat, "enchanted_wheat");
+        return wheat;
+    }
+
+    public static ItemStack createEnchantedCarrot() {
+        ItemStack carrot = new ItemStack(Items.CARROT);
+        carrot.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Carrot").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED CROP ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced carrot").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 carrots").formatted(Formatting.GRAY));
+        carrot.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        carrot.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(carrot, "enchanted_carrot");
+        return carrot;
+    }
+
+    public static ItemStack createEnchantedPotato() {
+        ItemStack potato = new ItemStack(Items.POTATO);
+        potato.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Potato").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED CROP ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced potato").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 potatoes").formatted(Formatting.GRAY));
+        potato.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        potato.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(potato, "enchanted_potato");
+        return potato;
+    }
+
+    public static ItemStack createEnchantedSugarCane() {
+        ItemStack sugarCane = new ItemStack(Items.SUGAR_CANE);
+        sugarCane.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Sugar Cane").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED PLANT ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced sugar cane").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 sugar cane").formatted(Formatting.GRAY));
+        sugarCane.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sugarCane.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(sugarCane, "enchanted_sugar_cane");
+        return sugarCane;
     }
 
     // GILDED NETHERITE ARMOR - Ultimate protection

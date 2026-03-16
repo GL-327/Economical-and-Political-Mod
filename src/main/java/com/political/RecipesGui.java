@@ -2,10 +2,7 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -15,587 +12,220 @@ import net.minecraft.util.Formatting;
 
 public class RecipesGui {
 
-    // Crafting grid slot positions in a 9x6 (54-slot) GUI — matches /setrecipe layout:
-    // Row 0 (0-8):   bg  bg  bg  bg  HEADER bg  bg  bg  bg
-    // Row 1 (9-17):  bg  S0  S1  S2  bg     bg  bg  bg  bg
-    // Row 2 (18-26): bg  S3  S4  S5  bg     bg  ARR RES bg
-    // Row 3 (27-35): bg  S6  S7  S8  bg     bg  bg  bg  bg
-    // Row 4 (36-44): bg  bg  bg  bg  bg     bg  bg  bg  bg
-    // Row 5 (45-53): BAK bg  bg  bg  bg     bg  bg  bg  bg
-    private static final int[] GRID_SLOTS = {10, 11, 12, 19, 20, 21, 28, 29, 30};
-    private static final int SLOT_HEADER = 4;
-    private static final int SLOT_ARROW  = 23;
-    private static final int SLOT_RESULT = 24;
-    private static final int SLOT_BACK   = 45;
+    // ============================================================
+    // MAIN MENU - Simplified working version
+    // ============================================================
+    public static void openMainMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("📖 Recipe Browser"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+                .setName(Text.literal("📖 Recipe Browser").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎨 Browse crafting recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚡ View all categories").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Link to /setrecipe for admins
+        gui.setSlot(11, new GuiElementBuilder(Items.COMMAND_BLOCK)
+                .setName(Text.literal("⚙ Create Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎨 Design custom recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🔧 Admin only - opens /setrecipe").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("✨ Click to open recipe editor").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> {
+                    player.sendMessage(Text.literal("Opening recipe editor...").formatted(Formatting.GREEN), false);
+                    RecipeEditorGui.openMainMenu(player);
+                })
+                .build());
+
+        // Materials category (includes recent additions)
+        gui.setSlot(13, new GuiElementBuilder(Items.SLIME_BALL)
+                .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("📦 Cores, chunks & compacted items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ New enchanted items added!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMaterialsMenu(player))
+                .build());
+
+        // Weapon Attributes (recent addition)
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("⚔ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚔ Weapon attribute tokens").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ New feature!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openWeaponAttributesMenu(player))
+                .build());
+
+        gui.open();
+    }
 
     // ============================================================
-    // HELPER: Open a single recipe page (9x5 crafting grid view)
+    // MATERIALS MENU - Shows recent additions
     // ============================================================
-    private static void openRecipePage(ServerPlayerEntity player,
-                                       String title,
-                                       Text headerName,
-                                       ItemStack[] ingredients, // exactly 9 slots (null = empty)
-                                       ItemStack result,
-                                       Runnable backAction) {
+    private static void openMaterialsMenu(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal(title));
+        gui.setTitle(Text.literal("📦 Materials"));
 
-        // Background fill
+        // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
                 .setName(Text.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
-        gui.setSlot(SLOT_HEADER, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
-                .setName(headerName)
-                .glow()
-                .build());
-
-        // 3x3 crafting grid — clear any background panes first
-        for (int i = 0; i < 9; i++) {
-            ItemStack ing = (ingredients != null && i < ingredients.length) ? ingredients[i] : null;
-            if (ing != null && !ing.isEmpty()) {
-                GuiElementBuilder eb = new GuiElementBuilder(ing.getItem());
-                Text name = ing.get(DataComponentTypes.CUSTOM_NAME);
-                if (name != null) eb.setName(name);
-                if (ing.getCount() > 1) eb.setCount(ing.getCount());
-                gui.setSlot(GRID_SLOTS[i], eb.build());
-            } else {
-                // Empty grid slot: override the background pane with air
-                gui.setSlot(GRID_SLOTS[i], GuiElementBuilder.from(ItemStack.EMPTY).build());
-            }
-        }
-
-        // Arrow pointing right
-        gui.setSlot(SLOT_ARROW, new GuiElementBuilder(Items.SPECTRAL_ARROW)
-                .setName(Text.literal("→").formatted(Formatting.YELLOW))
-                .build());
-
-        // Result item
-        if (result != null && !result.isEmpty()) {
-            GuiElementBuilder rb = new GuiElementBuilder(result.getItem());
-            Text resultName = result.get(DataComponentTypes.CUSTOM_NAME);
-            if (resultName != null) rb.setName(resultName);
-            rb.glow();
-            gui.setSlot(SLOT_RESULT, rb.build());
-        }
-
-        // Back button
-        gui.setSlot(SLOT_BACK, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> backAction.run())
-                .build());
-
-        gui.open();
-    }
-
-    // ============================================================
-    // HELPER: Create a display ItemStack with custom name and count
-    // ============================================================
-    private static ItemStack display(net.minecraft.item.Item item, int count, String name, Formatting color) {
-        ItemStack stack = new ItemStack(item, count);
-        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(color));
-        return stack;
-    }
-
-    private static ItemStack display(net.minecraft.item.Item item, int count, String name) {
-        return display(item, count, name, Formatting.WHITE);
-    }
-
-    /**
-     * Item #8 – /setrecipe ↔ /recipe sync.
-     * Checks RecipeConfigManager for a custom admin recipe whose result matches
-     * the custom item ID of {@code resultStack}. If one is found the recipe page
-     * is opened with the admin-configured ingredients instead of the hardcoded
-     * ones. Returns true when the custom recipe was shown, false when the caller
-     * should fall through to its own hardcoded recipe.
-     */
-    private static boolean tryOpenCustomRecipe(ServerPlayerEntity player,
-                                               ItemStack resultStack,
-                                               String title,
-                                               Runnable backAction) {
-        String customId = SlayerItems.getCustomItemId(resultStack);
-        if (customId == null) return false;
-
-        for (SlayerRecipes.Recipe r : RecipeConfigManager.getCustomRecipes()) {
-            String rId = SlayerItems.getCustomItemId(r.result);
-            if (customId.equals(rId)) {
-                Text headerName = r.result.get(DataComponentTypes.CUSTOM_NAME);
-                if (headerName == null) headerName = Text.literal(r.name).formatted(Formatting.WHITE);
-                openRecipePage(player, title, headerName, r.ingredients, r.result, backAction);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // ============================================================
-    // MAIN MENU - Symmetric Layout
-    // ============================================================
-    public static void openMainMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("📖 Recipe Workshop"));
-
-        // Decorative background with symmetric pattern
-        for (int i = 0; i < 54; i++) {
-            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
-                        .setName(Text.literal("⬛").formatted(Formatting.DARK_BLUE))
-                        .build());
-            } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                        .setName(Text.literal("")).build());
-            }
-        }
-
-        // Center header
-        gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
-                .setName(Text.literal("📖 Recipe Workshop").formatted(Formatting.GOLD, Formatting.BOLD))
+        gui.setSlot(4, new GuiElementBuilder(Items.SLIME_BALL)
+                .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🎨 Master crafting recipes").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚡ Create custom recipes").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("🔧 Browse all categories").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("📦 All crafting materials").formatted(Formatting.GRAY))
                 .glow().build());
 
-        // Symmetric category layout - Top row
-        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("⚔️ Bounty Swords (T1)").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🗡️ Tier 1 bounty weapons").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT1SwordsMenu(player))
-                .build());
+        // Add cores and chunks
+        int slot = 10;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (slot > 43) break;
+            
+            gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createCore(type))
+                    .setName(SlayerItems.createCore(type).get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createCore(type)))
+                    .build());
+            
+            if (slot <= 43) {
+                gui.setSlot(slot++, new GuiElementBuilder(SlayerItems.createChunk(type))
+                        .setName(SlayerItems.createChunk(type).get(DataComponentTypes.CUSTOM_NAME))
+                        .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                        .setCallback((idx, type2, action) -> showItemInfo(player, SlayerItems.createChunk(type)))
+                        .build());
+            }
+        }
 
-        gui.setSlot(11, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔️ Bounty Swords (T2)").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🗡️ Tier 2 bounty weapons").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT2SwordsMenu(player))
-                .build());
+        // Add compacted items
+        ItemStack[] compacted = {
+            SlayerItems.createCompactedIron(),
+            SlayerItems.createCompactedGold(),
+            SlayerItems.createCompactedDiamond(),
+            SlayerItems.createCompactedEmerald(),
+            SlayerItems.createCompactedNetherite()
+        };
 
-        gui.setSlot(12, new GuiElementBuilder(Items.BLAZE_ROD)
-                .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚡ High-power energy weapons").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openHPEBMMenu(player))
-                .build());
+        for (ItemStack item : compacted) {
+            if (slot > 43) break;
+            gui.setSlot(slot++, new GuiElementBuilder(item)
+                    .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, item))
+                    .build());
+        }
 
-        gui.setSlot(13, new GuiElementBuilder(Items.COMMAND_BLOCK)
-                .setName(Text.literal("⚙ Create Custom Recipe").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🎨 Design your own recipes").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("🔧 Admin only feature").formatted(Formatting.RED))
-                .addLoreLine(Text.literal("✨ Click to create").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCustomRecipeCreator(player))
-                .build());
+        // Add enchanted items (recent additions)
+        ItemStack[] enchanted = {
+            SlayerItems.createEnchantedCobblestone(),
+            SlayerItems.createEnchantedStone(),
+            SlayerItems.createEnchantedOakLog(),
+            SlayerItems.createEnchantedRose(),
+            SlayerItems.createEnchantedDandelion(),
+            SlayerItems.createEnchantedWheat(),
+            SlayerItems.createEnchantedCarrot(),
+            SlayerItems.createEnchantedPotato()
+        };
 
-        gui.setSlot(14, new GuiElementBuilder(Items.NETHERITE_SWORD)
-                .setName(Text.literal("🗡️ Special Weapons").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🎁 Unique special weapons").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSpecialWeaponsMenu(player))
-                .build());
+        for (ItemStack item : enchanted) {
+            if (slot > 43) break;
+            gui.setSlot(slot++, new GuiElementBuilder(item)
+                    .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ NEW! Enchanted item").formatted(Formatting.GREEN))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, item))
+                    .build());
+        }
 
-        gui.setSlot(15, new GuiElementBuilder(Items.NETHERITE_HELMET)
-                .setName(Text.literal("🛡️ Special Armor").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🎁 Unique special armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSpecialArmorMenu(player))
-                .build());
-
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_APPLE)
-                .setName(Text.literal("🎁 Special Items").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🎁 Unique special items").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSpecialItemsMenu(player))
-                .build());
-
-        // Midas's Sword
-        gui.setSlot(17, new GuiElementBuilder(SlayerItems.createMidasSword())
-                .setName(SlayerItems.createMidasSword().get(DataComponentTypes.CUSTOM_NAME))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚔️ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal("🎁 Legendary golden weapon").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Touch of Midas").formatted(Formatting.GREEN))
-                .setCallback((idx, type, action) -> openMidasSwordRecipe(player))
-                .glow()
-                .build());
-
-        // Second row - Armor categories
-        gui.setSlot(19, new GuiElementBuilder(Items.IRON_CHESTPLATE)
-                .setName(Text.literal("🛡️ Bounty Armor (T1)").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🛡️ Tier 1 bounty armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT1ArmorMenu(player))
-                .build());
-
-        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
-                .setName(Text.literal("🛡️ Bounty Armor (T2)").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🛡️ Tier 2 bounty armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT2ArmorMenu(player))
-                .build());
-
-        gui.setSlot(21, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
-                .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("📈 5 tiers of gold armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openGoldArmorMenu(player))
-                .build());
-
-        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_HELMET)
-                .setName(Text.literal("👑 Legendary Crowns").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("👑 Premium crowns & helmets").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openLegendaryCrownsMenu(player))
-                .build());
-
-        gui.setSlot(23, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Text.literal("👑 Piglin Collection").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("💰 Premium piglin items").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openPiglinMenu(player))
-                .build());
-
-        gui.setSlot(24, new GuiElementBuilder(Items.GOLD_BLOCK)
-                .setName(Text.literal("🧱 Compacted Materials").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🔨 Dense material blocks").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCompactedMaterialsMenu(player))
-                .build());
-
-        gui.setSlot(25, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("⭐ Super Compacted").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🌟 Ultra-dense materials").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openSuperCompactedMenu(player))
-                .build());
-
-        // Third row - Weapon Attributes (replacing armor attributes)
-        gui.setSlot(31, new GuiElementBuilder(Items.ENCHANTED_BOOK)
-                .setName(Text.literal("⚔️ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🔥 Apply weapon abilities").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚡ 10 unique attributes").formatted(Formatting.DARK_GRAY))
-                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openWeaponAttributesMenu(player))
-                .glow()
-                .build());
-
-        // Bottom navigation
-        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Exit recipe workshop").formatted(Formatting.GRAY))
-                .setCallback((idx, type, action) -> player.closeHandledScreen())
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
                 .build());
 
         gui.open();
     }
 
     // ============================================================
-    // HELPER METHODS - Placeholder implementations
+    // WEAPON ATTRIBUTES MENU - Recent addition
     // ============================================================
-
-    private static void openT1SwordsMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("⚔️ T1 Bounty Swords"));
-
-        // Decorative background
-        for (int i = 0; i < 54; i++) {
-            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE)
-                        .setName(Text.literal("⬛").formatted(Formatting.YELLOW))
-                        .build());
-            } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                        .setName(Text.literal("")).build());
-            }
-        }
-
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("⚔️ Tier 1 Bounty Swords").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🗡️ Basic bounty weapons").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("🎯 7 slayer types").formatted(Formatting.DARK_GRAY))
-                .glow()
-                .build());
-
-        // T1 Swords
-        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
-
-        for (int i = 0; i < Math.min(types.length, slots.length); i++) {
-            SlayerManager.SlayerType type = types[i];
-            ItemStack sword = SlayerItems.createSlayerSword(type);
-            
-            gui.setSlot(slots[i], new GuiElementBuilder(sword.getItem())
-                    .setName(sword.get(DataComponentTypes.CUSTOM_NAME))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("🗡️ " + type.displayName + " Slayer").formatted(Formatting.YELLOW))
-                    .addLoreLine(Text.literal("⭐ Tier 1 Weapon").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.GREEN))
-                    .setCallback((idx, type2, action) -> {
-                        // Open recipe for this specific sword
-                        openSlayerRecipe(player, type, 1);
-                    })
-                    .build());
-        }
-
-        // Back button
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Back").formatted(Formatting.RED))
-                .setCallback((index, type2, action) -> openMainMenu(player))
-                .build());
-
-        gui.open();
-    }
-
-    // Helper method to open slayer recipe
-    private static void openSlayerRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type, int tier) {
-        ItemStack result = tier == 1 ? SlayerItems.createSlayerSword(type) : SlayerItems.createUpgradedSlayerSword(type);
-        String pageTitle = "⚔ " + type.displayName + " Slayer (T" + tier + ")";
-        
-        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openT1SwordsMenu(player))) return;
-        
-        // Default recipe if no custom recipe found
-        ItemStack[] ingredients = {
-            new ItemStack(Items.IRON_SWORD, 1),           // Base sword
-            new ItemStack(type.icon, 8),                // Slayer cores
-            new ItemStack(Items.REDSTONE, 4),            // Power component
-            ItemStack.EMPTY,                             // Empty
-            new ItemStack(Items.GOLD_INGOT, 2),          // Enhancement
-            new ItemStack(Items.LAPIS_LAZULI, 4),        // Magic component
-            ItemStack.EMPTY,                             // Empty
-            new ItemStack(Items.DIAMOND, 1),             // Durability
-            ItemStack.EMPTY                              // Empty
-        };
-        
-        openRecipePage(player, pageTitle, 
-            Text.literal("⚔ " + type.displayName + " Slayer (T" + tier + ")").formatted(Formatting.YELLOW, Formatting.BOLD),
-            ingredients, result, () -> openT1SwordsMenu(player));
-    }
-
-    private static void openT2SwordsMenu(ServerPlayerEntity player) {
-        // TODO: Implement T2 swords menu
-        player.sendMessage(Text.literal("T2 Swords menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openHPEBMMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("⚡ HPEBM Weapons"));
-
-        // Decorative background
-        for (int i = 0; i < 54; i++) {
-            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
-                        .setName(Text.literal("⬛").formatted(Formatting.LIGHT_PURPLE))
-                        .build());
-            } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                        .setName(Text.literal("")).build());
-            }
-        }
-
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.BLAZE_ROD)
-                .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚡ High-power energy weapons").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("🔋 All marks available").formatted(Formatting.DARK_GRAY))
-                .glow()
-                .build());
-
-        // HPEBM Weapons
-        ItemStack[] hpebmWeapons = {
-            CustomItemHandler.createHPEBM(1),
-            CustomItemHandler.createHPEBM(2),
-            CustomItemHandler.createHPEBM(3),
-            CustomItemHandler.createHPEBM(4),
-            CustomItemHandler.createHPEBM(5),
-            CustomItemHandler.createUltraOverclockedBeam()
-        };
-
-        int[] hpebmSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
-
-        for (int i = 0; i < Math.min(hpebmWeapons.length, hpebmSlots.length); i++) {
-            final int markNum = i + 1; // Make it effectively final
-            ItemStack weapon = hpebmWeapons[i];
-            String weaponName = weapon.get(DataComponentTypes.CUSTOM_NAME) != null ? 
-                weapon.get(DataComponentTypes.CUSTOM_NAME).getString() : "HPEBM Weapon";
-            
-            gui.setSlot(hpebmSlots[i], new GuiElementBuilder(weapon.getItem())
-                    .setName(weapon.get(DataComponentTypes.CUSTOM_NAME))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("⚡ " + weaponName).formatted(Formatting.LIGHT_PURPLE))
-                    .addLoreLine(Text.literal("🔋 Mark " + markNum + " Weapon").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.GREEN))
-                    .setCallback((idx, type2, action) -> {
-                        // Open recipe for this specific HPEBM weapon
-                        openHPEBMRecipe(player, markNum);
-                    })
-                    .build());
-        }
-
-        // Back button
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Back").formatted(Formatting.RED))
-                .setCallback((index, type2, action) -> openMainMenu(player))
-                .build());
-
-        gui.open();
-    }
-
-    // Helper method to open HPEBM recipe
-    private static void openHPEBMRecipe(ServerPlayerEntity player, int mark) {
-        ItemStack result = mark <= 5 ? CustomItemHandler.createHPEBM(mark) : CustomItemHandler.createUltraOverclockedBeam();
-        String pageTitle = "⚡ HPEBM Mk" + mark;
-        
-        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openHPEBMMenu(player))) return;
-        
-        // Default recipe if no custom recipe found
-        ItemStack[] ingredients = {
-            new ItemStack(Items.IRON_SHOVEL, 1),           // Base weapon
-            new ItemStack(Items.REDSTONE, 8),             // Power component
-            new ItemStack(Items.GOLD_INGOT, 4),           // Energy conductor
-            new ItemStack(Items.GLOWSTONE_DUST, 4),      // Amplifier
-            new ItemStack(Items.QUARTZ, 2),                // Focus crystal
-            new ItemStack(Items.DIAMOND, 1),              // Durability
-            new ItemStack(Items.ENDER_PEARL, 1),          // Dimensional stabilizer
-            ItemStack.EMPTY,                             // Empty
-            ItemStack.EMPTY                              // Empty
-        };
-        
-        openRecipePage(player, pageTitle, 
-            Text.literal("⚡ HPEBM Mk" + mark).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
-            ingredients, result, () -> openHPEBMMenu(player));
-    }
-
-    private static void openCustomRecipeCreator(ServerPlayerEntity player) {
-        // TODO: Implement custom recipe creator
-        player.sendMessage(Text.literal("Custom recipe creator coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openSpecialWeaponsMenu(ServerPlayerEntity player) {
-        // TODO: Implement special weapons menu
-        player.sendMessage(Text.literal("Special weapons menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openSpecialArmorMenu(ServerPlayerEntity player) {
-        // TODO: Implement special armor menu
-        player.sendMessage(Text.literal("Special armor menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openSpecialItemsMenu(ServerPlayerEntity player) {
-        // TODO: Implement special items menu
-        player.sendMessage(Text.literal("Special items menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openT1ArmorMenu(ServerPlayerEntity player) {
-        // TODO: Implement T1 armor menu
-        player.sendMessage(Text.literal("T1 Armor menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openT2ArmorMenu(ServerPlayerEntity player) {
-        // TODO: Implement T2 armor menu
-        player.sendMessage(Text.literal("T2 Armor menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openGoldArmorMenu(ServerPlayerEntity player) {
-        // TODO: Implement gold armor menu
-        player.sendMessage(Text.literal("Gold armor menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openLegendaryCrownsMenu(ServerPlayerEntity player) {
-        // TODO: Implement legendary crowns menu
-        player.sendMessage(Text.literal("Legendary crowns menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openPiglinMenu(ServerPlayerEntity player) {
-        // TODO: Implement piglin menu
-        player.sendMessage(Text.literal("Piglin menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openCompactedMaterialsMenu(ServerPlayerEntity player) {
-        // TODO: Implement compacted materials menu
-        player.sendMessage(Text.literal("Compacted materials menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
-    private static void openSuperCompactedMenu(ServerPlayerEntity player) {
-        // TODO: Implement super compacted menu
-        player.sendMessage(Text.literal("Super compacted menu coming soon!").formatted(Formatting.YELLOW), false);
-    }
-
     private static void openWeaponAttributesMenu(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("⚔️ Weapon Attributes"));
+        gui.setTitle(Text.literal("⚔ Weapon Attributes"));
 
-        // Decorative background
-        for (int i = 0; i < 54; i++) {
-            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                        .setName(Text.literal("⬛").formatted(Formatting.DARK_GRAY))
-                        .build());
-            } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                        .setName(Text.literal("")).build());
-            }
-        }
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.ENCHANTED_BOOK)
-                .setName(Text.literal("⚔️ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("⚔ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🔥 Apply weapon abilities").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚡ 10 unique attributes").formatted(Formatting.DARK_GRAY))
-                .glow()
-                .build());
+                .addLoreLine(Text.literal("⚔ Weapon attribute tokens").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ NEW FEATURE!").formatted(Formatting.GREEN))
+                .glow().build());
 
-        // Weapon attribute items
-        int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
-        WeaponAttribute[] attributes = WeaponAttribute.values();
-        
-        for (int i = 0; i < 10 && i < slots.length; i++) {
-            WeaponAttribute attr = attributes[i];
+        // Add all weapon attribute tokens
+        int slot = 10;
+        for (WeaponAttribute attr : WeaponAttribute.values()) {
+            if (slot > 43) break;
+            
             ItemStack token = SlayerItems.createWeaponAttributeToken(attr);
-            
-            List<Text> lore = new ArrayList<>();
-            lore.add(Text.literal(""));
-            lore.add(Text.literal(attr.displayName).formatted(Formatting.GOLD));
-            lore.add(Text.literal(""));
-            lore.add(Text.literal(attr.buffSummary).formatted(Formatting.GREEN));
-            lore.add(Text.literal(""));
-            if (!attr.debuffSummary.isEmpty()) {
-                lore.add(Text.literal("⚠️ " + attr.debuffSummary).formatted(Formatting.RED));
-            }
-            lore.add(Text.literal(""));
-            lore.add(Text.literal("💰 Cost: " + attr.xpCost + " XP").formatted(Formatting.YELLOW));
-            
-            gui.setSlot(slots[i], new GuiElementBuilder(token)
-                    .setName(Text.literal(attr.displayName).formatted(Formatting.GOLD, Formatting.BOLD))
-                    .setLore(lore)
-                    .glow()
+            gui.setSlot(slot++, new GuiElementBuilder(token)
+                    .setName(token.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal("✨ Weapon attribute token").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("✨ Click to view").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type2, action) -> showItemInfo(player, token))
                     .build());
         }
 
-        // Navigation
+        // Back button
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // HELPER: Show item information
+    // ============================================================
+    private static void showItemInfo(ServerPlayerEntity player, ItemStack item) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("Item Info"));
+
+        // Background
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
+
+        // Item display
+        gui.setSlot(13, new GuiElementBuilder(item)
+                .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+                .glow().build());
+
+        // Info
+        gui.setSlot(4, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("Item Information").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("📖 View recipes in /setrecipe").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚙ Admin command: /setrecipe").formatted(Formatting.GRAY))
+                .build());
+
+        // Back button
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openMainMenu(player))
                 .build());
@@ -607,29 +237,9 @@ public class RecipesGui {
     // LEGACY METHOD - For backward compatibility
     // ============================================================
     public static boolean openSpecificRecipe(ServerPlayerEntity player, String itemName) {
-        // TODO: Implement specific recipe lookup
-        player.sendMessage(Text.literal("Specific recipe lookup coming soon!").formatted(Formatting.YELLOW), false);
-        return false;
-    }
-
-    // ============================================================
-    // MIDAS SWORD RECIPE
-    // ============================================================
-    private static void openMidasSwordRecipe(ServerPlayerEntity player) {
-        ItemStack result = SlayerItems.createMidasSword();
-        String pageTitle = "⚔ Midas's Sword";
-        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
-        
-        // Default recipe if no custom recipe found
-        ItemStack[] ingredients = {
-            display(Items.GOLDEN_SWORD, 1, "Golden Sword"),
-            display(Items.GOLD_BLOCK, 8, "Gold Blocks"),
-            display(Items.GOLD_INGOT, 4, "Gold Ingots"),
-            display(Items.NETHER_STAR, 1, "Nether Star")
-        };
-        
-        openRecipePage(player, pageTitle, 
-            Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD),
-            ingredients, result, () -> openMainMenu(player));
+        // For now, just open the main menu
+        player.sendMessage(Text.literal("Recipe lookup: " + itemName + " - Browse categories instead").formatted(Formatting.YELLOW), false);
+        openMainMenu(player);
+        return true;
     }
 }

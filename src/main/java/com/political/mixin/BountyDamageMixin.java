@@ -1,5 +1,6 @@
 package com.political.mixin;
 
+import com.political.CoinManager;
 import com.political.CustomItemHandler;
 import com.political.HealthScalingManager;
 import com.political.SlayerData;
@@ -98,6 +99,24 @@ public abstract class BountyDamageMixin {
         }
 
         HealthScalingManager.onScaledMobKill(self, player);
+
+        // Midas sword coin bonus
+        ItemStack weapon = player.getMainHandStack();
+        if (SlayerItems.isMidasSword(weapon)) {
+            // Get current kill bonus from NBT or default to 1
+            String customId = SlayerItems.getCustomItemId(weapon);
+            if ("midas_sword".equals(customId)) {
+                // Give 1 coin per kill
+                CoinManager.giveCoinsQuiet(player, 1);
+                
+                // Update the sword's kill counter in NBT
+                int currentKills = SlayerItems.getMidasSwordKills(weapon);
+                SlayerItems.setMidasSwordKills(weapon, currentKills + 1);
+                
+                // Show subtle coin notification
+                player.sendMessage(Text.literal("§6+1 coin §7(Midas's Sword)").formatted(Formatting.GOLD), true);
+            }
+        }
 
         // Dictator kill detection
         if (self instanceof ServerPlayerEntity killedPlayer) {

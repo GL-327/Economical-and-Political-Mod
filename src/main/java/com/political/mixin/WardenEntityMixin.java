@@ -27,6 +27,12 @@ public class WardenEntityMixin {
                     warden.increaseAngerAt(warden.getTarget(), 15, true);
                 }
             }
+            
+            // Simple fix: If warden goes too low (below Y=50), teleport it back up
+            // This prevents most digging behavior without complex world access
+            if (warden.getY() < 50) {
+                warden.teleport(warden.getX(), 60, warden.getZ(), false);
+            }
         }
     }
 }

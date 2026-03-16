@@ -48,7 +48,8 @@ public class RecipeEditorGui {
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
         GOLD_ARMOR   ("👑 Gold Armor Evolution",             Items.GOLDEN_CHESTPLATE,  Formatting.GOLD),
         MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY),
-        ATTRIBUTE_TOKENS("✧ Attribute Tokens",               Items.PAPER,              Formatting.LIGHT_PURPLE);
+        ATTRIBUTE_TOKENS("✧ Attribute Tokens",               Items.PAPER,              Formatting.LIGHT_PURPLE),
+        WEAPON_ATTRIBUTES("⚔ Weapon Attributes",               Items.NETHER_STAR,        Formatting.RED);
 
         final String label;
         final net.minecraft.item.Item icon;
@@ -185,18 +186,6 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createCompactedRedstone());
                 items.add(SlayerItems.createCompactedQuartz());
                 
-                // Add enchanted compacted materials
-                items.add(SlayerItems.createCompactedIron());
-                items.add(SlayerItems.createCompactedGold());
-                items.add(SlayerItems.createCompactedDiamond());
-                items.add(SlayerItems.createCompactedEmerald());
-                items.add(SlayerItems.createCompactedNetherite());
-                items.add(SlayerItems.createCompactedCopper());
-                items.add(SlayerItems.createCompactedCoal());
-                items.add(SlayerItems.createCompactedLapis());
-                items.add(SlayerItems.createCompactedRedstone());
-                items.add(SlayerItems.createCompactedQuartz());
-                
                 // Add super compacted ores
                 items.add(SlayerItems.createSuperCompactedGold());
                 items.add(SlayerItems.createSuperCompactedIron());
@@ -204,8 +193,25 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createSuperCompactedEmerald());
                 items.add(SlayerItems.createSuperCompactedNetherite());
                 
-                // Add enchanted blackstone for gilded armor
+                // Add enchanted blocks
+                items.add(SlayerItems.createEnchantedCobblestone());
+                items.add(SlayerItems.createEnchantedStone());
+                items.add(SlayerItems.createEnchantedIronBlock());
+                items.add(SlayerItems.createEnchantedGoldBlock());
+                items.add(SlayerItems.createEnchantedDiamondBlock());
                 items.add(SlayerItems.createEnchantedBlackstone());
+                items.add(SlayerItems.createEnchantedGildedBlackstone());
+                items.add(SlayerItems.createEnchantedOakLog());
+                
+                // Add enchanted flowers
+                items.add(SlayerItems.createEnchantedRose());
+                items.add(SlayerItems.createEnchantedDandelion());
+                
+                // Add enchanted crops
+                items.add(SlayerItems.createEnchantedWheat());
+                items.add(SlayerItems.createEnchantedCarrot());
+                items.add(SlayerItems.createEnchantedPotato());
+                items.add(SlayerItems.createEnchantedSugarCane());
             }
             case ATTRIBUTE_TOKENS -> {
                 // Add all 10 attribute tokens
@@ -219,6 +225,12 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.CURSED));
                 items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.OVERGROWN));
                 items.add(SlayerItems.createAttributeToken(com.political.ArmourAttribute.VOLATILE));
+            }
+            case WEAPON_ATTRIBUTES -> {
+                // Add all weapon attribute tokens
+                for (WeaponAttribute attr : WeaponAttribute.values()) {
+                    items.add(SlayerItems.createWeaponAttributeToken(attr));
+                }
             }
         }
         return items;

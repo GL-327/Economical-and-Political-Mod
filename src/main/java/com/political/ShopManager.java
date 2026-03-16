@@ -38,220 +38,8 @@ public class ShopManager {
     }
 
     private static void initializeCategories() {
-        // ===== BUILDING BLOCKS =====
-        CATEGORIES.put("Building Blocks", Arrays.asList(
-                Items.STONE, Items.COBBLESTONE, Items.MOSSY_COBBLESTONE,
-                Items.GRANITE, Items.POLISHED_GRANITE, Items.DIORITE, Items.POLISHED_DIORITE,
-                Items.ANDESITE, Items.POLISHED_ANDESITE, Items.DEEPSLATE, Items.COBBLED_DEEPSLATE,
-                Items.POLISHED_DEEPSLATE, Items.CALCITE, Items.TUFF, Items.DRIPSTONE_BLOCK,
-                Items.DIRT, Items.GRASS_BLOCK, Items.PODZOL, Items.MYCELIUM, Items.MUD,
-                Items.CLAY, Items.CLAY_BALL, Items.BRICK, Items.BRICKS,
-                Items.SAND, Items.RED_SAND, Items.SANDSTONE, Items.RED_SANDSTONE,
-                Items.GRAVEL, Items.OAK_LOG, Items.SPRUCE_LOG, Items.BIRCH_LOG,
-                Items.JUNGLE_LOG, Items.ACACIA_LOG, Items.DARK_OAK_LOG, Items.MANGROVE_LOG,
-                Items.CHERRY_LOG, Items.CRIMSON_STEM, Items.WARPED_STEM,
-                Items.OAK_PLANKS, Items.SPRUCE_PLANKS, Items.BIRCH_PLANKS,
-                Items.JUNGLE_PLANKS, Items.ACACIA_PLANKS, Items.DARK_OAK_PLANKS,
-                Items.MANGROVE_PLANKS, Items.CHERRY_PLANKS, Items.BAMBOO_PLANKS,
-                Items.CRIMSON_PLANKS, Items.WARPED_PLANKS,
-                Items.GLASS, Items.TINTED_GLASS, Items.GLOWSTONE, Items.SEA_LANTERN,
-                Items.SHROOMLIGHT, Items.OBSIDIAN, Items.CRYING_OBSIDIAN,
-                Items.NETHERRACK, Items.NETHER_BRICKS, Items.RED_NETHER_BRICKS,
-                Items.BASALT, Items.POLISHED_BASALT, Items.SMOOTH_BASALT, Items.BLACKSTONE,
-                Items.POLISHED_BLACKSTONE, Items.END_STONE, Items.END_STONE_BRICKS,
-                Items.PURPUR_BLOCK, Items.PURPUR_PILLAR, Items.PRISMARINE,
-                Items.PRISMARINE_BRICKS, Items.DARK_PRISMARINE, Items.QUARTZ_BLOCK,
-                Items.SMOOTH_QUARTZ, Items.QUARTZ_BRICKS, Items.QUARTZ_PILLAR,
-                Items.AMETHYST_BLOCK, Items.BUDDING_AMETHYST, Items.COPPER_BLOCK,
-                Items.EXPOSED_COPPER, Items.WEATHERED_COPPER, Items.OXIDIZED_COPPER
-        ));
-
-        // ===== ORES & RAW MATERIALS =====
-        CATEGORIES.put("Ores & Materials", Arrays.asList(
-                Items.COAL, Items.CHARCOAL, Items.RAW_IRON, Items.RAW_COPPER, Items.RAW_GOLD,
-                Items.IRON_INGOT, Items.COPPER_INGOT, Items.GOLD_INGOT,
-                Items.IRON_NUGGET, Items.GOLD_NUGGET,
-                SlayerItems.createCompactedIron().getItem(),
-                SlayerItems.createCompactedGold().getItem(),
-                SlayerItems.createCompactedDiamond().getItem(),
-                SlayerItems.createCompactedEmerald().getItem(),
-                SlayerItems.createCompactedNetherite().getItem(),
-                SlayerItems.createCompactedCopper().getItem(),
-                SlayerItems.createCompactedCoal().getItem(),
-                SlayerItems.createCompactedLapis().getItem(),
-                SlayerItems.createCompactedRedstone().getItem(),
-                SlayerItems.createCompactedQuartz().getItem(),
-                Items.REDSTONE, Items.QUARTZ, Items.NETHERITE_SCRAP, Items.NETHERITE_INGOT,
-                Items.AMETHYST_SHARD, Items.ECHO_SHARD, Items.FLINT,
-                Items.COAL_BLOCK, Items.IRON_BLOCK, Items.COPPER_BLOCK, Items.GOLD_BLOCK,
-                Items.DIAMOND_BLOCK, Items.EMERALD_BLOCK, Items.LAPIS_BLOCK,
-                Items.REDSTONE_BLOCK, Items.NETHERITE_BLOCK
-        ));
-
-        // ===== FOOD =====
-        CATEGORIES.put("Food", Arrays.asList(
-                Items.APPLE, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE,
-                Items.BREAD, Items.WHEAT, Items.WHEAT_SEEDS,
-                Items.CARROT, Items.GOLDEN_CARROT, Items.POTATO, Items.BAKED_POTATO, Items.POISONOUS_POTATO,
-                Items.BEETROOT, Items.BEETROOT_SEEDS, Items.BEETROOT_SOUP,
-                Items.MELON_SLICE, Items.MELON, Items.GLISTERING_MELON_SLICE,
-                Items.PUMPKIN, Items.PUMPKIN_PIE, Items.CARVED_PUMPKIN,
-                Items.SWEET_BERRIES, Items.GLOW_BERRIES, Items.CHORUS_FRUIT,
-                Items.BEEF, Items.COOKED_BEEF, Items.PORKCHOP, Items.COOKED_PORKCHOP,
-                Items.CHICKEN, Items.COOKED_CHICKEN, Items.MUTTON, Items.COOKED_MUTTON,
-                Items.RABBIT, Items.COOKED_RABBIT, Items.RABBIT_STEW,
-                Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON,
-                Items.TROPICAL_FISH, Items.PUFFERFISH,
-                Items.MUSHROOM_STEW, Items.SUSPICIOUS_STEW, Items.COOKIE, Items.CAKE,
-                Items.HONEY_BOTTLE, Items.DRIED_KELP, Items.ROTTEN_FLESH, Items.SPIDER_EYE,
-                Items.SUGAR, Items.SUGAR_CANE, Items.COCOA_BEANS, Items.EGG, Items.MILK_BUCKET
-        ));
-
-        // ===== MOB DROPS =====
-        CATEGORIES.put("Mob Drops", Arrays.asList(
-                Items.STRING, Items.FEATHER, Items.LEATHER, Items.RABBIT_HIDE, Items.RABBIT_FOOT,
-                Items.BONE, Items.BONE_MEAL, Items.BONE_BLOCK,
-                Items.GUNPOWDER, Items.SLIME_BALL, Items.SLIME_BLOCK,
-                Items.ENDER_PEARL, Items.ENDER_EYE, Items.BLAZE_ROD, Items.BLAZE_POWDER,
-                Items.GHAST_TEAR, Items.MAGMA_CREAM, Items.MAGMA_BLOCK,
-                Items.NETHER_STAR, Items.WITHER_SKELETON_SKULL,
-                Items.PRISMARINE_SHARD, Items.PRISMARINE_CRYSTALS,
-                Items.SHULKER_SHELL, Items.PHANTOM_MEMBRANE, Items.DRAGON_BREATH,
-                Items.INK_SAC, Items.GLOW_INK_SAC, Items.HONEYCOMB, Items.HONEYCOMB_BLOCK,
-                Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE, Items.TURTLE_SCUTE,
-                Items.ARMADILLO_SCUTE, Items.GOAT_HORN,
-                Items.EXPERIENCE_BOTTLE, Items.TOTEM_OF_UNDYING, Items.TRIDENT,
-                Items.NAUTILUS_SHELL, Items.HEART_OF_THE_SEA, Items.TURTLE_EGG,
-                Items.WHITE_WOOL, Items.BLACK_WOOL,
-                Items.COBWEB
-        ));
-
-        // ===== REDSTONE =====
-        CATEGORIES.put("Redstone", Arrays.asList(
-                Items.REDSTONE, Items.REDSTONE_BLOCK, Items.REDSTONE_TORCH,
-                Items.REDSTONE_LAMP, Items.REPEATER, Items.COMPARATOR,
-                Items.PISTON, Items.STICKY_PISTON, Items.SLIME_BLOCK, Items.HONEY_BLOCK,
-                Items.OBSERVER, Items.HOPPER, Items.DROPPER, Items.DISPENSER,
-                Items.LEVER, Items.STONE_BUTTON, Items.OAK_BUTTON,
-                Items.STONE_PRESSURE_PLATE, Items.OAK_PRESSURE_PLATE,
-                Items.LIGHT_WEIGHTED_PRESSURE_PLATE, Items.HEAVY_WEIGHTED_PRESSURE_PLATE,
-                Items.TRIPWIRE_HOOK, Items.TRAPPED_CHEST, Items.TNT,
-                Items.NOTE_BLOCK, Items.JUKEBOX, Items.DAYLIGHT_DETECTOR,
-                Items.TARGET, Items.LIGHTNING_ROD, Items.SCULK_SENSOR, Items.CALIBRATED_SCULK_SENSOR
-        ));
-
-        // ===== TOOLS & WEAPONS =====
-        CATEGORIES.put("Tools", Arrays.asList(
-        ));
-
-        // ===== ARMOR =====
-        CATEGORIES.put("Armor", Arrays.asList(
-                Items.TURTLE_HELMET
-        ));
-
-        // ===== DECORATION =====
-        CATEGORIES.put("Decoration", Arrays.asList(
-                Items.TORCH, Items.SOUL_TORCH, Items.LANTERN, Items.SOUL_LANTERN,
-                Items.CANDLE, Items.WHITE_CANDLE, Items.BLACK_CANDLE,
-                Items.IRON_CHAIN, Items.IRON_BARS, Items.LADDER, Items.SCAFFOLDING,
-                Items.FLOWER_POT, Items.PAINTING, Items.ITEM_FRAME, Items.GLOW_ITEM_FRAME,
-                Items.ARMOR_STAND, Items.END_ROD, Items.BELL, Items.DECORATED_POT,
-                Items.OAK_SIGN, Items.SPRUCE_SIGN, Items.BIRCH_SIGN,
-                Items.OAK_FENCE, Items.SPRUCE_FENCE, Items.NETHER_BRICK_FENCE,
-                Items.OAK_FENCE_GATE, Items.SPRUCE_FENCE_GATE,
-                Items.BOOKSHELF, Items.CHISELED_BOOKSHELF, Items.LECTERN,
-                Items.BREWING_STAND, Items.CAULDRON, Items.ENCHANTING_TABLE, Items.ANVIL,
-                Items.GRINDSTONE, Items.STONECUTTER, Items.SMITHING_TABLE, Items.LOOM,
-                Items.CARTOGRAPHY_TABLE, Items.FLETCHING_TABLE, Items.COMPOSTER, Items.BARREL,
-                Items.SMOKER, Items.BLAST_FURNACE, Items.FURNACE, Items.CAMPFIRE, Items.SOUL_CAMPFIRE
-        ));
-
-        // ===== PLANTS & FLOWERS =====
-        CATEGORIES.put("Plants", Arrays.asList(
-                Items.OAK_SAPLING, Items.SPRUCE_SAPLING, Items.BIRCH_SAPLING,
-                Items.JUNGLE_SAPLING, Items.ACACIA_SAPLING, Items.DARK_OAK_SAPLING,
-                Items.CHERRY_SAPLING, Items.MANGROVE_PROPAGULE,
-                Items.OAK_LEAVES, Items.SPRUCE_LEAVES, Items.BIRCH_LEAVES,
-                Items.AZALEA, Items.FLOWERING_AZALEA, Items.MOSS_BLOCK, Items.MOSS_CARPET,
-                Items.VINE, Items.GLOW_LICHEN, Items.SCULK, Items.SCULK_VEIN,
-                Items.LILY_PAD, Items.SEAGRASS, Items.KELP, Items.DRIED_KELP_BLOCK,
-                Items.SEA_PICKLE, Items.CACTUS, Items.BAMBOO, Items.DEAD_BUSH,
-                Items.FERN, Items.LARGE_FERN, Items.SHORT_GRASS, Items.TALL_GRASS,
-                Items.DANDELION, Items.POPPY, Items.BLUE_ORCHID, Items.ALLIUM,
-                Items.AZURE_BLUET, Items.RED_TULIP, Items.ORANGE_TULIP,
-                Items.PINK_TULIP, Items.WHITE_TULIP, Items.OXEYE_DAISY,
-                Items.CORNFLOWER, Items.LILY_OF_THE_VALLEY, Items.WITHER_ROSE,
-                Items.TORCHFLOWER, Items.PITCHER_PLANT, Items.SPORE_BLOSSOM,
-                Items.SUNFLOWER, Items.LILAC, Items.ROSE_BUSH, Items.PEONY,
-                Items.PINK_PETALS, Items.BROWN_MUSHROOM, Items.RED_MUSHROOM,
-                Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS, Items.NETHER_WART,
-                Items.CHORUS_FLOWER
-        ));
-
-        // ===== POTIONS & BREWING =====
-        CATEGORIES.put("Brewing", Arrays.asList(
-                Items.GLASS_BOTTLE, Items.WATER_BUCKET,
-                Items.NETHER_WART, Items.BLAZE_POWDER, Items.BLAZE_ROD,
-                Items.GHAST_TEAR, Items.MAGMA_CREAM, Items.FERMENTED_SPIDER_EYE,
-                Items.SPIDER_EYE, Items.SUGAR, Items.GLISTERING_MELON_SLICE,
-                Items.RABBIT_FOOT, Items.GOLDEN_CARROT, Items.PUFFERFISH,
-                Items.PHANTOM_MEMBRANE, Items.DRAGON_BREATH,
-                Items.REDSTONE, Items.GLOWSTONE_DUST, Items.GUNPOWDER
-        ));
-
-        // ===== DYES =====
-        CATEGORIES.put("Dyes", Arrays.asList(
-                Items.WHITE_DYE, Items.ORANGE_DYE, Items.MAGENTA_DYE, Items.LIGHT_BLUE_DYE,
-                Items.YELLOW_DYE, Items.LIME_DYE, Items.PINK_DYE, Items.GRAY_DYE,
-                Items.LIGHT_GRAY_DYE, Items.CYAN_DYE, Items.PURPLE_DYE, Items.BLUE_DYE,
-                Items.BROWN_DYE, Items.GREEN_DYE, Items.RED_DYE, Items.BLACK_DYE,
-                Items.WHITE_CONCRETE, Items.ORANGE_CONCRETE, Items.MAGENTA_CONCRETE,
-                Items.LIGHT_BLUE_CONCRETE, Items.YELLOW_CONCRETE, Items.LIME_CONCRETE,
-                Items.PINK_CONCRETE, Items.GRAY_CONCRETE, Items.LIGHT_GRAY_CONCRETE,
-                Items.CYAN_CONCRETE, Items.PURPLE_CONCRETE, Items.BLUE_CONCRETE,
-                Items.BROWN_CONCRETE, Items.GREEN_CONCRETE, Items.RED_CONCRETE, Items.BLACK_CONCRETE,
-                Items.WHITE_CONCRETE_POWDER, Items.BLACK_CONCRETE_POWDER,
-                Items.TERRACOTTA, Items.WHITE_TERRACOTTA, Items.ORANGE_TERRACOTTA, Items.BLACK_TERRACOTTA,
-                Items.TERRACOTTA, Items.WHITE_GLAZED_TERRACOTTA, Items.BLACK_GLAZED_TERRACOTTA,
-                Items.WHITE_STAINED_GLASS, Items.BLACK_STAINED_GLASS
-        ));
-
-        // ===== MISCELLANEOUS =====
-        CATEGORIES.put("Miscellaneous", Arrays.asList(
-                Items.BUCKET, Items.WATER_BUCKET, Items.LAVA_BUCKET, Items.POWDER_SNOW_BUCKET,
-                Items.AXOLOTL_BUCKET, Items.TADPOLE_BUCKET,
-                Items.COD_BUCKET, Items.SALMON_BUCKET, Items.TROPICAL_FISH_BUCKET, Items.PUFFERFISH_BUCKET,
-                Items.BOOK, Items.WRITABLE_BOOK, Items.ENCHANTED_BOOK, Items.KNOWLEDGE_BOOK,
-                Items.PAPER, Items.MAP, Items.FILLED_MAP,
-                Items.MINECART, Items.CHEST_MINECART, Items.FURNACE_MINECART,
-                Items.TNT_MINECART, Items.HOPPER_MINECART,
-                Items.OAK_BOAT, Items.OAK_CHEST_BOAT, Items.BAMBOO_RAFT,
-                Items.RAIL, Items.POWERED_RAIL, Items.DETECTOR_RAIL, Items.ACTIVATOR_RAIL,
-                Items.CHEST, Items.ENDER_CHEST, Items.SHULKER_BOX,
-                Items.WHITE_SHULKER_BOX, Items.BLACK_SHULKER_BOX,
-                Items.BUNDLE, Items.RECOVERY_COMPASS,
-                Items.SPONGE, Items.WET_SPONGE, Items.CONDUIT, Items.BEACON,
-                Items.END_CRYSTAL, Items.RESPAWN_ANCHOR,
-                Items.LODESTONE
-        ));
-
-        // ===== SPECIAL ITEMS =====
-        CATEGORIES.put("Special Items", Arrays.asList(
-                SlayerItems.createTheGavel().getItem(),
-                CustomItemHandler.createHarveysStick().getItem(),
-                SlayerItems.createMidasSword().getItem(),
-                CustomItemHandler.createHermesShoes().getItem(),
-                // Add all HPEBM marks
-                CustomItemHandler.createHPEBM(1).getItem(),
-                CustomItemHandler.createHPEBM(2).getItem(),
-                CustomItemHandler.createHPEBM(3).getItem(),
-                CustomItemHandler.createHPEBM(4).getItem(),
-                CustomItemHandler.createHPEBM(5).getItem(),
-                CustomItemHandler.createUltraOverclockedBeam().getItem()
-        ));
-
         // ===== COMPACTED MATERIALS =====
-        CATEGORIES.put("Compacted Materials", Arrays.asList(
+        CATEGORIES.put("Compacted Items", Arrays.asList(
                 SlayerItems.createCompactedIron().getItem(),
                 SlayerItems.createCompactedGold().getItem(),
                 SlayerItems.createCompactedDiamond().getItem(),
@@ -265,7 +53,7 @@ public class ShopManager {
         ));
 
         // ===== SUPER COMPACTED MATERIALS =====
-        CATEGORIES.put("Super Compacted", Arrays.asList(
+        CATEGORIES.put("Super Compacted Items", Arrays.asList(
                 SlayerItems.createSuperCompactedGold().getItem(),
                 SlayerItems.createSuperCompactedIron().getItem(),
                 SlayerItems.createSuperCompactedDiamond().getItem(),
@@ -273,33 +61,9 @@ public class ShopManager {
                 SlayerItems.createSuperCompactedNetherite().getItem()
         ));
 
-        // ===== ENCHANTED MATERIALS =====
-        CATEGORIES.put("Enchanted Materials", Arrays.asList(
-                SlayerItems.createEnchantedBlackstone().getItem(),
-                SlayerItems.createEnchantedGildedBlackstone().getItem(),
-                // Add all other enchanted materials
-                Items.ENCHANTED_GOLDEN_APPLE,
-                Items.EXPERIENCE_BOTTLE,
-                Items.SPECTRAL_ARROW,
-                Items.TIPPED_ARROW,
-                // Weapon Attribute Tokens (add all 10 types)
-                SlayerItems.createAttributeToken(ArmourAttribute.BURNING).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.SIGHTLESS).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.FRENZIED).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.GROUNDED).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.WEBBED).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.FROST).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.PHANTOMSTEP).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.CURSED).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.OVERGROWN).getItem(),
-                SlayerItems.createAttributeToken(ArmourAttribute.VOLATILE).getItem()
-        ));
-
         // ===== ENCHANTED ITEMS =====
         CATEGORIES.put("Enchanted Items", Arrays.asList(
-                // Enchanted Tools
-                Items.KNOWLEDGE_BOOK,
-                // Custom Enchanted Blocks
+                // Enchanted Blocks
                 SlayerItems.createEnchantedCobblestone().getItem(),
                 SlayerItems.createEnchantedStone().getItem(),
                 SlayerItems.createEnchantedIronBlock().getItem(),
@@ -307,6 +71,17 @@ public class ShopManager {
                 SlayerItems.createEnchantedDiamondBlock().getItem(),
                 SlayerItems.createEnchantedBlackstone().getItem(),
                 SlayerItems.createEnchantedGildedBlackstone().getItem(),
+                SlayerItems.createEnchantedOakLog().getItem(),
+                // Enchanted Flowers
+                SlayerItems.createEnchantedRose().getItem(),
+                SlayerItems.createEnchantedDandelion().getItem(),
+                // Enchanted Crops
+                SlayerItems.createEnchantedWheat().getItem(),
+                SlayerItems.createEnchantedCarrot().getItem(),
+                SlayerItems.createEnchantedPotato().getItem(),
+                SlayerItems.createEnchantedSugarCane().getItem(),
+                // Enchanted Tools
+                Items.KNOWLEDGE_BOOK,
                 // Enchanted Armor (all variants)
                 Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS,
                 Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS,
@@ -337,18 +112,7 @@ public class ShopManager {
                 // Totem of Undying
                 Items.TOTEM_OF_UNDYING,
                 // Carrot on a Stick & Warped Fungus on a Stick
-                Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK,
-                // Debug Stick (if available)
-                // Items.DEBUG_STICK,
-                // Enchanted Golden Apple
-                Items.ENCHANTED_GOLDEN_APPLE,
-                // Special enchanted items
-                Items.FIREWORK_ROCKET, Items.FIREWORK_STAR,
-                Items.ENDER_PEARL, Items.ENDER_EYE,
-                Items.CHORUS_FRUIT,
-                Items.SPECTRAL_ARROW, Items.TIPPED_ARROW,
-                Items.POTION, Items.LINGERING_POTION, Items.SPLASH_POTION,
-                Items.EXPERIENCE_BOTTLE
+                Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK
         ));
     }
 

@@ -993,7 +993,7 @@ public class CustomItemHandler {
         
         // Check for gold items by material type
         Item item = stack.getItem();
-        return item == Items.GOLD_INGOT ||
+        boolean isVanillaGold = item == Items.GOLD_INGOT ||
                item == Items.GOLD_NUGGET ||
                item == Items.GOLD_BLOCK ||
                item == Items.GOLDEN_SWORD ||
@@ -1010,10 +1010,31 @@ public class CustomItemHandler {
                item == Items.RAW_GOLD ||
                item == Items.GILDED_BLACKSTONE ||
                item == Items.LIGHT_WEIGHTED_PRESSURE_PLATE ||
-               item == Items.HEAVY_WEIGHTED_PRESSURE_PLATE ||
-               // Check for custom gold items by name
-               (stack.get(DataComponentTypes.CUSTOM_NAME) != null && 
-                stack.get(DataComponentTypes.CUSTOM_NAME).getString().toLowerCase().contains("gold"));
+               item == Items.HEAVY_WEIGHTED_PRESSURE_PLATE;
+        
+        if (isVanillaGold) return true;
+        
+        // Check for custom gold items by name
+        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (customName != null) {
+            String name = customName.getString().toLowerCase();
+            if (name.contains("gold")) return true;
+        }
+        
+        // Check for T1/T2 piglin swords and armor (for Midas crown)
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId != null) {
+            // Check for T1/T2 piglin swords
+            if (customId.equals("piglin_t1_sword") || customId.equals("piglin_t2_sword")) {
+                return true;
+            }
+            // Check for T1/T2 piglin armor
+            if (customId.startsWith("piglin_t1_") || customId.startsWith("piglin_t2_")) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public static void tickSlayerSystems(ServerPlayerEntity player) {
