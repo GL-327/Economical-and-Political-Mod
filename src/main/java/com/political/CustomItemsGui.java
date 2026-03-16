@@ -384,7 +384,7 @@ public class CustomItemsGui {
         
         for (int i = 0; i < 10 && i < slots.length; i++) {
             WeaponAttribute attr = attributes[i];
-            ItemStack token = SlayerItems.createAttributeToken(attr);
+            ItemStack token = SlayerItems.createWeaponAttributeToken(attr);
             
             List<Text> lore = new ArrayList<>();
             lore.add(Text.literal(""));
@@ -408,7 +408,7 @@ public class CustomItemsGui {
         // Navigation
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openMainMenu(player))
+                .setCallback((idx, type, action) -> open(player))
                 .build());
 
         gui.open();
@@ -441,13 +441,13 @@ public class CustomItemsGui {
         // Boss drop items
         int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
         ItemStack[] drops = {
-            SlayerItems.createWardenHeart(),
-            SlayerItems.createEndermanCore(),
-            SlayerItems.createPiglinCore(),
-            SlayerItems.createSpiderCore(),
-            SlayerItems.createSkeletonCore(),
-            SlayerItems.createSlimeCore(),
-            SlayerItems.createZombieCore(),
+            SlayerItems.createCore(SlayerManager.SlayerType.WARDEN),
+            SlayerItems.createCore(SlayerManager.SlayerType.ENDERMAN),
+            SlayerItems.createCore(SlayerManager.SlayerType.PIGLIN),
+            SlayerItems.createCore(SlayerManager.SlayerType.SPIDER),
+            SlayerItems.createCore(SlayerManager.SlayerType.SKELETON),
+            SlayerItems.createCore(SlayerManager.SlayerType.SLIME),
+            SlayerItems.createCore(SlayerManager.SlayerType.ZOMBIE),
             SlayerItems.createUndeadHeart()
         };
 
@@ -455,7 +455,7 @@ public class CustomItemsGui {
             ItemStack drop = drops[i];
             List<Text> lore = new ArrayList<>();
             lore.add(Text.literal(""));
-            lore.add(Text.literal(drop.get(DataComponentTypes.CUSTOM_NAME).getString().orElse("Unknown")));
+            lore.add(Text.literal(drop.get(DataComponentTypes.CUSTOM_NAME).getString()));
             lore.add(Text.literal(""));
             lore.add(Text.literal("🏆 Boss drop material").formatted(Formatting.GOLD));
             
@@ -469,7 +469,7 @@ public class CustomItemsGui {
         // Navigation
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openMainMenu(player))
+                .setCallback((idx, type, action) -> open(player))
                 .build());
 
         gui.open();
@@ -505,7 +505,7 @@ public class CustomItemsGui {
         
         for (int i = 0; i < Math.min(types.length, slots.length); i++) {
             SlayerManager.SlayerType type = types[i];
-            ItemStack material = SlayerItems.createChunk(type);
+            ItemStack material = SlayerItems.createCore(type);
             
             List<Text> lore = new ArrayList<>();
             lore.add(Text.literal(""));
@@ -523,7 +523,7 @@ public class CustomItemsGui {
         // Navigation
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openMainMenu(player))
+                .setCallback((idx, type, action) -> open(player))
                 .build());
 
         gui.open();

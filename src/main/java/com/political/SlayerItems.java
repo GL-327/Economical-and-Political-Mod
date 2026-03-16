@@ -3775,4 +3775,28 @@ public class SlayerItems {
         stack.set(DataComponentTypes.LORE, new LoreComponent(newLore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
+
+    public static ItemStack createWeaponAttributeToken(WeaponAttribute attr) {
+        ItemStack token = new ItemStack(Items.NETHER_STAR);
+        token.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚔ " + attr.displayName + " Token").formatted(attr.color, Formatting.BOLD));
+        setSlayerLore(token, java.util.List.of(
+                "🎁 Weapon attribute token",
+                "",
+                "⚔ " + attr.displayName,
+                "",
+                attr.buffSummary,
+                "",
+                "💰 Cost: " + attr.xpCost + " XP"
+        ));
+        token.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        
+        // Store attribute ID in NBT
+        NbtCompound nbt = new NbtCompound();
+        nbt.putString(WEAPON_ATTRIBUTE_TOKEN_KEY, attr.id);
+        token.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        
+        setCustomItemId(token, "weapon_attribute_token_" + attr.id);
+        return token;
+    }
 }

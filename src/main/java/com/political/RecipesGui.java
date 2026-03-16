@@ -2,6 +2,8 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -409,7 +411,7 @@ public class RecipesGui {
         
         for (int i = 0; i < 10 && i < slots.length; i++) {
             WeaponAttribute attr = WeaponAttribute.values()[i];
-            ItemStack token = SlayerItems.createAttributeToken(attr);
+            ItemStack token = SlayerItems.createWeaponAttributeToken(attr);
             
             List<Text> lore = new ArrayList<>();
             lore.add(Text.literal(""));
