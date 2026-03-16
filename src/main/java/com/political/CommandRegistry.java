@@ -90,6 +90,18 @@ public class CommandRegistry {
                 )
                 .then(CommandManager.literal("enable")
                         .then(CommandManager.argument("item", StringArgumentType.string())
+                                .suggests((context, builder) -> {
+                                    // Suggest common items
+                                    builder.suggest("totem");
+                                    builder.suggest("midas_sword");
+                                    builder.suggest("hpebm");
+                                    builder.suggest("compacted_iron");
+                                    builder.suggest("super_compacted_diamond");
+                                    builder.suggest("slayer_sword");
+                                    builder.suggest("enchanted_cobblestone");
+                                    builder.suggest("gilded_netherite");
+                                    return builder.buildFuture();
+                                })
                                 .executes(context -> {
                                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                                     String item = StringArgumentType.getString(context, "item");
@@ -100,6 +112,18 @@ public class CommandRegistry {
                 )
                 .then(CommandManager.literal("disable")
                         .then(CommandManager.argument("item", StringArgumentType.string())
+                                .suggests((context, builder) -> {
+                                    // Suggest common items
+                                    builder.suggest("totem");
+                                    builder.suggest("midas_sword");
+                                    builder.suggest("hpebm");
+                                    builder.suggest("compacted_iron");
+                                    builder.suggest("super_compacted_diamond");
+                                    builder.suggest("slayer_sword");
+                                    builder.suggest("enchanted_cobblestone");
+                                    builder.suggest("gilded_netherite");
+                                    return builder.buildFuture();
+                                })
                                 .executes(context -> {
                                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                                     String item = StringArgumentType.getString(context, "item");
@@ -107,6 +131,31 @@ public class CommandRegistry {
                                     return 1;
                                 })
                         )
+                )
+                .then(CommandManager.literal("list")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            player.sendMessage(Text.literal("📋 All Available Recipes:").formatted(Formatting.GOLD), false);
+                            player.sendMessage(Text.literal(""), false);
+                            
+                            // Custom Items
+                            player.sendMessage(Text.literal("⚔️ Weapons:").formatted(Formatting.YELLOW), false);
+                            player.sendMessage(Text.literal("• midas_sword • all_slayer_swords • hpebm_mk1-6 • special_weapons").formatted(Formatting.GRAY), false);
+                            
+                            player.sendMessage(Text.literal("🛡️ Armor:").formatted(Formatting.YELLOW), false);
+                            player.sendMessage(Text.literal("• slayer_armor_t1_t2 • gold_armor_t1-5 • gilded_netherite • special_armor").formatted(Formatting.GRAY), false);
+                            
+                            player.sendMessage(Text.literal("🏭 Materials:").formatted(Formatting.YELLOW), false);
+                            player.sendMessage(Text.literal("• compacted_* (iron,gold,diamond,etc) • super_compacted_*").formatted(Formatting.GRAY), false);
+                            
+                            // Vanilla Items
+                            player.sendMessage(Text.literal("🔨 Vanilla:").formatted(Formatting.YELLOW), false);
+                            player.sendMessage(Text.literal("• totem • enchanted_* (cobblestone,stone,etc) • netherite").formatted(Formatting.GRAY), false);
+                            
+                            player.sendMessage(Text.literal(""), false);
+                            player.sendMessage(Text.literal("Use /setrecipe enable <item> to enable recipes").formatted(Formatting.GREEN), false);
+                            return 1;
+                        })
                 ));
 
         // Customitems command

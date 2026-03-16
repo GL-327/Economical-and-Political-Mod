@@ -397,8 +397,94 @@ public class RecipesGui {
     }
 
     private static void openHPEBMMenu(ServerPlayerEntity player) {
-        // TODO: Implement HPEBM menu
-        player.sendMessage(Text.literal("HPEBM menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚡ HPEBM Weapons"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.LIGHT_PURPLE))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.BLAZE_ROD)
+                .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚡ High-power energy weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🔋 All marks available").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // HPEBM Weapons
+        ItemStack[] hpebmWeapons = {
+            CustomItemHandler.createHPEBM(1),
+            CustomItemHandler.createHPEBM(2),
+            CustomItemHandler.createHPEBM(3),
+            CustomItemHandler.createHPEBM(4),
+            CustomItemHandler.createHPEBM(5),
+            CustomItemHandler.createUltraOverclockedBeam()
+        };
+
+        int[] hpebmSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+
+        for (int i = 0; i < Math.min(hpebmWeapons.length, hpebmSlots.length); i++) {
+            final int markNum = i + 1; // Make it effectively final
+            ItemStack weapon = hpebmWeapons[i];
+            String weaponName = weapon.get(DataComponentTypes.CUSTOM_NAME) != null ? 
+                weapon.get(DataComponentTypes.CUSTOM_NAME).getString() : "HPEBM Weapon";
+            
+            gui.setSlot(hpebmSlots[i], new GuiElementBuilder(weapon.getItem())
+                    .setName(weapon.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("⚡ " + weaponName).formatted(Formatting.LIGHT_PURPLE))
+                    .addLoreLine(Text.literal("🔋 Mark " + markNum + " Weapon").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.GREEN))
+                    .setCallback((idx, type2, action) -> {
+                        // Open recipe for this specific HPEBM weapon
+                        openHPEBMRecipe(player, markNum);
+                    })
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.RED))
+                .setCallback((index, type2, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    // Helper method to open HPEBM recipe
+    private static void openHPEBMRecipe(ServerPlayerEntity player, int mark) {
+        ItemStack result = mark <= 5 ? CustomItemHandler.createHPEBM(mark) : CustomItemHandler.createUltraOverclockedBeam();
+        String pageTitle = "⚡ HPEBM Mk" + mark;
+        
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openHPEBMMenu(player))) return;
+        
+        // Default recipe if no custom recipe found
+        ItemStack[] ingredients = {
+            new ItemStack(Items.IRON_SHOVEL, 1),           // Base weapon
+            new ItemStack(Items.REDSTONE, 8),             // Power component
+            new ItemStack(Items.GOLD_INGOT, 4),           // Energy conductor
+            new ItemStack(Items.GLOWSTONE_DUST, 4),      // Amplifier
+            new ItemStack(Items.QUARTZ, 2),                // Focus crystal
+            new ItemStack(Items.DIAMOND, 1),              // Durability
+            new ItemStack(Items.ENDER_PEARL, 1),          // Dimensional stabilizer
+            ItemStack.EMPTY,                             // Empty
+            ItemStack.EMPTY                              // Empty
+        };
+        
+        openRecipePage(player, pageTitle, 
+            Text.literal("⚡ HPEBM Mk" + mark).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+            ingredients, result, () -> openHPEBMMenu(player));
     }
 
     private static void openCustomRecipeCreator(ServerPlayerEntity player) {
