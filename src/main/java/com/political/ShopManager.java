@@ -71,7 +71,16 @@ public class ShopManager {
                 Items.COAL, Items.CHARCOAL, Items.RAW_IRON, Items.RAW_COPPER, Items.RAW_GOLD,
                 Items.IRON_INGOT, Items.COPPER_INGOT, Items.GOLD_INGOT,
                 Items.IRON_NUGGET, Items.GOLD_NUGGET,
-                Items.DIAMOND, Items.EMERALD, Items.LAPIS_LAZULI,
+                SlayerItems.createCompactedIron().getItem(),
+                SlayerItems.createCompactedGold().getItem(),
+                SlayerItems.createCompactedDiamond().getItem(),
+                SlayerItems.createCompactedEmerald().getItem(),
+                SlayerItems.createCompactedNetherite().getItem(),
+                SlayerItems.createCompactedCopper().getItem(),
+                SlayerItems.createCompactedCoal().getItem(),
+                SlayerItems.createCompactedLapis().getItem(),
+                SlayerItems.createCompactedRedstone().getItem(),
+                SlayerItems.createCompactedQuartz().getItem(),
                 Items.REDSTONE, Items.QUARTZ, Items.NETHERITE_SCRAP, Items.NETHERITE_INGOT,
                 Items.AMETHYST_SHARD, Items.ECHO_SHARD, Items.FLINT,
                 Items.COAL_BLOCK, Items.IRON_BLOCK, Items.COPPER_BLOCK, Items.GOLD_BLOCK,
@@ -780,19 +789,6 @@ public class ShopManager {
         setPrice(Items.RESPAWN_ANCHOR, 200);
         setPrice(Items.LODESTONE, 300);
 
-        // ===== CUSTOM ITEMS - COMPACTED MATERIALS =====
-        // Pricing based on 64 base materials, slightly discounted to prevent inflation
-        setCustomPrice(SlayerItems.createCompactedIron().getItem(), 192);       // 64 iron ingots = 256, discounted to 192
-        setCustomPrice(SlayerItems.createCompactedGold().getItem(), 288);       // 64 gold ingots = 384, discounted to 288
-        setCustomPrice(SlayerItems.createCompactedDiamond().getItem(), 3360);    // 64 diamonds = 4480, discounted to 3360
-        setCustomPrice(SlayerItems.createCompactedEmerald().getItem(), 2880);    // 64 emeralds = 3840, discounted to 2880
-        setCustomPrice(SlayerItems.createCompactedNetherite().getItem(), 30240);  // 64 netherite = 40320, discounted to 30240
-        setCustomPrice(SlayerItems.createCompactedCopper().getItem(), 96);        // 64 copper = 128, discounted to 96
-        setCustomPrice(SlayerItems.createCompactedCoal().getItem(), 48);         // 64 coal = 64, discounted to 48
-        setCustomPrice(SlayerItems.createCompactedLapis().getItem(), 240);       // 64 lapis = 320, discounted to 240
-        setCustomPrice(SlayerItems.createCompactedRedstone().getItem(), 192);     // 64 redstone = 256, discounted to 192
-        setCustomPrice(SlayerItems.createCompactedQuartz().getItem(), 96);       // 64 quartz = 128, discounted to 96
-
         // ===== CUSTOM ITEMS - SUPER COMPACTED MATERIALS =====
         // Pricing based on 576 base materials (9x compacted), heavily discounted
         setCustomPrice(SlayerItems.createSuperCompactedGold().getItem(), 2592);     // 576 gold ingots = 3456, discounted to 2592
@@ -805,6 +801,9 @@ public class ShopManager {
         // Premium materials for advanced crafting
         setCustomPrice(SlayerItems.createEnchantedBlackstone().getItem(), 5000);      // Premium crafting material
         setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 8000); // Ultimate crafting material
+        
+        // Add more enchanted materials as needed
+        // Note: These are premium materials for advanced crafting recipes
 
         // Snapshot defaults the first time (when DEFAULT_PRICES is empty)
         if (DEFAULT_PRICES.isEmpty()) {

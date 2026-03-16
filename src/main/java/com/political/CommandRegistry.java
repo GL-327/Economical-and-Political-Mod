@@ -77,6 +77,22 @@ public class CommandRegistry {
                 })
         );
 
+        // Setrecipe command
+        dispatcher.register(CommandManager.literal("setrecipe")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    RecipesGui.openMainMenu(player);
+                    return 1;
+                }));
+
+        // Customitems command
+        dispatcher.register(CommandManager.literal("customitems")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    CustomItemsGui.open(player);
+                    return 1;
+                }));
+
 // Alias
         dispatcher.register(CommandManager.literal("recipe")
                 .executes(context -> {
