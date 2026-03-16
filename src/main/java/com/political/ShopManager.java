@@ -299,6 +299,14 @@ public class ShopManager {
         CATEGORIES.put("Enchanted Items", Arrays.asList(
                 // Enchanted Tools
                 Items.KNOWLEDGE_BOOK,
+                // Custom Enchanted Blocks
+                SlayerItems.createEnchantedCobblestone().getItem(),
+                SlayerItems.createEnchantedStone().getItem(),
+                SlayerItems.createEnchantedIronBlock().getItem(),
+                SlayerItems.createEnchantedGoldBlock().getItem(),
+                SlayerItems.createEnchantedDiamondBlock().getItem(),
+                SlayerItems.createEnchantedBlackstone().getItem(),
+                SlayerItems.createEnchantedGildedBlackstone().getItem(),
                 // Enchanted Armor (all variants)
                 Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS,
                 Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS,
@@ -801,6 +809,13 @@ public class ShopManager {
         // Premium materials for advanced crafting
         setCustomPrice(SlayerItems.createEnchantedBlackstone().getItem(), 5000);      // Premium crafting material
         setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 8000); // Ultimate crafting material
+        
+        // Custom Enchanted Blocks
+        setCustomPrice(SlayerItems.createEnchantedCobblestone().getItem(), 1000);     // Basic enchanted block
+        setCustomPrice(SlayerItems.createEnchantedStone().getItem(), 1200);           // Basic enchanted block
+        setCustomPrice(SlayerItems.createEnchantedIronBlock().getItem(), 3000);        // Mid-tier enchanted block
+        setCustomPrice(SlayerItems.createEnchantedGoldBlock().getItem(), 4000);        // High-tier enchanted block
+        setCustomPrice(SlayerItems.createEnchantedDiamondBlock().getItem(), 6000);     // Premium enchanted block
         
         // Add more enchanted materials as needed
         // Note: These are premium materials for advanced crafting recipes

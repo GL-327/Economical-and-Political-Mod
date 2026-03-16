@@ -3553,6 +3553,84 @@ public class SlayerItems {
         return blackstone;
     }
 
+    // ENCHANTED BLOCKS - For shop and crafting
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createEnchantedCobblestone() {
+        ItemStack cobblestone = new ItemStack(Items.COBBLESTONE);
+        cobblestone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Cobblestone").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced cobblestone").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 cobblestone").formatted(Formatting.GRAY));
+        cobblestone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        cobblestone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(cobblestone, "enchanted_cobblestone");
+        return cobblestone;
+    }
+
+    public static ItemStack createEnchantedStone() {
+        ItemStack stone = new ItemStack(Items.STONE);
+        stone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Stone").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced stone").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 stone").formatted(Formatting.GRAY));
+        stone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(stone, "enchanted_stone");
+        return stone;
+    }
+
+    public static ItemStack createEnchantedIronBlock() {
+        ItemStack ironBlock = new ItemStack(Items.IRON_BLOCK);
+        ironBlock.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Iron Block").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced iron block").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 iron blocks").formatted(Formatting.GRAY));
+        ironBlock.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        ironBlock.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(ironBlock, "enchanted_iron_block");
+        return ironBlock;
+    }
+
+    public static ItemStack createEnchantedGoldBlock() {
+        ItemStack goldBlock = new ItemStack(Items.GOLD_BLOCK);
+        goldBlock.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Gold Block").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced gold block").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 gold blocks").formatted(Formatting.GRAY));
+        goldBlock.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        goldBlock.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(goldBlock, "enchanted_gold_block");
+        return goldBlock;
+    }
+
+    public static ItemStack createEnchantedDiamondBlock() {
+        ItemStack diamondBlock = new ItemStack(Items.DIAMOND_BLOCK);
+        diamondBlock.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Diamond Block").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced diamond block").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 diamond blocks").formatted(Formatting.GRAY));
+        diamondBlock.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        diamondBlock.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(diamondBlock, "enchanted_diamond_block");
+        return diamondBlock;
+    }
+
     // GILDED NETHERITE ARMOR - Ultimate protection
     // ═══════════════════════════════════════════════════════════════
 
