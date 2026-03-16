@@ -407,9 +407,10 @@ public class RecipesGui {
 
         // Weapon attribute items
         int[] slots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        WeaponAttribute[] attributes = WeaponAttribute.values();
         
         for (int i = 0; i < 10 && i < slots.length; i++) {
-            WeaponAttribute attr = WeaponAttribute.values()[i];
+            WeaponAttribute attr = attributes[i];
             ItemStack token = SlayerItems.createWeaponAttributeToken(attr);
             
             List<Text> lore = new ArrayList<>();
