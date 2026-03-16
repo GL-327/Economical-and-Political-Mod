@@ -311,8 +311,84 @@ public class RecipesGui {
     // ============================================================
 
     private static void openT1SwordsMenu(ServerPlayerEntity player) {
-        // TODO: Implement T1 swords menu
-        player.sendMessage(Text.literal("T1 Swords menu coming soon!").formatted(Formatting.YELLOW), false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔️ T1 Bounty Swords"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.YELLOW))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔️ Tier 1 Bounty Swords").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🗡️ Basic bounty weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🎯 7 slayer types").formatted(Formatting.DARK_GRAY))
+                .glow()
+                .build());
+
+        // T1 Swords
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+
+        for (int i = 0; i < Math.min(types.length, slots.length); i++) {
+            SlayerManager.SlayerType type = types[i];
+            ItemStack sword = SlayerItems.createSlayerSword(type);
+            
+            gui.setSlot(slots[i], new GuiElementBuilder(sword.getItem())
+                    .setName(sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("🗡️ " + type.displayName + " Slayer").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("⭐ Tier 1 Weapon").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.GREEN))
+                    .setCallback((idx, type2, action) -> {
+                        // Open recipe for this specific sword
+                        openSlayerRecipe(player, type, 1);
+                    })
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.RED))
+                .setCallback((index, type2, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    // Helper method to open slayer recipe
+    private static void openSlayerRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type, int tier) {
+        ItemStack result = tier == 1 ? SlayerItems.createSlayerSword(type) : SlayerItems.createUpgradedSlayerSword(type);
+        String pageTitle = "⚔ " + type.displayName + " Slayer (T" + tier + ")";
+        
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openT1SwordsMenu(player))) return;
+        
+        // Default recipe if no custom recipe found
+        ItemStack[] ingredients = {
+            new ItemStack(Items.IRON_SWORD, 1),           // Base sword
+            new ItemStack(type.icon, 8),                // Slayer cores
+            new ItemStack(Items.REDSTONE, 4),            // Power component
+            ItemStack.EMPTY,                             // Empty
+            new ItemStack(Items.GOLD_INGOT, 2),          // Enhancement
+            new ItemStack(Items.LAPIS_LAZULI, 4),        // Magic component
+            ItemStack.EMPTY,                             // Empty
+            new ItemStack(Items.DIAMOND, 1),             // Durability
+            ItemStack.EMPTY                              // Empty
+        };
+        
+        openRecipePage(player, pageTitle, 
+            Text.literal("⚔ " + type.displayName + " Slayer (T" + tier + ")").formatted(Formatting.YELLOW, Formatting.BOLD),
+            ingredients, result, () -> openT1SwordsMenu(player));
     }
 
     private static void openT2SwordsMenu(ServerPlayerEntity player) {

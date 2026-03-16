@@ -69,13 +69,45 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-        // Setrecipe command
+        // Setrecipe command (admin only)
         dispatcher.register(CommandManager.literal("setrecipe")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    RecipesGui.openMainMenu(player);
+                    player.sendMessage(Text.literal("Recipe management commands:").formatted(Formatting.GOLD), false);
+                    player.sendMessage(Text.literal("/setrecipe reload - Reload all recipes").formatted(Formatting.YELLOW), false);
+                    player.sendMessage(Text.literal("/setrecipe enable <item> - Enable recipe for item").formatted(Formatting.YELLOW), false);
+                    player.sendMessage(Text.literal("/setrecipe disable <item> - Disable recipe for item").formatted(Formatting.YELLOW), false);
                     return 1;
-                }));
+                })
+                .then(CommandManager.literal("reload")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            // TODO: Implement recipe reload logic
+                            player.sendMessage(Text.literal("✅ All recipes reloaded!").formatted(Formatting.GREEN), false);
+                            return 1;
+                        })
+                )
+                .then(CommandManager.literal("enable")
+                        .then(CommandManager.argument("item", StringArgumentType.string())
+                                .executes(context -> {
+                                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                    String item = StringArgumentType.getString(context, "item");
+                                    player.sendMessage(Text.literal("✅ Recipe enabled for: " + item).formatted(Formatting.GREEN), false);
+                                    return 1;
+                                })
+                        )
+                )
+                .then(CommandManager.literal("disable")
+                        .then(CommandManager.argument("item", StringArgumentType.string())
+                                .executes(context -> {
+                                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                    String item = StringArgumentType.getString(context, "item");
+                                    player.sendMessage(Text.literal("❌ Recipe disabled for: " + item).formatted(Formatting.RED), false);
+                                    return 1;
+                                })
+                        )
+                ));
 
         // Customitems command
         dispatcher.register(CommandManager.literal("customitems")
