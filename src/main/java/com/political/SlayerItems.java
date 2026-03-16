@@ -2729,15 +2729,15 @@ public class SlayerItems {
     // ═══════════════════════════════════════════════════════════════
 
     public static ItemStack createSuperCompactedGold() {
-        ItemStack compacted = new ItemStack(Items.GOLD_INGOT);
+        ItemStack compacted = new ItemStack(Items.GOLD_BLOCK);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⭐ Super Compacted Gold").formatted(Formatting.GOLD, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("◆ SUPER COMPACTED BLOCK ◆").formatted(Formatting.GOLD, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("The ultimate storage for gold").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted gold").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("The ultimate gold storage block").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 compacted gold").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Gold Ingots").formatted(Formatting.GOLD)));
@@ -2748,15 +2748,15 @@ public class SlayerItems {
     }
 
     public static ItemStack createSuperCompactedIron() {
-        ItemStack compacted = new ItemStack(Items.IRON_INGOT);
+        ItemStack compacted = new ItemStack(Items.IRON_BLOCK);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⭐ Super Compacted Iron").formatted(Formatting.GRAY, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("◆ SUPER COMPACTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("The ultimate storage for iron").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted iron").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("The ultimate iron storage block").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 compacted iron").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Iron Ingots").formatted(Formatting.WHITE)));
@@ -2767,15 +2767,15 @@ public class SlayerItems {
     }
 
     public static ItemStack createSuperCompactedDiamond() {
-        ItemStack compacted = new ItemStack(Items.DIAMOND);
+        ItemStack compacted = new ItemStack(Items.DIAMOND_BLOCK);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⭐ Super Compacted Diamond").formatted(Formatting.AQUA, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("◆ SUPER COMPACTED BLOCK ◆").formatted(Formatting.AQUA, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("The ultimate storage for diamonds").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted diamond").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("The ultimate diamond storage block").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 compacted diamond").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Diamonds").formatted(Formatting.AQUA)));
@@ -2786,15 +2786,15 @@ public class SlayerItems {
     }
 
     public static ItemStack createSuperCompactedEmerald() {
-        ItemStack compacted = new ItemStack(Items.EMERALD);
+        ItemStack compacted = new ItemStack(Items.EMERALD_BLOCK);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⭐ Super Compacted Emerald").formatted(Formatting.GREEN, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal("◆ SUPER COMPACTED BLOCK ◆").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("The ultimate storage for emeralds").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted emerald").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("The ultimate emerald storage block").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 compacted emerald").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Emeralds").formatted(Formatting.GREEN)));
@@ -2805,15 +2805,15 @@ public class SlayerItems {
     }
 
     public static ItemStack createSuperCompactedNetherite() {
-        ItemStack compacted = new ItemStack(Items.NETHERITE_INGOT);
+        ItemStack compacted = new ItemStack(Items.NETHERITE_BLOCK);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⭐ Super Compacted Netherite").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ SUPER COMPACTED MATERIAL ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal("◆ SUPER COMPACTED BLOCK ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("The ultimate storage for netherite").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 9 enchanted netherite").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("The ultimate netherite storage block").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 9 compacted netherite").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
                 .append(Text.literal("576 Netherite Ingots").formatted(Formatting.DARK_GRAY)));
@@ -2824,18 +2824,18 @@ public class SlayerItems {
     }
 
     public static ItemStack createCompactedIron() {
-        ItemStack compacted = new ItemStack(Items.IRON_INGOT);
+        ItemStack compacted = new ItemStack(Items.RAW_IRON);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⬛ Compacted Iron").formatted(Formatting.GRAY, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("◆ COMPACTED ORE ◆").formatted(Formatting.GRAY, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("A dense ingot of compressed iron").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 64 iron ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Highly concentrated raw iron").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 raw iron").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Iron Ingots").formatted(Formatting.WHITE)));
+                .append(Text.literal("64 Raw Iron").formatted(Formatting.WHITE)));
         compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
         compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(compacted, "compacted_iron");
@@ -2843,18 +2843,18 @@ public class SlayerItems {
     }
 
     public static ItemStack createCompactedGold() {
-        ItemStack compacted = new ItemStack(Items.GOLD_INGOT);
+        ItemStack compacted = new ItemStack(Items.RAW_GOLD);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⬛ Compacted Gold").formatted(Formatting.YELLOW, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal("◆ COMPACTED ORE ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("A dense ingot of compressed gold").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 64 gold ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Highly concentrated raw gold").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 raw gold").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Gold Ingots").formatted(Formatting.YELLOW)));
+                .append(Text.literal("64 Raw Gold").formatted(Formatting.YELLOW)));
         compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
         compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(compacted, "compacted_gold");
@@ -2886,9 +2886,9 @@ public class SlayerItems {
                 Text.literal("⬛ Compacted Diamond").formatted(Formatting.AQUA, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("◆ COMPACTED ORE ◆").formatted(Formatting.AQUA, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("A dense gem of compressed diamond").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Highly concentrated diamond").formatted(Formatting.GRAY));
         lore.add(Text.literal("Crafted from 64 diamonds").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
@@ -2905,9 +2905,9 @@ public class SlayerItems {
                 Text.literal("⬛ Compacted Emerald").formatted(Formatting.GREEN, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal("◆ COMPACTED ORE ◆").formatted(Formatting.GREEN, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("A dense gem of compressed emerald").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Highly concentrated emerald").formatted(Formatting.GRAY));
         lore.add(Text.literal("Crafted from 64 emeralds").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
@@ -2919,18 +2919,18 @@ public class SlayerItems {
     }
 
     public static ItemStack createCompactedCopper() {
-        ItemStack compacted = new ItemStack(Items.COPPER_INGOT);
+        ItemStack compacted = new ItemStack(Items.RAW_COPPER);
         compacted.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⬛ Compacted Copper").formatted(Formatting.RED, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
-        lore.add(Text.literal("◆ COMPACTED MATERIAL ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal("◆ COMPACTED ORE ◆").formatted(Formatting.RED, Formatting.BOLD));
         lore.add(Text.literal(""));
-        lore.add(Text.literal("A dense ingot of compressed copper").formatted(Formatting.GRAY));
-        lore.add(Text.literal("Crafted from 64 copper ingots").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Highly concentrated raw copper").formatted(Formatting.GRAY));
+        lore.add(Text.literal("Crafted from 64 raw copper").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("Value: ").formatted(Formatting.GRAY)
-                .append(Text.literal("64 Copper Ingots").formatted(Formatting.RED)));
+                .append(Text.literal("64 Raw Copper").formatted(Formatting.RED)));
         compacted.set(DataComponentTypes.LORE, new LoreComponent(lore));
         compacted.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(compacted, "compacted_copper");
