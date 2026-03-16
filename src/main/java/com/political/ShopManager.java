@@ -24,7 +24,7 @@ public class ShopManager {
     private static final Map<Item, Integer> DEFAULT_PRICES = new LinkedHashMap<>();
 
     // Shop categories
-    public static final Map<String, List<ItemStack>> CATEGORIES = new LinkedHashMap<>();
+    public static final Map<String, List<Item>> CATEGORIES = new LinkedHashMap<>();
 
     // Custom price overrides
     private static final Map<Item, Integer> customPriceOverrides = new LinkedHashMap<>();
@@ -113,9 +113,10 @@ public class ShopManager {
                 Items.ELYTRA,
                 // Totem of Undying
                 Items.TOTEM_OF_UNDYING,
-                // Carrot on a Stick & Warped Fungus on a Stick
-                Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK
-        ));
+                // Carrot on a Stick
+                Items.CARROT_ON_A_STICK
+        );
+        CATEGORIES.put("Enchanted Items", enchantedItems);
     }
 
     private static void initializePrices() {
@@ -685,12 +686,7 @@ public class ShopManager {
     }
 
     public static List<Item> getItemsInCategory(String category) {
-        List<ItemStack> itemStacks = CATEGORIES.getOrDefault(category, new ArrayList<>());
-        List<Item> items = new ArrayList<>();
-        for (ItemStack stack : itemStacks) {
-            items.add(stack.getItem());
-        }
-        return items;
+        return new ArrayList<>(CATEGORIES.getOrDefault(category, new ArrayList<>()));
     }
 
     // ===== TRANSACTION METHODS =====
