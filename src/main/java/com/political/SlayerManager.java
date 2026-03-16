@@ -635,7 +635,12 @@ public class SlayerManager {
         world.spawnEntity(boss);
 
         // Make Warden aggressive toward the player
-        if (type == SlayerType.WARDEN) {
+        if (type == SlayerType.WARDEN && boss instanceof net.minecraft.entity.mob.WardenEntity warden) {
+            // Set target first
+            warden.setTarget(player);
+            // Then increase anger to make it immediately aggressive (prevents digging)
+            warden.increaseAngerAt(player, 150, true);
+        } else if (type == SlayerType.WARDEN) {
             boss.setTarget(player);
         }
 

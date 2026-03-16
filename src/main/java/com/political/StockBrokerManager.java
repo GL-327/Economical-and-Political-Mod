@@ -129,14 +129,7 @@ public class StockBrokerManager {
         }
 
         // Open stock market GUI
-        openStockMarketGui(player);
+        StockMarketGui.openMainMenu(player);
         return ActionResult.SUCCESS;
-    }
-
-    private static void openStockMarketGui(ServerPlayerEntity player) {
-        // This is a placeholder for now - will be expanded when stock market is implemented
-        player.sendMessage(Text.literal("📈 Stock Market coming soon!").formatted(Formatting.DARK_BLUE, Formatting.BOLD), false);
-        player.sendMessage(Text.literal("💹 The Stock Broker is preparing to open the market...").formatted(Formatting.GRAY), false);
-        player.sendMessage(Text.literal("📊 Track prices, analyze trends, and invest wisely!").formatted(Formatting.GREEN), false);
     }
 }

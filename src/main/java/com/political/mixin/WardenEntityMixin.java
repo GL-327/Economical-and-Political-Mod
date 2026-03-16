@@ -1,35 +1,47 @@
 package com.political.mixin;
 
 import com.political.SlayerManager;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WardenEntity.class)
-public class WardenEntityMixin {
+public abstract class WardenEntityMixin {
+
+    @Shadow public abstract void increaseAngerAt(LivingEntity entity, int amount, boolean listening);
+    @Shadow public abstract LivingEntity getTarget();
+    @Shadow public abstract int getAnger();
+    @Shadow public abstract void setPersistent();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void keepBossWardenActive(CallbackInfo ci) {
         WardenEntity warden = (WardenEntity) (Object) this;
 
         if (SlayerManager.isSlayerBoss(warden.getUuid())) {
-            // Force warden to stay emerged by keeping anger high
-            if (warden.getTarget() != null) {
-                warden.increaseAngerAt(warden.getTarget(), 50, true);
-            } else {
-                // Keep warden aggressive but don't force underground retreat
-                // Only retreat if health is critically low
-                if (warden.getHealth() <= warden.getMaxHealth() * 0.2) {
-                    warden.increaseAngerAt(warden.getTarget(), 25, true);
-                } else {
-                    warden.increaseAngerAt(warden.getTarget(), 15, true);
+            // Ensure persistence
+            warden.setPersistent();
+            
+            LivingEntity target = warden.getTarget();
+            int currentAnger = warden.getAnger();
+            
+            // Keep anger high to prevent digging behavior
+            // Warden digs underground when anger is low and no target
+            if (target != null) {
+                // Aggressive mode - max anger toward target
+                if (currentAnger < 100) {
+                    increaseAngerAt(target, 100, true);
                 }
+            } else {
+                // No target - maintain moderate anger to stay active
+                // Try to find nearby players via anger simulation
+                warden.increaseAngerAt(null, 50, false);
             }
             
-            // Simple fix: If warden goes too low (below Y=50), teleport it back up
-            // This prevents most digging behavior without complex world access
+            // Prevent warden from going underground by teleporting back up
             if (warden.getY() < 50) {
                 warden.teleport(warden.getX(), 60, warden.getZ(), false);
             }

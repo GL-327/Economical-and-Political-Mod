@@ -788,16 +788,113 @@ public class ShopManager {
         }
     }
 
+    // Map of custom item suppliers for proper buying
+    private static final Map<Item, java.util.function.Supplier<ItemStack>> CUSTOM_ITEM_SUPPLIERS = new LinkedHashMap<>();
+    
+    static {
+        // Compacted items
+        CUSTOM_ITEM_SUPPLIERS.put(Items.RAW_IRON, SlayerItems::createCompactedIron);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.RAW_GOLD, SlayerItems::createCompactedGold);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.DIAMOND, SlayerItems::createCompactedDiamond);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.EMERALD, SlayerItems::createCompactedEmerald);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.NETHERITE_INGOT, SlayerItems::createCompactedNetherite);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.RAW_COPPER, SlayerItems::createCompactedCopper);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.COAL, SlayerItems::createCompactedCoal);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.LAPIS_LAZULI, SlayerItems::createCompactedLapis);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.REDSTONE, SlayerItems::createCompactedRedstone);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.QUARTZ, SlayerItems::createCompactedQuartz);
+        
+        // Super compacted items
+        CUSTOM_ITEM_SUPPLIERS.put(Items.GOLD_BLOCK, SlayerItems::createSuperCompactedGold);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.IRON_BLOCK, SlayerItems::createSuperCompactedIron);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.DIAMOND_BLOCK, SlayerItems::createSuperCompactedDiamond);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.EMERALD_BLOCK, SlayerItems::createSuperCompactedEmerald);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.NETHERITE_BLOCK, SlayerItems::createSuperCompactedNetherite);
+        
+        // Enchanted blocks
+        CUSTOM_ITEM_SUPPLIERS.put(Items.COBBLESTONE, SlayerItems::createEnchantedCobblestone);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.STONE, SlayerItems::createEnchantedStone);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.IRON_BLOCK, SlayerItems::createEnchantedIronBlock);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.GOLD_BLOCK, SlayerItems::createEnchantedGoldBlock);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.DIAMOND_BLOCK, SlayerItems::createEnchantedDiamondBlock);
+        CUSTOM_ITEM_SUPPLIERS.put(Items.BLACKSTONE, SlayerItems::createEnchantedBlackstone);
+    }
+    
     public static void giveItems(ServerPlayerEntity player, Item item, int quantity) {
         int remaining = quantity;
         int maxStack = item.getMaxCount();
 
+        // Check if this is a custom item category
+        ItemStack customTemplate = getCustomItemForCategory(item);
+        
         while (remaining > 0) {
             int toGive = Math.min(remaining, maxStack);
-            var stack = new net.minecraft.item.ItemStack(item, toGive);
+            ItemStack stack;
+            
+            if (customTemplate != null) {
+                // Give the custom item
+                stack = customTemplate.copy();
+                stack.setCount(toGive);
+            } else {
+                // Give vanilla item
+                stack = new net.minecraft.item.ItemStack(item, toGive);
+            }
             player.getInventory().insertStack(stack);
             remaining -= toGive;
         }
+    }
+    
+    /**
+     * Gets the appropriate custom item for a shop category base item.
+     * Returns null for vanilla items that should stay vanilla.
+     */
+    private static ItemStack getCustomItemForCategory(Item baseItem) {
+        // Check categories to determine if this should be a custom item
+        String category = getCategoryForItem(baseItem);
+        if (category == null) return null;
+        
+        return switch (category) {
+            case "Compacted Items" -> {
+                if (baseItem == Items.RAW_IRON) yield SlayerItems.createCompactedIron();
+                else if (baseItem == Items.RAW_GOLD) yield SlayerItems.createCompactedGold();
+                else if (baseItem == Items.DIAMOND) yield SlayerItems.createCompactedDiamond();
+                else if (baseItem == Items.EMERALD) yield SlayerItems.createCompactedEmerald();
+                else if (baseItem == Items.NETHERITE_INGOT) yield SlayerItems.createCompactedNetherite();
+                else if (baseItem == Items.RAW_COPPER) yield SlayerItems.createCompactedCopper();
+                else if (baseItem == Items.COAL) yield SlayerItems.createCompactedCoal();
+                else if (baseItem == Items.LAPIS_LAZULI) yield SlayerItems.createCompactedLapis();
+                else if (baseItem == Items.REDSTONE) yield SlayerItems.createCompactedRedstone();
+                else if (baseItem == Items.QUARTZ) yield SlayerItems.createCompactedQuartz();
+                else yield null;
+            }
+            case "Super Compacted Items" -> {
+                if (baseItem == Items.GOLD_BLOCK) yield SlayerItems.createSuperCompactedGold();
+                else if (baseItem == Items.IRON_BLOCK) yield SlayerItems.createSuperCompactedIron();
+                else if (baseItem == Items.DIAMOND_BLOCK) yield SlayerItems.createSuperCompactedDiamond();
+                else if (baseItem == Items.EMERALD_BLOCK) yield SlayerItems.createSuperCompactedEmerald();
+                else if (baseItem == Items.NETHERITE_BLOCK) yield SlayerItems.createSuperCompactedNetherite();
+                else yield null;
+            }
+            case "Enchanted Items" -> {
+                if (baseItem == Items.COBBLESTONE) yield SlayerItems.createEnchantedCobblestone();
+                else if (baseItem == Items.STONE) yield SlayerItems.createEnchantedStone();
+                else if (baseItem == Items.IRON_BLOCK) yield SlayerItems.createEnchantedIronBlock();
+                else if (baseItem == Items.GOLD_BLOCK) yield SlayerItems.createEnchantedGoldBlock();
+                else if (baseItem == Items.DIAMOND_BLOCK) yield SlayerItems.createEnchantedDiamondBlock();
+                else if (baseItem == Items.BLACKSTONE) yield SlayerItems.createEnchantedBlackstone();
+                else yield null;
+            }
+            default -> null;
+        };
+    }
+    
+    private static String getCategoryForItem(Item item) {
+        for (Map.Entry<String, List<Item>> entry : CATEGORIES.entrySet()) {
+            if (entry.getValue().contains(item)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public static boolean hasInventorySpace(ServerPlayerEntity player, Item item, int quantity) {

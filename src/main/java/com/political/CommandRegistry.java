@@ -210,6 +210,162 @@ public class CommandRegistry {
                 })
         );
 
+        // /stocks command - Stock Market access
+        dispatcher.register(CommandManager.literal("stocks")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    StockMarketGui.openMainMenu(player);
+                    return 1;
+                })
+                .then(CommandManager.literal("buy")
+                        .then(CommandManager.argument("symbol", StringArgumentType.string())
+                                .suggests((context, builder) -> {
+                                    for (StockMarket.Stock stock : StockMarket.Stock.values()) {
+                                        builder.suggest(stock.symbol);
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(context -> {
+                                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                            String symbol = StringArgumentType.getString(context, "symbol").toUpperCase();
+                                            int amount = IntegerArgumentType.getInteger(context, "amount");
+                                            StockMarket.buyStock(player, symbol, amount);
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("sell")
+                        .then(CommandManager.argument("symbol", StringArgumentType.string())
+                                .suggests((context, builder) -> {
+                                    for (StockMarket.Stock stock : StockMarket.Stock.values()) {
+                                        builder.suggest(stock.symbol);
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(context -> {
+                                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                            String symbol = StringArgumentType.getString(context, "symbol").toUpperCase();
+                                            int amount = IntegerArgumentType.getInteger(context, "amount");
+                                            StockMarket.sellStock(player, symbol, amount);
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("portfolio")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            StockMarketGui.openPortfolio(player, 0);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("movers")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            StockMarketGui.openTopMovers(player);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("news")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            StockMarketGui.openMarketNews(player);
+                            return 1;
+                        }))
+        );
+
+        // Admin stock commands
+        dispatcher.register(CommandManager.literal("stockadmin")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.literal("event")
+                        .executes(context -> {
+                            StockMarket.triggerRandomEvent();
+                            context.getSource().sendFeedback(() -> 
+                                    Text.literal("Triggered random market event!").formatted(Formatting.YELLOW), true);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("reset")
+                        .executes(context -> {
+                            StockMarket.initializeMarket();
+                            context.getSource().sendFeedback(() -> 
+                                    Text.literal("Reset all stock prices to base values!").formatted(Formatting.GREEN), true);
+                            return 1;
+                        }))
+        );
+
+        // /crypto command - Crypto Market access
+        dispatcher.register(CommandManager.literal("crypto")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    CryptoMarketGui.openMainMenu(player);
+                    return 1;
+                })
+                .then(CommandManager.literal("buy")
+                        .then(CommandManager.argument("symbol", StringArgumentType.string())
+                                .suggests((context, builder) -> {
+                                    for (CryptoMarket.Crypto crypto : CryptoMarket.Crypto.values()) {
+                                        builder.suggest(crypto.symbol);
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0.01))
+                                        .executes(context -> {
+                                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                            String symbol = StringArgumentType.getString(context, "symbol").toUpperCase();
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            CryptoMarket.buyCrypto(player, symbol, amount);
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("sell")
+                        .then(CommandManager.argument("symbol", StringArgumentType.string())
+                                .suggests((context, builder) -> {
+                                    for (CryptoMarket.Crypto crypto : CryptoMarket.Crypto.values()) {
+                                        builder.suggest(crypto.symbol);
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0.01))
+                                        .executes(context -> {
+                                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                            String symbol = StringArgumentType.getString(context, "symbol").toUpperCase();
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            CryptoMarket.sellCrypto(player, symbol, amount);
+                                            return 1;
+                                        }))))
+                .then(CommandManager.literal("wallet")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            CryptoMarketGui.openWallet(player);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("stake")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            CryptoMarketGui.openStaking(player);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("swap")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            CryptoMarketGui.openSwapMenu(player);
+                            return 1;
+                        }))
+        );
+
+        // Admin crypto commands
+        dispatcher.register(CommandManager.literal("cryptoadmin")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.literal("give")
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
+                                .then(CommandManager.argument("symbol", StringArgumentType.string())
+                                        .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0.01))
+                                                .executes(context -> {
+                                                    ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+                                                    String symbol = StringArgumentType.getString(context, "symbol").toUpperCase();
+                                                    double amount = DoubleArgumentType.getDouble(context, "amount");
+                                                    CryptoMarket.deposit(target.getUuidAsString(), symbol, amount);
+                                                    context.getSource().sendFeedback(() -> 
+                                                            Text.literal("Gave " + amount + " " + symbol + " to " + target.getName().getString())
+                                                                    .formatted(Formatting.GREEN), true);
+                                                    return 1;
+                                                })))))
+        );
+
         // /slayer cancel - Cancel active quest
         dispatcher.register(CommandManager.literal("bounty")
                 .then(CommandManager.literal("cancel")

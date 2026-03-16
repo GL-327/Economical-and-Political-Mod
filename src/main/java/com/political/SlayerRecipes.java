@@ -273,4 +273,35 @@ public class SlayerRecipes {
         int playerLevel = SlayerData.getSlayerLevel(playerUuid, recipe.requiredSlayer);
         return playerLevel >= recipe.requiredLevel;
     }
+    
+    /**
+     * Finds a recipe that produces the given output item.
+     * Compares by custom item ID if available, otherwise by item type.
+     */
+    public static Recipe getRecipeForOutput(ItemStack output) {
+        if (output == null || output.isEmpty()) return null;
+        
+        String outputId = SlayerItems.getCustomItemId(output);
+        
+        for (Recipe recipe : RECIPES) {
+            if (recipe.result == null || recipe.result.isEmpty()) continue;
+            
+            // Try to match by custom item ID first
+            if (outputId != null) {
+                String recipeId = SlayerItems.getCustomItemId(recipe.result);
+                if (outputId.equals(recipeId)) {
+                    return recipe;
+                }
+            }
+            
+            // Fallback: match by item type and custom name
+            if (recipe.result.getItem() == output.getItem()) {
+                Text recipeName = recipe.result.get(DataComponentTypes.CUSTOM_NAME);
+                Text outputName = output.get(DataComponentTypes.CUSTOM_NAME);
+                if (recipeName == null && outputName == null) return recipe;
+                if (recipeName != null && recipeName.equals(outputName)) return recipe;
+            }
+        }
+        return null;
+    }
 }

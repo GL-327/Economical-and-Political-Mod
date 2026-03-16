@@ -31,6 +31,10 @@ public class CustomItemsGui {
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
         GOLD_ARMOR   ("👑 Gold Armor Evolution",             Items.GOLDEN_CHESTPLATE,  Formatting.GOLD),
         MATERIALS    ("📦 Materials (Cores & Chunks)",       Items.SLIME_BALL,         Formatting.GRAY),
+        COMPACTED    ("⬛ Compacted Materials",              Items.RAW_IRON,           Formatting.DARK_GRAY),
+        SUPER_COMPACTED("⭐ Super Compacted",               Items.GOLD_BLOCK,         Formatting.GOLD),
+        ENCHANTED_BLOCKS("✧ Enchanted Blocks",              Items.COBBLESTONE,        Formatting.LIGHT_PURPLE),
+        ENCHANTED_CROPS("✧ Enchanted Crops & Flowers",      Items.WHEAT,              Formatting.GREEN),
         ATTRIBUTE_TOKENS("✧ Attribute Tokens",               Items.PAPER,              Formatting.LIGHT_PURPLE),
         WEAPON_ATTRIBUTES("⚔ Weapon Attributes",               Items.NETHER_STAR,        Formatting.RED);
 
@@ -157,7 +161,8 @@ public class CustomItemsGui {
                 for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
                     items.add(SlayerItems.createAttributeCore(attr));
                 }
-                // Add compacted materials
+            }
+            case COMPACTED -> {
                 items.add(SlayerItems.createCompactedIron());
                 items.add(SlayerItems.createCompactedGold());
                 items.add(SlayerItems.createCompactedDiamond());
@@ -168,15 +173,15 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createCompactedLapis());
                 items.add(SlayerItems.createCompactedRedstone());
                 items.add(SlayerItems.createCompactedQuartz());
-                
-                // Add super compacted ores
+            }
+            case SUPER_COMPACTED -> {
                 items.add(SlayerItems.createSuperCompactedGold());
                 items.add(SlayerItems.createSuperCompactedIron());
                 items.add(SlayerItems.createSuperCompactedDiamond());
                 items.add(SlayerItems.createSuperCompactedEmerald());
                 items.add(SlayerItems.createSuperCompactedNetherite());
-                
-                // Add enchanted blocks
+            }
+            case ENCHANTED_BLOCKS -> {
                 items.add(SlayerItems.createEnchantedCobblestone());
                 items.add(SlayerItems.createEnchantedStone());
                 items.add(SlayerItems.createEnchantedIronBlock());
@@ -185,12 +190,12 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createEnchantedBlackstone());
                 items.add(SlayerItems.createEnchantedGildedBlackstone());
                 items.add(SlayerItems.createEnchantedOakLog());
-                
-                // Add enchanted flowers
+            }
+            case ENCHANTED_CROPS -> {
+                // Enchanted flowers
                 items.add(SlayerItems.createEnchantedRose());
                 items.add(SlayerItems.createEnchantedDandelion());
-                
-                // Add enchanted crops
+                // Enchanted crops
                 items.add(SlayerItems.createEnchantedWheat());
                 items.add(SlayerItems.createEnchantedCarrot());
                 items.add(SlayerItems.createEnchantedPotato());

@@ -134,6 +134,21 @@ public class BankGui {
                 })
                 .build());
 
+        // Slot 40 — Crypto Wallet
+        double cryptoValue = CryptoMarket.getWalletValue(player.getUuidAsString());
+        gui.setSlot(40, new GuiElementBuilder(Items.END_CRYSTAL)
+                .setName(Text.literal("🔮 Crypto Wallet").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Value: $" + CryptoMarket.formatCrypto(cryptoValue)).formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§7View your cryptocurrency holdings"))
+                .addLoreLine(Text.literal("§7Staking, DeFi, Margin trading"))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§eClick to open"))
+                .setCallback((index, type, action) -> CryptoMarketGui.openMainMenu(player))
+                .glow()
+                .build());
+
         gui.open();
     }
 

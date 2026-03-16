@@ -468,32 +468,75 @@ public class RecipesGui {
     }
 
     // ============================================================
-    // HELPER: Show item information
+    // HELPER: Show item information with actual recipe
     // ============================================================
-    private static void showItemInfo(ServerPlayerEntity player, ItemStack item) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
-        gui.setTitle(Text.literal("Item Info"));
+    private static void showItemInfo(ServerPlayerEntity player, ItemStack resultItem) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("Recipe View"));
 
         // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
                 .setName(Text.literal(""));
-        for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
-        // Item display
-        gui.setSlot(13, new GuiElementBuilder(item)
-                .setName(item.get(DataComponentTypes.CUSTOM_NAME))
+        // Header - Item name
+        Text displayName = resultItem.get(DataComponentTypes.CUSTOM_NAME);
+        if (displayName == null) {
+            displayName = Text.literal(resultItem.getItem().toString());
+        }
+        gui.setSlot(4, new GuiElementBuilder(resultItem.getItem())
+                .setName(displayName)
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§7Crafting Recipe").formatted(Formatting.GRAY))
                 .glow().build());
 
-        // Info
-        gui.setSlot(4, new GuiElementBuilder(Items.BOOK)
-                .setName(Text.literal("Item Information").formatted(Formatting.BLUE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("📖 View recipes in /setrecipe").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("⚙ Admin command: /setrecipe").formatted(Formatting.GRAY))
-                .build());
+        // Recipe grid slots (3x3)
+        int[] gridSlots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        
+        // Try to find the recipe from SlayerRecipes
+        SlayerRecipes.Recipe recipe = SlayerRecipes.getRecipeForOutput(resultItem);
+        
+        if (recipe != null && recipe.ingredients != null) {
+            // Display the actual recipe
+            for (int i = 0; i < 9 && i < recipe.ingredients.length; i++) {
+                ItemStack input = recipe.ingredients[i];
+                if (input != null && !input.isEmpty()) {
+                    Text inputName = input.get(DataComponentTypes.CUSTOM_NAME);
+                    if (inputName == null) {
+                        inputName = Text.literal(input.getItem().toString());
+                    }
+                    gui.setSlot(gridSlots[i], new GuiElementBuilder(input.getItem())
+                            .setName(inputName)
+                            .setCount(input.getCount())
+                            .build());
+                } else {
+                    // Empty slot indicator
+                    gui.setSlot(gridSlots[i], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                            .setName(Text.literal("§7Empty"))
+                            .build());
+                }
+            }
+            
+            // Arrow indicator
+            gui.setSlot(23, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("§e→").formatted(Formatting.YELLOW))
+                    .build());
+            
+            // Result
+            gui.setSlot(24, new GuiElementBuilder(resultItem)
+                    .setName(displayName)
+                    .glow().build());
+        } else {
+            // No recipe found - show message
+            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("§cNo recipe found"))
+                    .addLoreLine(Text.literal("§7This item may be obtained"))
+                    .addLoreLine(Text.literal("§7through other means."))
+                    .build());
+        }
 
         // Back button
-        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openMainMenu(player))
                 .build());
