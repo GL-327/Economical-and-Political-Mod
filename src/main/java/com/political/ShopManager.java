@@ -254,6 +254,54 @@ public class ShopManager {
                 SlayerItems.createEnchantedBlackstone().getItem(),
                 SlayerItems.createEnchantedGildedBlackstone().getItem()
         ));
+
+        // ===== ENCHANTED ITEMS =====
+        CATEGORIES.put("Enchanted Items", Arrays.asList(
+                // Enchanted Tools
+                Items.ENCHANTED_BOOK,
+                // Enchanted Armor (all variants)
+                Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS,
+                Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS,
+                Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
+                Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS,
+                Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS,
+                Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS,
+                // Enchanted Tools & Weapons
+                Items.DIAMOND_SWORD, Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_HOE,
+                Items.NETHERITE_SWORD, Items.NETHERITE_PICKAXE, Items.NETHERITE_AXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_HOE,
+                Items.IRON_SWORD, Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_SHOVEL, Items.IRON_HOE,
+                Items.GOLDEN_SWORD, Items.GOLDEN_PICKAXE, Items.GOLDEN_AXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_HOE,
+                Items.STONE_SWORD, Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_SHOVEL, Items.STONE_HOE,
+                Items.WOODEN_SWORD, Items.WOODEN_PICKAXE, Items.WOODEN_AXE, Items.WOODEN_SHOVEL, Items.WOODEN_HOE,
+                // Bows & Crossbows
+                Items.BOW, Items.CROSSBOW,
+                Items.TRIDENT,
+                // Shields
+                Items.SHIELD,
+                // Fishing Rod
+                Items.FISHING_ROD,
+                // Shears
+                Items.SHEARS,
+                // Flint & Steel
+                Items.FLINT_AND_STEEL,
+                // Elytra (rare)
+                Items.ELYTRA,
+                // Totem of Undying
+                Items.TOTEM_OF_UNDYING,
+                // Carrot on a Stick & Warped Fungus on a Stick
+                Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK,
+                // Debug Stick (if available)
+                // Items.DEBUG_STICK,
+                // Enchanted Golden Apple
+                Items.ENCHANTED_GOLDEN_APPLE,
+                // Special enchanted items
+                Items.FIREWORK_ROCKET, Items.FIREWORK_STAR,
+                Items.ENDER_PEARL, Items.ENDER_EYE,
+                Items.CHORUS_FRUIT,
+                Items.SPECTRAL_ARROW, Items.TIPPED_ARROW,
+                Items.POTION, Items.LINGERING_POTION, Items.SPLASH_POTION,
+                Items.EXPERIENCE_BOTTLE
+        ));
     }
 
     private static void initializePrices() {
@@ -965,6 +1013,10 @@ public class ShopManager {
             if (!word.isEmpty()) {
                 result.append(Character.toUpperCase(word.charAt(0)))
                         .append(word.substring(1).toLowerCase());
+                // Add space between words (except for last word)
+                if (words.length > 1 && !word.equals(words[words.length - 1])) {
+                    result.append(" ");
+                }
             }
         }
         return result.toString();

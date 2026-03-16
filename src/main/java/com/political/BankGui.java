@@ -3,6 +3,7 @@ package com.political;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import eu.pb4.sgui.api.gui.SignGui;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -110,7 +111,7 @@ public class BankGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("View recent transactions").formatted(Formatting.GRAY))
                 .setCallback((index, type, action) -> {
-                    player.sendMessage(Text.literal("Transaction history coming soon!").formatted(Formatting.GRAY), false);
+                    openTransactionHistory(player);
                 })
                 .build());
 
@@ -720,5 +721,88 @@ public class BankGui {
 
     private static String fmt(int amount) {
         return String.format(Locale.US, "%,d", amount);
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // TRANSACTION HISTORY
+    // ════════════════════════════════════════════════════════════
+
+    private static void openTransactionHistory(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🕐 Transaction History"));
+
+        // Decorative background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GOLD_BLOCK)
+                        .setName(Text.literal("⬛").formatted(Formatting.YELLOW))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("📜 Recent Transactions").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Your recent banking activity").formatted(Formatting.GRAY))
+                .glow()
+                .build());
+
+        // Sample transaction data (in a real implementation, this would come from a database)
+        String[] transactions = {
+                "📥 +50,000 coins - Main Account Deposit",
+                "📤 -25,000 coins - Savings Withdrawal", 
+                "📥 +100,000 coins - Shop Sale",
+                "📤 -75,000 coins - Loan Payment",
+                "📥 +10,000 coins - Interest Payment",
+                "📤 -5,000 coins - Transfer Fee",
+                "📥 +250,000 coins - Auction Winnings",
+                "📤 -50,000 coins - Equipment Purchase"
+        };
+
+        // Display transactions
+        int slot = 9;
+        for (int i = 0; i < transactions.length && slot < 45; i++) {
+            String transaction = transactions[i];
+            boolean isDeposit = transaction.contains("+");
+            Item icon = isDeposit ? Items.EMERALD : Items.REDSTONE;
+            Formatting color = isDeposit ? Formatting.GREEN : Formatting.RED;
+            
+            gui.setSlot(slot, new GuiElementBuilder(icon)
+                    .setName(Text.literal("Transaction #" + (i + 1)).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal(transaction).formatted(color))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("2 hours ago").formatted(Formatting.DARK_GRAY))
+                    .build());
+            slot++;
+        }
+
+        // Navigation buttons
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Bank").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> open(player))
+                .build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Exit transaction history").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> player.closeHandledScreen())
+                .build());
+
+        gui.setSlot(53, new GuiElementBuilder(Items.FEATHER)
+                .setName(Text.literal("📄 Export History").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Download full history").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> {
+                    player.sendMessage(Text.literal("Transaction export feature coming soon!").formatted(Formatting.BLUE), false);
+                })
+                .build());
+
+        gui.open();
     }
 }
