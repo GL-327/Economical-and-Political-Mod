@@ -29,72 +29,108 @@ public class BankGui {
 
     public static void open(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("🏦 Bank"));
+        gui.setTitle(Text.literal("🏦 National Bank"));
 
-        // Fill background
+        // Fill background with decorative pattern
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GOLD_BLOCK)
+                        .setName(Text.literal("⬛").formatted(Formatting.YELLOW))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
         }
 
         // Slot 4 — header: player's purse balance
         int purse = CoinManager.getCoins(player);
-        gui.setSlot(4, new GuiElementBuilder(Items.SUNFLOWER)
-                .setName(Text.literal("Your Purse: " + fmt(purse) + " coins").formatted(Formatting.GOLD, Formatting.BOLD))
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("💰 Your Wallet").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Welcome to the bank!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Balance: " + fmt(purse) + " coins").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🏛 Secure banking services").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("💳 Safe coin storage").formatted(Formatting.GRAY))
                 .glow()
                 .build());
 
         String uuid = player.getUuidAsString();
 
-        // Slot 10 — Main Account
+        // Slot 13 — Main Account
         int main = DataManager.getBankMain(uuid);
-        gui.setSlot(10, new GuiElementBuilder(Items.CHEST)
-                .setName(Text.literal("💰 Main Account").formatted(Formatting.YELLOW, Formatting.BOLD))
+        gui.setSlot(13, new GuiElementBuilder(Items.ENDER_CHEST)
+                .setName(Text.literal("� Main Account").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Balance: " + fmt(main) + " coins").formatted(Formatting.WHITE))
-                .addLoreLine(Text.literal("Cap: " + fmt(MAIN_MAX) + " coins").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Interest: " + fmtRate(DataManager.getMainAccountInterestRate()) + " per hour").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Balance: " + fmt(main) + " coins").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to manage").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("📊 Cap: " + fmt(MAIN_MAX) + " coins").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("📈 Interest: " + fmtRate(DataManager.getMainAccountInterestRate()) + "/hr").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to manage").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openMainAccount(player))
                 .build());
 
-        // Slot 12 — Savings Account
+        // Slot 22 — Savings Account
         int savings = DataManager.getBankSavings(uuid);
-        gui.setSlot(12, new GuiElementBuilder(Items.BARREL)
+        gui.setSlot(22, new GuiElementBuilder(Items.BARREL)
                 .setName(Text.literal("🏦 Savings Account").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Balance: " + fmt(savings) + " coins").formatted(Formatting.WHITE))
-                .addLoreLine(Text.literal("No deposit cap").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Interest: " + fmtRate(DataManager.getSavingsAccountInterestRate()) + " per hour").formatted(Formatting.GREEN))
-                .addLoreLine(Text.literal("⚠ Withdraw cooldown: 6 hours").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Balance: " + fmt(savings) + " coins").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to manage").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("♾️ Unlimited deposits").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("📈 Interest: " + fmtRate(DataManager.getSavingsAccountInterestRate()) + "/hr").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("⏰ Withdrawal: 6hr cooldown").formatted(Formatting.RED))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to manage").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openSavingsAccount(player))
                 .build());
 
-        // Slot 14 — Loans
+        // Slot 31 — Loans
         int loan = DataManager.getBankLoan(uuid);
-        GuiElementBuilder loansBtn = new GuiElementBuilder(Items.PAPER)
-                .setName(Text.literal("📜 Loans").formatted(Formatting.RED, Formatting.BOLD))
+        GuiElementBuilder loansBtn = new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("� Loan Services").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""));
         if (loan > 0) {
-            loansBtn.addLoreLine(Text.literal("Debt owed: " + fmt(loan) + " coins").formatted(Formatting.RED));
-            loansBtn.addLoreLine(Text.literal("Interest: 5% per hour").formatted(Formatting.DARK_RED));
+            loansBtn.addLoreLine(Text.literal("💳 Current Debt: " + fmt(loan) + " coins").formatted(Formatting.RED, Formatting.BOLD));
+            loansBtn.addLoreLine(Text.literal("📈 Interest: 5% per hour").formatted(Formatting.DARK_RED));
         } else {
-            loansBtn.addLoreLine(Text.literal("No active loan").formatted(Formatting.GREEN));
-            loansBtn.addLoreLine(Text.literal("Available: 10,000 coins @ 5%/hr").formatted(Formatting.GRAY));
+            loansBtn.addLoreLine(Text.literal("✅ No active loan").formatted(Formatting.GREEN));
+            loansBtn.addLoreLine(Text.literal("💰 Available: 10,000 coins").formatted(Formatting.GRAY));
+            loansBtn.addLoreLine(Text.literal("📈 Rate: 5% per hour").formatted(Formatting.YELLOW));
         }
-        loansBtn.addLoreLine(Text.literal("")).addLoreLine(Text.literal("Click to manage").formatted(Formatting.YELLOW));
+        loansBtn.addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to manage").formatted(Formatting.YELLOW));
         loansBtn.setCallback((index, type, action) -> openLoans(player));
-        gui.setSlot(14, loansBtn.build());
+        gui.setSlot(31, loansBtn.build());
 
-        // Slot 49 — Close
+        // Bottom row - Navigation buttons
+        gui.setSlot(47, new GuiElementBuilder(Items.CLOCK)
+                .setName(Text.literal("🕐 Transaction History").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("View recent transactions").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> {
+                    player.sendMessage(Text.literal("Transaction history coming soon!").formatted(Formatting.GRAY), false);
+                })
+                .build());
+
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("Close").formatted(Formatting.RED))
+                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Exit the bank").formatted(Formatting.GRAY))
                 .setCallback((index, type, action) -> player.closeHandledScreen())
+                .build());
+
+        gui.setSlot(51, new GuiElementBuilder(Items.BOOK)
+                .setName(Text.literal("📖 Help & Info").formatted(Formatting.BLUE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Banking information").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Interest rates & fees").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> {
+                    player.sendMessage(Text.literal("Main account: 2% interest, capped at 100k").formatted(Formatting.GRAY), false);
+                    player.sendMessage(Text.literal("Savings: 1.5% interest, unlimited, 6hr withdrawal cooldown").formatted(Formatting.GRAY), false);
+                    player.sendMessage(Text.literal("Loans: 5% interest, 10k max").formatted(Formatting.GRAY), false);
+                })
                 .build());
 
         gui.open();

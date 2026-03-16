@@ -22,144 +22,167 @@ public class CustomItemsGui {
 
     public static void open(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("§6✦ Custom Items ✦"));
+        gui.setTitle(Text.literal("✨ Custom Items Gallery"));
 
-        // Black background
+        // Decorative background pattern
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_PURPLE))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
         }
 
-        // Header
+        // Header with improved design
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("✦ Custom Items ✦").formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("🌟 Custom Collection").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Browse and receive custom items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🎮 Browse exclusive items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("💎 Premium gear & tools").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚔️ Unique weapons & armor").formatted(Formatting.GRAY))
                 .glow()
                 .build());
 
-        // ⚔ Bounty Swords
-        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("⚔ Bounty Swords").formatted(Formatting.RED, Formatting.BOLD))
+        // ⚔ Bounty Swords - improved design
+        gui.setSlot(11, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("⚔️ Bounty Weapons").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("All T1 & T2 bounty swords").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("7 types × 2 tiers").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🗡️ All T1 & T2 bounty swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🎯 7 slayer types × 2 tiers").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSwordsMenu(player))
                 .build());
 
         // 🛡 T1 Bounty Armor
-        gui.setSlot(11, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
-                .setName(Text.literal("🛡 Bounty Armor T1").formatted(Formatting.BLUE, Formatting.BOLD))
+        gui.setSlot(15, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡️ Bounty Armor T1").formatted(Formatting.BLUE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("T1 armor sets for all slayer types").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Requires Bounty Level " + SlayerItems.T1_ARMOR_LEVEL_REQ).formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🎯 T1 armor sets for all slayer types").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⭐ Requires Bounty Level " + SlayerItems.T1_ARMOR_LEVEL_REQ).formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openArmorMenu(player, 1))
                 .build());
 
         // 🛡 T2 Bounty Armor
-        gui.setSlot(12, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
-                .setName(Text.literal("🛡 Bounty Armor T2").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+        gui.setSlot(16, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal("🛡️ Bounty Armor T2").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("T2 armor sets for all slayer types").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Requires Bounty Level " + SlayerItems.T2_ARMOR_LEVEL_REQ).formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🎯 T2 armor sets for all slayer types").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⭐ Requires Bounty Level " + SlayerItems.T2_ARMOR_LEVEL_REQ).formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openArmorMenu(player, 2))
                 .glow()
                 .build());
 
         // 👑 Gold Armor Evolution
-        gui.setSlot(13, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+        gui.setSlot(20, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
                 .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("5 tiers of progressive gold armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• Pure → Polished → Shiny → Glistening → Gilded").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("📈 5 tiers of progressive gold armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⬆️ Pure → Polished → Shiny → Glistening → Gilded").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openGoldArmorMenu(player))
                 .glow()
                 .build());
 
         // ⭐ Legendary Gear
-        gui.setSlot(14, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("⭐ Legendary Gear").formatted(Formatting.GOLD, Formatting.BOLD))
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("🌟 Legendary Collection").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• Berserker Helmet").formatted(Formatting.DARK_GREEN))
-                .addLoreLine(Text.literal("• Venomous Crawler Leggings").formatted(Formatting.DARK_RED))
-                .addLoreLine(Text.literal("• Bone Desperado's Bow").formatted(Formatting.WHITE))
-                .addLoreLine(Text.literal("• Gelatinous Rustler Boots").formatted(Formatting.GREEN))
-                .addLoreLine(Text.literal("• Sculk Terror Chestplate").formatted(Formatting.DARK_AQUA))
-                .addLoreLine(Text.literal("• Voidwalker's Crown").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("💎 Elite special equipment").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• ⚔️ Berserker Helmet").formatted(Formatting.DARK_GREEN))
+                .addLoreLine(Text.literal("• 🕷️ Venomous Crawler Leggings").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("• 🏹 Bone Desperado's Bow").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal("• 🟢 Gelatinous Rustler Boots").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• 💀 Sculk Terror Chestplate").formatted(Formatting.DARK_AQUA))
+                .addLoreLine(Text.literal("• 👑 Voidwalker's Crown").formatted(Formatting.DARK_PURPLE))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openLegendaryMenu(player))
                 .glow()
                 .build());
 
         // 🗡 Special Weapons
-        gui.setSlot(15, new GuiElementBuilder(Items.GOLDEN_AXE)
-                .setName(Text.literal("🗡 Special Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
+        gui.setSlot(24, new GuiElementBuilder(Items.GOLDEN_AXE)
+                .setName(Text.literal("🗡️ Special Weapons").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• The Gavel").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• Harvey's Stick").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• Hermes Shoes").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• HPEBM (all marks)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚔️ Unique special weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• 🔨 The Gavel").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("• 🪄 Harvey's Stick").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("• 👟 Hermes Shoes").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("• ⚡ HPEBM (all marks)").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSpecialWeaponsMenu(player))
                 .build());
 
         // ✦ Boss Drops
-        gui.setSlot(16, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("✦ Boss Drops").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+        gui.setSlot(29, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("💀 Boss Drops").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Unique items dropped by bounty bosses").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("• Undead Heart, Echoing Core, etc.").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🎁 Unique boss rewards").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• ❤️ Undead Heart").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("• 📻 Echoing Core").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("• 🌟 Other rare drops").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openBossDropsMenu(player))
                 .glow()
                 .build());
 
         // ✦ Materials
-        gui.setSlot(17, new GuiElementBuilder(Items.GOLD_NUGGET)
-                .setName(Text.literal("✦ Materials").formatted(Formatting.AQUA, Formatting.BOLD))
+        gui.setSlot(30, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("🧱 Crafting Materials").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Chunks & Cores for all slayer types").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Used in bounty crafting").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🔨 Chunks & Cores for crafting").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("📦 All slayer types available").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("⚡ Used in bounty crafting").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openMaterialsMenu(player))
                 .build());
 
         // 👑 Piglin Items
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
+        gui.setSlot(31, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Piglin Collection").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• Crown of Greed").formatted(Formatting.GOLD))
-                .addLoreLine(Text.literal("• Crown of Midas").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("• Piglin Core & Flesh").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("• Piglin T1 & T2 Armor").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("💰 Premium piglin items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• 👑 Crown of Greed").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• 🌟 Crown of Midas").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• 💎 Piglin Core & Flesh").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• 🛡️ Piglin T1 & T2 Armor").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openPiglinMenu(player))
                 .glow()
                 .build());
 
         // ✧ Attribute Tokens
-        gui.setSlot(17, new GuiElementBuilder(Items.PAPER)
-                .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+        gui.setSlot(33, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("✨ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("All 10 armor attribute tokens").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🎯 All 10 armor attribute tokens").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚡ Apply special abilities to armor").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("🔥 Burning, Frost, Swift & more!").formatted(Formatting.DARK_GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to browse").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openAttributeTokensMenu(player))
                 .glow()
+                .build());
+
+        // Bottom row navigation
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Exit the gallery").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> player.closeHandledScreen())
                 .build());
 
         gui.open();

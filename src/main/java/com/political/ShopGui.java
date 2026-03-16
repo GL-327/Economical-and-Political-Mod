@@ -20,39 +20,47 @@ public class ShopGui {
 
     public static void openMainMenu(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("🏪 Item Shop"));
+        gui.setTitle(Text.literal("🏪 Premium Item Shop"));
 
-        // Fill background
+        // Fill background with decorative pattern
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Text.literal(""))
-                    .build());
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_GRAY))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal(""))
+                        .build());
+            }
         }
 
-        // Header with balance
+        // Header with balance - center position
         int coins = CoinManager.getCoins(player);
-        gui.setSlot(4, new GuiElementBuilder(Items.SUNFLOWER)
-                .setName(Text.literal("Your Coins: " + ShopManager.formatCoins(coins)).formatted(Formatting.GOLD, Formatting.BOLD))
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("💰 Your Balance").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Buy items at 2x sell price").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Sell items for coins!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Coins: " + ShopManager.formatCoins(coins)).formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Buy items at 2x sell price").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Sell items for instant coins!").formatted(Formatting.GRAY))
                 .glow()
                 .build());
 
-        // Category buttons
+        // Category buttons - improved layout with better icons
         Item[] categoryIcons = {
-                Items.STONE_BRICKS,      // Building Blocks
-                Items.DIAMOND,           // Ores & Materials
-                Items.COOKED_BEEF,       // Food
-                Items.BONE,              // Mob Drops
-                Items.REDSTONE,          // Redstone
-                Items.DIAMOND_PICKAXE,   // Tools
-                Items.DIAMOND_CHESTPLATE,// Armor
+                Items.BRICKS,           // Building Blocks
+                Items.DIAMOND,           // Ores & Materials  
+                Items.GOLDEN_APPLE,      // Food
+                Items.BONE_BLOCK,        // Mob Drops
+                Items.REDSTONE_BLOCK,    // Redstone
+                Items.NETHERITE_PICKAXE, // Tools
+                Items.NETHERITE_CHESTPLATE, // Armor
                 Items.LANTERN,           // Decoration
-                Items.OAK_SAPLING,       // Plants
+                Items.AZALEA,            // Plants
                 Items.BREWING_STAND,     // Brewing
-                Items.RED_DYE,           // Dyes
-                Items.ENDER_PEARL        // Miscellaneous
+                Items.MAGENTA_DYE,       // Dyes
+                Items.ENDER_CHEST        // Miscellaneous
         };
 
         List<String> categories = ShopManager.getCategoryNames();
@@ -64,34 +72,34 @@ public class ShopGui {
 
             final String cat = category;
             gui.setSlot(slots[i], new GuiElementBuilder(icon)
-                    .setName(Text.literal(category).formatted(Formatting.YELLOW, Formatting.BOLD))
+                    .setName(Text.literal("📦 " + category).formatted(Formatting.YELLOW, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Click to browse").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to browse items").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Right-click for quick buy").formatted(Formatting.DARK_GRAY))
                     .setCallback((index, type, action) -> {
                         openCategoryPage(player, cat, 0, false);
                     })
                     .build());
         }
 
-        // Sell mode button
-        gui.setSlot(48, new GuiElementBuilder(Items.HOPPER)
-                .setName(Text.literal("Quick Sell").formatted(Formatting.GREEN, Formatting.BOLD))
+        // Bottom row action buttons - improved layout
+        gui.setSlot(47, new GuiElementBuilder(Items.HOPPER)
+                .setName(Text.literal("⚡ Quick Sell").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Sell items from your inventory").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click to open sell menu").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Sell items from inventory").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Fast & convenient!").formatted(Formatting.DARK_GRAY))
                 .setCallback((index, type, action) -> {
                     openSellInventory(player);
                 })
                 .build());
 
-        // Sell all button
-        gui.setSlot(50, new GuiElementBuilder(Items.CHEST)
-                .setName(Text.literal("Sell All").formatted(Formatting.RED, Formatting.BOLD))
+        gui.setSlot(49, new GuiElementBuilder(Items.CHEST)
+                .setName(Text.literal("💸 Sell All").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Sell ALL sellable items").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("in your inventory!").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Shift+Click to confirm").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("⚠ Shift+Click to confirm").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> {
                     if (type.shift) {
                         sellAllItems(player);
@@ -101,27 +109,36 @@ public class ShopGui {
                 })
                 .build());
 
-        // Convert Credits → Coins button
+        gui.setSlot(51, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Close the shop").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> {
+                    gui.close();
+                })
+                .build());
+
+        // Convert Credits → Coins button - better position
         int playerCredits = DataManager.getCredits(player.getUuidAsString());
-        gui.setSlot(46, new GuiElementBuilder(Items.AMETHYST_SHARD)
-                .setName(Text.literal("💎 Convert Credits → Coins").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+        gui.setSlot(53, new GuiElementBuilder(Items.AMETHYST_SHARD)
+                .setName(Text.literal("💎 Credit Exchange").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("1 Credit = 10,000 Coins").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Your Credits: " + playerCredits).formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(playerCredits > 0
-                        ? Text.literal("Click to convert 1 credit!").formatted(Formatting.GREEN)
-                        : Text.literal("No credits to convert.").formatted(Formatting.RED))
+                        ? Text.literal("Click to exchange!").formatted(Formatting.GREEN)
+                        : Text.literal("No credits available").formatted(Formatting.RED))
                 .setCallback((index, type, action) -> {
                     int credits = DataManager.getCredits(player.getUuidAsString());
                     if (credits >= 1) {
                         DataManager.removeCredits(player.getUuidAsString(), 1);
                         CoinManager.giveCoins(player, 10000);
-                        player.sendMessage(Text.literal("✓ Converted 1 Credit → 10,000 Coins!").formatted(Formatting.GREEN), false);
+                        player.sendMessage(Text.literal("✓ Exchanged 1 Credit → 10,000 Coins!").formatted(Formatting.GREEN), false);
                         openMainMenu(player);
                     } else {
-                        player.sendMessage(Text.literal("✗ You have no credits to convert!").formatted(Formatting.RED), false);
+                        player.sendMessage(Text.literal("✗ You have no credits to exchange!").formatted(Formatting.RED), false);
                     }
                 })
                 .build());
