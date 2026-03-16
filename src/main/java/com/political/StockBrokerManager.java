@@ -103,7 +103,7 @@ public class StockBrokerManager {
             center.getX() + range, center.getY() + range, center.getZ() + range
         );
             
-            for (VillagerEntity villager : world.getEntitiesByClass(VillagerEntity.class, searchArea)) {
+            for (VillagerEntity villager : world.getEntitiesByClass(VillagerEntity.class, searchArea, null)) {
                 if (villager.getUuid().equals(brokerId)) {
                     if (isStockBroker(villager)) {
                         broker = villager;
