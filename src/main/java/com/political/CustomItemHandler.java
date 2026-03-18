@@ -301,6 +301,12 @@ public class CustomItemHandler {
         if (stack == null || stack.isEmpty()) return false;
         // Check NBT-based bounty identification first (works even without custom name)
         if (SlayerItems.isAnyBountyItem(stack)) return true;
+        // Check custom item ID for compacted/super compacted/enchanted
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId != null && (customId.startsWith("compacted_") || 
+                customId.startsWith("super_compacted_") || customId.startsWith("enchanted_"))) {
+            return true;
+        }
         // Then check custom name for other protected items
         if (stack.get(DataComponentTypes.CUSTOM_NAME) == null) return false;
         String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
@@ -326,6 +332,9 @@ public class CustomItemHandler {
                 name.contains("Enchanted Gilded Blackstone") ||
                 name.contains("Enchanted Compacted") ||
                 name.contains("✦ Enchanted") ||
+                name.contains("✧ Enchanted") ||
+                name.contains("Compacted") ||
+                name.contains("Super Compacted") ||
                 name.contains("Gilded Netherite");
     }
 

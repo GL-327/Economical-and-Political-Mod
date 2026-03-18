@@ -1167,6 +1167,15 @@ public class ShopManager {
     }
     
     private static String getCategoryForItem(Item item) {
+        // Priority: Custom item categories first (to ensure custom items are given, not vanilla)
+        String[] customCategories = {"Compacted Items", "Super Compacted", "Enchanted Items"};
+        for (String category : customCategories) {
+            List<Item> items = CATEGORIES.get(category);
+            if (items != null && items.contains(item)) {
+                return category;
+            }
+        }
+        // Then check other categories
         for (Map.Entry<String, List<Item>> entry : CATEGORIES.entrySet()) {
             if (entry.getValue().contains(item)) {
                 return entry.getKey();
