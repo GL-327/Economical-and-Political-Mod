@@ -14,60 +14,71 @@ public class ChairGui {
 
     public static void open(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("Chair Dashboard"));
+        gui.setTitle(Text.literal("👑 Chair Dashboard"));
 
+        // Dark elegant background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                    .setName(Text.literal(""))
-                    .build());
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
         }
 
+        // Decorative border with gold
+        int[] goldBorder = {0, 1, 2, 3, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52, 53};
+        for (int slot : goldBorder) {
+            gui.setSlot(slot, new GuiElementBuilder(Items.GOLD_BLOCK)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header with crown
         gui.setSlot(4, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Text.literal("Chair Dashboard").formatted(Formatting.GOLD, Formatting.BOLD))
+                .setName(Text.literal("👑 Chair Dashboard").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Welcome, Chair!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Manage your government").formatted(Formatting.GRAY))
                 .glow()
                 .build());
 
-        gui.setSlot(19, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("Active Perks").formatted(Formatting.AQUA, Formatting.BOLD))
+        // ── Row 1: Economy Controls ──
+        gui.setSlot(10, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("💰 Main Interest Rate").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal(PerkManager.getActivePerks().size() + " perks active").formatted(Formatting.GREEN))
-                .build());
-
-        List<String> activePerks = PerkManager.getActivePerks();
-        int perkSlot = 28;
-        for (String perkId : activePerks) {
-            if (perkSlot >= 35) break;
-            Perk perk = PerkManager.getPerk(perkId);
-            if (perk != null) {
-                gui.setSlot(perkSlot, new GuiElementBuilder(Items.ENCHANTED_BOOK)
-                        .setName(Text.literal(perk.name).formatted(Formatting.GREEN))
-                        .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
-                        .addLoreLine(Text.literal("Points: " + perk.pointValue).formatted(Formatting.YELLOW))
-                        .build());
-                perkSlot++;
-            }
-        }
-
-        boolean taxEnabled = TaxManager.isTaxEnabled();
-        gui.setSlot(21, new GuiElementBuilder(taxEnabled ? Items.GOLD_BLOCK : Items.GOLD_INGOT)
-                .setName(Text.literal("Tax System").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Current: " + formatRate(DataManager.getMainAccountInterestRate()) + "/hr").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Status: " + (taxEnabled ? "ENABLED" : "DISABLED")).formatted(taxEnabled ? Formatting.GREEN : Formatting.RED))
-                .addLoreLine(Text.literal("Daily Amount: " + TaxManager.getDailyTaxAmount() + " credits").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to toggle").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Left-click: +1%").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Right-click: -1%").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Shift-click: ±5%").formatted(Formatting.AQUA))
                 .setCallback((index, type, action) -> {
-                    TaxManager.setTaxEnabled(!TaxManager.isTaxEnabled());
+                    double change = type.isLeft ? 0.01 : -0.01;
+                    if (type.shift) change = type.isLeft ? 0.05 : -0.05;
+                    DataManager.setMainAccountInterestRate(DataManager.getMainAccountInterestRate() + change);
+                    DataManager.save(PoliticalServer.server);
+                    broadcastInterestRateChange(player, "Main Account", DataManager.getMainAccountInterestRate());
                     open(player);
                 })
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.GOLD_NUGGET)
-                .setName(Text.literal("Set Tax Amount").formatted(Formatting.YELLOW, Formatting.BOLD))
+        gui.setSlot(11, new GuiElementBuilder(Items.BARREL)
+                .setName(Text.literal("🏦 Savings Interest Rate").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Current: " + TaxManager.getDailyTaxAmount() + " credits").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("Current: " + formatRate(DataManager.getSavingsAccountInterestRate()) + "/hr").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Left-click: +1%").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Right-click: -1%").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Shift-click: ±5%").formatted(Formatting.AQUA))
+                .setCallback((index, type, action) -> {
+                    double change = type.isLeft ? 0.01 : -0.01;
+                    if (type.shift) change = type.isLeft ? 0.05 : -0.05;
+                    DataManager.setSavingsAccountInterestRate(DataManager.getSavingsAccountInterestRate() + change);
+                    DataManager.save(PoliticalServer.server);
+                    broadcastInterestRateChange(player, "Savings Account", DataManager.getSavingsAccountInterestRate());
+                    open(player);
+                })
+                .build());
+
+        gui.setSlot(12, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Text.literal("📊 Set Tax Amount").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Current: " + TaxManager.getDailyTaxAmount() + " credits/day").formatted(Formatting.GOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Left-click: +1").formatted(Formatting.GREEN))
                 .addLoreLine(Text.literal("Right-click: -1").formatted(Formatting.RED))
@@ -82,58 +93,94 @@ public class ChairGui {
                 })
                 .build());
 
-        gui.setSlot(23, new GuiElementBuilder(Items.PLAYER_HEAD)
-                .setName(Text.literal("View Debtors").formatted(Formatting.RED, Formatting.BOLD))
-                .addLoreLine(Text.literal("Click to view players in debt").formatted(Formatting.GRAY))
+        // Tax toggle
+        boolean taxEnabled = TaxManager.isTaxEnabled();
+        gui.setSlot(13, new GuiElementBuilder(taxEnabled ? Items.LIME_DYE : Items.RED_DYE)
+                .setName(Text.literal("📋 Tax System").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Status: " + (taxEnabled ? "§aENABLED" : "§cDISABLED")))
+                .addLoreLine(Text.literal("Amount: " + TaxManager.getDailyTaxAmount() + " credits/day").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to toggle").formatted(Formatting.GRAY))
                 .setCallback((index, type, action) -> {
-                    RulerGui.openDebtorsPage(player, "chair");
+                    TaxManager.setTaxEnabled(!TaxManager.isTaxEnabled());
+                    open(player);
                 })
                 .build());
 
-        boolean canChangePerks = PerkManager.canChangePerks(true);
-        if (canChangePerks) {
-            gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
-                    .setName(Text.literal("Select Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Choose perks for this term").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal("You have 6 perk points").formatted(Formatting.YELLOW))
-                    .setCallback((index, type, action) -> {
-                        PerksGui.open(player, true);
-                    })
-                    .build());
-        } else {
-            gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)
-                    .setName(Text.literal("Perks Locked").formatted(Formatting.RED, Formatting.BOLD))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Perks have already been").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal("selected for this term!").formatted(Formatting.GRAY))
-                    .build());
-        }
-
-        gui.setSlot(20, buildInterestRateButton(
-                "Main Account Interest Rate", Items.GOLD_INGOT,
-                DataManager.getMainAccountInterestRate(), 0.01, 0.20, 0.01, 0.05,
-                player, true));
-
-        gui.setSlot(26, buildInterestRateButton(
-                "Savings Account Interest Rate", Items.BARREL,
-                DataManager.getSavingsAccountInterestRate(), 0.01, 0.50, 0.01, 0.05,
-                player, false));
-
-        gui.setSlot(25, new GuiElementBuilder(Items.BARRIER)
-                .setName(Text.literal("Impeachment Status").formatted(Formatting.RED, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal(ElectionManager.isImpeachmentActive() ? "Vote in progress!" : "No active vote").formatted(ElectionManager.isImpeachmentActive() ? Formatting.RED : Formatting.GREEN))
-                .build());
-
+        // ── Row 2: Government ──
         int treasury = DataManager.getGovernmentTreasury();
-        gui.setSlot(24, new GuiElementBuilder(Items.GOLD_BLOCK)
+        gui.setSlot(19, new GuiElementBuilder(Items.GOLD_BLOCK)
                 .setName(Text.literal("🏛 Government Treasury").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Balance: " + String.format("%,d", treasury) + " coins").formatted(Formatting.WHITE))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click to manage treasury").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to manage").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> GovernmentTreasuryGui.open(player))
+                .build());
+
+        gui.setSlot(20, new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("👥 View Debtors").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("View players in debt").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> RulerGui.openDebtorsPage(player, "chair"))
+                .build());
+
+        gui.setSlot(21, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("⚖ Impeachment Status").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal(ElectionManager.isImpeachmentActive() ? "§cVote in progress!" : "§aNo active vote"))
+                .build());
+
+        // ── Row 3: Perks ──
+        List<String> activePerks = PerkManager.getActivePerks();
+        gui.setSlot(28, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✨ Active Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal(activePerks.size() + " perks active").formatted(Formatting.GREEN))
+                .glow().build());
+
+        // Show active perks
+        int perkSlot = 29;
+        for (String perkId : activePerks) {
+            if (perkSlot >= 35) break;
+            Perk perk = PerkManager.getPerk(perkId);
+            if (perk != null) {
+                gui.setSlot(perkSlot, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                        .setName(Text.literal(perk.name).formatted(Formatting.GREEN))
+                        .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
+                        .addLoreLine(Text.literal("Points: " + perk.pointValue).formatted(Formatting.YELLOW))
+                        .build());
+                perkSlot++;
+            }
+        }
+
+        // Perks selection button
+        boolean canChangePerks = PerkManager.canChangePerks(true);
+        if (canChangePerks) {
+            gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
+                    .setName(Text.literal("🌟 Select Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Choose perks for this term").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("You have 6 perk points").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Click to select").formatted(Formatting.GREEN))
+                    .setCallback((index, type, action) -> PerksGui.open(player, true))
+                    .glow().build());
+        } else {
+            gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("🔒 Perks Locked").formatted(Formatting.RED, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Perks already selected").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("for this term!").formatted(Formatting.GRAY))
+                    .build());
+        }
+
+        // Close button
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((slot, clickType, action) -> gui.close())
                 .build());
 
         gui.open();
@@ -143,51 +190,6 @@ public class ChairGui {
     private static String formatRate(double rate) {
         int pct = (int) Math.round(rate * 100);
         return pct + "%";
-    }
-
-    /**
-     * Builds a clickable GUI element for adjusting a government interest rate.
-     *
-     * @param label        Display name
-     * @param icon         Item icon
-     * @param currentRate  Current rate as a fraction (e.g. 0.05)
-     * @param min          Minimum allowed rate
-     * @param max          Maximum allowed rate
-     * @param step         Step per click
-     * @param shiftStep    Step per shift-click
-     * @param player       The Chair player
-     * @param isMain       true = main account rate, false = savings account rate
-     */
-    private static eu.pb4.sgui.api.elements.GuiElement buildInterestRateButton(
-            String label, net.minecraft.item.Item icon,
-            double currentRate, double min, double max, double step, double shiftStep,
-            ServerPlayerEntity player, boolean isMain) {
-        return new GuiElementBuilder(icon)
-                .setName(Text.literal(label).formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Current: " + formatRate(currentRate) + " per hour").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal("Min: " + formatRate(min) + "  Max: " + formatRate(max)).formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Left-click: +" + formatRate(step)).formatted(Formatting.GREEN))
-                .addLoreLine(Text.literal("Right-click: -" + formatRate(step)).formatted(Formatting.RED))
-                .addLoreLine(Text.literal("Shift-click: ±" + formatRate(shiftStep)).formatted(Formatting.AQUA))
-                .setCallback((index, type, action) -> {
-                    double change = type.isLeft ? step : -step;
-                    if (type.shift) change = type.isLeft ? shiftStep : -shiftStep;
-                    if (isMain) {
-                        DataManager.setMainAccountInterestRate(DataManager.getMainAccountInterestRate() + change);
-                        DataManager.save(PoliticalServer.server);
-                        double newRate = DataManager.getMainAccountInterestRate();
-                        broadcastInterestRateChange(player, "Main Account", newRate);
-                    } else {
-                        DataManager.setSavingsAccountInterestRate(DataManager.getSavingsAccountInterestRate() + change);
-                        DataManager.save(PoliticalServer.server);
-                        double newRate = DataManager.getSavingsAccountInterestRate();
-                        broadcastInterestRateChange(player, "Savings Account", newRate);
-                    }
-                    open(player);
-                })
-                .build();
     }
 
     /** Broadcasts a server-wide announcement when an interest rate changes. */

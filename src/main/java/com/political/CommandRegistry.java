@@ -58,6 +58,7 @@ public class CommandRegistry {
         registerForceUndergroundAuction(dispatcher);
         registerModHelp(dispatcher);
         registerSetHelp(dispatcher);
+        registerCivilCraft(dispatcher);
         registerTakeLeadership(dispatcher);
         registerSpawnProtection(dispatcher);
         registerCheckpoint(dispatcher);
@@ -95,11 +96,11 @@ public class CommandRegistry {
                 })
         );
 
-        // Customitems command
+        // Customitems command - opens RecipesGui
         dispatcher.register(CommandManager.literal("customitems")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    CustomItemsGui.open(player);
+                    RecipesGui.openMainMenu(player);
                     return 1;
                 }));
 
@@ -1840,6 +1841,25 @@ public class CommandRegistry {
                     return 1;
                 }));
 
+        dispatcher.register(CommandManager.literal("judge")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    String uuid = player.getUuidAsString();
+
+                    if (DictatorManager.isDictator(uuid)) {
+                        player.sendMessage(Text.literal("Dictators must use /dictator instead!").formatted(Formatting.RED));
+                        return 0;
+                    }
+
+                    if (!uuid.equals(DataManager.getJudge())) {
+                        player.sendMessage(Text.literal("Only the Judge can use this command!").formatted(Formatting.RED));
+                        return 0;
+                    }
+                    JudgeGui.open(player);
+                    return 1;
+                }));
+
         dispatcher.register(CommandManager.literal("admin")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .executes(context -> {
@@ -2117,8 +2137,8 @@ public class CommandRegistry {
                     player.sendMessage(Text.literal("  ⚔ Bounty Hunting").formatted(Formatting.RED, Formatting.BOLD));
                     player.sendMessage(Text.literal("/bounties").formatted(Formatting.GREEN)
                             .append(Text.literal(" — View bounty board & start quests").formatted(Formatting.GRAY)));
-                    player.sendMessage(Text.literal("/recipes").formatted(Formatting.GREEN)
-                            .append(Text.literal(" — View all crafting recipes").formatted(Formatting.GRAY)));
+                    player.sendMessage(Text.literal("/customitems").formatted(Formatting.GREEN)
+                            .append(Text.literal(" — View all custom items & recipes").formatted(Formatting.GRAY)));
                     player.sendMessage(Text.literal("").formatted(Formatting.GRAY));
                     player.sendMessage(Text.literal("  ⚖ Government").formatted(Formatting.YELLOW, Formatting.BOLD));
                     player.sendMessage(Text.literal("/vote").formatted(Formatting.GREEN)
@@ -2629,5 +2649,26 @@ public class CommandRegistry {
         
         player.sendMessage(Text.literal("=== END (" + TexturePackCodes.getAllItems().size() + " items) ===").formatted(Formatting.GOLD), false);
         player.sendMessage(Text.literal("Use /texturehelper for GUI view").formatted(Formatting.GRAY), false);
+    }
+
+    // ── /civilcraft and /cc ─────────────────────────────────────────────────────
+    private static void registerCivilCraft(CommandDispatcher<ServerCommandSource> dispatcher) {
+        // Main command
+        dispatcher.register(CommandManager.literal("civilcraft")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    CivilCraftGui.open(player);
+                    return 1;
+                }));
+
+        // Short alias
+        dispatcher.register(CommandManager.literal("cc")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    CivilCraftGui.open(player);
+                    return 1;
+                }));
     }
 }

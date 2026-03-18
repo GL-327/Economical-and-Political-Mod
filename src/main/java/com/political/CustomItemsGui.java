@@ -1039,7 +1039,7 @@ public class CustomItemsGui {
                 .setName(Text.literal("§6§l/customitems").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Select a category to browse items").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click any item to receive it").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click any item to view recipe").formatted(Formatting.GRAY))
                 .glow().build());
 
         // Place category buttons in a grid
@@ -1271,8 +1271,8 @@ public class CustomItemsGui {
             gui.setSlot(slots[2], new GuiElementBuilder(set.sword.getItem())
                     .setName(swordName != null ? swordName : Text.literal("Sword"))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to receive").formatted(Formatting.YELLOW))
-                    .setCallback((s, t, a) -> giveItem(player, set.sword))
+                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> showItemInfo(player, set.sword))
                     .build());
 
             // Armor pieces: Helmet, Chestplate, Leggings, Boots (shifted 1 slot right)
@@ -1283,8 +1283,8 @@ public class CustomItemsGui {
                 gui.setSlot(slots[3 + j], new GuiElementBuilder(armor.getItem())
                         .setName(armorName != null ? armorName : Text.literal("Armor"))
                         .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("✨ Click to receive").formatted(Formatting.YELLOW))
-                        .setCallback((s, t, a) -> giveItem(player, armor))
+                        .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
+                        .setCallback((s, t, a) -> showItemInfo(player, armor))
                         .build());
             }
         }
@@ -1315,16 +1315,6 @@ public class CustomItemsGui {
                 .build());
 
         gui.open();
-    }
-
-    private static void giveItem(ServerPlayerEntity player, ItemStack item) {
-        ItemStack copy = item.copy();
-        if (!player.getInventory().insertStack(copy)) {
-            player.dropItem(copy, false);
-        }
-        Text name = item.get(DataComponentTypes.CUSTOM_NAME);
-        String itemName = name != null ? name.getString() : item.getItem().toString();
-        player.sendMessage(Text.literal("✨ Given " + itemName + "!").formatted(Formatting.GREEN), false);
     }
 
     // Helper class for armor set display
@@ -1361,7 +1351,7 @@ public class CustomItemsGui {
         gui.setSlot(4, new GuiElementBuilder(cat.icon)
                 .setName(Text.literal(cat.label).formatted(cat.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Click an item to receive it").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click an item to view recipe").formatted(Formatting.GRAY))
                 .glow().build());
 
         // Item slots (7 per row, rows 1-4, columns 1-7)
@@ -1380,12 +1370,8 @@ public class CustomItemsGui {
                     .setName(displayName != null ? displayName
                             : Text.literal(item.getItem().toString()))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to receive").formatted(Formatting.YELLOW))
-                    .setCallback((s, t, a) -> {
-                        player.getInventory().insertStack(finalItem.copy());
-                        String itemName = displayName != null ? displayName.getString() : item.getItem().toString();
-                        player.sendMessage(Text.literal("✨ Given " + itemName + "!").formatted(Formatting.GREEN), false);
-                    });
+                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> showItemInfo(player, finalItem));
             gui.setSlot(slot, elem.build());
             shown++;
         }
@@ -1416,5 +1402,128 @@ public class CustomItemsGui {
                 .build());
 
         gui.open();
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // RECIPE VIEW - Show item recipe in a GUI
+    // ──────────────────────────────────────────────────────────────
+
+    private static void showItemInfo(ServerPlayerEntity player, ItemStack resultItem) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("Recipe View"));
+
+        // Background with dark theme
+        for (int i = 0; i < 36; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header - Item name
+        Text displayName = resultItem.get(DataComponentTypes.CUSTOM_NAME);
+        if (displayName == null) {
+            displayName = Text.literal(resultItem.getItem().toString());
+        }
+        gui.setSlot(4, new GuiElementBuilder(resultItem.getItem())
+                .setName(displayName)
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Crafting Recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Recipe grid slots (3x3)
+        int[] gridSlots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+
+        // Try to find the recipe from RecipeConfigManager
+        SlayerRecipes.Recipe recipe = findRecipeForOutput(resultItem);
+
+        if (recipe != null && recipe.ingredients != null) {
+            // Display the actual recipe
+            for (int i = 0; i < 9 && i < recipe.ingredients.length; i++) {
+                ItemStack input = recipe.ingredients[i];
+                if (input != null && !input.isEmpty()) {
+                    Text inputName = input.get(DataComponentTypes.CUSTOM_NAME);
+                    if (inputName == null) {
+                        inputName = Text.literal(input.getItem().toString());
+                    }
+                    gui.setSlot(gridSlots[i], new GuiElementBuilder(input.getItem())
+                            .setName(inputName)
+                            .setCount(input.getCount())
+                            .build());
+                } else {
+                    // Empty slot indicator
+                    gui.setSlot(gridSlots[i], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                            .setName(Text.literal("Empty").formatted(Formatting.GRAY))
+                            .build());
+                }
+            }
+
+            // Arrow indicator
+            gui.setSlot(23, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("→").formatted(Formatting.YELLOW))
+                    .build());
+
+            // Result
+            gui.setSlot(24, new GuiElementBuilder(resultItem)
+                    .setName(displayName)
+                    .glow().build());
+        } else {
+            // No recipe found - show message
+            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("No recipe found").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("This item may be obtained"))
+                    .addLoreLine(Text.literal("through other means."))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> open(player))
+                .build());
+
+        gui.open();
+    }
+
+    // Find recipe for output item
+    private static SlayerRecipes.Recipe findRecipeForOutput(ItemStack output) {
+        if (output == null || output.isEmpty()) return null;
+
+        String outputId = SlayerItems.getCustomItemId(output);
+
+        // Check all recipes
+        for (SlayerRecipes.Recipe recipe : RecipeConfigManager.getRecipes()) {
+            if (recipe.result == null || recipe.result.isEmpty()) continue;
+
+            // Try to match by custom item ID first
+            if (outputId != null) {
+                String recipeId = SlayerItems.getCustomItemId(recipe.result);
+                if (outputId.equals(recipeId)) {
+                    if (hasValidIngredients(recipe)) {
+                        return recipe;
+                    }
+                }
+            }
+
+            // Fallback: match by item type and custom name
+            if (recipe.result.getItem() == output.getItem()) {
+                Text recipeName = recipe.result.get(DataComponentTypes.CUSTOM_NAME);
+                Text outputName = output.get(DataComponentTypes.CUSTOM_NAME);
+                if (recipeName != null && outputName != null && recipeName.equals(outputName)) {
+                    if (hasValidIngredients(recipe)) {
+                        return recipe;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean hasValidIngredients(SlayerRecipes.Recipe recipe) {
+        if (recipe.ingredients == null) return false;
+        for (ItemStack ing : recipe.ingredients) {
+            if (ing != null && !ing.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

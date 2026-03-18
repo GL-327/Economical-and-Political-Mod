@@ -266,6 +266,7 @@ public class DataManager {
                 }
             }
             ElectionManager.resetImpeachment();
+            DataManager.save(PoliticalServer.server);
         }
 
         data.chair = uuid;
@@ -274,17 +275,6 @@ public class DataManager {
     public static String getViceChair() {
         return data.viceChair;
     }
-
-    public static void resetImpeachment() {
-        DataManager.SaveData data = DataManager.getData();
-        data.impeachmentActive = false;
-        data.impeachYes = 0;
-        data.impeachNo = 0;
-        data.impeachVoted.clear();
-        data.activeSlayerQuests = SlayerManager.getActiveQuests();
-        DataManager.save(PoliticalServer.server);
-    }
-    public Map<String, SlayerData.PlayerSlayerData> playerSlayerData = new HashMap<>();
 
     public static void setViceChair(String uuid) {
         String oldViceChair = data.viceChair;
@@ -321,6 +311,10 @@ public class DataManager {
 
     public static void setJudge(String uuid) {
         data.judge = uuid;
+    }
+
+    public static java.util.Map<String, Long> getPrisoners() {
+        return data.prisoners;
     }
 
     public static int getChairTermCount() {

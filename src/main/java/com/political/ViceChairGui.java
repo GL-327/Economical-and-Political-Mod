@@ -13,36 +13,63 @@ import java.util.List;
 public class ViceChairGui {
 
     public static void open(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
-        gui.setTitle(Text.literal("Vice Chair Dashboard"));
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X5, player, false);
+        gui.setTitle(Text.literal("🎖 Vice Chair Dashboard"));
 
-        // Fill with glass panes
-        for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.LIGHT_BLUE_STAINED_GLASS_PANE)
-                    .setName(Text.literal(""))
-                    .build());
+        // Dark elegant background
+        for (int i = 0; i < 45; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
         }
 
-        // Header
+        // Decorative border with cyan
+        int[] cyanBorder = {0, 1, 2, 3, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
+        for (int slot : cyanBorder) {
+            gui.setSlot(slot, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header with badge
         gui.setSlot(4, new GuiElementBuilder(Items.IRON_HELMET)
-                .setName(Text.literal("Vice Chair Dashboard").formatted(Formatting.AQUA, Formatting.BOLD))
+                .setName(Text.literal("🎖 Vice Chair Dashboard").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Welcome, Vice Chair!").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("Assist the Chair in governing").formatted(Formatting.GRAY))
                 .glow()
                 .build());
 
-        // Active Perks Display
-        gui.setSlot(19, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Text.literal("Active Perks").formatted(Formatting.AQUA, Formatting.BOLD))
+        // ── Row 1: Chair Info ──
+        String chair = DataManager.getChair();
+        String chairName = chair != null ? DataManager.getPlayerName(chair) : "None";
+        gui.setSlot(10, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Current Chair").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal(PerkManager.getActivePerks().size() + " perks active").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(chairName).formatted(Formatting.YELLOW))
                 .build());
 
-        // Show active perks
+        // Tax status (view only)
+        boolean taxEnabled = TaxManager.isTaxEnabled();
+        gui.setSlot(11, new GuiElementBuilder(taxEnabled ? Items.LIME_DYE : Items.RED_DYE)
+                .setName(Text.literal("📋 Tax Status").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Status: " + (taxEnabled ? "§aENABLED" : "§cDISABLED")))
+                .addLoreLine(Text.literal("Amount: " + TaxManager.getDailyTaxAmount() + " credits/day").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("(Chair controls taxes)").formatted(Formatting.GRAY))
+                .build());
+
+        // ── Row 2: Perks ──
         List<String> activePerks = PerkManager.getActivePerks();
-        int perkSlot = 10;
+        gui.setSlot(19, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✨ Active Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal(activePerks.size() + " perks active").formatted(Formatting.GREEN))
+                .glow().build());
+
+        // Show active perks
+        int perkSlot = 20;
         for (String perkId : activePerks) {
-            if (perkSlot >= 17) break;
+            if (perkSlot >= 26) break;
             Perk perk = PerkManager.getPerk(perkId);
             if (perk != null) {
                 gui.setSlot(perkSlot, new GuiElementBuilder(Items.ENCHANTED_BOOK)
@@ -53,49 +80,34 @@ public class ViceChairGui {
             }
         }
 
-        // Chair Info
-        String chair = DataManager.getChair();
-        String chairName = chair != null ? DataManager.getPlayerName(chair) : "None";
-        gui.setSlot(21, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Text.literal("Current Chair").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal(chairName).formatted(Formatting.YELLOW))
-                .build());
-
-        // Perks Menu Button - with lock check
-        // Vice Chair is exempt from cooldowns but still needs lock for "already selected this term"
-        boolean canChangePerks = PerkManager.canChangePerks(false);  // false = Vice Chair
+        // Perks selection button
+        boolean canChangePerks = PerkManager.canChangePerks(false);
         if (canChangePerks) {
-            gui.setSlot(23, new GuiElementBuilder(Items.NETHER_STAR)
-                    .setName(Text.literal("Select Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+            gui.setSlot(31, new GuiElementBuilder(Items.NETHER_STAR)
+                    .setName(Text.literal("🌟 Select Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("Choose perks for this term").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("You have 2 perk points").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("Note: You are exempt from").formatted(Formatting.GREEN))
                     .addLoreLine(Text.literal("perk cooldowns!").formatted(Formatting.GREEN))
-                    .setCallback((index, type, action) -> {
-                        PerksGui.open(player, false); // false = isViceChair (NOT chair)
-                    })
-                    .build());
-        } else {
-            gui.setSlot(23, new GuiElementBuilder(Items.BARRIER)
-                    .setName(Text.literal("Perks Locked").formatted(Formatting.RED, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Perks have already been").formatted(Formatting.GRAY))
-                    .addLoreLine(Text.literal("selected for this term!").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Click to select").formatted(Formatting.AQUA))
+                    .setCallback((index, type, action) -> PerksGui.open(player, false))
+                    .glow().build());
+        } else {
+            gui.setSlot(31, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("🔒 Perks Locked").formatted(Formatting.RED, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Perks already selected").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("for this term!").formatted(Formatting.GRAY))
                     .build());
         }
 
-        // Tax Info (view only for Vice Chair)
-        boolean taxEnabled = TaxManager.isTaxEnabled();
-        gui.setSlot(25, new GuiElementBuilder(taxEnabled ? Items.GOLD_BLOCK : Items.GOLD_INGOT)
-                .setName(Text.literal("Tax Status").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Status: " + (taxEnabled ? "ENABLED" : "DISABLED")).formatted(taxEnabled ? Formatting.GREEN : Formatting.RED))
-                .addLoreLine(Text.literal("Daily Amount: " + TaxManager.getDailyTaxAmount() + " credits").formatted(Formatting.YELLOW))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("(Chair controls taxes)").formatted(Formatting.GRAY))
+        // Close button
+        gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((slot, clickType, action) -> gui.close())
                 .build());
 
         gui.open();

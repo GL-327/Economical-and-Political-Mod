@@ -346,6 +346,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     CustomItemHandler.tickCrownOfGreed(player);
                     CustomItemHandler.tickCrownOfMidas(player);
                     ArmourAttributeHandler.tick(player);
+                    DanielsPickaxe.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }
