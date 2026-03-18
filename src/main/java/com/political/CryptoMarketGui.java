@@ -350,6 +350,12 @@ public class CryptoMarketGui {
     // ═══════════════════════════════════════════════════════════════
 
     public static void openCryptoBrowser(ServerPlayerEntity player, int page) {
+        // Close existing GUI if open
+        SimpleGui existingGui = openCryptoGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
+        
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("📊 Browse Cryptos"));
 
@@ -435,6 +441,12 @@ public class CryptoMarketGui {
     public static void openCryptoDetail(ServerPlayerEntity player, String symbol) {
         CryptoMarket.Crypto crypto = CryptoMarket.getCryptoBySymbol(symbol);
         if (crypto == null) return;
+
+        // Close existing GUI if open
+        SimpleGui existingGui = openCryptoGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
 
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal(crypto.symbol + " Trading"));
@@ -586,6 +598,12 @@ public class CryptoMarketGui {
     // ═══════════════════════════════════════════════════════════════
 
     public static void openWallet(ServerPlayerEntity player) {
+        // Close existing GUI if open
+        SimpleGui existingGui = openCryptoGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
+        
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("💼 My Wallet"));
 

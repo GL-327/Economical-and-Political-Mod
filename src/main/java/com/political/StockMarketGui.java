@@ -315,6 +315,12 @@ public class StockMarketGui {
     // ═══════════════════════════════════════════════════════════════
 
     public static void openPortfolio(ServerPlayerEntity player, int page) {
+        // Close existing GUI if open
+        SimpleGui existingGui = openStockGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
+        
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("💼 Your Portfolio"));
 
@@ -402,6 +408,12 @@ public class StockMarketGui {
     // ═══════════════════════════════════════════════════════════════
 
     public static void openStockBrowser(ServerPlayerEntity player, int page) {
+        // Close existing GUI if open
+        SimpleGui existingGui = openStockGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
+        
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("📊 Browse Stocks"));
 
@@ -492,6 +504,12 @@ public class StockMarketGui {
     public static void openStockDetail(ServerPlayerEntity player, String symbol) {
         StockMarket.Stock stock = StockMarket.getStockBySymbol(symbol);
         if (stock == null) return;
+
+        // Close existing GUI if open
+        SimpleGui existingGui = openStockGuis.remove(player.getUuid());
+        if (existingGui != null && existingGui.isOpen()) {
+            existingGui.close();
+        }
 
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal(stock.symbol + " Trading"));

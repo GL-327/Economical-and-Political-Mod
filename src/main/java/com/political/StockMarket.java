@@ -120,6 +120,9 @@ public class StockMarket {
     // Trade count tracking for INVESTOR buff
     private static final Map<String, Integer> playerTradeCounts = new ConcurrentHashMap<>();
     
+    // Player trading impact tracking
+    private static final Map<String, Integer> recentBuyPressure = new ConcurrentHashMap<>(); // symbol -> net buy shares
+    
     public static void incrementTradeCount(String playerUuid) {
         playerTradeCounts.merge(playerUuid, 1, Integer::sum);
     }
@@ -211,6 +214,16 @@ public class StockMarket {
         for (MarketEvent event : activeEvents) {
             event.durationTicks -= UPDATE_INTERVAL;
         }
+        
+        // Decay player buy pressure over time
+        for (Map.Entry<String, Integer> entry : recentBuyPressure.entrySet()) {
+            int decayed = (int) (entry.getValue() * 0.7); // 30% decay per update
+            if (Math.abs(decayed) < 10) {
+                recentBuyPressure.remove(entry.getKey());
+            } else {
+                recentBuyPressure.put(entry.getKey(), decayed);
+            }
+        }
     }
 
     private static double calculateNewPrice(Stock stock, double currentPrice, Random random) {
@@ -232,9 +245,20 @@ public class StockMarket {
             }
         }
         
+        // Player trading impact - buys push price up, sells push down
+        double playerImpact = 0.0;
+        Integer buyPressure = recentBuyPressure.get(stock.symbol);
+        if (buyPressure != null && buyPressure != 0) {
+            // Scale impact by trade volume relative to typical volume
+            // Assume typical volume of 1000 shares per update cycle
+            double relativeVolume = Math.abs(buyPressure) / 1000.0;
+            // Cap impact at 3% per update cycle for realistic movement
+            playerImpact = Math.signum(buyPressure) * Math.min(relativeVolume * currentPrice * 0.01, currentPrice * 0.03);
+        }
+        
         // Calculate new price
         double trendChange = currentPrice * trendModifier;
-        double newPrice = currentPrice + baseChange + trendChange + (currentPrice * eventModifier);
+        double newPrice = currentPrice + baseChange + trendChange + (currentPrice * eventModifier) + playerImpact;
         
         // Add some mean reversion (stocks tend to return toward base price)
         double reversionFactor = 0.01;
@@ -383,6 +407,10 @@ public class StockMarket {
         Map<String, Integer> portfolio = playerPortfolios.computeIfAbsent(uuid, k -> new HashMap<>());
         portfolio.merge(symbol, shares, Integer::sum);
         
+        // Track buy pressure for price impact
+        int pressure = recentBuyPressure.getOrDefault(symbol, 0);
+        recentBuyPressure.put(symbol, pressure + shares);
+        
         player.sendMessage(Text.literal("✅ Bought " + shares + " shares of " + symbol + " for " + formatPrice(totalCost) + " coins (fee: " + formatPrice(fee) + ")!")
                 .formatted(Formatting.GREEN), false);
         
@@ -424,6 +452,10 @@ public class StockMarket {
         if (portfolio.get(symbol) <= 0) {
             portfolio.remove(symbol);
         }
+        
+        // Track sell pressure for price impact (negative = selling)
+        int pressure = recentBuyPressure.getOrDefault(symbol, 0);
+        recentBuyPressure.put(symbol, pressure - shares);
         
         // Track trade count for INVESTOR buff
         incrementTradeCount(uuid);

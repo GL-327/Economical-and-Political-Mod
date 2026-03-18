@@ -345,7 +345,8 @@ public class FletchingTableGui {
 
         // Show all arrow types and their recipes
         CustomArrows.ArrowType[] types = CustomArrows.getAllArrowTypes();
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20};
+        // 6 rows = 54 slots, use slots 10-16, 19-25, 28-34, 37-43 for display (21 slots)
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
         for (int i = 0; i < types.length && i < slots.length; i++) {
             CustomArrows.ArrowType type = types[i];
@@ -400,7 +401,8 @@ public class FletchingTableGui {
 
         // Add arrow type selection buttons for editing
         CustomArrows.ArrowType[] types = CustomArrows.getAllArrowTypes();
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20};
+        // 6 rows = 54 slots, use slots 10-16, 19-25, 28-34, 37-43 for display (21 slots)
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
         for (int i = 0; i < types.length && i < slots.length; i++) {
             CustomArrows.ArrowType type = types[i];

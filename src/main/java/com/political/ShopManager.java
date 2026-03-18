@@ -239,15 +239,14 @@ public class ShopManager {
                 Items.COBBLESTONE, Items.STONE, Items.IRON_BLOCK, Items.GOLD_BLOCK,
                 Items.DIAMOND_BLOCK, Items.BLACKSTONE, Items.GILDED_BLACKSTONE, Items.OAK_LOG,
                 Items.POPPY, Items.DANDELION, Items.WHEAT, Items.CARROT, Items.POTATO, Items.SUGAR_CANE,
-                // New enchanted blocks
+                // New enchanted blocks (excluding super compacted base items)
                 Items.SAND, Items.RED_SAND, Items.GRAVEL, Items.NETHERRACK, Items.END_STONE,
                 Items.OBSIDIAN, Items.GLOWSTONE, Items.PRISMARINE, Items.COPPER_BLOCK,
-                Items.EMERALD_BLOCK, Items.LAPIS_BLOCK, Items.COAL_BLOCK, Items.NETHERITE_BLOCK,
-                Items.QUARTZ_BLOCK, Items.REDSTONE_BLOCK, Items.BASALT, Items.DEEPSLATE,
-                Items.COBBLED_DEEPSLATE, Items.TUFF, Items.CALCITE, Items.AMETHYST_BLOCK,
-                Items.GLASS, Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE,
-                Items.TERRACOTTA, Items.CLAY, Items.BRICKS, Items.NETHER_BRICKS,
-                Items.PURPUR_BLOCK, Items.SEA_LANTERN, Items.SHROOMLIGHT
+                Items.LAPIS_BLOCK, Items.COAL_BLOCK, Items.QUARTZ_BLOCK, Items.REDSTONE_BLOCK,
+                Items.BASALT, Items.DEEPSLATE, Items.COBBLED_DEEPSLATE, Items.TUFF,
+                Items.CALCITE, Items.AMETHYST_BLOCK, Items.GLASS, Items.ICE,
+                Items.PACKED_ICE, Items.BLUE_ICE, Items.TERRACOTTA, Items.CLAY,
+                Items.BRICKS, Items.NETHER_BRICKS, Items.PURPUR_BLOCK, Items.SEA_LANTERN, Items.SHROOMLIGHT
         );
         CATEGORIES.put("Enchanted Items", enchantedItems);
     }
