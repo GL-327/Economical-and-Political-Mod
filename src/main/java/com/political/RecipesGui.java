@@ -44,8 +44,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openSearchGui(player))
                 .build());
 
-        // Gem & Block Armor category (Emerald, Lapis, and Block armors merged)
-        gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
+        // Gem & Block Armor category (Emerald, Lapis, and Block armors merged) - shifted right
+        gui.setSlot(11, new GuiElementBuilder(Items.EMERALD)
                 .setName(Text.literal("💎 Gem & Block Armor").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("💎 Emerald, Lapis, and Block armors").formatted(Formatting.GRAY))
@@ -53,8 +53,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openGemAndBlockArmorMenu(player, 0))
                 .build());
 
-        // T1 Swords category
-        gui.setSlot(11, new GuiElementBuilder(Items.IRON_SWORD)
+        // T1 Swords category - shifted right
+        gui.setSlot(12, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Text.literal("⚔ T1 Bounty Swords").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚔ Tier 1 slayer swords").formatted(Formatting.GRAY))
@@ -62,8 +62,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openT1SwordsMenu(player))
                 .build());
 
-        // T2 Swords category
-        gui.setSlot(12, new GuiElementBuilder(Items.DIAMOND_SWORD)
+        // T2 Swords category - shifted right
+        gui.setSlot(13, new GuiElementBuilder(Items.DIAMOND_SWORD)
                 .setName(Text.literal("⚔ T2 Bounty Swords").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚔ Tier 2 slayer swords").formatted(Formatting.GRAY))
@@ -71,8 +71,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openT2SwordsMenu(player))
                 .build());
 
-        // Materials category (includes recent additions)
-        gui.setSlot(13, new GuiElementBuilder(Items.SLIME_BALL)
+        // Materials category - shifted right
+        gui.setSlot(14, new GuiElementBuilder(Items.SLIME_BALL)
                 .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("📦 Cores, chunks & compacted items").formatted(Formatting.GRAY))
@@ -81,8 +81,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openMaterialsMenu(player))
                 .build());
 
-        // T1 Armor category
-        gui.setSlot(14, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+        // T1 Armor category - shifted right
+        gui.setSlot(15, new GuiElementBuilder(Items.IRON_CHESTPLATE)
                 .setName(Text.literal("🛡 T1 Bounty Armor").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("🛡 Tier 1 slayer armor").formatted(Formatting.GRAY))
@@ -90,8 +90,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openT1ArmorMenu(player))
                 .build());
 
-        // T2 Armor category
-        gui.setSlot(15, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+        // T2 Armor category - shifted right
+        gui.setSlot(16, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
                 .setName(Text.literal("🛡 T2 Bounty Armor").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("🛡 Tier 2 slayer armor").formatted(Formatting.GRAY))
@@ -99,8 +99,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openT2ArmorMenu(player))
                 .build());
 
-        // Special/Legendary Armor category
-        gui.setSlot(16, new GuiElementBuilder(Items.NETHERITE_HELMET)
+        // Special/Legendary Armor category - shifted right
+        gui.setSlot(17, new GuiElementBuilder(Items.NETHERITE_HELMET)
                 .setName(Text.literal("🛡 Special Armor").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("🛡 Legendary & special armor pieces").formatted(Formatting.GRAY))
@@ -108,9 +108,9 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openSpecialArmorMenu(player))
                 .build());
 
-        // Row 2: More categories
+        // Row 2: More categories - shifted right
         // Special Items category
-        gui.setSlot(19, new GuiElementBuilder(Items.STICK)
+        gui.setSlot(20, new GuiElementBuilder(Items.STICK)
                 .setName(Text.literal("🎁 Special Items").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("🎁 Special unique items").formatted(Formatting.GRAY))
@@ -119,7 +119,7 @@ public class RecipesGui {
                 .build());
 
         // Piglin Items category
-        gui.setSlot(20, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        gui.setSlot(21, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("👑 Piglin-themed items").formatted(Formatting.GRAY))
@@ -128,7 +128,7 @@ public class RecipesGui {
                 .build());
 
         // Gold Armor Evolution category
-        gui.setSlot(21, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+        gui.setSlot(22, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
                 .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Gold armor tiers (Pure → Gilded)").formatted(Formatting.GRAY))
@@ -137,7 +137,7 @@ public class RecipesGui {
                 .build());
 
         // Attribute Tokens category
-        gui.setSlot(22, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(23, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Armor attribute tokens").formatted(Formatting.GRAY))
@@ -146,7 +146,7 @@ public class RecipesGui {
                 .build());
 
         // Weapon Attributes category
-        gui.setSlot(23, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(24, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚔ Weapon attribute tokens").formatted(Formatting.GRAY))
@@ -154,8 +154,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openWeaponAttributesMenu(player))
                 .build());
 
-        // Row 3: Block Tools category
-        gui.setSlot(28, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
+        // Row 3: Block Tools category - shifted right
+        gui.setSlot(29, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
                 .setName(Text.literal("⛏ Block Tools").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⛏ Block-themed tools (pickaxe, axe, shovel, hoe)").formatted(Formatting.GRAY))
@@ -164,7 +164,7 @@ public class RecipesGui {
                 .build());
 
         // Block Weapons category
-        gui.setSlot(29, new GuiElementBuilder(Items.QUARTZ)
+        gui.setSlot(30, new GuiElementBuilder(Items.QUARTZ)
                 .setName(Text.literal("⚔ Block Weapons").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚔ Block-themed swords").formatted(Formatting.GRAY))

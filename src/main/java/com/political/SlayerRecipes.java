@@ -706,6 +706,55 @@ public class SlayerRecipes {
         addBlockToolRecipe("Coal Shovel", BlockTools.createCoalShovel(), Items.COAL_BLOCK, Items.STONE_SHOVEL);
         addBlockToolRecipe("Coal Hoe", BlockTools.createCoalHoe(), Items.COAL_BLOCK, Items.STONE_HOE);
         
+        // ===== ENCHANTED BLOCK RECIPES (64 base = 1 enchanted) =====
+        addEnchantedBlockRecipe("Enchanted Cobblestone", SlayerItems.createEnchantedCobblestone(), Items.COBBLESTONE);
+        addEnchantedBlockRecipe("Enchanted Stone", SlayerItems.createEnchantedStone(), Items.STONE);
+        addEnchantedBlockRecipe("Enchanted Iron Block", SlayerItems.createEnchantedIronBlock(), Items.IRON_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Gold Block", SlayerItems.createEnchantedGoldBlock(), Items.GOLD_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Diamond Block", SlayerItems.createEnchantedDiamondBlock(), Items.DIAMOND_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Emerald Block", SlayerItems.createEnchantedEmeraldBlock(), Items.EMERALD_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Lapis Block", SlayerItems.createEnchantedLapisBlock(), Items.LAPIS_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Coal Block", SlayerItems.createEnchantedCoalBlock(), Items.COAL_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Copper Block", SlayerItems.createEnchantedCopperBlock(), Items.COPPER_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Netherite Block", SlayerItems.createEnchantedNetheriteBlock(), Items.NETHERITE_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Quartz Block", SlayerItems.createEnchantedQuartzBlock(), Items.QUARTZ_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Redstone Block", SlayerItems.createEnchantedRedstoneBlock(), Items.REDSTONE_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Blackstone", SlayerItems.createEnchantedBlackstone(), Items.BLACKSTONE);
+        addEnchantedBlockRecipe("Enchanted Gilded Blackstone", SlayerItems.createEnchantedGildedBlackstone(), Items.GILDED_BLACKSTONE);
+        addEnchantedBlockRecipe("Enchanted Oak Log", SlayerItems.createEnchantedOakLog(), Items.OAK_LOG);
+        addEnchantedBlockRecipe("Enchanted Sand", SlayerItems.createEnchantedSand(), Items.SAND);
+        addEnchantedBlockRecipe("Enchanted Red Sand", SlayerItems.createEnchantedRedSand(), Items.RED_SAND);
+        addEnchantedBlockRecipe("Enchanted Gravel", SlayerItems.createEnchantedGravel(), Items.GRAVEL);
+        addEnchantedBlockRecipe("Enchanted Netherrack", SlayerItems.createEnchantedNetherrack(), Items.NETHERRACK);
+        addEnchantedBlockRecipe("Enchanted End Stone", SlayerItems.createEnchantedEndStone(), Items.END_STONE);
+        addEnchantedBlockRecipe("Enchanted Obsidian", SlayerItems.createEnchantedObsidian(), Items.OBSIDIAN);
+        addEnchantedBlockRecipe("Enchanted Glowstone", SlayerItems.createEnchantedGlowstone(), Items.GLOWSTONE);
+        addEnchantedBlockRecipe("Enchanted Prismarine", SlayerItems.createEnchantedPrismarine(), Items.PRISMARINE);
+        addEnchantedBlockRecipe("Enchanted Basalt", SlayerItems.createEnchantedBasalt(), Items.BASALT);
+        addEnchantedBlockRecipe("Enchanted Deepslate", SlayerItems.createEnchantedDeepslate(), Items.DEEPSLATE);
+        addEnchantedBlockRecipe("Enchanted Cobbled Deepslate", SlayerItems.createEnchantedCobbledDeepslate(), Items.COBBLED_DEEPSLATE);
+        addEnchantedBlockRecipe("Enchanted Tuff", SlayerItems.createEnchantedTuff(), Items.TUFF);
+        addEnchantedBlockRecipe("Enchanted Calcite", SlayerItems.createEnchantedCalcite(), Items.CALCITE);
+        addEnchantedBlockRecipe("Enchanted Amethyst Block", SlayerItems.createEnchantedAmethystBlock(), Items.AMETHYST_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Glass", SlayerItems.createEnchantedGlass(), Items.GLASS);
+        addEnchantedBlockRecipe("Enchanted Ice", SlayerItems.createEnchantedIce(), Items.ICE);
+        addEnchantedBlockRecipe("Enchanted Packed Ice", SlayerItems.createEnchantedPackedIce(), Items.PACKED_ICE);
+        addEnchantedBlockRecipe("Enchanted Blue Ice", SlayerItems.createEnchantedBlueIce(), Items.BLUE_ICE);
+        addEnchantedBlockRecipe("Enchanted Terracotta", SlayerItems.createEnchantedTerracotta(), Items.TERRACOTTA);
+        addEnchantedBlockRecipe("Enchanted Clay", SlayerItems.createEnchantedClay(), Items.CLAY);
+        addEnchantedBlockRecipe("Enchanted Bricks", SlayerItems.createEnchantedBrick(), Items.BRICKS);
+        addEnchantedBlockRecipe("Enchanted Nether Bricks", SlayerItems.createEnchantedNetherBrick(), Items.NETHER_BRICKS);
+        addEnchantedBlockRecipe("Enchanted Purpur Block", SlayerItems.createEnchantedPurpurBlock(), Items.PURPUR_BLOCK);
+        addEnchantedBlockRecipe("Enchanted Sea Lantern", SlayerItems.createEnchantedSeaLantern(), Items.SEA_LANTERN);
+        addEnchantedBlockRecipe("Enchanted Shroomlight", SlayerItems.createEnchantedShroomlight(), Items.SHROOMLIGHT);
+        
+        // Enchanted Crops
+        addEnchantedBlockRecipe("Enchanted Wheat", SlayerItems.createEnchantedWheat(), Items.WHEAT);
+        addEnchantedBlockRecipe("Enchanted Carrot", SlayerItems.createEnchantedCarrot(), Items.CARROT);
+        addEnchantedBlockRecipe("Enchanted Potato", SlayerItems.createEnchantedPotato(), Items.POTATO);
+        addEnchantedBlockRecipe("Enchanted Sugar Cane", SlayerItems.createEnchantedSugarCane(), Items.SUGAR_CANE);
+        addEnchantedBlockRecipe("Enchanted Rose", SlayerItems.createEnchantedRose(), Items.POPPY);
+        addEnchantedBlockRecipe("Enchanted Dandelion", SlayerItems.createEnchantedDandelion(), Items.DANDELION);
     }
     
     private static void addBlockWeaponRecipe(String name, ItemStack result, Item blockItem, Item weaponBase) {
@@ -722,6 +771,19 @@ public class SlayerRecipes {
             new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
             new ItemStack(blockItem), new ItemStack(toolBase), new ItemStack(blockItem),
             ItemStack.EMPTY, new ItemStack(blockItem), ItemStack.EMPTY
+        };
+        RECIPES.add(new Recipe(name, result, ingredients, null, 0));
+    }
+    
+    /**
+     * Adds an enchanted block recipe - 64 base items fill all 9 slots (7 full stacks + 1 partial)
+     */
+    private static void addEnchantedBlockRecipe(String name, ItemStack result, Item baseItem) {
+        // 64 items = 7 stacks of 9 + 1 item = fill all 9 slots with base item
+        ItemStack[] ingredients = new ItemStack[] {
+            new ItemStack(baseItem, 64), new ItemStack(baseItem, 64), new ItemStack(baseItem, 64),
+            new ItemStack(baseItem, 64), new ItemStack(baseItem, 64), new ItemStack(baseItem, 64),
+            new ItemStack(baseItem, 64), new ItemStack(baseItem, 64), new ItemStack(baseItem, 64)
         };
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }

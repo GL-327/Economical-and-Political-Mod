@@ -16,6 +16,7 @@
         "CraftingResultMixin",
         "CraftingMixin",
         "CropBlockMixin",
+        "CustomArrowEntityMixin",
         "CustomEnchantDamageMixin",
         "EnchantmentScreenHandlerMixin",
         "EndGatewayMixin",

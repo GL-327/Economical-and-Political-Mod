@@ -184,15 +184,24 @@ public class DanielsPickaxe {
             // Set count
             newStack.setCount(mainHand.getCount());
 
-            // Replace in player's hand
-            player.setStackInHand(player.getActiveHand(), newStack);
+            // Update lore for the new mode
+            updateItemLoreOnStack(newStack, tunnelMode);
+
+            // Replace in player's main hand (not active hand - that can be offhand)
+            player.setStackInHand(net.minecraft.util.Hand.MAIN_HAND, newStack);
         }
     }
 
     private static void updateItemLore(ServerPlayerEntity player, boolean abilityActive) {
         ItemStack mainHand = player.getMainHandStack();
         if (!isDanielsPickaxe(mainHand)) return;
+        updateItemLoreOnStack(mainHand, abilityActive);
+    }
 
+    /**
+     * Update lore on a specific ItemStack (used when switching types).
+     */
+    private static void updateItemLoreOnStack(ItemStack stack, boolean tunnelMode) {
         List<Text> lore = new ArrayList<>();
         lore.add(Text.literal(""));
         lore.add(Text.literal("◆ LEGENDARY MINING TOOL ◆").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
@@ -200,7 +209,7 @@ public class DanielsPickaxe {
         lore.add(Text.literal("Right-click: Toggle Mining Mode").formatted(Formatting.YELLOW));
         lore.add(Text.literal(""));
 
-        if (abilityActive) {
+        if (tunnelMode) {
             lore.add(Text.literal("Mode: TUNNEL MINING").formatted(Formatting.GOLD, Formatting.BOLD));
             lore.add(Text.literal("  └ 3x3 tunnel excavation").formatted(Formatting.GRAY));
             lore.add(Text.literal("  └ Vein mining ores").formatted(Formatting.GRAY));
@@ -216,7 +225,7 @@ public class DanielsPickaxe {
         lore.add(Text.literal("§8[Forged in the depths of determination]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("「Legendary」").formatted(Formatting.DARK_PURPLE));
 
-        mainHand.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
     }
 
     /**

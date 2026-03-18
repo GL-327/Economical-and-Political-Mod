@@ -318,9 +318,41 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createEnchantedIronBlock());
                 items.add(SlayerItems.createEnchantedGoldBlock());
                 items.add(SlayerItems.createEnchantedDiamondBlock());
+                items.add(SlayerItems.createEnchantedEmeraldBlock());
+                items.add(SlayerItems.createEnchantedLapisBlock());
+                items.add(SlayerItems.createEnchantedCoalBlock());
+                items.add(SlayerItems.createEnchantedCopperBlock());
+                items.add(SlayerItems.createEnchantedNetheriteBlock());
+                items.add(SlayerItems.createEnchantedQuartzBlock());
+                items.add(SlayerItems.createEnchantedRedstoneBlock());
                 items.add(SlayerItems.createEnchantedBlackstone());
                 items.add(SlayerItems.createEnchantedGildedBlackstone());
                 items.add(SlayerItems.createEnchantedOakLog());
+                items.add(SlayerItems.createEnchantedSand());
+                items.add(SlayerItems.createEnchantedRedSand());
+                items.add(SlayerItems.createEnchantedGravel());
+                items.add(SlayerItems.createEnchantedNetherrack());
+                items.add(SlayerItems.createEnchantedEndStone());
+                items.add(SlayerItems.createEnchantedObsidian());
+                items.add(SlayerItems.createEnchantedGlowstone());
+                items.add(SlayerItems.createEnchantedPrismarine());
+                items.add(SlayerItems.createEnchantedBasalt());
+                items.add(SlayerItems.createEnchantedDeepslate());
+                items.add(SlayerItems.createEnchantedCobbledDeepslate());
+                items.add(SlayerItems.createEnchantedTuff());
+                items.add(SlayerItems.createEnchantedCalcite());
+                items.add(SlayerItems.createEnchantedAmethystBlock());
+                items.add(SlayerItems.createEnchantedGlass());
+                items.add(SlayerItems.createEnchantedIce());
+                items.add(SlayerItems.createEnchantedPackedIce());
+                items.add(SlayerItems.createEnchantedBlueIce());
+                items.add(SlayerItems.createEnchantedTerracotta());
+                items.add(SlayerItems.createEnchantedClay());
+                items.add(SlayerItems.createEnchantedBrick());
+                items.add(SlayerItems.createEnchantedNetherBrick());
+                items.add(SlayerItems.createEnchantedPurpurBlock());
+                items.add(SlayerItems.createEnchantedSeaLantern());
+                items.add(SlayerItems.createEnchantedShroomlight());
             }
             case ENCHANTED_CROPS -> {
                 // Enchanted flowers

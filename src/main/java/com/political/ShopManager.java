@@ -201,64 +201,70 @@ public class ShopManager {
         );
         CATEGORIES.put("Miscellaneous", miscellaneous);
 
-        // ===== RAW MATERIALS (Vanilla - Cheap) =====
-        List<Item> rawMaterials = Arrays.asList(
-                Items.RAW_IRON,
-                Items.RAW_GOLD,
-                Items.RAW_COPPER,
-                Items.COAL,
-                Items.LAPIS_LAZULI,
-                Items.REDSTONE,
-                Items.QUARTZ,
-                Items.DIAMOND,
-                Items.EMERALD,
-                Items.NETHERITE_SCRAP
-        );
-        CATEGORIES.put("Raw Materials", rawMaterials);
-
-        // ===== MATERIAL BLOCKS (Vanilla - Cheap) =====
-        List<Item> materialBlocks = Arrays.asList(
-                Items.IRON_BLOCK,
-                Items.GOLD_BLOCK,
-                Items.COPPER_BLOCK,
-                Items.COAL_BLOCK,
-                Items.LAPIS_BLOCK,
-                Items.REDSTONE_BLOCK,
-                Items.QUARTZ_BLOCK,
-                Items.DIAMOND_BLOCK,
-                Items.EMERALD_BLOCK,
-                Items.NETHERITE_BLOCK
-        );
-        CATEGORIES.put("Material Blocks", materialBlocks);
-
         // ===== FARMING & NATURAL (Vanilla - Cheap) =====
+        // Note: Logs are in Building Blocks, Flowers are in Plants & Flowers
         List<Item> farmingItems = Arrays.asList(
-                // Crops
+                // Crops only (no duplicates)
                 Items.WHEAT,
                 Items.CARROT,
                 Items.POTATO,
                 Items.BEETROOT,
                 Items.SUGAR_CANE,
                 Items.PUMPKIN,
-                Items.MELON_SLICE,
-                // Flowers
-                Items.POPPY,
-                Items.DANDELION,
-                Items.BLUE_ORCHID,
-                Items.ALLIUM,
-                Items.AZURE_BLUET,
-                Items.OXEYE_DAISY,
-                // Logs
-                Items.OAK_LOG,
-                Items.BIRCH_LOG,
-                Items.SPRUCE_LOG,
-                Items.JUNGLE_LOG,
-                Items.ACACIA_LOG,
-                Items.DARK_OAK_LOG,
-                Items.MANGROVE_LOG,
-                Items.CHERRY_LOG
+                Items.MELON_SLICE
         );
         CATEGORIES.put("Farming & Natural", farmingItems);
+
+        // ===== BLOCK ARMOR (Custom Items) =====
+        List<Item> blockArmor = Arrays.asList(
+                Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS
+        );
+        CATEGORIES.put("Block Armor", blockArmor);
+
+        // ===== BLOCK TOOLS (Custom Items) =====
+        List<Item> blockTools = Arrays.asList(
+                Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_HOE
+        );
+        CATEGORIES.put("Block Tools", blockTools);
+
+        // ===== BLOCK WEAPONS (Custom Items) =====
+        List<Item> blockWeapons = Arrays.asList(
+                Items.DIAMOND_SWORD
+        );
+        CATEGORIES.put("Block Weapons", blockWeapons);
+
+        // ===== COMPACTED ITEMS (Custom Items) =====
+        List<Item> compactedItems = Arrays.asList(
+                Items.RAW_IRON, Items.RAW_GOLD, Items.DIAMOND, Items.EMERALD,
+                Items.NETHERITE_INGOT, Items.RAW_COPPER, Items.COAL,
+                Items.LAPIS_LAZULI, Items.REDSTONE, Items.QUARTZ
+        );
+        CATEGORIES.put("Compacted Items", compactedItems);
+
+        // ===== SUPER COMPACTED (Custom Items) =====
+        List<Item> superCompacted = Arrays.asList(
+                Items.GOLD_BLOCK, Items.IRON_BLOCK, Items.DIAMOND_BLOCK,
+                Items.EMERALD_BLOCK, Items.NETHERITE_BLOCK
+        );
+        CATEGORIES.put("Super Compacted", superCompacted);
+
+        // ===== ENCHANTED ITEMS (Custom Items) =====
+        List<Item> enchantedItems = Arrays.asList(
+                // Original enchanted
+                Items.COBBLESTONE, Items.STONE, Items.IRON_BLOCK, Items.GOLD_BLOCK,
+                Items.DIAMOND_BLOCK, Items.BLACKSTONE, Items.GILDED_BLACKSTONE, Items.OAK_LOG,
+                Items.POPPY, Items.DANDELION, Items.WHEAT, Items.CARROT, Items.POTATO, Items.SUGAR_CANE,
+                // New enchanted blocks
+                Items.SAND, Items.RED_SAND, Items.GRAVEL, Items.NETHERRACK, Items.END_STONE,
+                Items.OBSIDIAN, Items.GLOWSTONE, Items.PRISMARINE, Items.COPPER_BLOCK,
+                Items.EMERALD_BLOCK, Items.LAPIS_BLOCK, Items.COAL_BLOCK, Items.NETHERITE_BLOCK,
+                Items.QUARTZ_BLOCK, Items.REDSTONE_BLOCK, Items.BASALT, Items.DEEPSLATE,
+                Items.COBBLED_DEEPSLATE, Items.TUFF, Items.CALCITE, Items.AMETHYST_BLOCK,
+                Items.GLASS, Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE,
+                Items.TERRACOTTA, Items.CLAY, Items.BRICKS, Items.NETHER_BRICKS,
+                Items.PURPUR_BLOCK, Items.SEA_LANTERN, Items.SHROOMLIGHT
+        );
+        CATEGORIES.put("Enchanted Items", enchantedItems);
     }
 
     private static void initializePrices() {
@@ -393,27 +399,6 @@ public class ShopManager {
         setPrice(Items.LAPIS_BLOCK, 36);          // 9 lapis = 36 coins (was 36, ok)
         setPrice(Items.REDSTONE_BLOCK, 18);      // 9 redstone = 18 coins
         setPrice(Items.NETHERITE_BLOCK, 6300);   // 9 netherite = 6300 coins (was 6300, ok)
-
-        // ===== RAW MATERIALS (Cheap vanilla prices) =====
-        setPrice(Items.RAW_IRON, 2);
-        setPrice(Items.RAW_GOLD, 8);
-        setPrice(Items.RAW_COPPER, 2);
-
-        // ===== FARMING & NATURAL (Very cheap) =====
-        setPrice(Items.POPPY, 1);
-        setPrice(Items.DANDELION, 1);
-        setPrice(Items.BLUE_ORCHID, 1);
-        setPrice(Items.ALLIUM, 1);
-        setPrice(Items.AZURE_BLUET, 1);
-        setPrice(Items.OXEYE_DAISY, 1);
-        setPrice(Items.OAK_LOG, 1);
-        setPrice(Items.BIRCH_LOG, 1);
-        setPrice(Items.SPRUCE_LOG, 1);
-        setPrice(Items.JUNGLE_LOG, 1);
-        setPrice(Items.ACACIA_LOG, 1);
-        setPrice(Items.DARK_OAK_LOG, 1);
-        setPrice(Items.MANGROVE_LOG, 1);
-        setPrice(Items.CHERRY_LOG, 1);
 
         // ===== FOOD =====
         setPrice(Items.APPLE, 2);
@@ -728,44 +713,78 @@ public class ShopManager {
         setPrice(Items.LODESTONE, 300);
 
         // ===== CUSTOM ITEMS - COMPACTED MATERIALS =====
-        // 64 base materials compacted - slightly discounted from raw cost
-        setCustomPrice(SlayerItems.createCompactedIron().getItem(), 160);      // 64 iron = 192, discounted to 160
-        setCustomPrice(SlayerItems.createCompactedGold().getItem(), 54);       // 64 gold = 64, discounted to 54
-        setCustomPrice(SlayerItems.createCompactedDiamond().getItem(), 2880);  // 64 diamonds = 3200, discounted to 2880
-        setCustomPrice(SlayerItems.createCompactedEmerald().getItem(), 1728);  // 64 emeralds = 1920, discounted to 1728
-        setCustomPrice(SlayerItems.createCompactedNetherite().getItem(), 40320); // 64 netherite = 44800, discounted to 40320
-        setCustomPrice(SlayerItems.createCompactedCopper().getItem(), 108);     // 64 copper = 128, discounted to 108
-        setCustomPrice(SlayerItems.createCompactedCoal().getItem(), 54);        // 64 coal = 64, discounted to 54
-        setCustomPrice(SlayerItems.createCompactedLapis().getItem(), 230);      // 64 lapis = 256, discounted to 230
-        setCustomPrice(SlayerItems.createCompactedRedstone().getItem(), 108);   // 64 redstone = 128, discounted to 108
-        setCustomPrice(SlayerItems.createCompactedQuartz().getItem(), 108);     // 64 quartz = 128, discounted to 108
+        // 64 base materials compacted - HEAVILY discounted to prevent uncraft dupe
+        setCustomPrice(SlayerItems.createCompactedIron().getItem(), 16);       // 64 iron = 192, now 16 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedGold().getItem(), 6);        // 64 gold = 64, now 6 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedDiamond().getItem(), 288);   // 64 diamonds = 3200, now 288 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedEmerald().getItem(), 172);    // 64 emeralds = 1920, now 172 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedNetherite().getItem(), 4032); // 64 netherite = 44800, now 4032 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedCopper().getItem(), 10);      // 64 copper = 128, now 10 (92% reduction)
+        setCustomPrice(SlayerItems.createCompactedCoal().getItem(), 6);        // 64 coal = 64, now 6 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedLapis().getItem(), 23);      // 64 lapis = 256, now 23 (91% reduction)
+        setCustomPrice(SlayerItems.createCompactedRedstone().getItem(), 10);   // 64 redstone = 128, now 10 (92% reduction)
+        setCustomPrice(SlayerItems.createCompactedQuartz().getItem(), 10);     // 64 quartz = 128, now 10 (92% reduction)
 
         // ===== CUSTOM ITEMS - SUPER COMPACTED MATERIALS =====
-        // 9x compacted = 576 base materials, heavily discounted
-        setCustomPrice(SlayerItems.createSuperCompactedGold().getItem(), 432);      // 576 gold = 576, discounted to 432
-        setCustomPrice(SlayerItems.createSuperCompactedIron().getItem(), 1296);     // 576 iron = 1728, discounted to 1296
-        setCustomPrice(SlayerItems.createSuperCompactedDiamond().getItem(), 23040); // 576 diamonds = 28800, discounted to 23040
-        setCustomPrice(SlayerItems.createSuperCompactedEmerald().getItem(), 13824);  // 576 emeralds = 17280, discounted to 13824
-        setCustomPrice(SlayerItems.createSuperCompactedNetherite().getItem(), 322560); // 576 netherite = 403200, discounted to 322560
+        // 9x compacted = 576 base materials, HEAVILY discounted
+        setCustomPrice(SlayerItems.createSuperCompactedGold().getItem(), 43);      // 576 gold = 576, now 43 (93% reduction)
+        setCustomPrice(SlayerItems.createSuperCompactedIron().getItem(), 129);     // 576 iron = 1728, now 129 (93% reduction)
+        setCustomPrice(SlayerItems.createSuperCompactedDiamond().getItem(), 2304); // 576 diamonds = 28800, now 2304 (92% reduction)
+        setCustomPrice(SlayerItems.createSuperCompactedEmerald().getItem(), 1382);  // 576 emeralds = 17280, now 1382 (92% reduction)
+        setCustomPrice(SlayerItems.createSuperCompactedNetherite().getItem(), 32256); // 576 netherite = 403200, now 32256 (92% reduction)
 
         // ===== CUSTOM ITEMS - ENCHANTED MATERIALS =====
-        // Premium materials for advanced crafting - reduced prices
-        setCustomPrice(SlayerItems.createEnchantedBlackstone().getItem(), 500);       // Reduced from 5000
-        setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 800); // Reduced from 8000
+        // Premium materials - heavily reduced to prevent dupes
+        setCustomPrice(SlayerItems.createEnchantedBlackstone().getItem(), 50);       // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedGildedBlackstone().getItem(), 80); // 90% reduction
         
-        // Custom Enchanted Blocks - reduced prices
-        setCustomPrice(SlayerItems.createEnchantedCobblestone().getItem(), 64);      // Reduced from 1000
-        setCustomPrice(SlayerItems.createEnchantedStone().getItem(), 128);           // Reduced from 1200
-        setCustomPrice(SlayerItems.createEnchantedIronBlock().getItem(), 256);       // Reduced from 3000
-        setCustomPrice(SlayerItems.createEnchantedGoldBlock().getItem(), 512);       // Reduced from 4000
-        setCustomPrice(SlayerItems.createEnchantedDiamondBlock().getItem(), 1024);    // Reduced from 6000
-        setCustomPrice(SlayerItems.createEnchantedOakLog().getItem(), 64);           // New
-        setCustomPrice(SlayerItems.createEnchantedRose().getItem(), 128);            // New
-        setCustomPrice(SlayerItems.createEnchantedDandelion().getItem(), 128);         // New
-        setCustomPrice(SlayerItems.createEnchantedWheat().getItem(), 64);             // New
-        setCustomPrice(SlayerItems.createEnchantedCarrot().getItem(), 64);            // New
-        setCustomPrice(SlayerItems.createEnchantedPotato().getItem(), 64);            // New
-        setCustomPrice(SlayerItems.createEnchantedSugarCane().getItem(), 64);         // New
+        // Custom Enchanted Blocks - heavily reduced
+        setCustomPrice(SlayerItems.createEnchantedCobblestone().getItem(), 6);      // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedStone().getItem(), 12);          // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedIronBlock().getItem(), 25);       // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedGoldBlock().getItem(), 51);       // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedDiamondBlock().getItem(), 102);   // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedOakLog().getItem(), 6);          // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedRose().getItem(), 12);           // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedDandelion().getItem(), 12);      // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedWheat().getItem(), 6);            // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedCarrot().getItem(), 6);          // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedPotato().getItem(), 6);          // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedSugarCane().getItem(), 6);       // 91% reduction
+        
+        // New Enchanted Blocks - heavily reduced to prevent dupes
+        setCustomPrice(SlayerItems.createEnchantedEmeraldBlock().getItem(), 86);     // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedLapisBlock().getItem(), 23);      // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedCoalBlock().getItem(), 6);        // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedCopperBlock().getItem(), 13);      // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedNetheriteBlock().getItem(), 4032); // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedQuartzBlock().getItem(), 10);      // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedRedstoneBlock().getItem(), 13);    // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedSand().getItem(), 6);              // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedRedSand().getItem(), 6);          // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedGravel().getItem(), 6);            // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedNetherrack().getItem(), 6);        // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedEndStone().getItem(), 6);          // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedObsidian().getItem(), 13);         // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedGlowstone().getItem(), 13);        // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedPrismarine().getItem(), 13);       // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedBasalt().getItem(), 6);            // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedDeepslate().getItem(), 6);         // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedCobbledDeepslate().getItem(), 6);  // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedTuff().getItem(), 6);              // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedCalcite().getItem(), 6);           // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedAmethystBlock().getItem(), 25);    // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedGlass().getItem(), 6);             // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedIce().getItem(), 6);               // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedPackedIce().getItem(), 6);         // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedBlueIce().getItem(), 13);          // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedTerracotta().getItem(), 6);        // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedClay().getItem(), 6);              // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedBrick().getItem(), 6);             // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedNetherBrick().getItem(), 6);       // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedPurpurBlock().getItem(), 6);        // 91% reduction
+        setCustomPrice(SlayerItems.createEnchantedSeaLantern().getItem(), 13);        // 90% reduction
+        setCustomPrice(SlayerItems.createEnchantedShroomlight().getItem(), 13);       // 90% reduction
 
         // Snapshot defaults the first time (when DEFAULT_PRICES is empty)
         if (DEFAULT_PRICES.isEmpty()) {
@@ -1102,6 +1121,60 @@ public class ShopManager {
                 else if (baseItem == Items.CARROT) yield SlayerItems.createEnchantedCarrot();
                 else if (baseItem == Items.POTATO) yield SlayerItems.createEnchantedPotato();
                 else if (baseItem == Items.SUGAR_CANE) yield SlayerItems.createEnchantedSugarCane();
+                // New enchanted blocks
+                else if (baseItem == Items.EMERALD_BLOCK) yield SlayerItems.createEnchantedEmeraldBlock();
+                else if (baseItem == Items.LAPIS_BLOCK) yield SlayerItems.createEnchantedLapisBlock();
+                else if (baseItem == Items.COAL_BLOCK) yield SlayerItems.createEnchantedCoalBlock();
+                else if (baseItem == Items.COPPER_BLOCK) yield SlayerItems.createEnchantedCopperBlock();
+                else if (baseItem == Items.NETHERITE_BLOCK) yield SlayerItems.createEnchantedNetheriteBlock();
+                else if (baseItem == Items.QUARTZ_BLOCK) yield SlayerItems.createEnchantedQuartzBlock();
+                else if (baseItem == Items.REDSTONE_BLOCK) yield SlayerItems.createEnchantedRedstoneBlock();
+                else if (baseItem == Items.SAND) yield SlayerItems.createEnchantedSand();
+                else if (baseItem == Items.RED_SAND) yield SlayerItems.createEnchantedRedSand();
+                else if (baseItem == Items.GRAVEL) yield SlayerItems.createEnchantedGravel();
+                else if (baseItem == Items.NETHERRACK) yield SlayerItems.createEnchantedNetherrack();
+                else if (baseItem == Items.END_STONE) yield SlayerItems.createEnchantedEndStone();
+                else if (baseItem == Items.OBSIDIAN) yield SlayerItems.createEnchantedObsidian();
+                else if (baseItem == Items.GLOWSTONE) yield SlayerItems.createEnchantedGlowstone();
+                else if (baseItem == Items.PRISMARINE) yield SlayerItems.createEnchantedPrismarine();
+                else if (baseItem == Items.BASALT) yield SlayerItems.createEnchantedBasalt();
+                else if (baseItem == Items.DEEPSLATE) yield SlayerItems.createEnchantedDeepslate();
+                else if (baseItem == Items.COBBLED_DEEPSLATE) yield SlayerItems.createEnchantedCobbledDeepslate();
+                else if (baseItem == Items.TUFF) yield SlayerItems.createEnchantedTuff();
+                else if (baseItem == Items.CALCITE) yield SlayerItems.createEnchantedCalcite();
+                else if (baseItem == Items.AMETHYST_BLOCK) yield SlayerItems.createEnchantedAmethystBlock();
+                else if (baseItem == Items.GLASS) yield SlayerItems.createEnchantedGlass();
+                else if (baseItem == Items.ICE) yield SlayerItems.createEnchantedIce();
+                else if (baseItem == Items.PACKED_ICE) yield SlayerItems.createEnchantedPackedIce();
+                else if (baseItem == Items.BLUE_ICE) yield SlayerItems.createEnchantedBlueIce();
+                else if (baseItem == Items.TERRACOTTA) yield SlayerItems.createEnchantedTerracotta();
+                else if (baseItem == Items.CLAY) yield SlayerItems.createEnchantedClay();
+                else if (baseItem == Items.BRICKS) yield SlayerItems.createEnchantedBrick();
+                else if (baseItem == Items.NETHER_BRICKS) yield SlayerItems.createEnchantedNetherBrick();
+                else if (baseItem == Items.PURPUR_BLOCK) yield SlayerItems.createEnchantedPurpurBlock();
+                else if (baseItem == Items.SEA_LANTERN) yield SlayerItems.createEnchantedSeaLantern();
+                else if (baseItem == Items.SHROOMLIGHT) yield SlayerItems.createEnchantedShroomlight();
+                else yield null;
+            }
+            case "Block Armor" -> {
+                // Return a sample block armor piece for display
+                if (baseItem == Items.LEATHER_HELMET) yield BlockArmor.createGlassHelmet();
+                else if (baseItem == Items.LEATHER_CHESTPLATE) yield BlockArmor.createGlassChestplate();
+                else if (baseItem == Items.LEATHER_LEGGINGS) yield BlockArmor.createGlassLeggings();
+                else if (baseItem == Items.LEATHER_BOOTS) yield BlockArmor.createGlassBoots();
+                else yield null;
+            }
+            case "Block Tools" -> {
+                // Return a sample block tool for display
+                if (baseItem == Items.DIAMOND_PICKAXE) yield BlockTools.createGlassPickaxe();
+                else if (baseItem == Items.DIAMOND_AXE) yield BlockTools.createGlassAxe();
+                else if (baseItem == Items.DIAMOND_SHOVEL) yield BlockTools.createGlassShovel();
+                else if (baseItem == Items.DIAMOND_HOE) yield BlockTools.createGlassHoe();
+                else yield null;
+            }
+            case "Block Weapons" -> {
+                // Return a sample block weapon for display
+                if (baseItem == Items.DIAMOND_SWORD) yield BlockWeapons.createGlassSword();
                 else yield null;
             }
             default -> null;

@@ -2,7 +2,6 @@ package com.political.mixin;
 
 import com.political.BountyArmorHandler;
 import com.political.CustomArrows;
-import com.political.SkeletonBowHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -66,45 +65,35 @@ public class ArrowDamageMixin {
     @Inject(method = "onEntityHit", at = @At("TAIL"))
     private void political_customArrowHit(EntityHitResult hitResult, CallbackInfo ci) {
         PersistentProjectileEntity self = (PersistentProjectileEntity)(Object)this;
-        Entity owner = self.getOwner();
         
         Entity hit = hitResult.getEntity();
         if (!(hit instanceof LivingEntity livingHit)) return;
         if (!(self.getEntityWorld() instanceof ServerWorld world)) return;
         
-        // Check if the shooter was using custom arrows
-        if (owner instanceof ServerPlayerEntity shooter) {
-            // Find custom arrows in shooter's inventory
-            var arrowStack = findCustomArrowInInventory(shooter);
-            if (arrowStack != null && CustomArrows.isCustomArrow(arrowStack)) {
-                CustomArrows.ArrowType type = CustomArrows.getArrowType(arrowStack);
-                if (type != null) {
-                    applyCustomArrowEffects(self, livingHit, world, type, shooter);
+        // Check if this arrow entity has custom arrow tags
+        if (self.getCommandTags().contains("custom_arrow")) {
+            // Determine arrow type from tags
+            CustomArrows.ArrowType type = null;
+            for (String tag : self.getCommandTags()) {
+                if (tag.startsWith("arrow_type_")) {
+                    String typeName = tag.substring("arrow_type_".length()).toUpperCase();
+                    try {
+                        type = CustomArrows.ArrowType.valueOf(typeName);
+                    } catch (IllegalArgumentException ignored) {}
+                    break;
                 }
+            }
+            
+            if (type != null) {
+                applyCustomArrowEffects(self, livingHit, world, type);
             }
         }
     }
 
     /**
-     * Find custom arrows in a player's inventory.
-     */
-    private net.minecraft.item.ItemStack findCustomArrowInInventory(ServerPlayerEntity player) {
-        // Check offhand first (arrow slot)
-        net.minecraft.item.ItemStack offhand = player.getOffHandStack();
-        if (CustomArrows.isCustomArrow(offhand)) return offhand;
-
-        // Check inventory
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            net.minecraft.item.ItemStack stack = player.getInventory().getStack(i);
-            if (CustomArrows.isCustomArrow(stack)) return stack;
-        }
-        return null;
-    }
-
-    /**
      * Apply custom arrow effects based on arrow type.
      */
-    private void applyCustomArrowEffects(PersistentProjectileEntity arrow, LivingEntity target, ServerWorld world, CustomArrows.ArrowType type, ServerPlayerEntity shooter) {
+    private void applyCustomArrowEffects(PersistentProjectileEntity arrow, LivingEntity target, ServerWorld world, CustomArrows.ArrowType type) {
         float bonusDamage = type.getBonusDamage();
         
         // Apply bonus damage
@@ -148,18 +137,18 @@ public class ArrowDamageMixin {
                 world.spawnParticles(net.minecraft.particle.ParticleTypes.CRIT,
                         target.getX(), target.getY() + 1.0, target.getZ(),
                         8, 0.3, 0.5, 0.3, 0.1);
-                target.damage(world, arrow.getDamageSources().arrow(arrow, shooter), bonusDamage);
+                target.damage(world, arrow.getDamageSources().arrow(arrow, arrow.getOwner()), bonusDamage);
             }
             case CustomArrows.ArrowType.NETHERITE_TIPPED -> {
                 // Soul fire particles
                 world.spawnParticles(net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME,
                         target.getX(), target.getY() + 1.0, target.getZ(),
                         10, 0.3, 0.5, 0.3, 0.05);
-                target.damage(world, arrow.getDamageSources().arrow(arrow, shooter), bonusDamage);
+                target.damage(world, arrow.getDamageSources().arrow(arrow, arrow.getOwner()), bonusDamage);
             }
             default -> {
                 // Basic damage bonus for iron/steel tipped
-                target.damage(world, arrow.getDamageSources().arrow(arrow, shooter), bonusDamage);
+                target.damage(world, arrow.getDamageSources().arrow(arrow, arrow.getOwner()), bonusDamage);
             }
         }
     }

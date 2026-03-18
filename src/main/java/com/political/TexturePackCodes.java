@@ -81,6 +81,7 @@ public class TexturePackCodes {
         return switch (itemId) {
             case "zombie_berserker_helmet" -> "special_armor:zombie_berserker_helmet:color=1A6600";
             case "spider_leggings" -> "special_armor:spider_leggings:color=4D0000";
+            case "skeleton_bow" -> "special_weapon:skeleton_bow:color=F5F5F5";
             case "slime_boots" -> "special_armor:slime_boots:color=00FF00";
             case "warden_chestplate" -> "special_armor:warden_chestplate:color=004D4D";
             case "voidwalker_crown" -> "special_armor:voidwalker_crown:color=1A0A2E";

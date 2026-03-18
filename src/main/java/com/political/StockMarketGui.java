@@ -24,17 +24,37 @@ public class StockMarketGui {
 
     // Track open GUIs for auto-refresh
     private static final Map<UUID, SimpleGui> openStockGuis = new ConcurrentHashMap<>();
+    private static final Map<UUID, String> guiViewType = new ConcurrentHashMap<>(); // Track which view is open
+    private static final Map<UUID, Integer> guiPage = new ConcurrentHashMap<>(); // Track page number
+    private static final Map<UUID, String> guiSymbol = new ConcurrentHashMap<>(); // Track symbol for detail view
+    private static int tickCounter = 0;
 
     // Call this from ServerTickEvents.END_SERVER_TICK
     public static void tick() {
+        tickCounter++;
+        // Only refresh every 20 ticks (1 second) to avoid performance issues
+        if (tickCounter % 20 != 0) return;
+        
         openStockGuis.entrySet().removeIf(entry -> {
             SimpleGui gui = entry.getValue();
             if (gui.isOpen()) {
-                // Re-render the header with updated prices
-                refreshHeader(gui);
+                UUID uuid = entry.getKey();
+                String viewType = guiViewType.getOrDefault(uuid, "main");
+                
+                // Refresh based on view type
+                switch (viewType) {
+                    case "main" -> refreshHeader(gui);
+                    case "browser" -> refreshBrowserView(gui, uuid);
+                    case "portfolio" -> refreshPortfolioView(gui, uuid);
+                    case "detail" -> refreshDetailView(gui, uuid);
+                }
                 return false;
             }
-            return true; // Remove closed GUIs
+            // Clean up tracking maps
+            guiViewType.remove(entry.getKey());
+            guiPage.remove(entry.getKey());
+            guiSymbol.remove(entry.getKey());
+            return true;
         });
     }
 
@@ -60,6 +80,148 @@ public class StockMarketGui {
                 .glow().build());
     }
 
+    private static void refreshBrowserView(SimpleGui gui, UUID uuid) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
+        
+        int page = guiPage.getOrDefault(uuid, 0);
+        StockMarket.Stock[] stocks = StockMarket.Stock.values();
+        int itemsPerPage = 28;
+        int startIdx = page * itemsPerPage;
+        
+        int slot = 10;
+        int count = 0;
+        
+        for (int i = startIdx; i < stocks.length && count < itemsPerPage; i++) {
+            StockMarket.Stock stock = stocks[i];
+            double price = StockMarket.getPrice(stock.symbol);
+            double change = StockMarket.calculateChange(stock.symbol);
+            
+            Formatting changeColor = change >= 0 ? Formatting.GREEN : Formatting.RED;
+            String changeStr = (change >= 0 ? "+" : "") + String.format("%.2f", change) + "%";
+            
+            ItemStack displayItem = getStockDisplayItem(stock);
+            
+            gui.setSlot(slot, new GuiElementBuilder(displayItem.getItem())
+                    .setName(Text.literal(stock.icon + " " + stock.symbol).formatted(Formatting.BOLD))
+                    .addLoreLine(Text.literal(stock.name).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("§6Price: " + StockMarket.formatPrice(price) + " coins"))
+                    .addLoreLine(Text.literal("§7Change: " + changeStr).formatted(changeColor))
+                    .build());
+            
+            count++;
+            slot++;
+            if (slot == 17) slot = 19;
+            else if (slot == 26) slot = 28;
+            else if (slot == 35) slot = 37;
+            else if (slot == 44) slot = 46;
+        }
+    }
+
+    private static void refreshPortfolioView(SimpleGui gui, UUID uuid) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
+        
+        // Update portfolio value in header
+        double portfolioValue = StockMarket.getPortfolioValue(player.getUuidAsString());
+        int liquidCash = CoinManager.getCoins(player);
+        
+        gui.setSlot(4, new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("💼 Portfolio Summary").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Portfolio Value: §6" + StockMarket.formatPrice(portfolioValue)).formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Liquid Cash: §6" + liquidCash + " coins").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Total Net Worth: §6" + StockMarket.formatPrice(portfolioValue + liquidCash)).formatted(Formatting.GOLD, Formatting.BOLD))
+                .glow().build());
+        
+        // Update individual stock values
+        Map<String, Integer> portfolio = StockMarket.getPortfolio(player.getUuidAsString());
+        int slot = 9;
+        
+        for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
+            if (slot >= 45) break;
+            
+            String symbol = entry.getKey();
+            int shares = entry.getValue();
+            double price = StockMarket.getPrice(symbol);
+            double value = price * shares;
+            double change = StockMarket.calculateChange(symbol);
+            
+            Formatting changeColor = change >= 0 ? Formatting.GREEN : Formatting.RED;
+            StockMarket.Stock stock = StockMarket.getStockBySymbol(symbol);
+            Item displayItem = stock != null ? getStockDisplayItem(stock).getItem() : Items.PAPER;
+            
+            gui.setSlot(slot, new GuiElementBuilder(displayItem)
+                    .setName(Text.literal(symbol).formatted(Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Shares: §f" + shares).formatted(Formatting.WHITE))
+                    .addLoreLine(Text.literal("Price: §6" + StockMarket.formatPrice(price)).formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Value: §6" + StockMarket.formatPrice(value)).formatted(Formatting.GOLD))
+                    .addLoreLine(Text.literal("Change: " + (change >= 0 ? "+" : "") + String.format("%.2f", change) + "%").formatted(changeColor))
+                    .build());
+            slot++;
+        }
+    }
+
+    private static void refreshDetailView(SimpleGui gui, UUID uuid) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
+        
+        String symbol = guiSymbol.get(uuid);
+        if (symbol == null) return;
+        
+        StockMarket.Stock stock = StockMarket.getStockBySymbol(symbol);
+        if (stock == null) return;
+        
+        double price = StockMarket.getPrice(symbol);
+        double change = StockMarket.calculateChange(symbol);
+        double totalChange = StockMarket.calculateTotalChange(symbol);
+        
+        Formatting changeColor = change >= 0 ? Formatting.GREEN : Formatting.RED;
+        Formatting totalColor = totalChange >= 0 ? Formatting.GREEN : Formatting.RED;
+        
+        // Update stock info
+        gui.setSlot(4, new GuiElementBuilder(getStockDisplayItem(stock).getItem())
+                .setName(Text.literal(stock.icon + " " + stock.symbol).formatted(Formatting.BOLD))
+                .addLoreLine(Text.literal(stock.name).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§6Current Price: " + StockMarket.formatPrice(price)))
+                .addLoreLine(Text.literal("§7Session Change: " + (change >= 0 ? "+" : "") + 
+                        String.format("%.2f", change) + "%").formatted(changeColor))
+                .addLoreLine(Text.literal("§7Total Change: " + (totalChange >= 0 ? "+" : "") + 
+                        String.format("%.2f", totalChange) + "%").formatted(totalColor))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§7Volatility: " + String.format("%.0f%%", stock.volatility * 100)))
+                .glow().build());
+        
+        // Update holdings
+        int owned = StockMarket.getPortfolio(player.getUuidAsString()).getOrDefault(symbol, 0);
+        gui.setSlot(13, new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("Your Holdings").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§7Shares Owned: §f" + owned))
+                .addLoreLine(Text.literal("§7Value: §6" + StockMarket.formatPrice(price * owned)))
+                .build());
+        
+        // Update buy buttons with current prices
+        gui.setSlot(20, new GuiElementBuilder(Items.LIME_DYE)
+                .setName(Text.literal("Buy 1 Share").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Cost: §6" + StockMarket.formatPrice(price) + " coins"))
+                .build());
+        
+        gui.setSlot(21, new GuiElementBuilder(Items.LIME_DYE)
+                .setName(Text.literal("Buy 10 Shares").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Cost: §6" + StockMarket.formatPrice(price * 10) + " coins"))
+                .build());
+        
+        gui.setSlot(22, new GuiElementBuilder(Items.LIME_DYE)
+                .setName(Text.literal("Buy 100 Shares").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Cost: §6" + StockMarket.formatPrice(price * 100) + " coins"))
+                .build());
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // MAIN MENU
     // ═══════════════════════════════════════════════════════════════
@@ -76,6 +238,7 @@ public class StockMarketGui {
 
         // Track this GUI
         openStockGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "main");
 
         // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
@@ -154,6 +317,11 @@ public class StockMarketGui {
     public static void openPortfolio(ServerPlayerEntity player, int page) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("💼 Your Portfolio"));
+
+        // Track this GUI
+        openStockGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "portfolio");
+        guiPage.put(player.getUuid(), page);
 
         // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
@@ -236,6 +404,11 @@ public class StockMarketGui {
     public static void openStockBrowser(ServerPlayerEntity player, int page) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("📊 Browse Stocks"));
+
+        // Track this GUI
+        openStockGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "browser");
+        guiPage.put(player.getUuid(), page);
 
         // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));
@@ -322,6 +495,11 @@ public class StockMarketGui {
 
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal(stock.symbol + " Trading"));
+
+        // Track this GUI
+        openStockGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "detail");
+        guiSymbol.put(player.getUuid(), symbol);
 
         // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Text.literal(""));

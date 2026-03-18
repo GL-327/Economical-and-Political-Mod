@@ -1920,28 +1920,28 @@ public class SlayerItems {
     public static ItemStack createT1Helmet(SlayerManager.SlayerType type) {
         ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
         applyT1ArmorStats(helmet, type, "Helmet", 3, 1);
-        setCustomItemId(helmet, type.name().toLowerCase() + "_t1_helmet");
+        setCustomItemId(helmet, type.name().toLowerCase() + "_helmet_t1");
         return helmet;
     }
 
     public static ItemStack createT1Chestplate(SlayerManager.SlayerType type) {
         ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         applyT1ArmorStats(chestplate, type, "Chestplate", 5, 2);
-        setCustomItemId(chestplate, type.name().toLowerCase() + "_t1_chestplate");
+        setCustomItemId(chestplate, type.name().toLowerCase() + "_chestplate_t1");
         return chestplate;
     }
 
     public static ItemStack createT1Leggings(SlayerManager.SlayerType type) {
         ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
         applyT1ArmorStats(leggings, type, "Leggings", 4, 1);
-        setCustomItemId(leggings, type.name().toLowerCase() + "_t1_leggings");
+        setCustomItemId(leggings, type.name().toLowerCase() + "_leggings_t1");
         return leggings;
     }
 
     public static ItemStack createT1Boots(SlayerManager.SlayerType type) {
         ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
         applyT1ArmorStats(boots, type, "Boots", 2, 1);
-        setCustomItemId(boots, type.name().toLowerCase() + "_t1_boots");
+        setCustomItemId(boots, type.name().toLowerCase() + "_boots_t1");
         return boots;
     }
 
@@ -1966,28 +1966,28 @@ public class SlayerItems {
     public static ItemStack createT2Helmet(SlayerManager.SlayerType type) {
         ItemStack helmet = new ItemStack(Items.LEATHER_HELMET);
         applyT2ArmorStats(helmet, type, "Helmet", 5, 2, 0);
-        setCustomItemId(helmet, type.name().toLowerCase() + "_t2_helmet");
+        setCustomItemId(helmet, type.name().toLowerCase() + "_helmet_t2");
         return helmet;
     }
 
     public static ItemStack createT2Chestplate(SlayerManager.SlayerType type) {
         ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         applyT2ArmorStats(chestplate, type, "Chestplate", 8, 3, 0);
-        setCustomItemId(chestplate, type.name().toLowerCase() + "_t2_chestplate");
+        setCustomItemId(chestplate, type.name().toLowerCase() + "_chestplate_t2");
         return chestplate;
     }
 
     public static ItemStack createT2Leggings(SlayerManager.SlayerType type) {
         ItemStack leggings = new ItemStack(Items.LEATHER_LEGGINGS);
         applyT2ArmorStats(leggings, type, "Leggings", 6, 2, 0);
-        setCustomItemId(leggings, type.name().toLowerCase() + "_t2_leggings");
+        setCustomItemId(leggings, type.name().toLowerCase() + "_leggings_t2");
         return leggings;
     }
 
     public static ItemStack createT2Boots(SlayerManager.SlayerType type) {
         ItemStack boots = new ItemStack(Items.LEATHER_BOOTS);
         applyT2ArmorStats(boots, type, "Boots", 4, 2, 0);
-        setCustomItemId(boots, type.name().toLowerCase() + "_t2_boots");
+        setCustomItemId(boots, type.name().toLowerCase() + "_boots_t2");
         return boots;
     }
 
@@ -3885,6 +3885,489 @@ public class SlayerItems {
         sugarCane.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         setCustomItemId(sugarCane, "enchanted_sugar_cane");
         return sugarCane;
+    }
+
+    // More Enchanted Blocks - Extended variety
+    // ═══════════════════════════════════════════════════════════════
+
+    public static ItemStack createEnchantedSand() {
+        ItemStack sand = new ItemStack(Items.SAND);
+        sand.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Sand").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced sand").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 sand").formatted(Formatting.GRAY));
+        sand.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sand.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(sand, "enchanted_sand");
+        return sand;
+    }
+
+    public static ItemStack createEnchantedRedSand() {
+        ItemStack sand = new ItemStack(Items.RED_SAND);
+        sand.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Red Sand").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced red sand").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 red sand").formatted(Formatting.GRAY));
+        sand.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sand.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(sand, "enchanted_red_sand");
+        return sand;
+    }
+
+    public static ItemStack createEnchantedGravel() {
+        ItemStack gravel = new ItemStack(Items.GRAVEL);
+        gravel.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Gravel").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced gravel").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 gravel").formatted(Formatting.GRAY));
+        gravel.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        gravel.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(gravel, "enchanted_gravel");
+        return gravel;
+    }
+
+    public static ItemStack createEnchantedNetherrack() {
+        ItemStack netherrack = new ItemStack(Items.NETHERRACK);
+        netherrack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Netherrack").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced netherrack").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 netherrack").formatted(Formatting.GRAY));
+        netherrack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        netherrack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(netherrack, "enchanted_netherrack");
+        return netherrack;
+    }
+
+    public static ItemStack createEnchantedEndStone() {
+        ItemStack endStone = new ItemStack(Items.END_STONE);
+        endStone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted End Stone").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced end stone").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 end stone").formatted(Formatting.GRAY));
+        endStone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        endStone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(endStone, "enchanted_end_stone");
+        return endStone;
+    }
+
+    public static ItemStack createEnchantedObsidian() {
+        ItemStack obsidian = new ItemStack(Items.OBSIDIAN);
+        obsidian.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Obsidian").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced obsidian").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 obsidian").formatted(Formatting.GRAY));
+        obsidian.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        obsidian.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(obsidian, "enchanted_obsidian");
+        return obsidian;
+    }
+
+    public static ItemStack createEnchantedGlowstone() {
+        ItemStack glowstone = new ItemStack(Items.GLOWSTONE);
+        glowstone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Glowstone").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced glowstone").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 glowstone").formatted(Formatting.GRAY));
+        glowstone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        glowstone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(glowstone, "enchanted_glowstone");
+        return glowstone;
+    }
+
+    public static ItemStack createEnchantedPrismarine() {
+        ItemStack prismarine = new ItemStack(Items.PRISMARINE);
+        prismarine.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Prismarine").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced prismarine").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 prismarine").formatted(Formatting.GRAY));
+        prismarine.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        prismarine.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(prismarine, "enchanted_prismarine");
+        return prismarine;
+    }
+
+    public static ItemStack createEnchantedCopperBlock() {
+        ItemStack copper = new ItemStack(Items.COPPER_BLOCK);
+        copper.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Copper Block").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced copper").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 copper blocks").formatted(Formatting.GRAY));
+        copper.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        copper.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(copper, "enchanted_copper_block");
+        return copper;
+    }
+
+    public static ItemStack createEnchantedEmeraldBlock() {
+        ItemStack emerald = new ItemStack(Items.EMERALD_BLOCK);
+        emerald.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Emerald Block").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GREEN, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced emeralds").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 emerald blocks").formatted(Formatting.GRAY));
+        emerald.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        emerald.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(emerald, "enchanted_emerald_block");
+        return emerald;
+    }
+
+    public static ItemStack createEnchantedLapisBlock() {
+        ItemStack lapis = new ItemStack(Items.LAPIS_BLOCK);
+        lapis.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Lapis Block").formatted(Formatting.BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.BLUE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced lapis").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 lapis blocks").formatted(Formatting.GRAY));
+        lapis.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        lapis.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(lapis, "enchanted_lapis_block");
+        return lapis;
+    }
+
+    public static ItemStack createEnchantedCoalBlock() {
+        ItemStack coal = new ItemStack(Items.COAL_BLOCK);
+        coal.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Coal Block").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced coal").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 coal blocks").formatted(Formatting.GRAY));
+        coal.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        coal.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(coal, "enchanted_coal_block");
+        return coal;
+    }
+
+    public static ItemStack createEnchantedNetheriteBlock() {
+        ItemStack netherite = new ItemStack(Items.NETHERITE_BLOCK);
+        netherite.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✦ Enchanted Netherite Block").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced netherite").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 netherite blocks").formatted(Formatting.GRAY));
+        netherite.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        netherite.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(netherite, "enchanted_netherite_block");
+        return netherite;
+    }
+
+    public static ItemStack createEnchantedQuartzBlock() {
+        ItemStack quartz = new ItemStack(Items.QUARTZ_BLOCK);
+        quartz.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Quartz Block").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced quartz").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 quartz blocks").formatted(Formatting.GRAY));
+        quartz.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        quartz.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(quartz, "enchanted_quartz_block");
+        return quartz;
+    }
+
+    public static ItemStack createEnchantedRedstoneBlock() {
+        ItemStack redstone = new ItemStack(Items.REDSTONE_BLOCK);
+        redstone.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Redstone Block").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced redstone").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 redstone blocks").formatted(Formatting.GRAY));
+        redstone.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        redstone.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(redstone, "enchanted_redstone_block");
+        return redstone;
+    }
+
+    public static ItemStack createEnchantedBasalt() {
+        ItemStack basalt = new ItemStack(Items.BASALT);
+        basalt.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Basalt").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced basalt").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 basalt").formatted(Formatting.GRAY));
+        basalt.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        basalt.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(basalt, "enchanted_basalt");
+        return basalt;
+    }
+
+    public static ItemStack createEnchantedDeepslate() {
+        ItemStack deepslate = new ItemStack(Items.DEEPSLATE);
+        deepslate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Deepslate").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced deepslate").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 deepslate").formatted(Formatting.GRAY));
+        deepslate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        deepslate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(deepslate, "enchanted_deepslate");
+        return deepslate;
+    }
+
+    public static ItemStack createEnchantedCobbledDeepslate() {
+        ItemStack deepslate = new ItemStack(Items.COBBLED_DEEPSLATE);
+        deepslate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Cobbled Deepslate").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced cobbled deepslate").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 cobbled deepslate").formatted(Formatting.GRAY));
+        deepslate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        deepslate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(deepslate, "enchanted_cobbled_deepslate");
+        return deepslate;
+    }
+
+    public static ItemStack createEnchantedTuff() {
+        ItemStack tuff = new ItemStack(Items.TUFF);
+        tuff.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Tuff").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced tuff").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 tuff").formatted(Formatting.GRAY));
+        tuff.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        tuff.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(tuff, "enchanted_tuff");
+        return tuff;
+    }
+
+    public static ItemStack createEnchantedCalcite() {
+        ItemStack calcite = new ItemStack(Items.CALCITE);
+        calcite.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Calcite").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced calcite").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 calcite").formatted(Formatting.GRAY));
+        calcite.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        calcite.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(calcite, "enchanted_calcite");
+        return calcite;
+    }
+
+    public static ItemStack createEnchantedAmethystBlock() {
+        ItemStack amethyst = new ItemStack(Items.AMETHYST_BLOCK);
+        amethyst.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Amethyst Block").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced amethyst").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 amethyst blocks").formatted(Formatting.GRAY));
+        amethyst.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        amethyst.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(amethyst, "enchanted_amethyst_block");
+        return amethyst;
+    }
+
+    public static ItemStack createEnchantedGlass() {
+        ItemStack glass = new ItemStack(Items.GLASS);
+        glass.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Glass").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.WHITE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced glass").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 glass").formatted(Formatting.GRAY));
+        glass.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        glass.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(glass, "enchanted_glass");
+        return glass;
+    }
+
+    public static ItemStack createEnchantedIce() {
+        ItemStack ice = new ItemStack(Items.ICE);
+        ice.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Ice").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced ice").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 ice").formatted(Formatting.GRAY));
+        ice.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        ice.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(ice, "enchanted_ice");
+        return ice;
+    }
+
+    public static ItemStack createEnchantedPackedIce() {
+        ItemStack ice = new ItemStack(Items.PACKED_ICE);
+        ice.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Packed Ice").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced packed ice").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 packed ice").formatted(Formatting.GRAY));
+        ice.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        ice.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(ice, "enchanted_packed_ice");
+        return ice;
+    }
+
+    public static ItemStack createEnchantedBlueIce() {
+        ItemStack ice = new ItemStack(Items.BLUE_ICE);
+        ice.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Blue Ice").formatted(Formatting.BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.BLUE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced blue ice").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 blue ice").formatted(Formatting.GRAY));
+        ice.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        ice.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(ice, "enchanted_blue_ice");
+        return ice;
+    }
+
+    public static ItemStack createEnchantedTerracotta() {
+        ItemStack terracotta = new ItemStack(Items.TERRACOTTA);
+        terracotta.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Terracotta").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced terracotta").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 terracotta").formatted(Formatting.GRAY));
+        terracotta.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        terracotta.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(terracotta, "enchanted_terracotta");
+        return terracotta;
+    }
+
+    public static ItemStack createEnchantedClay() {
+        ItemStack clay = new ItemStack(Items.CLAY);
+        clay.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Clay").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.GRAY, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced clay").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 clay").formatted(Formatting.GRAY));
+        clay.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        clay.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(clay, "enchanted_clay");
+        return clay;
+    }
+
+    public static ItemStack createEnchantedBrick() {
+        ItemStack brick = new ItemStack(Items.BRICKS);
+        brick.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Bricks").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced bricks").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 bricks").formatted(Formatting.GRAY));
+        brick.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        brick.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(brick, "enchanted_brick");
+        return brick;
+    }
+
+    public static ItemStack createEnchantedNetherBrick() {
+        ItemStack brick = new ItemStack(Items.NETHER_BRICKS);
+        brick.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Nether Bricks").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced nether bricks").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 nether bricks").formatted(Formatting.GRAY));
+        brick.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        brick.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(brick, "enchanted_nether_brick");
+        return brick;
+    }
+
+    public static ItemStack createEnchantedPurpurBlock() {
+        ItemStack purpur = new ItemStack(Items.PURPUR_BLOCK);
+        purpur.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Purpur Block").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced purpur").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 purpur blocks").formatted(Formatting.GRAY));
+        purpur.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        purpur.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(purpur, "enchanted_purpur_block");
+        return purpur;
+    }
+
+    public static ItemStack createEnchantedSeaLantern() {
+        ItemStack lantern = new ItemStack(Items.SEA_LANTERN);
+        lantern.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Sea Lantern").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.AQUA, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced sea lantern").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 sea lanterns").formatted(Formatting.GRAY));
+        lantern.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        lantern.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(lantern, "enchanted_sea_lantern");
+        return lantern;
+    }
+
+    public static ItemStack createEnchantedShroomlight() {
+        ItemStack shroomlight = new ItemStack(Items.SHROOMLIGHT);
+        shroomlight.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("✧ Enchanted Shroomlight").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("◆ ENCHANTED BLOCK ◆").formatted(Formatting.YELLOW, Formatting.BOLD));
+        lore.add(Text.literal("Magically enhanced shroomlight").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("Crafted from 64 shroomlights").formatted(Formatting.GRAY));
+        shroomlight.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        shroomlight.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(shroomlight, "enchanted_shroomlight");
+        return shroomlight;
     }
 
     // GILDED NETHERITE ARMOR - Ultimate protection

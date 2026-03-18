@@ -83,6 +83,17 @@ public class UncraftGui {
                 .setCallback((idx, type, action) -> openEnchantedCropsUncraft(player, 0))
                 .build());
 
+        // Custom Recipes button (from /setrecipe)
+        gui.setSlot(22, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+                .setName(Text.literal("📖 Custom Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Reverse custom recipes from /setrecipe").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Returns ingredients used in crafting").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§eClick to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomRecipesUncraft(player, 0))
+                .build());
+
         gui.open();
     }
 
@@ -382,6 +393,136 @@ public class UncraftGui {
         Text itemName = customItem.get(DataComponentTypes.CUSTOM_NAME);
         String nameStr = itemName != null ? itemName.getString() : "Item";
         player.sendMessage(Text.literal("✓ Uncrafted " + nameStr + " into " + count + "x " + baseItem.getName().getString())
+                .formatted(Formatting.GREEN), false);
+    }
+
+    /**
+     * Opens the custom recipes uncraft menu - reverses recipes from /setrecipe.
+     */
+    private static void openCustomRecipesUncraft(ServerPlayerEntity player, int page) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("📖 Uncraft Custom Recipes"));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+                .setName(Text.literal("📖 Custom Recipe Reversal").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Reverse recipes from /setrecipe").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click result to get ingredients back").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        // Get custom recipes from RecipeConfigManager
+        java.util.List<SlayerRecipes.Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();
+        
+        int startSlot = 9;
+        int maxSlots = 36;
+        
+        for (int i = 0; i < customRecipes.size() && i < maxSlots; i++) {
+            SlayerRecipes.Recipe recipe = customRecipes.get(i);
+            ItemStack result = recipe.result.copy();
+            
+            // Count non-empty ingredients
+            int ingredientCount = 0;
+            for (ItemStack ing : recipe.ingredients) {
+                if (ing != null && !ing.isEmpty()) ingredientCount++;
+            }
+            
+            gui.setSlot(startSlot + i, new GuiElementBuilder(result)
+                    .setName(result.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Returns " + ingredientCount + " ingredients").formatted(Formatting.GREEN))
+                    .addLoreLine(Text.literal("Recipe: " + recipe.name).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("§eClick to uncraft").formatted(Formatting.YELLOW))
+                    .setCallback((slot, type, action) -> performRecipeUncraft(player, recipe))
+                    .build());
+        }
+
+        // Info if no custom recipes
+        if (customRecipes.isEmpty()) {
+            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("No Custom Recipes").formatted(Formatting.RED, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Use /setrecipe to create custom recipes").formatted(Formatting.GRAY))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openUncraftMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    /**
+     * Performs uncrafting of a custom recipe - returns ingredients.
+     */
+    private static void performRecipeUncraft(ServerPlayerEntity player, SlayerRecipes.Recipe recipe) {
+        ItemStack result = recipe.result.copy();
+        String resultId = SlayerItems.getCustomItemId(result);
+        
+        // Find the result item in player's inventory
+        int foundSlot = -1;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack invStack = player.getInventory().getStack(i);
+            if (!invStack.isEmpty()) {
+                String invId = SlayerItems.getCustomItemId(invStack);
+                if (resultId != null && resultId.equals(invId)) {
+                    foundSlot = i;
+                    break;
+                } else if (invStack.getItem() == result.getItem() && invStack.get(DataComponentTypes.CUSTOM_NAME) == null) {
+                    foundSlot = i;
+                    break;
+                }
+            }
+        }
+
+        if (foundSlot == -1) {
+            player.sendMessage(Text.literal("✖ You don't have this item!").formatted(Formatting.RED), false);
+            return;
+        }
+
+        // Count non-empty ingredients
+        int ingredientCount = 0;
+        for (ItemStack ing : recipe.ingredients) {
+            if (ing != null && !ing.isEmpty()) ingredientCount++;
+        }
+
+        // Check inventory space
+        int emptySlots = 0;
+        for (int i = 0; i < 36; i++) {
+            if (player.getInventory().getStack(i).isEmpty()) {
+                emptySlots++;
+            }
+        }
+
+        if (emptySlots < ingredientCount) {
+            player.sendMessage(Text.literal("✖ Not enough inventory space! Need " + ingredientCount + " empty slots.").formatted(Formatting.RED), false);
+            return;
+        }
+
+        // Remove the result item
+        player.getInventory().getStack(foundSlot).decrement(1);
+
+        // Give back ingredients
+        for (ItemStack ing : recipe.ingredients) {
+            if (ing != null && !ing.isEmpty()) {
+                player.getInventory().insertStack(ing.copy());
+            }
+        }
+
+        Text itemName = result.get(DataComponentTypes.CUSTOM_NAME);
+        String nameStr = itemName != null ? itemName.getString() : "Item";
+        player.sendMessage(Text.literal("✓ Uncrafted " + nameStr + " into " + ingredientCount + " ingredients")
                 .formatted(Formatting.GREEN), false);
     }
 }

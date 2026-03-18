@@ -22,17 +22,37 @@ public class CryptoMarketGui {
 
     // Track open GUIs for auto-refresh
     private static final Map<UUID, SimpleGui> openCryptoGuis = new ConcurrentHashMap<>();
+    private static final Map<UUID, String> guiViewType = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> guiPage = new ConcurrentHashMap<>();
+    private static final Map<UUID, String> guiSymbol = new ConcurrentHashMap<>();
+    private static int tickCounter = 0;
 
     // Call this from ServerTickEvents.END_SERVER_TICK
     public static void tick() {
+        tickCounter++;
+        // Only refresh every 20 ticks (1 second) to avoid performance issues
+        if (tickCounter % 20 != 0) return;
+        
         openCryptoGuis.entrySet().removeIf(entry -> {
             SimpleGui gui = entry.getValue();
             if (gui.isOpen()) {
-                // Re-render the header with updated prices
-                refreshHeader(gui);
+                UUID uuid = entry.getKey();
+                String viewType = guiViewType.getOrDefault(uuid, "main");
+                
+                // Refresh based on view type
+                switch (viewType) {
+                    case "main" -> refreshHeader(gui);
+                    case "browser" -> refreshBrowserView(gui, uuid);
+                    case "wallet" -> refreshWalletView(gui, uuid);
+                    case "detail" -> refreshDetailView(gui, uuid);
+                }
                 return false;
             }
-            return true; // Remove closed GUIs
+            // Clean up tracking maps
+            guiViewType.remove(entry.getKey());
+            guiPage.remove(entry.getKey());
+            guiSymbol.remove(entry.getKey());
+            return true;
         });
     }
 
@@ -63,6 +83,132 @@ public class CryptoMarketGui {
                 .glow().build());
     }
 
+    private static void refreshBrowserView(SimpleGui gui, UUID uuid) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
+        
+        int page = guiPage.getOrDefault(uuid, 0);
+        CryptoMarket.Crypto[] cryptos = CryptoMarket.Crypto.values();
+        int itemsPerPage = 28;
+        int startIdx = page * itemsPerPage;
+        
+        int slot = 10;
+        int count = 0;
+        
+        for (int i = startIdx; i < cryptos.length && count < itemsPerPage; i++) {
+            CryptoMarket.Crypto crypto = cryptos[i];
+            double price = CryptoMarket.getPrice(crypto.symbol);
+            double change = CryptoMarket.calculateChange(crypto.symbol);
+            
+            Formatting changeColor = change >= 0 ? Formatting.GREEN : Formatting.RED;
+            String changeStr = (change >= 0 ? "+" : "") + String.format("%.2f", change) + "%";
+            
+            gui.setSlot(slot, new GuiElementBuilder(getCryptoDisplayItem(crypto).getItem())
+                    .setName(Text.literal(crypto.icon + " " + crypto.symbol).formatted(Formatting.BOLD))
+                    .addLoreLine(Text.literal(crypto.name).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("§6Price: $" + CryptoMarket.formatCrypto(price)))
+                    .addLoreLine(Text.literal("§7Change: " + changeStr).formatted(changeColor))
+                    .build());
+            
+            count++;
+            slot++;
+            if (slot == 17) slot = 19;
+            else if (slot == 26) slot = 28;
+            else if (slot == 35) slot = 37;
+            else if (slot == 44) slot = 46;
+        }
+    }
+
+    private static void refreshWalletView(SimpleGui gui, UUID uuid) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
+        
+        double walletValue = CryptoMarket.getWalletValue(player.getUuidAsString());
+        
+        gui.setSlot(4, new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("💼 Your Wallet").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Total Value: §6$" + CryptoMarket.formatCrypto(walletValue)).formatted(Formatting.YELLOW))
+                .glow().build());
+        
+        Map<String, Double> wallet = CryptoMarket.getWallet(player.getUuidAsString());
+        int slot = 9;
+        
+        for (Map.Entry<String, Double> entry : wallet.entrySet()) {
+            if (slot >= 45) break;
+            
+            String symbol = entry.getKey();
+            double amount = entry.getValue();
+            double price = CryptoMarket.getPrice(symbol);
+            double value = price * amount;
+            double change = CryptoMarket.calculateChange(symbol);
+            
+            Formatting changeColor = change >= 0 ? Formatting.GREEN : Formatting.RED;
+            CryptoMarket.Crypto crypto = CryptoMarket.getCryptoBySymbol(symbol);
+            
+            if (crypto != null) {
+                gui.setSlot(slot, new GuiElementBuilder(getCryptoDisplayItem(crypto).getItem())
+                        .setName(Text.literal(symbol).formatted(Formatting.BOLD))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("Amount: §f" + CryptoMarket.formatCrypto(amount)).formatted(Formatting.WHITE))
+                        .addLoreLine(Text.literal("Price: §6$" + CryptoMarket.formatCrypto(price)).formatted(Formatting.YELLOW))
+                        .addLoreLine(Text.literal("Value: §6$" + CryptoMarket.formatCrypto(value)).formatted(Formatting.GOLD))
+                        .addLoreLine(Text.literal("Change: " + (change >= 0 ? "+" : "") + String.format("%.2f", change) + "%").formatted(changeColor))
+                        .build());
+            }
+            slot++;
+        }
+    }
+
+    private static void refreshDetailView(SimpleGui gui, UUID uuid) {
+        ServerPlayerEntity player = gui.getPlayer();
+        if (player == null) return;
+        
+        String symbol = guiSymbol.get(uuid);
+        if (symbol == null) return;
+        
+        CryptoMarket.Crypto crypto = CryptoMarket.getCryptoBySymbol(symbol);
+        if (crypto == null) return;
+        
+        double price = CryptoMarket.getPrice(symbol);
+        double change = CryptoMarket.calculateChange(symbol);
+        
+        Formatting changeColor = change >= 0 ? Formatting.GREEN : Formatting.RED;
+        
+        gui.setSlot(4, new GuiElementBuilder(getCryptoDisplayItem(crypto).getItem())
+                .setName(Text.literal(crypto.icon + " " + crypto.symbol).formatted(Formatting.BOLD))
+                .addLoreLine(Text.literal(crypto.name).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§6Current Price: $" + CryptoMarket.formatCrypto(price)))
+                .addLoreLine(Text.literal("§7Session Change: " + (change >= 0 ? "+" : "") + 
+                        String.format("%.2f", change) + "%").formatted(changeColor))
+                .glow().build());
+        
+        double owned = CryptoMarket.getWallet(player.getUuidAsString()).getOrDefault(symbol, 0.0);
+        gui.setSlot(13, new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("Your Holdings").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("§7Owned: §f" + CryptoMarket.formatCrypto(owned)))
+                .addLoreLine(Text.literal("§7Value: §6$" + CryptoMarket.formatCrypto(price * owned)))
+                .build());
+        
+        gui.setSlot(20, new GuiElementBuilder(Items.LIME_DYE)
+                .setName(Text.literal("Buy 0.1 " + symbol).formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Cost: §6$" + CryptoMarket.formatCrypto(price * 0.1)))
+                .build());
+        
+        gui.setSlot(21, new GuiElementBuilder(Items.LIME_DYE)
+                .setName(Text.literal("Buy 1 " + symbol).formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Cost: §6$" + CryptoMarket.formatCrypto(price)))
+                .build());
+        
+        gui.setSlot(22, new GuiElementBuilder(Items.LIME_DYE)
+                .setName(Text.literal("Buy 10 " + symbol).formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("§7Cost: §6$" + CryptoMarket.formatCrypto(price * 10)))
+                .build());
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // MAIN MENU
     // ═══════════════════════════════════════════════════════════════
@@ -79,6 +225,7 @@ public class CryptoMarketGui {
 
         // Track this GUI
         openCryptoGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "main");
 
         // Background
         GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal(""));
@@ -206,6 +353,11 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("📊 Browse Cryptos"));
 
+        // Track this GUI
+        openCryptoGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "browser");
+        guiPage.put(player.getUuid(), page);
+
         GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
@@ -286,6 +438,11 @@ public class CryptoMarketGui {
 
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal(crypto.symbol + " Trading"));
+
+        // Track this GUI
+        openCryptoGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "detail");
+        guiSymbol.put(player.getUuid(), symbol);
 
         GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal(""));
         for (int i = 0; i < 36; i++) gui.setSlot(i, bg.build());
@@ -431,6 +588,10 @@ public class CryptoMarketGui {
     public static void openWallet(ServerPlayerEntity player) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("💼 My Wallet"));
+
+        // Track this GUI
+        openCryptoGuis.put(player.getUuid(), gui);
+        guiViewType.put(player.getUuid(), "wallet");
 
         GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());

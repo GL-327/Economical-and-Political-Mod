@@ -2,7 +2,6 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
@@ -387,8 +386,8 @@ public class FletchingTableGui {
             CustomArrows.ArrowType type = types[i];
             ItemStack displayArrow = CustomArrows.createArrow(type, 1);
 
-            gui.setSlot(slots[i], new GuiElementBuilder(displayArrow)
-                    .setName(displayArrow.get(DataComponentTypes.CUSTOM_NAME))
+            gui.setSlot(slots[i], new GuiElementBuilder(displayArrow.getItem())
+                    .setName(Text.literal(type.getName()).formatted(type.getColor(), Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("Click to edit recipe").formatted(Formatting.YELLOW))
                     .setCallback((slot, clickType, action) -> openRecipeEditor(player, type))
