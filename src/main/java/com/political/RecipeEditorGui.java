@@ -203,11 +203,82 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createVenomousDagger());
             }
             case CUSTOM_TOOLS -> {
-                // Legendary custom tools
-                items.add(DanielsPickaxe.create());
-                items.add(CustomItemHandler.createTheGavel());
-                items.add(CustomItemHandler.createHarveysStick());
-                items.add(CustomItemHandler.createHermesShoes());
+                // 15 NEW LEGENDARY TOOL SETS
+                // Dragon Tools
+                items.add(LegendaryTools.createDragonPickaxe());
+                items.add(LegendaryTools.createDragonAxe());
+                items.add(LegendaryTools.createDragonShovel());
+                items.add(LegendaryTools.createDragonHoe());
+                // Aether Tools
+                items.add(LegendaryTools.createAetherPickaxe());
+                items.add(LegendaryTools.createAetherAxe());
+                items.add(LegendaryTools.createAetherShovel());
+                items.add(LegendaryTools.createAetherHoe());
+                // Void Tools
+                items.add(LegendaryTools.createVoidPickaxe());
+                items.add(LegendaryTools.createVoidAxe());
+                items.add(LegendaryTools.createVoidShovel());
+                items.add(LegendaryTools.createVoidHoe());
+                // Nature Tools
+                items.add(LegendaryTools.createNaturePickaxe());
+                items.add(LegendaryTools.createNatureAxe());
+                items.add(LegendaryTools.createNatureShovel());
+                items.add(LegendaryTools.createNatureHoe());
+                // Frost Tools
+                items.add(LegendaryTools.createFrostPickaxe());
+                items.add(LegendaryTools.createFrostAxe());
+                items.add(LegendaryTools.createFrostShovel());
+                items.add(LegendaryTools.createFrostHoe());
+                // Thunder Tools
+                items.add(LegendaryTools.createThunderPickaxe());
+                items.add(LegendaryTools.createThunderAxe());
+                items.add(LegendaryTools.createThunderShovel());
+                items.add(LegendaryTools.createThunderHoe());
+                // Ocean Tools
+                items.add(LegendaryTools.createOceanPickaxe());
+                items.add(LegendaryTools.createOceanAxe());
+                items.add(LegendaryTools.createOceanShovel());
+                items.add(LegendaryTools.createOceanHoe());
+                // Lunar Tools
+                items.add(LegendaryTools.createLunarPickaxe());
+                items.add(LegendaryTools.createLunarAxe());
+                items.add(LegendaryTools.createLunarShovel());
+                items.add(LegendaryTools.createLunarHoe());
+                // Solar Tools
+                items.add(LegendaryTools.createSolarPickaxe());
+                items.add(LegendaryTools.createSolarAxe());
+                items.add(LegendaryTools.createSolarShovel());
+                items.add(LegendaryTools.createSolarHoe());
+                // Terra Tools
+                items.add(LegendaryTools.createTerraPickaxe());
+                items.add(LegendaryTools.createTerraAxe());
+                items.add(LegendaryTools.createTerraShovel());
+                items.add(LegendaryTools.createTerraHoe());
+                // Phantom Tools
+                items.add(LegendaryTools.createPhantomPickaxe());
+                items.add(LegendaryTools.createPhantomAxe());
+                items.add(LegendaryTools.createPhantomShovel());
+                items.add(LegendaryTools.createPhantomHoe());
+                // Blood Tools
+                items.add(LegendaryTools.createBloodPickaxe());
+                items.add(LegendaryTools.createBloodAxe());
+                items.add(LegendaryTools.createBloodShovel());
+                items.add(LegendaryTools.createBloodHoe());
+                // Celestial Tools
+                items.add(LegendaryTools.createCelestialPickaxe());
+                items.add(LegendaryTools.createCelestialAxe());
+                items.add(LegendaryTools.createCelestialShovel());
+                items.add(LegendaryTools.createCelestialHoe());
+                // Shadow Tools
+                items.add(LegendaryTools.createShadowPickaxe());
+                items.add(LegendaryTools.createShadowAxe());
+                items.add(LegendaryTools.createShadowShovel());
+                items.add(LegendaryTools.createShadowHoe());
+                // Crystal Tools
+                items.add(LegendaryTools.createCrystalPickaxe());
+                items.add(LegendaryTools.createCrystalAxe());
+                items.add(LegendaryTools.createCrystalShovel());
+                items.add(LegendaryTools.createCrystalHoe());
             }
             case PIGLIN -> {
                 items.add(SlayerItems.createCrownOfGreed());

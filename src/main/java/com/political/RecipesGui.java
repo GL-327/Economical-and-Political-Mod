@@ -137,17 +137,17 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openWeaponAttributesMenu(player))
                 .build());
 
-        // Row 3: Block Tools category - shifted right
-        gui.setSlot(28, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
+        // Row 3: Block Tools and Block Weapons - must use slots 0-26 for 9x3
+        gui.setSlot(25, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
                 .setName(Text.literal("⛏ Block Tools").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⛏ Block-themed tools (pickaxe, axe, shovel, hoe)").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⛏ Block-themed tools").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openBlockToolsMenu(player, 0))
                 .build());
 
         // Block Weapons category
-        gui.setSlot(29, new GuiElementBuilder(Items.QUARTZ)
+        gui.setSlot(26, new GuiElementBuilder(Items.QUARTZ)
                 .setName(Text.literal("⚔ Block Weapons").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚔ Block-themed swords").formatted(Formatting.GRAY))
@@ -204,7 +204,7 @@ public class RecipesGui {
     }
 
     // ============================================================
-    // SLAYER SETS MENU - Combined T1 & T2 Armor + Swords
+    // BOUNTY SETS MENU - Main menu with T1 and T2 choices
     // ============================================================
     private static void openSlayerSetsMenu(ServerPlayerEntity player, int page) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
@@ -220,96 +220,110 @@ public class RecipesGui {
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Bounty Sets (T1 & T2)").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Complete armor + sword sets").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("T1 (Iron) and T2 (Diamond) tiers").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Bounty Hunter Equipment").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Select Tier to Browse").formatted(Formatting.YELLOW))
                 .glow().build());
 
-        // Define slayer sets: Icon, Name, T1/T2 sword, T1/T2 armor pieces
-        java.util.List<SlayerSetDisplay> sets = new java.util.ArrayList<>();
-        
+        // Define slayer sets for display with icons
+        java.util.List<BountySetDisplay> sets = new java.util.ArrayList<>();
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            sets.add(new SlayerSetDisplay(type.icon, type.displayName, type.color,
+            sets.add(new BountySetDisplay(type.icon, type.displayName, type.color,
                 SlayerItems.createSlayerSword(type),
-                SlayerItems.createUpgradedSlayerSword(type),
                 SlayerItems.createSlayerHelmet(type, 1),
                 SlayerItems.createSlayerChestplate(type, 1),
                 SlayerItems.createSlayerLeggings(type, 1),
                 SlayerItems.createSlayerBoots(type, 1),
+                SlayerItems.createUpgradedSlayerSword(type),
                 SlayerItems.createSlayerHelmet(type, 2),
                 SlayerItems.createSlayerChestplate(type, 2),
                 SlayerItems.createSlayerLeggings(type, 2),
                 SlayerItems.createSlayerBoots(type, 2)));
         }
 
-        // Pagination - 2 sets per page (each set takes 3 rows: T1 row, T2 row, separator)
-        int setsPerPage = 2;
+        // Display sets with T1 and T2 buttons side by side (2 rows per set)
+        // Format: [Icon] [T1 Button] [separator] [T2 Button]
+        int setsPerPage = 4;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
         int clampedPage = Math.min(page, totalPages - 1);
         int startIdx = clampedPage * setsPerPage;
         int endIdx = Math.min(startIdx + setsPerPage, sets.size());
 
-        // Display sets in organized rows
         for (int i = startIdx; i < endIdx; i++) {
-            SlayerSetDisplay set = sets.get(i);
-            int rowOffset = (i - startIdx) * 27; // 3 rows per set
+            BountySetDisplay set = sets.get(i);
+            int rowOffset = (i - startIdx) * 18; // 2 rows per set
             int baseSlot = 10 + rowOffset;
             
-            // Row 1: Icon | T1 Helmet | T1 Chest | T1 Legs | T1 Boots | T1 Sword | Tier label
+            // Row 1: Icon | T1 Helmet | T1 Chest | T1 Legs | T1 Boots | T1 Sword | T1 Label
             gui.setSlot(baseSlot, new GuiElementBuilder(set.icon)
-                    .setName(Text.literal(set.name).formatted(set.color, Formatting.BOLD))
+                    .setName(Text.literal(set.name + " Set").formatted(set.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("Slayer Type:").formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal(set.name).formatted(set.color))
                     .glow()
                     .build());
             
+            // Gap slot
+            gui.setSlot(baseSlot + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+            
             // T1 Armor pieces
-            gui.setSlot(baseSlot + 1, createArmorElement(set.t1Helmet, player));
-            gui.setSlot(baseSlot + 2, createArmorElement(set.t1Chestplate, player));
-            gui.setSlot(baseSlot + 3, createArmorElement(set.t1Leggings, player));
-            gui.setSlot(baseSlot + 4, createArmorElement(set.t1Boots, player));
+            gui.setSlot(baseSlot + 2, createArmorElement(set.t1Helmet, player));
+            gui.setSlot(baseSlot + 3, createArmorElement(set.t1Chestplate, player));
+            gui.setSlot(baseSlot + 4, createArmorElement(set.t1Leggings, player));
+            gui.setSlot(baseSlot + 5, createArmorElement(set.t1Boots, player));
             
             // T1 Sword
-            gui.setSlot(baseSlot + 5, new GuiElementBuilder(set.t1Sword)
+            gui.setSlot(baseSlot + 6, new GuiElementBuilder(set.t1Sword)
                     .setName(set.t1Sword.get(DataComponentTypes.CUSTOM_NAME))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("✨ T1 Sword - Click for recipe").formatted(Formatting.YELLOW))
                     .setCallback((idx, type, action) -> showItemInfo(player, set.t1Sword))
                     .build());
             
-            // T1 Label
-            gui.setSlot(baseSlot + 6, new GuiElementBuilder(Items.IRON_INGOT)
-                    .setName(Text.literal("T1").formatted(Formatting.WHITE))
-                    .addLoreLine(Text.literal("Tier 1 (Iron)").formatted(Formatting.GRAY))
+            // T1 Label button (opens T1 submenu)
+            final String setName = set.name;
+            gui.setSlot(baseSlot + 7, new GuiElementBuilder(Items.IRON_BLOCK)
+                    .setName(Text.literal("T1 (Iron)").formatted(Formatting.WHITE, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Browse T1 " + setName).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("✨ Click to view T1 set").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, action) -> openT1BountySetMenu(player, setName))
                     .build());
             
-            // Row 2: Gap | T2 Helmet | T2 Chest | T2 Legs | T2 Boots | T2 Sword | Tier label
+            // Row 2: Gap | T2 Helmet | T2 Chest | T2 Legs | T2 Boots | T2 Sword | T2 Label
             int row2Base = baseSlot + 9;
             gui.setSlot(row2Base, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
                     .setName(Text.literal(""))
                     .build());
             
             // T2 Armor pieces
-            gui.setSlot(row2Base + 1, createArmorElement(set.t2Helmet, player));
-            gui.setSlot(row2Base + 2, createArmorElement(set.t2Chestplate, player));
-            gui.setSlot(row2Base + 3, createArmorElement(set.t2Leggings, player));
-            gui.setSlot(row2Base + 4, createArmorElement(set.t2Boots, player));
+            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+            gui.setSlot(row2Base + 2, createArmorElement(set.t2Helmet, player));
+            gui.setSlot(row2Base + 3, createArmorElement(set.t2Chestplate, player));
+            gui.setSlot(row2Base + 4, createArmorElement(set.t2Leggings, player));
+            gui.setSlot(row2Base + 5, createArmorElement(set.t2Boots, player));
             
             // T2 Sword
-            gui.setSlot(row2Base + 5, new GuiElementBuilder(set.t2Sword)
+            gui.setSlot(row2Base + 6, new GuiElementBuilder(set.t2Sword)
                     .setName(set.t2Sword.get(DataComponentTypes.CUSTOM_NAME))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("✨ T2 Sword - Click for recipe").formatted(Formatting.AQUA))
                     .setCallback((idx, type, action) -> showItemInfo(player, set.t2Sword))
                     .build());
             
-            // T2 Label
-            gui.setSlot(row2Base + 6, new GuiElementBuilder(Items.DIAMOND)
-                    .setName(Text.literal("T2").formatted(Formatting.AQUA))
-                    .addLoreLine(Text.literal("Tier 2 (Diamond)").formatted(Formatting.GRAY))
+            // T2 Label button (opens T2 submenu)
+            gui.setSlot(row2Base + 7, new GuiElementBuilder(Items.DIAMOND_BLOCK)
+                    .setName(Text.literal("T2 (Diamond)").formatted(Formatting.AQUA, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Browse T2 " + setName).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("✨ Click to view T2 set").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, action) -> openT2BountySetMenu(player, setName))
                     .build());
             
-            // Row 3: Separator
+            // Separator row with set name
             int row3Base = baseSlot + 18;
             Text separator = Text.literal("━━ " + set.name + " Set ━━").formatted(Formatting.DARK_GRAY);
             for (int sep = 0; sep < 9; sep++) {
@@ -350,33 +364,131 @@ public class RecipesGui {
         gui.open();
     }
     
-    // Helper class for organizing slayer set display (T1 & T2 combined)
-    private static class SlayerSetDisplay {
+    // Helper class for bounty set display
+    private static class BountySetDisplay {
         final net.minecraft.item.Item icon;
         final String name;
         final Formatting color;
-        final ItemStack t1Sword, t2Sword;
-        final ItemStack t1Helmet, t1Chestplate, t1Leggings, t1Boots;
-        final ItemStack t2Helmet, t2Chestplate, t2Leggings, t2Boots;
+        final ItemStack t1Sword, t1Helmet, t1Chestplate, t1Leggings, t1Boots;
+        final ItemStack t2Sword, t2Helmet, t2Chestplate, t2Leggings, t2Boots;
         
-        SlayerSetDisplay(net.minecraft.item.Item icon, String name, Formatting color,
-                        ItemStack t1Sword, ItemStack t2Sword,
-                        ItemStack t1Helmet, ItemStack t1Chestplate, ItemStack t1Leggings, ItemStack t1Boots,
-                        ItemStack t2Helmet, ItemStack t2Chestplate, ItemStack t2Leggings, ItemStack t2Boots) {
+        BountySetDisplay(net.minecraft.item.Item icon, String name, Formatting color,
+                        ItemStack t1Sword, ItemStack t1Helmet, ItemStack t1Chestplate, ItemStack t1Leggings, ItemStack t1Boots,
+                        ItemStack t2Sword, ItemStack t2Helmet, ItemStack t2Chestplate, ItemStack t2Leggings, ItemStack t2Boots) {
             this.icon = icon;
             this.name = name;
             this.color = color;
             this.t1Sword = t1Sword;
-            this.t2Sword = t2Sword;
             this.t1Helmet = t1Helmet;
             this.t1Chestplate = t1Chestplate;
             this.t1Leggings = t1Leggings;
             this.t1Boots = t1Boots;
+            this.t2Sword = t2Sword;
             this.t2Helmet = t2Helmet;
             this.t2Chestplate = t2Chestplate;
             this.t2Leggings = t2Leggings;
             this.t2Boots = t2Boots;
         }
+    }
+    
+    // T1 Bounty Set Submenu
+    private static void openT1BountySetMenu(ServerPlayerEntity player, String setName) {
+        SlayerManager.SlayerType slayerType = null;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (type.displayName.equals(setName)) {
+                slayerType = type;
+                break;
+            }
+        }
+        if (slayerType == null) return;
+        
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("🛡 T1 " + setName + " Set"));
+        
+        // Background
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+        
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(slayerType.icon)
+                .setName(Text.literal("T1 " + setName + " Set").formatted(slayerType.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Tier 1 (Iron) Bounty Equipment").formatted(Formatting.GRAY))
+                .glow().build());
+        
+        // T1 items in a row
+        gui.setSlot(10, createArmorElement(SlayerItems.createSlayerHelmet(slayerType, 1), player));
+        gui.setSlot(11, createArmorElement(SlayerItems.createSlayerChestplate(slayerType, 1), player));
+        gui.setSlot(12, createArmorElement(SlayerItems.createSlayerLeggings(slayerType, 1), player));
+        gui.setSlot(13, createArmorElement(SlayerItems.createSlayerBoots(slayerType, 1), player));
+        
+        ItemStack t1Sword = SlayerItems.createSlayerSword(slayerType);
+        gui.setSlot(14, new GuiElementBuilder(t1Sword)
+                .setName(t1Sword.get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ T1 Sword").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> showItemInfo(player, t1Sword))
+                .build());
+        
+        // Back button
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Bounty Sets").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openSlayerSetsMenu(player, 0))
+                .build());
+        
+        gui.open();
+    }
+    
+    // T2 Bounty Set Submenu
+    private static void openT2BountySetMenu(ServerPlayerEntity player, String setName) {
+        SlayerManager.SlayerType slayerType = null;
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            if (type.displayName.equals(setName)) {
+                slayerType = type;
+                break;
+            }
+        }
+        if (slayerType == null) return;
+        
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("🛡 T2 " + setName + " Set"));
+        
+        // Background
+        for (int i = 0; i < 27; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+        
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(slayerType.icon)
+                .setName(Text.literal("T2 " + setName + " Set").formatted(slayerType.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Tier 2 (Diamond) Bounty Equipment").formatted(Formatting.GRAY))
+                .glow().build());
+        
+        // T2 items in a row
+        gui.setSlot(10, createArmorElement(SlayerItems.createSlayerHelmet(slayerType, 2), player));
+        gui.setSlot(11, createArmorElement(SlayerItems.createSlayerChestplate(slayerType, 2), player));
+        gui.setSlot(12, createArmorElement(SlayerItems.createSlayerLeggings(slayerType, 2), player));
+        gui.setSlot(13, createArmorElement(SlayerItems.createSlayerBoots(slayerType, 2), player));
+        
+        ItemStack t2Sword = SlayerItems.createUpgradedSlayerSword(slayerType);
+        gui.setSlot(14, new GuiElementBuilder(t2Sword)
+                .setName(t2Sword.get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ T2 Sword").formatted(Formatting.AQUA))
+                .setCallback((idx, type, action) -> showItemInfo(player, t2Sword))
+                .build());
+        
+        // Back button
+        gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Bounty Sets").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openSlayerSetsMenu(player, 0))
+                .build());
+        
+        gui.open();
     }
 
     // ============================================================
@@ -688,12 +800,25 @@ public class RecipesGui {
     private static class ToolSetDisplay {
         final net.minecraft.item.Item blockItem;
         final String name;
+        final Formatting color;
         final ItemStack pickaxe, axe, shovel, hoe;
         
         ToolSetDisplay(net.minecraft.item.Item blockItem, String name,
                        ItemStack pickaxe, ItemStack axe, ItemStack shovel, ItemStack hoe) {
             this.blockItem = blockItem;
             this.name = name;
+            this.color = Formatting.WHITE;
+            this.pickaxe = pickaxe;
+            this.axe = axe;
+            this.shovel = shovel;
+            this.hoe = hoe;
+        }
+        
+        ToolSetDisplay(net.minecraft.item.Item blockItem, String name, Formatting color,
+                       ItemStack pickaxe, ItemStack axe, ItemStack shovel, ItemStack hoe) {
+            this.blockItem = blockItem;
+            this.name = name;
+            this.color = color;
             this.pickaxe = pickaxe;
             this.axe = axe;
             this.shovel = shovel;
@@ -1323,51 +1448,145 @@ public class RecipesGui {
     }
 
     // ============================================================
-    // CUSTOM TOOLS MENU - Legendary custom tools
+    // CUSTOM TOOLS MENU - 15 Legendary Tool Sets
     // ============================================================
     private static void openCustomToolsMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
-        gui.setTitle(Text.literal("⛏ Custom Tools"));
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⛏ Legendary Tools"));
 
-        // Background with dark theme
-        for (int i = 0; i < 36; i++) {
+        // Background
+        for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
-                .setName(Text.literal("⛏ Custom Tools").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .setName(Text.literal("⛏ Legendary Tools").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Legendary custom tools").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click any tool to view recipe").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("15 unique tool sets with abilities").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Pickaxe → Axe → Shovel → Hoe").formatted(Formatting.YELLOW))
                 .glow().build());
 
-        // Add custom tools in a grid
-        ItemStack[] customTools = {
-            DanielsPickaxe.create(),
-            CustomItemHandler.createTheGavel(),
-            CustomItemHandler.createHarveysStick(),
-            CustomItemHandler.createHermesShoes()
-        };
+        // Define tool sets: Block/Icon, Name, Color, Tools
+        List<ToolSetDisplay> sets = new ArrayList<>();
+        
+        // Set 1: Dragon
+        sets.add(new ToolSetDisplay(Items.DRAGON_HEAD, "Dragon", Formatting.DARK_RED,
+            LegendaryTools.createDragonPickaxe(), LegendaryTools.createDragonAxe(),
+            LegendaryTools.createDragonShovel(), LegendaryTools.createDragonHoe()));
+        // Set 2: Aether
+        sets.add(new ToolSetDisplay(Items.ELYTRA, "Aether", Formatting.AQUA,
+            LegendaryTools.createAetherPickaxe(), LegendaryTools.createAetherAxe(),
+            LegendaryTools.createAetherShovel(), LegendaryTools.createAetherHoe()));
+        // Set 3: Void
+        sets.add(new ToolSetDisplay(Items.ENDER_PEARL, "Void", Formatting.DARK_PURPLE,
+            LegendaryTools.createVoidPickaxe(), LegendaryTools.createVoidAxe(),
+            LegendaryTools.createVoidShovel(), LegendaryTools.createVoidHoe()));
+        // Set 4: Nature
+        sets.add(new ToolSetDisplay(Items.OAK_SAPLING, "Nature", Formatting.GREEN,
+            LegendaryTools.createNaturePickaxe(), LegendaryTools.createNatureAxe(),
+            LegendaryTools.createNatureShovel(), LegendaryTools.createNatureHoe()));
+        // Set 5: Frost
+        sets.add(new ToolSetDisplay(Items.SNOW_BLOCK, "Frost", Formatting.BLUE,
+            LegendaryTools.createFrostPickaxe(), LegendaryTools.createFrostAxe(),
+            LegendaryTools.createFrostShovel(), LegendaryTools.createFrostHoe()));
+        // Set 6: Thunder
+        sets.add(new ToolSetDisplay(Items.LIGHTNING_ROD, "Thunder", Formatting.YELLOW,
+            LegendaryTools.createThunderPickaxe(), LegendaryTools.createThunderAxe(),
+            LegendaryTools.createThunderShovel(), LegendaryTools.createThunderHoe()));
+        // Set 7: Ocean
+        sets.add(new ToolSetDisplay(Items.HEART_OF_THE_SEA, "Ocean", Formatting.DARK_BLUE,
+            LegendaryTools.createOceanPickaxe(), LegendaryTools.createOceanAxe(),
+            LegendaryTools.createOceanShovel(), LegendaryTools.createOceanHoe()));
+        // Set 8: Lunar
+        sets.add(new ToolSetDisplay(Items.PHANTOM_MEMBRANE, "Lunar", Formatting.LIGHT_PURPLE,
+            LegendaryTools.createLunarPickaxe(), LegendaryTools.createLunarAxe(),
+            LegendaryTools.createLunarShovel(), LegendaryTools.createLunarHoe()));
+        // Set 9: Solar
+        sets.add(new ToolSetDisplay(Items.FIRE_CHARGE, "Solar", Formatting.GOLD,
+            LegendaryTools.createSolarPickaxe(), LegendaryTools.createSolarAxe(),
+            LegendaryTools.createSolarShovel(), LegendaryTools.createSolarHoe()));
+        // Set 10: Terra
+        sets.add(new ToolSetDisplay(Items.GRASS_BLOCK, "Terra", Formatting.DARK_GREEN,
+            LegendaryTools.createTerraPickaxe(), LegendaryTools.createTerraAxe(),
+            LegendaryTools.createTerraShovel(), LegendaryTools.createTerraHoe()));
+        // Set 11: Phantom
+        sets.add(new ToolSetDisplay(Items.SPECTRAL_ARROW, "Phantom", Formatting.GRAY,
+            LegendaryTools.createPhantomPickaxe(), LegendaryTools.createPhantomAxe(),
+            LegendaryTools.createPhantomShovel(), LegendaryTools.createPhantomHoe()));
+        // Set 12: Blood
+        sets.add(new ToolSetDisplay(Items.NETHER_WART, "Blood", Formatting.DARK_RED,
+            LegendaryTools.createBloodPickaxe(), LegendaryTools.createBloodAxe(),
+            LegendaryTools.createBloodShovel(), LegendaryTools.createBloodHoe()));
+        // Set 13: Celestial
+        sets.add(new ToolSetDisplay(Items.NETHER_STAR, "Celestial", Formatting.DARK_AQUA,
+            LegendaryTools.createCelestialPickaxe(), LegendaryTools.createCelestialAxe(),
+            LegendaryTools.createCelestialShovel(), LegendaryTools.createCelestialHoe()));
+        // Set 14: Shadow
+        sets.add(new ToolSetDisplay(Items.BLACK_DYE, "Shadow", Formatting.BLACK,
+            LegendaryTools.createShadowPickaxe(), LegendaryTools.createShadowAxe(),
+            LegendaryTools.createShadowShovel(), LegendaryTools.createShadowHoe()));
+        // Set 15: Crystal
+        sets.add(new ToolSetDisplay(Items.DIAMOND, "Crystal", Formatting.WHITE,
+            LegendaryTools.createCrystalPickaxe(), LegendaryTools.createCrystalAxe(),
+            LegendaryTools.createCrystalShovel(), LegendaryTools.createCrystalHoe()));
 
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
-        int idx = 0;
-        for (ItemStack tool : customTools) {
-            if (idx >= slots.length) break;
-            gui.setSlot(slots[idx++], new GuiElementBuilder(tool)
-                    .setName(tool.get(DataComponentTypes.CUSTOM_NAME))
+        // Display sets in rows (3 sets per page, each set takes 2 rows)
+        int setsPerPage = 3;
+        int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
+        int clampedPage = 0;
+        int startIdx = 0;
+        int endIdx = Math.min(setsPerPage, sets.size());
+
+        for (int i = startIdx; i < endIdx; i++) {
+            ToolSetDisplay set = sets.get(i);
+            int rowOffset = (i - startIdx) * 18; // 2 rows per set
+            int baseSlot = 10 + rowOffset;
+            
+            // Row 1: Icon | Pickaxe | Axe | Shovel | Hoe
+            gui.setSlot(baseSlot, new GuiElementBuilder(set.blockItem)
+                    .setName(Text.literal(set.name + " Set").formatted(set.color, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
-                    .setCallback((slot, type2, action) -> showItemInfo(player, tool))
+                    .addLoreLine(Text.literal("Material:").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(set.name).formatted(set.color))
+                    .glow()
                     .build());
+            
+            // Gap slot
+            gui.setSlot(baseSlot + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+            
+            // Tools
+            gui.setSlot(baseSlot + 2, createToolElement(set.pickaxe, player));
+            gui.setSlot(baseSlot + 3, createToolElement(set.axe, player));
+            gui.setSlot(baseSlot + 4, createToolElement(set.shovel, player));
+            gui.setSlot(baseSlot + 5, createToolElement(set.hoe, player));
+            
+            // Separator row
+            Text separator = Text.literal("━━ " + set.name + " Tools ━━").formatted(Formatting.DARK_GRAY);
+            for (int sep = 0; sep < 9; sep++) {
+                int sepSlot = baseSlot + 9 + sep;
+                if (sepSlot < 54) {
+                    gui.setSlot(sepSlot, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                            .setName(separator)
+                            .build());
+                }
+            }
         }
 
         // Back button
-        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openMainMenu(player))
                 .build());
+
+        if (totalPages > 1) {
+            gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+                    .setName(Text.literal("Page 1 / " + totalPages).formatted(Formatting.WHITE))
+                    .build());
+        }
 
         gui.open();
     }

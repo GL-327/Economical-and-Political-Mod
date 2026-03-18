@@ -6,6 +6,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -26,17 +28,19 @@ import java.util.*;
 
 /**
  * Daniel's Pickaxe - A legendary mining tool with toggleable 3x3 tunnel + vein mining.
- * When ability is OFF: Insta-breaks all blocks (extreme mining speed)
+ * When ability is OFF: Insta-breaks all blocks (extreme mining speed with Haste 10)
  * When ability is ON: 3x3 tunnel mining + vein mining for ores + auto-smelt
  */
 public class DanielsPickaxe {
 
     private static final String TAG_DANIELS_PICKAXE = "daniels_pickaxe";
     private static final String TAG_ABILITY_ACTIVE = "daniels_ability_active";
+    private static final String TAG_MODE = "daniels_mode"; // 0 = insta, 1 = tunnel
     private static final Identifier MINING_SPEED_MODIFIER = Identifier.of("political", "daniels_mining_speed");
 
     // Track ability state per player
     private static final Map<UUID, Boolean> abilityActive = new HashMap<>();
+    private static final Map<UUID, Long> lastHasteTime = new HashMap<>(); // Track last haste refresh
 
     // Blocks that count as ores for vein mining
     private static final Set<Block> ORE_BLOCKS = new HashSet<>(Arrays.asList(
@@ -66,11 +70,12 @@ public class DanielsPickaxe {
     }
 
     public static ItemStack create() {
-        // Start with netherite pickaxe for best base stats
-        ItemStack stack = new ItemStack(Items.NETHERITE_PICKAXE);
+        // Start with diamond pickaxe for insta-mine mode (base)
+        ItemStack stack = new ItemStack(Items.DIAMOND_PICKAXE);
 
         NbtCompound nbt = new NbtCompound();
         nbt.putByte(TAG_DANIELS_PICKAXE, (byte) 1);
+        nbt.putByte(TAG_MODE, (byte) 0); // 0 = insta mode
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
 
         stack.set(DataComponentTypes.CUSTOM_NAME,
@@ -84,12 +89,14 @@ public class DanielsPickaxe {
                 Text.literal(""),
                 Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD),
                 Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY),
-                Text.literal("  └ Hidden Efficiency V (insta-mine)").formatted(Formatting.GRAY),
+                Text.literal("  └ Haste X for extreme speed").formatted(Formatting.GRAY),
+                Text.literal("  └ Diamond Pickaxe").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("§7Toggle for TUNNEL MODE:").formatted(Formatting.GRAY),
                 Text.literal("  └ 3x3 tunnel mining").formatted(Formatting.GRAY),
                 Text.literal("  └ Vein mining for ores").formatted(Formatting.GRAY),
                 Text.literal("  └ Auto-smelts ores").formatted(Formatting.GRAY),
+                Text.literal("  └ Netherite Pickaxe").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("Unbreakable").formatted(Formatting.GREEN),
                 Text.literal("§8Cannot apply Efficiency, Silk Touch, or Mending").formatted(Formatting.DARK_GRAY),
@@ -157,16 +164,39 @@ public class DanielsPickaxe {
 
     /**
      * Switch the pickaxe item type based on mode.
-     * Tunnel mode = Netherite pickaxe (for durability and mining speed)
-     * Instant break mode = Netherite pickaxe (same, just different lore)
+     * Tunnel mode = Netherite pickaxe (for 3x3 mining)
+     * Instant break mode = Diamond pickaxe (with haste 10)
      */
     private static void switchPickaxeType(ServerPlayerEntity player, boolean tunnelMode) {
         ItemStack mainHand = player.getMainHandStack();
         if (!isDanielsPickaxe(mainHand)) return;
 
-        // Always use netherite pickaxe now
-        // Just update the lore to reflect the mode
-        updateItemLoreOnStack(mainHand, tunnelMode);
+        // Get the NBT data to preserve
+        NbtCompound nbt = mainHand.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(new NbtCompound())).copyNbt();
+        nbt.putByte(TAG_MODE, tunnelMode ? (byte) 1 : (byte) 0);
+
+        // Create new pickaxe based on mode
+        ItemStack newPickaxe;
+        if (tunnelMode) {
+            newPickaxe = new ItemStack(Items.NETHERITE_PICKAXE);
+        } else {
+            newPickaxe = new ItemStack(Items.DIAMOND_PICKAXE);
+        }
+
+        // Copy all data to new pickaxe
+        newPickaxe.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        newPickaxe.set(DataComponentTypes.CUSTOM_NAME, mainHand.get(DataComponentTypes.CUSTOM_NAME));
+        newPickaxe.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
+        newPickaxe.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        
+        // Copy lore (will be updated separately)
+        newPickaxe.set(DataComponentTypes.LORE, mainHand.get(DataComponentTypes.LORE));
+
+        // Copy custom item ID
+        SlayerItems.setCustomItemId(newPickaxe, "daniels_pickaxe");
+
+        // Replace in main hand using the proper vanilla method
+        player.setStackInHand(net.minecraft.util.Hand.MAIN_HAND, newPickaxe);
     }
 
     private static void updateItemLore(ServerPlayerEntity player, boolean abilityActive) {
@@ -191,9 +221,12 @@ public class DanielsPickaxe {
             lore.add(Text.literal("  └ 3x3 tunnel excavation").formatted(Formatting.GRAY));
             lore.add(Text.literal("  └ Vein mining ores").formatted(Formatting.GRAY));
             lore.add(Text.literal("  └ Auto-smelts ores").formatted(Formatting.GRAY));
+            lore.add(Text.literal("  └ Netherite Pickaxe").formatted(Formatting.GRAY));
         } else {
             lore.add(Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD));
             lore.add(Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY));
+            lore.add(Text.literal("  └ Haste X for extreme speed").formatted(Formatting.GRAY));
+            lore.add(Text.literal("  └ Diamond Pickaxe").formatted(Formatting.GRAY));
         }
 
         lore.add(Text.literal(""));
@@ -203,6 +236,27 @@ public class DanielsPickaxe {
         lore.add(Text.literal("「Legendary」").formatted(Formatting.DARK_PURPLE));
 
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+    }
+
+    /**
+     * Called every tick to refresh haste effect in insta-mine mode.
+     * Should be called from a player tick event.
+     */
+    public static void tickPlayer(ServerPlayerEntity player) {
+        if (!isAbilityActive(player)) {
+            // Insta-mine mode - apply Haste 10
+            long currentTime = System.currentTimeMillis();
+            long lastTime = lastHasteTime.getOrDefault(player.getUuid(), 0L);
+            
+            // Refresh every 1000ms (1 second), duration 40 ticks (2 seconds)
+            if (currentTime - lastTime >= 1000) {
+                if (isDanielsPickaxe(player.getMainHandStack())) {
+                    player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.HASTE, 40, 9, true, false, false)); // Haste 10 (level 9)
+                    lastHasteTime.put(player.getUuid(), currentTime);
+                }
+            }
+        }
     }
 
     /**
@@ -217,8 +271,7 @@ public class DanielsPickaxe {
         boolean tunnelMode = isAbilityActive(uuid);
 
         if (!tunnelMode) {
-            // Instant break mode - no special handling needed
-            // The extreme mining speed handles this
+            // Instant break mode - no special handling needed, haste 10 handles it
             return false;
         }
 
@@ -231,7 +284,8 @@ public class DanielsPickaxe {
 
         // If it's an ore, also vein mine
         if (isOreBlock(state.getBlock())) {
-            veinMineOre(player, world, pos, tool, new HashSet<>());
+            Set<BlockPos> visited = new HashSet<>();
+            veinMineOre(player, world, pos, state.getBlock(), tool, visited);
         }
 
         return true;
@@ -289,11 +343,9 @@ public class DanielsPickaxe {
             }
         }
         
-        // Break 3x3 area
+        // Break 3x3 area (including center for proper clearing)
         for (int d1 = -1; d1 <= 1; d1++) {
             for (int d2 = -1; d2 <= 1; d2++) {
-                if (d1 == 0 && d2 == 0) continue; // Skip center (already broken)
-
                 BlockPos targetPos = center.add(
                     offsetX1 * d1 + offsetX2 * d2,
                     offsetY1 * d1 + offsetY2 * d2,
@@ -309,22 +361,33 @@ public class DanielsPickaxe {
         }
     }
 
-    private static void veinMineOre(ServerPlayerEntity player, ServerWorld world, BlockPos start, ItemStack tool, Set<BlockPos> visited) {
+    private static void veinMineOre(ServerPlayerEntity player, ServerWorld world, BlockPos start, Block oreBlock, ItemStack tool, Set<BlockPos> visited) {
         if (visited.size() >= 64) return; // Limit vein size
+        if (visited.contains(start)) return;
+        
+        BlockState startState = world.getBlockState(start);
+        if (!isOreBlock(startState.getBlock())) return;
+        
         visited.add(start);
 
-        Block oreBlock = world.getBlockState(start).getBlock();
-        if (!isOreBlock(oreBlock)) return;
+        // Check all 6 adjacent blocks and 20 diagonal blocks (full 3x3x3 minus corners)
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    if (dx == 0 && dy == 0 && dz == 0) continue; // Skip center
+                    
+                    BlockPos neighbor = start.add(dx, dy, dz);
+                    if (visited.contains(neighbor)) continue;
 
-        // Check all 6 adjacent blocks
-        for (Direction dir : Direction.values()) {
-            BlockPos neighbor = start.offset(dir);
-            if (visited.contains(neighbor)) continue;
-
-            BlockState neighborState = world.getBlockState(neighbor);
-            if (neighborState.getBlock() == oreBlock) {
-                breakBlockWithAutoSmelt(player, world, neighbor, neighborState, tool);
-                veinMineOre(player, world, neighbor, tool, visited);
+                    BlockState neighborState = world.getBlockState(neighbor);
+                    Block neighborBlock = neighborState.getBlock();
+                    
+                    // Break if it's the same ore type or any other ore
+                    if (isOreBlock(neighborBlock)) {
+                        breakBlockWithAutoSmelt(player, world, neighbor, neighborState, tool);
+                        veinMineOre(player, world, neighbor, neighborBlock, tool, visited);
+                    }
+                }
             }
         }
     }
@@ -403,5 +466,6 @@ public class DanielsPickaxe {
 
     public static void onPlayerDisconnect(UUID uuid) {
         abilityActive.remove(uuid);
+        lastHasteTime.remove(uuid);
     }
 }

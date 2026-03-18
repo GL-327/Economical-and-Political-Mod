@@ -30,6 +30,8 @@ public class BlockArmorHandler {
         tickSandstoneArmor(player);
         tickAmethystArmor(player);
         tickCoalArmor(player);
+        tickWarpedArmor(player);
+        tickWetSpongeArmor(player);
     }
     
     // ============================================================
@@ -298,6 +300,43 @@ public class BlockArmorHandler {
                 player.getStatusEffect(StatusEffects.NIGHT_VISION).getDuration() < 200) {
                 player.addStatusEffect(new StatusEffectInstance(
                     StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
+            }
+        }
+    }
+    
+    // ============================================================
+    // WARPED ARMOR - Endermen ignore player
+    // ============================================================
+    private static void tickWarpedArmor(ServerPlayerEntity player) {
+        if (BlockArmor.hasFullBlockArmorSet(player, "warped")) {
+            // Endermen ignore player with invisibility effect (simulated)
+            if (!player.hasStatusEffect(StatusEffects.INVISIBILITY) || 
+                player.getStatusEffect(StatusEffects.INVISIBILITY).getDuration() < 200) {
+                player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.INVISIBILITY, 400, 0, true, false, false));
+            }
+        }
+    }
+    
+    // ============================================================
+    // WET SPONGE ARMOR - Fire extinguisher
+    // ============================================================
+    private static void tickWetSpongeArmor(ServerPlayerEntity player) {
+        if (BlockArmor.hasFullBlockArmorSet(player, "wet_sponge")) {
+            // Extinguish fire immediately when on fire
+            if (player.isOnFire()) {
+                player.extinguish();
+                // Splash particles effect
+                player.getEntityWorld().spawnParticles(
+                    net.minecraft.particle.ParticleTypes.SPLASH,
+                    player.getX(), player.getY() + 1, player.getZ(),
+                    20, 0.5, 0.5, 0.5, 0.1);
+            }
+            // Fire resistance to prevent reignition
+            if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE) || 
+                player.getStatusEffect(StatusEffects.FIRE_RESISTANCE).getDuration() < 60) {
+                player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.FIRE_RESISTANCE, 100, 0, true, false, false));
             }
         }
     }

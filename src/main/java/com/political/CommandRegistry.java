@@ -877,6 +877,22 @@ public class CommandRegistry {
                     return 1;
                 }));
 
+        dispatcher.register(CommandManager.literal("specialshop")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    SpecialShopGui.openMainMenu(player);
+                    return 1;
+                }));
+
+        dispatcher.register(CommandManager.literal("sshop")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    SpecialShopGui.openMainMenu(player);
+                    return 1;
+                }));
+
         dispatcher.register(CommandManager.literal("sell")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayer();
