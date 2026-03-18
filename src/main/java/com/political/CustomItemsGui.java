@@ -58,9 +58,13 @@ public class CustomItemsGui {
     // Helper method to give item to player
     private static void giveItem(ServerPlayerEntity player, ItemStack item) {
         if (player.getInventory().insertStack(item.copy())) {
-            player.sendMessage(Text.literal("✅ Given: " + item.get(DataComponentTypes.CUSTOM_NAME)));
+            Text customName = item.get(DataComponentTypes.CUSTOM_NAME);
+            String itemName = customName != null ? customName.getString() : item.getItem().toString();
+            player.sendMessage(Text.literal("✅ ")
+                    .append(Text.literal(itemName).formatted(Formatting.GREEN))
+                    .append(Text.literal(" added to inventory!").formatted(Formatting.GRAY)));
         } else {
-            player.sendMessage(Text.literal("❌ Inventory full!"));
+            player.sendMessage(Text.literal("❌ Inventory full! Make some space and try again.").formatted(Formatting.RED));
         }
     }
 

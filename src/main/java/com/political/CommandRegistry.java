@@ -97,11 +97,11 @@ public class CommandRegistry {
                 })
         );
 
-        // Customitems command - opens RecipesGui
+        // Customitems command - opens CustomItemsGui
         dispatcher.register(CommandManager.literal("customitems")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    RecipesGui.openMainMenu(player);
+                    CustomItemsGui.open(player);
                     return 1;
                 }));
 
