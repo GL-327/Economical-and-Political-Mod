@@ -313,49 +313,58 @@ public class DanielsPickaxe {
     }
 
     private static void break3x3Area(ServerPlayerEntity player, ServerWorld world, BlockPos center, Direction blockFace, ItemStack tool) {
-        // Break 3x3 area perpendicular to the block face being mined
+        // Break 3x3x3 area (flat above and below) perpendicular to the block face being mined
         // The area is centered on the mined block and extends in the plane perpendicular to the hit face
+        // Plus breaks above and below for flat tunnel excavation
         
         // Find perpendicular axes for the 3x3 plane
         int offsetX1, offsetY1, offsetZ1;  // First perpendicular direction
         int offsetX2, offsetY2, offsetZ2;  // Second perpendicular direction
+        int offsetX3, offsetY3, offsetZ3;  // Third direction (above/below)
         
         switch (blockFace) {
             case DOWN, UP -> {
-                // Mining floor or ceiling: break in XZ plane (horizontal)
+                // Mining floor or ceiling: break in XZ plane + Y (above/below)
                 offsetX1 = 1; offsetY1 = 0; offsetZ1 = 0;  // X axis
                 offsetX2 = 0; offsetY2 = 0; offsetZ2 = 1;  // Z axis
+                offsetX3 = 0; offsetY3 = 1; offsetZ3 = 0;  // Y axis (above/below)
             }
             case NORTH, SOUTH -> {
-                // Mining north/south wall: break in XY plane (vertical, east-west width)
+                // Mining north/south wall: break in XY plane + Z (above/below)
                 offsetX1 = 1; offsetY1 = 0; offsetZ1 = 0;  // X axis (east-west)
                 offsetX2 = 0; offsetY2 = 1; offsetZ2 = 0;  // Y axis (up-down)
+                offsetX3 = 0; offsetY3 = 0; offsetZ3 = 1;  // Z axis (above/below)
             }
             case WEST, EAST -> {
-                // Mining west/east wall: break in YZ plane (vertical, north-south width)
+                // Mining west/east wall: break in YZ plane + X (above/below)
                 offsetX1 = 0; offsetY1 = 0; offsetZ1 = 1;  // Z axis (north-south)
                 offsetX2 = 0; offsetY2 = 1; offsetZ2 = 0;  // Y axis (up-down)
+                offsetX3 = 1; offsetY3 = 0; offsetZ3 = 0;  // X axis (above/below)
             }
             default -> {
                 // Fallback
                 offsetX1 = 1; offsetY1 = 0; offsetZ1 = 0;
                 offsetX2 = 0; offsetY2 = 1; offsetZ2 = 0;
+                offsetX3 = 0; offsetY3 = 0; offsetZ3 = 1;
             }
         }
         
-        // Break 3x3 area (including center for proper clearing)
+        // Break 3x3x3 area (including center for proper clearing)
+        // Now includes above and below (d3 = -1, 0, 1)
         for (int d1 = -1; d1 <= 1; d1++) {
             for (int d2 = -1; d2 <= 1; d2++) {
-                BlockPos targetPos = center.add(
-                    offsetX1 * d1 + offsetX2 * d2,
-                    offsetY1 * d1 + offsetY2 * d2,
-                    offsetZ1 * d1 + offsetZ2 * d2
-                );
+                for (int d3 = -1; d3 <= 1; d3++) {
+                    BlockPos targetPos = center.add(
+                        offsetX1 * d1 + offsetX2 * d2 + offsetX3 * d3,
+                        offsetY1 * d1 + offsetY2 * d2 + offsetY3 * d3,
+                        offsetZ1 * d1 + offsetZ2 * d2 + offsetZ3 * d3
+                    );
 
-                BlockState targetState = world.getBlockState(targetPos);
-                if (!targetState.isAir() && targetState.getBlock().getHardness() >= 0) {
-                    // Break the block
-                    breakBlockWithAutoSmelt(player, world, targetPos, targetState, tool);
+                    BlockState targetState = world.getBlockState(targetPos);
+                    if (!targetState.isAir() && targetState.getBlock().getHardness() >= 0) {
+                        // Break the block
+                        breakBlockWithAutoSmelt(player, world, targetPos, targetState, tool);
+                    }
                 }
             }
         }

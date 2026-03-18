@@ -352,7 +352,7 @@ public class RecipesGui {
                     .build());
         }
 
-        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages).formatted(Formatting.WHITE))
                 .build());
 
@@ -759,7 +759,7 @@ public class RecipesGui {
                     .build());
         }
 
-        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages).formatted(Formatting.WHITE))
                 .build());
 
@@ -1018,7 +1018,7 @@ public class RecipesGui {
                     .build());
         }
 
-        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages).formatted(Formatting.WHITE))
                 .build());
 
@@ -1580,7 +1580,7 @@ public class RecipesGui {
                 .build());
 
         if (totalPages > 1) {
-            gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+            gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                     .setName(Text.literal("Page 1 / " + totalPages).formatted(Formatting.WHITE))
                     .build());
         }
@@ -1771,7 +1771,7 @@ public class RecipesGui {
 
         // Pagination buttons (if needed in future)
         if (totalPages > 1) {
-            gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+            gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                     .setName(Text.literal("Page 1 / " + totalPages))
                     .build());
         }

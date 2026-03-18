@@ -55,6 +55,15 @@ public class CustomItemsGui {
         }
     }
 
+    // Helper method to give item to player
+    private static void giveItem(ServerPlayerEntity player, ItemStack item) {
+        if (player.getInventory().insertStack(item.copy())) {
+            player.sendMessage(Text.literal("✅ Given: " + item.get(DataComponentTypes.CUSTOM_NAME)));
+        } else {
+            player.sendMessage(Text.literal("❌ Inventory full!"));
+        }
+    }
+
     /** Returns all items belonging to a given category. */
     private static List<ItemStack> getItemsForCategory(Category cat) {
         List<ItemStack> items = new ArrayList<>();
@@ -1271,8 +1280,8 @@ public class CustomItemsGui {
             gui.setSlot(slots[2], new GuiElementBuilder(set.sword.getItem())
                     .setName(swordName != null ? swordName : Text.literal("Sword"))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
-                    .setCallback((s, t, a) -> showItemInfo(player, set.sword))
+                    .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> giveItem(player, set.sword))
                     .build());
 
             // Armor pieces: Helmet, Chestplate, Leggings, Boots (shifted 1 slot right)
@@ -1280,11 +1289,12 @@ public class CustomItemsGui {
             for (int j = 0; j < 4; j++) {
                 ItemStack armor = armorPieces[j];
                 Text armorName = armor.get(DataComponentTypes.CUSTOM_NAME);
+                final ItemStack finalArmor = armor;
                 gui.setSlot(slots[3 + j], new GuiElementBuilder(armor.getItem())
                         .setName(armorName != null ? armorName : Text.literal("Armor"))
                         .addLoreLine(Text.literal(""))
-                        .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
-                        .setCallback((s, t, a) -> showItemInfo(player, armor))
+                        .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
+                        .setCallback((s, t, a) -> giveItem(player, finalArmor))
                         .build());
             }
         }
@@ -1310,7 +1320,7 @@ public class CustomItemsGui {
                     .setCallback((s, t, a) -> openGemBlockGearPage(player, next)).build());
         }
 
-        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages))
                 .build());
 
@@ -1370,8 +1380,8 @@ public class CustomItemsGui {
                     .setName(displayName != null ? displayName
                             : Text.literal(item.getItem().toString()))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
-                    .setCallback((s, t, a) -> showItemInfo(player, finalItem));
+                    .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> giveItem(player, finalItem));
             gui.setSlot(slot, elem.build());
             shown++;
         }
@@ -1397,7 +1407,7 @@ public class CustomItemsGui {
                     .setCallback((s, t, a) -> openCategoryPage(player, cat, next)).build());
         }
 
-        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages))
                 .build());
 

@@ -62,6 +62,7 @@ public class CommandRegistry {
         registerTakeLeadership(dispatcher);
         registerSpawnProtection(dispatcher);
         registerCheckpoint(dispatcher);
+        registerCustomSpawn(dispatcher);
 
         // /playerbuff command (admin only)
         registerPlayerBuff(dispatcher);
@@ -2670,5 +2671,48 @@ public class CommandRegistry {
                     CivilCraftGui.open(player);
                     return 1;
                 }));
+    }
+
+    // ── /cspawn ─────────────────────────────────────────────────────────────────────
+    private static void registerCustomSpawn(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("cspawn")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.argument("type", StringArgumentType.string())
+                        .suggests((context, builder) -> {
+                            builder.suggest("elite");
+                            builder.suggest("champion");
+                            builder.suggest("enchanted");
+                            return builder.buildFuture();
+                        })
+                        .executes(context -> {
+                            String type = StringArgumentType.getString(context, "type").toLowerCase();
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            
+                            net.minecraft.entity.EntityType<?> entityType = switch (type) {
+                                case "elite" -> net.minecraft.entity.EntityType.ZOMBIE;
+                                case "champion" -> net.minecraft.entity.EntityType.SKELETON;
+                                case "enchanted" -> net.minecraft.entity.EntityType.VINDICATOR;
+                                default -> {
+                                    player.sendMessage(Text.literal("Invalid type! Use: elite, champion, or enchanted").formatted(Formatting.RED));
+                                    yield null;
+                                }
+                            };
+                            
+                            if (entityType == null) return 1;
+                            
+                            // Spawn the mob at player's location
+                            net.minecraft.entity.Entity entity = entityType.create(player.getEntityWorld(), net.minecraft.entity.SpawnReason.COMMAND);
+                            if (entity != null) {
+                                entity.setPosition(player.getX(), player.getY(), player.getZ());
+                                // Add custom name
+                                entity.setCustomName(Text.literal("§" + (type.equals("elite") ? "c" : type.equals("champion") ? "5" : "9") + "§l" + 
+                                    (type.substring(0, 1).toUpperCase() + type.substring(1)) + " " + 
+                                    (type.equals("elite") ? "Warrior" : type.equals("champion") ? "Archer" : "Mage")));
+                                entity.setCustomNameVisible(true);
+                                player.getEntityWorld().spawnEntity(entity);
+                                player.sendMessage(Text.literal("✅ Spawned " + type + " mob!").formatted(Formatting.GREEN));
+                            }
+                            return 1;
+                        })));
     }
 }
