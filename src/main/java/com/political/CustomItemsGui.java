@@ -1113,23 +1113,7 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.BLOCK_WEAPONS, 0))
                 .build());
 
-        gui.setSlot(19, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("⚔ Bounty Swords T1").formatted(Formatting.YELLOW, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("T1 slayer swords").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.SWORDS_T1, 0))
-                .build());
-
-        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔ Bounty Swords T2").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("T2 slayer swords").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.SWORDS_T2, 0))
-                .build());
-
-        gui.setSlot(21, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
+        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
                 .setName(Text.literal("⛏ Block Tools").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Block-themed tools").formatted(Formatting.GRAY))
