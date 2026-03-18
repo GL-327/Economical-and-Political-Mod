@@ -1,0 +1,46 @@
+﻿
+> Configure project :
+Fabric Loom: 1.15.5
+
+> Task :compileJava FAILED
+.\gradlew : C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\Hou
+ndEntity.java:68: error: cannot find symbol
+At line:1 char:1
++ .\gradlew compileJava > build_output_4.txt 2>&1 ; Get-Content build_o ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Gathe\...not find symbol:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+                this.playSound(SoundEvents.ENTITY_WOLF_HOWL, 0.5f, this.getSoundPitch());
+                                          ^
+  symbol:   variable ENTITY_WOLF_HOWL
+  location: class SoundEvents
+1 error
+
+[Incubating] Problems report is available at: file:///C:/Users/Gathe/Videos/Economical-and-Political-Mod/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  C:\Users\Gathe\Videos\Economical-and-Political-Mod\src\main\java\com\political\backrooms\entities\HoundEntity.j
+ava:68: error: cannot find symbol
+                  this.playSound(SoundEvents.ENTITY_WOLF_HOWL, 0.5f, this.getSoundPitch());
+                                            ^
+    symbol:   variable ENTITY_WOLF_HOWL
+    location: class SoundEvents
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.3.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 925ms
+1 actionable task: 1 executed

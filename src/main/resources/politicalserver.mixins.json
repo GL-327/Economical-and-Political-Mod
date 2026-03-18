@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "com.political.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ServerPlayerInteractionManagerMixin",
+		"MiningSpeedMixin",
+		"OreDropMixin",
+		"WardenEntityMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
