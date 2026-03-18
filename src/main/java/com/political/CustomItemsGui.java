@@ -1063,7 +1063,7 @@ public class CustomItemsGui {
     // Each row shows: [Block] [Sword] [Helmet] [Chest] [Legs] [Boots]
     // ──────────────────────────────────────────────────────────────
 
-    private static void openGemBlockGearPage(ServerPlayerEntity player, int page) {
+    public static void openGemBlockGearPage(ServerPlayerEntity player, int page) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("§6💎 Gem & Block Armor"));
 

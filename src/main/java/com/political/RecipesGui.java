@@ -312,7 +312,7 @@ public class RecipesGui {
             gui.setSlot(row2Base + 7, new GuiElementBuilder(Items.DIAMOND_BLOCK)
                     .setName(Text.literal("T2 (Diamond)").formatted(Formatting.AQUA, Formatting.BOLD))
                     .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("Browse T2 " + setName).formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("Browse T2 " + set.name).formatted(Formatting.GRAY))
                     .addLoreLine(Text.literal("✨ Click to view T2 set").formatted(Formatting.YELLOW))
                     .setCallback((idx, type, action) -> openT2ArmorSetMenu(player, set.type))
                     .build());
