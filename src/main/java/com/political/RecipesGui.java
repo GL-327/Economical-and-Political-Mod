@@ -53,26 +53,18 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openGemAndBlockArmorMenu(player, 0))
                 .build());
 
-        // T1 Swords category - shifted right
-        gui.setSlot(12, new GuiElementBuilder(Items.IRON_SWORD)
-                .setName(Text.literal("⚔ T1 Bounty Swords").formatted(Formatting.YELLOW, Formatting.BOLD))
+        // Bounty Sets (T1 & T2 combined) - replaces separate T1/T2 armor/sword buttons
+        gui.setSlot(12, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("⚔ Bounty Sets (T1 & T2)").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚔ Tier 1 slayer swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🛡 T1 & T2 Armor + Swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Complete slayer equipment sets").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT1SwordsMenu(player))
-                .build());
-
-        // T2 Swords category - shifted right
-        gui.setSlot(13, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔ T2 Bounty Swords").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("⚔ Tier 2 slayer swords").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT2SwordsMenu(player))
+                .setCallback((idx, type, action) -> openSlayerSetsMenu(player, 0))
                 .build());
 
         // Materials category - shifted right
-        gui.setSlot(14, new GuiElementBuilder(Items.SLIME_BALL)
+        gui.setSlot(13, new GuiElementBuilder(Items.SLIME_BALL)
                 .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("📦 Cores, chunks & compacted items").formatted(Formatting.GRAY))
@@ -81,26 +73,8 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openMaterialsMenu(player))
                 .build());
 
-        // T1 Armor category - shifted right
-        gui.setSlot(15, new GuiElementBuilder(Items.IRON_CHESTPLATE)
-                .setName(Text.literal("🛡 T1 Bounty Armor").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🛡 Tier 1 slayer armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT1ArmorMenu(player))
-                .build());
-
-        // T2 Armor category - shifted right
-        gui.setSlot(16, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
-                .setName(Text.literal("🛡 T2 Bounty Armor").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("🛡 Tier 2 slayer armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openT2ArmorMenu(player))
-                .build());
-
         // Special/Legendary Armor category - shifted right
-        gui.setSlot(17, new GuiElementBuilder(Items.NETHERITE_HELMET)
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHERITE_HELMET)
                 .setName(Text.literal("🛡 Special Armor").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("🛡 Legendary & special armor pieces").formatted(Formatting.GRAY))
@@ -110,12 +84,21 @@ public class RecipesGui {
 
         // Row 2: More categories - shifted right
         // Special Items category
-        gui.setSlot(20, new GuiElementBuilder(Items.STICK)
+        gui.setSlot(19, new GuiElementBuilder(Items.STICK)
                 .setName(Text.literal("🎁 Special Items").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("🎁 Special unique items").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openSpecialItemsMenu(player))
+                .build());
+
+        // Custom Tools category
+        gui.setSlot(20, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+                .setName(Text.literal("⛏ Custom Tools").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⛏ Legendary custom tools").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomToolsMenu(player))
                 .build());
 
         // Piglin Items category
@@ -155,7 +138,7 @@ public class RecipesGui {
                 .build());
 
         // Row 3: Block Tools category - shifted right
-        gui.setSlot(29, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
+        gui.setSlot(28, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
                 .setName(Text.literal("⛏ Block Tools").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⛏ Block-themed tools (pickaxe, axe, shovel, hoe)").formatted(Formatting.GRAY))
@@ -164,7 +147,7 @@ public class RecipesGui {
                 .build());
 
         // Block Weapons category
-        gui.setSlot(30, new GuiElementBuilder(Items.QUARTZ)
+        gui.setSlot(29, new GuiElementBuilder(Items.QUARTZ)
                 .setName(Text.literal("⚔ Block Weapons").formatted(Formatting.WHITE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("⚔ Block-themed swords").formatted(Formatting.GRAY))
@@ -218,6 +201,182 @@ public class RecipesGui {
                 .build());
 
         gui.open();
+    }
+
+    // ============================================================
+    // SLAYER SETS MENU - Combined T1 & T2 Armor + Swords
+    // ============================================================
+    private static void openSlayerSetsMenu(ServerPlayerEntity player, int page) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ Bounty Sets (T1 & T2)"));
+
+        // Background with dark theme
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("⚔ Bounty Sets (T1 & T2)").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Complete armor + sword sets").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("T1 (Iron) and T2 (Diamond) tiers").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        // Define slayer sets: Icon, Name, T1/T2 sword, T1/T2 armor pieces
+        java.util.List<SlayerSetDisplay> sets = new java.util.ArrayList<>();
+        
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            sets.add(new SlayerSetDisplay(type.icon, type.displayName, type.color,
+                SlayerItems.createSlayerSword(type),
+                SlayerItems.createUpgradedSlayerSword(type),
+                SlayerItems.createSlayerHelmet(type, 1),
+                SlayerItems.createSlayerChestplate(type, 1),
+                SlayerItems.createSlayerLeggings(type, 1),
+                SlayerItems.createSlayerBoots(type, 1),
+                SlayerItems.createSlayerHelmet(type, 2),
+                SlayerItems.createSlayerChestplate(type, 2),
+                SlayerItems.createSlayerLeggings(type, 2),
+                SlayerItems.createSlayerBoots(type, 2)));
+        }
+
+        // Pagination - 2 sets per page (each set takes 3 rows: T1 row, T2 row, separator)
+        int setsPerPage = 2;
+        int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
+        int clampedPage = Math.min(page, totalPages - 1);
+        int startIdx = clampedPage * setsPerPage;
+        int endIdx = Math.min(startIdx + setsPerPage, sets.size());
+
+        // Display sets in organized rows
+        for (int i = startIdx; i < endIdx; i++) {
+            SlayerSetDisplay set = sets.get(i);
+            int rowOffset = (i - startIdx) * 27; // 3 rows per set
+            int baseSlot = 10 + rowOffset;
+            
+            // Row 1: Icon | T1 Helmet | T1 Chest | T1 Legs | T1 Boots | T1 Sword | Tier label
+            gui.setSlot(baseSlot, new GuiElementBuilder(set.icon)
+                    .setName(Text.literal(set.name).formatted(set.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Slayer Type:").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal(set.name).formatted(set.color))
+                    .glow()
+                    .build());
+            
+            // T1 Armor pieces
+            gui.setSlot(baseSlot + 1, createArmorElement(set.t1Helmet, player));
+            gui.setSlot(baseSlot + 2, createArmorElement(set.t1Chestplate, player));
+            gui.setSlot(baseSlot + 3, createArmorElement(set.t1Leggings, player));
+            gui.setSlot(baseSlot + 4, createArmorElement(set.t1Boots, player));
+            
+            // T1 Sword
+            gui.setSlot(baseSlot + 5, new GuiElementBuilder(set.t1Sword)
+                    .setName(set.t1Sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ T1 Sword - Click for recipe").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, action) -> showItemInfo(player, set.t1Sword))
+                    .build());
+            
+            // T1 Label
+            gui.setSlot(baseSlot + 6, new GuiElementBuilder(Items.IRON_INGOT)
+                    .setName(Text.literal("T1").formatted(Formatting.WHITE))
+                    .addLoreLine(Text.literal("Tier 1 (Iron)").formatted(Formatting.GRAY))
+                    .build());
+            
+            // Row 2: Gap | T2 Helmet | T2 Chest | T2 Legs | T2 Boots | T2 Sword | Tier label
+            int row2Base = baseSlot + 9;
+            gui.setSlot(row2Base, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
+            
+            // T2 Armor pieces
+            gui.setSlot(row2Base + 1, createArmorElement(set.t2Helmet, player));
+            gui.setSlot(row2Base + 2, createArmorElement(set.t2Chestplate, player));
+            gui.setSlot(row2Base + 3, createArmorElement(set.t2Leggings, player));
+            gui.setSlot(row2Base + 4, createArmorElement(set.t2Boots, player));
+            
+            // T2 Sword
+            gui.setSlot(row2Base + 5, new GuiElementBuilder(set.t2Sword)
+                    .setName(set.t2Sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ T2 Sword - Click for recipe").formatted(Formatting.AQUA))
+                    .setCallback((idx, type, action) -> showItemInfo(player, set.t2Sword))
+                    .build());
+            
+            // T2 Label
+            gui.setSlot(row2Base + 6, new GuiElementBuilder(Items.DIAMOND)
+                    .setName(Text.literal("T2").formatted(Formatting.AQUA))
+                    .addLoreLine(Text.literal("Tier 2 (Diamond)").formatted(Formatting.GRAY))
+                    .build());
+            
+            // Row 3: Separator
+            int row3Base = baseSlot + 18;
+            Text separator = Text.literal("━━ " + set.name + " Set ━━").formatted(Formatting.DARK_GRAY);
+            for (int sep = 0; sep < 9; sep++) {
+                gui.setSlot(row3Base + sep, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(separator)
+                        .build());
+            }
+        }
+
+        // Back button
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openMainMenu(player))
+                .build());
+
+        // Pagination
+        if (clampedPage > 0) {
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Page " + (clampedPage) + " / " + totalPages))
+                    .setCallback((slot, type, action) -> openSlayerSetsMenu(player, prev))
+                    .build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int next = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Page " + (clampedPage + 2) + " / " + totalPages))
+                    .setCallback((slot, type, action) -> openSlayerSetsMenu(player, next))
+                    .build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages).formatted(Formatting.WHITE))
+                .build());
+
+        gui.open();
+    }
+    
+    // Helper class for organizing slayer set display (T1 & T2 combined)
+    private static class SlayerSetDisplay {
+        final net.minecraft.item.Item icon;
+        final String name;
+        final Formatting color;
+        final ItemStack t1Sword, t2Sword;
+        final ItemStack t1Helmet, t1Chestplate, t1Leggings, t1Boots;
+        final ItemStack t2Helmet, t2Chestplate, t2Leggings, t2Boots;
+        
+        SlayerSetDisplay(net.minecraft.item.Item icon, String name, Formatting color,
+                        ItemStack t1Sword, ItemStack t2Sword,
+                        ItemStack t1Helmet, ItemStack t1Chestplate, ItemStack t1Leggings, ItemStack t1Boots,
+                        ItemStack t2Helmet, ItemStack t2Chestplate, ItemStack t2Leggings, ItemStack t2Boots) {
+            this.icon = icon;
+            this.name = name;
+            this.color = color;
+            this.t1Sword = t1Sword;
+            this.t2Sword = t2Sword;
+            this.t1Helmet = t1Helmet;
+            this.t1Chestplate = t1Chestplate;
+            this.t1Leggings = t1Leggings;
+            this.t1Boots = t1Boots;
+            this.t2Helmet = t2Helmet;
+            this.t2Chestplate = t2Chestplate;
+            this.t2Leggings = t2Leggings;
+            this.t2Boots = t2Boots;
+        }
     }
 
     // ============================================================
@@ -301,6 +460,116 @@ public class RecipesGui {
         sets.add(new ArmorSetDisplay(Items.COAL_BLOCK, "Coal",
             BlockWeapons.createCoalSword(), BlockArmor.createCoalHelmet(), BlockArmor.createCoalChestplate(),
             BlockArmor.createCoalLeggings(), BlockArmor.createCoalBoots()));
+
+        // 36+ NEW BLOCK ARMOR SETS
+        sets.add(new ArmorSetDisplay(Items.DIAMOND_BLOCK, "Diamond Block",
+            BlockWeapons.createDiamondBlockSword(), BlockArmor.createDiamondBlockHelmet(), BlockArmor.createDiamondBlockChestplate(),
+            BlockArmor.createDiamondBlockLeggings(), BlockArmor.createDiamondBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.EMERALD_BLOCK, "Emerald Block",
+            BlockWeapons.createEmeraldBlockSword(), BlockArmor.createEmeraldBlockHelmet(), BlockArmor.createEmeraldBlockChestplate(),
+            BlockArmor.createEmeraldBlockLeggings(), BlockArmor.createEmeraldBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.GOLD_BLOCK, "Gold Block",
+            BlockWeapons.createGoldBlockSword(), BlockArmor.createGoldBlockHelmet(), BlockArmor.createGoldBlockChestplate(),
+            BlockArmor.createGoldBlockLeggings(), BlockArmor.createGoldBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.IRON_BLOCK, "Iron Block",
+            BlockWeapons.createIronBlockSword(), BlockArmor.createIronBlockHelmet(), BlockArmor.createIronBlockChestplate(),
+            BlockArmor.createIronBlockLeggings(), BlockArmor.createIronBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.LAPIS_BLOCK, "Lapis Block",
+            BlockWeapons.createLapisBlockSword(), BlockArmor.createLapisBlockHelmet(), BlockArmor.createLapisBlockChestplate(),
+            BlockArmor.createLapisBlockLeggings(), BlockArmor.createLapisBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.COPPER_BLOCK, "Copper Block",
+            BlockWeapons.createCopperBlockSword(), BlockArmor.createCopperBlockHelmet(), BlockArmor.createCopperBlockChestplate(),
+            BlockArmor.createCopperBlockLeggings(), BlockArmor.createCopperBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.ANCIENT_DEBRIS, "Ancient Debris",
+            BlockWeapons.createAncientDebrisSword(), BlockArmor.createAncientDebrisHelmet(), BlockArmor.createAncientDebrisChestplate(),
+            BlockArmor.createAncientDebrisLeggings(), BlockArmor.createAncientDebrisBoots()));
+        sets.add(new ArmorSetDisplay(Items.BASALT, "Basalt",
+            BlockWeapons.createBasaltSword(), BlockArmor.createBasaltHelmet(), BlockArmor.createBasaltChestplate(),
+            BlockArmor.createBasaltLeggings(), BlockArmor.createBasaltBoots()));
+        sets.add(new ArmorSetDisplay(Items.BLACKSTONE, "Blackstone",
+            BlockWeapons.createBlackstoneSword(), BlockArmor.createBlackstoneHelmet(), BlockArmor.createBlackstoneChestplate(),
+            BlockArmor.createBlackstoneLeggings(), BlockArmor.createBlackstoneBoots()));
+        sets.add(new ArmorSetDisplay(Items.BONE_BLOCK, "Bone Block",
+            BlockWeapons.createBoneBlockSword(), BlockArmor.createBoneBlockHelmet(), BlockArmor.createBoneBlockChestplate(),
+            BlockArmor.createBoneBlockLeggings(), BlockArmor.createBoneBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.BRICKS, "Brick",
+            BlockWeapons.createBrickSword(), BlockArmor.createBrickHelmet(), BlockArmor.createBrickChestplate(),
+            BlockArmor.createBrickLeggings(), BlockArmor.createBrickBoots()));
+        sets.add(new ArmorSetDisplay(Items.CACTUS, "Cactus",
+            BlockWeapons.createCactusSword(), BlockArmor.createCactusHelmet(), BlockArmor.createCactusChestplate(),
+            BlockArmor.createCactusLeggings(), BlockArmor.createCactusBoots()));
+        sets.add(new ArmorSetDisplay(Items.CALCITE, "Calcite",
+            BlockWeapons.createCalciteSword(), BlockArmor.createCalciteHelmet(), BlockArmor.createCalciteChestplate(),
+            BlockArmor.createCalciteLeggings(), BlockArmor.createCalciteBoots()));
+        sets.add(new ArmorSetDisplay(Items.DEEPSLATE, "Deepslate",
+            BlockWeapons.createDeepslateSword(), BlockArmor.createDeepslateHelmet(), BlockArmor.createDeepslateChestplate(),
+            BlockArmor.createDeepslateLeggings(), BlockArmor.createDeepslateBoots()));
+        sets.add(new ArmorSetDisplay(Items.DRIPSTONE_BLOCK, "Dripstone",
+            BlockWeapons.createDripstoneSword(), BlockArmor.createDripstoneHelmet(), BlockArmor.createDripstoneChestplate(),
+            BlockArmor.createDripstoneLeggings(), BlockArmor.createDripstoneBoots()));
+        sets.add(new ArmorSetDisplay(Items.HAY_BLOCK, "Hay",
+            BlockWeapons.createHaySword(), BlockArmor.createHayHelmet(), BlockArmor.createHayChestplate(),
+            BlockArmor.createHayLeggings(), BlockArmor.createHayBoots()));
+        sets.add(new ArmorSetDisplay(Items.HONEYCOMB_BLOCK, "Honeycomb",
+            BlockWeapons.createHoneycombSword(), BlockArmor.createHoneycombHelmet(), BlockArmor.createHoneycombChestplate(),
+            BlockArmor.createHoneycombLeggings(), BlockArmor.createHoneycombBoots()));
+        sets.add(new ArmorSetDisplay(Items.LILY_PAD, "Lily Pad",
+            BlockWeapons.createLilyPadSword(), BlockArmor.createLilyPadHelmet(), BlockArmor.createLilyPadChestplate(),
+            BlockArmor.createLilyPadLeggings(), BlockArmor.createLilyPadBoots()));
+        sets.add(new ArmorSetDisplay(Items.MELON, "Melon",
+            BlockWeapons.createMelonSword(), BlockArmor.createMelonHelmet(), BlockArmor.createMelonChestplate(),
+            BlockArmor.createMelonLeggings(), BlockArmor.createMelonBoots()));
+        sets.add(new ArmorSetDisplay(Items.MOSS_BLOCK, "Moss Block",
+            BlockWeapons.createMossBlockSword(), BlockArmor.createMossBlockHelmet(), BlockArmor.createMossBlockChestplate(),
+            BlockArmor.createMossBlockLeggings(), BlockArmor.createMossBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.MYCELIUM, "Mycelium",
+            BlockWeapons.createMyceliumSword(), BlockArmor.createMyceliumHelmet(), BlockArmor.createMyceliumChestplate(),
+            BlockArmor.createMyceliumLeggings(), BlockArmor.createMyceliumBoots()));
+        sets.add(new ArmorSetDisplay(Items.NETHER_BRICKS, "Nether Brick",
+            BlockWeapons.createNetherBrickSword(), BlockArmor.createNetherBrickHelmet(), BlockArmor.createNetherBrickChestplate(),
+            BlockArmor.createNetherBrickLeggings(), BlockArmor.createNetherBrickBoots()));
+        sets.add(new ArmorSetDisplay(Items.PUMPKIN, "Pumpkin",
+            BlockWeapons.createPumpkinSword(), BlockArmor.createPumpkinHelmet(), BlockArmor.createPumpkinChestplate(),
+            BlockArmor.createPumpkinLeggings(), BlockArmor.createPumpkinBoots()));
+        sets.add(new ArmorSetDisplay(Items.PURPUR_BLOCK, "Purpur",
+            BlockWeapons.createPurpurSword(), BlockArmor.createPurpurHelmet(), BlockArmor.createPurpurChestplate(),
+            BlockArmor.createPurpurLeggings(), BlockArmor.createPurpurBoots()));
+        sets.add(new ArmorSetDisplay(Items.SAND, "Sand",
+            BlockWeapons.createSandSword(), BlockArmor.createSandHelmet(), BlockArmor.createSandChestplate(),
+            BlockArmor.createSandLeggings(), BlockArmor.createSandBoots()));
+        sets.add(new ArmorSetDisplay(Items.SCULK, "Sculk",
+            BlockWeapons.createSculkSword(), BlockArmor.createSculkHelmet(), BlockArmor.createSculkChestplate(),
+            BlockArmor.createSculkLeggings(), BlockArmor.createSculkBoots()));
+        sets.add(new ArmorSetDisplay(Items.SHROOMLIGHT, "Shroomlight",
+            BlockWeapons.createShroomlightSword(), BlockArmor.createShroomlightHelmet(), BlockArmor.createShroomlightChestplate(),
+            BlockArmor.createShroomlightLeggings(), BlockArmor.createShroomlightBoots()));
+        sets.add(new ArmorSetDisplay(Items.SLIME_BLOCK, "Slime",
+            BlockWeapons.createSlimeSword(), BlockArmor.createSlimeHelmet(), BlockArmor.createSlimeChestplate(),
+            BlockArmor.createSlimeLeggings(), BlockArmor.createSlimeBoots()));
+        sets.add(new ArmorSetDisplay(Items.SMOOTH_STONE, "Smooth Stone",
+            BlockWeapons.createSmoothStoneSword(), BlockArmor.createSmoothStoneHelmet(), BlockArmor.createSmoothStoneChestplate(),
+            BlockArmor.createSmoothStoneLeggings(), BlockArmor.createSmoothStoneBoots()));
+        sets.add(new ArmorSetDisplay(Items.SNOW_BLOCK, "Snow",
+            BlockWeapons.createSnowSword(), BlockArmor.createSnowHelmet(), BlockArmor.createSnowChestplate(),
+            BlockArmor.createSnowLeggings(), BlockArmor.createSnowBoots()));
+        sets.add(new ArmorSetDisplay(Items.SOUL_SOIL, "Soul Soil",
+            BlockWeapons.createSoulSoilSword(), BlockArmor.createSoulSoilHelmet(), BlockArmor.createSoulSoilChestplate(),
+            BlockArmor.createSoulSoilLeggings(), BlockArmor.createSoulSoilBoots()));
+        sets.add(new ArmorSetDisplay(Items.SPONGE, "Sponge",
+            BlockWeapons.createSpongeSword(), BlockArmor.createSpongeHelmet(), BlockArmor.createSpongeChestplate(),
+            BlockArmor.createSpongeLeggings(), BlockArmor.createSpongeBoots()));
+        sets.add(new ArmorSetDisplay(Items.TARGET, "Target",
+            BlockWeapons.createTargetSword(), BlockArmor.createTargetHelmet(), BlockArmor.createTargetChestplate(),
+            BlockArmor.createTargetLeggings(), BlockArmor.createTargetBoots()));
+        sets.add(new ArmorSetDisplay(Items.TNT, "TNT",
+            BlockWeapons.createTntSword(), BlockArmor.createTntHelmet(), BlockArmor.createTntChestplate(),
+            BlockArmor.createTntLeggings(), BlockArmor.createTntBoots()));
+        sets.add(new ArmorSetDisplay(Items.WARPED_STEM, "Warped",
+            BlockWeapons.createWarpedSword(), BlockArmor.createWarpedHelmet(), BlockArmor.createWarpedChestplate(),
+            BlockArmor.createWarpedLeggings(), BlockArmor.createWarpedBoots()));
+        sets.add(new ArmorSetDisplay(Items.WET_SPONGE, "Wet Sponge",
+            BlockWeapons.createWetSpongeSword(), BlockArmor.createWetSpongeHelmet(), BlockArmor.createWetSpongeChestplate(),
+            BlockArmor.createWetSpongeLeggings(), BlockArmor.createWetSpongeBoots()));
 
         // Pagination - 3 sets per page (each set takes 2 rows)
         int setsPerPage = 3;
@@ -489,6 +758,80 @@ public class RecipesGui {
         sets.add(new ToolSetDisplay(Items.COAL_BLOCK, "Coal",
             BlockTools.createCoalPickaxe(), BlockTools.createCoalAxe(), BlockTools.createCoalShovel(), BlockTools.createCoalHoe()));
 
+        // 36+ NEW BLOCK TOOL SETS
+        sets.add(new ToolSetDisplay(Items.DIAMOND_BLOCK, "Diamond Block",
+            BlockTools.createDiamondBlockPickaxe(), BlockTools.createDiamondBlockAxe(), BlockTools.createDiamondBlockShovel(), BlockTools.createDiamondBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.EMERALD_BLOCK, "Emerald Block",
+            BlockTools.createEmeraldBlockPickaxe(), BlockTools.createEmeraldBlockAxe(), BlockTools.createEmeraldBlockShovel(), BlockTools.createEmeraldBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.GOLD_BLOCK, "Gold Block",
+            BlockTools.createGoldBlockPickaxe(), BlockTools.createGoldBlockAxe(), BlockTools.createGoldBlockShovel(), BlockTools.createGoldBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.IRON_BLOCK, "Iron Block",
+            BlockTools.createIronBlockPickaxe(), BlockTools.createIronBlockAxe(), BlockTools.createIronBlockShovel(), BlockTools.createIronBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.LAPIS_BLOCK, "Lapis Block",
+            BlockTools.createLapisBlockPickaxe(), BlockTools.createLapisBlockAxe(), BlockTools.createLapisBlockShovel(), BlockTools.createLapisBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.COPPER_BLOCK, "Copper Block",
+            BlockTools.createCopperBlockPickaxe(), BlockTools.createCopperBlockAxe(), BlockTools.createCopperBlockShovel(), BlockTools.createCopperBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.ANCIENT_DEBRIS, "Ancient Debris",
+            BlockTools.createAncientDebrisPickaxe(), BlockTools.createAncientDebrisAxe(), BlockTools.createAncientDebrisShovel(), BlockTools.createAncientDebrisHoe()));
+        sets.add(new ToolSetDisplay(Items.BASALT, "Basalt",
+            BlockTools.createBasaltPickaxe(), BlockTools.createBasaltAxe(), BlockTools.createBasaltShovel(), BlockTools.createBasaltHoe()));
+        sets.add(new ToolSetDisplay(Items.BLACKSTONE, "Blackstone",
+            BlockTools.createBlackstonePickaxe(), BlockTools.createBlackstoneAxe(), BlockTools.createBlackstoneShovel(), BlockTools.createBlackstoneHoe()));
+        sets.add(new ToolSetDisplay(Items.BONE_BLOCK, "Bone Block",
+            BlockTools.createBoneBlockPickaxe(), BlockTools.createBoneBlockAxe(), BlockTools.createBoneBlockShovel(), BlockTools.createBoneBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.BRICKS, "Brick",
+            BlockTools.createBrickPickaxe(), BlockTools.createBrickAxe(), BlockTools.createBrickShovel(), BlockTools.createBrickHoe()));
+        sets.add(new ToolSetDisplay(Items.CACTUS, "Cactus",
+            BlockTools.createCactusPickaxe(), BlockTools.createCactusAxe(), BlockTools.createCactusShovel(), BlockTools.createCactusHoe()));
+        sets.add(new ToolSetDisplay(Items.CALCITE, "Calcite",
+            BlockTools.createCalcitePickaxe(), BlockTools.createCalciteAxe(), BlockTools.createCalciteShovel(), BlockTools.createCalciteHoe()));
+        sets.add(new ToolSetDisplay(Items.DEEPSLATE, "Deepslate",
+            BlockTools.createDeepslatePickaxe(), BlockTools.createDeepslateAxe(), BlockTools.createDeepslateShovel(), BlockTools.createDeepslateHoe()));
+        sets.add(new ToolSetDisplay(Items.DRIPSTONE_BLOCK, "Dripstone",
+            BlockTools.createDripstonePickaxe(), BlockTools.createDripstoneAxe(), BlockTools.createDripstoneShovel(), BlockTools.createDripstoneHoe()));
+        sets.add(new ToolSetDisplay(Items.HAY_BLOCK, "Hay",
+            BlockTools.createHayPickaxe(), BlockTools.createHayAxe(), BlockTools.createHayShovel(), BlockTools.createHayHoe()));
+        sets.add(new ToolSetDisplay(Items.HONEYCOMB_BLOCK, "Honeycomb",
+            BlockTools.createHoneycombPickaxe(), BlockTools.createHoneycombAxe(), BlockTools.createHoneycombShovel(), BlockTools.createHoneycombHoe()));
+        sets.add(new ToolSetDisplay(Items.LILY_PAD, "Lily Pad",
+            BlockTools.createLilyPadPickaxe(), BlockTools.createLilyPadAxe(), BlockTools.createLilyPadShovel(), BlockTools.createLilyPadHoe()));
+        sets.add(new ToolSetDisplay(Items.MELON, "Melon",
+            BlockTools.createMelonPickaxe(), BlockTools.createMelonAxe(), BlockTools.createMelonShovel(), BlockTools.createMelonHoe()));
+        sets.add(new ToolSetDisplay(Items.MOSS_BLOCK, "Moss Block",
+            BlockTools.createMossBlockPickaxe(), BlockTools.createMossBlockAxe(), BlockTools.createMossBlockShovel(), BlockTools.createMossBlockHoe()));
+        sets.add(new ToolSetDisplay(Items.MYCELIUM, "Mycelium",
+            BlockTools.createMyceliumPickaxe(), BlockTools.createMyceliumAxe(), BlockTools.createMyceliumShovel(), BlockTools.createMyceliumHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHER_BRICKS, "Nether Brick",
+            BlockTools.createNetherBrickPickaxe(), BlockTools.createNetherBrickAxe(), BlockTools.createNetherBrickShovel(), BlockTools.createNetherBrickHoe()));
+        sets.add(new ToolSetDisplay(Items.PUMPKIN, "Pumpkin",
+            BlockTools.createPumpkinPickaxe(), BlockTools.createPumpkinAxe(), BlockTools.createPumpkinShovel(), BlockTools.createPumpkinHoe()));
+        sets.add(new ToolSetDisplay(Items.PURPUR_BLOCK, "Purpur",
+            BlockTools.createPurpurPickaxe(), BlockTools.createPurpurAxe(), BlockTools.createPurpurShovel(), BlockTools.createPurpurHoe()));
+        sets.add(new ToolSetDisplay(Items.SAND, "Sand",
+            BlockTools.createSandPickaxe(), BlockTools.createSandAxe(), BlockTools.createSandShovel(), BlockTools.createSandHoe()));
+        sets.add(new ToolSetDisplay(Items.SCULK, "Sculk",
+            BlockTools.createSculkPickaxe(), BlockTools.createSculkAxe(), BlockTools.createSculkShovel(), BlockTools.createSculkHoe()));
+        sets.add(new ToolSetDisplay(Items.SHROOMLIGHT, "Shroomlight",
+            BlockTools.createShroomlightPickaxe(), BlockTools.createShroomlightAxe(), BlockTools.createShroomlightShovel(), BlockTools.createShroomlightHoe()));
+        sets.add(new ToolSetDisplay(Items.SLIME_BLOCK, "Slime",
+            BlockTools.createSlimePickaxe(), BlockTools.createSlimeAxe(), BlockTools.createSlimeShovel(), BlockTools.createSlimeHoe()));
+        sets.add(new ToolSetDisplay(Items.SMOOTH_STONE, "Smooth Stone",
+            BlockTools.createSmoothStonePickaxe(), BlockTools.createSmoothStoneAxe(), BlockTools.createSmoothStoneShovel(), BlockTools.createSmoothStoneHoe()));
+        sets.add(new ToolSetDisplay(Items.SNOW_BLOCK, "Snow",
+            BlockTools.createSnowPickaxe(), BlockTools.createSnowAxe(), BlockTools.createSnowShovel(), BlockTools.createSnowHoe()));
+        sets.add(new ToolSetDisplay(Items.SOUL_SOIL, "Soul Soil",
+            BlockTools.createSoulSoilPickaxe(), BlockTools.createSoulSoilAxe(), BlockTools.createSoulSoilShovel(), BlockTools.createSoulSoilHoe()));
+        sets.add(new ToolSetDisplay(Items.SPONGE, "Sponge",
+            BlockTools.createSpongePickaxe(), BlockTools.createSpongeAxe(), BlockTools.createSpongeShovel(), BlockTools.createSpongeHoe()));
+        sets.add(new ToolSetDisplay(Items.TARGET, "Target",
+            BlockTools.createTargetPickaxe(), BlockTools.createTargetAxe(), BlockTools.createTargetShovel(), BlockTools.createTargetHoe()));
+        sets.add(new ToolSetDisplay(Items.TNT, "TNT",
+            BlockTools.createTntPickaxe(), BlockTools.createTntAxe(), BlockTools.createTntShovel(), BlockTools.createTntHoe()));
+        sets.add(new ToolSetDisplay(Items.WARPED_STEM, "Warped",
+            BlockTools.createWarpedPickaxe(), BlockTools.createWarpedAxe(), BlockTools.createWarpedShovel(), BlockTools.createWarpedHoe()));
+        sets.add(new ToolSetDisplay(Items.WET_SPONGE, "Wet Sponge",
+            BlockTools.createWetSpongePickaxe(), BlockTools.createWetSpongeAxe(), BlockTools.createWetSpongeShovel(), BlockTools.createWetSpongeHoe()));
+
         // Pagination - 3 sets per page (each set takes 2 rows)
         int setsPerPage = 3;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
@@ -599,7 +942,44 @@ public class RecipesGui {
             BlockWeapons.createMagmaSword(),
             BlockWeapons.createSandstoneSword(),
             BlockWeapons.createAmethystSword(),
-            BlockWeapons.createCoalSword()
+            BlockWeapons.createCoalSword(),
+            // 36+ NEW BLOCK SWORDS
+            BlockWeapons.createDiamondBlockSword(),
+            BlockWeapons.createEmeraldBlockSword(),
+            BlockWeapons.createGoldBlockSword(),
+            BlockWeapons.createIronBlockSword(),
+            BlockWeapons.createLapisBlockSword(),
+            BlockWeapons.createCopperBlockSword(),
+            BlockWeapons.createAncientDebrisSword(),
+            BlockWeapons.createBasaltSword(),
+            BlockWeapons.createBlackstoneSword(),
+            BlockWeapons.createBoneBlockSword(),
+            BlockWeapons.createBrickSword(),
+            BlockWeapons.createCactusSword(),
+            BlockWeapons.createCalciteSword(),
+            BlockWeapons.createDeepslateSword(),
+            BlockWeapons.createDripstoneSword(),
+            BlockWeapons.createHaySword(),
+            BlockWeapons.createHoneycombSword(),
+            BlockWeapons.createLilyPadSword(),
+            BlockWeapons.createMelonSword(),
+            BlockWeapons.createMossBlockSword(),
+            BlockWeapons.createMyceliumSword(),
+            BlockWeapons.createNetherBrickSword(),
+            BlockWeapons.createPumpkinSword(),
+            BlockWeapons.createPurpurSword(),
+            BlockWeapons.createSandSword(),
+            BlockWeapons.createSculkSword(),
+            BlockWeapons.createShroomlightSword(),
+            BlockWeapons.createSlimeSword(),
+            BlockWeapons.createSmoothStoneSword(),
+            BlockWeapons.createSnowSword(),
+            BlockWeapons.createSoulSoilSword(),
+            BlockWeapons.createSpongeSword(),
+            BlockWeapons.createTargetSword(),
+            BlockWeapons.createTntSword(),
+            BlockWeapons.createWarpedSword(),
+            BlockWeapons.createWetSpongeSword()
         };
 
         int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29};
@@ -930,6 +1310,56 @@ public class RecipesGui {
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
                     .setCallback((slot, type2, action) -> showItemInfo(player, item))
+                    .build());
+        }
+
+        // Back button
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // CUSTOM TOOLS MENU - Legendary custom tools
+    // ============================================================
+    private static void openCustomToolsMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        gui.setTitle(Text.literal("⛏ Custom Tools"));
+
+        // Background with dark theme
+        for (int i = 0; i < 36; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+                .setName(Text.literal("⛏ Custom Tools").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Legendary custom tools").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click any tool to view recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Add custom tools in a grid
+        ItemStack[] customTools = {
+            DanielsPickaxe.create(),
+            CustomItemHandler.createTheGavel(),
+            CustomItemHandler.createHarveysStick(),
+            CustomItemHandler.createHermesShoes()
+        };
+
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
+        int idx = 0;
+        for (ItemStack tool : customTools) {
+            if (idx >= slots.length) break;
+            gui.setSlot(slots[idx++], new GuiElementBuilder(tool)
+                    .setName(tool.get(DataComponentTypes.CUSTOM_NAME))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
+                    .setCallback((slot, type2, action) -> showItemInfo(player, tool))
                     .build());
         }
 
