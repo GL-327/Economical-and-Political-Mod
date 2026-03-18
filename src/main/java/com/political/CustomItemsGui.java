@@ -19,6 +19,14 @@ import java.util.List;
  */
 public class CustomItemsGui {
 
+    public interface BountyItemClickHandler {
+        void onClick(ServerPlayerEntity player, ItemStack item);
+    }
+
+    public interface BackHandler {
+        void open(ServerPlayerEntity player);
+    }
+
     // ── Category definitions ─────────────────────────────────────
     public enum Category {
         CUSTOM_ARMOR ("💎 Custom Armor",                    Items.EMERALD,            Formatting.GREEN),
@@ -1077,7 +1085,9 @@ public class CustomItemsGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("T1 & T2 Armor + Swords").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.ARMOR_T1, 0))
+                .setCallback((idx, type, action) -> openBountySetsPage(player, 0,
+                        (p, item) -> giveItem(p, item),
+                        CustomItemsGui::open))
                 .build());
 
         gui.setSlot(12, new GuiElementBuilder(Items.NETHERITE_HELMET)
@@ -1220,12 +1230,122 @@ public class CustomItemsGui {
         gui.open();
     }
 
+    public static void openBountySetsPage(ServerPlayerEntity player, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ Bounty Sets (T1 & T2)"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("⚔ Bounty Sets (T1 & T2)").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Displayed in rows:").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("[Icon] [gap] [Sword] [Helmet] [Chest] [Legs] [Boots]").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        List<RecipesGui.BountySetDisplay> sets = new ArrayList<>();
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            sets.add(new RecipesGui.BountySetDisplay(type, type.icon, type.displayName, type.color,
+                    SlayerItems.createSlayerSword(type),
+                    SlayerItems.createSlayerHelmet(type, 1),
+                    SlayerItems.createSlayerChestplate(type, 1),
+                    SlayerItems.createSlayerLeggings(type, 1),
+                    SlayerItems.createSlayerBoots(type, 1),
+                    SlayerItems.createUpgradedSlayerSword(type),
+                    SlayerItems.createSlayerHelmet(type, 2),
+                    SlayerItems.createSlayerChestplate(type, 2),
+                    SlayerItems.createSlayerLeggings(type, 2),
+                    SlayerItems.createSlayerBoots(type, 2)));
+        }
+
+        int setsPerPage = 4;
+        int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
+        int clampedPage = Math.min(page, totalPages - 1);
+        int startIdx = clampedPage * setsPerPage;
+        int endIdx = Math.min(startIdx + setsPerPage, sets.size());
+
+        for (int i = startIdx; i < endIdx; i++) {
+            RecipesGui.BountySetDisplay set = sets.get(i);
+            int row = i - startIdx + 1;
+
+            int row1Base = row * 9;
+            gui.setSlot(row1Base, new GuiElementBuilder(set.icon)
+                    .setName(Text.literal(set.name + " T1").formatted(set.color, Formatting.BOLD))
+                    .glow().build());
+            gui.setSlot(row1Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+
+            ItemStack[] t1Items = { set.t1Sword, set.t1Helmet, set.t1Chestplate, set.t1Leggings, set.t1Boots };
+            for (int j = 0; j < t1Items.length; j++) {
+                ItemStack item = t1Items[j];
+                Text name = item.get(DataComponentTypes.CUSTOM_NAME);
+                final ItemStack finalItem = item;
+                gui.setSlot(row1Base + 2 + j, new GuiElementBuilder(item.getItem())
+                        .setName(name != null ? name : Text.literal(item.getItem().toString()))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("✨ Click").formatted(Formatting.YELLOW))
+                        .setCallback((s, t, a) -> onItemClick.onClick(player, finalItem))
+                        .build());
+            }
+
+            int row2Base = (row + 1) * 9;
+            gui.setSlot(row2Base, new GuiElementBuilder(set.icon)
+                    .setName(Text.literal(set.name + " T2").formatted(set.color, Formatting.BOLD))
+                    .glow().build());
+            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+
+            ItemStack[] t2Items = { set.t2Sword, set.t2Helmet, set.t2Chestplate, set.t2Leggings, set.t2Boots };
+            for (int j = 0; j < t2Items.length; j++) {
+                ItemStack item = t2Items[j];
+                Text name = item.get(DataComponentTypes.CUSTOM_NAME);
+                final ItemStack finalItem = item;
+                gui.setSlot(row2Base + 2 + j, new GuiElementBuilder(item.getItem())
+                        .setName(name != null ? name : Text.literal(item.getItem().toString()))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("✨ Click").formatted(Formatting.YELLOW))
+                        .setCallback((s, t, a) -> onItemClick.onClick(player, finalItem))
+                        .build());
+            }
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((s, t, a) -> onBack.open(player)).build());
+
+        if (clampedPage > 0) {
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> openBountySetsPage(player, prev, onItemClick, onBack)).build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int next = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> openBountySetsPage(player, next, onItemClick, onBack)).build());
+        }
+
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages).formatted(Formatting.WHITE))
+                .build());
+
+        gui.open();
+    }
+
     // ──────────────────────────────────────────────────────────────
     // GEM_BLOCK_GEAR: Armor Sets in Rows Display
     // Each row shows: [Block] [Sword] [Helmet] [Chest] [Legs] [Boots]
     // ──────────────────────────────────────────────────────────────
 
     public static void openGemBlockGearPage(ServerPlayerEntity player, int page) {
+        openGemBlockGearPage(player, page, (p, item) -> giveItem(p, item), CustomItemsGui::open);
+    }
+
+    public static void openGemBlockGearPage(ServerPlayerEntity player, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("§6💎 Gem & Block Armor"));
 
@@ -1434,7 +1554,7 @@ public class CustomItemsGui {
                     .setName(swordName != null ? swordName : Text.literal("Sword"))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
-                    .setCallback((s, t, a) -> giveItem(player, set.sword))
+                    .setCallback((s, t, a) -> onItemClick.onClick(player, set.sword))
                     .build());
 
             // Armor pieces: Helmet, Chestplate, Leggings, Boots (shifted 1 slot right)
@@ -1447,7 +1567,7 @@ public class CustomItemsGui {
                         .setName(armorName != null ? armorName : Text.literal("Armor"))
                         .addLoreLine(Text.literal(""))
                         .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
-                        .setCallback((s, t, a) -> giveItem(player, finalArmor))
+                        .setCallback((s, t, a) -> onItemClick.onClick(player, finalArmor))
                         .build());
             }
         }
@@ -1455,7 +1575,7 @@ public class CustomItemsGui {
         // ← Back to main menu
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Categories").formatted(Formatting.YELLOW))
-                .setCallback((s, t, a) -> open(player)).build());
+                .setCallback((s, t, a) -> onBack.open(player)).build());
 
         // Pagination
         if (clampedPage > 0) {
@@ -1463,14 +1583,14 @@ public class CustomItemsGui {
             gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
                     .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages))
-                    .setCallback((s, t, a) -> openGemBlockGearPage(player, prev)).build());
+                    .setCallback((s, t, a) -> openGemBlockGearPage(player, prev, onItemClick, onBack)).build());
         }
         if (clampedPage < totalPages - 1) {
             final int next = clampedPage + 1;
             gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
                     .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("Page " + (clampedPage + 2) + " / " + totalPages))
-                    .setCallback((s, t, a) -> openGemBlockGearPage(player, next)).build());
+                    .setCallback((s, t, a) -> openGemBlockGearPage(player, next, onItemClick, onBack)).build());
         }
 
         gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
@@ -1489,9 +1609,12 @@ public class CustomItemsGui {
     // ──────────────────────────────────────────────────────────────
 
     public static void openCategoryPage(ServerPlayerEntity player, Category cat, int page) {
-        // Special handling for CUSTOM_ARMOR - armor sets in rows
+        openCategoryPage(player, cat, page, (p, item) -> giveItem(p, item), CustomItemsGui::open);
+    }
+
+    public static void openCategoryPage(ServerPlayerEntity player, Category cat, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
         if (cat == Category.CUSTOM_ARMOR) {
-            openGemBlockGearPage(player, page);
+            openGemBlockGearPage(player, page, onItemClick, onBack);
             return;
         }
 
@@ -1534,7 +1657,7 @@ public class CustomItemsGui {
                             : Text.literal(item.getItem().toString()))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
-                    .setCallback((s, t, a) -> giveItem(player, finalItem));
+                    .setCallback((s, t, a) -> onItemClick.onClick(player, finalItem));
             gui.setSlot(slot, elem.build());
             shown++;
         }
@@ -1542,7 +1665,7 @@ public class CustomItemsGui {
         // ← Back to main menu
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Categories").formatted(Formatting.YELLOW))
-                .setCallback((s, t, a) -> open(player)).build());
+                .setCallback((s, t, a) -> onBack.open(player)).build());
 
         // Pagination
         if (clampedPage > 0) {
@@ -1550,14 +1673,14 @@ public class CustomItemsGui {
             gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
                     .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("Page " + clampedPage + " / " + totalPages))
-                    .setCallback((s, t, a) -> openCategoryPage(player, cat, prev)).build());
+                    .setCallback((s, t, a) -> openCategoryPage(player, cat, prev, onItemClick, onBack)).build());
         }
         if (clampedPage < totalPages - 1) {
             final int next = clampedPage + 1;
             gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
                     .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("Page " + (clampedPage + 2) + " / " + totalPages))
-                    .setCallback((s, t, a) -> openCategoryPage(player, cat, next)).build());
+                    .setCallback((s, t, a) -> openCategoryPage(player, cat, next, onItemClick, onBack)).build());
         }
 
         gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
@@ -1571,7 +1694,7 @@ public class CustomItemsGui {
     // RECIPE VIEW - Show item recipe in a GUI
     // ──────────────────────────────────────────────────────────────
 
-    private static void showItemInfo(ServerPlayerEntity player, ItemStack resultItem) {
+    public static void showItemInfo(ServerPlayerEntity player, ItemStack resultItem) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal("Recipe View"));
 

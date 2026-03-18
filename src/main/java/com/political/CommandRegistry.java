@@ -92,7 +92,22 @@ public class CommandRegistry {
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    RecipeEditorGui.openRecipeList(player);
+                    try {
+                        RecipeEditorGui.openRecipeList(player);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        player.sendMessage(Text.literal("An unexpected error occurred: " + e.getClass().getSimpleName() + ": " + e.getMessage()).formatted(Formatting.RED), false);
+                        StackTraceElement[] st = e.getStackTrace();
+                        if (st != null) {
+                            for (StackTraceElement el : st) {
+                                String cn = el.getClassName();
+                                if (cn != null && cn.startsWith("com.political")) {
+                                    player.sendMessage(Text.literal("Location: " + el.toString()).formatted(Formatting.GRAY), false);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     return 1;
                 })
         );

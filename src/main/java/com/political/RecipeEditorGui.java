@@ -37,12 +37,8 @@ public class RecipeEditorGui {
     private static final int SLOT_HEADER    = 4;
 
     // ── Category definitions ─────────────────────────────────────
-    private enum Category {
+    public enum Category {
         GEM_BLOCK_GEAR ("💎 Gem & Block Armor",         Items.EMERALD,            Formatting.GREEN),
-        SWORDS_T1    ("⚔ Bounty Swords (T1)",               Items.IRON_SWORD,         Formatting.YELLOW),
-        SWORDS_T2    ("⚔ Bounty Swords (T2)",               Items.DIAMOND_SWORD,      Formatting.AQUA),
-        ARMOR_T1     ("🛡 Bounty Armor T1",                  Items.IRON_CHESTPLATE,    Formatting.GREEN),
-        ARMOR_T2     ("🛡 Bounty Armor T2",                  Items.DIAMOND_CHESTPLATE, Formatting.DARK_AQUA),
         SPECIAL_ARMOR("🛡 Special / Legendary Armor",        Items.NETHERITE_HELMET,   Formatting.GOLD),
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
@@ -59,7 +55,8 @@ public class RecipeEditorGui {
         BLOCK_TOOLS   ("⛏ Block Tools",                     Items.DIAMOND_PICKAXE,    Formatting.AQUA),
         BLOCK_ARMOR   ("🧱 Block Armor",                    Items.OBSIDIAN,           Formatting.DARK_PURPLE),
         BLOCK_WEAPONS ("⚔ Block Weapons",                   Items.QUARTZ,             Formatting.WHITE),
-        CUSTOM_ARROWS ("➵ Custom Arrows",                    Items.TIPPED_ARROW,       Formatting.GOLD);
+        CUSTOM_ARROWS ("➵ Custom Arrows",                    Items.TIPPED_ARROW,       Formatting.GOLD),
+        BOUNTY_SETS   ("⚔ Bounty Sets",                      Items.NETHER_STAR,        Formatting.DARK_PURPLE);
 
         final String label;
         final net.minecraft.item.Item icon;
@@ -150,24 +147,14 @@ public class RecipeEditorGui {
                 items.add(BlockArmor.createTerracottaLeggings());
                 items.add(BlockArmor.createTerracottaBoots());
             }
-            case SWORDS_T1 -> {
-                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values())
-                    items.add(SlayerItems.createSlayerSword(t));
-            }
-            case SWORDS_T2 -> {
-                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values())
-                    items.add(SlayerItems.createUpgradedSlayerSword(t));
-            }
-            case ARMOR_T1 -> {
+            case BOUNTY_SETS -> {
                 for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+                    items.add(SlayerItems.createSlayerSword(t));
                     items.add(SlayerItems.createSlayerHelmet(t, 1));
                     items.add(SlayerItems.createSlayerChestplate(t, 1));
                     items.add(SlayerItems.createSlayerLeggings(t, 1));
                     items.add(SlayerItems.createSlayerBoots(t, 1));
-                }
-            }
-            case ARMOR_T2 -> {
-                for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+                    items.add(SlayerItems.createUpgradedSlayerSword(t));
                     items.add(SlayerItems.createSlayerHelmet(t, 2));
                     items.add(SlayerItems.createSlayerChestplate(t, 2));
                     items.add(SlayerItems.createSlayerLeggings(t, 2));
@@ -923,11 +910,11 @@ public class RecipeEditorGui {
 
     /** Entry point — opens the main category selection menu. */
     public static void openMainMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("§6§l/setrecipe — Choose Category"));
 
         // Background with dark theme
-        for (int i = 0; i < 36; i++) {
+        for (int i = 0; i < 54; i++) {
             gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
                     .setName(Text.literal("")).build());
         }
@@ -955,12 +942,12 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.BLOCK_ARMOR, 0))
                 .build());
 
-        gui.setSlot(11, new GuiElementBuilder(Category.ARMOR_T1.icon)
-                .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+        gui.setSlot(11, new GuiElementBuilder(Category.BOUNTY_SETS.icon)
+                .setName(Text.literal(Category.BOUNTY_SETS.label).formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("T1 & T2 Armor + Swords").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.ARMOR_T1, 0))
+                .setCallback((slot, type, action) -> openBountySetsPage(player, 0))
                 .build());
 
         gui.setSlot(12, new GuiElementBuilder(Category.SPECIAL_ARMOR.icon)
@@ -984,7 +971,7 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.PIGLIN, 0))
                 .build());
 
-        // Row 2: Weapons and Tools (slots 18, 20, 22)
+        // Row 2: Weapons and Tools (slots 18-23)
         gui.setSlot(18, new GuiElementBuilder(Category.BLOCK_WEAPONS.icon)
                 .setName(Text.literal(Category.BLOCK_WEAPONS.label).formatted(Category.BLOCK_WEAPONS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -992,7 +979,7 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.BLOCK_WEAPONS, 0))
                 .build());
 
-        gui.setSlot(20, new GuiElementBuilder(Category.BLOCK_TOOLS.icon)
+        gui.setSlot(21, new GuiElementBuilder(Category.BLOCK_TOOLS.icon)
                 .setName(Text.literal(Category.BLOCK_TOOLS.label).formatted(Category.BLOCK_TOOLS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
@@ -1077,6 +1064,157 @@ public class RecipeEditorGui {
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
                 .build());
+
+        gui.open();
+    }
+
+    private static void openBountySetsPage(ServerPlayerEntity player, int page) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("§6⚔ Bounty Sets - Recipe Editor"));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Category.BOUNTY_SETS.icon)
+                .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("T1 & T2 sets displayed in rows:").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("[Icon] [gap] [Sword] [Helmet] [Chest] [Legs] [Boots]").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click items to edit recipes").formatted(Formatting.AQUA))
+                .glow().build());
+
+        // Define sets
+        List<RecipesGui.BountySetDisplay> sets = new ArrayList<>();
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            sets.add(new RecipesGui.BountySetDisplay(type, type.icon, type.displayName, type.color,
+                SlayerItems.createSlayerSword(type),
+                SlayerItems.createSlayerHelmet(type, 1),
+                SlayerItems.createSlayerChestplate(type, 1),
+                SlayerItems.createSlayerLeggings(type, 1),
+                SlayerItems.createSlayerBoots(type, 1),
+                SlayerItems.createUpgradedSlayerSword(type),
+                SlayerItems.createSlayerHelmet(type, 2),
+                SlayerItems.createSlayerChestplate(type, 2),
+                SlayerItems.createSlayerLeggings(type, 2),
+                SlayerItems.createSlayerBoots(type, 2)));
+        }
+
+        int setsPerPage = 4;
+        int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
+        int clampedPage = Math.min(page, totalPages - 1);
+        int startIdx = clampedPage * setsPerPage;
+        int endIdx = Math.min(startIdx + setsPerPage, sets.size());
+
+        for (int i = startIdx; i < endIdx; i++) {
+            RecipesGui.BountySetDisplay set = sets.get(i);
+            int row = i - startIdx + 1; // Rows 1-4
+            
+            // Row 1: T1 items
+            int row1Base = row * 9;
+            gui.setSlot(row1Base, new GuiElementBuilder(set.icon)
+                    .setName(Text.literal(set.name + " T1").formatted(set.color, Formatting.BOLD))
+                    .glow().build());
+            
+            gui.setSlot(row1Base + 2, new GuiElementBuilder(set.t1Sword.getItem())
+                    .setName(set.t1Sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t1Sword);
+                        openRecipeEditor(player, set.t1Sword, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row1Base + 3, new GuiElementBuilder(set.t1Helmet.getItem())
+                    .setName(set.t1Helmet.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t1Helmet);
+                        openRecipeEditor(player, set.t1Helmet, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row1Base + 4, new GuiElementBuilder(set.t1Chestplate.getItem())
+                    .setName(set.t1Chestplate.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t1Chestplate);
+                        openRecipeEditor(player, set.t1Chestplate, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row1Base + 5, new GuiElementBuilder(set.t1Leggings.getItem())
+                    .setName(set.t1Leggings.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t1Leggings);
+                        openRecipeEditor(player, set.t1Leggings, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row1Base + 6, new GuiElementBuilder(set.t1Boots.getItem())
+                    .setName(set.t1Boots.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t1Boots);
+                        openRecipeEditor(player, set.t1Boots, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+
+            // Row 2: T2 items
+            int row2Base = (row + 1) * 9;
+            gui.setSlot(row2Base, new GuiElementBuilder(set.icon)
+                    .setName(Text.literal(set.name + " T2").formatted(set.color, Formatting.BOLD))
+                    .glow().build());
+            
+            gui.setSlot(row2Base + 2, new GuiElementBuilder(set.t2Sword.getItem())
+                    .setName(set.t2Sword.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t2Sword);
+                        openRecipeEditor(player, set.t2Sword, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row2Base + 3, new GuiElementBuilder(set.t2Helmet.getItem())
+                    .setName(set.t2Helmet.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t2Helmet);
+                        openRecipeEditor(player, set.t2Helmet, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row2Base + 4, new GuiElementBuilder(set.t2Chestplate.getItem())
+                    .setName(set.t2Chestplate.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t2Chestplate);
+                        openRecipeEditor(player, set.t2Chestplate, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row2Base + 5, new GuiElementBuilder(set.t2Leggings.getItem())
+                    .setName(set.t2Leggings.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t2Leggings);
+                        openRecipeEditor(player, set.t2Leggings, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+            gui.setSlot(row2Base + 6, new GuiElementBuilder(set.t2Boots.getItem())
+                    .setName(set.t2Boots.get(DataComponentTypes.CUSTOM_NAME))
+                    .setCallback((idx, type, action) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(set.t2Boots);
+                        openRecipeEditor(player, set.t2Boots, r, Category.BOUNTY_SETS);
+                    })
+                    .build());
+        }
+
+        // Pagination
+        if (clampedPage > 0) {
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> openBountySetsPage(player, prev)).build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int next = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> openBountySetsPage(player, next)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Categories").formatted(Formatting.YELLOW))
+                .setCallback((s, t, a) -> openMainMenu(player)).build());
 
         gui.open();
     }
