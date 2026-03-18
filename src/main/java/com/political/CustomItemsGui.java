@@ -21,7 +21,7 @@ public class CustomItemsGui {
 
     // ── Category definitions ─────────────────────────────────────
     private enum Category {
-        GEM_BLOCK_GEAR ("💎 Gem & Block Armor",         Items.EMERALD,            Formatting.GREEN),
+        CUSTOM_ARMOR ("💎 Custom Armor",                    Items.EMERALD,            Formatting.GREEN),
         SWORDS_T1    ("⚔ Bounty Swords (T1)",               Items.IRON_SWORD,         Formatting.YELLOW),
         SWORDS_T2    ("⚔ Bounty Swords (T2)",               Items.DIAMOND_SWORD,      Formatting.AQUA),
         ARMOR_T1     ("🛡 Bounty Armor T1",                  Items.IRON_CHESTPLATE,    Formatting.GREEN),
@@ -58,7 +58,7 @@ public class CustomItemsGui {
     private static List<ItemStack> getItemsForCategory(Category cat) {
         List<ItemStack> items = new ArrayList<>();
         switch (cat) {
-            case GEM_BLOCK_GEAR -> {
+            case CUSTOM_ARMOR -> {
                 // Emerald armor
                 items.add(GemGear.createEmeraldHelmet());
                 items.add(GemGear.createEmeraldChestplate());
@@ -784,8 +784,8 @@ public class CustomItemsGui {
     // ──────────────────────────────────────────────────────────────
 
     public static void openCategoryPage(ServerPlayerEntity player, Category cat, int page) {
-        // Special handling for GEM_BLOCK_GEAR - armor sets in rows
-        if (cat == Category.GEM_BLOCK_GEAR) {
+        // Special handling for CUSTOM_ARMOR - armor sets in rows
+        if (cat == Category.CUSTOM_ARMOR) {
             openGemBlockGearPage(player, page);
             return;
         }

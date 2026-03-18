@@ -32,7 +32,13 @@ public class CustomArrows {
         INCENDIARY_ARROW("Incendiary Arrow", 1.5f, Formatting.RED, "§cSets target on fire for 5s"),
         POISON_ARROW("Venom Arrow", 1.0f, Formatting.DARK_GREEN, "§2Poisons target for 10s"),
         VOID_ARROW("Void Arrow", 6.0f, Formatting.DARK_PURPLE, "§5+5.0 damage, pierces armor"),
-        SPECTRAL_ARROW("Spectral Arrow", 1.0f, Formatting.YELLOW, "§eGlows target for 15s");
+        SPECTRAL_ARROW("Spectral Arrow", 1.0f, Formatting.YELLOW, "§eGlows target for 15s"),
+        // New arrows with special abilities
+        FROST_ARROW("Frost Arrow", 1.5f, Formatting.BLUE, "§bFreezes target for 3s"),
+        LIGHTNING_ARROW("Lightning Arrow", 3.0f, Formatting.YELLOW, "§eStrikes target with lightning"),
+        HEALING_ARROW("Healing Arrow", 0.0f, Formatting.GREEN, "§aHeals target by 4 hearts"),
+        GRAVITY_ARROW("Gravity Arrow", 1.0f, Formatting.DARK_GRAY, "§7Pulls nearby entities to impact"),
+        BOUNCING_ARROW("Bouncing Arrow", 0.5f, Formatting.LIGHT_PURPLE, "§dBounces up to 3 times");
 
         private final String name;
         private final float bonusDamage;
@@ -181,6 +187,53 @@ public class CustomArrows {
                         target.getX(), target.getY() + 1.0, target.getZ(),
                         10, 0.3, 0.5, 0.3, 0.05);
             }
+            case FROST_ARROW -> {
+                // Freeze target for 3 seconds
+                target.setFrozenTicks(60);
+                target.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
+                        net.minecraft.entity.effect.StatusEffects.SLOWNESS, 60, 4)); // 3s, slowness V
+                world.spawnParticles(ParticleTypes.SNOWFLAKE,
+                        target.getX(), target.getY() + 1.0, target.getZ(),
+                        20, 0.5, 0.5, 0.5, 0.1);
+            }
+            case LIGHTNING_ARROW -> {
+                // Strike target with lightning
+                net.minecraft.entity.EntityType.LIGHTNING_BOLT.spawn(world, 
+                        target.getBlockPos(), net.minecraft.entity.SpawnReason.TRIGGERED);
+                world.spawnParticles(ParticleTypes.ELECTRIC_SPARK,
+                        target.getX(), target.getY() + 1.0, target.getZ(),
+                        15, 0.5, 0.5, 0.5, 0.1);
+            }
+            case HEALING_ARROW -> {
+                // Heal target instead of damaging
+                target.heal(8.0f); // 4 hearts
+                world.spawnParticles(ParticleTypes.HEART,
+                        target.getX(), target.getY() + 1.0, target.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.1);
+            }
+            case GRAVITY_ARROW -> {
+                // Pull nearby entities to impact point
+                double pullRadius = 5.0;
+                for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, 
+                        target.getBoundingBox().expand(pullRadius), e -> e != target && e.isAlive())) {
+                    net.minecraft.util.math.Vec3d direction = new net.minecraft.util.math.Vec3d(
+                            target.getX() - entity.getX(),
+                            target.getY() - entity.getY(),
+                            target.getZ() - entity.getZ()
+                    ).normalize().multiply(1.5);
+                    entity.addVelocity(direction.x, direction.y + 0.3, direction.z);
+                }
+                world.spawnParticles(ParticleTypes.REVERSE_PORTAL,
+                        target.getX(), target.getY() + 1.0, target.getZ(),
+                        15, 0.5, 0.5, 0.5, 0.1);
+            }
+            case BOUNCING_ARROW -> {
+                // Bouncing effect - knockback
+                target.takeKnockback(1.5, -arrow.getVelocity().x, -arrow.getVelocity().z);
+                world.spawnParticles(ParticleTypes.ITEM_SLIME,
+                        target.getX(), target.getY() + 1.0, target.getZ(),
+                        10, 0.3, 0.5, 0.3, 0.05);
+            }
             default -> {
                 // No special particles for basic arrows
             }
@@ -261,6 +314,32 @@ public class CustomArrows {
                     new ItemStack(Items.GLOWSTONE_DUST),
                     new ItemStack(Items.GHAST_TEAR)
             };
+            // New arrows
+            case FROST_ARROW -> new ItemStack[]{
+                    new ItemStack(Items.ARROW, 8),
+                    new ItemStack(Items.ICE),
+                    new ItemStack(Items.BLUE_ICE)
+            };
+            case LIGHTNING_ARROW -> new ItemStack[]{
+                    new ItemStack(Items.ARROW, 4),
+                    new ItemStack(Items.COPPER_INGOT),
+                    new ItemStack(Items.LIGHTNING_ROD)
+            };
+            case HEALING_ARROW -> new ItemStack[]{
+                    new ItemStack(Items.ARROW, 4),
+                    new ItemStack(Items.GOLDEN_APPLE),
+                    new ItemStack(Items.GLISTERING_MELON_SLICE)
+            };
+            case GRAVITY_ARROW -> new ItemStack[]{
+                    new ItemStack(Items.ARROW, 8),
+                    new ItemStack(Items.ENDER_EYE),
+                    new ItemStack(Items.CHORUS_FRUIT)
+            };
+            case BOUNCING_ARROW -> new ItemStack[]{
+                    new ItemStack(Items.ARROW, 8),
+                    new ItemStack(Items.SLIME_BALL),
+                    new ItemStack(Items.HONEY_BLOCK)
+            };
         };
     }
 
@@ -273,6 +352,8 @@ public class CustomArrows {
             case EXPLOSIVE_ARROW -> 4;
             case INCENDIARY_ARROW, POISON_ARROW, SPECTRAL_ARROW -> 8;
             case VOID_ARROW -> 4;
+            case FROST_ARROW, GRAVITY_ARROW, BOUNCING_ARROW -> 8;
+            case LIGHTNING_ARROW, HEALING_ARROW -> 4;
         };
     }
 }

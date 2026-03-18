@@ -49,7 +49,6 @@ public class CommandRegistry {
         registerAuctionHouse(dispatcher);
         registerHome(dispatcher);
         registerShop(dispatcher);
-        registerUncraft(dispatcher);
         registerStore(dispatcher);
         registerUndergroundAuction(dispatcher);
         registerCoins(dispatcher);
@@ -883,16 +882,6 @@ public class CommandRegistry {
                     ServerPlayerEntity player = context.getSource().getPlayer();
                     if (player == null) return 0;
                     ShopGui.openSellInventory(player);
-                    return 1;
-                }));
-    }
-
-    private static void registerUncraft(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("uncraft")
-                .executes(context -> {
-                    ServerPlayerEntity player = context.getSource().getPlayer();
-                    if (player == null) return 0;
-                    UncraftGui.openUncraftMenu(player);
                     return 1;
                 }));
     }

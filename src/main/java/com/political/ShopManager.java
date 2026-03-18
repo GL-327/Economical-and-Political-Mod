@@ -215,23 +215,8 @@ public class ShopManager {
         );
         CATEGORIES.put("Farming & Natural", farmingItems);
 
-        // ===== BLOCK ARMOR (Custom Items) =====
-        List<Item> blockArmor = Arrays.asList(
-                Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS
-        );
-        CATEGORIES.put("Block Armor", blockArmor);
-
-        // ===== BLOCK TOOLS (Custom Items) =====
-        List<Item> blockTools = Arrays.asList(
-                Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_HOE
-        );
-        CATEGORIES.put("Block Tools", blockTools);
-
-        // ===== BLOCK WEAPONS (Custom Items) =====
-        List<Item> blockWeapons = Arrays.asList(
-                Items.DIAMOND_SWORD
-        );
-        CATEGORIES.put("Block Weapons", blockWeapons);
+        // Note: Block Armor, Block Tools, and Block Weapons are custom items
+        // They are not sold as vanilla items - players craft them via /recipes
 
         // ===== COMPACTED ITEMS (Custom Items) =====
         List<Item> compactedItems = Arrays.asList(

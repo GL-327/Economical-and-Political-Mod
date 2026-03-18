@@ -44,9 +44,9 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openSearchGui(player))
                 .build());
 
-        // Gem & Block Armor category (Emerald, Lapis, and Block armors merged) - shifted right
+        // Custom Armor category (Emerald, Lapis, and Block armors merged) - shifted right
         gui.setSlot(11, new GuiElementBuilder(Items.EMERALD)
-                .setName(Text.literal("💎 Gem & Block Armor").formatted(Formatting.GREEN, Formatting.BOLD))
+                .setName(Text.literal("💎 Custom Armor").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("💎 Emerald, Lapis, and Block armors").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
@@ -225,7 +225,7 @@ public class RecipesGui {
     // ============================================================
     private static void openGemAndBlockArmorMenu(ServerPlayerEntity player, int page) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("💎 Gem & Block Armor Sets"));
+        gui.setTitle(Text.literal("💎 Custom Armor Sets"));
 
         // Background with dark theme
         for (int i = 0; i < 54; i++) {
@@ -235,7 +235,7 @@ public class RecipesGui {
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.EMERALD)
-                .setName(Text.literal("💎 Gem & Block Armor Sets").formatted(Formatting.GREEN, Formatting.BOLD))
+                .setName(Text.literal("💎 Custom Armor Sets").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Block → Armor Set → Weapon").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Complete sets with matching weapons!").formatted(Formatting.YELLOW))
@@ -730,12 +730,12 @@ public class RecipesGui {
 
         // Header with slayer type info
         gui.setSlot(4, new GuiElementBuilder(slayerType.icon)
-                .setName(Text.literal(slayerType.displayName + " T1 Armor").formatted(slayerType.color, Formatting.BOLD))
+                .setName(Text.literal(slayerType.displayName + " T1 Set").formatted(slayerType.color, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Full armor set for " + slayerType.displayName).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Armor + Weapon set").formatted(Formatting.GRAY))
                 .glow().build());
 
-        // Armor pieces in a row
+        // Armor pieces in a row (slots 10-13)
         gui.setSlot(10, new GuiElementBuilder(SlayerItems.createSlayerHelmet(slayerType, 1))
                 .setName(SlayerItems.createSlayerHelmet(slayerType, 1).get(DataComponentTypes.CUSTOM_NAME))
                 .addLoreLine(Text.literal(""))
@@ -762,6 +762,15 @@ public class RecipesGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
                 .setCallback((i, clickType, action) -> showItemInfo(player, SlayerItems.createSlayerBoots(slayerType, 1)))
+                .build());
+
+        // Sword counterpart (slot 14)
+        ItemStack sword = SlayerItems.createSlayerSword(slayerType);
+        gui.setSlot(14, new GuiElementBuilder(sword)
+                .setName(sword.get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
+                .setCallback((i, clickType, action) -> showItemInfo(player, SlayerItems.createSlayerSword(slayerType)))
                 .build());
 
         // Back button
@@ -830,12 +839,12 @@ public class RecipesGui {
 
         // Header with slayer type info
         gui.setSlot(4, new GuiElementBuilder(slayerType.icon)
-                .setName(Text.literal(slayerType.displayName + " T2 Armor").formatted(slayerType.color, Formatting.BOLD))
+                .setName(Text.literal(slayerType.displayName + " T2 Set").formatted(slayerType.color, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Full armor set for " + slayerType.displayName).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Armor + Weapon set").formatted(Formatting.GRAY))
                 .glow().build());
 
-        // Armor pieces in a row
+        // Armor pieces in a row (slots 10-13)
         gui.setSlot(10, new GuiElementBuilder(SlayerItems.createSlayerHelmet(slayerType, 2))
                 .setName(SlayerItems.createSlayerHelmet(slayerType, 2).get(DataComponentTypes.CUSTOM_NAME))
                 .addLoreLine(Text.literal(""))
@@ -862,6 +871,15 @@ public class RecipesGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
                 .setCallback((i, clickType, action) -> showItemInfo(player, SlayerItems.createSlayerBoots(slayerType, 2)))
+                .build());
+
+        // Sword counterpart (slot 14)
+        ItemStack sword = SlayerItems.createUpgradedSlayerSword(slayerType);
+        gui.setSlot(14, new GuiElementBuilder(sword)
+                .setName(sword.get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
+                .setCallback((i, clickType, action) -> showItemInfo(player, SlayerItems.createUpgradedSlayerSword(slayerType)))
                 .build());
 
         // Back button

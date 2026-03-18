@@ -234,6 +234,26 @@ public class FletchingTableGui {
             if (tip.getItem() == Items.GLOWSTONE_DUST && modifier != null && modifier.getItem() == Items.GHAST_TEAR) {
                 return CustomArrows.ArrowType.SPECTRAL_ARROW;
             }
+            // Frost (ice + blue ice)
+            if (tip.getItem() == Items.ICE && modifier != null && modifier.getItem() == Items.BLUE_ICE) {
+                return CustomArrows.ArrowType.FROST_ARROW;
+            }
+            // Lightning (copper + lightning rod)
+            if (tip.getItem() == Items.COPPER_INGOT && modifier != null && modifier.getItem() == Items.LIGHTNING_ROD) {
+                return CustomArrows.ArrowType.LIGHTNING_ARROW;
+            }
+            // Healing (golden apple + glistering melon)
+            if (tip.getItem() == Items.GOLDEN_APPLE && modifier != null && modifier.getItem() == Items.GLISTERING_MELON_SLICE) {
+                return CustomArrows.ArrowType.HEALING_ARROW;
+            }
+            // Gravity (ender eye + chorus fruit)
+            if (tip.getItem() == Items.ENDER_EYE && modifier != null && modifier.getItem() == Items.CHORUS_FRUIT) {
+                return CustomArrows.ArrowType.GRAVITY_ARROW;
+            }
+            // Bouncing (slime ball + honey block)
+            if (tip.getItem() == Items.SLIME_BALL && modifier != null && modifier.getItem() == Items.HONEY_BLOCK) {
+                return CustomArrows.ArrowType.BOUNCING_ARROW;
+            }
         }
         
         return null;

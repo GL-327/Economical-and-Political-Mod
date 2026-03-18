@@ -66,8 +66,8 @@ public class DanielsPickaxe {
     }
 
     public static ItemStack create() {
-        // Start with iron pickaxe for instant break mode (default)
-        ItemStack stack = new ItemStack(Items.IRON_PICKAXE);
+        // Start with netherite pickaxe for best base stats
+        ItemStack stack = new ItemStack(Items.NETHERITE_PICKAXE);
 
         NbtCompound nbt = new NbtCompound();
         nbt.putByte(TAG_DANIELS_PICKAXE, (byte) 1);
@@ -84,6 +84,7 @@ public class DanielsPickaxe {
                 Text.literal(""),
                 Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD),
                 Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY),
+                Text.literal("  └ Hidden Efficiency V (insta-mine)").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("§7Toggle for TUNNEL MODE:").formatted(Formatting.GRAY),
                 Text.literal("  └ 3x3 tunnel mining").formatted(Formatting.GRAY),
@@ -91,6 +92,7 @@ public class DanielsPickaxe {
                 Text.literal("  └ Auto-smelts ores").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("Unbreakable").formatted(Formatting.GREEN),
+                Text.literal("§8Cannot apply Efficiency, Silk Touch, or Mending").formatted(Formatting.DARK_GRAY),
                 Text.literal(""),
                 Text.literal("§8[Forged in the depths of determination]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Legendary」").formatted(Formatting.DARK_PURPLE)
@@ -156,40 +158,15 @@ public class DanielsPickaxe {
     /**
      * Switch the pickaxe item type based on mode.
      * Tunnel mode = Netherite pickaxe (for durability and mining speed)
-     * Instant break mode = Iron pickaxe (visual indicator)
+     * Instant break mode = Netherite pickaxe (same, just different lore)
      */
     private static void switchPickaxeType(ServerPlayerEntity player, boolean tunnelMode) {
         ItemStack mainHand = player.getMainHandStack();
         if (!isDanielsPickaxe(mainHand)) return;
 
-        // Get current item type
-        net.minecraft.item.Item currentType = mainHand.getItem();
-        net.minecraft.item.Item targetType = tunnelMode ? Items.NETHERITE_PICKAXE : Items.IRON_PICKAXE;
-
-        // Only switch if different
-        if (currentType != targetType) {
-            // Create new stack with target type
-            ItemStack newStack = new ItemStack(targetType);
-
-            // Copy all components
-            NbtCompound nbt = mainHand.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(new NbtCompound())).copyNbt();
-            newStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
-            newStack.set(DataComponentTypes.CUSTOM_NAME, mainHand.get(DataComponentTypes.CUSTOM_NAME));
-            newStack.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
-            newStack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-
-            // Copy custom item ID
-            SlayerItems.setCustomItemId(newStack, "daniels_pickaxe");
-
-            // Set count
-            newStack.setCount(mainHand.getCount());
-
-            // Update lore for the new mode
-            updateItemLoreOnStack(newStack, tunnelMode);
-
-            // Replace in player's main hand (not active hand - that can be offhand)
-            player.setStackInHand(net.minecraft.util.Hand.MAIN_HAND, newStack);
-        }
+        // Always use netherite pickaxe now
+        // Just update the lore to reflect the mode
+        updateItemLoreOnStack(mainHand, tunnelMode);
     }
 
     private static void updateItemLore(ServerPlayerEntity player, boolean abilityActive) {
@@ -412,6 +389,16 @@ public class DanielsPickaxe {
         
         // Insta-break any breakable block
         return state.getBlock().getHardness() >= 0;
+    }
+
+    /**
+     * Check if an enchantment can be applied to Daniel's Pickaxe.
+     * Blocks Efficiency, Silk Touch, and Mending.
+     */
+    public static boolean canApplyEnchantment(net.minecraft.registry.RegistryKey<net.minecraft.enchantment.Enchantment> enchantmentKey) {
+        String id = enchantmentKey.getValue().getPath();
+        // Block efficiency (already has hidden V), silk touch, and mending
+        return !id.equals("efficiency") && !id.equals("silk_touch") && !id.equals("mending");
     }
 
     public static void onPlayerDisconnect(UUID uuid) {
