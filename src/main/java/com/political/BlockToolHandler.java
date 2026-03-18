@@ -28,6 +28,7 @@ import java.util.UUID;
 /**
  * Handles special abilities for block-themed tools.
  * Each tool type has unique abilities based on its block material.
+ * Updated: Push test
  */
 public class BlockToolHandler {
 
