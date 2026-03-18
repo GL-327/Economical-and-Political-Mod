@@ -1,4 +1,5 @@
 package com.political;
+// Updated: 2026-03-18
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
