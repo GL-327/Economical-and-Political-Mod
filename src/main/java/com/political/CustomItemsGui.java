@@ -1379,7 +1379,7 @@ public class CustomItemsGui {
                     SlayerItems.createSlayerBoots(type, 2)));
         }
 
-        int setsPerPage = 3;
+        int setsPerPage = 2;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
         int clampedPage = Math.min(page, totalPages - 1);
         int startIdx = clampedPage * setsPerPage;
@@ -1387,9 +1387,10 @@ public class CustomItemsGui {
 
         for (int i = startIdx; i < endIdx; i++) {
             RecipesGui.BountySetDisplay set = sets.get(i);
-            int row = i - startIdx + 1;
+            int setIndexOnPage = i - startIdx;
+            int baseRow = 1 + (setIndexOnPage * 2);
 
-            int row1Base = row * 9;
+            int row1Base = baseRow * 9;
             gui.setSlot(row1Base, new GuiElementBuilder(set.icon)
                     .setName(Text.literal(set.name + " T1").formatted(set.color, Formatting.BOLD))
                     .glow().build());
@@ -1409,7 +1410,7 @@ public class CustomItemsGui {
                         .build());
             }
 
-            int row2Base = (row + 1) * 9;
+            int row2Base = (baseRow + 1) * 9;
             gui.setSlot(row2Base, new GuiElementBuilder(set.icon)
                     .setName(Text.literal(set.name + " T2").formatted(set.color, Formatting.BOLD))
                     .glow().build());
@@ -1813,6 +1814,10 @@ public class CustomItemsGui {
     // ──────────────────────────────────────────────────────────────
 
     public static void showItemInfo(ServerPlayerEntity player, ItemStack resultItem) {
+        showItemInfo(player, resultItem, CustomItemsGui::open);
+    }
+
+    public static void showItemInfo(ServerPlayerEntity player, ItemStack resultItem, BackHandler onBack) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
         gui.setTitle(Text.literal("Recipe View"));
 
@@ -1881,7 +1886,7 @@ public class CustomItemsGui {
         // Back button
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> open(player))
+                .setCallback((slot, type, action) -> onBack.open(player))
                 .build());
 
         gui.open();

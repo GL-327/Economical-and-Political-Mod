@@ -1092,7 +1092,7 @@ public class RecipeEditorGui {
                 SlayerItems.createSlayerBoots(type, 2)));
         }
 
-        int setsPerPage = 3;
+        int setsPerPage = 2;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
         int clampedPage = Math.min(page, totalPages - 1);
         int startIdx = clampedPage * setsPerPage;
@@ -1100,13 +1100,18 @@ public class RecipeEditorGui {
 
         for (int i = startIdx; i < endIdx; i++) {
             RecipesGui.BountySetDisplay set = sets.get(i);
-            int row = i - startIdx + 1; // Rows 1-4
+            int setIndexOnPage = i - startIdx;
+            int baseRow = 1 + (setIndexOnPage * 2);
             
             // Row 1: T1 items
-            int row1Base = row * 9;
+            int row1Base = baseRow * 9;
             gui.setSlot(row1Base, new GuiElementBuilder(set.icon)
                     .setName(Text.literal(set.name + " T1").formatted(set.color, Formatting.BOLD))
                     .glow().build());
+
+            gui.setSlot(row1Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
             
             gui.setSlot(row1Base + 2, new GuiElementBuilder(set.t1Sword.getItem())
                     .setName(set.t1Sword.get(DataComponentTypes.CUSTOM_NAME))
@@ -1145,10 +1150,14 @@ public class RecipeEditorGui {
                     .build());
 
             // Row 2: T2 items
-            int row2Base = (row + 1) * 9;
+            int row2Base = (baseRow + 1) * 9;
             gui.setSlot(row2Base, new GuiElementBuilder(set.icon)
                     .setName(Text.literal(set.name + " T2").formatted(set.color, Formatting.BOLD))
                     .glow().build());
+
+            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
+                    .build());
             
             gui.setSlot(row2Base + 2, new GuiElementBuilder(set.t2Sword.getItem())
                     .setName(set.t2Sword.get(DataComponentTypes.CUSTOM_NAME))
@@ -1330,7 +1339,7 @@ public class RecipeEditorGui {
 
     // ──────────────────────────────────────────────────────────────
     // GEM_BLOCK_GEAR: Armor Sets in Rows Display
-    // Each row: [Block] [Sword] [Helmet] [Chest] [Legs] [Boots]
+    // Each row: [Block] [gap] [Sword] [Helmet] [Chest] [Legs] [Boots]
     // ──────────────────────────────────────────────────────────────
 
     private static void openGemBlockGearPage(ServerPlayerEntity player, int page) {
@@ -1348,7 +1357,7 @@ public class RecipeEditorGui {
                 .setName(Text.literal("💎 Gem & Block Armor").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Armor sets displayed in rows:").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("[Block] [Sword] [Helmet] [Chest] [Legs] [Boots]").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("[Block] [gap] [Sword] [Helmet] [Chest] [Legs] [Boots]").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal("Click items to edit recipes").formatted(Formatting.AQUA))
                 .glow().build());
 
@@ -1524,14 +1533,19 @@ public class RecipeEditorGui {
             ArmorSetDisplay set = sets[startIdx + i];
             int row = i + 1; // Rows 1-4 (slots 9-44)
 
-            // Row layout: [0:Block] [1:Sword] [2:Helmet] [3:Chest] [4:Legs] [5:Boots]
-            int[] slots = { row * 9, row * 9 + 1, row * 9 + 2, row * 9 + 3, row * 9 + 4, row * 9 + 5 };
+            // Row layout: [0:Block] [1:gap] [2:Sword] [3:Helmet] [4:Chest] [5:Legs] [6:Boots]
+            int[] slots = { row * 9, row * 9 + 1, row * 9 + 2, row * 9 + 3, row * 9 + 4, row * 9 + 5, row * 9 + 6 };
 
             // Block (decorative background)
             gui.setSlot(slots[0], new GuiElementBuilder(set.blockItem)
                     .setName(Text.literal("§8" + set.blockItem.toString().replace("_", " ")).formatted(Formatting.DARK_GRAY))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("Armor Set Material").formatted(Formatting.GRAY))
+                    .build());
+
+            // Gap slot
+            gui.setSlot(slots[1], new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal(""))
                     .build());
 
             // Items: Sword + 4 Armor pieces
@@ -1582,7 +1596,7 @@ public class RecipeEditorGui {
                         openRecipeEditor(player, finalItem, finalRecipe, Category.GEM_BLOCK_GEAR);
                     }
                 });
-                gui.setSlot(slots[1 + j], elem.build());
+                gui.setSlot(slots[2 + j], elem.build());
             }
         }
 

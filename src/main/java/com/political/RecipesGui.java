@@ -42,7 +42,7 @@ public class RecipesGui {
                 .glow().build());
 
         // Search button
-        gui.setSlot(19, new GuiElementBuilder(Items.SPYGLASS)
+        gui.setSlot(1, new GuiElementBuilder(Items.SPYGLASS)
                 .setName(Text.literal("🔍 Search Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to search items by name").formatted(Formatting.GRAY))
@@ -57,7 +57,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Emerald, Lapis armors").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openGemBlockGearPage(player, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -67,7 +67,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("T1 & T2 Armor + Swords").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openBountySetsPage(player, 0,
-                        (p, item) -> showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -77,7 +77,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Legendary armor").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.SPECIAL_ARMOR, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -87,7 +87,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Gold armor tiers").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.GOLD_ARMOR, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -97,7 +97,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Piglin-themed items").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.PIGLIN, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -108,7 +108,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openToolSetsPage(player, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -118,7 +118,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Special unique items").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.SPECIAL_ITEMS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -129,7 +129,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Cores & chunks").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.MATERIALS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -139,7 +139,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Compacted resources").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.COMPACTED, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -149,7 +149,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Super compacted").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.SUPER_COMPACTED, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -159,7 +159,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Armor attributes").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.ATTRIBUTE_TOKENS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -169,7 +169,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Weapon attributes").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.WEAPON_ATTRIBUTES, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -179,7 +179,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Energy beam weapons").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.HPEBM, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -190,7 +190,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Enchanted blocks").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.ENCHANTED_BLOCKS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -200,7 +200,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.ENCHANTED_CROPS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
@@ -210,7 +210,7 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.CUSTOM_ARROWS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());
 
