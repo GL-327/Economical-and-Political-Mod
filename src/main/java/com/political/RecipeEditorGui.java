@@ -977,7 +977,7 @@ public class RecipeEditorGui {
                 .build());
 
         // Row 2: Weapons and Tools (slots 18-23)
-        gui.setSlot(21, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
                 .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
@@ -990,25 +990,18 @@ public class RecipeEditorGui {
                         RecipeEditorGui::openMainMenu))
                 .build());
 
-        gui.setSlot(23, new GuiElementBuilder(Category.SPECIAL_ITEMS.icon)
+        gui.setSlot(24, new GuiElementBuilder(Category.SPECIAL_ITEMS.icon)
                 .setName(Text.literal(Category.SPECIAL_ITEMS.label).formatted(Category.SPECIAL_ITEMS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.SPECIAL_ITEMS, 0))
                 .build());
 
-        gui.setSlot(19, new GuiElementBuilder(Category.ENCHANTED_CROPS.icon)
+        gui.setSlot(20, new GuiElementBuilder(Category.ENCHANTED_CROPS.icon)
                 .setName(Text.literal(Category.ENCHANTED_CROPS.label).formatted(Category.ENCHANTED_CROPS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
-                .build());
-
-        gui.setSlot(25, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
-                .setName(Text.literal(Category.CUSTOM_ARROWS.label).formatted(Category.CUSTOM_ARROWS.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
                 .build());
 
         // Row 3: Materials and Tokens (slots 27-32)
@@ -1033,36 +1026,29 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.SUPER_COMPACTED, 0))
                 .build());
 
-        gui.setSlot(39, new GuiElementBuilder(Category.ATTRIBUTE_TOKENS.icon)
+        // Row 4: Additional categories (slots 36-38)
+        gui.setSlot(38, new GuiElementBuilder(Category.ATTRIBUTE_TOKENS.icon)
                 .setName(Text.literal(Category.ATTRIBUTE_TOKENS.label).formatted(Category.ATTRIBUTE_TOKENS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.ATTRIBUTE_TOKENS, 0))
                 .build());
 
-        gui.setSlot(41, new GuiElementBuilder(Category.WEAPON_ATTRIBUTES.icon)
+        gui.setSlot(40, new GuiElementBuilder(Category.WEAPON_ATTRIBUTES.icon)
                 .setName(Text.literal(Category.WEAPON_ATTRIBUTES.label).formatted(Category.WEAPON_ATTRIBUTES.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.WEAPON_ATTRIBUTES, 0))
                 .build());
 
-        gui.setSlot(43, new GuiElementBuilder(Category.HPEBM.icon)
+        gui.setSlot(42, new GuiElementBuilder(Category.HPEBM.icon)
                 .setName(Text.literal(Category.HPEBM.label).formatted(Category.HPEBM.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.HPEBM, 0))
                 .build());
 
-        // Row 4: Additional categories (slots 36-38)
-        gui.setSlot(37, new GuiElementBuilder(Category.ENCHANTED_BLOCKS.icon)
-                .setName(Text.literal(Category.ENCHANTED_BLOCKS.label).formatted(Category.ENCHANTED_BLOCKS.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_BLOCKS, 0))
-                .build());
-
-        int[] menuSlots = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43};
+        int[] menuSlots = {10, 12, 14, 16, 20, 22, 24, 28, 30, 32, 34, 38, 40, 42};
         for (int slot : menuSlots) {
             placeDiamondPlaceholder(gui, slot);
         }

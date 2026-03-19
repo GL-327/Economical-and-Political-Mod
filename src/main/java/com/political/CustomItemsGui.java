@@ -1119,7 +1119,7 @@ public class CustomItemsGui {
                 .build());
 
         // Row 2: Weapons and Tools
-        gui.setSlot(21, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
                 .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
@@ -1129,7 +1129,7 @@ public class CustomItemsGui {
                         CustomItemsGui::open))
                 .build());
 
-        gui.setSlot(23, new GuiElementBuilder(Items.STICK)
+        gui.setSlot(24, new GuiElementBuilder(Items.STICK)
                 .setName(Text.literal("🎁 Special Items").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Special unique items").formatted(Formatting.GRAY))
@@ -1137,20 +1137,12 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.SPECIAL_ITEMS, 0))
                 .build());
 
-        gui.setSlot(19, new GuiElementBuilder(Items.WHEAT)
+        gui.setSlot(20, new GuiElementBuilder(Items.WHEAT)
                 .setName(Text.literal("✧ Enchanted Crops").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
-                .build());
-
-        gui.setSlot(25, new GuiElementBuilder(Items.TIPPED_ARROW)
-                .setName(Text.literal("➵ Custom Arrows").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
                 .build());
 
         // Row 3: Materials and Tokens
@@ -1178,7 +1170,8 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.SUPER_COMPACTED, 0))
                 .build());
 
-        gui.setSlot(39, new GuiElementBuilder(Items.PAPER)
+        // Row 4: Additional categories
+        gui.setSlot(38, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Armor Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Armor attributes").formatted(Formatting.GRAY))
@@ -1186,7 +1179,7 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.ATTRIBUTE_TOKENS, 0))
                 .build());
 
-        gui.setSlot(41, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Weapon Tokens").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Weapon attributes").formatted(Formatting.GRAY))
@@ -1194,21 +1187,12 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.WEAPON_ATTRIBUTES, 0))
                 .build());
 
-        gui.setSlot(43, new GuiElementBuilder(Items.BLAZE_ROD)
+        gui.setSlot(42, new GuiElementBuilder(Items.BLAZE_ROD)
                 .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Energy beam weapons").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.HPEBM, 0))
-                .build());
-
-        // Row 4: Additional categories
-        gui.setSlot(37, new GuiElementBuilder(Items.COBBLESTONE)
-                .setName(Text.literal("✧ Enchanted Blocks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Enchanted blocks").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.ENCHANTED_BLOCKS, 0))
                 .build());
 
         // Close button
@@ -1217,7 +1201,7 @@ public class CustomItemsGui {
                 .setCallback((slot, clickType, action) -> gui.close())
                 .build());
 
-        int[] menuSlots = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43};
+        int[] menuSlots = {10, 12, 14, 16, 20, 22, 24, 28, 30, 32, 34, 38, 40, 42};
         for (int slot : menuSlots) {
             placeDiamondPlaceholder(gui, slot);
         }
