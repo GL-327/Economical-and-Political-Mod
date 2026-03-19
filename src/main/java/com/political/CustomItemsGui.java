@@ -1067,6 +1067,14 @@ public class CustomItemsGui {
                 .addLoreLine(Text.literal("Click any item to receive it").formatted(Formatting.YELLOW))
                 .glow().build());
 
+        gui.setSlot(0, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("🔍 Search Items").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Search items by name").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Supports partial matches").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSearchGui(player))
+                .build());
+
         // Row 1: Armor categories - spread across more slots
         gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
                 .setName(Text.literal("💎 Custom Armor").formatted(Formatting.GREEN, Formatting.BOLD))
@@ -1207,6 +1215,110 @@ public class CustomItemsGui {
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("✖ Close").formatted(Formatting.RED, Formatting.BOLD))
                 .setCallback((slot, clickType, action) -> gui.close())
+                .build());
+
+        placeComingSoon(gui, 11);
+        placeComingSoon(gui, 13);
+        placeComingSoon(gui, 15);
+        placeComingSoon(gui, 22);
+        placeComingSoon(gui, 24);
+        placeComingSoon(gui, 29);
+        placeComingSoon(gui, 31);
+        placeComingSoon(gui, 33);
+        placeComingSoon(gui, 42);
+
+        gui.open();
+    }
+
+    private static void placeComingSoon(SimpleGui gui, int slot) {
+        gui.setSlot(slot, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("Coming Soon").formatted(Formatting.DARK_GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("This slot is reserved").formatted(Formatting.GRAY))
+                .build());
+    }
+
+    private static void openSearchGui(ServerPlayerEntity player) {
+        eu.pb4.sgui.api.gui.SignGui signGui = new eu.pb4.sgui.api.gui.SignGui(player) {
+            @Override
+            public void onClose() {
+                String searchTerm = this.getLine(0).getString().trim();
+                if (!searchTerm.isEmpty()) {
+                    showSearchResults(player, searchTerm);
+                } else {
+                    CustomItemsGui.open(player);
+                }
+            }
+        };
+        signGui.setLine(0, Text.literal("Search:").formatted(Formatting.AQUA));
+        signGui.setLine(1, Text.literal("(type here)").formatted(Formatting.GRAY));
+        signGui.open();
+    }
+
+    private static void showSearchResults(ServerPlayerEntity player, String searchTerm) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🔍 Search: " + searchTerm));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("🔍 Search Results").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Search: \"" + searchTerm + "\"").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        List<ItemStack> results = new ArrayList<>();
+        String searchLower = searchTerm.toLowerCase();
+
+        for (Category cat : Category.values()) {
+            for (ItemStack item : getItemsForCategory(cat)) {
+                if (item == null || item.isEmpty()) continue;
+                Text nameText = item.get(DataComponentTypes.CUSTOM_NAME);
+                String itemName = nameText != null ? nameText.getString().toLowerCase() : item.getItem().toString().toLowerCase();
+                if (itemName.contains(searchLower)) {
+                    results.add(item);
+                }
+            }
+        }
+
+        int shown = 0;
+        for (ItemStack item : results) {
+            if (shown >= 28) break;
+            int row = shown / 7;
+            int col = shown % 7 + 1;
+            int slot = row * 9 + col;
+
+            Text displayName = item.get(DataComponentTypes.CUSTOM_NAME);
+            ItemStack clickItem = item;
+            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+                    .setName(displayName != null ? displayName : Text.literal(item.getItem().toString()))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> giveItem(player, clickItem))
+                    .build());
+
+            shown++;
+        }
+
+        if (shown == 0) {
+            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("No results found").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Try a different search term").formatted(Formatting.GRAY))
+                    .build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> open(player))
+                .build());
+
+        gui.setSlot(46, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("🔍 Search Again").formatted(Formatting.AQUA))
+                .setCallback((slot, type, action) -> openSearchGui(player))
                 .build());
 
         gui.open();

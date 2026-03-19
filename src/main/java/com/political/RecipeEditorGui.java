@@ -930,6 +930,14 @@ public class RecipeEditorGui {
                 .addLoreLine(Text.literal("Select a category to view and edit recipes").formatted(Formatting.GRAY))
                 .glow().build());
 
+        gui.setSlot(0, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("🔍 Search Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Search items by name").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Opens editor on click").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSearchGui(player))
+                .build());
+
         // Place category buttons matching /recipe layout
         // Row 1: Armor categories (slots 9-14)
         gui.setSlot(10, new GuiElementBuilder(Category.GEM_BLOCK_GEAR.icon)
@@ -1052,6 +1060,118 @@ public class RecipeEditorGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
+                .build());
+
+        placeComingSoon(gui, 11);
+        placeComingSoon(gui, 13);
+        placeComingSoon(gui, 15);
+        placeComingSoon(gui, 18);
+        placeComingSoon(gui, 20);
+        placeComingSoon(gui, 22);
+        placeComingSoon(gui, 24);
+        placeComingSoon(gui, 27);
+        placeComingSoon(gui, 29);
+        placeComingSoon(gui, 31);
+        placeComingSoon(gui, 33);
+        placeComingSoon(gui, 36);
+        placeComingSoon(gui, 42);
+
+        gui.open();
+    }
+
+    private static void placeComingSoon(SimpleGui gui, int slot) {
+        if (gui.getSlot(slot) != null) return;
+        gui.setSlot(slot, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("Coming Soon").formatted(Formatting.DARK_GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("This slot is reserved").formatted(Formatting.GRAY))
+                .build());
+    }
+
+    private static void openSearchGui(ServerPlayerEntity player) {
+        eu.pb4.sgui.api.gui.SignGui signGui = new eu.pb4.sgui.api.gui.SignGui(player) {
+            @Override
+            public void onClose() {
+                String searchTerm = this.getLine(0).getString().trim();
+                if (!searchTerm.isEmpty()) {
+                    showSearchResults(player, searchTerm);
+                } else {
+                    openMainMenu(player);
+                }
+            }
+        };
+        signGui.setLine(0, Text.literal("Search:").formatted(Formatting.AQUA));
+        signGui.setLine(1, Text.literal("(type here)").formatted(Formatting.GRAY));
+        signGui.open();
+    }
+
+    private static void showSearchResults(ServerPlayerEntity player, String searchTerm) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🔍 Search: " + searchTerm));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("🔍 Search Results").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Search: \"" + searchTerm + "\"").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        java.util.List<ItemStack> results = new java.util.ArrayList<>();
+        String searchLower = searchTerm.toLowerCase();
+
+        for (Category cat : Category.values()) {
+            for (ItemStack item : getItemsForCategory(cat)) {
+                if (item == null || item.isEmpty()) continue;
+                Text nameText = item.get(DataComponentTypes.CUSTOM_NAME);
+                String itemName = nameText != null ? nameText.getString().toLowerCase() : item.getItem().toString().toLowerCase();
+                if (itemName.contains(searchLower)) {
+                    results.add(item);
+                }
+            }
+        }
+
+        int shown = 0;
+        for (ItemStack item : results) {
+            if (shown >= 28) break;
+            int row = shown / 7;
+            int col = shown % 7 + 1;
+            int slot = row * 9 + col;
+
+            Text displayName = item.get(DataComponentTypes.CUSTOM_NAME);
+            ItemStack clickItem = item;
+            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+                    .setName(displayName != null ? displayName : Text.literal(item.getItem().toString()))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click to edit recipe").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> {
+                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(clickItem);
+                        openRecipeEditor(player, clickItem, r, null);
+                    })
+                    .build());
+
+            shown++;
+        }
+
+        if (shown == 0) {
+            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("No results found").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("Try a different search term").formatted(Formatting.GRAY))
+                    .build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openMainMenu(player))
+                .build());
+
+        gui.setSlot(46, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("🔍 Search Again").formatted(Formatting.AQUA))
+                .setCallback((slot, type, action) -> openSearchGui(player))
                 .build());
 
         gui.open();

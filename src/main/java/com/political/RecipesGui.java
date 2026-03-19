@@ -42,7 +42,7 @@ public class RecipesGui {
                 .glow().build());
 
         // Search button
-        gui.setSlot(1, new GuiElementBuilder(Items.SPYGLASS)
+        gui.setSlot(0, new GuiElementBuilder(Items.SPYGLASS)
                 .setName(Text.literal("🔍 Search Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to search items by name").formatted(Formatting.GRAY))
@@ -220,7 +220,30 @@ public class RecipesGui {
                 .setCallback((slot, clickType, action) -> gui.close())
                 .build());
 
+        placeComingSoon(gui, 11);
+        placeComingSoon(gui, 13);
+        placeComingSoon(gui, 15);
+        placeComingSoon(gui, 18);
+        placeComingSoon(gui, 20);
+        placeComingSoon(gui, 22);
+        placeComingSoon(gui, 24);
+        placeComingSoon(gui, 27);
+        placeComingSoon(gui, 29);
+        placeComingSoon(gui, 31);
+        placeComingSoon(gui, 33);
+        placeComingSoon(gui, 36);
+        placeComingSoon(gui, 42);
+
         gui.open();
+    }
+
+    private static void placeComingSoon(SimpleGui gui, int slot) {
+        if (gui.getSlot(slot) != null) return;
+        gui.setSlot(slot, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal("Coming Soon").formatted(Formatting.DARK_GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("This slot is reserved").formatted(Formatting.GRAY))
+                .build());
     }
 
     // Helper class for bounty set display
