@@ -1051,10 +1051,10 @@ public class CustomItemsGui {
 
         for (int i = 0; i < 54; i++) {
             if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
                         .setName(Text.literal("")).build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.BLUE_STAINED_GLASS_PANE)
                         .setName(Text.literal("")).build());
             }
         }
@@ -1067,7 +1067,7 @@ public class CustomItemsGui {
                 .addLoreLine(Text.literal("Click any item to receive it").formatted(Formatting.YELLOW))
                 .glow().build());
 
-        gui.setSlot(0, new GuiElementBuilder(Items.SPYGLASS)
+        gui.setSlot(1, new GuiElementBuilder(Items.SPYGLASS)
                 .setName(Text.literal("🔍 Search Items").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Search items by name").formatted(Formatting.GRAY))
@@ -1217,24 +1217,18 @@ public class CustomItemsGui {
                 .setCallback((slot, clickType, action) -> gui.close())
                 .build());
 
-        placeComingSoon(gui, 11);
-        placeComingSoon(gui, 13);
-        placeComingSoon(gui, 15);
-        placeComingSoon(gui, 22);
-        placeComingSoon(gui, 24);
-        placeComingSoon(gui, 29);
-        placeComingSoon(gui, 31);
-        placeComingSoon(gui, 33);
-        placeComingSoon(gui, 42);
+        int[] menuSlots = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43};
+        for (int slot : menuSlots) {
+            placeDiamondPlaceholder(gui, slot);
+        }
 
         gui.open();
     }
 
-    private static void placeComingSoon(SimpleGui gui, int slot) {
-        gui.setSlot(slot, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                .setName(Text.literal("Coming Soon").formatted(Formatting.DARK_GRAY, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("This slot is reserved").formatted(Formatting.GRAY))
+    private static void placeDiamondPlaceholder(SimpleGui gui, int slot) {
+        if (gui.getSlot(slot) != null) return;
+        gui.setSlot(slot, new GuiElementBuilder(Items.DIAMOND_BLOCK)
+                .setName(Text.literal(""))
                 .build());
     }
 

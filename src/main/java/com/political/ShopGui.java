@@ -9,7 +9,6 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.component.DataComponentTypes;
 
 import java.util.List;
 
@@ -190,27 +189,13 @@ public class ShopGui {
 
             int playerHas = ShopManager.countItems(player, item);
             
-            // Check if this is a custom item category - use custom ItemStack for display
-            ItemStack customDisplayItem = ShopManager.getCustomItemForCategory(item);
             String itemName;
             GuiElementBuilder builder;
-            
-            if (customDisplayItem != null) {
-                // Use custom item for display
-                Text customName = customDisplayItem.get(DataComponentTypes.CUSTOM_NAME);
-                itemName = customName != null ? customName.getString() : ShopManager.getItemName(item);
-                builder = new GuiElementBuilder(customDisplayItem.getItem())
-                        .setName(customName != null ? customName : Text.literal(itemName).formatted(Formatting.WHITE));
-                // Copy enchantment glint if present
-                if (customDisplayItem.get(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE) == Boolean.TRUE) {
-                    builder.glow();
-                }
-            } else {
-                // Vanilla item
-                itemName = ShopManager.getItemName(item);
-                builder = new GuiElementBuilder(item)
-                        .setName(Text.literal(itemName).formatted(Formatting.WHITE));
-            }
+
+            // Vanilla item (custom variants are reserved for /sshop)
+            itemName = ShopManager.getItemName(item);
+            builder = new GuiElementBuilder(item)
+                    .setName(Text.literal(itemName).formatted(Formatting.WHITE));
 
             if (sellMode) {
                 // SELL MODE
