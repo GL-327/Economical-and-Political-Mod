@@ -23,10 +23,15 @@ public class RecipesGui {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("📖 Recipe Browser"));
 
-        // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                .setName(Text.literal(""));
-        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
