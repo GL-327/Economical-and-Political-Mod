@@ -27,6 +27,48 @@ public class ArmorAbilityHandler {
         tickSlimeBoots(player);
         tickWardenChestplate(player);
         tickBerserkerHelmet(player);
+        // New block armor set abilities
+        tickCrimsonStemSet(player);
+        tickCryingObsidianSet(player);
+        tickGildedBlackstoneSet(player);
+        tickGraniteSet(player);
+        tickDioriteSet(player);
+        tickAndesiteSet(player);
+        tickPolishedGraniteSet(player);
+        tickPolishedDioriteSet(player);
+        tickPolishedAndesiteSet(player);
+        tickPackedIceSet(player);
+        tickBlueIceSet(player);
+        tickNetherGoldOreSet(player);
+        tickDarkOakLogSet(player);
+        tickJungleLogSet(player);
+        tickAcaciaLogSet(player);
+        tickMangroveLogSet(player);
+        tickCherryLogSet(player);
+        tickBambooBlockSet(player);
+        tickTuffSet(player);
+        tickPolishedTuffSet(player);
+        tickNetherWartBlockSet(player);
+        tickWarpedWartBlockSet(player);
+        tickChiseledDeepslateSet(player);
+        tickReinforcedDeepslateSet(player);
+        tickChiseledNetherBrickSet(player);
+        tickCrackedNetherBrickSet(player);
+        tickChiseledStoneBrickSet(player);
+        tickCrackedStoneBrickSet(player);
+        tickEndStoneBrickSet(player);
+        tickRedSandstoneSet(player);
+        tickRawIronBlockSet(player);
+        tickRawGoldBlockSet(player);
+        tickPrismarineBricksSet(player);
+        tickDarkPrismarineSet(player);
+        tickSeaLanternSet(player);
+        tickLodestoneSet(player);
+        tickBlackstoneBricksSet(player);
+        tickPolishedBlackstoneSet(player);
+        tickSmoothBasaltSet(player);
+        tickAmethystClusterSet(player);
+        tickObsidianBlockSet(player);
     }
 
     /**
@@ -332,5 +374,552 @@ public class ArmorAbilityHandler {
         if (customName == null) return false;
         String name = customName.getString();
         return name.contains("Berserker") && name.contains("Helmet");
+    }
+
+    // ============================================================
+    // FULL SET DETECTION HELPER
+    // ============================================================
+    private static boolean hasFullSet(ServerPlayerEntity player, String setPrefix) {
+        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack leggings = player.getEquippedStack(EquipmentSlot.LEGS);
+        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+
+        String helmetId = SlayerItems.getCustomItemId(helmet);
+        String chestplateId = SlayerItems.getCustomItemId(chestplate);
+        String leggingsId = SlayerItems.getCustomItemId(leggings);
+        String bootsId = SlayerItems.getCustomItemId(boots);
+
+        return helmetId != null && helmetId.startsWith(setPrefix) &&
+               chestplateId != null && chestplateId.startsWith(setPrefix) &&
+               leggingsId != null && leggingsId.startsWith(setPrefix) &&
+               bootsId != null && bootsId.startsWith(setPrefix);
+    }
+
+    // ============================================================
+    // CRIMSON STEM SET - Nether Regeneration
+    // ============================================================
+    private static void tickCrimsonStemSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "crimson_stem")) return;
+        if (player.age % 40 == 0) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.REGENERATION, 60, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CRYING OBSIDIAN SET - Portal Teleport
+    // ============================================================
+    private static void tickCryingObsidianSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "crying_obsidian")) return;
+        if (player.age % 60 == 0) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 40, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // GILDED BLACKSTONE SET - Gold Fortune
+    // ============================================================
+    private static void tickGildedBlackstoneSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "gilded_blackstone")) return;
+        if (player.age % 60 == 0) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.LUCK, 40, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // GRANITE SET - Stone Strength
+    // ============================================================
+    private static void tickGraniteSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "granite")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // DIORITE SET - Shining Protection
+    // ============================================================
+    private static void tickDioriteSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "diorite")) return;
+        if (!player.hasStatusEffect(StatusEffects.GLOWING)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.GLOWING, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // ANDESITE SET - Mountain Resilience
+    // ============================================================
+    private static void tickAndesiteSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "andesite")) return;
+        if (!player.hasStatusEffect(StatusEffects.SLOWNESS)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SLOWNESS, 100, 0, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // POLISHED GRANITE SET - Polished Power
+    // ============================================================
+    private static void tickPolishedGraniteSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "polished_granite")) return;
+        if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.STRENGTH, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // POLISHED DIORITE SET - Elegant Speed
+    // ============================================================
+    private static void tickPolishedDioriteSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "polished_diorite")) return;
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // POLISHED ANDESITE SET - Smooth Defense
+    // ============================================================
+    private static void tickPolishedAndesiteSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "polished_andesite")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // PACKED ICE SET - Frozen Walk
+    // ============================================================
+    private static void tickPackedIceSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "packed_ice")) return;
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // BLUE ICE SET - Deep Freeze
+    // ============================================================
+    private static void tickBlueIceSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "blue_ice")) return;
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 100, 2, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.DOLPHINS_GRACE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.DOLPHINS_GRACE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // NETHER GOLD ORE SET - Gold Rush
+    // ============================================================
+    private static void tickNetherGoldOreSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "nether_gold_ore")) return;
+        if (!player.hasStatusEffect(StatusEffects.LUCK)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.LUCK, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // DARK OAK LOG SET - Forest Stealth
+    // ============================================================
+    private static void tickDarkOakLogSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "dark_oak_log")) return;
+        if (!player.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.INVISIBILITY, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // JUNGLE LOG SET - Jungle Agility
+    // ============================================================
+    private static void tickJungleLogSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "jungle_log")) return;
+        if (!player.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.JUMP_BOOST, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // ACACIA LOG SET - Savanna Speed
+    // ============================================================
+    private static void tickAcaciaLogSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "acacia_log")) return;
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // MANGROVE LOG SET - Swamp Survival
+    // ============================================================
+    private static void tickMangroveLogSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "mangrove_log")) return;
+        if (!player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.WATER_BREATHING, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CHERRY LOG SET - Cherry Blossom
+    // ============================================================
+    private static void tickCherryLogSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "cherry_log")) return;
+        if (!player.hasStatusEffect(StatusEffects.LUCK)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.LUCK, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // BAMBOO BLOCK SET - Bouncy Step
+    // ============================================================
+    private static void tickBambooBlockSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "bamboo_block")) return;
+        if (!player.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.JUMP_BOOST, 100, 2, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // TUFF SET - Stone Guardian
+    // ============================================================
+    private static void tickTuffSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "tuff")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // POLISHED TUFF SET - Refined Protection
+    // ============================================================
+    private static void tickPolishedTuffSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "polished_tuff")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // NETHER WART BLOCK SET - Wart Growth
+    // ============================================================
+    private static void tickNetherWartBlockSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "nether_wart_block")) return;
+        if (player.age % 40 == 0) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.REGENERATION, 60, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // WARPED WART BLOCK SET - Warped Speed
+    // ============================================================
+    private static void tickWarpedWartBlockSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "warped_wart_block")) return;
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 100, 1, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CHISELED DEEPSLATE SET - Deepslate Defense
+    // ============================================================
+    private static void tickChiseledDeepslateSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "chiseled_deepslate")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // REINFORCED DEEPSLATE SET - Ultimate Defense
+    // ============================================================
+    private static void tickReinforcedDeepslateSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "reinforced_deepslate")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 2, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CHISELED NETHER BRICK SET - Ancient Strength
+    // ============================================================
+    private static void tickChiseledNetherBrickSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "chiseled_nether_brick")) return;
+        if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.STRENGTH, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CRACKED NETHER BRICK SET - Broken Power
+    // ============================================================
+    private static void tickCrackedNetherBrickSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "cracked_nether_brick")) return;
+        if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.STRENGTH, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CHISELED STONE BRICK SET - Carved Stone
+    // ============================================================
+    private static void tickChiseledStoneBrickSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "chiseled_stone_brick")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // CRACKED STONE BRICK SET - Weathered Might
+    // ============================================================
+    private static void tickCrackedStoneBrickSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "cracked_stone_brick")) return;
+        if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.STRENGTH, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // END STONE BRICK SET - End Protection
+    // ============================================================
+    private static void tickEndStoneBrickSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "end_stone_brick")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // RED SANDSTONE SET - Desert Strength
+    // ============================================================
+    private static void tickRedSandstoneSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "red_sandstone")) return;
+        if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.FIRE_RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // RAW IRON BLOCK SET - Iron Fortitude
+    // ============================================================
+    private static void tickRawIronBlockSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "raw_iron_block")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // RAW GOLD BLOCK SET - Golden Fortune
+    // ============================================================
+    private static void tickRawGoldBlockSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "raw_gold_block")) return;
+        if (!player.hasStatusEffect(StatusEffects.LUCK)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.LUCK, 100, 2, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // PRISMARINE BRICKS SET - Ocean Might
+    // ============================================================
+    private static void tickPrismarineBricksSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "prismarine_bricks")) return;
+        if (!player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.WATER_BREATHING, 100, 0, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.DOLPHINS_GRACE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.DOLPHINS_GRACE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // DARK PRISMARINE SET - Deep Ocean
+    // ============================================================
+    private static void tickDarkPrismarineSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "dark_prismarine")) return;
+        if (!player.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.WATER_BREATHING, 100, 0, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.NIGHT_VISION, 200, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // SEA LANTERN SET - Light in Darkness
+    // ============================================================
+    private static void tickSeaLanternSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "sea_lantern")) return;
+        if (!player.hasStatusEffect(StatusEffects.GLOWING)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.GLOWING, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // LODESTONE SET - Magnetic Field
+    // ============================================================
+    private static void tickLodestoneSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "lodestone")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // BLACKSTONE BRICKS SET - Nether Brick Power
+    // ============================================================
+    private static void tickBlackstoneBricksSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "blackstone_bricks")) return;
+        if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.FIRE_RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // POLISHED BLACKSTONE SET - Obsidian Shield
+    // ============================================================
+    private static void tickPolishedBlackstoneSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "polished_blackstone")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 1, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // SMOOTH BASALT SET - Volcanic Defense
+    // ============================================================
+    private static void tickSmoothBasaltSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "smooth_basalt")) return;
+        if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.FIRE_RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // AMETHYST CLUSTER SET - Crystal Harmony
+    // ============================================================
+    private static void tickAmethystClusterSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "amethyst_cluster")) return;
+        if (!player.hasStatusEffect(StatusEffects.REGENERATION)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.REGENERATION, 100, 0, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // OBSIDIAN BLOCK SET - Bedrock Strength
+    // ============================================================
+    private static void tickObsidianBlockSet(ServerPlayerEntity player) {
+        if (!hasFullSet(player, "obsidian_block")) return;
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 3, true, false, false
+            ));
+        }
     }
 }

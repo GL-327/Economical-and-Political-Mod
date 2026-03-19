@@ -1201,4 +1201,911 @@ public class BlockWeapons {
         SlayerItems.setCustomItemId(sword, "wet_sponge_sword");
         return sword;
     }
+    
+    // ============================================================
+    // NEW BLOCK WEAPONS
+    // ============================================================
+    
+    public static ItemStack createCrimsonStemSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Crimson Stem Blade").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 250").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Fungal strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Crimson Stem Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Crimson forest affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Nether regeneration").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Fungal edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 250);
+        SlayerItems.setCustomItemId(sword, "crimson_stem_sword");
+        return sword;
+    }
+    
+    public static ItemStack createCryingObsidianSword() {
+        ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Crying Obsidian Blade").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("⚔ Damage: 10").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 1800").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Void tears").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Crying Obsidian Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Portal creation").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Enderman teleportation").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Tears of the void").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 1800);
+        SlayerItems.setCustomItemId(sword, "crying_obsidian_sword");
+        return sword;
+    }
+    
+    public static ItemStack createGildedBlackstoneSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Gilded Blackstone Blade").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("⚔ Damage: 7").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 650").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Golden fortune").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Gilded Blackstone Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Piglin respect").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Gold loot bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Golden edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 650);
+        SlayerItems.setCustomItemId(sword, "gilded_blackstone_sword");
+        return sword;
+    }
+    
+    public static ItemStack createGraniteSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Granite Blade").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 420").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Hard strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Granite Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Stone affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Mining boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Granite edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 420);
+        SlayerItems.setCustomItemId(sword, "granite_sword");
+        return sword;
+    }
+    
+    public static ItemStack createDioriteSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Diorite Blade").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 400").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Crystal sharpness").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Diorite Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• White stone affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Speed boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Crystal edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 400);
+        SlayerItems.setCustomItemId(sword, "diorite_sword");
+        return sword;
+    }
+    
+    public static ItemStack createAndesiteSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Andesite Blade").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 410").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Volcanic strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Andesite Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Mountain affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Hill climbing").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Volcanic edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 410);
+        SlayerItems.setCustomItemId(sword, "andesite_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPolishedGraniteSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Polished Granite Blade").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 430").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Smooth strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Polished Granite Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Polished stone affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Village hero").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Sleek edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 430);
+        SlayerItems.setCustomItemId(sword, "polished_granite_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPolishedDioriteSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Polished Diorite Blade").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 410").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Clean cuts").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Polished Diorite Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• White stone mastery").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Speed boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Clean edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 410);
+        SlayerItems.setCustomItemId(sword, "polished_diorite_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPolishedAndesiteSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Polished Andesite Blade").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 420").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Sleek strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Polished Andesite Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Modern stone affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Efficiency boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Modern edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 420);
+        SlayerItems.setCustomItemId(sword, "polished_andesite_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPackedIceSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Packed Ice Blade").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⚔ Damage: 6").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 520").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Frozen strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Packed Ice Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Frost walker").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Ice walk").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Frozen edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 520);
+        SlayerItems.setCustomItemId(sword, "packed_ice_sword");
+        return sword;
+    }
+    
+    public static ItemStack createBlueIceSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Blue Ice Blade").formatted(Formatting.BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.BLUE));
+        lore.add(Text.literal("⚔ Damage: 7").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 680").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Glacial power").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Blue Ice Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Permanent frost walker").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Ice walk").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Speed on ice").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Glacial edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 680);
+        SlayerItems.setCustomItemId(sword, "blue_ice_sword");
+        return sword;
+    }
+    
+    public static ItemStack createNetherGoldOreSword() {
+        ItemStack sword = new ItemStack(Items.GOLDEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Nether Gold Ore Blade").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 280").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Golden nether strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Nether Gold Ore Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Piglin riches").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Barter boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Golden nether edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 280);
+        SlayerItems.setCustomItemId(sword, "nether_gold_ore_sword");
+        return sword;
+    }
+    
+    public static ItemStack createDarkOakLogSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Dark Oak Log Blade").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 320").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Shadow strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Dark Oak Log Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Night vision").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Dark forest affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Shadow edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 320);
+        SlayerItems.setCustomItemId(sword, "dark_oak_log_sword");
+        return sword;
+    }
+    
+    public static ItemStack createJungleLogSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Jungle Log Blade").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 300").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Tropical strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Jungle Log Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Jungle climber").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Jungle affinity").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Tropical edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 300);
+        SlayerItems.setCustomItemId(sword, "jungle_log_sword");
+        return sword;
+    }
+    
+    public static ItemStack createAcaciaLogSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Acacia Log Blade").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 290").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Savanna strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Acacia Log Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Savanna speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Village hero").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Savanna edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 290);
+        SlayerItems.setCustomItemId(sword, "acacia_log_sword");
+        return sword;
+    }
+    
+    public static ItemStack createMangroveLogSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Mangrove Log Blade").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 340").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Swamp strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Mangrove Log Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Water breathing").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Dolphin's grace").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Swamp edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 340);
+        SlayerItems.setCustomItemId(sword, "mangrove_log_sword");
+        return sword;
+    }
+    
+    public static ItemStack createCherryLogSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Cherry Log Blade").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 310").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Blossom strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Cherry Log Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Feather fall").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Cherry blossom effect").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Blossom edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 310);
+        SlayerItems.setCustomItemId(sword, "cherry_log_sword");
+        return sword;
+    }
+    
+    public static ItemStack createBambooBlockSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Bamboo Block Blade").formatted(Formatting.GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("⚔ Damage: 3").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 180").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Quick strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Bamboo Block Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Jump boost II").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Fast movement").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Light edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 180);
+        SlayerItems.setCustomItemId(sword, "bamboo_block_sword");
+        return sword;
+    }
+    
+    public static ItemStack createTuffSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Tuff Blade").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 380").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Volcanic strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Tuff Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Cave dweller").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Cave mining boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Volcanic edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 380);
+        SlayerItems.setCustomItemId(sword, "tuff_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPolishedTuffSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Polished Tuff Blade").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 400").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Smooth cuts").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Polished Tuff Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Stone mason").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Masonry discount").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Sleek edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 400);
+        SlayerItems.setCustomItemId(sword, "polished_tuff_sword");
+        return sword;
+    }
+    
+    public static ItemStack createNetherWartBlockSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Nether Wart Block Blade").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 260").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Fungal strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Nether Wart Block Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Witherskin").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Wither resistance").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Fungal edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 260);
+        SlayerItems.setCustomItemId(sword, "nether_wart_block_sword");
+        return sword;
+    }
+    
+    public static ItemStack createWarpedWartBlockSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Warped Wart Block Blade").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 260").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Warped strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Warped Wart Block Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Ender resistance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Enderman ignore").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Warped edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 260);
+        SlayerItems.setCustomItemId(sword, "warped_wart_block_sword");
+        return sword;
+    }
+    
+    public static ItemStack createChiseledDeepslateSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Chiseled Deepslate Blade").formatted(Formatting.DARK_BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_BLUE));
+        lore.add(Text.literal("⚔ Damage: 7").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 420").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Ancient power").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Chiseled Deepslate Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Deep dark").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Sculk sensing").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Ancient edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 420);
+        SlayerItems.setCustomItemId(sword, "chiseled_deepslate_sword");
+        return sword;
+    }
+    
+    public static ItemStack createReinforcedDeepslateSword() {
+        ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Reinforced Deepslate Blade").formatted(Formatting.BLUE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.BLUE));
+        lore.add(Text.literal("⚔ Damage: 10").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 1200").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Bedrock power").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Reinforced Deepslate Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Bedrock strength").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• All damage reduction").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Indestructible edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 1200);
+        SlayerItems.setCustomItemId(sword, "reinforced_deepslate_sword");
+        return sword;
+    }
+    
+    public static ItemStack createChiseledNetherBrickSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Chiseled Nether Brick Blade").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 380").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Ancient strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Chiseled Nether Brick Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Nether guardian").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Fortress bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Ancient edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 380);
+        SlayerItems.setCustomItemId(sword, "chiseled_nether_brick_sword");
+        return sword;
+    }
+    
+    public static ItemStack createCrackedNetherBrickSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Cracked Nether Brick Blade").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 320").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Fire strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Cracked Nether Brick Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Fire walker").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Lava immunity").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Fire edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 320);
+        SlayerItems.setCustomItemId(sword, "cracked_nether_brick_sword");
+        return sword;
+    }
+    
+    public static ItemStack createChiseledStoneBrickSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Chiseled Stone Brick Blade").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 400").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Mason strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Chiseled Stone Brick Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Mason's pride").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Village discounts").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Mason edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 400);
+        SlayerItems.setCustomItemId(sword, "chiseled_stone_brick_sword");
+        return sword;
+    }
+    
+    public static ItemStack createCrackedStoneBrickSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Cracked Stone Brick Blade").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 340").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Ruin strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Cracked Stone Brick Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Ruin explorer").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Ancient loot bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Ruin edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 340);
+        SlayerItems.setCustomItemId(sword, "cracked_stone_brick_sword");
+        return sword;
+    }
+    
+    public static ItemStack createEndStoneBrickSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ End Stone Brick Blade").formatted(Formatting.YELLOW, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 360").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Void strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full End Stone Brick Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Ender walker").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• End city bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Void edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 360);
+        SlayerItems.setCustomItemId(sword, "end_stone_brick_sword");
+        return sword;
+    }
+    
+    public static ItemStack createRedSandstoneSword() {
+        ItemStack sword = new ItemStack(Items.WOODEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Red Sandstone Blade").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Damage: 4").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 280").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Desert strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Red Sandstone Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Desert runner").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Sand speed").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Desert edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 280);
+        SlayerItems.setCustomItemId(sword, "red_sandstone_sword");
+        return sword;
+    }
+    
+    public static ItemStack createRawIronBlockSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Raw Iron Block Blade").formatted(Formatting.WHITE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("⚔ Damage: 7").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 500").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Heavy strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Raw Iron Block Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Iron golem").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Iron golem friendship").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Heavy edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 500);
+        SlayerItems.setCustomItemId(sword, "raw_iron_block_sword");
+        return sword;
+    }
+    
+    public static ItemStack createRawGoldBlockSword() {
+        ItemStack sword = new ItemStack(Items.GOLDEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Raw Gold Block Blade").formatted(Formatting.GOLD, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 350").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Fortune strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Raw Gold Block Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Golden fortune").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Extra loot").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Golden edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 350);
+        SlayerItems.setCustomItemId(sword, "raw_gold_block_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPrismarineBricksSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Prismarine Bricks Blade").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("⚔ Damage: 6").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 320").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Ocean strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Prismarine Bricks Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Ocean champion").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Dolphin's grace").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Ocean edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 320);
+        SlayerItems.setCustomItemId(sword, "prismarine_bricks_sword");
+        return sword;
+    }
+    
+    public static ItemStack createDarkPrismarineSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Dark Prismarine Blade").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("⚔ Damage: 6").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 360").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Abyss strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Dark Prismarine Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Conduit power").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Water breathing").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Abyss edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 360);
+        SlayerItems.setCustomItemId(sword, "dark_prismarine_sword");
+        return sword;
+    }
+    
+    public static ItemStack createSeaLanternSword() {
+        ItemStack sword = new ItemStack(Items.GOLDEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Sea Lantern Blade").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 220").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Glowing strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Sea Lantern Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Glow effect").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Underwater glow").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Glow edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 220);
+        SlayerItems.setCustomItemId(sword, "sea_lantern_sword");
+        return sword;
+    }
+    
+    public static ItemStack createLodestoneSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Lodestone Blade").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: 7").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 450").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ True north strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Lodestone Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• True north").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Compass always points").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Magnetic edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 450);
+        SlayerItems.setCustomItemId(sword, "lodestone_sword");
+        return sword;
+    }
+    
+    public static ItemStack createBlackstoneBricksSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Blackstone Bricks Blade").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 400").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Fortress strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Blackstone Bricks Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Fortress guardian").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Nether fortress bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Fortress edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 400);
+        SlayerItems.setCustomItemId(sword, "blackstone_bricks_sword");
+        return sword;
+    }
+    
+    public static ItemStack createPolishedBlackstoneSword() {
+        ItemStack sword = new ItemStack(Items.STONE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Polished Blackstone Blade").formatted(Formatting.GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 380").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Sleek strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Polished Blackstone Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Netherite polish").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Blackstone bonus").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Polished edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 380);
+        SlayerItems.setCustomItemId(sword, "polished_blackstone_sword");
+        return sword;
+    }
+    
+    public static ItemStack createSmoothBasaltSword() {
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Smooth Basalt Blade").formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("⚔ Damage: 7").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 420").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Volcanic strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Smooth Basalt Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Basalt pillar").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Lava resistance").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Volcanic edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 420);
+        SlayerItems.setCustomItemId(sword, "smooth_basalt_sword");
+        return sword;
+    }
+    
+    public static ItemStack createAmethystClusterSword() {
+        ItemStack sword = new ItemStack(Items.GOLDEN_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Amethyst Cluster Blade").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("⚔ Damage: 5").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 280").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Crystal strikes").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Amethyst Cluster Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Crystal resonance").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• Amethyst boost").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Crystal edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 280);
+        SlayerItems.setCustomItemId(sword, "amethyst_cluster_sword");
+        return sword;
+    }
+    
+    public static ItemStack createObsidianBlockSword() {
+        ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
+        sword.set(DataComponentTypes.CUSTOM_NAME, Text.literal("⚔ Obsidian Blade").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("⚔ Damage: 10").formatted(Formatting.RED));
+        lore.add(Text.literal("⚔ Durability: 2000").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚔ Bedrock breaker").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✨ SET BONUS (Full Obsidian Armor):").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal("• Bedrock breaker").formatted(Formatting.GREEN));
+        lore.add(Text.literal("• All resistance").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Void edge").formatted(Formatting.DARK_GRAY));
+        sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        sword.set(DataComponentTypes.MAX_DAMAGE, 2000);
+        SlayerItems.setCustomItemId(sword, "obsidian_block_sword");
+        return sword;
+    }
 }
