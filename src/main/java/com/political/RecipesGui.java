@@ -122,6 +122,26 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
+        gui.setSlot(19, new GuiElementBuilder(Items.WHEAT)
+                .setName(Text.literal("✧ Enchanted Crops").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.ENCHANTED_CROPS, 0,
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
+                        RecipesGui::openMainMenu))
+                .build());
+
+        gui.setSlot(25, new GuiElementBuilder(Items.TIPPED_ARROW)
+                .setName(Text.literal("➵ Custom Arrows").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.CUSTOM_ARROWS, 0,
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
+                        RecipesGui::openMainMenu))
+                .build());
+
         // Row 3: Materials and Tokens
         gui.setSlot(30, new GuiElementBuilder(Items.SLIME_BALL)
                 .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
@@ -190,26 +210,6 @@ public class RecipesGui {
                 .addLoreLine(Text.literal("Enchanted blocks").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.ENCHANTED_BLOCKS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
-                        RecipesGui::openMainMenu))
-                .build());
-
-        gui.setSlot(38, new GuiElementBuilder(Items.WHEAT)
-                .setName(Text.literal("✧ Enchanted Crops").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.ENCHANTED_CROPS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
-                        RecipesGui::openMainMenu))
-                .build());
-
-        gui.setSlot(40, new GuiElementBuilder(Items.TIPPED_ARROW)
-                .setName(Text.literal("➵ Custom Arrows").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.CUSTOM_ARROWS, 0,
                         (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
                         RecipesGui::openMainMenu))
                 .build());

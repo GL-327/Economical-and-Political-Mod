@@ -1137,6 +1137,22 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.SPECIAL_ITEMS, 0))
                 .build());
 
+        gui.setSlot(19, new GuiElementBuilder(Items.WHEAT)
+                .setName(Text.literal("✧ Enchanted Crops").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
+                .build());
+
+        gui.setSlot(25, new GuiElementBuilder(Items.TIPPED_ARROW)
+                .setName(Text.literal("➵ Custom Arrows").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
+                .build());
+
         // Row 3: Materials and Tokens
         gui.setSlot(30, new GuiElementBuilder(Items.SLIME_BALL)
                 .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
@@ -1193,22 +1209,6 @@ public class CustomItemsGui {
                 .addLoreLine(Text.literal("Enchanted blocks").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.ENCHANTED_BLOCKS, 0))
-                .build());
-
-        gui.setSlot(38, new GuiElementBuilder(Items.WHEAT)
-                .setName(Text.literal("✧ Enchanted Crops").formatted(Formatting.GREEN, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
-                .build());
-
-        gui.setSlot(40, new GuiElementBuilder(Items.TIPPED_ARROW)
-                .setName(Text.literal("➵ Custom Arrows").formatted(Formatting.GOLD, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
                 .build());
 
         // Close button

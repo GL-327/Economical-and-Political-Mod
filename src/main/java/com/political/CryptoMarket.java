@@ -106,7 +106,7 @@ public class CryptoMarket {
     private static double fearGreedIndex = 50.0; // 0-100
     
     // Player trading impact tracking
-    private static final Map<String, Double> recentBuyPressure = new ConcurrentHashMap<>(); // symbol -> net buy volume
+    private static final Map<String, Double> recentBuyPressure = new ConcurrentHashMap<>(); // symbol -> net buy volume (USD notional)
     private static final Map<String, Integer> tradeCount = new ConcurrentHashMap<>(); // symbol -> number of trades
     
     /**
@@ -286,12 +286,11 @@ public class CryptoMarket {
         double playerImpact = 0.0;
         Double buyPressure = recentBuyPressure.get(crypto.symbol);
         if (buyPressure != null && buyPressure != 0) {
-            // Scale impact by trade volume relative to circulating supply
-            Long supplyLong = circulatingSupply.get(crypto.symbol);
-            double supply = supplyLong != null ? supplyLong.doubleValue() : 1000000.0;
-            double relativeVolume = Math.abs(buyPressure) / supply;
+            // Scale impact by notional volume relative to market cap
+            double marketCap = marketCaps.getOrDefault(crypto.symbol, currentPrice * 1_000_000d);
+            double relativeVolume = Math.abs(buyPressure) / Math.max(1.0, marketCap);
             // Cap impact at 2% per update cycle for realistic movement
-            playerImpact = Math.signum(buyPressure) * Math.min(relativeVolume * currentPrice, currentPrice * 0.02);
+            playerImpact = Math.signum(buyPressure) * Math.min(relativeVolume * currentPrice * 0.8, currentPrice * 0.02);
         }
         
         // Calculate new price
@@ -419,9 +418,9 @@ public class CryptoMarket {
         // Add crypto to wallet
         deposit(player.getUuidAsString(), symbol, amount);
         
-        // Track buy pressure for price impact
+        // Track buy pressure for price impact (USD notional)
         double pressure = recentBuyPressure.getOrDefault(symbol, 0.0);
-        recentBuyPressure.put(symbol, pressure + amount);
+        recentBuyPressure.put(symbol, pressure + (price * amount));
         
         player.sendMessage(Text.literal("✅ Bought " + formatCrypto(amount) + " " + symbol + " for " + 
                 formatCrypto(coinsNeeded) + " coins (fee: " + formatCrypto((long)fee) + ")!").formatted(Formatting.GREEN), false);
@@ -451,9 +450,9 @@ public class CryptoMarket {
         // Remove crypto
         withdraw(uuid, symbol, amount);
         
-        // Track sell pressure for price impact (negative = selling)
+        // Track sell pressure for price impact (USD notional; negative = selling)
         double pressure = recentBuyPressure.getOrDefault(symbol, 0.0);
-        recentBuyPressure.put(symbol, pressure - amount);
+        recentBuyPressure.put(symbol, pressure - (price * amount));
         
         // Track trade count for INVESTOR buff
         StockMarket.incrementTradeCount(uuid);

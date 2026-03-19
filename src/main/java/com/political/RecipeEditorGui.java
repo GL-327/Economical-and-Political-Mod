@@ -997,6 +997,20 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.SPECIAL_ITEMS, 0))
                 .build());
 
+        gui.setSlot(19, new GuiElementBuilder(Category.ENCHANTED_CROPS.icon)
+                .setName(Text.literal(Category.ENCHANTED_CROPS.label).formatted(Category.ENCHANTED_CROPS.colour, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
+                .build());
+
+        gui.setSlot(25, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
+                .setName(Text.literal(Category.CUSTOM_ARROWS.label).formatted(Category.CUSTOM_ARROWS.colour, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
+                .build());
+
         // Row 3: Materials and Tokens (slots 27-32)
         gui.setSlot(30, new GuiElementBuilder(Category.MATERIALS.icon)
                 .setName(Text.literal(Category.MATERIALS.label).formatted(Category.MATERIALS.colour, Formatting.BOLD))
@@ -1046,20 +1060,6 @@ public class RecipeEditorGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_BLOCKS, 0))
-                .build());
-
-        gui.setSlot(38, new GuiElementBuilder(Category.ENCHANTED_CROPS.icon)
-                .setName(Text.literal(Category.ENCHANTED_CROPS.label).formatted(Category.ENCHANTED_CROPS.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
-                .build());
-
-        gui.setSlot(40, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
-                .setName(Text.literal(Category.CUSTOM_ARROWS.label).formatted(Category.CUSTOM_ARROWS.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
                 .build());
 
         int[] menuSlots = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43};
