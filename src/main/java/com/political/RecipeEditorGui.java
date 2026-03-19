@@ -932,14 +932,14 @@ public class RecipeEditorGui {
 
         // Place category buttons matching /recipe layout
         // Row 1: Armor categories (slots 9-14)
-        gui.setSlot(9, new GuiElementBuilder(Category.GEM_BLOCK_GEAR.icon)
+        gui.setSlot(10, new GuiElementBuilder(Category.GEM_BLOCK_GEAR.icon)
                 .setName(Text.literal(Category.GEM_BLOCK_GEAR.label).formatted(Category.GEM_BLOCK_GEAR.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.GEM_BLOCK_GEAR, 0))
                 .build());
 
-        gui.setSlot(11, new GuiElementBuilder(Category.BOUNTY_SETS.icon)
+        gui.setSlot(12, new GuiElementBuilder(Category.BOUNTY_SETS.icon)
                 .setName(Text.literal(Category.BOUNTY_SETS.label).formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("T1 & T2 Armor + Swords").formatted(Formatting.GRAY))
@@ -947,21 +947,21 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openBountySetsPage(player, 0))
                 .build());
 
-        gui.setSlot(12, new GuiElementBuilder(Category.SPECIAL_ARMOR.icon)
+        gui.setSlot(14, new GuiElementBuilder(Category.SPECIAL_ARMOR.icon)
                 .setName(Text.literal(Category.SPECIAL_ARMOR.label).formatted(Category.SPECIAL_ARMOR.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.SPECIAL_ARMOR, 0))
                 .build());
 
-        gui.setSlot(13, new GuiElementBuilder(Category.GOLD_ARMOR.icon)
+        gui.setSlot(16, new GuiElementBuilder(Category.GOLD_ARMOR.icon)
                 .setName(Text.literal(Category.GOLD_ARMOR.label).formatted(Category.GOLD_ARMOR.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.GOLD_ARMOR, 0))
                 .build());
 
-        gui.setSlot(14, new GuiElementBuilder(Category.PIGLIN.icon)
+        gui.setSlot(28, new GuiElementBuilder(Category.PIGLIN.icon)
                 .setName(Text.literal(Category.PIGLIN.label).formatted(Category.PIGLIN.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
@@ -969,7 +969,7 @@ public class RecipeEditorGui {
                 .build());
 
         // Row 2: Weapons and Tools (slots 18-23)
-        gui.setSlot(20, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+        gui.setSlot(21, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
                 .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
@@ -990,42 +990,42 @@ public class RecipeEditorGui {
                 .build());
 
         // Row 3: Materials and Tokens (slots 27-32)
-        gui.setSlot(27, new GuiElementBuilder(Category.MATERIALS.icon)
+        gui.setSlot(30, new GuiElementBuilder(Category.MATERIALS.icon)
                 .setName(Text.literal(Category.MATERIALS.label).formatted(Category.MATERIALS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.MATERIALS, 0))
                 .build());
 
-        gui.setSlot(28, new GuiElementBuilder(Category.COMPACTED.icon)
+        gui.setSlot(32, new GuiElementBuilder(Category.COMPACTED.icon)
                 .setName(Text.literal(Category.COMPACTED.label).formatted(Category.COMPACTED.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.COMPACTED, 0))
                 .build());
 
-        gui.setSlot(29, new GuiElementBuilder(Category.SUPER_COMPACTED.icon)
+        gui.setSlot(34, new GuiElementBuilder(Category.SUPER_COMPACTED.icon)
                 .setName(Text.literal(Category.SUPER_COMPACTED.label).formatted(Category.SUPER_COMPACTED.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.SUPER_COMPACTED, 0))
                 .build());
 
-        gui.setSlot(30, new GuiElementBuilder(Category.ATTRIBUTE_TOKENS.icon)
+        gui.setSlot(39, new GuiElementBuilder(Category.ATTRIBUTE_TOKENS.icon)
                 .setName(Text.literal(Category.ATTRIBUTE_TOKENS.label).formatted(Category.ATTRIBUTE_TOKENS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.ATTRIBUTE_TOKENS, 0))
                 .build());
 
-        gui.setSlot(31, new GuiElementBuilder(Category.WEAPON_ATTRIBUTES.icon)
+        gui.setSlot(41, new GuiElementBuilder(Category.WEAPON_ATTRIBUTES.icon)
                 .setName(Text.literal(Category.WEAPON_ATTRIBUTES.label).formatted(Category.WEAPON_ATTRIBUTES.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.WEAPON_ATTRIBUTES, 0))
                 .build());
 
-        gui.setSlot(32, new GuiElementBuilder(Category.HPEBM.icon)
+        gui.setSlot(43, new GuiElementBuilder(Category.HPEBM.icon)
                 .setName(Text.literal(Category.HPEBM.label).formatted(Category.HPEBM.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
@@ -1033,21 +1033,21 @@ public class RecipeEditorGui {
                 .build());
 
         // Row 4: Additional categories (slots 36-38)
-        gui.setSlot(36, new GuiElementBuilder(Category.ENCHANTED_BLOCKS.icon)
+        gui.setSlot(37, new GuiElementBuilder(Category.ENCHANTED_BLOCKS.icon)
                 .setName(Text.literal(Category.ENCHANTED_BLOCKS.label).formatted(Category.ENCHANTED_BLOCKS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_BLOCKS, 0))
                 .build());
 
-        gui.setSlot(37, new GuiElementBuilder(Category.ENCHANTED_CROPS.icon)
+        gui.setSlot(38, new GuiElementBuilder(Category.ENCHANTED_CROPS.icon)
                 .setName(Text.literal(Category.ENCHANTED_CROPS.label).formatted(Category.ENCHANTED_CROPS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.ENCHANTED_CROPS, 0))
                 .build());
 
-        gui.setSlot(38, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
+        gui.setSlot(40, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
                 .setName(Text.literal(Category.CUSTOM_ARROWS.label).formatted(Category.CUSTOM_ARROWS.colour, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))

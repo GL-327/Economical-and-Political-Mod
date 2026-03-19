@@ -42,7 +42,7 @@ public class RecipesGui {
                 .glow().build());
 
         // Search button
-        gui.setSlot(0, new GuiElementBuilder(Items.SPYGLASS)
+        gui.setSlot(19, new GuiElementBuilder(Items.SPYGLASS)
                 .setName(Text.literal("🔍 Search Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Click to search items by name").formatted(Formatting.GRAY))
@@ -51,7 +51,7 @@ public class RecipesGui {
                 .build());
 
         // Row 1: Armor categories - spread across more slots
-        gui.setSlot(9, new GuiElementBuilder(Items.EMERALD)
+        gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
                 .setName(Text.literal("💎 Custom Armor").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Emerald, Lapis armors").formatted(Formatting.GRAY))
@@ -61,7 +61,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(12, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("T1 & T2 Armor + Swords").formatted(Formatting.GRAY))
@@ -71,7 +71,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(12, new GuiElementBuilder(Items.NETHERITE_HELMET)
+        gui.setSlot(14, new GuiElementBuilder(Items.NETHERITE_HELMET)
                 .setName(Text.literal("🛡 Special Armor").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Legendary armor").formatted(Formatting.GRAY))
@@ -81,7 +81,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(13, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
                 .setName(Text.literal("👑 Gold Armor").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Gold armor tiers").formatted(Formatting.GRAY))
@@ -91,7 +91,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(14, new GuiElementBuilder(Items.GOLDEN_HELMET)
+        gui.setSlot(28, new GuiElementBuilder(Items.GOLDEN_HELMET)
                 .setName(Text.literal("👑 Piglin Items").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Piglin-themed items").formatted(Formatting.GRAY))
@@ -102,7 +102,7 @@ public class RecipesGui {
                 .build());
 
         // Row 2: Weapons and Tools
-        gui.setSlot(20, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+        gui.setSlot(21, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
                 .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
@@ -123,7 +123,7 @@ public class RecipesGui {
                 .build());
 
         // Row 3: Materials and Tokens
-        gui.setSlot(27, new GuiElementBuilder(Items.SLIME_BALL)
+        gui.setSlot(30, new GuiElementBuilder(Items.SLIME_BALL)
                 .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Cores & chunks").formatted(Formatting.GRAY))
@@ -133,7 +133,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(28, new GuiElementBuilder(Items.RAW_IRON)
+        gui.setSlot(32, new GuiElementBuilder(Items.RAW_IRON)
                 .setName(Text.literal("⬛ Compacted").formatted(Formatting.DARK_GRAY, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Compacted resources").formatted(Formatting.GRAY))
@@ -143,7 +143,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(29, new GuiElementBuilder(Items.GOLD_BLOCK)
+        gui.setSlot(34, new GuiElementBuilder(Items.GOLD_BLOCK)
                 .setName(Text.literal("⭐ Super Compacted").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Super compacted").formatted(Formatting.GRAY))
@@ -153,7 +153,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(30, new GuiElementBuilder(Items.PAPER)
+        gui.setSlot(39, new GuiElementBuilder(Items.PAPER)
                 .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Armor attributes").formatted(Formatting.GRAY))
@@ -163,7 +163,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(31, new GuiElementBuilder(Items.NETHER_STAR)
+        gui.setSlot(41, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Weapon Tokens").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Weapon attributes").formatted(Formatting.GRAY))
@@ -173,7 +173,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(32, new GuiElementBuilder(Items.BLAZE_ROD)
+        gui.setSlot(43, new GuiElementBuilder(Items.BLAZE_ROD)
                 .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Energy beam weapons").formatted(Formatting.GRAY))
@@ -184,7 +184,7 @@ public class RecipesGui {
                 .build());
 
         // Row 4: Additional categories
-        gui.setSlot(36, new GuiElementBuilder(Items.COBBLESTONE)
+        gui.setSlot(37, new GuiElementBuilder(Items.COBBLESTONE)
                 .setName(Text.literal("✧ Enchanted Blocks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Enchanted blocks").formatted(Formatting.GRAY))
@@ -194,7 +194,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(37, new GuiElementBuilder(Items.WHEAT)
+        gui.setSlot(38, new GuiElementBuilder(Items.WHEAT)
                 .setName(Text.literal("✧ Enchanted Crops").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Enchanted crops & flowers").formatted(Formatting.GRAY))
@@ -204,7 +204,7 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(38, new GuiElementBuilder(Items.TIPPED_ARROW)
+        gui.setSlot(40, new GuiElementBuilder(Items.TIPPED_ARROW)
                 .setName(Text.literal("➵ Custom Arrows").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Special arrows").formatted(Formatting.GRAY))
