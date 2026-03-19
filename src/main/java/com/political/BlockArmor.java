@@ -413,8 +413,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createGlassHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, GLASS_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyGlassStats(stack, "Helmet", 1, 4, EquipmentSlot.HEAD);
         setCustomItemId(stack, "glass_helmet");
         return stack;
@@ -494,8 +493,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createObsidianHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, OBSIDIAN_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyObsidianStats(stack, "Helmet", 3, 6, EquipmentSlot.HEAD);
         setCustomItemId(stack, "obsidian_helmet");
         return stack;
@@ -582,8 +580,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createQuartzHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, QUARTZ_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyQuartzStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "quartz_helmet");
         return stack;
@@ -661,8 +658,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createGlowstoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, GLOWSTONE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyGlowstoneStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "glowstone_helmet");
         return stack;
@@ -741,8 +737,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createRedstoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, REDSTONE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyRedstoneStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "redstone_helmet");
         return stack;
@@ -820,8 +815,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createNetherrackHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, NETHERRACK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyNetherrackStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "netherrack_helmet");
         return stack;
@@ -899,8 +893,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createEndstoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, ENDSTONE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyEndstoneStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "endstone_helmet");
         return stack;
@@ -978,8 +971,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createIceHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, ICE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyIceStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "ice_helmet");
         return stack;
@@ -1057,8 +1049,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createPrismarineHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, PRISMARINE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPrismarineStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "prismarine_helmet");
         return stack;
@@ -1136,8 +1127,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createTerracottaHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, TERRACOTTA_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyTerracottaStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "terracotta_helmet");
         return stack;
@@ -1215,8 +1205,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createMossyHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, MOSSY_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyMossyStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "mossy_helmet");
         return stack;
@@ -1294,8 +1283,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createSoulSandHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, SOUL_SAND_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applySoulSandStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "soul_sand_helmet");
         return stack;
@@ -1373,8 +1361,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createMagmaHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, MAGMA_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyMagmaStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "magma_helmet");
         return stack;
@@ -1452,8 +1439,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createSandstoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, SANDSTONE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applySandstoneStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "sandstone_helmet");
         return stack;
@@ -1531,8 +1517,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createAmethystHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, AMETHYST_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyAmethystStats(stack, "Helmet", 2, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "amethyst_helmet");
         return stack;
@@ -1610,8 +1595,7 @@ public class BlockArmor {
     // ============================================================
     
     public static ItemStack createCoalHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, COAL_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyCoalStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "coal_helmet");
         return stack;
@@ -1690,8 +1674,7 @@ public class BlockArmor {
 
     // DIAMOND BLOCK ARMOR - Ultimate hardness
     public static ItemStack createDiamondBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, DIAMOND_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyDiamondBlockStats(stack, "Helmet", 4, 5, EquipmentSlot.HEAD);
         setCustomItemId(stack, "diamond_block_helmet");
         return stack;
@@ -1747,8 +1730,7 @@ public class BlockArmor {
 
     // EMERALD BLOCK ARMOR - Merchant's pride
     public static ItemStack createEmeraldBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, EMERALD_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyEmeraldBlockStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "emerald_block_helmet");
         return stack;
@@ -1804,8 +1786,7 @@ public class BlockArmor {
 
     // GOLD BLOCK ARMOR - Gilded luxury
     public static ItemStack createGoldBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, GOLD_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyGoldBlockStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "gold_block_helmet");
         return stack;
@@ -1861,8 +1842,7 @@ public class BlockArmor {
 
     // IRON BLOCK ARMOR - Industrial strength
     public static ItemStack createIronBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, IRON_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyIronBlockStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "iron_block_helmet");
         return stack;
@@ -1918,8 +1898,7 @@ public class BlockArmor {
 
     // LAPIS BLOCK ARMOR - Enchanted
     public static ItemStack createLapisBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, LAPIS_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyLapisBlockStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "lapis_block_helmet");
         return stack;
@@ -1975,8 +1954,7 @@ public class BlockArmor {
 
     // COPPER BLOCK ARMOR - Conductive
     public static ItemStack createCopperBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, COPPER_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyCopperBlockStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "copper_block_helmet");
         return stack;
@@ -2032,8 +2010,7 @@ public class BlockArmor {
 
     // ANCIENT DEBRIS ARMOR - Netherite ancient
     public static ItemStack createAncientDebrisHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, ANCIENT_DEBRIS_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyAncientDebrisStats(stack, "Helmet", 4, 5, EquipmentSlot.HEAD);
         setCustomItemId(stack, "ancient_debris_helmet");
         return stack;
@@ -2083,8 +2060,7 @@ public class BlockArmor {
 
     // BASALT ARMOR - Volcanic pillar
     public static ItemStack createBasaltHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, BASALT_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyBasaltStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "basalt_helmet");
         return stack;
@@ -2134,8 +2110,7 @@ public class BlockArmor {
 
     // BLACKSTONE ARMOR - Dark fortress
     public static ItemStack createBlackstoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, BLACKSTONE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyBlackstoneStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "blackstone_helmet");
         return stack;
@@ -2185,8 +2160,7 @@ public class BlockArmor {
 
     // BONE BLOCK ARMOR - Undead essence
     public static ItemStack createBoneBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, BONE_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyBoneBlockStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "bone_block_helmet");
         return stack;
@@ -2236,8 +2210,7 @@ public class BlockArmor {
 
     // BRICK ARMOR - Builder's pride
     public static ItemStack createBrickHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, BRICK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyBrickStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "brick_helmet");
         return stack;
@@ -2287,8 +2260,7 @@ public class BlockArmor {
 
     // CACTUS ARMOR - Prickly defense
     public static ItemStack createCactusHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, CACTUS_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyCactusStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "cactus_helmet");
         return stack;
@@ -2338,8 +2310,7 @@ public class BlockArmor {
 
     // CALCITE ARMOR - Crystal white
     public static ItemStack createCalciteHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, CALCITE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyCalciteStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "calcite_helmet");
         return stack;
@@ -2389,8 +2360,7 @@ public class BlockArmor {
 
     // DEEPSLATE ARMOR - Deep dark
     public static ItemStack createDeepslateHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, DEEPSLATE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyDeepslateStats(stack, "Helmet", 3, 4, EquipmentSlot.HEAD);
         setCustomItemId(stack, "deepslate_helmet");
         return stack;
@@ -2440,8 +2410,7 @@ public class BlockArmor {
 
     // DRIPSTONE ARMOR - Sharp and pointy
     public static ItemStack createDripstoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, DRIPSTONE_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyDripstoneStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "dripstone_helmet");
         return stack;
@@ -2491,8 +2460,7 @@ public class BlockArmor {
 
     // HAY BALE ARMOR - Farmer's protection
     public static ItemStack createHayHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, HAY_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyHayStats(stack, "Helmet", 1, 0, EquipmentSlot.HEAD);
         setCustomItemId(stack, "hay_helmet");
         return stack;
@@ -2542,8 +2510,7 @@ public class BlockArmor {
 
     // HONEYCOMB ARMOR - Beekeeper's suit
     public static ItemStack createHoneycombHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, HONEYCOMB_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyHoneycombStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "honeycomb_helmet");
         return stack;
@@ -2593,8 +2560,7 @@ public class BlockArmor {
 
     // LILY PAD ARMOR - Water walker
     public static ItemStack createLilyPadHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, LILY_PAD_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyLilyPadStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "lily_pad_helmet");
         return stack;
@@ -2644,8 +2610,7 @@ public class BlockArmor {
 
     // MELON ARMOR - Juicy protection
     public static ItemStack createMelonHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, MELON_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyMelonStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "melon_helmet");
         return stack;
@@ -2695,8 +2660,7 @@ public class BlockArmor {
 
     // MOSS BLOCK ARMOR - Overgrown
     public static ItemStack createMossBlockHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, MOSS_BLOCK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyMossBlockStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "moss_block_helmet");
         return stack;
@@ -2797,8 +2761,7 @@ public class BlockArmor {
 
     // NETHER BRICK ARMOR - Fortress guard
     public static ItemStack createNetherBrickHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, NETHER_BRICK_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyNetherBrickStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "nether_brick_helmet");
         return stack;
@@ -3052,8 +3015,7 @@ public class BlockArmor {
 
     // SHROOMLIGHT ARMOR - Fungal light
     public static ItemStack createShroomlightHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        applyPlayerHeadTexture(stack, SHROOMLIGHT_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyShroomlightStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "shroomlight_helmet");
         return stack;
