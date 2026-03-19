@@ -41,6 +41,7 @@ public class DanielsPickaxe {
     // Track ability state per player
     private static final Map<UUID, Boolean> abilityActive = new HashMap<>();
     private static final Map<UUID, Long> lastHasteTime = new HashMap<>(); // Track last haste refresh
+    private static final Map<UUID, Long> lastToggleTime = new HashMap<>(); // Track last mode toggle
 
     // Blocks that count as ores for vein mining
     private static final Set<Block> ORE_BLOCKS = new HashSet<>(Arrays.asList(
@@ -89,7 +90,7 @@ public class DanielsPickaxe {
                 Text.literal(""),
                 Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD),
                 Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY),
-                Text.literal("  └ Haste X for extreme speed").formatted(Formatting.GRAY),
+                Text.literal("  └ Haste V for extreme speed").formatted(Formatting.GRAY),
                 Text.literal("  └ Diamond Pickaxe").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("§7Toggle for TUNNEL MODE:").formatted(Formatting.GRAY),
@@ -130,6 +131,15 @@ public class DanielsPickaxe {
 
     public static void toggleAbility(ServerPlayerEntity player) {
         UUID uuid = player.getUuid();
+
+        long now = System.currentTimeMillis();
+        long last = lastToggleTime.getOrDefault(uuid, 0L);
+        if (now - last < 2000) {
+            player.sendMessage(Text.literal("⏳ Please wait before switching modes again").formatted(Formatting.RED), true);
+            return;
+        }
+        lastToggleTime.put(uuid, now);
+
         boolean currentState = abilityActive.getOrDefault(uuid, false);
         boolean newState = !currentState;
         abilityActive.put(uuid, newState);
@@ -225,7 +235,7 @@ public class DanielsPickaxe {
         } else {
             lore.add(Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD));
             lore.add(Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY));
-            lore.add(Text.literal("  └ Haste X for extreme speed").formatted(Formatting.GRAY));
+            lore.add(Text.literal("  └ Haste V for extreme speed").formatted(Formatting.GRAY));
             lore.add(Text.literal("  └ Diamond Pickaxe").formatted(Formatting.GRAY));
         }
 
@@ -244,7 +254,7 @@ public class DanielsPickaxe {
      */
     public static void tickPlayer(ServerPlayerEntity player) {
         if (!isAbilityActive(player)) {
-            // Insta-mine mode - apply Haste 10
+            // Insta-mine mode - apply Haste 5
             long currentTime = System.currentTimeMillis();
             long lastTime = lastHasteTime.getOrDefault(player.getUuid(), 0L);
             
@@ -252,7 +262,7 @@ public class DanielsPickaxe {
             if (currentTime - lastTime >= 1000) {
                 if (isDanielsPickaxe(player.getMainHandStack())) {
                     player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.HASTE, 40, 9, true, false, false)); // Haste 10 (level 9)
+                        StatusEffects.HASTE, 40, 4, true, false, false)); // Haste 5 (level 4)
                     lastHasteTime.put(player.getUuid(), currentTime);
                 }
             }
@@ -278,6 +288,10 @@ public class DanielsPickaxe {
         // Tunnel mode: 3x3 excavation + vein mining
         // Get the actual block face the player is looking at
         Direction blockFace = getBlockFace(player, world, pos);
+
+        if (blockFace == Direction.UP || blockFace == Direction.DOWN) {
+            blockFace = player.getHorizontalFacing();
+        }
 
         // Break 3x3 area centered on the mined block
         break3x3Area(player, world, pos, blockFace, tool);

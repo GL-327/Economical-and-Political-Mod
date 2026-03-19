@@ -60,12 +60,16 @@ public class ShopGui {
                 Items.BREWING_STAND,     // Brewing
                 Items.CYAN_DYE,          // Dyes & Decoration
                 Items.ENDER_CHEST,       // Miscellaneous
-                Items.IRON_BLOCK,        // Compacted Items
-                Items.GOLD_BLOCK,        // Super Compacted
-                Items.ENCHANTED_BOOK     // Enchanted Items
+                Items.IRON_BLOCK,        // Compacted Items (special shop)
+                Items.GOLD_BLOCK,        // Super Compacted (special shop)
+                Items.ENCHANTED_BOOK     // Enchanted Items (special shop)
         };
 
-        List<String> categories = ShopManager.getCategoryNames();
+        List<String> categories = ShopManager.getCategoryNames().stream()
+                .filter(c -> !c.equalsIgnoreCase("Compacted Items"))
+                .filter(c -> !c.equalsIgnoreCase("Super Compacted"))
+                .filter(c -> !c.equalsIgnoreCase("Enchanted Items"))
+                .toList();
         int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
         for (int i = 0; i < categories.size() && i < slots.length; i++) {

@@ -1072,14 +1072,6 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.CUSTOM_ARMOR, 0))
                 .build());
 
-        gui.setSlot(10, new GuiElementBuilder(Items.OBSIDIAN)
-                .setName(Text.literal("🧱 Block Armor").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Block-themed armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.BLOCK_ARMOR, 0))
-                .build());
-
         gui.setSlot(11, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -1115,28 +1107,14 @@ public class CustomItemsGui {
                 .build());
 
         // Row 2: Weapons and Tools
-        gui.setSlot(18, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔ Block Weapons").formatted(Formatting.WHITE, Formatting.BOLD))
+        gui.setSlot(20, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+                .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Block-themed swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.BLOCK_WEAPONS, 0))
-                .build());
-
-        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
-                .setName(Text.literal("⛏ Block Tools").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Block-themed tools").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.BLOCK_TOOLS, 0))
-                .build());
-
-        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
-                .setName(Text.literal("⛏ Custom Tools").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Legendary tools").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> openCategoryPage(player, Category.CUSTOM_TOOLS, 0))
+                .setCallback((idx, type, action) -> openToolSetsPage(player, 0,
+                        (p, item) -> giveItem(p, item),
+                        CustomItemsGui::open))
                 .build());
 
         gui.setSlot(23, new GuiElementBuilder(Items.STICK)
@@ -1230,6 +1208,142 @@ public class CustomItemsGui {
         gui.open();
     }
 
+    public static void openToolSetsPage(ServerPlayerEntity player, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⛏ Tool Sets"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+                .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("[Icon] [gap] [Pickaxe] [Axe] [Shovel] [Hoe]").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        class ToolSetDisplay {
+            final net.minecraft.item.Item icon;
+            final String name;
+            final Formatting color;
+            final ItemStack pickaxe;
+            final ItemStack axe;
+            final ItemStack shovel;
+            final ItemStack hoe;
+
+            ToolSetDisplay(net.minecraft.item.Item icon, String name, Formatting color, ItemStack pickaxe, ItemStack axe, ItemStack shovel, ItemStack hoe) {
+                this.icon = icon;
+                this.name = name;
+                this.color = color;
+                this.pickaxe = pickaxe;
+                this.axe = axe;
+                this.shovel = shovel;
+                this.hoe = hoe;
+            }
+        }
+
+        List<ToolSetDisplay> sets = new ArrayList<>();
+
+        // Block tool sets (use representative block icons)
+        sets.add(new ToolSetDisplay(Items.GLASS, "Glass", Formatting.AQUA,
+                BlockTools.createGlassPickaxe(), BlockTools.createGlassAxe(), BlockTools.createGlassShovel(), BlockTools.createGlassHoe()));
+        sets.add(new ToolSetDisplay(Items.OBSIDIAN, "Obsidian", Formatting.DARK_PURPLE,
+                BlockTools.createObsidianPickaxe(), BlockTools.createObsidianAxe(), BlockTools.createObsidianShovel(), BlockTools.createObsidianHoe()));
+        sets.add(new ToolSetDisplay(Items.QUARTZ_BLOCK, "Quartz", Formatting.WHITE,
+                BlockTools.createQuartzPickaxe(), BlockTools.createQuartzAxe(), BlockTools.createQuartzShovel(), BlockTools.createQuartzHoe()));
+        sets.add(new ToolSetDisplay(Items.GLOWSTONE, "Glowstone", Formatting.YELLOW,
+                BlockTools.createGlowstonePickaxe(), BlockTools.createGlowstoneAxe(), BlockTools.createGlowstoneShovel(), BlockTools.createGlowstoneHoe()));
+        sets.add(new ToolSetDisplay(Items.REDSTONE_BLOCK, "Redstone", Formatting.RED,
+                BlockTools.createRedstonePickaxe(), BlockTools.createRedstoneAxe(), BlockTools.createRedstoneShovel(), BlockTools.createRedstoneHoe()));
+
+        // Legendary tool sets (use pickaxe base item as icon)
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Dragon", Formatting.DARK_RED,
+                LegendaryTools.createDragonPickaxe(), LegendaryTools.createDragonAxe(), LegendaryTools.createDragonShovel(), LegendaryTools.createDragonHoe()));
+        sets.add(new ToolSetDisplay(Items.DIAMOND_PICKAXE, "Aether", Formatting.AQUA,
+                LegendaryTools.createAetherPickaxe(), LegendaryTools.createAetherAxe(), LegendaryTools.createAetherShovel(), LegendaryTools.createAetherHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Void", Formatting.DARK_PURPLE,
+                LegendaryTools.createVoidPickaxe(), LegendaryTools.createVoidAxe(), LegendaryTools.createVoidShovel(), LegendaryTools.createVoidHoe()));
+        sets.add(new ToolSetDisplay(Items.DIAMOND_PICKAXE, "Nature", Formatting.GREEN,
+                LegendaryTools.createNaturePickaxe(), LegendaryTools.createNatureAxe(), LegendaryTools.createNatureShovel(), LegendaryTools.createNatureHoe()));
+        sets.add(new ToolSetDisplay(Items.DIAMOND_PICKAXE, "Frost", Formatting.BLUE,
+                LegendaryTools.createFrostPickaxe(), LegendaryTools.createFrostAxe(), LegendaryTools.createFrostShovel(), LegendaryTools.createFrostHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Thunder", Formatting.YELLOW,
+                LegendaryTools.createThunderPickaxe(), LegendaryTools.createThunderAxe(), LegendaryTools.createThunderShovel(), LegendaryTools.createThunderHoe()));
+        sets.add(new ToolSetDisplay(Items.DIAMOND_PICKAXE, "Ocean", Formatting.DARK_BLUE,
+                LegendaryTools.createOceanPickaxe(), LegendaryTools.createOceanAxe(), LegendaryTools.createOceanShovel(), LegendaryTools.createOceanHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Lunar", Formatting.LIGHT_PURPLE,
+                LegendaryTools.createLunarPickaxe(), LegendaryTools.createLunarAxe(), LegendaryTools.createLunarShovel(), LegendaryTools.createLunarHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Solar", Formatting.GOLD,
+                LegendaryTools.createSolarPickaxe(), LegendaryTools.createSolarAxe(), LegendaryTools.createSolarShovel(), LegendaryTools.createSolarHoe()));
+        sets.add(new ToolSetDisplay(Items.DIAMOND_PICKAXE, "Terra", Formatting.DARK_GREEN,
+                LegendaryTools.createTerraPickaxe(), LegendaryTools.createTerraAxe(), LegendaryTools.createTerraShovel(), LegendaryTools.createTerraHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Phantom", Formatting.GRAY,
+                LegendaryTools.createPhantomPickaxe(), LegendaryTools.createPhantomAxe(), LegendaryTools.createPhantomShovel(), LegendaryTools.createPhantomHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Blood", Formatting.DARK_RED,
+                LegendaryTools.createBloodPickaxe(), LegendaryTools.createBloodAxe(), LegendaryTools.createBloodShovel(), LegendaryTools.createBloodHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Celestial", Formatting.DARK_AQUA,
+                LegendaryTools.createCelestialPickaxe(), LegendaryTools.createCelestialAxe(), LegendaryTools.createCelestialShovel(), LegendaryTools.createCelestialHoe()));
+        sets.add(new ToolSetDisplay(Items.NETHERITE_PICKAXE, "Shadow", Formatting.BLACK,
+                LegendaryTools.createShadowPickaxe(), LegendaryTools.createShadowAxe(), LegendaryTools.createShadowShovel(), LegendaryTools.createShadowHoe()));
+        sets.add(new ToolSetDisplay(Items.DIAMOND_PICKAXE, "Crystal", Formatting.WHITE,
+                LegendaryTools.createCrystalPickaxe(), LegendaryTools.createCrystalAxe(), LegendaryTools.createCrystalShovel(), LegendaryTools.createCrystalHoe()));
+
+        int setsPerPage = 4;
+        int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
+        int clampedPage = Math.min(page, totalPages - 1);
+        int startIdx = clampedPage * setsPerPage;
+        int endIdx = Math.min(startIdx + setsPerPage, sets.size());
+
+        for (int i = startIdx; i < endIdx; i++) {
+            ToolSetDisplay set = sets.get(i);
+            int row = i - startIdx + 1;
+            int base = row * 9;
+
+            gui.setSlot(base, new GuiElementBuilder(set.icon)
+                    .setName(Text.literal(set.name + " Tools").formatted(set.color, Formatting.BOLD))
+                    .glow().build());
+            gui.setSlot(base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+
+            ItemStack[] tools = { set.pickaxe, set.axe, set.shovel, set.hoe };
+            for (int j = 0; j < tools.length; j++) {
+                ItemStack tool = tools[j];
+                Text toolName = tool.get(DataComponentTypes.CUSTOM_NAME);
+                final ItemStack finalTool = tool;
+                gui.setSlot(base + 2 + j, new GuiElementBuilder(tool.getItem())
+                        .setName(toolName != null ? toolName : Text.literal(tool.getItem().toString()))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("✨ Click").formatted(Formatting.YELLOW))
+                        .setCallback((s, t, a) -> onItemClick.onClick(player, finalTool))
+                        .build());
+            }
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((s, t, a) -> onBack.open(player)).build());
+
+        if (clampedPage > 0) {
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("← Previous Page").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> openToolSetsPage(player, prev, onItemClick, onBack)).build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int next = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page →").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> openToolSetsPage(player, next, onItemClick, onBack)).build());
+        }
+
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("Page " + (clampedPage + 1) + " / " + totalPages).formatted(Formatting.WHITE))
+                .build());
+
+        gui.open();
+    }
+
     public static void openBountySetsPage(ServerPlayerEntity player, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
         gui.setTitle(Text.literal("⚔ Bounty Sets (T1 & T2)"));
@@ -1261,7 +1375,7 @@ public class CustomItemsGui {
                     SlayerItems.createSlayerBoots(type, 2)));
         }
 
-        int setsPerPage = 4;
+        int setsPerPage = 3;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
         int clampedPage = Math.min(page, totalPages - 1);
         int startIdx = clampedPage * setsPerPage;

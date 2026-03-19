@@ -56,16 +56,6 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
-        gui.setSlot(10, new GuiElementBuilder(Items.OBSIDIAN)
-                .setName(Text.literal("🧱 Block Armor").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Block-themed armor").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.BLOCK_ARMOR, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
-                        RecipesGui::openMainMenu))
-                .build());
-
         gui.setSlot(11, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -107,32 +97,12 @@ public class RecipesGui {
                 .build());
 
         // Row 2: Weapons and Tools
-        gui.setSlot(18, new GuiElementBuilder(Items.DIAMOND_SWORD)
-                .setName(Text.literal("⚔ Block Weapons").formatted(Formatting.WHITE, Formatting.BOLD))
+        gui.setSlot(20, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+                .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Block-themed swords").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.BLOCK_WEAPONS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
-                        RecipesGui::openMainMenu))
-                .build());
-
-        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_PICKAXE)
-                .setName(Text.literal("⛏ Block Tools").formatted(Formatting.AQUA, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Block-themed tools").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.BLOCK_TOOLS, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item),
-                        RecipesGui::openMainMenu))
-                .build());
-
-        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
-                .setName(Text.literal("⛏ Custom Tools").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Legendary tools").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
-                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.CUSTOM_TOOLS, 0,
+                .setCallback((idx, type, action) -> CustomItemsGui.openToolSetsPage(player, 0,
                         (p, item) -> CustomItemsGui.showItemInfo(p, item),
                         RecipesGui::openMainMenu))
                 .build());
@@ -1812,50 +1782,6 @@ public class RecipesGui {
 
         // Back button
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openMainMenu(player))
-                .build());
-
-        gui.open();
-    }
-
-    // ============================================================
-    // MATERIALS MENU - Shows recent additions
-    // ============================================================
-    private static void openMaterialsMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, player, false);
-        gui.setTitle(Text.literal("📦 Materials"));
-
-        // Background with dark theme
-        for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Text.literal("")).build());
-        }
-
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.SLIME_BALL)
-                .setName(Text.literal("📦 Materials").formatted(Formatting.GRAY, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("All crafting materials").formatted(Formatting.GRAY))
-                .addLoreLine(Text.literal("Click any item to view recipe").formatted(Formatting.GRAY))
-                .glow().build());
-
-        // Add cores and chunks in a grid
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
-        int idx = 0;
-        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-            if (idx >= slots.length) break;
-            
-            gui.setSlot(slots[idx++], new GuiElementBuilder(SlayerItems.createCore(type))
-                    .setName(SlayerItems.createCore(type).get(DataComponentTypes.CUSTOM_NAME))
-                    .addLoreLine(Text.literal(""))
-                    .addLoreLine(Text.literal("✨ Click to view recipe").formatted(Formatting.YELLOW))
-                    .setCallback((slot, type2, action) -> showItemInfo(player, SlayerItems.createCore(type)))
-                    .build());
-        }
-
-        // Back button
-        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openMainMenu(player))
                 .build());

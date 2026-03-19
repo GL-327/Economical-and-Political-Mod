@@ -935,13 +935,6 @@ public class RecipeEditorGui {
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.GEM_BLOCK_GEAR, 0))
                 .build());
 
-        gui.setSlot(10, new GuiElementBuilder(Category.BLOCK_ARMOR.icon)
-                .setName(Text.literal(Category.BLOCK_ARMOR.label).formatted(Category.BLOCK_ARMOR.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.BLOCK_ARMOR, 0))
-                .build());
-
         gui.setSlot(11, new GuiElementBuilder(Category.BOUNTY_SETS.icon)
                 .setName(Text.literal(Category.BOUNTY_SETS.label).formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -972,25 +965,17 @@ public class RecipeEditorGui {
                 .build());
 
         // Row 2: Weapons and Tools (slots 18-23)
-        gui.setSlot(18, new GuiElementBuilder(Category.BLOCK_WEAPONS.icon)
-                .setName(Text.literal(Category.BLOCK_WEAPONS.label).formatted(Category.BLOCK_WEAPONS.colour, Formatting.BOLD))
+        gui.setSlot(20, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
+                .setName(Text.literal("⛏ Tool Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.BLOCK_WEAPONS, 0))
-                .build());
-
-        gui.setSlot(21, new GuiElementBuilder(Category.BLOCK_TOOLS.icon)
-                .setName(Text.literal(Category.BLOCK_TOOLS.label).formatted(Category.BLOCK_TOOLS.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.BLOCK_TOOLS, 0))
-                .build());
-
-        gui.setSlot(22, new GuiElementBuilder(Category.CUSTOM_TOOLS.icon)
-                .setName(Text.literal(Category.CUSTOM_TOOLS.label).formatted(Category.CUSTOM_TOOLS.colour, Formatting.BOLD))
-                .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
-                .setCallback((slot, type, action) -> openCategoryPage(player, Category.CUSTOM_TOOLS, 0))
+                .addLoreLine(Text.literal("Block + Legendary tools").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((slot, type, action) -> CustomItemsGui.openToolSetsPage(player, 0,
+                        (p, item) -> {
+                            SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(item);
+                            openRecipeEditor(p, item, r, Category.CUSTOM_TOOLS);
+                        },
+                        RecipeEditorGui::openMainMenu))
                 .build());
 
         gui.setSlot(23, new GuiElementBuilder(Category.SPECIAL_ITEMS.icon)
@@ -1103,7 +1088,7 @@ public class RecipeEditorGui {
                 SlayerItems.createSlayerBoots(type, 2)));
         }
 
-        int setsPerPage = 4;
+        int setsPerPage = 3;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
         int clampedPage = Math.min(page, totalPages - 1);
         int startIdx = clampedPage * setsPerPage;
