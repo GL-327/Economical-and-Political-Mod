@@ -97,6 +97,7 @@ public class CryptoMarketGui {
         
         for (int i = startIdx; i < cryptos.length && count < itemsPerPage; i++) {
             CryptoMarket.Crypto crypto = cryptos[i];
+            final String symbol = crypto.symbol;
             double price = CryptoMarket.getPrice(crypto.symbol);
             double change = CryptoMarket.calculateChange(crypto.symbol);
             
@@ -109,6 +110,9 @@ public class CryptoMarketGui {
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("§6Price: $" + CryptoMarket.formatCrypto(price)))
                     .addLoreLine(Text.literal("§7Change: " + changeStr).formatted(changeColor))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("§eClick to trade"))
+                    .setCallback((idx, type, action) -> openCryptoDetail(player, symbol))
                     .build());
             
             count++;
@@ -155,6 +159,9 @@ public class CryptoMarketGui {
                         .addLoreLine(Text.literal("Price: §6$" + CryptoMarket.formatCrypto(price)).formatted(Formatting.YELLOW))
                         .addLoreLine(Text.literal("Value: §6$" + CryptoMarket.formatCrypto(value)).formatted(Formatting.GOLD))
                         .addLoreLine(Text.literal("Change: " + (change >= 0 ? "+" : "") + String.format("%.2f", change) + "%").formatted(changeColor))
+                        .addLoreLine(Text.literal(""))
+                        .addLoreLine(Text.literal("§eClick to trade"))
+                        .setCallback((idx, type, action) -> openCryptoDetail(player, symbol))
                         .build());
             }
             slot++;

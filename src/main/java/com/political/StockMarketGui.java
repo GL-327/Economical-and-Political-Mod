@@ -94,6 +94,7 @@ public class StockMarketGui {
         
         for (int i = startIdx; i < stocks.length && count < itemsPerPage; i++) {
             StockMarket.Stock stock = stocks[i];
+            final String symbol = stock.symbol;
             double price = StockMarket.getPrice(stock.symbol);
             double change = StockMarket.calculateChange(stock.symbol);
             
@@ -108,6 +109,9 @@ public class StockMarketGui {
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("§6Price: " + StockMarket.formatPrice(price) + " coins"))
                     .addLoreLine(Text.literal("§7Change: " + changeStr).formatted(changeColor))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("§eClick to trade"))
+                    .setCallback((idx, type, action) -> openStockDetail(player, symbol))
                     .build());
             
             count++;
@@ -160,6 +164,9 @@ public class StockMarketGui {
                     .addLoreLine(Text.literal("Price: §6" + StockMarket.formatPrice(price)).formatted(Formatting.YELLOW))
                     .addLoreLine(Text.literal("Value: §6" + StockMarket.formatPrice(value)).formatted(Formatting.GOLD))
                     .addLoreLine(Text.literal("Change: " + (change >= 0 ? "+" : "") + String.format("%.2f", change) + "%").formatted(changeColor))
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("§eClick to trade"))
+                    .setCallback((idx, type, action) -> openStockDetail(player, symbol))
                     .build());
             slot++;
         }
