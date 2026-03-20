@@ -25,8 +25,8 @@ public class CraftingResultSlotMixin {
 
     @Shadow @Final private RecipeInputInventory input;
 
-    @Inject(method = "onTakeItem", at = @At("TAIL"))
-    private void political_consumeIngredients(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+    @Inject(method = "onTakeItem", at = @At("HEAD"), cancellable = true)
+    private void political_onTakeItem(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (player == null || stack == null || stack.isEmpty()) return;
         if (this.input == null) return;
 
@@ -36,25 +36,29 @@ public class CraftingResultSlotMixin {
         }
         if (grid.size() != 9) return;
 
+        // Check for custom recipe - if found, handle consumption ourselves and cancel vanilla
         SlayerRecipes.Recipe matchedCustom = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedCustom != null) {
-            consumeForCustomRecipe(matchedCustom, grid);
+            consumeForCustomRecipe(matchedCustom);
+            ci.cancel();
             return;
         }
 
         ItemStack beam = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beam != null) {
             decrementOneEachNonEmpty();
+            ci.cancel();
             return;
         }
 
         ItemStack bounty = BountyCraftingHandler.checkBountyGridRecipe(grid, player);
         if (bounty != null) {
             decrementOneEachNonEmpty();
+            ci.cancel();
         }
     }
 
-    private void consumeForCustomRecipe(SlayerRecipes.Recipe recipe, List<ItemStack> grid) {
+    private void consumeForCustomRecipe(SlayerRecipes.Recipe recipe) {
         if (recipe.ingredients == null) return;
 
         Map<String, Integer> required = new HashMap<>();
