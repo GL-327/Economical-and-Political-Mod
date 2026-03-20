@@ -917,17 +917,95 @@ public class SlayerRecipes {
         addBlockToolRecipeWithCore("Ice Shovel", BlockTools.createIceShovel(), Items.PACKED_ICE, Items.DIAMOND_SHOVEL, 1);
         addBlockToolRecipeWithCore("Ice Hoe", BlockTools.createIceHoe(), Items.PACKED_ICE, Items.DIAMOND_HOE, 1);
         
+        // Terracotta Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Terracotta Pickaxe", BlockTools.createTerracottaPickaxe(), Items.TERRACOTTA, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Terracotta Axe", BlockTools.createTerracottaAxe(), Items.TERRACOTTA, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Terracotta Shovel", BlockTools.createTerracottaShovel(), Items.TERRACOTTA, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Terracotta Hoe", BlockTools.createTerracottaHoe(), Items.TERRACOTTA, Items.IRON_HOE, 1);
+        
+        // Obsidian Tools - T3 (very durable material)
+        addBlockToolRecipeWithCore("Obsidian Pickaxe", BlockTools.createObsidianPickaxe(), Items.OBSIDIAN, Items.NETHERITE_PICKAXE, 3);
+        addBlockToolRecipeWithCore("Obsidian Axe", BlockTools.createObsidianAxe(), Items.OBSIDIAN, Items.NETHERITE_AXE, 3);
+        addBlockToolRecipeWithCore("Obsidian Shovel", BlockTools.createObsidianShovel(), Items.OBSIDIAN, Items.NETHERITE_SHOVEL, 3);
+        addBlockToolRecipeWithCore("Obsidian Hoe", BlockTools.createObsidianHoe(), Items.OBSIDIAN, Items.NETHERITE_HOE, 3);
+        
+        // Quartz Tools - T1 (basic nether material)
+        addBlockToolRecipeWithCore("Quartz Pickaxe", BlockTools.createQuartzPickaxe(), Items.QUARTZ_BLOCK, Items.DIAMOND_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Quartz Axe", BlockTools.createQuartzAxe(), Items.QUARTZ_BLOCK, Items.DIAMOND_AXE, 1);
+        addBlockToolRecipeWithCore("Quartz Shovel", BlockTools.createQuartzShovel(), Items.QUARTZ_BLOCK, Items.DIAMOND_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Quartz Hoe", BlockTools.createQuartzHoe(), Items.QUARTZ_BLOCK, Items.DIAMOND_HOE, 1);
+        
+        // Glowstone Tools - T1 (light-emitting material)
+        addBlockToolRecipeWithCore("Glowstone Pickaxe", BlockTools.createGlowstonePickaxe(), Items.GLOWSTONE, Items.GOLDEN_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Glowstone Axe", BlockTools.createGlowstoneAxe(), Items.GLOWSTONE, Items.GOLDEN_AXE, 1);
+        addBlockToolRecipeWithCore("Glowstone Shovel", BlockTools.createGlowstoneShovel(), Items.GLOWSTONE, Items.GOLDEN_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Glowstone Hoe", BlockTools.createGlowstoneHoe(), Items.GLOWSTONE, Items.GOLDEN_HOE, 1);
+        
+        // Redstone Tools - T1 (common material)
+        addBlockToolRecipeWithCore("Redstone Pickaxe", BlockTools.createRedstonePickaxe(), Items.REDSTONE_BLOCK, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Redstone Axe", BlockTools.createRedstoneAxe(), Items.REDSTONE_BLOCK, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Redstone Shovel", BlockTools.createRedstoneShovel(), Items.REDSTONE_BLOCK, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Redstone Hoe", BlockTools.createRedstoneHoe(), Items.REDSTONE_BLOCK, Items.IRON_HOE, 1);
+        
+        // Netherrack Tools - T1 (common nether material)
+        addBlockToolRecipeWithCore("Netherrack Pickaxe", BlockTools.createNetherrackPickaxe(), Items.NETHERRACK, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Netherrack Axe", BlockTools.createNetherrackAxe(), Items.NETHERRACK, Items.STONE_AXE, 1);
+        addBlockToolRecipeWithCore("Netherrack Shovel", BlockTools.createNetherrackShovel(), Items.NETHERRACK, Items.STONE_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Netherrack Hoe", BlockTools.createNetherrackHoe(), Items.NETHERRACK, Items.STONE_HOE, 1);
+        
+        // End Stone Tools - T2 (end material, decent durability)
+        addBlockToolRecipeWithCore("End Stone Pickaxe", BlockTools.createEndstonePickaxe(), Items.END_STONE, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("End Stone Axe", BlockTools.createEndstoneAxe(), Items.END_STONE, Items.DIAMOND_AXE, 2);
+        addBlockToolRecipeWithCore("End Stone Shovel", BlockTools.createEndstoneShovel(), Items.END_STONE, Items.DIAMOND_SHOVEL, 2);
+        addBlockToolRecipeWithCore("End Stone Hoe", BlockTools.createEndstoneHoe(), Items.END_STONE, Items.DIAMOND_HOE, 2);
+        
+        // Ice Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Ice Pickaxe", BlockTools.createIcePickaxe(), Items.PACKED_ICE, Items.DIAMOND_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Ice Axe", BlockTools.createIceAxe(), Items.PACKED_ICE, Items.DIAMOND_AXE, 1);
+        addBlockToolRecipeWithCore("Ice Shovel", BlockTools.createIceShovel(), Items.PACKED_ICE, Items.DIAMOND_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Ice Hoe", BlockTools.createIceHoe(), Items.PACKED_ICE, Items.DIAMOND_HOE, 1);
+        
         // Prismarine Tools - T2 (ocean material, decent durability)
         addBlockToolRecipeWithCore("Prismarine Pickaxe", BlockTools.createPrismarinePickaxe(), Items.PRISMARINE, Items.DIAMOND_PICKAXE, 2);
         addBlockToolRecipeWithCore("Prismarine Axe", BlockTools.createPrismarineAxe(), Items.PRISMARINE, Items.DIAMOND_AXE, 2);
         addBlockToolRecipeWithCore("Prismarine Shovel", BlockTools.createPrismarineShovel(), Items.PRISMARINE, Items.DIAMOND_SHOVEL, 2);
         addBlockToolRecipeWithCore("Prismarine Hoe", BlockTools.createPrismarineHoe(), Items.PRISMARINE, Items.DIAMOND_HOE, 2);
         
-        // Terracotta Tools - T1 (basic material)
-        addBlockToolRecipeWithCore("Terracotta Pickaxe", BlockTools.createTerracottaPickaxe(), Items.TERRACOTTA, Items.IRON_PICKAXE, 1);
-        addBlockToolRecipeWithCore("Terracotta Axe", BlockTools.createTerracottaAxe(), Items.TERRACOTTA, Items.IRON_AXE, 1);
-        addBlockToolRecipeWithCore("Terracotta Shovel", BlockTools.createTerracottaShovel(), Items.TERRACOTTA, Items.IRON_SHOVEL, 1);
-        addBlockToolRecipeWithCore("Terracotta Hoe", BlockTools.createTerracottaHoe(), Items.TERRACOTTA, Items.IRON_HOE, 1);
+        // Mossy Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Mossy Pickaxe", BlockTools.createMossyPickaxe(), Items.MOSSY_COBBLESTONE, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Mossy Axe", BlockTools.createMossyAxe(), Items.MOSSY_COBBLESTONE, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Mossy Shovel", BlockTools.createMossyShovel(), Items.MOSSY_COBBLESTONE, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Mossy Hoe", BlockTools.createMossyHoe(), Items.MOSSY_COBBLESTONE, Items.IRON_HOE, 1);
+        
+        // Soul Sand Tools - T1 (soul material)
+        addBlockToolRecipeWithCore("Soul Sand Pickaxe", BlockTools.createSoulSandPickaxe(), Items.SOUL_SAND, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Soul Sand Axe", BlockTools.createSoulSandAxe(), Items.SOUL_SAND, Items.STONE_AXE, 1);
+        addBlockToolRecipeWithCore("Soul Sand Shovel", BlockTools.createSoulSandShovel(), Items.SOUL_SAND, Items.STONE_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Soul Sand Hoe", BlockTools.createSoulSandHoe(), Items.SOUL_SAND, Items.STONE_HOE, 1);
+        
+        // Magma Tools - T2 (nether material, fire resistant)
+        addBlockToolRecipeWithCore("Magma Pickaxe", BlockTools.createMagmaPickaxe(), Items.MAGMA_BLOCK, Items.IRON_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Magma Axe", BlockTools.createMagmaAxe(), Items.MAGMA_BLOCK, Items.IRON_AXE, 2);
+        addBlockToolRecipeWithCore("Magma Shovel", BlockTools.createMagmaShovel(), Items.MAGMA_BLOCK, Items.IRON_SHOVEL, 2);
+        addBlockToolRecipeWithCore("Magma Hoe", BlockTools.createMagmaHoe(), Items.MAGMA_BLOCK, Items.IRON_HOE, 2);
+        
+        // Sandstone Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Sandstone Pickaxe", BlockTools.createSandstonePickaxe(), Items.SANDSTONE, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Sandstone Axe", BlockTools.createSandstoneAxe(), Items.SANDSTONE, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Sandstone Shovel", BlockTools.createSandstoneShovel(), Items.SANDSTONE, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Sandstone Hoe", BlockTools.createSandstoneHoe(), Items.SANDSTONE, Items.IRON_HOE, 1);
+        
+        // Amethyst Tools - T2 (rare crystal material)
+        addBlockToolRecipeWithCore("Amethyst Pickaxe", BlockTools.createAmethystPickaxe(), Items.AMETHYST_BLOCK, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Amethyst Axe", BlockTools.createAmethystAxe(), Items.AMETHYST_BLOCK, Items.DIAMOND_AXE, 2);
+        addBlockToolRecipeWithCore("Amethyst Shovel", BlockTools.createAmethystShovel(), Items.AMETHYST_BLOCK, Items.DIAMOND_SHOVEL, 2);
+        addBlockToolRecipeWithCore("Amethyst Hoe", BlockTools.createAmethystHoe(), Items.AMETHYST_BLOCK, Items.DIAMOND_HOE, 2);
+        
+        // Coal Tools - T1 (common material)
+        addBlockToolRecipeWithCore("Coal Pickaxe", BlockTools.createCoalPickaxe(), Items.COAL_BLOCK, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Coal Axe", BlockTools.createCoalAxe(), Items.COAL_BLOCK, Items.STONE_AXE, 1);
+        addBlockToolRecipeWithCore("Coal Shovel", BlockTools.createCoalShovel(), Items.COAL_BLOCK, Items.STONE_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Coal Hoe", BlockTools.createCoalHoe(), Items.COAL_BLOCK, Items.STONE_HOE, 1);
         // ===== NEW TOOL RECIPES WITH CRAFTING CORES =====
         // Stripped Log Tools
         addBlockToolRecipeWithCore("Stripped Spruce Log Pickaxe", BlockTools.createStrippedSpruceLogPickaxe(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_PICKAXE, 1);
