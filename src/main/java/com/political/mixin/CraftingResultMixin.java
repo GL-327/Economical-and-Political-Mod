@@ -33,6 +33,7 @@ public class CraftingResultMixin {
             RecipeEntry<CraftingRecipe> recipe,
             CallbackInfo ci) {
 
+        // Don't override if result is already set (by CraftingMixin or vanilla)
         ItemStack currentResult = resultInventory.getStack(0);
         if (!currentResult.isEmpty()) return;
 
