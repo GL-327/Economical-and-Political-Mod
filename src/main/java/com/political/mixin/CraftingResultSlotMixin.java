@@ -7,8 +7,6 @@ import com.political.SlayerRecipes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.slot.CraftingResultSlot;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,15 +26,10 @@ public class CraftingResultSlotMixin {
     @Shadow @Final private RecipeInputInventory input;
 
     @Inject(method = "onTakeItem", at = @At("TAIL"))
-    private void political_consumeIngredients(PlayerEntity player, ItemStack stack, 
-            RecipeEntry<CraftingRecipe> recipe, CallbackInfo ci) {
+    private void political_consumeIngredients(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (player == null || stack == null || stack.isEmpty()) return;
         if (this.input == null) return;
 
-        // If there's a valid vanilla recipe, vanilla already consumed the ingredients
-        if (recipe != null) return;
-
-        // For custom recipes without vanilla match, consume ingredients
         List<ItemStack> grid = new ArrayList<>();
         for (int i = 0; i < this.input.size(); i++) {
             grid.add(this.input.getStack(i));
