@@ -2610,7 +2610,7 @@ public class BlockArmor {
 
     // PURPUR ARMOR - End city elegant
     public static ItemStack createPurpurHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPlayerHeadTexture(stack, PURPUR_HEAD);
         applyPurpurStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "purpur_helmet");
@@ -2661,7 +2661,7 @@ public class BlockArmor {
 
     // SCULK ARMOR - Deep dark sensor
     public static ItemStack createSculkHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPlayerHeadTexture(stack, SCULK_HEAD);
         applySculkStats(stack, "Helmet", 4, 4, EquipmentSlot.HEAD);
         setCustomItemId(stack, "sculk_helmet");
@@ -2762,7 +2762,7 @@ public class BlockArmor {
 
     // SMOOTH STONE ARMOR - Refined
     public static ItemStack createSmoothStoneHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPlayerHeadTexture(stack, SMOOTH_STONE_HEAD);
         applySmoothStoneStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
         setCustomItemId(stack, "smooth_stone_helmet");
@@ -2813,7 +2813,7 @@ public class BlockArmor {
 
     // SNOW ARMOR - Frozen
     public static ItemStack createSnowHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPlayerHeadTexture(stack, SNOW_HEAD);
         applySnowStats(stack, "Helmet", 1, 0, EquipmentSlot.HEAD);
         setCustomItemId(stack, "snow_helmet");
@@ -2864,7 +2864,7 @@ public class BlockArmor {
 
     // SOUL SOIL ARMOR - Fire immunity
     public static ItemStack createSoulSoilHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPlayerHeadTexture(stack, SOUL_SOIL_HEAD);
         applySoulSoilStats(stack, "Helmet", 3, 2, EquipmentSlot.HEAD);
         setCustomItemId(stack, "soul_soil_helmet");
@@ -2915,7 +2915,7 @@ public class BlockArmor {
 
     // SPONGE ARMOR - Water absorption
     public static ItemStack createSpongeHelmet() {
-        ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
         applyPlayerHeadTexture(stack, SPONGE_HEAD);
         applySpongeStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
         setCustomItemId(stack, "sponge_helmet");
