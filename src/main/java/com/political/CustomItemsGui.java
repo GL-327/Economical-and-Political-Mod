@@ -2029,9 +2029,6 @@ public class CustomItemsGui {
             new ArmorSetDisplay(Items.AMETHYST_CLUSTER, BlockWeapons.createAmethystClusterSword(),
                 BlockArmor.createAmethystClusterHelmet(), BlockArmor.createAmethystClusterChestplate(),
                 BlockArmor.createAmethystClusterLeggings(), BlockArmor.createAmethystClusterBoots()),
-            new ArmorSetDisplay(Items.OBSIDIAN, BlockWeapons.createObsidianBlockSword(),
-                BlockArmor.createObsidianBlockHelmet(), BlockArmor.createObsidianBlockChestplate(),
-                BlockArmor.createObsidianBlockLeggings(), BlockArmor.createObsidianBlockBoots()),
         };
 
         final int SETS_PER_PAGE = 4;
