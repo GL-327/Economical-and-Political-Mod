@@ -314,12 +314,12 @@ public class BountyCraftingHandler {
             return matchesCustomRecipeExact(grid, recipe);
         }
 
-        // Build a count map of what's in the grid
+        // Build a count map of what's in the grid (use actual counts, not just slot count)
         java.util.Map<String, Integer> gridCounts = new java.util.HashMap<>();
         for (ItemStack stack : grid) {
             if (stack.isEmpty()) continue;
             String key = getIngredientKey(stack);
-            gridCounts.merge(key, 1, Integer::sum);
+            gridCounts.merge(key, stack.getCount(), Integer::sum);
         }
 
         // Build a count map of what the recipe requires
@@ -327,7 +327,7 @@ public class BountyCraftingHandler {
         for (ItemStack ing : recipe.ingredients) {
             if (ing == null || ing.isEmpty()) continue;
             String key = getIngredientKey(ing);
-            recipeCounts.merge(key, 1, Integer::sum);
+            recipeCounts.merge(key, ing.getCount(), Integer::sum);
         }
 
         return gridCounts.equals(recipeCounts);
@@ -344,16 +344,19 @@ public class BountyCraftingHandler {
             ItemStack gridItem = grid.get(i);
             ItemStack recipeItem = recipe.ingredients[i];
 
-            // Check if items match (both empty or same type)
+            // Check if items match (both empty or same type with same count)
             if (gridItem.isEmpty() && (recipeItem == null || recipeItem.isEmpty())) {
                 continue; // Both empty - good
             }
             if (!gridItem.isEmpty() && recipeItem != null && !recipeItem.isEmpty()) {
-                // Both have items - check if they match
+                // Both have items - check if they match AND have same count
                 String gridKey = getIngredientKey(gridItem);
                 String recipeKey = getIngredientKey(recipeItem);
                 if (!gridKey.equals(recipeKey)) {
                     return false; // Different items in this slot
+                }
+                if (gridItem.getCount() != recipeItem.getCount()) {
+                    return false; // Different counts in this slot
                 }
                 continue; // Items match - good
             }
