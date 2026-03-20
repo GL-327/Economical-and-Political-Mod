@@ -50,14 +50,15 @@ public class CraftingMixin {
             }
             
             // Check if this grid matches a valid custom recipe
-            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return; // Allow beam recipes
-            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return; // Allow bounty recipes
+            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return; // Allow beam recipes (no protected items needed)
+            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return; // Allow bounty recipes (no protected items)
             
             // Check RecipeConfigManager custom recipes (/setrecipe)
             com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
             if (matchedRecipe != null) {
-                // Valid custom recipe - set the result
+                // Valid custom recipe - set the result and cancel to prevent vanilla from interfering
                 resultInventory.setStack(0, matchedRecipe.result.copy());
+                ci.cancel();
                 return;
             }
             
