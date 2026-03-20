@@ -29,39 +29,38 @@ public class CraftingMixin {
                                                   CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe,
                                                   CallbackInfo ci) {
 
-        boolean hasProtectedItem = false;
+        List<ItemStack> grid = new ArrayList<>();
+        for (int i = 0; i < craftingInventory.size(); i++) {
+            grid.add(craftingInventory.getStack(i));
+        }
 
+        // Check for custom recipes first - these need full control
+        com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
+        if (matchedRecipe != null) {
+            // Custom recipe found - set result and CANCEL to prevent vanilla interference
+            resultInventory.setStack(0, matchedRecipe.result.copy());
+            ci.cancel();
+            return;
+        }
+
+        // Check for protected items that shouldn't be used in vanilla recipes
+        boolean hasProtectedItem = false;
         for (int i = 0; i < craftingInventory.size(); i++) {
             ItemStack stack = craftingInventory.getStack(i);
             if (stack.isEmpty()) continue;
-
             if (CustomItemHandler.isProtectedItem(stack)) {
                 hasProtectedItem = true;
-                break; // No need to check further
+                break;
             }
         }
 
-        // If any protected item is in the grid, check if it's a valid custom recipe
-        // If NOT a valid custom recipe, block the result to prevent vanilla usage
+        // If protected items present but no valid custom recipe, block crafting
         if (hasProtectedItem) {
-            List<ItemStack> grid = new ArrayList<>();
-            for (int i = 0; i < craftingInventory.size(); i++) {
-                grid.add(craftingInventory.getStack(i));
-            }
+            // Check beam and bounty recipes
+            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return;
+            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return;
             
-            // Check if this grid matches a valid custom recipe
-            if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return; // Allow beam recipes (no protected items needed)
-            if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return; // Allow bounty recipes (no protected items)
-            
-            // Check RecipeConfigManager custom recipes (/setrecipe)
-            com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
-            if (matchedRecipe != null) {
-                // Valid custom recipe - set the result (don't cancel, let vanilla handle consumption)
-                resultInventory.setStack(0, matchedRecipe.result.copy());
-                return;
-            }
-            
-            // No valid custom recipe found - block vanilla crafting
+            // No valid recipe - block
             resultInventory.setStack(0, ItemStack.EMPTY);
             ci.cancel();
         }

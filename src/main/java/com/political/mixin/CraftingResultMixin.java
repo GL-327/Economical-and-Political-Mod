@@ -2,7 +2,6 @@ package com.political.mixin;
 
 import com.political.BeamCraftingHandler;
 import com.political.BountyCraftingHandler;
-import com.political.SlayerRecipes;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -33,7 +32,7 @@ public class CraftingResultMixin {
             RecipeEntry<CraftingRecipe> recipe,
             CallbackInfo ci) {
 
-        // Don't override if result is already set (by CraftingMixin or vanilla)
+        // Only set result if empty (vanilla didn't set anything)
         ItemStack currentResult = resultInventory.getStack(0);
         if (!currentResult.isEmpty()) return;
 
@@ -42,19 +41,13 @@ public class CraftingResultMixin {
             grid.add(craftingInventory.getStack(i));
         }
 
-        SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
-        if (matchedRecipe != null) {
-            resultInventory.setStack(0, matchedRecipe.result.copy());
-            return;
-        }
-
+        // Check beam and bounty recipes (custom recipes handled by CraftingMixin)
         ItemStack beamResult = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beamResult != null) {
             resultInventory.setStack(0, beamResult);
             return;
         }
 
-        // Check bounty item recipes (cores, armor, swords, etc.)
         ItemStack bountyResult = BountyCraftingHandler.checkBountyGridRecipe(grid, player);
         if (bountyResult != null) {
             resultInventory.setStack(0, bountyResult);
