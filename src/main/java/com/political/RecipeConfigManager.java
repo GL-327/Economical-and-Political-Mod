@@ -100,13 +100,11 @@ public class RecipeConfigManager {
     // ── Public API ─────────────────────────────────────────────
 
     /**
-     * Returns all registered crafting recipes — both hardcoded SlayerRecipes
-     * and any custom recipes added via /setrecipe.
+     * Returns all registered crafting recipes — only custom recipes from /setrecipe.
+     * Hardcoded SlayerRecipes are no longer used to avoid overriding /setrecipe.
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        List<SlayerRecipes.Recipe> all = new ArrayList<>(SlayerRecipes.getRecipes());
-        all.addAll(CUSTOM_RECIPES);
-        return all;
+        return new ArrayList<>(CUSTOM_RECIPES);
     }
 
     /** Returns only the custom (admin-set) recipes. */
