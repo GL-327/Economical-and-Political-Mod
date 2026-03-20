@@ -102,11 +102,11 @@ public class BountyCraftingHandler {
             return SlayerItems.createWardenChestplate();
         }
 
-        // ─── T1 Bounty Swords: 3 Cores + 1 Iron Sword + 2 Sticks = 6 items ──
+        // ─── T1 Bounty Swords: 3 Cores + 1 Custom Crafting Core (T1) + 1 Iron Sword + 1 Stick = 6 items ──
         if (totalItems == 6 && countGridVanilla(grid, Items.IRON_SWORD) == 1
-                && countGridVanilla(grid, Items.STICK) == 2) {
+                && countGridVanilla(grid, Items.STICK) == 1) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-                if (countGridCores(grid, type) == 3) {
+                if (countGridCores(grid, type) == 3 && countGridCustomCores(grid, "custom_crafter_core_t1") == 1) {
                     int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
                     if (level < SlayerItems.BASIC_SWORD_LEVEL_REQ) return null;
                     return SlayerItems.createSlayerSword(type);
@@ -114,10 +114,10 @@ public class BountyCraftingHandler {
             }
         }
 
-        // ─── T2 Upgraded Swords: 3 Cores + 1 Diamond Sword + 1 T1 Sword = 5 items ─
-        if (totalItems == 5 && countGridVanilla(grid, Items.DIAMOND_SWORD) == 1) {
+        // ─── T2 Upgraded Swords: 3 Cores + 1 Custom Crafting Core (T2) + 1 T1 Sword = 5 items ─
+        if (totalItems == 5) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
-                if (countGridCores(grid, type) == 3 && countGridT1Swords(grid, type) == 1) {
+                if (countGridCores(grid, type) == 3 && countGridCustomCores(grid, "custom_crafter_core_t2") == 1 && countGridT1Swords(grid, type) == 1) {
                     int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
                     if (level < SlayerItems.UPGRADED_SWORD_LEVEL_REQ) return null;
                     return SlayerItems.createUpgradedSlayerSword(type);
@@ -143,16 +143,18 @@ public class BountyCraftingHandler {
             }
         }
 
-        // ─── T2 Armor: 3 Cores + 1 T1 Armor + 1 Secondary + 1 Diamond = 6 items ─
-        if (totalItems == 6 && countGridVanilla(grid, Items.DIAMOND) == 1) {
+        // ─── T2 Armor: 3 Cores + 1 Custom Crafting Core (T2) + 2 Secondary = 6 items ─
+        if (totalItems == 6) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                 if (countGridCores(grid, type) != 3) continue;
                 Item secondary = getSecondaryMaterial(type);
-                if (countGridVanilla(grid, secondary) != 1) continue;
-                for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
-                    if (countGridT1Armor(grid, type, piece) == 1) {
-                        int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
-                        if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) return null;
+                if (countGridVanilla(grid, secondary) != 2) continue;
+                if (countGridCustomCores(grid, "custom_crafter_core_t2") == 1) {
+                    int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
+                    if (level < SlayerItems.T2_ARMOR_LEVEL_REQ) return null;
+                    // Determine armor piece based on secondary material type
+                    SlayerItems.ArmorPiece piece = getArmorPieceFromSecondary(secondary);
+                    if (piece != null) {
                         return SlayerItems.createT2Armor(type, piece);
                     }
                 }

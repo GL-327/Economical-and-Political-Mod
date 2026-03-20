@@ -350,101 +350,101 @@ public class SlayerRecipes {
         
         // ===== BLOCK ARMOR RECIPES (No slayer requirement) =====
         
-        // Glass Armor (all pieces)
-        addBlockArmorRecipe("Glass Helmet", BlockArmor.createGlassHelmet(), Items.GLASS, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Glass Chestplate", BlockArmor.createGlassChestplate(), Items.GLASS, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Glass Leggings", BlockArmor.createGlassLeggings(), Items.GLASS, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Glass Boots", BlockArmor.createGlassBoots(), Items.GLASS, Items.LEATHER_BOOTS);
+        // Glass Armor (all pieces) - T1 (basic material)
+        addBlockArmorRecipeWithCore("Glass Helmet", BlockArmor.createGlassHelmet(), Items.GLASS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Glass Chestplate", BlockArmor.createGlassChestplate(), Items.GLASS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Glass Leggings", BlockArmor.createGlassLeggings(), Items.GLASS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Glass Boots", BlockArmor.createGlassBoots(), Items.GLASS, Items.LEATHER_BOOTS, 1);
         
-        // Obsidian Armor
-        addBlockArmorRecipe("Obsidian Helmet", BlockArmor.createObsidianHelmet(), Items.OBSIDIAN, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Obsidian Chestplate", BlockArmor.createObsidianChestplate(), Items.OBSIDIAN, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Obsidian Leggings", BlockArmor.createObsidianLeggings(), Items.OBSIDIAN, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Obsidian Boots", BlockArmor.createObsidianBoots(), Items.OBSIDIAN, Items.LEATHER_BOOTS);
+        // Obsidian Armor - T2 (durable material, blast resistant)
+        addBlockArmorRecipeWithCore("Obsidian Helmet", BlockArmor.createObsidianHelmet(), Items.OBSIDIAN, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Obsidian Chestplate", BlockArmor.createObsidianChestplate(), Items.OBSIDIAN, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Obsidian Leggings", BlockArmor.createObsidianLeggings(), Items.OBSIDIAN, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Obsidian Boots", BlockArmor.createObsidianBoots(), Items.OBSIDIAN, Items.LEATHER_BOOTS, 2);
         
-        // Quartz Armor
-        addBlockArmorRecipe("Quartz Helmet", BlockArmor.createQuartzHelmet(), Items.QUARTZ_BLOCK, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Quartz Chestplate", BlockArmor.createQuartzChestplate(), Items.QUARTZ_BLOCK, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Quartz Leggings", BlockArmor.createQuartzLeggings(), Items.QUARTZ_BLOCK, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Quartz Boots", BlockArmor.createQuartzBoots(), Items.QUARTZ_BLOCK, Items.LEATHER_BOOTS);
+        // Quartz Armor - T1 (basic nether material)
+        addBlockArmorRecipeWithCore("Quartz Helmet", BlockArmor.createQuartzHelmet(), Items.QUARTZ_BLOCK, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Quartz Chestplate", BlockArmor.createQuartzChestplate(), Items.QUARTZ_BLOCK, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Quartz Leggings", BlockArmor.createQuartzLeggings(), Items.QUARTZ_BLOCK, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Quartz Boots", BlockArmor.createQuartzBoots(), Items.QUARTZ_BLOCK, Items.LEATHER_BOOTS, 1);
         
-        // Glowstone Armor
-        addBlockArmorRecipe("Glowstone Helmet", BlockArmor.createGlowstoneHelmet(), Items.GLOWSTONE, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Glowstone Chestplate", BlockArmor.createGlowstoneChestplate(), Items.GLOWSTONE, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Glowstone Leggings", BlockArmor.createGlowstoneLeggings(), Items.GLOWSTONE, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Glowstone Boots", BlockArmor.createGlowstoneBoots(), Items.GLOWSTONE, Items.LEATHER_BOOTS);
+        // Glowstone Armor - T1 (light-emitting material)
+        addBlockArmorRecipeWithCore("Glowstone Helmet", BlockArmor.createGlowstoneHelmet(), Items.GLOWSTONE, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Glowstone Chestplate", BlockArmor.createGlowstoneChestplate(), Items.GLOWSTONE, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Glowstone Leggings", BlockArmor.createGlowstoneLeggings(), Items.GLOWSTONE, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Glowstone Boots", BlockArmor.createGlowstoneBoots(), Items.GLOWSTONE, Items.LEATHER_BOOTS, 1);
         
-        // Redstone Armor
-        addBlockArmorRecipe("Redstone Helmet", BlockArmor.createRedstoneHelmet(), Items.REDSTONE_BLOCK, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Redstone Chestplate", BlockArmor.createRedstoneChestplate(), Items.REDSTONE_BLOCK, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Redstone Leggings", BlockArmor.createRedstoneLeggings(), Items.REDSTONE_BLOCK, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Redstone Boots", BlockArmor.createRedstoneBoots(), Items.REDSTONE_BLOCK, Items.LEATHER_BOOTS);
+        // Redstone Armor - T1 (common material)
+        addBlockArmorRecipeWithCore("Redstone Helmet", BlockArmor.createRedstoneHelmet(), Items.REDSTONE_BLOCK, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Redstone Chestplate", BlockArmor.createRedstoneChestplate(), Items.REDSTONE_BLOCK, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Redstone Leggings", BlockArmor.createRedstoneLeggings(), Items.REDSTONE_BLOCK, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Redstone Boots", BlockArmor.createRedstoneBoots(), Items.REDSTONE_BLOCK, Items.LEATHER_BOOTS, 1);
         
-        // Netherrack Armor
-        addBlockArmorRecipe("Netherrack Helmet", BlockArmor.createNetherrackHelmet(), Items.NETHERRACK, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Netherrack Chestplate", BlockArmor.createNetherrackChestplate(), Items.NETHERRACK, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Netherrack Leggings", BlockArmor.createNetherrackLeggings(), Items.NETHERRACK, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Netherrack Boots", BlockArmor.createNetherrackBoots(), Items.NETHERRACK, Items.LEATHER_BOOTS);
+        // Netherrack Armor - T1 (common nether material)
+        addBlockArmorRecipeWithCore("Netherrack Helmet", BlockArmor.createNetherrackHelmet(), Items.NETHERRACK, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Netherrack Chestplate", BlockArmor.createNetherrackChestplate(), Items.NETHERRACK, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Netherrack Leggings", BlockArmor.createNetherrackLeggings(), Items.NETHERRACK, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Netherrack Boots", BlockArmor.createNetherrackBoots(), Items.NETHERRACK, Items.LEATHER_BOOTS, 1);
         
-        // End Stone Armor
-        addBlockArmorRecipe("End Stone Helmet", BlockArmor.createEndstoneHelmet(), Items.END_STONE, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("End Stone Chestplate", BlockArmor.createEndstoneChestplate(), Items.END_STONE, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("End Stone Leggings", BlockArmor.createEndstoneLeggings(), Items.END_STONE, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("End Stone Boots", BlockArmor.createEndstoneBoots(), Items.END_STONE, Items.LEATHER_BOOTS);
+        // End Stone Armor - T2 (end material, decent durability)
+        addBlockArmorRecipeWithCore("End Stone Helmet", BlockArmor.createEndstoneHelmet(), Items.END_STONE, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("End Stone Chestplate", BlockArmor.createEndstoneChestplate(), Items.END_STONE, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("End Stone Leggings", BlockArmor.createEndstoneLeggings(), Items.END_STONE, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("End Stone Boots", BlockArmor.createEndstoneBoots(), Items.END_STONE, Items.LEATHER_BOOTS, 2);
         
-        // Ice Armor
-        addBlockArmorRecipe("Ice Helmet", BlockArmor.createIceHelmet(), Items.PACKED_ICE, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Ice Chestplate", BlockArmor.createIceChestplate(), Items.PACKED_ICE, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Ice Leggings", BlockArmor.createIceLeggings(), Items.PACKED_ICE, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Ice Boots", BlockArmor.createIceBoots(), Items.PACKED_ICE, Items.LEATHER_BOOTS);
+        // Ice Armor - T1 (basic material)
+        addBlockArmorRecipeWithCore("Ice Helmet", BlockArmor.createIceHelmet(), Items.PACKED_ICE, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Ice Chestplate", BlockArmor.createIceChestplate(), Items.PACKED_ICE, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Ice Leggings", BlockArmor.createIceLeggings(), Items.PACKED_ICE, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Ice Boots", BlockArmor.createIceBoots(), Items.PACKED_ICE, Items.LEATHER_BOOTS, 1);
         
-        // Prismarine Armor
-        addBlockArmorRecipe("Prismarine Helmet", BlockArmor.createPrismarineHelmet(), Items.PRISMARINE, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Prismarine Chestplate", BlockArmor.createPrismarineChestplate(), Items.PRISMARINE, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Prismarine Leggings", BlockArmor.createPrismarineLeggings(), Items.PRISMARINE, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Prismarine Boots", BlockArmor.createPrismarineBoots(), Items.PRISMARINE, Items.LEATHER_BOOTS);
+        // Prismarine Armor - T2 (ocean material, decent durability)
+        addBlockArmorRecipeWithCore("Prismarine Helmet", BlockArmor.createPrismarineHelmet(), Items.PRISMARINE, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Prismarine Chestplate", BlockArmor.createPrismarineChestplate(), Items.PRISMARINE, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Prismarine Leggings", BlockArmor.createPrismarineLeggings(), Items.PRISMARINE, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Prismarine Boots", BlockArmor.createPrismarineBoots(), Items.PRISMARINE, Items.LEATHER_BOOTS, 2);
         
-        // Terracotta Armor
-        addBlockArmorRecipe("Terracotta Helmet", BlockArmor.createTerracottaHelmet(), Items.TERRACOTTA, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Terracotta Chestplate", BlockArmor.createTerracottaChestplate(), Items.TERRACOTTA, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Terracotta Leggings", BlockArmor.createTerracottaLeggings(), Items.TERRACOTTA, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Terracotta Boots", BlockArmor.createTerracottaBoots(), Items.TERRACOTTA, Items.LEATHER_BOOTS);
+        // Terracotta Armor - T1 (basic material)
+        addBlockArmorRecipeWithCore("Terracotta Helmet", BlockArmor.createTerracottaHelmet(), Items.TERRACOTTA, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Terracotta Chestplate", BlockArmor.createTerracottaChestplate(), Items.TERRACOTTA, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Terracotta Leggings", BlockArmor.createTerracottaLeggings(), Items.TERRACOTTA, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Terracotta Boots", BlockArmor.createTerracottaBoots(), Items.TERRACOTTA, Items.LEATHER_BOOTS, 1);
         
-        // Mossy Armor
-        addBlockArmorRecipe("Mossy Helmet", BlockArmor.createMossyHelmet(), Items.MOSSY_COBBLESTONE, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Mossy Chestplate", BlockArmor.createMossyChestplate(), Items.MOSSY_COBBLESTONE, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Mossy Leggings", BlockArmor.createMossyLeggings(), Items.MOSSY_COBBLESTONE, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Mossy Boots", BlockArmor.createMossyBoots(), Items.MOSSY_COBBLESTONE, Items.LEATHER_BOOTS);
+        // Mossy Armor - T1 (basic material)
+        addBlockArmorRecipeWithCore("Mossy Helmet", BlockArmor.createMossyHelmet(), Items.MOSSY_COBBLESTONE, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Mossy Chestplate", BlockArmor.createMossyChestplate(), Items.MOSSY_COBBLESTONE, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Mossy Leggings", BlockArmor.createMossyLeggings(), Items.MOSSY_COBBLESTONE, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Mossy Boots", BlockArmor.createMossyBoots(), Items.MOSSY_COBBLESTONE, Items.LEATHER_BOOTS, 1);
         
-        // Soul Sand Armor
-        addBlockArmorRecipe("Soul Sand Helmet", BlockArmor.createSoulSandHelmet(), Items.SOUL_SAND, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Soul Sand Chestplate", BlockArmor.createSoulSandChestplate(), Items.SOUL_SAND, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Soul Sand Leggings", BlockArmor.createSoulSandLeggings(), Items.SOUL_SAND, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Soul Sand Boots", BlockArmor.createSoulSandBoots(), Items.SOUL_SAND, Items.LEATHER_BOOTS);
+        // Soul Sand Armor - T1 (soul material)
+        addBlockArmorRecipeWithCore("Soul Sand Helmet", BlockArmor.createSoulSandHelmet(), Items.SOUL_SAND, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Soul Sand Chestplate", BlockArmor.createSoulSandChestplate(), Items.SOUL_SAND, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Soul Sand Leggings", BlockArmor.createSoulSandLeggings(), Items.SOUL_SAND, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Soul Sand Boots", BlockArmor.createSoulSandBoots(), Items.SOUL_SAND, Items.LEATHER_BOOTS, 1);
         
-        // Magma Armor
-        addBlockArmorRecipe("Magma Helmet", BlockArmor.createMagmaHelmet(), Items.MAGMA_BLOCK, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Magma Chestplate", BlockArmor.createMagmaChestplate(), Items.MAGMA_BLOCK, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Magma Leggings", BlockArmor.createMagmaLeggings(), Items.MAGMA_BLOCK, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Magma Boots", BlockArmor.createMagmaBoots(), Items.MAGMA_BLOCK, Items.LEATHER_BOOTS);
+        // Magma Armor - T2 (nether material, fire resistant)
+        addBlockArmorRecipeWithCore("Magma Helmet", BlockArmor.createMagmaHelmet(), Items.MAGMA_BLOCK, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Magma Chestplate", BlockArmor.createMagmaChestplate(), Items.MAGMA_BLOCK, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Magma Leggings", BlockArmor.createMagmaLeggings(), Items.MAGMA_BLOCK, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Magma Boots", BlockArmor.createMagmaBoots(), Items.MAGMA_BLOCK, Items.LEATHER_BOOTS, 2);
         
-        // Sandstone Armor
-        addBlockArmorRecipe("Sandstone Helmet", BlockArmor.createSandstoneHelmet(), Items.SANDSTONE, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Sandstone Chestplate", BlockArmor.createSandstoneChestplate(), Items.SANDSTONE, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Sandstone Leggings", BlockArmor.createSandstoneLeggings(), Items.SANDSTONE, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Sandstone Boots", BlockArmor.createSandstoneBoots(), Items.SANDSTONE, Items.LEATHER_BOOTS);
+        // Sandstone Armor - T1 (basic material)
+        addBlockArmorRecipeWithCore("Sandstone Helmet", BlockArmor.createSandstoneHelmet(), Items.SANDSTONE, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Sandstone Chestplate", BlockArmor.createSandstoneChestplate(), Items.SANDSTONE, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Sandstone Leggings", BlockArmor.createSandstoneLeggings(), Items.SANDSTONE, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Sandstone Boots", BlockArmor.createSandstoneBoots(), Items.SANDSTONE, Items.LEATHER_BOOTS, 1);
         
-        // Amethyst Armor
-        addBlockArmorRecipe("Amethyst Helmet", BlockArmor.createAmethystHelmet(), Items.AMETHYST_BLOCK, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Amethyst Chestplate", BlockArmor.createAmethystChestplate(), Items.AMETHYST_BLOCK, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Amethyst Leggings", BlockArmor.createAmethystLeggings(), Items.AMETHYST_BLOCK, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Amethyst Boots", BlockArmor.createAmethystBoots(), Items.AMETHYST_BLOCK, Items.LEATHER_BOOTS);
+        // Amethyst Armor - T2 (rare crystal material)
+        addBlockArmorRecipeWithCore("Amethyst Helmet", BlockArmor.createAmethystHelmet(), Items.AMETHYST_BLOCK, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Amethyst Chestplate", BlockArmor.createAmethystChestplate(), Items.AMETHYST_BLOCK, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Amethyst Leggings", BlockArmor.createAmethystLeggings(), Items.AMETHYST_BLOCK, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Amethyst Boots", BlockArmor.createAmethystBoots(), Items.AMETHYST_BLOCK, Items.LEATHER_BOOTS, 2);
         
-        // Coal Armor
-        addBlockArmorRecipe("Coal Helmet", BlockArmor.createCoalHelmet(), Items.COAL_BLOCK, Items.LEATHER_HELMET);
-        addBlockArmorRecipe("Coal Chestplate", BlockArmor.createCoalChestplate(), Items.COAL_BLOCK, Items.LEATHER_CHESTPLATE);
-        addBlockArmorRecipe("Coal Leggings", BlockArmor.createCoalLeggings(), Items.COAL_BLOCK, Items.LEATHER_LEGGINGS);
-        addBlockArmorRecipe("Coal Boots", BlockArmor.createCoalBoots(), Items.COAL_BLOCK, Items.LEATHER_BOOTS);
+        // Coal Armor - T1 (common material)
+        addBlockArmorRecipeWithCore("Coal Helmet", BlockArmor.createCoalHelmet(), Items.COAL_BLOCK, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Coal Chestplate", BlockArmor.createCoalChestplate(), Items.COAL_BLOCK, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Coal Leggings", BlockArmor.createCoalLeggings(), Items.COAL_BLOCK, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Coal Boots", BlockArmor.createCoalBoots(), Items.COAL_BLOCK, Items.LEATHER_BOOTS, 1);
 
         // ===== NEW ARMOR SETS WITH CRAFTING CORES =====
         // Stripped Log Armor (T1 - weaker than diamond)
@@ -745,53 +745,53 @@ public class SlayerRecipes {
         
         // ===== BLOCK WEAPON RECIPES (Match Block Armor sets) =====
         
-        // Glass Blade
-        addBlockWeaponRecipe("Glass Blade", BlockWeapons.createGlassSword(), Items.GLASS, Items.DIAMOND_SWORD);
+        // Glass Blade - T1 (basic material)
+        addBlockWeaponRecipeWithCore("Glass Blade", BlockWeapons.createGlassSword(), Items.GLASS, Items.DIAMOND_SWORD, 1);
         
-        // Obsidian Blade
-        addBlockWeaponRecipe("Obsidian Blade", BlockWeapons.createObsidianSword(), Items.OBSIDIAN, Items.NETHERITE_SWORD);
+        // Obsidian Blade - T3 (very durable material)
+        addBlockWeaponRecipeWithCore("Obsidian Blade", BlockWeapons.createObsidianSword(), Items.OBSIDIAN, Items.NETHERITE_SWORD, 3);
         
-        // Quartz Blade
-        addBlockWeaponRecipe("Quartz Blade", BlockWeapons.createQuartzSword(), Items.QUARTZ_BLOCK, Items.DIAMOND_SWORD);
+        // Quartz Blade - T1 (basic nether material)
+        addBlockWeaponRecipeWithCore("Quartz Blade", BlockWeapons.createQuartzSword(), Items.QUARTZ_BLOCK, Items.DIAMOND_SWORD, 1);
         
-        // Glowstone Blade
-        addBlockWeaponRecipe("Glowstone Blade", BlockWeapons.createGlowstoneSword(), Items.GLOWSTONE, Items.GOLDEN_SWORD);
+        // Glowstone Blade - T1 (light-emitting material)
+        addBlockWeaponRecipeWithCore("Glowstone Blade", BlockWeapons.createGlowstoneSword(), Items.GLOWSTONE, Items.GOLDEN_SWORD, 1);
         
-        // Redstone Blade
-        addBlockWeaponRecipe("Redstone Blade", BlockWeapons.createRedstoneSword(), Items.REDSTONE_BLOCK, Items.IRON_SWORD);
+        // Redstone Blade - T1 (common material)
+        addBlockWeaponRecipeWithCore("Redstone Blade", BlockWeapons.createRedstoneSword(), Items.REDSTONE_BLOCK, Items.IRON_SWORD, 1);
         
-        // Netherrack Blade
-        addBlockWeaponRecipe("Netherrack Blade", BlockWeapons.createNetherrackSword(), Items.NETHERRACK, Items.STONE_SWORD);
+        // Netherrack Blade - T1 (common nether material)
+        addBlockWeaponRecipeWithCore("Netherrack Blade", BlockWeapons.createNetherrackSword(), Items.NETHERRACK, Items.STONE_SWORD, 1);
         
-        // Endstone Blade
-        addBlockWeaponRecipe("Endstone Blade", BlockWeapons.createEndstoneSword(), Items.END_STONE, Items.DIAMOND_SWORD);
+        // Endstone Blade - T2 (end material, decent durability)
+        addBlockWeaponRecipeWithCore("Endstone Blade", BlockWeapons.createEndstoneSword(), Items.END_STONE, Items.DIAMOND_SWORD, 2);
         
-        // Ice Blade
-        addBlockWeaponRecipe("Ice Blade", BlockWeapons.createIceSword(), Items.PACKED_ICE, Items.DIAMOND_SWORD);
+        // Ice Blade - T1 (basic material)
+        addBlockWeaponRecipeWithCore("Ice Blade", BlockWeapons.createIceSword(), Items.PACKED_ICE, Items.DIAMOND_SWORD, 1);
         
-        // Prismarine Blade
-        addBlockWeaponRecipe("Prismarine Blade", BlockWeapons.createPrismarineSword(), Items.PRISMARINE, Items.DIAMOND_SWORD);
+        // Prismarine Blade - T2 (ocean material, decent durability)
+        addBlockWeaponRecipeWithCore("Prismarine Blade", BlockWeapons.createPrismarineSword(), Items.PRISMARINE, Items.DIAMOND_SWORD, 2);
         
-        // Terracotta Blade
-        addBlockWeaponRecipe("Terracotta Blade", BlockWeapons.createTerracottaSword(), Items.TERRACOTTA, Items.IRON_SWORD);
+        // Terracotta Blade - T1 (basic material)
+        addBlockWeaponRecipeWithCore("Terracotta Blade", BlockWeapons.createTerracottaSword(), Items.TERRACOTTA, Items.IRON_SWORD, 1);
         
-        // Mossy Blade
-        addBlockWeaponRecipe("Mossy Blade", BlockWeapons.createMossySword(), Items.MOSSY_COBBLESTONE, Items.STONE_SWORD);
+        // Mossy Blade - T1 (basic material)
+        addBlockWeaponRecipeWithCore("Mossy Blade", BlockWeapons.createMossySword(), Items.MOSSY_COBBLESTONE, Items.STONE_SWORD, 1);
         
-        // Soul Blade
-        addBlockWeaponRecipe("Soul Blade", BlockWeapons.createSoulSandSword(), Items.SOUL_SAND, Items.GOLDEN_SWORD);
+        // Soul Blade - T1 (soul material)
+        addBlockWeaponRecipeWithCore("Soul Blade", BlockWeapons.createSoulSandSword(), Items.SOUL_SAND, Items.GOLDEN_SWORD, 1);
         
-        // Magma Blade
-        addBlockWeaponRecipe("Magma Blade", BlockWeapons.createMagmaSword(), Items.MAGMA_BLOCK, Items.GOLDEN_SWORD);
+        // Magma Blade - T2 (nether material, fire resistant)
+        addBlockWeaponRecipeWithCore("Magma Blade", BlockWeapons.createMagmaSword(), Items.MAGMA_BLOCK, Items.GOLDEN_SWORD, 2);
         
-        // Sandstone Blade
-        addBlockWeaponRecipe("Sandstone Blade", BlockWeapons.createSandstoneSword(), Items.SANDSTONE, Items.STONE_SWORD);
+        // Sandstone Blade - T1 (basic material)
+        addBlockWeaponRecipeWithCore("Sandstone Blade", BlockWeapons.createSandstoneSword(), Items.SANDSTONE, Items.STONE_SWORD, 1);
         
-        // Amethyst Blade
-        addBlockWeaponRecipe("Amethyst Blade", BlockWeapons.createAmethystSword(), Items.AMETHYST_BLOCK, Items.DIAMOND_SWORD);
+        // Amethyst Blade - T2 (rare crystal material)
+        addBlockWeaponRecipeWithCore("Amethyst Blade", BlockWeapons.createAmethystSword(), Items.AMETHYST_BLOCK, Items.DIAMOND_SWORD, 2);
         
-        // Coal Blade
-        addBlockWeaponRecipe("Coal Blade", BlockWeapons.createCoalSword(), Items.COAL_BLOCK, Items.STONE_SWORD);
+        // Coal Blade - T1 (common material)
+        addBlockWeaponRecipeWithCore("Coal Blade", BlockWeapons.createCoalSword(), Items.COAL_BLOCK, Items.STONE_SWORD, 1);
 
         // ===== NEW WEAPON RECIPES WITH CRAFTING CORES =====
         // Stripped Log Swords
@@ -893,102 +893,41 @@ public class SlayerRecipes {
         
         // ===== BLOCK TOOLS =====
         
-        // Glass Tools
-        addBlockToolRecipe("Glass Pickaxe", BlockTools.createGlassPickaxe(), Items.GLASS, Items.DIAMOND_PICKAXE);
-        addBlockToolRecipe("Glass Axe", BlockTools.createGlassAxe(), Items.GLASS, Items.DIAMOND_AXE);
-        addBlockToolRecipe("Glass Shovel", BlockTools.createGlassShovel(), Items.GLASS, Items.DIAMOND_SHOVEL);
-        addBlockToolRecipe("Glass Hoe", BlockTools.createGlassHoe(), Items.GLASS, Items.DIAMOND_HOE);
+        // Glass Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Glass Pickaxe", BlockTools.createGlassPickaxe(), Items.GLASS, Items.DIAMOND_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Glass Axe", BlockTools.createGlassAxe(), Items.GLASS, Items.DIAMOND_AXE, 1);
+        addBlockToolRecipeWithCore("Glass Shovel", BlockTools.createGlassShovel(), Items.GLASS, Items.DIAMOND_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Glass Hoe", BlockTools.createGlassHoe(), Items.GLASS, Items.DIAMOND_HOE, 1);
         
-        // Obsidian Tools
-        addBlockToolRecipe("Obsidian Pickaxe", BlockTools.createObsidianPickaxe(), Items.OBSIDIAN, Items.NETHERITE_PICKAXE);
-        addBlockToolRecipe("Obsidian Axe", BlockTools.createObsidianAxe(), Items.OBSIDIAN, Items.NETHERITE_AXE);
-        addBlockToolRecipe("Obsidian Shovel", BlockTools.createObsidianShovel(), Items.OBSIDIAN, Items.NETHERITE_SHOVEL);
-        addBlockToolRecipe("Obsidian Hoe", BlockTools.createObsidianHoe(), Items.OBSIDIAN, Items.NETHERITE_HOE);
+        // Netherrack Tools - T1 (common nether material)
+        addBlockToolRecipeWithCore("Netherrack Pickaxe", BlockTools.createNetherrackPickaxe(), Items.NETHERRACK, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Netherrack Axe", BlockTools.createNetherrackAxe(), Items.NETHERRACK, Items.STONE_AXE, 1);
+        addBlockToolRecipeWithCore("Netherrack Shovel", BlockTools.createNetherrackShovel(), Items.NETHERRACK, Items.STONE_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Netherrack Hoe", BlockTools.createNetherrackHoe(), Items.NETHERRACK, Items.STONE_HOE, 1);
         
-        // Quartz Tools
-        addBlockToolRecipe("Quartz Pickaxe", BlockTools.createQuartzPickaxe(), Items.QUARTZ_BLOCK, Items.DIAMOND_PICKAXE);
-        addBlockToolRecipe("Quartz Axe", BlockTools.createQuartzAxe(), Items.QUARTZ_BLOCK, Items.DIAMOND_AXE);
-        addBlockToolRecipe("Quartz Shovel", BlockTools.createQuartzShovel(), Items.QUARTZ_BLOCK, Items.DIAMOND_SHOVEL);
-        addBlockToolRecipe("Quartz Hoe", BlockTools.createQuartzHoe(), Items.QUARTZ_BLOCK, Items.DIAMOND_HOE);
+        // End Stone Tools - T2 (end material, decent durability)
+        addBlockToolRecipeWithCore("End Stone Pickaxe", BlockTools.createEndstonePickaxe(), Items.END_STONE, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("End Stone Axe", BlockTools.createEndstoneAxe(), Items.END_STONE, Items.DIAMOND_AXE, 2);
+        addBlockToolRecipeWithCore("End Stone Shovel", BlockTools.createEndstoneShovel(), Items.END_STONE, Items.DIAMOND_SHOVEL, 2);
+        addBlockToolRecipeWithCore("End Stone Hoe", BlockTools.createEndstoneHoe(), Items.END_STONE, Items.DIAMOND_HOE, 2);
         
-        // Glowstone Tools
-        addBlockToolRecipe("Glowstone Pickaxe", BlockTools.createGlowstonePickaxe(), Items.GLOWSTONE, Items.GOLDEN_PICKAXE);
-        addBlockToolRecipe("Glowstone Axe", BlockTools.createGlowstoneAxe(), Items.GLOWSTONE, Items.GOLDEN_AXE);
-        addBlockToolRecipe("Glowstone Shovel", BlockTools.createGlowstoneShovel(), Items.GLOWSTONE, Items.GOLDEN_SHOVEL);
-        addBlockToolRecipe("Glowstone Hoe", BlockTools.createGlowstoneHoe(), Items.GLOWSTONE, Items.GOLDEN_HOE);
+        // Ice Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Ice Pickaxe", BlockTools.createIcePickaxe(), Items.PACKED_ICE, Items.DIAMOND_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Ice Axe", BlockTools.createIceAxe(), Items.PACKED_ICE, Items.DIAMOND_AXE, 1);
+        addBlockToolRecipeWithCore("Ice Shovel", BlockTools.createIceShovel(), Items.PACKED_ICE, Items.DIAMOND_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Ice Hoe", BlockTools.createIceHoe(), Items.PACKED_ICE, Items.DIAMOND_HOE, 1);
         
-        // Redstone Tools
-        addBlockToolRecipe("Redstone Pickaxe", BlockTools.createRedstonePickaxe(), Items.REDSTONE_BLOCK, Items.IRON_PICKAXE);
-        addBlockToolRecipe("Redstone Axe", BlockTools.createRedstoneAxe(), Items.REDSTONE_BLOCK, Items.IRON_AXE);
-        addBlockToolRecipe("Redstone Shovel", BlockTools.createRedstoneShovel(), Items.REDSTONE_BLOCK, Items.IRON_SHOVEL);
-        addBlockToolRecipe("Redstone Hoe", BlockTools.createRedstoneHoe(), Items.REDSTONE_BLOCK, Items.IRON_HOE);
+        // Prismarine Tools - T2 (ocean material, decent durability)
+        addBlockToolRecipeWithCore("Prismarine Pickaxe", BlockTools.createPrismarinePickaxe(), Items.PRISMARINE, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Prismarine Axe", BlockTools.createPrismarineAxe(), Items.PRISMARINE, Items.DIAMOND_AXE, 2);
+        addBlockToolRecipeWithCore("Prismarine Shovel", BlockTools.createPrismarineShovel(), Items.PRISMARINE, Items.DIAMOND_SHOVEL, 2);
+        addBlockToolRecipeWithCore("Prismarine Hoe", BlockTools.createPrismarineHoe(), Items.PRISMARINE, Items.DIAMOND_HOE, 2);
         
-        // Netherrack Tools
-        addBlockToolRecipe("Netherrack Pickaxe", BlockTools.createNetherrackPickaxe(), Items.NETHERRACK, Items.STONE_PICKAXE);
-        addBlockToolRecipe("Netherrack Axe", BlockTools.createNetherrackAxe(), Items.NETHERRACK, Items.STONE_AXE);
-        addBlockToolRecipe("Netherrack Shovel", BlockTools.createNetherrackShovel(), Items.NETHERRACK, Items.STONE_SHOVEL);
-        addBlockToolRecipe("Netherrack Hoe", BlockTools.createNetherrackHoe(), Items.NETHERRACK, Items.STONE_HOE);
-        
-        // End Stone Tools
-        addBlockToolRecipe("End Stone Pickaxe", BlockTools.createEndstonePickaxe(), Items.END_STONE, Items.DIAMOND_PICKAXE);
-        addBlockToolRecipe("End Stone Axe", BlockTools.createEndstoneAxe(), Items.END_STONE, Items.DIAMOND_AXE);
-        addBlockToolRecipe("End Stone Shovel", BlockTools.createEndstoneShovel(), Items.END_STONE, Items.DIAMOND_SHOVEL);
-        addBlockToolRecipe("End Stone Hoe", BlockTools.createEndstoneHoe(), Items.END_STONE, Items.DIAMOND_HOE);
-        
-        // Ice Tools
-        addBlockToolRecipe("Ice Pickaxe", BlockTools.createIcePickaxe(), Items.PACKED_ICE, Items.DIAMOND_PICKAXE);
-        addBlockToolRecipe("Ice Axe", BlockTools.createIceAxe(), Items.PACKED_ICE, Items.DIAMOND_AXE);
-        addBlockToolRecipe("Ice Shovel", BlockTools.createIceShovel(), Items.PACKED_ICE, Items.DIAMOND_SHOVEL);
-        addBlockToolRecipe("Ice Hoe", BlockTools.createIceHoe(), Items.PACKED_ICE, Items.DIAMOND_HOE);
-        
-        // Prismarine Tools
-        addBlockToolRecipe("Prismarine Pickaxe", BlockTools.createPrismarinePickaxe(), Items.PRISMARINE, Items.DIAMOND_PICKAXE);
-        addBlockToolRecipe("Prismarine Axe", BlockTools.createPrismarineAxe(), Items.PRISMARINE, Items.DIAMOND_AXE);
-        addBlockToolRecipe("Prismarine Shovel", BlockTools.createPrismarineShovel(), Items.PRISMARINE, Items.DIAMOND_SHOVEL);
-        addBlockToolRecipe("Prismarine Hoe", BlockTools.createPrismarineHoe(), Items.PRISMARINE, Items.DIAMOND_HOE);
-        
-        // Terracotta Tools
-        addBlockToolRecipe("Terracotta Pickaxe", BlockTools.createTerracottaPickaxe(), Items.TERRACOTTA, Items.IRON_PICKAXE);
-        addBlockToolRecipe("Terracotta Axe", BlockTools.createTerracottaAxe(), Items.TERRACOTTA, Items.IRON_AXE);
-        addBlockToolRecipe("Terracotta Shovel", BlockTools.createTerracottaShovel(), Items.TERRACOTTA, Items.IRON_SHOVEL);
-        addBlockToolRecipe("Terracotta Hoe", BlockTools.createTerracottaHoe(), Items.TERRACOTTA, Items.IRON_HOE);
-        
-        // Mossy Tools
-        addBlockToolRecipe("Mossy Pickaxe", BlockTools.createMossyPickaxe(), Items.MOSSY_COBBLESTONE, Items.IRON_PICKAXE);
-        addBlockToolRecipe("Mossy Axe", BlockTools.createMossyAxe(), Items.MOSSY_COBBLESTONE, Items.IRON_AXE);
-        addBlockToolRecipe("Mossy Shovel", BlockTools.createMossyShovel(), Items.MOSSY_COBBLESTONE, Items.IRON_SHOVEL);
-        addBlockToolRecipe("Mossy Hoe", BlockTools.createMossyHoe(), Items.MOSSY_COBBLESTONE, Items.IRON_HOE);
-        
-        // Soul Sand Tools
-        addBlockToolRecipe("Soul Sand Pickaxe", BlockTools.createSoulSandPickaxe(), Items.SOUL_SAND, Items.STONE_PICKAXE);
-        addBlockToolRecipe("Soul Sand Axe", BlockTools.createSoulSandAxe(), Items.SOUL_SAND, Items.STONE_AXE);
-        addBlockToolRecipe("Soul Sand Shovel", BlockTools.createSoulSandShovel(), Items.SOUL_SAND, Items.STONE_SHOVEL);
-        addBlockToolRecipe("Soul Sand Hoe", BlockTools.createSoulSandHoe(), Items.SOUL_SAND, Items.STONE_HOE);
-        
-        // Magma Tools
-        addBlockToolRecipe("Magma Pickaxe", BlockTools.createMagmaPickaxe(), Items.MAGMA_BLOCK, Items.IRON_PICKAXE);
-        addBlockToolRecipe("Magma Axe", BlockTools.createMagmaAxe(), Items.MAGMA_BLOCK, Items.IRON_AXE);
-        addBlockToolRecipe("Magma Shovel", BlockTools.createMagmaShovel(), Items.MAGMA_BLOCK, Items.IRON_SHOVEL);
-        addBlockToolRecipe("Magma Hoe", BlockTools.createMagmaHoe(), Items.MAGMA_BLOCK, Items.IRON_HOE);
-        
-        // Sandstone Tools
-        addBlockToolRecipe("Sandstone Pickaxe", BlockTools.createSandstonePickaxe(), Items.SANDSTONE, Items.IRON_PICKAXE);
-        addBlockToolRecipe("Sandstone Axe", BlockTools.createSandstoneAxe(), Items.SANDSTONE, Items.IRON_AXE);
-        addBlockToolRecipe("Sandstone Shovel", BlockTools.createSandstoneShovel(), Items.SANDSTONE, Items.IRON_SHOVEL);
-        addBlockToolRecipe("Sandstone Hoe", BlockTools.createSandstoneHoe(), Items.SANDSTONE, Items.IRON_HOE);
-        
-        // Amethyst Tools
-        addBlockToolRecipe("Amethyst Pickaxe", BlockTools.createAmethystPickaxe(), Items.AMETHYST_BLOCK, Items.DIAMOND_PICKAXE);
-        addBlockToolRecipe("Amethyst Axe", BlockTools.createAmethystAxe(), Items.AMETHYST_BLOCK, Items.DIAMOND_AXE);
-        addBlockToolRecipe("Amethyst Shovel", BlockTools.createAmethystShovel(), Items.AMETHYST_BLOCK, Items.DIAMOND_SHOVEL);
-        addBlockToolRecipe("Amethyst Hoe", BlockTools.createAmethystHoe(), Items.AMETHYST_BLOCK, Items.DIAMOND_HOE);
-        
-        // Coal Tools
-        addBlockToolRecipe("Coal Pickaxe", BlockTools.createCoalPickaxe(), Items.COAL_BLOCK, Items.STONE_PICKAXE);
-        addBlockToolRecipe("Coal Axe", BlockTools.createCoalAxe(), Items.COAL_BLOCK, Items.STONE_AXE);
-        addBlockToolRecipe("Coal Shovel", BlockTools.createCoalShovel(), Items.COAL_BLOCK, Items.STONE_SHOVEL);
-        addBlockToolRecipe("Coal Hoe", BlockTools.createCoalHoe(), Items.COAL_BLOCK, Items.STONE_HOE);
-
+        // Terracotta Tools - T1 (basic material)
+        addBlockToolRecipeWithCore("Terracotta Pickaxe", BlockTools.createTerracottaPickaxe(), Items.TERRACOTTA, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Terracotta Axe", BlockTools.createTerracottaAxe(), Items.TERRACOTTA, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Terracotta Shovel", BlockTools.createTerracottaShovel(), Items.TERRACOTTA, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Terracotta Hoe", BlockTools.createTerracottaHoe(), Items.TERRACOTTA, Items.IRON_HOE, 1);
         // ===== NEW TOOL RECIPES WITH CRAFTING CORES =====
         // Stripped Log Tools
         addBlockToolRecipeWithCore("Stripped Spruce Log Pickaxe", BlockTools.createStrippedSpruceLogPickaxe(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_PICKAXE, 1);
@@ -1139,11 +1078,14 @@ public class SlayerRecipes {
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }
     
-    private static void addBlockToolRecipe(String name, ItemStack result, Item blockItem, Item toolBase) {
+    private static void addBlockToolRecipeWithCore(String name, ItemStack result, Item blockItem, Item toolBase, int coreTier) {
+        ItemStack core = coreTier == 1 ? SlayerItems.createCustomCrafterCoreT1() : 
+                         coreTier == 2 ? SlayerItems.createCustomCrafterCoreT2() : 
+                         SlayerItems.createCustomCrafterCoreT3();
         ItemStack[] ingredients = new ItemStack[] {
             new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-            new ItemStack(blockItem), new ItemStack(toolBase), new ItemStack(blockItem),
-            ItemStack.EMPTY, new ItemStack(blockItem), ItemStack.EMPTY
+            new ItemStack(blockItem), core, new ItemStack(blockItem),
+            ItemStack.EMPTY, new ItemStack(toolBase), ItemStack.EMPTY
         };
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }
@@ -1232,18 +1174,6 @@ public class SlayerRecipes {
             new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
             new ItemStack(blockItem), core, new ItemStack(blockItem),
             ItemStack.EMPTY, new ItemStack(weaponBase), ItemStack.EMPTY
-        };
-        RECIPES.add(new Recipe(name, result, ingredients, null, 0));
-    }
-
-    private static void addBlockToolRecipeWithCore(String name, ItemStack result, Item blockItem, Item toolBase, int coreTier) {
-        ItemStack core = coreTier == 1 ? SlayerItems.createCustomCrafterCoreT1() : 
-                         coreTier == 2 ? SlayerItems.createCustomCrafterCoreT2() : 
-                         SlayerItems.createCustomCrafterCoreT3();
-        ItemStack[] ingredients = new ItemStack[] {
-            new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-            new ItemStack(blockItem), core, new ItemStack(blockItem),
-            ItemStack.EMPTY, new ItemStack(toolBase), ItemStack.EMPTY
         };
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }
