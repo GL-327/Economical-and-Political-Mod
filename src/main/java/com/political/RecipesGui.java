@@ -536,6 +536,172 @@ public class RecipesGui {
             BlockWeapons.createWetSpongeSword(), BlockArmor.createWetSpongeHelmet(), BlockArmor.createWetSpongeChestplate(),
             BlockArmor.createWetSpongeLeggings(), BlockArmor.createWetSpongeBoots()));
 
+        // ===== NEW ARMOR SETS =====
+        // Stripped Log Armor
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_SPRUCE_LOG, "Stripped Spruce Log",
+            BlockWeapons.createStrippedSpruceLogSword(), BlockArmor.createStrippedSpruceLogHelmet(), BlockArmor.createStrippedSpruceLogChestplate(),
+            BlockArmor.createStrippedSpruceLogLeggings(), BlockArmor.createStrippedSpruceLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_BIRCH_LOG, "Stripped Birch Log",
+            BlockWeapons.createStrippedBirchLogSword(), BlockArmor.createStrippedBirchLogHelmet(), BlockArmor.createStrippedBirchLogChestplate(),
+            BlockArmor.createStrippedBirchLogLeggings(), BlockArmor.createStrippedBirchLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_DARK_OAK_LOG, "Stripped Dark Oak Log",
+            BlockWeapons.createStrippedDarkOakLogSword(), BlockArmor.createStrippedDarkOakLogHelmet(), BlockArmor.createStrippedDarkOakLogChestplate(),
+            BlockArmor.createStrippedDarkOakLogLeggings(), BlockArmor.createStrippedDarkOakLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_JUNGLE_LOG, "Stripped Jungle Log",
+            BlockWeapons.createStrippedJungleLogSword(), BlockArmor.createStrippedJungleLogHelmet(), BlockArmor.createStrippedJungleLogChestplate(),
+            BlockArmor.createStrippedJungleLogLeggings(), BlockArmor.createStrippedJungleLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_ACACIA_LOG, "Stripped Acacia Log",
+            BlockWeapons.createStrippedAcaciaLogSword(), BlockArmor.createStrippedAcaciaLogHelmet(), BlockArmor.createStrippedAcaciaLogChestplate(),
+            BlockArmor.createStrippedAcaciaLogLeggings(), BlockArmor.createStrippedAcaciaLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_MANGROVE_LOG, "Stripped Mangrove Log",
+            BlockWeapons.createStrippedMangroveLogSword(), BlockArmor.createStrippedMangroveLogHelmet(), BlockArmor.createStrippedMangroveLogChestplate(),
+            BlockArmor.createStrippedMangroveLogLeggings(), BlockArmor.createStrippedMangroveLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_CHERRY_LOG, "Stripped Cherry Log",
+            BlockWeapons.createStrippedCherryLogSword(), BlockArmor.createStrippedCherryLogHelmet(), BlockArmor.createStrippedCherryLogChestplate(),
+            BlockArmor.createStrippedCherryLogLeggings(), BlockArmor.createStrippedCherryLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.BAMBOO_BLOCK, "Bamboo Block",
+            BlockWeapons.createStrippedBambooBlockSword(), BlockArmor.createStrippedBambooBlockHelmet(), BlockArmor.createStrippedBambooBlockChestplate(),
+            BlockArmor.createStrippedBambooBlockLeggings(), BlockArmor.createStrippedBambooBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_CRIMSON_STEM, "Stripped Crimson Stem",
+            BlockWeapons.createStrippedCrimsonStemSword(), BlockArmor.createStrippedCrimsonStemHelmet(), BlockArmor.createStrippedCrimsonStemChestplate(),
+            BlockArmor.createStrippedCrimsonStemLeggings(), BlockArmor.createStrippedCrimsonStemBoots()));
+        sets.add(new ArmorSetDisplay(Items.STRIPPED_WARPED_STEM, "Stripped Warped Stem",
+            BlockWeapons.createStrippedWarpedStemSword(), BlockArmor.createStrippedWarpedStemHelmet(), BlockArmor.createStrippedWarpedStemChestplate(),
+            BlockArmor.createStrippedWarpedStemLeggings(), BlockArmor.createStrippedWarpedStemBoots()));
+        // Plank Armor
+        sets.add(new ArmorSetDisplay(Items.SPRUCE_PLANKS, "Spruce Planks",
+            BlockWeapons.createSprucePlanksSword(), BlockArmor.createSprucePlanksHelmet(), BlockArmor.createSprucePlanksChestplate(),
+            BlockArmor.createSprucePlanksLeggings(), BlockArmor.createSprucePlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.BIRCH_PLANKS, "Birch Planks",
+            BlockWeapons.createBirchPlanksSword(), BlockArmor.createBirchPlanksHelmet(), BlockArmor.createBirchPlanksChestplate(),
+            BlockArmor.createBirchPlanksLeggings(), BlockArmor.createBirchPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.JUNGLE_PLANKS, "Jungle Planks",
+            BlockWeapons.createJunglePlanksSword(), BlockArmor.createJunglePlanksHelmet(), BlockArmor.createJunglePlanksChestplate(),
+            BlockArmor.createJunglePlanksLeggings(), BlockArmor.createJunglePlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.ACACIA_PLANKS, "Acacia Planks",
+            BlockWeapons.createAcaciaPlanksSword(), BlockArmor.createAcaciaPlanksHelmet(), BlockArmor.createAcaciaPlanksChestplate(),
+            BlockArmor.createAcaciaPlanksLeggings(), BlockArmor.createAcaciaPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.DARK_OAK_PLANKS, "Dark Oak Planks",
+            BlockWeapons.createDarkOakPlanksSword(), BlockArmor.createDarkOakPlanksHelmet(), BlockArmor.createDarkOakPlanksChestplate(),
+            BlockArmor.createDarkOakPlanksLeggings(), BlockArmor.createDarkOakPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.MANGROVE_PLANKS, "Mangrove Planks",
+            BlockWeapons.createMangrovePlanksSword(), BlockArmor.createMangrovePlanksHelmet(), BlockArmor.createMangrovePlanksChestplate(),
+            BlockArmor.createMangrovePlanksLeggings(), BlockArmor.createMangrovePlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.CHERRY_PLANKS, "Cherry Planks",
+            BlockWeapons.createCherryPlanksSword(), BlockArmor.createCherryPlanksHelmet(), BlockArmor.createCherryPlanksChestplate(),
+            BlockArmor.createCherryPlanksLeggings(), BlockArmor.createCherryPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.BAMBOO_PLANKS, "Bamboo Planks",
+            BlockWeapons.createBambooPlanksSword(), BlockArmor.createBambooPlanksHelmet(), BlockArmor.createBambooPlanksChestplate(),
+            BlockArmor.createBambooPlanksLeggings(), BlockArmor.createBambooPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.CRIMSON_PLANKS, "Crimson Planks",
+            BlockWeapons.createCrimsonPlanksSword(), BlockArmor.createCrimsonPlanksHelmet(), BlockArmor.createCrimsonPlanksChestplate(),
+            BlockArmor.createCrimsonPlanksLeggings(), BlockArmor.createCrimsonPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.WARPED_PLANKS, "Warped Planks",
+            BlockWeapons.createWarpedPlanksSword(), BlockArmor.createWarpedPlanksHelmet(), BlockArmor.createWarpedPlanksChestplate(),
+            BlockArmor.createWarpedPlanksLeggings(), BlockArmor.createWarpedPlanksBoots()));
+        sets.add(new ArmorSetDisplay(Items.OAK_PLANKS, "Oak Planks",
+            BlockWeapons.createOakPlanksSword(), BlockArmor.createOakPlanksHelmet(), BlockArmor.createOakPlanksChestplate(),
+            BlockArmor.createOakPlanksLeggings(), BlockArmor.createOakPlanksBoots()));
+        // Stone/Mud/Log Armor
+        sets.add(new ArmorSetDisplay(Items.OAK_LOG, "Oak Log",
+            BlockWeapons.createOakLogSword(), BlockArmor.createOakLogHelmet(), BlockArmor.createOakLogChestplate(),
+            BlockArmor.createOakLogLeggings(), BlockArmor.createOakLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.SPRUCE_LOG, "Spruce Log",
+            BlockWeapons.createSpruceLogSword(), BlockArmor.createSpruceLogHelmet(), BlockArmor.createSpruceLogChestplate(),
+            BlockArmor.createSpruceLogLeggings(), BlockArmor.createSpruceLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.BIRCH_LOG, "Birch Log",
+            BlockWeapons.createBirchLogSword(), BlockArmor.createBirchLogHelmet(), BlockArmor.createBirchLogChestplate(),
+            BlockArmor.createBirchLogLeggings(), BlockArmor.createBirchLogBoots()));
+        sets.add(new ArmorSetDisplay(Items.STONE_BRICKS, "Stone Bricks",
+            BlockWeapons.createStoneBricksSword(), BlockArmor.createStoneBricksHelmet(), BlockArmor.createStoneBricksChestplate(),
+            BlockArmor.createStoneBricksLeggings(), BlockArmor.createStoneBricksBoots()));
+        sets.add(new ArmorSetDisplay(Items.COBBLESTONE, "Cobblestone",
+            BlockWeapons.createCobblestoneSword(), BlockArmor.createCobblestoneHelmet(), BlockArmor.createCobblestoneChestplate(),
+            BlockArmor.createCobblestoneLeggings(), BlockArmor.createCobblestoneBoots()));
+        sets.add(new ArmorSetDisplay(Items.MOSSY_COBBLESTONE, "Mossy Cobblestone",
+            BlockWeapons.createMossyCobblestoneSword(), BlockArmor.createMossyCobblestoneHelmet(), BlockArmor.createMossyCobblestoneChestplate(),
+            BlockArmor.createMossyCobblestoneLeggings(), BlockArmor.createMossyCobblestoneBoots()));
+        sets.add(new ArmorSetDisplay(Items.COBBLED_DEEPSLATE, "Cobbled Deepslate",
+            BlockWeapons.createCobbledDeepslateSword(), BlockArmor.createCobbledDeepslateHelmet(), BlockArmor.createCobbledDeepslateChestplate(),
+            BlockArmor.createCobbledDeepslateLeggings(), BlockArmor.createCobbledDeepslateBoots()));
+        sets.add(new ArmorSetDisplay(Items.MUD_BRICKS, "Mud Bricks",
+            BlockWeapons.createMudBricksSword(), BlockArmor.createMudBricksHelmet(), BlockArmor.createMudBricksChestplate(),
+            BlockArmor.createMudBricksLeggings(), BlockArmor.createMudBricksBoots()));
+        sets.add(new ArmorSetDisplay(Items.MANGROVE_ROOTS, "Mangrove Roots",
+            BlockWeapons.createMangroveRootsSword(), BlockArmor.createMangroveRootsHelmet(), BlockArmor.createMangroveRootsChestplate(),
+            BlockArmor.createMangroveRootsLeggings(), BlockArmor.createMangroveRootsBoots()));
+        sets.add(new ArmorSetDisplay(Items.MUDDY_MANGROVE_ROOTS, "Muddy Mangrove Roots",
+            BlockWeapons.createMuddyMangroveRootsSword(), BlockArmor.createMuddyMangroveRootsHelmet(), BlockArmor.createMuddyMangroveRootsChestplate(),
+            BlockArmor.createMuddyMangroveRootsLeggings(), BlockArmor.createMuddyMangroveRootsBoots()));
+        // Copper/Netherite/Froglight/Basalt Armor
+        sets.add(new ArmorSetDisplay(Items.NETHERITE_BLOCK, "Netherite Block",
+            BlockWeapons.createNetheriteBlockSword(), BlockArmor.createNetheriteBlockHelmet(), BlockArmor.createNetheriteBlockChestplate(),
+            BlockArmor.createNetheriteBlockLeggings(), BlockArmor.createNetheriteBlockBoots()));
+        sets.add(new ArmorSetDisplay(Items.CHISELED_COPPER, "Chiseled Copper",
+            BlockWeapons.createChiseledCopperSword(), BlockArmor.createChiseledCopperHelmet(), BlockArmor.createChiseledCopperChestplate(),
+            BlockArmor.createChiseledCopperLeggings(), BlockArmor.createChiseledCopperBoots()));
+        sets.add(new ArmorSetDisplay(Items.CUT_COPPER, "Cut Copper",
+            BlockWeapons.createCutCopperSword(), BlockArmor.createCutCopperHelmet(), BlockArmor.createCutCopperChestplate(),
+            BlockArmor.createCutCopperLeggings(), BlockArmor.createCutCopperBoots()));
+        sets.add(new ArmorSetDisplay(Items.EXPOSED_COPPER, "Exposed Copper",
+            BlockWeapons.createExposedCopperSword(), BlockArmor.createExposedCopperHelmet(), BlockArmor.createExposedCopperChestplate(),
+            BlockArmor.createExposedCopperLeggings(), BlockArmor.createExposedCopperBoots()));
+        sets.add(new ArmorSetDisplay(Items.WEATHERED_COPPER, "Weathered Copper",
+            BlockWeapons.createWeatheredCopperSword(), BlockArmor.createWeatheredCopperHelmet(), BlockArmor.createWeatheredCopperChestplate(),
+            BlockArmor.createWeatheredCopperLeggings(), BlockArmor.createWeatheredCopperBoots()));
+        sets.add(new ArmorSetDisplay(Items.OXIDIZED_COPPER, "Oxidised Copper",
+            BlockWeapons.createOxidisedCopperSword(), BlockArmor.createOxidisedCopperHelmet(), BlockArmor.createOxidisedCopperChestplate(),
+            BlockArmor.createOxidisedCopperLeggings(), BlockArmor.createOxidisedCopperBoots()));
+        sets.add(new ArmorSetDisplay(Items.WAXED_CUT_COPPER, "Waxed Cut Copper",
+            BlockWeapons.createWaxedCutCopperSword(), BlockArmor.createWaxedCutCopperHelmet(), BlockArmor.createWaxedCutCopperChestplate(),
+            BlockArmor.createWaxedCutCopperLeggings(), BlockArmor.createWaxedCutCopperBoots()));
+        sets.add(new ArmorSetDisplay(Items.POLISHED_BASALT, "Polished Basalt",
+            BlockWeapons.createPolishedBasaltSword(), BlockArmor.createPolishedBasaltHelmet(), BlockArmor.createPolishedBasaltChestplate(),
+            BlockArmor.createPolishedBasaltLeggings(), BlockArmor.createPolishedBasaltBoots()));
+        sets.add(new ArmorSetDisplay(Items.VERDANT_FROGLIGHT, "Verdant Froglight",
+            BlockWeapons.createVerdantFroglightSword(), BlockArmor.createVerdantFroglightHelmet(), BlockArmor.createVerdantFroglightChestplate(),
+            BlockArmor.createVerdantFroglightLeggings(), BlockArmor.createVerdantFroglightBoots()));
+        sets.add(new ArmorSetDisplay(Items.PEARLESCENT_FROGLIGHT, "Pearlescent Froglight",
+            BlockWeapons.createPearlescentFroglightSword(), BlockArmor.createPearlescentFroglightHelmet(), BlockArmor.createPearlescentFroglightChestplate(),
+            BlockArmor.createPearlescentFroglightLeggings(), BlockArmor.createPearlescentFroglightBoots()));
+        sets.add(new ArmorSetDisplay(Items.OCHRE_FROGLIGHT, "Ochre Froglight",
+            BlockWeapons.createOchreFroglightSword(), BlockArmor.createOchreFroglightHelmet(), BlockArmor.createOchreFroglightChestplate(),
+            BlockArmor.createOchreFroglightLeggings(), BlockArmor.createOchreFroglightBoots()));
+        // Material Item Armor
+        sets.add(new ArmorSetDisplay(Items.IRON_NUGGET, "Iron Nugget",
+            BlockWeapons.createIronNuggetSword(), BlockArmor.createIronNuggetHelmet(), BlockArmor.createIronNuggetChestplate(),
+            BlockArmor.createIronNuggetLeggings(), BlockArmor.createIronNuggetBoots()));
+        sets.add(new ArmorSetDisplay(Items.GOLD_NUGGET, "Gold Nugget",
+            BlockWeapons.createGoldNuggetSword(), BlockArmor.createGoldNuggetHelmet(), BlockArmor.createGoldNuggetChestplate(),
+            BlockArmor.createGoldNuggetLeggings(), BlockArmor.createGoldNuggetBoots()));
+        sets.add(new ArmorSetDisplay(Items.COPPER_INGOT, "Copper Ingot",
+            BlockWeapons.createCopperIngotSword(), BlockArmor.createCopperIngotHelmet(), BlockArmor.createCopperIngotChestplate(),
+            BlockArmor.createCopperIngotLeggings(), BlockArmor.createCopperIngotBoots()));
+        sets.add(new ArmorSetDisplay(Items.EMERALD, "Emerald",
+            BlockWeapons.createEmeraldSword(), BlockArmor.createEmeraldHelmet(), BlockArmor.createEmeraldChestplate(),
+            BlockArmor.createEmeraldLeggings(), BlockArmor.createEmeraldBoots()));
+        sets.add(new ArmorSetDisplay(Items.LAPIS_LAZULI, "Lapis Lazuli",
+            BlockWeapons.createLapisLazuliSword(), BlockArmor.createLapisLazuliHelmet(), BlockArmor.createLapisLazuliChestplate(),
+            BlockArmor.createLapisLazuliLeggings(), BlockArmor.createLapisLazuliBoots()));
+        sets.add(new ArmorSetDisplay(Items.AMETHYST_SHARD, "Amethyst Shard",
+            BlockWeapons.createAmethystShardSword(), BlockArmor.createAmethystShardHelmet(), BlockArmor.createAmethystShardChestplate(),
+            BlockArmor.createAmethystShardLeggings(), BlockArmor.createAmethystShardBoots()));
+        sets.add(new ArmorSetDisplay(Items.FLINT, "Flint",
+            BlockWeapons.createFlintSword(), BlockArmor.createFlintHelmet(), BlockArmor.createFlintChestplate(),
+            BlockArmor.createFlintLeggings(), BlockArmor.createFlintBoots()));
+        sets.add(new ArmorSetDisplay(Items.BONE_MEAL, "Bone Meal",
+            BlockWeapons.createBoneMealSword(), BlockArmor.createBoneMealHelmet(), BlockArmor.createBoneMealChestplate(),
+            BlockArmor.createBoneMealLeggings(), BlockArmor.createBoneMealBoots()));
+        sets.add(new ArmorSetDisplay(Items.CHARCOAL, "Charcoal",
+            BlockWeapons.createCharcoalSword(), BlockArmor.createCharcoalHelmet(), BlockArmor.createCharcoalChestplate(),
+            BlockArmor.createCharcoalLeggings(), BlockArmor.createCharcoalBoots()));
+        sets.add(new ArmorSetDisplay(Items.END_STONE, "End Stone",
+            BlockWeapons.createEndStoneSword(), BlockArmor.createEndStoneHelmet(), BlockArmor.createEndStoneChestplate(),
+            BlockArmor.createEndStoneLeggings(), BlockArmor.createEndStoneBoots()));
+        sets.add(new ArmorSetDisplay(Items.SNOW_BLOCK, "Snow Block",
+            BlockWeapons.createSnowBlockSword(), BlockArmor.createSnowBlockHelmet(), BlockArmor.createSnowBlockChestplate(),
+            BlockArmor.createSnowBlockLeggings(), BlockArmor.createSnowBlockBoots()));
+
         // Pagination - 3 sets per page (each set takes 2 rows)
         int setsPerPage = 3;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);

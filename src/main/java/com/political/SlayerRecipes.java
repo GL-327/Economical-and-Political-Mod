@@ -445,7 +445,230 @@ public class SlayerRecipes {
         addBlockArmorRecipe("Coal Chestplate", BlockArmor.createCoalChestplate(), Items.COAL_BLOCK, Items.LEATHER_CHESTPLATE);
         addBlockArmorRecipe("Coal Leggings", BlockArmor.createCoalLeggings(), Items.COAL_BLOCK, Items.LEATHER_LEGGINGS);
         addBlockArmorRecipe("Coal Boots", BlockArmor.createCoalBoots(), Items.COAL_BLOCK, Items.LEATHER_BOOTS);
-        
+
+        // ===== NEW ARMOR SETS WITH CRAFTING CORES =====
+        // Stripped Log Armor (T1 - weaker than diamond)
+        addBlockArmorRecipeWithCore("Stripped Spruce Log Helmet", BlockArmor.createStrippedSpruceLogHelmet(), Items.STRIPPED_SPRUCE_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Spruce Log Chestplate", BlockArmor.createStrippedSpruceLogChestplate(), Items.STRIPPED_SPRUCE_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Spruce Log Leggings", BlockArmor.createStrippedSpruceLogLeggings(), Items.STRIPPED_SPRUCE_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Spruce Log Boots", BlockArmor.createStrippedSpruceLogBoots(), Items.STRIPPED_SPRUCE_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Birch Log Helmet", BlockArmor.createStrippedBirchLogHelmet(), Items.STRIPPED_BIRCH_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Birch Log Chestplate", BlockArmor.createStrippedBirchLogChestplate(), Items.STRIPPED_BIRCH_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Birch Log Leggings", BlockArmor.createStrippedBirchLogLeggings(), Items.STRIPPED_BIRCH_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Birch Log Boots", BlockArmor.createStrippedBirchLogBoots(), Items.STRIPPED_BIRCH_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Dark Oak Log Helmet", BlockArmor.createStrippedDarkOakLogHelmet(), Items.STRIPPED_DARK_OAK_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Dark Oak Log Chestplate", BlockArmor.createStrippedDarkOakLogChestplate(), Items.STRIPPED_DARK_OAK_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Dark Oak Log Leggings", BlockArmor.createStrippedDarkOakLogLeggings(), Items.STRIPPED_DARK_OAK_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Dark Oak Log Boots", BlockArmor.createStrippedDarkOakLogBoots(), Items.STRIPPED_DARK_OAK_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Jungle Log Helmet", BlockArmor.createStrippedJungleLogHelmet(), Items.STRIPPED_JUNGLE_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Jungle Log Chestplate", BlockArmor.createStrippedJungleLogChestplate(), Items.STRIPPED_JUNGLE_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Jungle Log Leggings", BlockArmor.createStrippedJungleLogLeggings(), Items.STRIPPED_JUNGLE_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Jungle Log Boots", BlockArmor.createStrippedJungleLogBoots(), Items.STRIPPED_JUNGLE_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Acacia Log Helmet", BlockArmor.createStrippedAcaciaLogHelmet(), Items.STRIPPED_ACACIA_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Acacia Log Chestplate", BlockArmor.createStrippedAcaciaLogChestplate(), Items.STRIPPED_ACACIA_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Acacia Log Leggings", BlockArmor.createStrippedAcaciaLogLeggings(), Items.STRIPPED_ACACIA_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Acacia Log Boots", BlockArmor.createStrippedAcaciaLogBoots(), Items.STRIPPED_ACACIA_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Mangrove Log Helmet", BlockArmor.createStrippedMangroveLogHelmet(), Items.STRIPPED_MANGROVE_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Mangrove Log Chestplate", BlockArmor.createStrippedMangroveLogChestplate(), Items.STRIPPED_MANGROVE_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Mangrove Log Leggings", BlockArmor.createStrippedMangroveLogLeggings(), Items.STRIPPED_MANGROVE_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Mangrove Log Boots", BlockArmor.createStrippedMangroveLogBoots(), Items.STRIPPED_MANGROVE_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Cherry Log Helmet", BlockArmor.createStrippedCherryLogHelmet(), Items.STRIPPED_CHERRY_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Stripped Cherry Log Chestplate", BlockArmor.createStrippedCherryLogChestplate(), Items.STRIPPED_CHERRY_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Stripped Cherry Log Leggings", BlockArmor.createStrippedCherryLogLeggings(), Items.STRIPPED_CHERRY_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Stripped Cherry Log Boots", BlockArmor.createStrippedCherryLogBoots(), Items.STRIPPED_CHERRY_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Bamboo Block Helmet", BlockArmor.createBambooBlockHelmet(), Items.BAMBOO_BLOCK, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Bamboo Block Chestplate", BlockArmor.createBambooBlockChestplate(), Items.BAMBOO_BLOCK, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Bamboo Block Leggings", BlockArmor.createBambooBlockLeggings(), Items.BAMBOO_BLOCK, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Bamboo Block Boots", BlockArmor.createBambooBlockBoots(), Items.BAMBOO_BLOCK, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stripped Crimson Stem Helmet", BlockArmor.createStrippedCrimsonStemHelmet(), Items.STRIPPED_CRIMSON_STEM, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Stripped Crimson Stem Chestplate", BlockArmor.createStrippedCrimsonStemChestplate(), Items.STRIPPED_CRIMSON_STEM, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Stripped Crimson Stem Leggings", BlockArmor.createStrippedCrimsonStemLeggings(), Items.STRIPPED_CRIMSON_STEM, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Stripped Crimson Stem Boots", BlockArmor.createStrippedCrimsonStemBoots(), Items.STRIPPED_CRIMSON_STEM, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Stripped Warped Stem Helmet", BlockArmor.createStrippedWarpedStemHelmet(), Items.STRIPPED_WARPED_STEM, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Stripped Warped Stem Chestplate", BlockArmor.createStrippedWarpedStemChestplate(), Items.STRIPPED_WARPED_STEM, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Stripped Warped Stem Leggings", BlockArmor.createStrippedWarpedStemLeggings(), Items.STRIPPED_WARPED_STEM, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Stripped Warped Stem Boots", BlockArmor.createStrippedWarpedStemBoots(), Items.STRIPPED_WARPED_STEM, Items.LEATHER_BOOTS, 2);
+
+        // Plank Armor (T1)
+        addBlockArmorRecipeWithCore("Spruce Planks Helmet", BlockArmor.createSprucePlanksHelmet(), Items.SPRUCE_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Spruce Planks Chestplate", BlockArmor.createSprucePlanksChestplate(), Items.SPRUCE_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Spruce Planks Leggings", BlockArmor.createSprucePlanksLeggings(), Items.SPRUCE_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Spruce Planks Boots", BlockArmor.createSprucePlanksBoots(), Items.SPRUCE_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Birch Planks Helmet", BlockArmor.createBirchPlanksHelmet(), Items.BIRCH_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Birch Planks Chestplate", BlockArmor.createBirchPlanksChestplate(), Items.BIRCH_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Birch Planks Leggings", BlockArmor.createBirchPlanksLeggings(), Items.BIRCH_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Birch Planks Boots", BlockArmor.createBirchPlanksBoots(), Items.BIRCH_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Jungle Planks Helmet", BlockArmor.createJunglePlanksHelmet(), Items.JUNGLE_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Jungle Planks Chestplate", BlockArmor.createJunglePlanksChestplate(), Items.JUNGLE_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Jungle Planks Leggings", BlockArmor.createJunglePlanksLeggings(), Items.JUNGLE_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Jungle Planks Boots", BlockArmor.createJunglePlanksBoots(), Items.JUNGLE_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Acacia Planks Helmet", BlockArmor.createAcaciaPlanksHelmet(), Items.ACACIA_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Acacia Planks Chestplate", BlockArmor.createAcaciaPlanksChestplate(), Items.ACACIA_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Acacia Planks Leggings", BlockArmor.createAcaciaPlanksLeggings(), Items.ACACIA_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Acacia Planks Boots", BlockArmor.createAcaciaPlanksBoots(), Items.ACACIA_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Dark Oak Planks Helmet", BlockArmor.createDarkOakPlanksHelmet(), Items.DARK_OAK_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Dark Oak Planks Chestplate", BlockArmor.createDarkOakPlanksChestplate(), Items.DARK_OAK_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Dark Oak Planks Leggings", BlockArmor.createDarkOakPlanksLeggings(), Items.DARK_OAK_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Dark Oak Planks Boots", BlockArmor.createDarkOakPlanksBoots(), Items.DARK_OAK_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Mangrove Planks Helmet", BlockArmor.createMangrovePlanksHelmet(), Items.MANGROVE_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Mangrove Planks Chestplate", BlockArmor.createMangrovePlanksChestplate(), Items.MANGROVE_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Mangrove Planks Leggings", BlockArmor.createMangrovePlanksLeggings(), Items.MANGROVE_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Mangrove Planks Boots", BlockArmor.createMangrovePlanksBoots(), Items.MANGROVE_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Cherry Planks Helmet", BlockArmor.createCherryPlanksHelmet(), Items.CHERRY_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Cherry Planks Chestplate", BlockArmor.createCherryPlanksChestplate(), Items.CHERRY_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Cherry Planks Leggings", BlockArmor.createCherryPlanksLeggings(), Items.CHERRY_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Cherry Planks Boots", BlockArmor.createCherryPlanksBoots(), Items.CHERRY_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Bamboo Planks Helmet", BlockArmor.createBambooPlanksHelmet(), Items.BAMBOO_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Bamboo Planks Chestplate", BlockArmor.createBambooPlanksChestplate(), Items.BAMBOO_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Bamboo Planks Leggings", BlockArmor.createBambooPlanksLeggings(), Items.BAMBOO_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Bamboo Planks Boots", BlockArmor.createBambooPlanksBoots(), Items.BAMBOO_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Crimson Planks Helmet", BlockArmor.createCrimsonPlanksHelmet(), Items.CRIMSON_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Crimson Planks Chestplate", BlockArmor.createCrimsonPlanksChestplate(), Items.CRIMSON_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Crimson Planks Leggings", BlockArmor.createCrimsonPlanksLeggings(), Items.CRIMSON_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Crimson Planks Boots", BlockArmor.createCrimsonPlanksBoots(), Items.CRIMSON_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Warped Planks Helmet", BlockArmor.createWarpedPlanksHelmet(), Items.WARPED_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Warped Planks Chestplate", BlockArmor.createWarpedPlanksChestplate(), Items.WARPED_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Warped Planks Leggings", BlockArmor.createWarpedPlanksLeggings(), Items.WARPED_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Warped Planks Boots", BlockArmor.createWarpedPlanksBoots(), Items.WARPED_PLANKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Oak Planks Helmet", BlockArmor.createOakPlanksHelmet(), Items.OAK_PLANKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Oak Planks Chestplate", BlockArmor.createOakPlanksChestplate(), Items.OAK_PLANKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Oak Planks Leggings", BlockArmor.createOakPlanksLeggings(), Items.OAK_PLANKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Oak Planks Boots", BlockArmor.createOakPlanksBoots(), Items.OAK_PLANKS, Items.LEATHER_BOOTS, 1);
+
+        // Stone/Mud/Log Armor
+        addBlockArmorRecipeWithCore("Oak Log Helmet", BlockArmor.createOakLogHelmet(), Items.OAK_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Oak Log Chestplate", BlockArmor.createOakLogChestplate(), Items.OAK_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Oak Log Leggings", BlockArmor.createOakLogLeggings(), Items.OAK_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Oak Log Boots", BlockArmor.createOakLogBoots(), Items.OAK_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Spruce Log Helmet", BlockArmor.createSpruceLogHelmet(), Items.SPRUCE_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Spruce Log Chestplate", BlockArmor.createSpruceLogChestplate(), Items.SPRUCE_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Spruce Log Leggings", BlockArmor.createSpruceLogLeggings(), Items.SPRUCE_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Spruce Log Boots", BlockArmor.createSpruceLogBoots(), Items.SPRUCE_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Birch Log Helmet", BlockArmor.createBirchLogHelmet(), Items.BIRCH_LOG, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Birch Log Chestplate", BlockArmor.createBirchLogChestplate(), Items.BIRCH_LOG, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Birch Log Leggings", BlockArmor.createBirchLogLeggings(), Items.BIRCH_LOG, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Birch Log Boots", BlockArmor.createBirchLogBoots(), Items.BIRCH_LOG, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Stone Bricks Helmet", BlockArmor.createStoneBricksHelmet(), Items.STONE_BRICKS, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Stone Bricks Chestplate", BlockArmor.createStoneBricksChestplate(), Items.STONE_BRICKS, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Stone Bricks Leggings", BlockArmor.createStoneBricksLeggings(), Items.STONE_BRICKS, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Stone Bricks Boots", BlockArmor.createStoneBricksBoots(), Items.STONE_BRICKS, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Cobblestone Helmet", BlockArmor.createCobblestoneHelmet(), Items.COBBLESTONE, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Cobblestone Chestplate", BlockArmor.createCobblestoneChestplate(), Items.COBBLESTONE, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Cobblestone Leggings", BlockArmor.createCobblestoneLeggings(), Items.COBBLESTONE, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Cobblestone Boots", BlockArmor.createCobblestoneBoots(), Items.COBBLESTONE, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Mossy Cobblestone Helmet", BlockArmor.createMossyCobblestoneHelmet(), Items.MOSSY_COBBLESTONE, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Mossy Cobblestone Chestplate", BlockArmor.createMossyCobblestoneChestplate(), Items.MOSSY_COBBLESTONE, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Mossy Cobblestone Leggings", BlockArmor.createMossyCobblestoneLeggings(), Items.MOSSY_COBBLESTONE, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Mossy Cobblestone Boots", BlockArmor.createMossyCobblestoneBoots(), Items.MOSSY_COBBLESTONE, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Cobbled Deepslate Helmet", BlockArmor.createCobbledDeepslateHelmet(), Items.COBBLED_DEEPSLATE, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Cobbled Deepslate Chestplate", BlockArmor.createCobbledDeepslateChestplate(), Items.COBBLED_DEEPSLATE, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Cobbled Deepslate Leggings", BlockArmor.createCobbledDeepslateLeggings(), Items.COBBLED_DEEPSLATE, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Cobbled Deepslate Boots", BlockArmor.createCobbledDeepslateBoots(), Items.COBBLED_DEEPSLATE, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Mud Bricks Helmet", BlockArmor.createMudBricksHelmet(), Items.MUD_BRICKS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Mud Bricks Chestplate", BlockArmor.createMudBricksChestplate(), Items.MUD_BRICKS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Mud Bricks Leggings", BlockArmor.createMudBricksLeggings(), Items.MUD_BRICKS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Mud Bricks Boots", BlockArmor.createMudBricksBoots(), Items.MUD_BRICKS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Mangrove Roots Helmet", BlockArmor.createMangroveRootsHelmet(), Items.MANGROVE_ROOTS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Mangrove Roots Chestplate", BlockArmor.createMangroveRootsChestplate(), Items.MANGROVE_ROOTS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Mangrove Roots Leggings", BlockArmor.createMangroveRootsLeggings(), Items.MANGROVE_ROOTS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Mangrove Roots Boots", BlockArmor.createMangroveRootsBoots(), Items.MANGROVE_ROOTS, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Muddy Mangrove Roots Helmet", BlockArmor.createMuddyMangroveRootsHelmet(), Items.MUDDY_MANGROVE_ROOTS, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Muddy Mangrove Roots Chestplate", BlockArmor.createMuddyMangroveRootsChestplate(), Items.MUDDY_MANGROVE_ROOTS, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Muddy Mangrove Roots Leggings", BlockArmor.createMuddyMangroveRootsLeggings(), Items.MUDDY_MANGROVE_ROOTS, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Muddy Mangrove Roots Boots", BlockArmor.createMuddyMangroveRootsBoots(), Items.MUDDY_MANGROVE_ROOTS, Items.LEATHER_BOOTS, 1);
+
+        // Copper/Netherite/Froglight/Basalt Armor
+        addBlockArmorRecipeWithCore("Netherite Block Helmet", BlockArmor.createNetheriteBlockHelmet(), Items.NETHERITE_BLOCK, Items.LEATHER_HELMET, 3);
+        addBlockArmorRecipeWithCore("Netherite Block Chestplate", BlockArmor.createNetheriteBlockChestplate(), Items.NETHERITE_BLOCK, Items.LEATHER_CHESTPLATE, 3);
+        addBlockArmorRecipeWithCore("Netherite Block Leggings", BlockArmor.createNetheriteBlockLeggings(), Items.NETHERITE_BLOCK, Items.LEATHER_LEGGINGS, 3);
+        addBlockArmorRecipeWithCore("Netherite Block Boots", BlockArmor.createNetheriteBlockBoots(), Items.NETHERITE_BLOCK, Items.LEATHER_BOOTS, 3);
+        addBlockArmorRecipeWithCore("Chiseled Copper Helmet", BlockArmor.createChiseledCopperHelmet(), Items.CHISELED_COPPER, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Chiseled Copper Chestplate", BlockArmor.createChiseledCopperChestplate(), Items.CHISELED_COPPER, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Chiseled Copper Leggings", BlockArmor.createChiseledCopperLeggings(), Items.CHISELED_COPPER, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Chiseled Copper Boots", BlockArmor.createChiseledCopperBoots(), Items.CHISELED_COPPER, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Cut Copper Helmet", BlockArmor.createCutCopperHelmet(), Items.CUT_COPPER, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Cut Copper Chestplate", BlockArmor.createCutCopperChestplate(), Items.CUT_COPPER, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Cut Copper Leggings", BlockArmor.createCutCopperLeggings(), Items.CUT_COPPER, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Cut Copper Boots", BlockArmor.createCutCopperBoots(), Items.CUT_COPPER, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Exposed Copper Helmet", BlockArmor.createExposedCopperHelmet(), Items.EXPOSED_COPPER, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Exposed Copper Chestplate", BlockArmor.createExposedCopperChestplate(), Items.EXPOSED_COPPER, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Exposed Copper Leggings", BlockArmor.createExposedCopperLeggings(), Items.EXPOSED_COPPER, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Exposed Copper Boots", BlockArmor.createExposedCopperBoots(), Items.EXPOSED_COPPER, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Weathered Copper Helmet", BlockArmor.createWeatheredCopperHelmet(), Items.WEATHERED_COPPER, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Weathered Copper Chestplate", BlockArmor.createWeatheredCopperChestplate(), Items.WEATHERED_COPPER, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Weathered Copper Leggings", BlockArmor.createWeatheredCopperLeggings(), Items.WEATHERED_COPPER, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Weathered Copper Boots", BlockArmor.createWeatheredCopperBoots(), Items.WEATHERED_COPPER, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Oxidised Copper Helmet", BlockArmor.createOxidisedCopperHelmet(), Items.OXIDIZED_COPPER, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Oxidised Copper Chestplate", BlockArmor.createOxidisedCopperChestplate(), Items.OXIDIZED_COPPER, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Oxidised Copper Leggings", BlockArmor.createOxidisedCopperLeggings(), Items.OXIDIZED_COPPER, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Oxidised Copper Boots", BlockArmor.createOxidisedCopperBoots(), Items.OXIDIZED_COPPER, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Waxed Cut Copper Helmet", BlockArmor.createWaxedCutCopperHelmet(), Items.WAXED_CUT_COPPER, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Waxed Cut Copper Chestplate", BlockArmor.createWaxedCutCopperChestplate(), Items.WAXED_CUT_COPPER, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Waxed Cut Copper Leggings", BlockArmor.createWaxedCutCopperLeggings(), Items.WAXED_CUT_COPPER, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Waxed Cut Copper Boots", BlockArmor.createWaxedCutCopperBoots(), Items.WAXED_CUT_COPPER, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Polished Basalt Helmet", BlockArmor.createPolishedBasaltHelmet(), Items.POLISHED_BASALT, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Polished Basalt Chestplate", BlockArmor.createPolishedBasaltChestplate(), Items.POLISHED_BASALT, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Polished Basalt Leggings", BlockArmor.createPolishedBasaltLeggings(), Items.POLISHED_BASALT, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Polished Basalt Boots", BlockArmor.createPolishedBasaltBoots(), Items.POLISHED_BASALT, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Verdant Froglight Helmet", BlockArmor.createVerdantFroglightHelmet(), Items.VERDANT_FROGLIGHT, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Verdant Froglight Chestplate", BlockArmor.createVerdantFroglightChestplate(), Items.VERDANT_FROGLIGHT, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Verdant Froglight Leggings", BlockArmor.createVerdantFroglightLeggings(), Items.VERDANT_FROGLIGHT, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Verdant Froglight Boots", BlockArmor.createVerdantFroglightBoots(), Items.VERDANT_FROGLIGHT, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Pearlescent Froglight Helmet", BlockArmor.createPearlescentFroglightHelmet(), Items.PEARLESCENT_FROGLIGHT, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Pearlescent Froglight Chestplate", BlockArmor.createPearlescentFroglightChestplate(), Items.PEARLESCENT_FROGLIGHT, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Pearlescent Froglight Leggings", BlockArmor.createPearlescentFroglightLeggings(), Items.PEARLESCENT_FROGLIGHT, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Pearlescent Froglight Boots", BlockArmor.createPearlescentFroglightBoots(), Items.PEARLESCENT_FROGLIGHT, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Ochre Froglight Helmet", BlockArmor.createOchreFroglightHelmet(), Items.OCHRE_FROGLIGHT, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Ochre Froglight Chestplate", BlockArmor.createOchreFroglightChestplate(), Items.OCHRE_FROGLIGHT, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Ochre Froglight Leggings", BlockArmor.createOchreFroglightLeggings(), Items.OCHRE_FROGLIGHT, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Ochre Froglight Boots", BlockArmor.createOchreFroglightBoots(), Items.OCHRE_FROGLIGHT, Items.LEATHER_BOOTS, 2);
+
+        // Material Item Armor
+        addBlockArmorRecipeWithCore("Iron Nugget Helmet", BlockArmor.createIronNuggetHelmet(), Items.IRON_NUGGET, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Iron Nugget Chestplate", BlockArmor.createIronNuggetChestplate(), Items.IRON_NUGGET, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Iron Nugget Leggings", BlockArmor.createIronNuggetLeggings(), Items.IRON_NUGGET, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Iron Nugget Boots", BlockArmor.createIronNuggetBoots(), Items.IRON_NUGGET, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Gold Nugget Helmet", BlockArmor.createGoldNuggetHelmet(), Items.GOLD_NUGGET, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Gold Nugget Chestplate", BlockArmor.createGoldNuggetChestplate(), Items.GOLD_NUGGET, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Gold Nugget Leggings", BlockArmor.createGoldNuggetLeggings(), Items.GOLD_NUGGET, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Gold Nugget Boots", BlockArmor.createGoldNuggetBoots(), Items.GOLD_NUGGET, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Copper Ingot Helmet", BlockArmor.createCopperIngotHelmet(), Items.COPPER_INGOT, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Copper Ingot Chestplate", BlockArmor.createCopperIngotChestplate(), Items.COPPER_INGOT, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Copper Ingot Leggings", BlockArmor.createCopperIngotLeggings(), Items.COPPER_INGOT, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Copper Ingot Boots", BlockArmor.createCopperIngotBoots(), Items.COPPER_INGOT, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Emerald Helmet", BlockArmor.createEmeraldHelmet(), Items.EMERALD, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Emerald Chestplate", BlockArmor.createEmeraldChestplate(), Items.EMERALD, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Emerald Leggings", BlockArmor.createEmeraldLeggings(), Items.EMERALD, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Emerald Boots", BlockArmor.createEmeraldBoots(), Items.EMERALD, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Lapis Lazuli Helmet", BlockArmor.createLapisLazuliHelmet(), Items.LAPIS_LAZULI, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Lapis Lazuli Chestplate", BlockArmor.createLapisLazuliChestplate(), Items.LAPIS_LAZULI, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Lapis Lazuli Leggings", BlockArmor.createLapisLazuliLeggings(), Items.LAPIS_LAZULI, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Lapis Lazuli Boots", BlockArmor.createLapisLazuliBoots(), Items.LAPIS_LAZULI, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Amethyst Shard Helmet", BlockArmor.createAmethystShardHelmet(), Items.AMETHYST_SHARD, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("Amethyst Shard Chestplate", BlockArmor.createAmethystShardChestplate(), Items.AMETHYST_SHARD, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("Amethyst Shard Leggings", BlockArmor.createAmethystShardLeggings(), Items.AMETHYST_SHARD, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("Amethyst Shard Boots", BlockArmor.createAmethystShardBoots(), Items.AMETHYST_SHARD, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Flint Helmet", BlockArmor.createFlintHelmet(), Items.FLINT, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Flint Chestplate", BlockArmor.createFlintChestplate(), Items.FLINT, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Flint Leggings", BlockArmor.createFlintLeggings(), Items.FLINT, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Flint Boots", BlockArmor.createFlintBoots(), Items.FLINT, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Bone Meal Helmet", BlockArmor.createBoneMealHelmet(), Items.BONE_MEAL, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Bone Meal Chestplate", BlockArmor.createBoneMealChestplate(), Items.BONE_MEAL, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Bone Meal Leggings", BlockArmor.createBoneMealLeggings(), Items.BONE_MEAL, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Bone Meal Boots", BlockArmor.createBoneMealBoots(), Items.BONE_MEAL, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("Charcoal Helmet", BlockArmor.createCharcoalHelmet(), Items.CHARCOAL, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Charcoal Chestplate", BlockArmor.createCharcoalChestplate(), Items.CHARCOAL, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Charcoal Leggings", BlockArmor.createCharcoalLeggings(), Items.CHARCOAL, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Charcoal Boots", BlockArmor.createCharcoalBoots(), Items.CHARCOAL, Items.LEATHER_BOOTS, 1);
+        addBlockArmorRecipeWithCore("End Stone Helmet", BlockArmor.createEndStoneHelmet(), Items.END_STONE, Items.LEATHER_HELMET, 2);
+        addBlockArmorRecipeWithCore("End Stone Chestplate", BlockArmor.createEndStoneChestplate(), Items.END_STONE, Items.LEATHER_CHESTPLATE, 2);
+        addBlockArmorRecipeWithCore("End Stone Leggings", BlockArmor.createEndStoneLeggings(), Items.END_STONE, Items.LEATHER_LEGGINGS, 2);
+        addBlockArmorRecipeWithCore("End Stone Boots", BlockArmor.createEndStoneBoots(), Items.END_STONE, Items.LEATHER_BOOTS, 2);
+        addBlockArmorRecipeWithCore("Snow Block Helmet", BlockArmor.createSnowBlockHelmet(), Items.SNOW_BLOCK, Items.LEATHER_HELMET, 1);
+        addBlockArmorRecipeWithCore("Snow Block Chestplate", BlockArmor.createSnowBlockChestplate(), Items.SNOW_BLOCK, Items.LEATHER_CHESTPLATE, 1);
+        addBlockArmorRecipeWithCore("Snow Block Leggings", BlockArmor.createSnowBlockLeggings(), Items.SNOW_BLOCK, Items.LEATHER_LEGGINGS, 1);
+        addBlockArmorRecipeWithCore("Snow Block Boots", BlockArmor.createSnowBlockBoots(), Items.SNOW_BLOCK, Items.LEATHER_BOOTS, 1);
+
         // ===== CUSTOM WEAPON RECIPES (No slayer requirement) =====
         
         // Reinforced Iron Sword
@@ -569,6 +792,66 @@ public class SlayerRecipes {
         
         // Coal Blade
         addBlockWeaponRecipe("Coal Blade", BlockWeapons.createCoalSword(), Items.COAL_BLOCK, Items.STONE_SWORD);
+
+        // ===== NEW WEAPON RECIPES WITH CRAFTING CORES =====
+        // Stripped Log Swords
+        addBlockWeaponRecipeWithCore("Stripped Spruce Log Blade", BlockWeapons.createStrippedSpruceLogSword(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Birch Log Blade", BlockWeapons.createStrippedBirchLogSword(), Items.STRIPPED_BIRCH_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Dark Oak Log Blade", BlockWeapons.createStrippedDarkOakLogSword(), Items.STRIPPED_DARK_OAK_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Jungle Log Blade", BlockWeapons.createStrippedJungleLogSword(), Items.STRIPPED_JUNGLE_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Acacia Log Blade", BlockWeapons.createStrippedAcaciaLogSword(), Items.STRIPPED_ACACIA_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Mangrove Log Blade", BlockWeapons.createStrippedMangroveLogSword(), Items.STRIPPED_MANGROVE_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Cherry Log Blade", BlockWeapons.createStrippedCherryLogSword(), Items.STRIPPED_CHERRY_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Bamboo Block Blade", BlockWeapons.createStrippedBambooBlockSword(), Items.BAMBOO_BLOCK, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stripped Crimson Stem Blade", BlockWeapons.createStrippedCrimsonStemSword(), Items.STRIPPED_CRIMSON_STEM, Items.IRON_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Stripped Warped Stem Blade", BlockWeapons.createStrippedWarpedStemSword(), Items.STRIPPED_WARPED_STEM, Items.IRON_SWORD, 2);
+        // Plank Swords
+        addBlockWeaponRecipeWithCore("Spruce Planks Blade", BlockWeapons.createSprucePlanksSword(), Items.SPRUCE_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Birch Planks Blade", BlockWeapons.createBirchPlanksSword(), Items.BIRCH_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Jungle Planks Blade", BlockWeapons.createJunglePlanksSword(), Items.JUNGLE_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Acacia Planks Blade", BlockWeapons.createAcaciaPlanksSword(), Items.ACACIA_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Dark Oak Planks Blade", BlockWeapons.createDarkOakPlanksSword(), Items.DARK_OAK_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Mangrove Planks Blade", BlockWeapons.createMangrovePlanksSword(), Items.MANGROVE_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Cherry Planks Blade", BlockWeapons.createCherryPlanksSword(), Items.CHERRY_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Bamboo Planks Blade", BlockWeapons.createBambooPlanksSword(), Items.BAMBOO_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Crimson Planks Blade", BlockWeapons.createCrimsonPlanksSword(), Items.CRIMSON_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Warped Planks Blade", BlockWeapons.createWarpedPlanksSword(), Items.WARPED_PLANKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Oak Planks Blade", BlockWeapons.createOakPlanksSword(), Items.OAK_PLANKS, Items.IRON_SWORD, 1);
+        // Stone/Mud/Log Swords
+        addBlockWeaponRecipeWithCore("Oak Log Blade", BlockWeapons.createOakLogSword(), Items.OAK_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Spruce Log Blade", BlockWeapons.createSpruceLogSword(), Items.SPRUCE_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Birch Log Blade", BlockWeapons.createBirchLogSword(), Items.BIRCH_LOG, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Stone Bricks Blade", BlockWeapons.createStoneBricksSword(), Items.STONE_BRICKS, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Cobblestone Blade", BlockWeapons.createCobblestoneSword(), Items.COBBLESTONE, Items.STONE_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Mossy Cobblestone Blade", BlockWeapons.createMossyCobblestoneSword(), Items.MOSSY_COBBLESTONE, Items.STONE_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Cobbled Deepslate Blade", BlockWeapons.createCobbledDeepslateSword(), Items.COBBLED_DEEPSLATE, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Mud Bricks Blade", BlockWeapons.createMudBricksSword(), Items.MUD_BRICKS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Mangrove Roots Blade", BlockWeapons.createMangroveRootsSword(), Items.MANGROVE_ROOTS, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Muddy Mangrove Roots Blade", BlockWeapons.createMuddyMangroveRootsSword(), Items.MUDDY_MANGROVE_ROOTS, Items.IRON_SWORD, 1);
+        // Copper/Netherite/Froglight Swords
+        addBlockWeaponRecipeWithCore("Netherite Block Blade", BlockWeapons.createNetheriteBlockSword(), Items.NETHERITE_BLOCK, Items.NETHERITE_SWORD, 3);
+        addBlockWeaponRecipeWithCore("Chiseled Copper Blade", BlockWeapons.createChiseledCopperSword(), Items.CHISELED_COPPER, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Cut Copper Blade", BlockWeapons.createCutCopperSword(), Items.CUT_COPPER, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Exposed Copper Blade", BlockWeapons.createExposedCopperSword(), Items.EXPOSED_COPPER, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Weathered Copper Blade", BlockWeapons.createWeatheredCopperSword(), Items.WEATHERED_COPPER, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Oxidised Copper Blade", BlockWeapons.createOxidisedCopperSword(), Items.OXIDIZED_COPPER, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Waxed Cut Copper Blade", BlockWeapons.createWaxedCutCopperSword(), Items.WAXED_CUT_COPPER, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Polished Basalt Blade", BlockWeapons.createPolishedBasaltSword(), Items.POLISHED_BASALT, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Verdant Froglight Blade", BlockWeapons.createVerdantFroglightSword(), Items.VERDANT_FROGLIGHT, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Pearlescent Froglight Blade", BlockWeapons.createPearlescentFroglightSword(), Items.PEARLESCENT_FROGLIGHT, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Ochre Froglight Blade", BlockWeapons.createOchreFroglightSword(), Items.OCHRE_FROGLIGHT, Items.DIAMOND_SWORD, 2);
+        // Material Item Swords
+        addBlockWeaponRecipeWithCore("Iron Nugget Blade", BlockWeapons.createIronNuggetSword(), Items.IRON_NUGGET, Items.STONE_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Gold Nugget Blade", BlockWeapons.createGoldNuggetSword(), Items.GOLD_NUGGET, Items.GOLDEN_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Copper Ingot Blade", BlockWeapons.createCopperIngotSword(), Items.COPPER_INGOT, Items.IRON_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Emerald Blade", BlockWeapons.createEmeraldSword(), Items.EMERALD, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Lapis Lazuli Blade", BlockWeapons.createLapisLazuliSword(), Items.LAPIS_LAZULI, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Amethyst Shard Blade", BlockWeapons.createAmethystShardSword(), Items.AMETHYST_SHARD, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Flint Blade", BlockWeapons.createFlintSword(), Items.FLINT, Items.STONE_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Bone Meal Blade", BlockWeapons.createBoneMealSword(), Items.BONE_MEAL, Items.STONE_SWORD, 1);
+        addBlockWeaponRecipeWithCore("Charcoal Blade", BlockWeapons.createCharcoalSword(), Items.CHARCOAL, Items.STONE_SWORD, 1);
+        addBlockWeaponRecipeWithCore("End Stone Blade", BlockWeapons.createEndStoneSword(), Items.END_STONE, Items.DIAMOND_SWORD, 2);
+        addBlockWeaponRecipeWithCore("Snow Block Blade", BlockWeapons.createSnowBlockSword(), Items.SNOW_BLOCK, Items.IRON_SWORD, 1);
         
         // ===== ARMOR CRAFTER CORES =====
         
@@ -705,6 +988,96 @@ public class SlayerRecipes {
         addBlockToolRecipe("Coal Axe", BlockTools.createCoalAxe(), Items.COAL_BLOCK, Items.STONE_AXE);
         addBlockToolRecipe("Coal Shovel", BlockTools.createCoalShovel(), Items.COAL_BLOCK, Items.STONE_SHOVEL);
         addBlockToolRecipe("Coal Hoe", BlockTools.createCoalHoe(), Items.COAL_BLOCK, Items.STONE_HOE);
+
+        // ===== NEW TOOL RECIPES WITH CRAFTING CORES =====
+        // Stripped Log Tools
+        addBlockToolRecipeWithCore("Stripped Spruce Log Pickaxe", BlockTools.createStrippedSpruceLogPickaxe(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Spruce Log Axe", BlockTools.createStrippedSpruceLogAxe(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Spruce Log Shovel", BlockTools.createStrippedSpruceLogShovel(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Spruce Log Hoe", BlockTools.createStrippedSpruceLogHoe(), Items.STRIPPED_SPRUCE_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Birch Log Pickaxe", BlockTools.createStrippedBirchLogPickaxe(), Items.STRIPPED_BIRCH_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Birch Log Axe", BlockTools.createStrippedBirchLogAxe(), Items.STRIPPED_BIRCH_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Birch Log Shovel", BlockTools.createStrippedBirchLogShovel(), Items.STRIPPED_BIRCH_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Birch Log Hoe", BlockTools.createStrippedBirchLogHoe(), Items.STRIPPED_BIRCH_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Dark Oak Log Pickaxe", BlockTools.createStrippedDarkOakLogPickaxe(), Items.STRIPPED_DARK_OAK_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Dark Oak Log Axe", BlockTools.createStrippedDarkOakLogAxe(), Items.STRIPPED_DARK_OAK_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Dark Oak Log Shovel", BlockTools.createStrippedDarkOakLogShovel(), Items.STRIPPED_DARK_OAK_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Dark Oak Log Hoe", BlockTools.createStrippedDarkOakLogHoe(), Items.STRIPPED_DARK_OAK_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Jungle Log Pickaxe", BlockTools.createStrippedJungleLogPickaxe(), Items.STRIPPED_JUNGLE_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Jungle Log Axe", BlockTools.createStrippedJungleLogAxe(), Items.STRIPPED_JUNGLE_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Jungle Log Shovel", BlockTools.createStrippedJungleLogShovel(), Items.STRIPPED_JUNGLE_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Jungle Log Hoe", BlockTools.createStrippedJungleLogHoe(), Items.STRIPPED_JUNGLE_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Acacia Log Pickaxe", BlockTools.createStrippedAcaciaLogPickaxe(), Items.STRIPPED_ACACIA_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Acacia Log Axe", BlockTools.createStrippedAcaciaLogAxe(), Items.STRIPPED_ACACIA_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Acacia Log Shovel", BlockTools.createStrippedAcaciaLogShovel(), Items.STRIPPED_ACACIA_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Acacia Log Hoe", BlockTools.createStrippedAcaciaLogHoe(), Items.STRIPPED_ACACIA_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Mangrove Log Pickaxe", BlockTools.createStrippedMangroveLogPickaxe(), Items.STRIPPED_MANGROVE_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Mangrove Log Axe", BlockTools.createStrippedMangroveLogAxe(), Items.STRIPPED_MANGROVE_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Mangrove Log Shovel", BlockTools.createStrippedMangroveLogShovel(), Items.STRIPPED_MANGROVE_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Mangrove Log Hoe", BlockTools.createStrippedMangroveLogHoe(), Items.STRIPPED_MANGROVE_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Cherry Log Pickaxe", BlockTools.createStrippedCherryLogPickaxe(), Items.STRIPPED_CHERRY_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stripped Cherry Log Axe", BlockTools.createStrippedCherryLogAxe(), Items.STRIPPED_CHERRY_LOG, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Stripped Cherry Log Shovel", BlockTools.createStrippedCherryLogShovel(), Items.STRIPPED_CHERRY_LOG, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Stripped Cherry Log Hoe", BlockTools.createStrippedCherryLogHoe(), Items.STRIPPED_CHERRY_LOG, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Bamboo Block Pickaxe", BlockTools.createStrippedBambooBlockPickaxe(), Items.BAMBOO_BLOCK, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Bamboo Block Axe", BlockTools.createStrippedBambooBlockAxe(), Items.BAMBOO_BLOCK, Items.IRON_AXE, 1);
+        addBlockToolRecipeWithCore("Bamboo Block Shovel", BlockTools.createStrippedBambooBlockShovel(), Items.BAMBOO_BLOCK, Items.IRON_SHOVEL, 1);
+        addBlockToolRecipeWithCore("Bamboo Block Hoe", BlockTools.createStrippedBambooBlockHoe(), Items.BAMBOO_BLOCK, Items.IRON_HOE, 1);
+        addBlockToolRecipeWithCore("Stripped Crimson Stem Pickaxe", BlockTools.createStrippedCrimsonStemPickaxe(), Items.STRIPPED_CRIMSON_STEM, Items.IRON_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Stripped Crimson Stem Axe", BlockTools.createStrippedCrimsonStemAxe(), Items.STRIPPED_CRIMSON_STEM, Items.IRON_AXE, 2);
+        addBlockToolRecipeWithCore("Stripped Crimson Stem Shovel", BlockTools.createStrippedCrimsonStemShovel(), Items.STRIPPED_CRIMSON_STEM, Items.IRON_SHOVEL, 2);
+        addBlockToolRecipeWithCore("Stripped Crimson Stem Hoe", BlockTools.createStrippedCrimsonStemHoe(), Items.STRIPPED_CRIMSON_STEM, Items.IRON_HOE, 2);
+        addBlockToolRecipeWithCore("Stripped Warped Stem Pickaxe", BlockTools.createStrippedWarpedStemPickaxe(), Items.STRIPPED_WARPED_STEM, Items.IRON_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Stripped Warped Stem Axe", BlockTools.createStrippedWarpedStemAxe(), Items.STRIPPED_WARPED_STEM, Items.IRON_AXE, 2);
+        addBlockToolRecipeWithCore("Stripped Warped Stem Shovel", BlockTools.createStrippedWarpedStemShovel(), Items.STRIPPED_WARPED_STEM, Items.IRON_SHOVEL, 2);
+        addBlockToolRecipeWithCore("Stripped Warped Stem Hoe", BlockTools.createStrippedWarpedStemHoe(), Items.STRIPPED_WARPED_STEM, Items.IRON_HOE, 2);
+        // Plank Tools
+        addBlockToolRecipeWithCore("Spruce Planks Pickaxe", BlockTools.createSprucePlanksPickaxe(), Items.SPRUCE_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Birch Planks Pickaxe", BlockTools.createBirchPlanksPickaxe(), Items.BIRCH_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Jungle Planks Pickaxe", BlockTools.createJunglePlanksPickaxe(), Items.JUNGLE_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Acacia Planks Pickaxe", BlockTools.createAcaciaPlanksPickaxe(), Items.ACACIA_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Dark Oak Planks Pickaxe", BlockTools.createDarkOakPlanksPickaxe(), Items.DARK_OAK_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Mangrove Planks Pickaxe", BlockTools.createMangrovePlanksPickaxe(), Items.MANGROVE_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Cherry Planks Pickaxe", BlockTools.createCherryPlanksPickaxe(), Items.CHERRY_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Bamboo Planks Pickaxe", BlockTools.createBambooPlanksPickaxe(), Items.BAMBOO_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Crimson Planks Pickaxe", BlockTools.createCrimsonPlanksPickaxe(), Items.CRIMSON_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Warped Planks Pickaxe", BlockTools.createWarpedPlanksPickaxe(), Items.WARPED_PLANKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Oak Planks Pickaxe", BlockTools.createOakPlanksPickaxe(), Items.OAK_PLANKS, Items.IRON_PICKAXE, 1);
+        // Stone/Mud/Log Tools
+        addBlockToolRecipeWithCore("Oak Log Pickaxe", BlockTools.createOakLogPickaxe(), Items.OAK_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Spruce Log Pickaxe", BlockTools.createSpruceLogPickaxe(), Items.SPRUCE_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Birch Log Pickaxe", BlockTools.createBirchLogPickaxe(), Items.BIRCH_LOG, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Stone Bricks Pickaxe", BlockTools.createStoneBricksPickaxe(), Items.STONE_BRICKS, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Cobblestone Pickaxe", BlockTools.createCobblestonePickaxe(), Items.COBBLESTONE, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Mossy Cobblestone Pickaxe", BlockTools.createMossyCobblestonePickaxe(), Items.MOSSY_COBBLESTONE, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Cobbled Deepslate Pickaxe", BlockTools.createCobbledDeepslatePickaxe(), Items.COBBLED_DEEPSLATE, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Mud Bricks Pickaxe", BlockTools.createMudBricksPickaxe(), Items.MUD_BRICKS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Mangrove Roots Pickaxe", BlockTools.createMangroveRootsPickaxe(), Items.MANGROVE_ROOTS, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Muddy Mangrove Roots Pickaxe", BlockTools.createMuddyMangroveRootsPickaxe(), Items.MUDDY_MANGROVE_ROOTS, Items.IRON_PICKAXE, 1);
+        // Copper/Netherite/Froglight Tools
+        addBlockToolRecipeWithCore("Netherite Block Pickaxe", BlockTools.createNetheriteBlockPickaxe(), Items.NETHERITE_BLOCK, Items.NETHERITE_PICKAXE, 3);
+        addBlockToolRecipeWithCore("Chiseled Copper Pickaxe", BlockTools.createChiseledCopperPickaxe(), Items.CHISELED_COPPER, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Cut Copper Pickaxe", BlockTools.createCutCopperPickaxe(), Items.CUT_COPPER, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Exposed Copper Pickaxe", BlockTools.createExposedCopperPickaxe(), Items.EXPOSED_COPPER, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Weathered Copper Pickaxe", BlockTools.createWeatheredCopperPickaxe(), Items.WEATHERED_COPPER, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Oxidised Copper Pickaxe", BlockTools.createOxidisedCopperPickaxe(), Items.OXIDIZED_COPPER, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Waxed Cut Copper Pickaxe", BlockTools.createWaxedCutCopperPickaxe(), Items.WAXED_CUT_COPPER, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Polished Basalt Pickaxe", BlockTools.createPolishedBasaltPickaxe(), Items.POLISHED_BASALT, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Verdant Froglight Pickaxe", BlockTools.createVerdantFroglightPickaxe(), Items.VERDANT_FROGLIGHT, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Pearlescent Froglight Pickaxe", BlockTools.createPearlescentFroglightPickaxe(), Items.PEARLESCENT_FROGLIGHT, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Ochre Froglight Pickaxe", BlockTools.createOchreFroglightPickaxe(), Items.OCHRE_FROGLIGHT, Items.DIAMOND_PICKAXE, 2);
+        // Material Item Tools
+        addBlockToolRecipeWithCore("Iron Nugget Pickaxe", BlockTools.createIronNuggetPickaxe(), Items.IRON_NUGGET, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Gold Nugget Pickaxe", BlockTools.createGoldNuggetPickaxe(), Items.GOLD_NUGGET, Items.GOLDEN_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Copper Ingot Pickaxe", BlockTools.createCopperIngotPickaxe(), Items.COPPER_INGOT, Items.IRON_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Emerald Pickaxe", BlockTools.createEmeraldPickaxe(), Items.EMERALD, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Lapis Lazuli Pickaxe", BlockTools.createLapisLazuliPickaxe(), Items.LAPIS_LAZULI, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Amethyst Shard Pickaxe", BlockTools.createAmethystShardPickaxe(), Items.AMETHYST_SHARD, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Flint Pickaxe", BlockTools.createFlintPickaxe(), Items.FLINT, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Bone Meal Pickaxe", BlockTools.createBoneMealPickaxe(), Items.BONE_MEAL, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("Charcoal Pickaxe", BlockTools.createCharcoalPickaxe(), Items.CHARCOAL, Items.STONE_PICKAXE, 1);
+        addBlockToolRecipeWithCore("End Stone Pickaxe", BlockTools.createEndStonePickaxe(), Items.END_STONE, Items.DIAMOND_PICKAXE, 2);
+        addBlockToolRecipeWithCore("Snow Block Pickaxe", BlockTools.createSnowBlockPickaxe(), Items.SNOW_BLOCK, Items.IRON_PICKAXE, 1);
         
         // ===== ENCHANTED BLOCK RECIPES (64 base = 1 enchanted) =====
         addEnchantedBlockRecipe("Enchanted Cobblestone", SlayerItems.createEnchantedCobblestone(), Items.COBBLESTONE);
@@ -815,6 +1188,63 @@ public class SlayerRecipes {
                 new ItemStack(blockItem), ItemStack.EMPTY, new ItemStack(blockItem)
             };
         }
+        RECIPES.add(new Recipe(name, result, ingredients, null, 0));
+    }
+
+    private static void addBlockArmorRecipeWithCore(String name, ItemStack result, Item blockItem, Item armorBase, int coreTier) {
+        ItemStack core = coreTier == 1 ? SlayerItems.createCustomCrafterCoreT1() : 
+                         coreTier == 2 ? SlayerItems.createCustomCrafterCoreT2() : 
+                         SlayerItems.createCustomCrafterCoreT3();
+        ItemStack[] ingredients;
+        if (name.contains("Helmet")) {
+            ingredients = new ItemStack[] {
+                new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                ItemStack.EMPTY, core, ItemStack.EMPTY
+            };
+        } else if (name.contains("Chestplate")) {
+            ingredients = new ItemStack[] {
+                new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), core, new ItemStack(blockItem)
+            };
+        } else if (name.contains("Leggings")) {
+            ingredients = new ItemStack[] {
+                new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), core, new ItemStack(blockItem)
+            };
+        } else { // Boots
+            ingredients = new ItemStack[] {
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), core, new ItemStack(blockItem)
+            };
+        }
+        RECIPES.add(new Recipe(name, result, ingredients, null, 0));
+    }
+
+    private static void addBlockWeaponRecipeWithCore(String name, ItemStack result, Item blockItem, Item weaponBase, int coreTier) {
+        ItemStack core = coreTier == 1 ? SlayerItems.createCustomCrafterCoreT1() : 
+                         coreTier == 2 ? SlayerItems.createCustomCrafterCoreT2() : 
+                         SlayerItems.createCustomCrafterCoreT3();
+        ItemStack[] ingredients = new ItemStack[] {
+            new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
+            new ItemStack(blockItem), new ItemStack(weaponBase), new ItemStack(blockItem),
+            ItemStack.EMPTY, core, ItemStack.EMPTY
+        };
+        RECIPES.add(new Recipe(name, result, ingredients, null, 0));
+    }
+
+    private static void addBlockToolRecipeWithCore(String name, ItemStack result, Item blockItem, Item toolBase, int coreTier) {
+        ItemStack core = coreTier == 1 ? SlayerItems.createCustomCrafterCoreT1() : 
+                         coreTier == 2 ? SlayerItems.createCustomCrafterCoreT2() : 
+                         SlayerItems.createCustomCrafterCoreT3();
+        ItemStack[] ingredients = new ItemStack[] {
+            new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
+            new ItemStack(blockItem), new ItemStack(toolBase), new ItemStack(blockItem),
+            ItemStack.EMPTY, core, ItemStack.EMPTY
+        };
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }
 

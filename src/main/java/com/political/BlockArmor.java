@@ -7052,4 +7052,4244 @@ public class BlockArmor {
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
+
+    // ============================================================
+    // STRIPPED SPRUCE LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_SPRUCE_LOG_COLOR = 0x8B4513; // Brown
+    private static final int STRIPPED_SPRUCE_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedSpruceLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedSpruceLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_spruce_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedSpruceLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedSpruceLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_spruce_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedSpruceLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedSpruceLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_spruce_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedSpruceLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedSpruceLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_spruce_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedSpruceLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_SPRUCE_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Spruce " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_SPRUCE_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_spruce_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_spruce_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Forest walker").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped spruce wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED BIRCH LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_BIRCH_LOG_COLOR = 0xF5F5DC; // White
+    private static final int STRIPPED_BIRCH_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedBirchLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedBirchLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_birch_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedBirchLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedBirchLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_birch_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedBirchLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedBirchLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_birch_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedBirchLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedBirchLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_birch_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedBirchLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_BIRCH_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Birch " + pieceName).formatted(Formatting.WHITE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_BIRCH_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_birch_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_birch_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ Full set: Birch breeze").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped birch wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED DARK OAK LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_DARK_OAK_LOG_COLOR = 0x3D2914; // Dark brown
+    private static final int STRIPPED_DARK_OAK_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedDarkOakLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedDarkOakLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_dark_oak_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedDarkOakLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedDarkOakLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_dark_oak_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedDarkOakLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedDarkOakLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_dark_oak_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedDarkOakLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedDarkOakLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_dark_oak_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedDarkOakLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_DARK_OAK_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Dark Oak " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_DARK_OAK_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_dark_oak_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_dark_oak_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Night stalker").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped dark oak wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED JUNGLE LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_JUNGLE_LOG_COLOR = 0x6B8E23; // Olive
+    private static final int STRIPPED_JUNGLE_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedJungleLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedJungleLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_jungle_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedJungleLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedJungleLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_jungle_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedJungleLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedJungleLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_jungle_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedJungleLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedJungleLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_jungle_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedJungleLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_JUNGLE_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Jungle " + pieceName).formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_JUNGLE_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_jungle_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_jungle_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✦ Full set: Jungle leaper").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped jungle wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED ACACIA LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_ACACIA_LOG_COLOR = 0xD2691E; // Orange-brown
+    private static final int STRIPPED_ACACIA_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedAcaciaLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedAcaciaLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_acacia_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedAcaciaLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedAcaciaLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_acacia_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedAcaciaLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedAcaciaLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_acacia_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedAcaciaLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedAcaciaLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_acacia_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedAcaciaLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_ACACIA_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Acacia " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_ACACIA_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_acacia_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_acacia_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Savanna sprinter").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped acacia wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED MANGROVE LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_MANGROVE_LOG_COLOR = 0x800000; // Maroon
+    private static final int STRIPPED_MANGROVE_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedMangroveLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedMangroveLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_mangrove_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedMangroveLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedMangroveLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_mangrove_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedMangroveLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedMangroveLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_mangrove_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedMangroveLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedMangroveLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_mangrove_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedMangroveLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_MANGROVE_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Mangrove " + pieceName).formatted(Formatting.DARK_RED, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_MANGROVE_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_mangrove_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_mangrove_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("✦ Full set: Swamp wader").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped mangrove wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED CHERRY LOG ARMOR
+    // ============================================================
+    private static final int STRIPPED_CHERRY_LOG_COLOR = 0xFFB7C5; // Cherry pink
+    private static final int STRIPPED_CHERRY_LOG_DURABILITY = 165;
+
+    public static ItemStack createStrippedCherryLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedCherryLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_cherry_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedCherryLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedCherryLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_cherry_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedCherryLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedCherryLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_cherry_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedCherryLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedCherryLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_cherry_log_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedCherryLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_CHERRY_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Cherry " + pieceName).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_CHERRY_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_cherry_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_cherry_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("✦ Full set: Cherry blossom").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped cherry wood").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED BAMBOO BLOCK ARMOR
+    // ============================================================
+    private static final int STRIPPED_BAMBOO_BLOCK_COLOR = 0xFFD700; // Gold
+    private static final int STRIPPED_BAMBOO_BLOCK_DURABILITY = 150;
+
+    public static ItemStack createStrippedBambooBlockHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedBambooBlockStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_bamboo_block_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedBambooBlockChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedBambooBlockStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_bamboo_block_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedBambooBlockLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedBambooBlockStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_bamboo_block_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedBambooBlockBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedBambooBlockStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_bamboo_block_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedBambooBlockStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_BAMBOO_BLOCK_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Bamboo " + pieceName).formatted(Formatting.YELLOW, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_BAMBOO_BLOCK_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_bamboo_block_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_bamboo_block_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✦ Full set: Bouncy stride").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped bamboo").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED CRIMSON STEM ARMOR
+    // ============================================================
+    private static final int STRIPPED_CRIMSON_STEM_COLOR = 0x8B0000; // Dark red
+    private static final int STRIPPED_CRIMSON_STEM_DURABILITY = 165;
+
+    public static ItemStack createStrippedCrimsonStemHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedCrimsonStemStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_crimson_stem_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedCrimsonStemChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedCrimsonStemStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_crimson_stem_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedCrimsonStemLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedCrimsonStemStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_crimson_stem_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedCrimsonStemBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedCrimsonStemStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_crimson_stem_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedCrimsonStemStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_CRIMSON_STEM_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Crimson " + pieceName).formatted(Formatting.DARK_RED, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_CRIMSON_STEM_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_crimson_stem_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_crimson_stem_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("✦ Full set: Nether regeneration").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped crimson stem").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STRIPPED WARPED STEM ARMOR
+    // ============================================================
+    private static final int STRIPPED_WARPED_STEM_COLOR = 0x008080; // Teal
+    private static final int STRIPPED_WARPED_STEM_DURABILITY = 165;
+
+    public static ItemStack createStrippedWarpedStemHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStrippedWarpedStemStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stripped_warped_stem_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedWarpedStemChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStrippedWarpedStemStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stripped_warped_stem_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedWarpedStemLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStrippedWarpedStemStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stripped_warped_stem_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStrippedWarpedStemBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStrippedWarpedStemStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stripped_warped_stem_boots");
+        return stack;
+    }
+    
+    private static void applyStrippedWarpedStemStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STRIPPED_WARPED_STEM_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stripped Warped " + pieceName).formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STRIPPED_WARPED_STEM_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_warped_stem_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stripped_warped_stem_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("✦ Full set: Warped speed").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stripped warped stem").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // SPRUCE PLANKS ARMOR
+    // ============================================================
+    private static final int SPRUCE_PLANKS_COLOR = 0xA0522D; // Sienna
+    private static final int SPRUCE_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createSprucePlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applySprucePlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "spruce_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createSprucePlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applySprucePlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "spruce_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createSprucePlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applySprucePlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "spruce_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createSprucePlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applySprucePlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "spruce_planks_boots");
+        return stack;
+    }
+    
+    private static void applySprucePlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(SPRUCE_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Spruce Planks " + pieceName).formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, SPRUCE_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "spruce_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "spruce_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("✦ Full set: Taiga shelter").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Spruce wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // BIRCH PLANKS ARMOR
+    // ============================================================
+    private static final int BIRCH_PLANKS_COLOR = 0xF5F5DC; // Beige
+    private static final int BIRCH_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createBirchPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyBirchPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "birch_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createBirchPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyBirchPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "birch_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createBirchPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyBirchPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "birch_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createBirchPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyBirchPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "birch_planks_boots");
+        return stack;
+    }
+    
+    private static void applyBirchPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(BIRCH_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Birch Planks " + pieceName).formatted(Formatting.WHITE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, BIRCH_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "birch_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "birch_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ Full set: Birch forest").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Birch wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // JUNGLE PLANKS ARMOR
+    // ============================================================
+    private static final int JUNGLE_PLANKS_COLOR = 0x9ACD32; // Yellow-green
+    private static final int JUNGLE_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createJunglePlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyJunglePlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "jungle_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createJunglePlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyJunglePlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "jungle_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createJunglePlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyJunglePlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "jungle_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createJunglePlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyJunglePlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "jungle_planks_boots");
+        return stack;
+    }
+    
+    private static void applyJunglePlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(JUNGLE_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Jungle Planks " + pieceName).formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, JUNGLE_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "jungle_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "jungle_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✦ Full set: Jungle canopy").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Jungle wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // ACACIA PLANKS ARMOR
+    // ============================================================
+    private static final int ACACIA_PLANKS_COLOR = 0xCD853F; // Peru
+    private static final int ACACIA_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createAcaciaPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyAcaciaPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "acacia_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createAcaciaPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyAcaciaPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "acacia_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createAcaciaPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyAcaciaPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "acacia_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createAcaciaPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyAcaciaPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "acacia_planks_boots");
+        return stack;
+    }
+    
+    private static void applyAcaciaPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(ACACIA_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Acacia Planks " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, ACACIA_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "acacia_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "acacia_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Savanna heat").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Acacia wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // DARK OAK PLANKS ARMOR
+    // ============================================================
+    private static final int DARK_OAK_PLANKS_COLOR = 0x3E2723; // Dark brown
+    private static final int DARK_OAK_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createDarkOakPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyDarkOakPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "dark_oak_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createDarkOakPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyDarkOakPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "dark_oak_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createDarkOakPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyDarkOakPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "dark_oak_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createDarkOakPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyDarkOakPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "dark_oak_planks_boots");
+        return stack;
+    }
+    
+    private static void applyDarkOakPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(DARK_OAK_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Dark Oak Planks " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, DARK_OAK_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "dark_oak_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "dark_oak_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Dark forest").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Dark oak wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // MANGROVE PLANKS ARMOR
+    // ============================================================
+    private static final int MANGROVE_PLANKS_COLOR = 0x6D4C41; // Brown
+    private static final int MANGROVE_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createMangrovePlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyMangrovePlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "mangrove_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createMangrovePlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyMangrovePlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "mangrove_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createMangrovePlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyMangrovePlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "mangrove_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createMangrovePlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyMangrovePlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "mangrove_planks_boots");
+        return stack;
+    }
+    
+    private static void applyMangrovePlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MANGROVE_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Mangrove Planks " + pieceName).formatted(Formatting.DARK_RED, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, MANGROVE_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mangrove_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mangrove_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("✦ Full set: Swamp walker").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Mangrove wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // CHERRY PLANKS ARMOR
+    // ============================================================
+    private static final int CHERRY_PLANKS_COLOR = 0xFFB7C5; // Pink
+    private static final int CHERRY_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createCherryPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCherryPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "cherry_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCherryPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCherryPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "cherry_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCherryPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCherryPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "cherry_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCherryPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCherryPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "cherry_planks_boots");
+        return stack;
+    }
+    
+    private static void applyCherryPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(CHERRY_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Cherry Planks " + pieceName).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, CHERRY_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cherry_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cherry_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("✦ Full set: Cherry bloom").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Cherry wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // BAMBOO PLANKS ARMOR
+    // ============================================================
+    private static final int BAMBOO_PLANKS_COLOR = 0xEEDD82; // Light gold
+    private static final int BAMBOO_PLANKS_DURABILITY = 140;
+
+    public static ItemStack createBambooPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyBambooPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "bamboo_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createBambooPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyBambooPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "bamboo_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createBambooPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyBambooPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "bamboo_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createBambooPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyBambooPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "bamboo_planks_boots");
+        return stack;
+    }
+    
+    private static void applyBambooPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(BAMBOO_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Bamboo Planks " + pieceName).formatted(Formatting.YELLOW, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, BAMBOO_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "bamboo_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "bamboo_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium-Low").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✦ Full set: Bamboo bounce").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Bamboo planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // CRIMSON PLANKS ARMOR
+    // ============================================================
+    private static final int CRIMSON_PLANKS_COLOR = 0x8B0000; // Dark red
+    private static final int CRIMSON_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createCrimsonPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCrimsonPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "crimson_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCrimsonPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCrimsonPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "crimson_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCrimsonPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCrimsonPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "crimson_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCrimsonPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCrimsonPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "crimson_planks_boots");
+        return stack;
+    }
+    
+    private static void applyCrimsonPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(CRIMSON_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Crimson Planks " + pieceName).formatted(Formatting.DARK_RED, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, CRIMSON_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "crimson_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "crimson_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("✦ Full set: Crimson vitality").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Crimson wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // WARPED PLANKS ARMOR
+    // ============================================================
+    private static final int WARPED_PLANKS_COLOR = 0x008080; // Teal
+    private static final int WARPED_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createWarpedPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyWarpedPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "warped_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createWarpedPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyWarpedPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "warped_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createWarpedPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyWarpedPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "warped_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createWarpedPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyWarpedPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "warped_planks_boots");
+        return stack;
+    }
+    
+    private static void applyWarpedPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(WARPED_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Warped Planks " + pieceName).formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, WARPED_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "warped_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "warped_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("✦ Full set: Warped stride").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Warped wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // OAK PLANKS ARMOR
+    // ============================================================
+    private static final int OAK_PLANKS_COLOR = 0xDEB887; // Burlywood
+    private static final int OAK_PLANKS_DURABILITY = 150;
+
+    public static ItemStack createOakPlanksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyOakPlanksStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "oak_planks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createOakPlanksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyOakPlanksStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "oak_planks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createOakPlanksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyOakPlanksStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "oak_planks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createOakPlanksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyOakPlanksStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "oak_planks_boots");
+        return stack;
+    }
+    
+    private static void applyOakPlanksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(OAK_PLANKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Oak Planks " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, OAK_PLANKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "oak_planks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "oak_planks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Classic shelter").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Oak wood planks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // OAK LOG ARMOR
+    // ============================================================
+    private static final int OAK_LOG_COLOR = 0xC4A35A; // Tan
+    private static final int OAK_LOG_DURABILITY = 165;
+
+    public static ItemStack createOakLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyOakLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "oak_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createOakLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyOakLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "oak_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createOakLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyOakLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "oak_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createOakLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyOakLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "oak_log_boots");
+        return stack;
+    }
+    
+    private static void applyOakLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(OAK_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Oak Log " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, OAK_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "oak_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "oak_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Ancient oak").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Oak log").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // SPRUCE LOG ARMOR
+    // ============================================================
+    private static final int SPRUCE_LOG_COLOR = 0x8B4513; // Brown
+    private static final int SPRUCE_LOG_DURABILITY = 165;
+
+    public static ItemStack createSpruceLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applySpruceLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "spruce_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createSpruceLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applySpruceLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "spruce_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createSpruceLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applySpruceLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "spruce_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createSpruceLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applySpruceLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "spruce_log_boots");
+        return stack;
+    }
+    
+    private static void applySpruceLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(SPRUCE_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Spruce Log " + pieceName).formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, SPRUCE_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "spruce_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "spruce_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_AQUA)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_AQUA));
+        lore.add(Text.literal("✦ Full set: Taiga timber").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Spruce log").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // BIRCH LOG ARMOR
+    // ============================================================
+    private static final int BIRCH_LOG_COLOR = 0xF5F5DC; // Beige
+    private static final int BIRCH_LOG_DURABILITY = 165;
+
+    public static ItemStack createBirchLogHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyBirchLogStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "birch_log_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createBirchLogChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyBirchLogStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "birch_log_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createBirchLogLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyBirchLogStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "birch_log_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createBirchLogBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyBirchLogStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "birch_log_boots");
+        return stack;
+    }
+    
+    private static void applyBirchLogStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(BIRCH_LOG_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Birch Log " + pieceName).formatted(Formatting.WHITE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, BIRCH_LOG_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "birch_log_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "birch_log_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ Full set: Birch grove").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Birch log").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // STONE BRICKS ARMOR
+    // ============================================================
+    private static final int STONE_BRICKS_COLOR = 0x808080; // Gray
+    private static final int STONE_BRICKS_DURABILITY = 400;
+
+    public static ItemStack createStoneBricksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyStoneBricksStats(stack, "Helmet", 3, 4, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "stone_bricks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createStoneBricksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyStoneBricksStats(stack, "Chestplate", 7, 5, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "stone_bricks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createStoneBricksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyStoneBricksStats(stack, "Leggings", 5, 4, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "stone_bricks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createStoneBricksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyStoneBricksStats(stack, "Boots", 3, 3, EquipmentSlot.FEET);
+        setCustomItemId(stack, "stone_bricks_boots");
+        return stack;
+    }
+    
+    private static void applyStoneBricksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(STONE_BRICKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Stone Bricks " + pieceName).formatted(Formatting.GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, STONE_BRICKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stone_bricks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "stone_bricks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Very High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("✦ Full set: Stone wall").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Stone bricks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // COBBLESTONE ARMOR
+    // ============================================================
+    private static final int COBBLESTONE_COLOR = 0x696969; // Dim gray
+    private static final int COBBLESTONE_DURABILITY = 380;
+
+    public static ItemStack createCobblestoneHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCobblestoneStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "cobblestone_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCobblestoneChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCobblestoneStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "cobblestone_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCobblestoneLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCobblestoneStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "cobblestone_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCobblestoneBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCobblestoneStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "cobblestone_boots");
+        return stack;
+    }
+    
+    private static void applyCobblestoneStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(COBBLESTONE_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Cobblestone " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, COBBLESTONE_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cobblestone_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cobblestone_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Very High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Cave dweller").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Cobblestone").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // MOSSY COBBLESTONE ARMOR
+    // ============================================================
+    private static final int MOSSY_COBBLESTONE_COLOR = 0x556B2F; // Dark olive green
+    private static final int MOSSY_COBBLESTONE_DURABILITY = 350;
+
+    public static ItemStack createMossyCobblestoneHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyMossyCobblestoneStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "mossy_cobblestone_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createMossyCobblestoneChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyMossyCobblestoneStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "mossy_cobblestone_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createMossyCobblestoneLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyMossyCobblestoneStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "mossy_cobblestone_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createMossyCobblestoneBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyMossyCobblestoneStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "mossy_cobblestone_boots");
+        return stack;
+    }
+    
+    private static void applyMossyCobblestoneStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MOSSY_COBBLESTONE_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Mossy Cobblestone " + pieceName).formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, MOSSY_COBBLESTONE_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mossy_cobblestone_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mossy_cobblestone_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GREEN)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("✦ Full set: Forest guardian").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Mossy cobblestone").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // COBBLED DEEPSLATE ARMOR
+    // ============================================================
+    private static final int COBBLED_DEEPSLATE_COLOR = 0x2F4F4F; // Dark slate gray
+    private static final int COBBLED_DEEPSLATE_DURABILITY = 450;
+
+    public static ItemStack createCobbledDeepslateHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCobbledDeepslateStats(stack, "Helmet", 4, 5, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "cobbled_deepslate_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCobbledDeepslateChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCobbledDeepslateStats(stack, "Chestplate", 8, 6, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "cobbled_deepslate_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCobbledDeepslateLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCobbledDeepslateStats(stack, "Leggings", 5, 5, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "cobbled_deepslate_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCobbledDeepslateBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCobbledDeepslateStats(stack, "Boots", 4, 4, EquipmentSlot.FEET);
+        setCustomItemId(stack, "cobbled_deepslate_boots");
+        return stack;
+    }
+    
+    private static void applyCobbledDeepslateStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(COBBLED_DEEPSLATE_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Cobbled Deepslate " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, COBBLED_DEEPSLATE_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cobbled_deepslate_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cobbled_deepslate_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Extreme").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Deep defense").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Cobbled deepslate").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // MUD BRICKS ARMOR
+    // ============================================================
+    private static final int MUD_BRICKS_COLOR = 0x8B4513; // Saddle brown
+    private static final int MUD_BRICKS_DURABILITY = 280;
+
+    public static ItemStack createMudBricksHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyMudBricksStats(stack, "Helmet", 2, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "mud_bricks_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createMudBricksChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyMudBricksStats(stack, "Chestplate", 5, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "mud_bricks_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createMudBricksLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyMudBricksStats(stack, "Leggings", 3, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "mud_bricks_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createMudBricksBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyMudBricksStats(stack, "Boots", 2, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "mud_bricks_boots");
+        return stack;
+    }
+    
+    private static void applyMudBricksStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MUD_BRICKS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Mud Bricks " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, MUD_BRICKS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mud_bricks_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mud_bricks_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Mud mastery").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Mud bricks").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // MANGROVE ROOTS ARMOR
+    // ============================================================
+    private static final int MANGROVE_ROOTS_COLOR = 0x5D4037; // Brown
+    private static final int MANGROVE_ROOTS_DURABILITY = 160;
+
+    public static ItemStack createMangroveRootsHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyMangroveRootsStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "mangrove_roots_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createMangroveRootsChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyMangroveRootsStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "mangrove_roots_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createMangroveRootsLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyMangroveRootsStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "mangrove_roots_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createMangroveRootsBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyMangroveRootsStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "mangrove_roots_boots");
+        return stack;
+    }
+    
+    private static void applyMangroveRootsStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MANGROVE_ROOTS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Mangrove Roots " + pieceName).formatted(Formatting.DARK_RED, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, MANGROVE_ROOTS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mangrove_roots_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "mangrove_roots_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_RED)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("✦ Full set: Swamp root").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Mangrove roots").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // MUDDY MANGROVE ROOTS ARMOR
+    // ============================================================
+    private static final int MUDDY_MANGROVE_ROOTS_COLOR = 0x3E2723; // Dark brown
+    private static final int MUDDY_MANGROVE_ROOTS_DURABILITY = 180;
+
+    public static ItemStack createMuddyMangroveRootsHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyMuddyMangroveRootsStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "muddy_mangrove_roots_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createMuddyMangroveRootsChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyMuddyMangroveRootsStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "muddy_mangrove_roots_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createMuddyMangroveRootsLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyMuddyMangroveRootsStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "muddy_mangrove_roots_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createMuddyMangroveRootsBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyMuddyMangroveRootsStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "muddy_mangrove_roots_boots");
+        return stack;
+    }
+    
+    private static void applyMuddyMangroveRootsStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(MUDDY_MANGROVE_ROOTS_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Muddy Mangrove Roots " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, MUDDY_MANGROVE_ROOTS_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "muddy_mangrove_roots_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "muddy_mangrove_roots_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Deep swamp").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Muddy mangrove roots").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // NETHERITE BLOCK ARMOR
+    // ============================================================
+    private static final int NETHERITE_BLOCK_COLOR = 0x4A4A4A; // Dark gray
+    private static final int NETHERITE_BLOCK_DURABILITY = 2000;
+
+    public static ItemStack createNetheriteBlockHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyNetheriteBlockStats(stack, "Helmet", 5, 8, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "netherite_block_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createNetheriteBlockChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyNetheriteBlockStats(stack, "Chestplate", 10, 10, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "netherite_block_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createNetheriteBlockLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyNetheriteBlockStats(stack, "Leggings", 7, 8, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "netherite_block_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createNetheriteBlockBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyNetheriteBlockStats(stack, "Boots", 5, 6, EquipmentSlot.FEET);
+        setCustomItemId(stack, "netherite_block_boots");
+        return stack;
+    }
+    
+    private static void applyNetheriteBlockStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(NETHERITE_BLOCK_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Netherite Block " + pieceName).formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, NETHERITE_BLOCK_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "netherite_block_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "netherite_block_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_PURPLE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_PURPLE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Extreme").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("✦ Full set: Nether beast").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Netherite block").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // CHISELED COPPER ARMOR
+    // ============================================================
+    private static final int CHISELED_COPPER_COLOR = 0xB87333; // Copper
+    private static final int CHISELED_COPPER_DURABILITY = 200;
+
+    public static ItemStack createChiseledCopperHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyChiseledCopperStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "chiseled_copper_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createChiseledCopperChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyChiseledCopperStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "chiseled_copper_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createChiseledCopperLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyChiseledCopperStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "chiseled_copper_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createChiseledCopperBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyChiseledCopperStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "chiseled_copper_boots");
+        return stack;
+    }
+    
+    private static void applyChiseledCopperStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(CHISELED_COPPER_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Chiseled Copper " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, CHISELED_COPPER_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "chiseled_copper_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "chiseled_copper_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Conductive").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Chiseled copper").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // CUT COPPER ARMOR
+    // ============================================================
+    private static final int CUT_COPPER_COLOR = 0xD9874E; // Light copper
+    private static final int CUT_COPPER_DURABILITY = 180;
+
+    public static ItemStack createCutCopperHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCutCopperStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "cut_copper_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCutCopperChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCutCopperStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "cut_copper_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCutCopperLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCutCopperStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "cut_copper_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCutCopperBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCutCopperStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "cut_copper_boots");
+        return stack;
+    }
+    
+    private static void applyCutCopperStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(CUT_COPPER_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Cut Copper " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, CUT_COPPER_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cut_copper_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "cut_copper_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Copper sheen").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Cut copper").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // EXPOSED COPPER ARMOR
+    // ============================================================
+    private static final int EXPOSED_COPPER_COLOR = 0xA0522D; // Sienna (weathered)
+    private static final int EXPOSED_COPPER_DURABILITY = 170;
+
+    public static ItemStack createExposedCopperHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyExposedCopperStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "exposed_copper_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createExposedCopperChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyExposedCopperStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "exposed_copper_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createExposedCopperLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyExposedCopperStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "exposed_copper_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createExposedCopperBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyExposedCopperStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "exposed_copper_boots");
+        return stack;
+    }
+    
+    private static void applyExposedCopperStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(EXPOSED_COPPER_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Exposed Copper " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, EXPOSED_COPPER_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "exposed_copper_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "exposed_copper_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Weathered").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Exposed copper").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // WEATHERED COPPER ARMOR
+    // ============================================================
+    private static final int WEATHERED_COPPER_COLOR = 0x8B4513; // Darker patina
+    private static final int WEATHERED_COPPER_DURABILITY = 160;
+
+    public static ItemStack createWeatheredCopperHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyWeatheredCopperStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "weathered_copper_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createWeatheredCopperChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyWeatheredCopperStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "weathered_copper_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createWeatheredCopperLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyWeatheredCopperStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "weathered_copper_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createWeatheredCopperBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyWeatheredCopperStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "weathered_copper_boots");
+        return stack;
+    }
+    
+    private static void applyWeatheredCopperStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(WEATHERED_COPPER_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Weathered Copper " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, WEATHERED_COPPER_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "weathered_copper_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "weathered_copper_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Patina shield").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Weathered copper").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // OXIDISED COPPER ARMOR
+    // ============================================================
+    private static final int OXIDISED_COPPER_COLOR = 0x4A7C59; // Verdigris green
+    private static final int OXIDISED_COPPER_DURABILITY = 150;
+
+    public static ItemStack createOxidisedCopperHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyOxidisedCopperStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "oxidised_copper_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createOxidisedCopperChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyOxidisedCopperStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "oxidised_copper_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createOxidisedCopperLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyOxidisedCopperStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "oxidised_copper_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createOxidisedCopperBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyOxidisedCopperStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "oxidised_copper_boots");
+        return stack;
+    }
+    
+    private static void applyOxidisedCopperStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(OXIDISED_COPPER_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Oxidised Copper " + pieceName).formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, OXIDISED_COPPER_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "oxidised_copper_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "oxidised_copper_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GREEN)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("✦ Full set: Oxidized defense").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Oxidised copper").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // WAXED CUT COPPER ARMOR
+    // ============================================================
+    private static final int WAXED_CUT_COPPER_COLOR = 0xE8A857; // Shiny copper
+    private static final int WAXED_CUT_COPPER_DURABILITY = 190;
+
+    public static ItemStack createWaxedCutCopperHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyWaxedCutCopperStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "waxed_cut_copper_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createWaxedCutCopperChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyWaxedCutCopperStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "waxed_cut_copper_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createWaxedCutCopperLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyWaxedCutCopperStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "waxed_cut_copper_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createWaxedCutCopperBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyWaxedCutCopperStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "waxed_cut_copper_boots");
+        return stack;
+    }
+    
+    private static void applyWaxedCutCopperStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(WAXED_CUT_COPPER_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Waxed Cut Copper " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, WAXED_CUT_COPPER_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "waxed_cut_copper_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "waxed_cut_copper_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Preserved shine").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Waxed cut copper").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // POLISHED BASALT ARMOR
+    // ============================================================
+    private static final int POLISHED_BASALT_COLOR = 0x3D3D3D; // Dark gray
+    private static final int POLISHED_BASALT_DURABILITY = 420;
+
+    public static ItemStack createPolishedBasaltHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyPolishedBasaltStats(stack, "Helmet", 3, 4, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "polished_basalt_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createPolishedBasaltChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyPolishedBasaltStats(stack, "Chestplate", 7, 5, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "polished_basalt_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createPolishedBasaltLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyPolishedBasaltStats(stack, "Leggings", 5, 4, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "polished_basalt_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createPolishedBasaltBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyPolishedBasaltStats(stack, "Boots", 3, 3, EquipmentSlot.FEET);
+        setCustomItemId(stack, "polished_basalt_boots");
+        return stack;
+    }
+    
+    private static void applyPolishedBasaltStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(POLISHED_BASALT_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Polished Basalt " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, POLISHED_BASALT_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "polished_basalt_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "polished_basalt_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Very High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Basalt pillar").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Polished basalt").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // VERDANT FROGLIGHT ARMOR
+    // ============================================================
+    private static final int VERDANT_FROGLIGHT_COLOR = 0x7CFC00; // Lawn green
+    private static final int VERDANT_FROGLIGHT_DURABILITY = 300;
+
+    public static ItemStack createVerdantFroglightHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyVerdantFroglightStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "verdant_froglight_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createVerdantFroglightChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyVerdantFroglightStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "verdant_froglight_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createVerdantFroglightLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyVerdantFroglightStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "verdant_froglight_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createVerdantFroglightBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyVerdantFroglightStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "verdant_froglight_boots");
+        return stack;
+    }
+    
+    private static void applyVerdantFroglightStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(VERDANT_FROGLIGHT_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Verdant Froglight " + pieceName).formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, VERDANT_FROGLIGHT_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "verdant_froglight_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "verdant_froglight_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✦ Full set: Swamp glow").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Verdant froglight").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // PEARLESCENT FROGLIGHT ARMOR
+    // ============================================================
+    private static final int PEARLESCENT_FROGLIGHT_COLOR = 0xFF69B4; // Hot pink
+    private static final int PEARLESCENT_FROGLIGHT_DURABILITY = 300;
+
+    public static ItemStack createPearlescentFroglightHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyPearlescentFroglightStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "pearlescent_froglight_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createPearlescentFroglightChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyPearlescentFroglightStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "pearlescent_froglight_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createPearlescentFroglightLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyPearlescentFroglightStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "pearlescent_froglight_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createPearlescentFroglightBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyPearlescentFroglightStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "pearlescent_froglight_boots");
+        return stack;
+    }
+    
+    private static void applyPearlescentFroglightStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(PEARLESCENT_FROGLIGHT_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Pearlescent Froglight " + pieceName).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, PEARLESCENT_FROGLIGHT_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "pearlescent_froglight_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "pearlescent_froglight_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.LIGHT_PURPLE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("✦ Full set: Pearl shimmer").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Pearlescent froglight").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // OCHRE FROGLIGHT ARMOR
+    // ============================================================
+    private static final int OCHRE_FROGLIGHT_COLOR = 0xFFA500; // Orange
+    private static final int OCHRE_FROGLIGHT_DURABILITY = 300;
+
+    public static ItemStack createOchreFroglightHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyOchreFroglightStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "ochre_froglight_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createOchreFroglightChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyOchreFroglightStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "ochre_froglight_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createOchreFroglightLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyOchreFroglightStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "ochre_froglight_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createOchreFroglightBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyOchreFroglightStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "ochre_froglight_boots");
+        return stack;
+    }
+    
+    private static void applyOchreFroglightStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(OCHRE_FROGLIGHT_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Ochre Froglight " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, OCHRE_FROGLIGHT_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "ochre_froglight_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "ochre_froglight_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Warm glow").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Ochre froglight").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // IRON NUGGET ARMOR
+    // ============================================================
+    private static final int IRON_NUGGET_COLOR = 0xD1D1D1; // Light gray
+    private static final int IRON_NUGGET_DURABILITY = 120;
+
+    public static ItemStack createIronNuggetHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyIronNuggetStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "iron_nugget_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createIronNuggetChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyIronNuggetStats(stack, "Chestplate", 4, 2, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "iron_nugget_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createIronNuggetLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyIronNuggetStats(stack, "Leggings", 3, 1, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "iron_nugget_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createIronNuggetBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyIronNuggetStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "iron_nugget_boots");
+        return stack;
+    }
+    
+    private static void applyIronNuggetStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(IRON_NUGGET_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Iron Nugget " + pieceName).formatted(Formatting.WHITE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, IRON_NUGGET_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "iron_nugget_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "iron_nugget_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Low").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ Full set: Iron fragment").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Iron nugget").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // GOLD NUGGET ARMOR
+    // ============================================================
+    private static final int GOLD_NUGGET_COLOR = 0xFFD700; // Gold
+    private static final int GOLD_NUGGET_DURABILITY = 80;
+
+    public static ItemStack createGoldNuggetHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyGoldNuggetStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "gold_nugget_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createGoldNuggetChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyGoldNuggetStats(stack, "Chestplate", 4, 2, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "gold_nugget_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createGoldNuggetLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyGoldNuggetStats(stack, "Leggings", 3, 1, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "gold_nugget_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createGoldNuggetBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyGoldNuggetStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "gold_nugget_boots");
+        return stack;
+    }
+    
+    private static void applyGoldNuggetStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(GOLD_NUGGET_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Gold Nugget " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, GOLD_NUGGET_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "gold_nugget_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "gold_nugget_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Very Low").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Golden fragment").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Gold nugget").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // COPPER INGOT ARMOR
+    // ============================================================
+    private static final int COPPER_INGOT_COLOR = 0xB87333; // Copper
+    private static final int COPPER_INGOT_DURABILITY = 140;
+
+    public static ItemStack createCopperIngotHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCopperIngotStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "copper_ingot_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCopperIngotChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCopperIngotStats(stack, "Chestplate", 4, 2, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "copper_ingot_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCopperIngotLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCopperIngotStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "copper_ingot_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCopperIngotBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCopperIngotStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "copper_ingot_boots");
+        return stack;
+    }
+    
+    private static void applyCopperIngotStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(COPPER_INGOT_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Copper Ingot " + pieceName).formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, COPPER_INGOT_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "copper_ingot_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "copper_ingot_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GOLD)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Low").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GOLD));
+        lore.add(Text.literal("✦ Full set: Copper conductor").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Copper ingot").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // EMERALD ARMOR
+    // ============================================================
+    private static final int EMERALD_COLOR = 0x50C878; // Emerald green
+    private static final int EMERALD_DURABILITY = 350;
+
+    public static ItemStack createEmeraldHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyEmeraldStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "emerald_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createEmeraldChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyEmeraldStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "emerald_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createEmeraldLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyEmeraldStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "emerald_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createEmeraldBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyEmeraldStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "emerald_boots");
+        return stack;
+    }
+    
+    private static void applyEmeraldStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(EMERALD_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Emerald " + pieceName).formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, EMERALD_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "emerald_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "emerald_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GREEN)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("✦ Full set: Merchant's fortune").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Emerald").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // LAPIS LAZULI ARMOR
+    // ============================================================
+    private static final int LAPIS_LAZULI_COLOR = 0x1E90FF; // Dodger blue
+    private static final int LAPIS_LAZULI_DURABILITY = 250;
+
+    public static ItemStack createLapisLazuliHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyLapisLazuliStats(stack, "Helmet", 2, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "lapis_lazuli_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createLapisLazuliChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyLapisLazuliStats(stack, "Chestplate", 5, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "lapis_lazuli_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createLapisLazuliLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyLapisLazuliStats(stack, "Leggings", 3, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "lapis_lazuli_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createLapisLazuliBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyLapisLazuliStats(stack, "Boots", 2, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "lapis_lazuli_boots");
+        return stack;
+    }
+    
+    private static void applyLapisLazuliStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(LAPIS_LAZULI_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Lapis Lazuli " + pieceName).formatted(Formatting.BLUE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, LAPIS_LAZULI_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "lapis_lazuli_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "lapis_lazuli_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.BLUE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.BLUE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.BLUE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.BLUE));
+        lore.add(Text.literal("✦ Full set: Enchanted depth").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Lapis lazuli").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // AMETHYST SHARD ARMOR
+    // ============================================================
+    private static final int AMETHYST_SHARD_COLOR = 0x9966CC; // Purple
+    private static final int AMETHYST_SHARD_DURABILITY = 300;
+
+    public static ItemStack createAmethystShardHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyAmethystShardStats(stack, "Helmet", 3, 3, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "amethyst_shard_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createAmethystShardChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyAmethystShardStats(stack, "Chestplate", 6, 4, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "amethyst_shard_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createAmethystShardLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyAmethystShardStats(stack, "Leggings", 4, 3, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "amethyst_shard_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createAmethystShardBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyAmethystShardStats(stack, "Boots", 3, 2, EquipmentSlot.FEET);
+        setCustomItemId(stack, "amethyst_shard_boots");
+        return stack;
+    }
+    
+    private static void applyAmethystShardStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(AMETHYST_SHARD_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Amethyst Shard " + pieceName).formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, AMETHYST_SHARD_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "amethyst_shard_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "amethyst_shard_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_PURPLE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_PURPLE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("✦ Full set: Crystal resonance").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Amethyst shard").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // FLINT ARMOR
+    // ============================================================
+    private static final int FLINT_COLOR = 0x2F4F4F; // Dark slate gray
+    private static final int FLINT_DURABILITY = 160;
+
+    public static ItemStack createFlintHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyFlintStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "flint_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createFlintChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyFlintStats(stack, "Chestplate", 5, 3, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "flint_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createFlintLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyFlintStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "flint_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createFlintBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyFlintStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "flint_boots");
+        return stack;
+    }
+    
+    private static void applyFlintStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(FLINT_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Flint " + pieceName).formatted(Formatting.GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, FLINT_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "flint_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "flint_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Medium").formatted(Formatting.YELLOW)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.GRAY));
+        lore.add(Text.literal("✦ Full set: Sharp edge").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Flint").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // BONE MEAL ARMOR
+    // ============================================================
+    private static final int BONE_MEAL_COLOR = 0xFFFAF0; // Floral white
+    private static final int BONE_MEAL_DURABILITY = 100;
+
+    public static ItemStack createBoneMealHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyBoneMealStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "bone_meal_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createBoneMealChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyBoneMealStats(stack, "Chestplate", 4, 2, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "bone_meal_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createBoneMealLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyBoneMealStats(stack, "Leggings", 3, 1, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "bone_meal_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createBoneMealBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyBoneMealStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "bone_meal_boots");
+        return stack;
+    }
+    
+    private static void applyBoneMealStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(BONE_MEAL_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Bone Meal " + pieceName).formatted(Formatting.WHITE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, BONE_MEAL_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "bone_meal_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "bone_meal_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Very Low").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ Full set: Bone white").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Bone meal").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // CHARCOAL ARMOR
+    // ============================================================
+    private static final int CHARCOAL_COLOR = 0x1C1C1C; // Near black
+    private static final int CHARCOAL_DURABILITY = 130;
+
+    public static ItemStack createCharcoalHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyCharcoalStats(stack, "Helmet", 2, 2, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "charcoal_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createCharcoalChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyCharcoalStats(stack, "Chestplate", 4, 2, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "charcoal_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createCharcoalLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyCharcoalStats(stack, "Leggings", 3, 2, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "charcoal_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createCharcoalBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyCharcoalStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "charcoal_boots");
+        return stack;
+    }
+    
+    private static void applyCharcoalStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(CHARCOAL_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Charcoal " + pieceName).formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, CHARCOAL_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "charcoal_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "charcoal_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.DARK_GRAY)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Low").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("✦ Full set: Burnt remains").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Charcoal").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // END STONE ARMOR
+    // ============================================================
+    private static final int END_STONE_COLOR = 0xEBE8A3; // Pale yellow
+    private static final int END_STONE_DURABILITY = 400;
+
+    public static ItemStack createEndStoneHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applyEndStoneStats(stack, "Helmet", 4, 4, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "end_stone_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createEndStoneChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applyEndStoneStats(stack, "Chestplate", 7, 5, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "end_stone_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createEndStoneLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applyEndStoneStats(stack, "Leggings", 5, 4, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "end_stone_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createEndStoneBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applyEndStoneStats(stack, "Boots", 4, 3, EquipmentSlot.FEET);
+        setCustomItemId(stack, "end_stone_boots");
+        return stack;
+    }
+    
+    private static void applyEndStoneStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(END_STONE_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("End Stone " + pieceName).formatted(Formatting.YELLOW, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, END_STONE_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "end_stone_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "end_stone_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.YELLOW)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Very High").formatted(Formatting.GREEN)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("✦ Full set: End protection").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8End stone").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
+
+    // ============================================================
+    // SNOW BLOCK ARMOR
+    // ============================================================
+    private static final int SNOW_BLOCK_COLOR = 0xFFFAFA; // Snow white
+    private static final int SNOW_BLOCK_DURABILITY = 120;
+
+    public static ItemStack createSnowBlockHelmet() {
+        ItemStack stack = new ItemStack(Items.LEATHER_HELMET);
+        applySnowBlockStats(stack, "Helmet", 2, 1, EquipmentSlot.HEAD);
+        setCustomItemId(stack, "snow_block_helmet");
+        return stack;
+    }
+    
+    public static ItemStack createSnowBlockChestplate() {
+        ItemStack stack = new ItemStack(Items.LEATHER_CHESTPLATE);
+        applySnowBlockStats(stack, "Chestplate", 4, 2, EquipmentSlot.CHEST);
+        setCustomItemId(stack, "snow_block_chestplate");
+        return stack;
+    }
+    
+    public static ItemStack createSnowBlockLeggings() {
+        ItemStack stack = new ItemStack(Items.LEATHER_LEGGINGS);
+        applySnowBlockStats(stack, "Leggings", 3, 1, EquipmentSlot.LEGS);
+        setCustomItemId(stack, "snow_block_leggings");
+        return stack;
+    }
+    
+    public static ItemStack createSnowBlockBoots() {
+        ItemStack stack = new ItemStack(Items.LEATHER_BOOTS);
+        applySnowBlockStats(stack, "Boots", 2, 1, EquipmentSlot.FEET);
+        setCustomItemId(stack, "snow_block_boots");
+        return stack;
+    }
+    
+    private static void applySnowBlockStats(ItemStack stack, String pieceName, int armorValue, int toughnessValue, EquipmentSlot slot) {
+        stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(SNOW_BLOCK_COLOR));
+        
+        stack.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("Snow Block " + pieceName).formatted(Formatting.WHITE, Formatting.BOLD));
+        stack.set(DataComponentTypes.MAX_DAMAGE, SNOW_BLOCK_DURABILITY);
+        stack.set(DataComponentTypes.DAMAGE, 0);
+        
+        AttributeModifierSlot modifierSlot = getSlotForPiece(pieceName);
+        AttributeModifiersComponent.Builder attrBuilder = AttributeModifiersComponent.builder()
+                .add(EntityAttributes.ARMOR,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "snow_block_" + pieceName.toLowerCase() + "_armor"),
+                                armorValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot)
+                .add(EntityAttributes.ARMOR_TOUGHNESS,
+                        new EntityAttributeModifier(
+                                Identifier.of("politicalserver", "snow_block_" + pieceName.toLowerCase() + "_toughness"),
+                                toughnessValue,
+                                EntityAttributeModifier.Operation.ADD_VALUE
+                        ),
+                        modifierSlot);
+        
+        stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, attrBuilder.build());
+        
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("🛡 Armor: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + armorValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("💎 Toughness: ").formatted(Formatting.WHITE)
+                .append(Text.literal("+" + toughnessValue).formatted(Formatting.WHITE)));
+        lore.add(Text.literal("⚠ Durability: ").formatted(Formatting.WHITE)
+                .append(Text.literal("Low").formatted(Formatting.RED)));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ SET BONUS ━━━").formatted(Formatting.WHITE));
+        lore.add(Text.literal("✦ Full set: Winter guard").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Snow block").formatted(Formatting.DARK_GRAY));
+        
+        stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+    }
 }

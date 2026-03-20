@@ -1915,6 +1915,280 @@ public class BlockTools {
     public static ItemStack createObsidianBlockHoe() { return createBlockTool("Obsidian", "Hoe", "🌾", Items.NETHERITE_HOE, Formatting.DARK_PURPLE, 2000, "End farming", 6, "hoe"); }
 
     // ============================================================
+    // NEW ARMOR SET TOOLS
+    // ============================================================
+
+    // STRIPPED LOG TOOLS
+    public static ItemStack createStrippedSpruceLogPickaxe() { return createBlockTool("Stripped Spruce Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.DARK_AQUA, 250, "Forest mining", 5, "pickaxe"); }
+    public static ItemStack createStrippedSpruceLogAxe() { return createBlockTool("Stripped Spruce Log", "Axe", "🪓", Items.IRON_AXE, Formatting.DARK_AQUA, 250, "Tree chop", 5, "axe"); }
+    public static ItemStack createStrippedSpruceLogShovel() { return createBlockTool("Stripped Spruce Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.DARK_AQUA, 250, "Forest dig", 4, "shovel"); }
+    public static ItemStack createStrippedSpruceLogHoe() { return createBlockTool("Stripped Spruce Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.DARK_AQUA, 250, "Forest farm", 4, "hoe"); }
+
+    public static ItemStack createStrippedBirchLogPickaxe() { return createBlockTool("Stripped Birch Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.WHITE, 200, "Light mining", 4, "pickaxe"); }
+    public static ItemStack createStrippedBirchLogAxe() { return createBlockTool("Stripped Birch Log", "Axe", "🪓", Items.IRON_AXE, Formatting.WHITE, 200, "Light chop", 4, "axe"); }
+    public static ItemStack createStrippedBirchLogShovel() { return createBlockTool("Stripped Birch Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.WHITE, 200, "Light dig", 3, "shovel"); }
+    public static ItemStack createStrippedBirchLogHoe() { return createBlockTool("Stripped Birch Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.WHITE, 200, "Light farm", 3, "hoe"); }
+
+    public static ItemStack createStrippedDarkOakLogPickaxe() { return createBlockTool("Stripped Dark Oak Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.DARK_GRAY, 300, "Shadow mining", 6, "pickaxe"); }
+    public static ItemStack createStrippedDarkOakLogAxe() { return createBlockTool("Stripped Dark Oak Log", "Axe", "🪓", Items.IRON_AXE, Formatting.DARK_GRAY, 300, "Shadow chop", 6, "axe"); }
+    public static ItemStack createStrippedDarkOakLogShovel() { return createBlockTool("Stripped Dark Oak Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.DARK_GRAY, 300, "Shadow dig", 5, "shovel"); }
+    public static ItemStack createStrippedDarkOakLogHoe() { return createBlockTool("Stripped Dark Oak Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.DARK_GRAY, 300, "Shadow farm", 5, "hoe"); }
+
+    public static ItemStack createStrippedJungleLogPickaxe() { return createBlockTool("Stripped Jungle Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GREEN, 250, "Jungle mining", 5, "pickaxe"); }
+    public static ItemStack createStrippedJungleLogAxe() { return createBlockTool("Stripped Jungle Log", "Axe", "🪓", Items.IRON_AXE, Formatting.GREEN, 250, "Jungle chop", 5, "axe"); }
+    public static ItemStack createStrippedJungleLogShovel() { return createBlockTool("Stripped Jungle Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GREEN, 250, "Jungle dig", 4, "shovel"); }
+    public static ItemStack createStrippedJungleLogHoe() { return createBlockTool("Stripped Jungle Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.GREEN, 250, "Jungle farm", 4, "hoe"); }
+
+    public static ItemStack createStrippedAcaciaLogPickaxe() { return createBlockTool("Stripped Acacia Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 260, "Savanna mining", 5, "pickaxe"); }
+    public static ItemStack createStrippedAcaciaLogAxe() { return createBlockTool("Stripped Acacia Log", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 260, "Savanna chop", 5, "axe"); }
+    public static ItemStack createStrippedAcaciaLogShovel() { return createBlockTool("Stripped Acacia Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 260, "Savanna dig", 4, "shovel"); }
+    public static ItemStack createStrippedAcaciaLogHoe() { return createBlockTool("Stripped Acacia Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 260, "Savanna farm", 4, "hoe"); }
+
+    public static ItemStack createStrippedMangroveLogPickaxe() { return createBlockTool("Stripped Mangrove Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.DARK_RED, 280, "Swamp mining", 5, "pickaxe"); }
+    public static ItemStack createStrippedMangroveLogAxe() { return createBlockTool("Stripped Mangrove Log", "Axe", "🪓", Items.IRON_AXE, Formatting.DARK_RED, 280, "Swamp chop", 5, "axe"); }
+    public static ItemStack createStrippedMangroveLogShovel() { return createBlockTool("Stripped Mangrove Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.DARK_RED, 280, "Swamp dig", 4, "shovel"); }
+    public static ItemStack createStrippedMangroveLogHoe() { return createBlockTool("Stripped Mangrove Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.DARK_RED, 280, "Swamp farm", 4, "hoe"); }
+
+    public static ItemStack createStrippedCherryLogPickaxe() { return createBlockTool("Stripped Cherry Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.LIGHT_PURPLE, 240, "Cherry mining", 4, "pickaxe"); }
+    public static ItemStack createStrippedCherryLogAxe() { return createBlockTool("Stripped Cherry Log", "Axe", "🪓", Items.IRON_AXE, Formatting.LIGHT_PURPLE, 240, "Cherry chop", 4, "axe"); }
+    public static ItemStack createStrippedCherryLogShovel() { return createBlockTool("Stripped Cherry Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.LIGHT_PURPLE, 240, "Cherry dig", 3, "shovel"); }
+    public static ItemStack createStrippedCherryLogHoe() { return createBlockTool("Stripped Cherry Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.LIGHT_PURPLE, 240, "Cherry farm", 3, "hoe"); }
+
+    public static ItemStack createStrippedBambooBlockPickaxe() { return createBlockTool("Bamboo Block", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.YELLOW, 180, "Quick mining", 3, "pickaxe"); }
+    public static ItemStack createStrippedBambooBlockAxe() { return createBlockTool("Bamboo Block", "Axe", "🪓", Items.IRON_AXE, Formatting.YELLOW, 180, "Quick chop", 3, "axe"); }
+    public static ItemStack createStrippedBambooBlockShovel() { return createBlockTool("Bamboo Block", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.YELLOW, 180, "Quick dig", 2, "shovel"); }
+    public static ItemStack createStrippedBambooBlockHoe() { return createBlockTool("Bamboo Block", "Hoe", "🌾", Items.IRON_HOE, Formatting.YELLOW, 180, "Quick farm", 2, "hoe"); }
+
+    public static ItemStack createStrippedCrimsonStemPickaxe() { return createBlockTool("Crimson Stem", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.RED, 400, "Nether mining", 7, "pickaxe"); }
+    public static ItemStack createStrippedCrimsonStemAxe() { return createBlockTool("Crimson Stem", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.RED, 400, "Nether chop", 7, "axe"); }
+    public static ItemStack createStrippedCrimsonStemShovel() { return createBlockTool("Crimson Stem", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.RED, 400, "Nether dig", 6, "shovel"); }
+    public static ItemStack createStrippedCrimsonStemHoe() { return createBlockTool("Crimson Stem", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.RED, 400, "Nether farm", 6, "hoe"); }
+
+    public static ItemStack createStrippedWarpedStemPickaxe() { return createBlockTool("Warped Stem", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.AQUA, 420, "Warped mining", 7, "pickaxe"); }
+    public static ItemStack createStrippedWarpedStemAxe() { return createBlockTool("Warped Stem", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.AQUA, 420, "Warped chop", 7, "axe"); }
+    public static ItemStack createStrippedWarpedStemShovel() { return createBlockTool("Warped Stem", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.AQUA, 420, "Warped dig", 6, "shovel"); }
+    public static ItemStack createStrippedWarpedStemHoe() { return createBlockTool("Warped Stem", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.AQUA, 420, "Warped farm", 6, "hoe"); }
+
+    // PLANK TOOLS
+    public static ItemStack createSprucePlanksPickaxe() { return createBlockTool("Spruce Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.DARK_AQUA, 150, "Forest floor", 3, "pickaxe"); }
+    public static ItemStack createSprucePlanksAxe() { return createBlockTool("Spruce Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.DARK_AQUA, 150, "Forest wood", 3, "axe"); }
+    public static ItemStack createSprucePlanksShovel() { return createBlockTool("Spruce Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.DARK_AQUA, 150, "Forest dirt", 2, "shovel"); }
+    public static ItemStack createSprucePlanksHoe() { return createBlockTool("Spruce Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.DARK_AQUA, 150, "Forest crop", 2, "hoe"); }
+
+    public static ItemStack createBirchPlanksPickaxe() { return createBlockTool("Birch Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.WHITE, 120, "Light build", 2, "pickaxe"); }
+    public static ItemStack createBirchPlanksAxe() { return createBlockTool("Birch Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.WHITE, 120, "Light wood", 2, "axe"); }
+    public static ItemStack createBirchPlanksShovel() { return createBlockTool("Birch Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.WHITE, 120, "Light dirt", 1, "shovel"); }
+    public static ItemStack createBirchPlanksHoe() { return createBlockTool("Birch Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.WHITE, 120, "Light crop", 1, "hoe"); }
+
+    public static ItemStack createJunglePlanksPickaxe() { return createBlockTool("Jungle Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.GREEN, 150, "Jungle floor", 3, "pickaxe"); }
+    public static ItemStack createJunglePlanksAxe() { return createBlockTool("Jungle Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.GREEN, 150, "Jungle wood", 3, "axe"); }
+    public static ItemStack createJunglePlanksShovel() { return createBlockTool("Jungle Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.GREEN, 150, "Jungle dirt", 2, "shovel"); }
+    public static ItemStack createJunglePlanksHoe() { return createBlockTool("Jungle Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.GREEN, 150, "Jungle crop", 2, "hoe"); }
+
+    public static ItemStack createAcaciaPlanksPickaxe() { return createBlockTool("Acacia Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.GOLD, 160, "Savanna build", 3, "pickaxe"); }
+    public static ItemStack createAcaciaPlanksAxe() { return createBlockTool("Acacia Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.GOLD, 160, "Savanna wood", 3, "axe"); }
+    public static ItemStack createAcaciaPlanksShovel() { return createBlockTool("Acacia Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.GOLD, 160, "Savanna dirt", 2, "shovel"); }
+    public static ItemStack createAcaciaPlanksHoe() { return createBlockTool("Acacia Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.GOLD, 160, "Savanna crop", 2, "hoe"); }
+
+    public static ItemStack createDarkOakPlanksPickaxe() { return createBlockTool("Dark Oak Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.DARK_GRAY, 180, "Dark build", 3, "pickaxe"); }
+    public static ItemStack createDarkOakPlanksAxe() { return createBlockTool("Dark Oak Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.DARK_GRAY, 180, "Dark wood", 3, "axe"); }
+    public static ItemStack createDarkOakPlanksShovel() { return createBlockTool("Dark Oak Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.DARK_GRAY, 180, "Dark dirt", 2, "shovel"); }
+    public static ItemStack createDarkOakPlanksHoe() { return createBlockTool("Dark Oak Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.DARK_GRAY, 180, "Dark crop", 2, "hoe"); }
+
+    public static ItemStack createMangrovePlanksPickaxe() { return createBlockTool("Mangrove Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.DARK_RED, 170, "Swamp build", 3, "pickaxe"); }
+    public static ItemStack createMangrovePlanksAxe() { return createBlockTool("Mangrove Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.DARK_RED, 170, "Swamp wood", 3, "axe"); }
+    public static ItemStack createMangrovePlanksShovel() { return createBlockTool("Mangrove Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.DARK_RED, 170, "Swamp dirt", 2, "shovel"); }
+    public static ItemStack createMangrovePlanksHoe() { return createBlockTool("Mangrove Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.DARK_RED, 170, "Swamp crop", 2, "hoe"); }
+
+    public static ItemStack createCherryPlanksPickaxe() { return createBlockTool("Cherry Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.LIGHT_PURPLE, 140, "Cherry build", 2, "pickaxe"); }
+    public static ItemStack createCherryPlanksAxe() { return createBlockTool("Cherry Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.LIGHT_PURPLE, 140, "Cherry wood", 2, "axe"); }
+    public static ItemStack createCherryPlanksShovel() { return createBlockTool("Cherry Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.LIGHT_PURPLE, 140, "Cherry dirt", 1, "shovel"); }
+    public static ItemStack createCherryPlanksHoe() { return createBlockTool("Cherry Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.LIGHT_PURPLE, 140, "Cherry crop", 1, "hoe"); }
+
+    public static ItemStack createBambooPlanksPickaxe() { return createBlockTool("Bamboo Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.YELLOW, 100, "Quick build", 2, "pickaxe"); }
+    public static ItemStack createBambooPlanksAxe() { return createBlockTool("Bamboo Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.YELLOW, 100, "Quick wood", 2, "axe"); }
+    public static ItemStack createBambooPlanksShovel() { return createBlockTool("Bamboo Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.YELLOW, 100, "Quick dig", 1, "shovel"); }
+    public static ItemStack createBambooPlanksHoe() { return createBlockTool("Bamboo Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.YELLOW, 100, "Quick farm", 1, "hoe"); }
+
+    public static ItemStack createCrimsonPlanksPickaxe() { return createBlockTool("Crimson Planks", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.RED, 250, "Nether build", 5, "pickaxe"); }
+    public static ItemStack createCrimsonPlanksAxe() { return createBlockTool("Crimson Planks", "Axe", "🪓", Items.IRON_AXE, Formatting.RED, 250, "Nether wood", 5, "axe"); }
+    public static ItemStack createCrimsonPlanksShovel() { return createBlockTool("Crimson Planks", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.RED, 250, "Nether dirt", 4, "shovel"); }
+    public static ItemStack createCrimsonPlanksHoe() { return createBlockTool("Crimson Planks", "Hoe", "🌾", Items.IRON_HOE, Formatting.RED, 250, "Nether crop", 4, "hoe"); }
+
+    public static ItemStack createWarpedPlanksPickaxe() { return createBlockTool("Warped Planks", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.AQUA, 260, "Warped build", 5, "pickaxe"); }
+    public static ItemStack createWarpedPlanksAxe() { return createBlockTool("Warped Planks", "Axe", "🪓", Items.IRON_AXE, Formatting.AQUA, 260, "Warped wood", 5, "axe"); }
+    public static ItemStack createWarpedPlanksShovel() { return createBlockTool("Warped Planks", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.AQUA, 260, "Warped dirt", 4, "shovel"); }
+    public static ItemStack createWarpedPlanksHoe() { return createBlockTool("Warped Planks", "Hoe", "🌾", Items.IRON_HOE, Formatting.AQUA, 260, "Warped crop", 4, "hoe"); }
+
+    public static ItemStack createOakPlanksPickaxe() { return createBlockTool("Oak Planks", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.YELLOW, 120, "Classic build", 2, "pickaxe"); }
+    public static ItemStack createOakPlanksAxe() { return createBlockTool("Oak Planks", "Axe", "🪓", Items.STONE_AXE, Formatting.YELLOW, 120, "Classic wood", 2, "axe"); }
+    public static ItemStack createOakPlanksShovel() { return createBlockTool("Oak Planks", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.YELLOW, 120, "Classic dirt", 1, "shovel"); }
+    public static ItemStack createOakPlanksHoe() { return createBlockTool("Oak Planks", "Hoe", "🌾", Items.STONE_HOE, Formatting.YELLOW, 120, "Classic crop", 1, "hoe"); }
+
+    // STONE/MUD/LOG TOOLS
+    public static ItemStack createOakLogPickaxe() { return createBlockTool("Oak Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.YELLOW, 200, "Ancient wood", 4, "pickaxe"); }
+    public static ItemStack createOakLogAxe() { return createBlockTool("Oak Log", "Axe", "🪓", Items.IRON_AXE, Formatting.YELLOW, 200, "Ancient chop", 4, "axe"); }
+    public static ItemStack createOakLogShovel() { return createBlockTool("Oak Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.YELLOW, 200, "Ancient dig", 3, "shovel"); }
+    public static ItemStack createOakLogHoe() { return createBlockTool("Oak Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.YELLOW, 200, "Ancient farm", 3, "hoe"); }
+
+    public static ItemStack createSpruceLogPickaxe() { return createBlockTool("Spruce Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.DARK_AQUA, 210, "Pine mining", 4, "pickaxe"); }
+    public static ItemStack createSpruceLogAxe() { return createBlockTool("Spruce Log", "Axe", "🪓", Items.IRON_AXE, Formatting.DARK_AQUA, 210, "Pine chop", 4, "axe"); }
+    public static ItemStack createSpruceLogShovel() { return createBlockTool("Spruce Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.DARK_AQUA, 210, "Pine dig", 3, "shovel"); }
+    public static ItemStack createSpruceLogHoe() { return createBlockTool("Spruce Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.DARK_AQUA, 210, "Pine farm", 3, "hoe"); }
+
+    public static ItemStack createBirchLogPickaxe() { return createBlockTool("Birch Log", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.WHITE, 180, "Birch mining", 3, "pickaxe"); }
+    public static ItemStack createBirchLogAxe() { return createBlockTool("Birch Log", "Axe", "🪓", Items.IRON_AXE, Formatting.WHITE, 180, "Birch chop", 3, "axe"); }
+    public static ItemStack createBirchLogShovel() { return createBlockTool("Birch Log", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.WHITE, 180, "Birch dig", 2, "shovel"); }
+    public static ItemStack createBirchLogHoe() { return createBlockTool("Birch Log", "Hoe", "🌾", Items.IRON_HOE, Formatting.WHITE, 180, "Birch farm", 2, "hoe"); }
+
+    public static ItemStack createStoneBricksPickaxe() { return createBlockTool("Stone Bricks", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.GRAY, 500, "Fortress mining", 7, "pickaxe"); }
+    public static ItemStack createStoneBricksAxe() { return createBlockTool("Stone Bricks", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.GRAY, 500, "Fortress chop", 7, "axe"); }
+    public static ItemStack createStoneBricksShovel() { return createBlockTool("Stone Bricks", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.GRAY, 500, "Fortress dig", 6, "shovel"); }
+    public static ItemStack createStoneBricksHoe() { return createBlockTool("Stone Bricks", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.GRAY, 500, "Fortress farm", 6, "hoe"); }
+
+    public static ItemStack createCobblestonePickaxe() { return createBlockTool("Cobblestone", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.GRAY, 200, "Rock solid", 3, "pickaxe"); }
+    public static ItemStack createCobblestoneAxe() { return createBlockTool("Cobblestone", "Axe", "🪓", Items.STONE_AXE, Formatting.GRAY, 200, "Rock chop", 3, "axe"); }
+    public static ItemStack createCobblestoneShovel() { return createBlockTool("Cobblestone", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.GRAY, 200, "Rock dig", 2, "shovel"); }
+    public static ItemStack createCobblestoneHoe() { return createBlockTool("Cobblestone", "Hoe", "🌾", Items.STONE_HOE, Formatting.GRAY, 200, "Rock farm", 2, "hoe"); }
+
+    public static ItemStack createMossyCobblestonePickaxe() { return createBlockTool("Mossy Cobblestone", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.DARK_GREEN, 220, "Mossy mining", 3, "pickaxe"); }
+    public static ItemStack createMossyCobblestoneAxe() { return createBlockTool("Mossy Cobblestone", "Axe", "🪓", Items.STONE_AXE, Formatting.DARK_GREEN, 220, "Mossy chop", 3, "axe"); }
+    public static ItemStack createMossyCobblestoneShovel() { return createBlockTool("Mossy Cobblestone", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.DARK_GREEN, 220, "Mossy dig", 2, "shovel"); }
+    public static ItemStack createMossyCobblestoneHoe() { return createBlockTool("Mossy Cobblestone", "Hoe", "🌾", Items.STONE_HOE, Formatting.DARK_GREEN, 220, "Mossy farm", 2, "hoe"); }
+
+    public static ItemStack createCobbledDeepslatePickaxe() { return createBlockTool("Cobbled Deepslate", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.DARK_GRAY, 400, "Deep mining", 6, "pickaxe"); }
+    public static ItemStack createCobbledDeepslateAxe() { return createBlockTool("Cobbled Deepslate", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.DARK_GRAY, 400, "Deep chop", 6, "axe"); }
+    public static ItemStack createCobbledDeepslateShovel() { return createBlockTool("Cobbled Deepslate", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.DARK_GRAY, 400, "Deep dig", 5, "shovel"); }
+    public static ItemStack createCobbledDeepslateHoe() { return createBlockTool("Cobbled Deepslate", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.DARK_GRAY, 400, "Deep farm", 5, "hoe"); }
+
+    public static ItemStack createMudBricksPickaxe() { return createBlockTool("Mud Bricks", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.RED, 250, "Mud mining", 4, "pickaxe"); }
+    public static ItemStack createMudBricksAxe() { return createBlockTool("Mud Bricks", "Axe", "🪓", Items.IRON_AXE, Formatting.RED, 250, "Mud chop", 4, "axe"); }
+    public static ItemStack createMudBricksShovel() { return createBlockTool("Mud Bricks", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.RED, 250, "Mud dig", 3, "shovel"); }
+    public static ItemStack createMudBricksHoe() { return createBlockTool("Mud Bricks", "Hoe", "🌾", Items.IRON_HOE, Formatting.RED, 250, "Mud farm", 3, "hoe"); }
+
+    public static ItemStack createMangroveRootsPickaxe() { return createBlockTool("Mangrove Roots", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.DARK_RED, 220, "Root mining", 4, "pickaxe"); }
+    public static ItemStack createMangroveRootsAxe() { return createBlockTool("Mangrove Roots", "Axe", "🪓", Items.IRON_AXE, Formatting.DARK_RED, 220, "Root chop", 4, "axe"); }
+    public static ItemStack createMangroveRootsShovel() { return createBlockTool("Mangrove Roots", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.DARK_RED, 220, "Root dig", 3, "shovel"); }
+    public static ItemStack createMangroveRootsHoe() { return createBlockTool("Mangrove Roots", "Hoe", "🌾", Items.IRON_HOE, Formatting.DARK_RED, 220, "Root farm", 3, "hoe"); }
+
+    public static ItemStack createMuddyMangroveRootsPickaxe() { return createBlockTool("Muddy Mangrove Roots", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.DARK_RED, 260, "Muddy mining", 5, "pickaxe"); }
+    public static ItemStack createMuddyMangroveRootsAxe() { return createBlockTool("Muddy Mangrove Roots", "Axe", "🪓", Items.IRON_AXE, Formatting.DARK_RED, 260, "Muddy chop", 5, "axe"); }
+    public static ItemStack createMuddyMangroveRootsShovel() { return createBlockTool("Muddy Mangrove Roots", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.DARK_RED, 260, "Muddy dig", 4, "shovel"); }
+    public static ItemStack createMuddyMangroveRootsHoe() { return createBlockTool("Muddy Mangrove Roots", "Hoe", "🌾", Items.IRON_HOE, Formatting.DARK_RED, 260, "Muddy farm", 4, "hoe"); }
+
+    // COPPER/NETHERITE/FROGLIGHT/BASALT TOOLS
+    public static ItemStack createNetheriteBlockPickaxe() { return createBlockTool("Netherite Block", "Pickaxe", "⛏", Items.NETHERITE_PICKAXE, Formatting.DARK_PURPLE, 2000, "Ultimate mining", 8, "pickaxe"); }
+    public static ItemStack createNetheriteBlockAxe() { return createBlockTool("Netherite Block", "Axe", "🪓", Items.NETHERITE_AXE, Formatting.DARK_PURPLE, 2000, "Ultimate chop", 8, "axe"); }
+    public static ItemStack createNetheriteBlockShovel() { return createBlockTool("Netherite Block", "Shovel", "🪏", Items.NETHERITE_SHOVEL, Formatting.DARK_PURPLE, 2000, "Ultimate dig", 7, "shovel"); }
+    public static ItemStack createNetheriteBlockHoe() { return createBlockTool("Netherite Block", "Hoe", "🌾", Items.NETHERITE_HOE, Formatting.DARK_PURPLE, 2000, "Ultimate farm", 7, "hoe"); }
+
+    public static ItemStack createChiseledCopperPickaxe() { return createBlockTool("Chiseled Copper", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 220, "Copper mining", 4, "pickaxe"); }
+    public static ItemStack createChiseledCopperAxe() { return createBlockTool("Chiseled Copper", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 220, "Copper chop", 4, "axe"); }
+    public static ItemStack createChiseledCopperShovel() { return createBlockTool("Chiseled Copper", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 220, "Copper dig", 3, "shovel"); }
+    public static ItemStack createChiseledCopperHoe() { return createBlockTool("Chiseled Copper", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 220, "Copper farm", 3, "hoe"); }
+
+    public static ItemStack createCutCopperPickaxe() { return createBlockTool("Cut Copper", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 200, "Clean mining", 4, "pickaxe"); }
+    public static ItemStack createCutCopperAxe() { return createBlockTool("Cut Copper", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 200, "Clean chop", 4, "axe"); }
+    public static ItemStack createCutCopperShovel() { return createBlockTool("Cut Copper", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 200, "Clean dig", 3, "shovel"); }
+    public static ItemStack createCutCopperHoe() { return createBlockTool("Cut Copper", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 200, "Clean farm", 3, "hoe"); }
+
+    public static ItemStack createExposedCopperPickaxe() { return createBlockTool("Exposed Copper", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 190, "Weathered mining", 4, "pickaxe"); }
+    public static ItemStack createExposedCopperAxe() { return createBlockTool("Exposed Copper", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 190, "Weathered chop", 4, "axe"); }
+    public static ItemStack createExposedCopperShovel() { return createBlockTool("Exposed Copper", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 190, "Weathered dig", 3, "shovel"); }
+    public static ItemStack createExposedCopperHoe() { return createBlockTool("Exposed Copper", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 190, "Weathered farm", 3, "hoe"); }
+
+    public static ItemStack createWeatheredCopperPickaxe() { return createBlockTool("Weathered Copper", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 180, "Aged mining", 4, "pickaxe"); }
+    public static ItemStack createWeatheredCopperAxe() { return createBlockTool("Weathered Copper", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 180, "Aged chop", 4, "axe"); }
+    public static ItemStack createWeatheredCopperShovel() { return createBlockTool("Weathered Copper", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 180, "Aged dig", 3, "shovel"); }
+    public static ItemStack createWeatheredCopperHoe() { return createBlockTool("Weathered Copper", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 180, "Aged farm", 3, "hoe"); }
+
+    public static ItemStack createOxidisedCopperPickaxe() { return createBlockTool("Oxidised Copper", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.AQUA, 170, "Patina mining", 4, "pickaxe"); }
+    public static ItemStack createOxidisedCopperAxe() { return createBlockTool("Oxidised Copper", "Axe", "🪓", Items.IRON_AXE, Formatting.AQUA, 170, "Patina chop", 4, "axe"); }
+    public static ItemStack createOxidisedCopperShovel() { return createBlockTool("Oxidised Copper", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.AQUA, 170, "Patina dig", 3, "shovel"); }
+    public static ItemStack createOxidisedCopperHoe() { return createBlockTool("Oxidised Copper", "Hoe", "🌾", Items.IRON_HOE, Formatting.AQUA, 170, "Patina farm", 3, "hoe"); }
+
+    public static ItemStack createWaxedCutCopperPickaxe() { return createBlockTool("Waxed Cut Copper", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 210, "Preserved mining", 4, "pickaxe"); }
+    public static ItemStack createWaxedCutCopperAxe() { return createBlockTool("Waxed Cut Copper", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 210, "Preserved chop", 4, "axe"); }
+    public static ItemStack createWaxedCutCopperShovel() { return createBlockTool("Waxed Cut Copper", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 210, "Preserved dig", 3, "shovel"); }
+    public static ItemStack createWaxedCutCopperHoe() { return createBlockTool("Waxed Cut Copper", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 210, "Preserved farm", 3, "hoe"); }
+
+    public static ItemStack createPolishedBasaltPickaxe() { return createBlockTool("Polished Basalt", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.DARK_GRAY, 450, "Volcanic mining", 7, "pickaxe"); }
+    public static ItemStack createPolishedBasaltAxe() { return createBlockTool("Polished Basalt", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.DARK_GRAY, 450, "Volcanic chop", 7, "axe"); }
+    public static ItemStack createPolishedBasaltShovel() { return createBlockTool("Polished Basalt", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.DARK_GRAY, 450, "Volcanic dig", 6, "shovel"); }
+    public static ItemStack createPolishedBasaltHoe() { return createBlockTool("Polished Basalt", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.DARK_GRAY, 450, "Volcanic farm", 6, "hoe"); }
+
+    public static ItemStack createVerdantFroglightPickaxe() { return createBlockTool("Verdant Froglight", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.GREEN, 480, "Frog mining", 7, "pickaxe"); }
+    public static ItemStack createVerdantFroglightAxe() { return createBlockTool("Verdant Froglight", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.GREEN, 480, "Frog chop", 7, "axe"); }
+    public static ItemStack createVerdantFroglightShovel() { return createBlockTool("Verdant Froglight", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.GREEN, 480, "Frog dig", 6, "shovel"); }
+    public static ItemStack createVerdantFroglightHoe() { return createBlockTool("Verdant Froglight", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.GREEN, 480, "Frog farm", 6, "hoe"); }
+
+    public static ItemStack createPearlescentFroglightPickaxe() { return createBlockTool("Pearlescent Froglight", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.LIGHT_PURPLE, 500, "Pearl mining", 7, "pickaxe"); }
+    public static ItemStack createPearlescentFroglightAxe() { return createBlockTool("Pearlescent Froglight", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.LIGHT_PURPLE, 500, "Pearl chop", 7, "axe"); }
+    public static ItemStack createPearlescentFroglightShovel() { return createBlockTool("Pearlescent Froglight", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.LIGHT_PURPLE, 500, "Pearl dig", 6, "shovel"); }
+    public static ItemStack createPearlescentFroglightHoe() { return createBlockTool("Pearlescent Froglight", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.LIGHT_PURPLE, 500, "Pearl farm", 6, "hoe"); }
+
+    public static ItemStack createOchreFroglightPickaxe() { return createBlockTool("Ochre Froglight", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.YELLOW, 460, "Ochre mining", 7, "pickaxe"); }
+    public static ItemStack createOchreFroglightAxe() { return createBlockTool("Ochre Froglight", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.YELLOW, 460, "Ochre chop", 7, "axe"); }
+    public static ItemStack createOchreFroglightShovel() { return createBlockTool("Ochre Froglight", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.YELLOW, 460, "Ochre dig", 6, "shovel"); }
+    public static ItemStack createOchreFroglightHoe() { return createBlockTool("Ochre Froglight", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.YELLOW, 460, "Ochre farm", 6, "hoe"); }
+
+    // MATERIAL ITEM TOOLS
+    public static ItemStack createIronNuggetPickaxe() { return createBlockTool("Iron Nugget", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.WHITE, 100, "Nugget mining", 2, "pickaxe"); }
+    public static ItemStack createIronNuggetAxe() { return createBlockTool("Iron Nugget", "Axe", "🪓", Items.STONE_AXE, Formatting.WHITE, 100, "Nugget chop", 2, "axe"); }
+    public static ItemStack createIronNuggetShovel() { return createBlockTool("Iron Nugget", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.WHITE, 100, "Nugget dig", 1, "shovel"); }
+    public static ItemStack createIronNuggetHoe() { return createBlockTool("Iron Nugget", "Hoe", "🌾", Items.STONE_HOE, Formatting.WHITE, 100, "Nugget farm", 1, "hoe"); }
+
+    public static ItemStack createGoldNuggetPickaxe() { return createBlockTool("Gold Nugget", "Pickaxe", "⛏", Items.GOLDEN_PICKAXE, Formatting.GOLD, 50, "Golden mining", 1, "pickaxe"); }
+    public static ItemStack createGoldNuggetAxe() { return createBlockTool("Gold Nugget", "Axe", "🪓", Items.GOLDEN_AXE, Formatting.GOLD, 50, "Golden chop", 1, "axe"); }
+    public static ItemStack createGoldNuggetShovel() { return createBlockTool("Gold Nugget", "Shovel", "🪏", Items.GOLDEN_SHOVEL, Formatting.GOLD, 50, "Golden dig", 1, "shovel"); }
+    public static ItemStack createGoldNuggetHoe() { return createBlockTool("Gold Nugget", "Hoe", "🌾", Items.GOLDEN_HOE, Formatting.GOLD, 50, "Golden farm", 1, "hoe"); }
+
+    public static ItemStack createCopperIngotPickaxe() { return createBlockTool("Copper Ingot", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.GOLD, 150, "Conductive mining", 3, "pickaxe"); }
+    public static ItemStack createCopperIngotAxe() { return createBlockTool("Copper Ingot", "Axe", "🪓", Items.IRON_AXE, Formatting.GOLD, 150, "Conductive chop", 3, "axe"); }
+    public static ItemStack createCopperIngotShovel() { return createBlockTool("Copper Ingot", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.GOLD, 150, "Conductive dig", 2, "shovel"); }
+    public static ItemStack createCopperIngotHoe() { return createBlockTool("Copper Ingot", "Hoe", "🌾", Items.IRON_HOE, Formatting.GOLD, 150, "Conductive farm", 2, "hoe"); }
+
+    public static ItemStack createEmeraldPickaxe() { return createBlockTool("Emerald", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.GREEN, 400, "Fortune mining", 6, "pickaxe"); }
+    public static ItemStack createEmeraldAxe() { return createBlockTool("Emerald", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.GREEN, 400, "Fortune chop", 6, "axe"); }
+    public static ItemStack createEmeraldShovel() { return createBlockTool("Emerald", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.GREEN, 400, "Fortune dig", 5, "shovel"); }
+    public static ItemStack createEmeraldHoe() { return createBlockTool("Emerald", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.GREEN, 400, "Fortune farm", 5, "hoe"); }
+
+    public static ItemStack createLapisLazuliPickaxe() { return createBlockTool("Lapis Lazuli", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.BLUE, 300, "XP mining", 5, "pickaxe"); }
+    public static ItemStack createLapisLazuliAxe() { return createBlockTool("Lapis Lazuli", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.BLUE, 300, "XP chop", 5, "axe"); }
+    public static ItemStack createLapisLazuliShovel() { return createBlockTool("Lapis Lazuli", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.BLUE, 300, "XP dig", 4, "shovel"); }
+    public static ItemStack createLapisLazuliHoe() { return createBlockTool("Lapis Lazuli", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.BLUE, 300, "XP farm", 4, "hoe"); }
+
+    public static ItemStack createAmethystShardPickaxe() { return createBlockTool("Amethyst Shard", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.LIGHT_PURPLE, 380, "Crystal mining", 6, "pickaxe"); }
+    public static ItemStack createAmethystShardAxe() { return createBlockTool("Amethyst Shard", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.LIGHT_PURPLE, 380, "Crystal chop", 6, "axe"); }
+    public static ItemStack createAmethystShardShovel() { return createBlockTool("Amethyst Shard", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.LIGHT_PURPLE, 380, "Crystal dig", 5, "shovel"); }
+    public static ItemStack createAmethystShardHoe() { return createBlockTool("Amethyst Shard", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.LIGHT_PURPLE, 380, "Crystal farm", 5, "hoe"); }
+
+    public static ItemStack createFlintPickaxe() { return createBlockTool("Flint", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.GRAY, 120, "Sharp mining", 2, "pickaxe"); }
+    public static ItemStack createFlintAxe() { return createBlockTool("Flint", "Axe", "🪓", Items.STONE_AXE, Formatting.GRAY, 120, "Sharp chop", 2, "axe"); }
+    public static ItemStack createFlintShovel() { return createBlockTool("Flint", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.GRAY, 120, "Sharp dig", 1, "shovel"); }
+    public static ItemStack createFlintHoe() { return createBlockTool("Flint", "Hoe", "🌾", Items.STONE_HOE, Formatting.GRAY, 120, "Sharp farm", 1, "hoe"); }
+
+    public static ItemStack createBoneMealPickaxe() { return createBlockTool("Bone Meal", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.WHITE, 80, "Growth mining", 1, "pickaxe"); }
+    public static ItemStack createBoneMealAxe() { return createBlockTool("Bone Meal", "Axe", "🪓", Items.STONE_AXE, Formatting.WHITE, 80, "Growth chop", 1, "axe"); }
+    public static ItemStack createBoneMealShovel() { return createBlockTool("Bone Meal", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.WHITE, 80, "Growth dig", 1, "shovel"); }
+    public static ItemStack createBoneMealHoe() { return createBlockTool("Bone Meal", "Hoe", "🌾", Items.STONE_HOE, Formatting.WHITE, 80, "Growth farm", 1, "hoe"); }
+
+    public static ItemStack createCharcoalPickaxe() { return createBlockTool("Charcoal", "Pickaxe", "⛏", Items.STONE_PICKAXE, Formatting.DARK_GRAY, 130, "Ash mining", 2, "pickaxe"); }
+    public static ItemStack createCharcoalAxe() { return createBlockTool("Charcoal", "Axe", "🪓", Items.STONE_AXE, Formatting.DARK_GRAY, 130, "Ash chop", 2, "axe"); }
+    public static ItemStack createCharcoalShovel() { return createBlockTool("Charcoal", "Shovel", "🪏", Items.STONE_SHOVEL, Formatting.DARK_GRAY, 130, "Ash dig", 1, "shovel"); }
+    public static ItemStack createCharcoalHoe() { return createBlockTool("Charcoal", "Hoe", "🌾", Items.STONE_HOE, Formatting.DARK_GRAY, 130, "Ash farm", 1, "hoe"); }
+
+    public static ItemStack createEndStonePickaxe() { return createBlockTool("End Stone", "Pickaxe", "⛏", Items.DIAMOND_PICKAXE, Formatting.YELLOW, 600, "End mining", 8, "pickaxe"); }
+    public static ItemStack createEndStoneAxe() { return createBlockTool("End Stone", "Axe", "🪓", Items.DIAMOND_AXE, Formatting.YELLOW, 600, "End chop", 8, "axe"); }
+    public static ItemStack createEndStoneShovel() { return createBlockTool("End Stone", "Shovel", "🪏", Items.DIAMOND_SHOVEL, Formatting.YELLOW, 600, "End dig", 7, "shovel"); }
+    public static ItemStack createEndStoneHoe() { return createBlockTool("End Stone", "Hoe", "🌾", Items.DIAMOND_HOE, Formatting.YELLOW, 600, "End farm", 7, "hoe"); }
+
+    public static ItemStack createSnowBlockPickaxe() { return createBlockTool("Snow Block", "Pickaxe", "⛏", Items.IRON_PICKAXE, Formatting.WHITE, 180, "Winter mining", 3, "pickaxe"); }
+    public static ItemStack createSnowBlockAxe() { return createBlockTool("Snow Block", "Axe", "🪓", Items.IRON_AXE, Formatting.WHITE, 180, "Winter chop", 3, "axe"); }
+    public static ItemStack createSnowBlockShovel() { return createBlockTool("Snow Block", "Shovel", "🪏", Items.IRON_SHOVEL, Formatting.WHITE, 180, "Winter dig", 2, "shovel"); }
+    public static ItemStack createSnowBlockHoe() { return createBlockTool("Snow Block", "Hoe", "🌾", Items.IRON_HOE, Formatting.WHITE, 180, "Winter farm", 2, "hoe"); }
+
+    // ============================================================
     // HELPER METHOD for creating block tools
     // ============================================================
     
