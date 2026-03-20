@@ -34,7 +34,7 @@ public class BountyCraftingHandler {
         if (!(player instanceof ServerPlayerEntity serverPlayer)) return null;
         if (grid.size() != 9) return null;
 
-        int totalItems = getTotalGridItems(grid);
+        int totalItemCount = getTotalItemCount(grid);
 
         // ─── Check custom recipes from RecipeConfigManager first ───────────
         for (SlayerRecipes.Recipe customRecipe : RecipeConfigManager.getCustomRecipes()) {
@@ -53,7 +53,7 @@ public class BountyCraftingHandler {
         // ─── Special Armor Recipes (all use 6 slots) ───────────────────────
 
         // Zombie Berserker Helmet: 3 Zombie Cores + 1 Zombie Head + 2 Rotten Flesh
-        if (totalItems == 6
+        if (totalItemCount == 6
                 && countGridCores(grid, SlayerManager.SlayerType.ZOMBIE) == 3
                 && countGridVanilla(grid, Items.ZOMBIE_HEAD) == 1
                 && countGridVanilla(grid, Items.ROTTEN_FLESH) == 2) {
@@ -63,7 +63,7 @@ public class BountyCraftingHandler {
         }
 
         // Spider Leggings: 3 Spider Cores + 2 String + 1 Spider Eye
-        if (totalItems == 6
+        if (totalItemCount == 6
                 && countGridCores(grid, SlayerManager.SlayerType.SPIDER) == 3
                 && countGridVanilla(grid, Items.STRING) == 2
                 && countGridVanilla(grid, Items.SPIDER_EYE) == 1) {
@@ -73,7 +73,7 @@ public class BountyCraftingHandler {
         }
 
         // Skeleton Bow: 3 Skeleton Cores + 1 Bow + 2 Bones
-        if (totalItems == 6
+        if (totalItemCount == 6
                 && countGridCores(grid, SlayerManager.SlayerType.SKELETON) == 3
                 && countGridVanilla(grid, Items.BOW) == 1
                 && countGridVanilla(grid, Items.BONE) == 2) {
@@ -83,7 +83,7 @@ public class BountyCraftingHandler {
         }
 
         // Slime Boots: 3 Slime Cores + 2 Slime Balls + 1 Custom Crafting Core (T1)
-        if (totalItems == 6
+        if (totalItemCount == 6
                 && countGridCores(grid, SlayerManager.SlayerType.SLIME) == 3
                 && countGridVanilla(grid, Items.SLIME_BALL) == 2
                 && countGridCustomCores(grid, "custom_crafter_core_t1") == 1) {
@@ -93,7 +93,7 @@ public class BountyCraftingHandler {
         }
 
         // Warden Chestplate: 3 Warden Cores + 2 Echo Shards + 1 Custom Crafting Core (T2)
-        if (totalItems == 6
+        if (totalItemCount == 6
                 && countGridCores(grid, SlayerManager.SlayerType.IRON_GOLEM) == 3
                 && countGridVanilla(grid, Items.ECHO_SHARD) == 2
                 && countGridCustomCores(grid, "custom_crafter_core_t2") == 1) {
@@ -103,7 +103,7 @@ public class BountyCraftingHandler {
         }
 
         // ─── T1 Bounty Swords: 3 Cores + 1 Custom Crafting Core (T1) + 1 Iron Sword + 1 Stick = 6 items ──
-        if (totalItems == 6 && countGridVanilla(grid, Items.IRON_SWORD) == 1
+        if (totalItemCount == 6 && countGridVanilla(grid, Items.IRON_SWORD) == 1
                 && countGridVanilla(grid, Items.STICK) == 1) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                 if (countGridCores(grid, type) == 3 && countGridCustomCores(grid, "custom_crafter_core_t1") == 1) {
@@ -115,7 +115,7 @@ public class BountyCraftingHandler {
         }
 
         // ─── T2 Upgraded Swords: 3 Cores + 1 Custom Crafting Core (T2) + 1 T1 Sword = 5 items ─
-        if (totalItems == 5) {
+        if (totalItemCount == 5) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                 if (countGridCores(grid, type) == 3 && countGridCustomCores(grid, "custom_crafter_core_t2") == 1 && countGridT1Swords(grid, type) == 1) {
                     int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
@@ -126,7 +126,7 @@ public class BountyCraftingHandler {
         }
 
         // ─── T1 Armor: 3 Cores + 1 Custom Crafting Core (T1) + 2 Secondary = 6 items ──
-        if (totalItems == 6) {
+        if (totalItemCount == 6) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                 if (countGridCores(grid, type) != 3) continue;
                 Item secondary = getSecondaryMaterial(type);
@@ -144,7 +144,7 @@ public class BountyCraftingHandler {
         }
 
         // ─── T2 Armor: 3 Cores + 1 Custom Crafting Core (T2) + 2 Secondary = 6 items ─
-        if (totalItems == 6) {
+        if (totalItemCount == 6) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                 if (countGridCores(grid, type) != 3) continue;
                 Item secondary = getSecondaryMaterial(type);
@@ -162,7 +162,7 @@ public class BountyCraftingHandler {
         }
 
         // Crown of Greed: 2 Piglin Cores + 4 Piglin Flesh
-        if (totalItems == 6) {
+        if (totalItemCount == 6) {
             int piglinCores = 0;
             int piglinFlesh = 0;
             for (ItemStack stack : grid) {
@@ -259,6 +259,15 @@ public class BountyCraftingHandler {
         int count = 0;
         for (ItemStack stack : grid) {
             if (!stack.isEmpty()) count++;
+        }
+        return count;
+    }
+
+    /** Total count of all items in the grid (including stacks with count > 1). */
+    private static int getTotalItemCount(List<ItemStack> grid) {
+        int count = 0;
+        for (ItemStack stack : grid) {
+            if (!stack.isEmpty()) count += stack.getCount();
         }
         return count;
     }
