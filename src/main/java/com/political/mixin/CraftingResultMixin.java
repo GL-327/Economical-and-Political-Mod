@@ -2,6 +2,7 @@ package com.political.mixin;
 
 import com.political.BeamCraftingHandler;
 import com.political.BountyCraftingHandler;
+import com.political.SlayerRecipes;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -40,7 +41,12 @@ public class CraftingResultMixin {
             grid.add(craftingInventory.getStack(i));
         }
 
-        // Check HPEBM upgrade recipes (smithing-table-style upgrades via crafting grid)
+        SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
+        if (matchedRecipe != null) {
+            resultInventory.setStack(0, matchedRecipe.result.copy());
+            return;
+        }
+
         ItemStack beamResult = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beamResult != null) {
             resultInventory.setStack(0, beamResult);
