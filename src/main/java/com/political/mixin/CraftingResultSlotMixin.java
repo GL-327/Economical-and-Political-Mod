@@ -36,6 +36,7 @@ public class CraftingResultSlotMixin {
         // If there's a valid vanilla recipe, vanilla already consumed the ingredients
         if (recipe != null) return;
 
+        // For custom recipes without vanilla match, consume ingredients
         List<ItemStack> grid = new ArrayList<>();
         for (int i = 0; i < this.input.size(); i++) {
             grid.add(this.input.getStack(i));

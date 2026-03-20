@@ -56,9 +56,8 @@ public class CraftingMixin {
             // Check RecipeConfigManager custom recipes (/setrecipe)
             com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
             if (matchedRecipe != null) {
-                // Valid custom recipe - set the result and cancel to prevent vanilla from interfering
+                // Valid custom recipe - set the result (don't cancel, let vanilla handle consumption)
                 resultInventory.setStack(0, matchedRecipe.result.copy());
-                ci.cancel();
                 return;
             }
             
