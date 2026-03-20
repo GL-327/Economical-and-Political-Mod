@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
@@ -53,11 +52,6 @@ public class CraftingResultSlotMixin {
         if (bounty != null) {
             decrementOneEachNonEmpty();
         }
-    }
-
-    @Redirect(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/RecipeInputInventory;markDirty()V"))
-    private void political_skipVanillaMarkDirty(RecipeInputInventory input) {
-        // Skip vanilla's markDirty - our code handles consumption and marks dirty
     }
 
     private void consumeForCustomRecipe(SlayerRecipes.Recipe recipe, List<ItemStack> grid) {
