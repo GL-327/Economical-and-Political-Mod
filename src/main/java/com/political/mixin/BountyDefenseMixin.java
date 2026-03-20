@@ -88,6 +88,14 @@ public class BountyDefenseMixin {
             }
         }
 
+        // ── Dragon Chestplates - 50% universal reduction ───────────────────
+        String chestId = SlayerItems.getCustomItemId(chestplate);
+        if ("inferno_dragon_chestplate".equals(chestId) ||
+            "storm_dragon_chestplate".equals(chestId) ||
+            "void_dragon_chestplate".equals(chestId)) {
+            universalDef += 0.50f; // 50% damage reduction vs all bounty bosses
+        }
+
 
         // ── Standard T1 / T2 armour sets ────────────────────────────────
         if (bossType != null) {

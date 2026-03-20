@@ -3,6 +3,8 @@ package com.political;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
@@ -10,8 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
 
-import java.util.*;import net.minecraft.util.math.Box;
+import java.util.*;
 
 public class ArmorAbilityHandler {
     private static final Map<UUID, Long> entityNoiseTimestamps = new HashMap<>();
@@ -922,7 +926,7 @@ public class ArmorAbilityHandler {
         if (!hasFullSet(player, "obsidian_block")) return;
         if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
             player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.RESISTANCE, 100, 3, true, false, false
+                StatusEffects.RESISTANCE, 100, 2, true, false, false
             ));
         }
     }
@@ -936,11 +940,41 @@ public class ArmorAbilityHandler {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "inferno_dragon_chestplate")) return;
 
-        // Fire resistance
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+
+        // Fire resistance (immunity to fire)
         if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
             player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.FIRE_RESISTANCE, 200, 0, true, false, false
             ));
+        }
+
+        // Explosion at 2.5 hearts (5 HP) - simplified
+        if (player.getHealth() <= 5f && !player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            player.setHealth(2f);
+            // Visual feedback - fire effect
+            player.setOnFire(true);
+        }
+
+        // Double damage when on fire
+        if (player.isOnFire() && !player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.STRENGTH, 100, 0, true, false, false
+            ));
+        }
+
+        // Double stats in Nether
+        if (world.getRegistryKey() == World.NETHER) {
+            if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.RESISTANCE, 100, 1, true, false, false
+                ));
+            }
+            if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+                player.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.SPEED, 100, 1, true, false, false
+                ));
+            }
         }
     }
 
@@ -949,11 +983,48 @@ public class ArmorAbilityHandler {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
 
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+
         // Speed boost
         if (!player.hasStatusEffect(StatusEffects.SPEED)) {
             player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.SPEED, 100, 2, true, false, false
             ));
+        }
+
+        // Lightning immunity (Resistance effect)
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 0, true, false, false
+            ));
+        }
+
+        // Double health during thunderstorms
+        if (world.isThundering() && player.getMaxHealth() <= 24f) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(48f);
+        } else if (!world.isThundering() && player.getMaxHealth() > 24f) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
+        }
+
+        // Creative flight (only 1 heart while flying)
+        if (player.isSneaking() && !player.isOnGround()) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(2f);
+            player.setVelocity(player.getVelocity().x, 0.15, player.getVelocity().z);
+            player.fallDistance = 0;
+        } else if (player.getMaxHealth() < 24f && !world.isThundering()) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
+        }
+    }
+
+    // Storm Dragon - Lightning strike on hit - simplified callback
+    public static void onStormDragonHit(ServerPlayerEntity player, LivingEntity target) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
+
+        // 1% chance to strike target with lightning - simplified
+        if (Math.random() < 0.01) {
+            ServerWorld world = (ServerWorld) player.getEntityWorld();
+            target.setOnFire(true);
         }
     }
 
@@ -961,6 +1032,8 @@ public class ArmorAbilityHandler {
     public static void tickVoidDragonChestplate(ServerPlayerEntity player) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return;
+
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
 
         // Resistance + Strength
         if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
@@ -973,5 +1046,33 @@ public class ArmorAbilityHandler {
                 StatusEffects.STRENGTH, 100, 1, true, false, false
             ));
         }
+
+        // Invisibility on crouch (15 seconds)
+        if (player.isSneaking() && !player.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.INVISIBILITY, 300, 0, true, false, false
+            ));
+        }
+
+        // Creative flight in The End
+        if (world.getRegistryKey() == World.END) {
+            if (player.isSneaking() && !player.isOnGround()) {
+                player.setVelocity(player.getVelocity().x, 0.15, player.getVelocity().z);
+                player.fallDistance = 0;
+            }
+        }
+    }
+
+    // Void Dragon - Magic and arrow immunity - simplified
+    public static float onVoidDragonDamage(ServerPlayerEntity player, DamageSource source, float amount) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return amount;
+
+        // Check for magic/arrow damage types - simplified approach
+        String damageType = source.getName();
+        if (damageType != null && (damageType.contains("magic") || damageType.contains("arrow") || damageType.contains("projectile"))) {
+            return 0f;
+        }
+        return amount;
     }
 }

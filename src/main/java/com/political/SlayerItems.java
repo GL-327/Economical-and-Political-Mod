@@ -4849,90 +4849,6 @@ public class SlayerItems {
         setCustomItemId(sword, "swift_wooden_sword");
         return sword;
     }
-
-    // ============================================================
-    // DRAGON CHESTPLATES - Special Items (No Recipe)
-    // ============================================================
-
-    public static ItemStack createDragonChestplate1() {
-        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
-        chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("🐉 Inferno Dragon Chestplate").formatted(Formatting.DARK_RED, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 1]").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
-        lore.add(Text.literal("❤ Max Health: 20 HP (10 hearts)").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armour: 12").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Toughness: 8").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.DARK_RED));
-        lore.add(Text.literal("🔥 Fire Aura: Burn nearby enemies").formatted(Formatting.GOLD));
-        lore.add(Text.literal("🔥 +50% Fire Resistance").formatted(Formatting.GOLD));
-        lore.add(Text.literal("🔥 Fire Touch: Attack sets enemies on fire").formatted(Formatting.GOLD));
-        lore.add(Text.literal("🔥 Immune to lava damage").formatted(Formatting.GOLD));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8Born from the depths of the Nether").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
-        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(chestplate, "inferno_dragon_chestplate");
-        return chestplate;
-    }
-
-    public static ItemStack createDragonChestplate2() {
-        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
-        chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("⚡ Storm Dragon Chestplate").formatted(Formatting.AQUA, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 2]").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
-        lore.add(Text.literal("❤ Max Health: 24 HP (12 hearts)").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armour: 14").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Toughness: 10").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.AQUA));
-        lore.add(Text.literal("⚡ Thunder Step: Lightning strikes nearby foes").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("⚡ +100% Attack Speed").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("⚡ Chain Lightning: Hits multiple enemies").formatted(Formatting.YELLOW));
-        lore.add(Text.literal("⚡ Thunder Aura: Slows enemies by 50%").formatted(Formatting.YELLOW));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8Commands the fury of the storm".formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
-        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(chestplate, "storm_dragon_chestplate");
-        return chestplate;
-    }
-
-    public static ItemStack createDragonChestplate3() {
-        ItemStack chestplate = new ItemStack(Items.NETHERITE_CHESTPLATE);
-        chestplate.set(DataComponentTypes.CUSTOM_NAME,
-                Text.literal("🌑 Void Dragon Chestplate").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-        List<Text> lore = new ArrayList<>();
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 3]").formatted(Formatting.DARK_GRAY));
-        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("❤ Max Health: 30 HP (15 hearts)").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armour: 16").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Toughness: 12").formatted(Formatting.GRAY));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.LIGHT_PURPLE));
-        lore.add(Text.literal("🌀 Void Walk: Phase through blocks").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("🌀 Life Steal: Heal from damage dealt").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("🌀 Void Aura: True damage to all").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal("🌀 Death Touch: Kill entities below 20% HP").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal(""));
-        lore.add(Text.literal("§8Exists beyond the boundaries of reality".formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
-        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        setCustomItemId(chestplate, "void_dragon_chestplate");
-        return chestplate;
-    }
-
-    // ============================================================
-    // DRAGON WEAPONS - Special Items (No Recipe)
-    // ============================================================
-
     public static ItemStack createDragonSword1() {
         ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
         sword.set(DataComponentTypes.CUSTOM_NAME,
@@ -4999,12 +4915,92 @@ public class SlayerItems {
         lore.add(Text.literal("🌀 Void Cleave: Hits all nearby entities").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal("🌀 Soul Reap: Steals soul from kills").formatted(Formatting.DARK_PURPLE));
         lore.add(Text.literal("🌀 Existential Break: True damage").formatted(Formatting.DARK_PURPLE));
-        lore.add(Text.literal(""));
         lore.add(Text.literal("§8A blade that transcends reality".formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
         sword.set(DataComponentTypes.LORE, new LoreComponent(lore));
         sword.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         sword.set(DataComponentTypes.MAX_DAMAGE, 10000);
         setCustomItemId(sword, "void_dragon_sword");
         return sword;
+    }
+
+    // ============================================================
+    // DRAGON CHESTPLATES - Special Items (No Recipe)
+    // ============================================================
+
+    public static ItemStack createDragonChestplate1() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🐉 Inferno Dragon Chestplate").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 1]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("❤ Max Health: 20 HP (10 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 12").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 8").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🔥 Fire Aura: Particle trail").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🔥 Immune to fire & lava").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🔥 Double damage when on fire").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🔥 Explosion at 2.5 hearts").formatted(Formatting.GOLD));
+        lore.add(Text.literal("🔥 2x stats in Nether").formatted(Formatting.GOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Born from the depths of the Nether").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "inferno_dragon_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createDragonChestplate2() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("⚡ Storm Dragon Chestplate").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 2]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("❤ Max Health: 24 HP (12 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 14").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 10").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("⚡ Storm Aura: Particle trail").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚡ Creative flight (1 heart while flying)").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚡ Immune to lightning").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚡ 1% chance to strike attackers").formatted(Formatting.YELLOW));
+        lore.add(Text.literal("⚡ 2x health during thunderstorms").formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Commands the fury of the storm").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "storm_dragon_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createDragonChestplate3() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🌑 Void Dragon Chestplate").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 3]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("❤ Max Health: 30 HP (15 hearts)").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 16").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 12").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("🌀 Void Aura: Particle trail").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌀 Immune to magic & arrows").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌀 Invisibility on crouch (15s/10s cooldown)").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌀 Creative flight in The End").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Exists beyond the boundaries of reality").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(chestplate, "void_dragon_chestplate");
+        return chestplate;
     }
 }
