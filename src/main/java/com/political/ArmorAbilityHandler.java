@@ -31,6 +31,7 @@ public class ArmorAbilityHandler {
     private static final Set<UUID> fallImmunityPlayers = new HashSet<>();
     // Track previous max health for auto-heal
     private static final Map<UUID, Float> previousMaxHealth = new HashMap<>();
+    private static final Map<UUID, Boolean> previousFlying = new HashMap<>();
 
     // Call this every tick from PoliticalServer.java
     public static void tick(ServerPlayerEntity player) {
@@ -1013,45 +1014,35 @@ public class ArmorAbilityHandler {
             ));
         }
 
-        // Track previous max health for auto-heal
-        float prevMax = previousMaxHealth.getOrDefault(uuid, 24f);
-        
-        // Double health during thunderstorms
-        float targetHealth = 24f;
-        if (world.isThundering()) {
-            targetHealth = 48f;
-        }
-        
-        // Creative flight (only 1 heart while flying) - enable flight ability
         var abilities = player.getAbilities();
-        if (player.isSneaking() && !player.isOnGround()) {
-            // Enable flying and set low health while flying
-            abilities.allowFlying = true;
-            abilities.flying = true;
+        abilities.allowFlying = true;
+
+        boolean wasFlying = previousFlying.getOrDefault(uuid, false);
+        boolean isFlying = abilities.flying;
+        previousFlying.put(uuid, isFlying);
+
+        if (wasFlying && !isFlying && !player.isOnGround()) {
+            grantFallImmunity(uuid);
+        }
+        if (isFlying) {
+            fallImmunityPlayers.remove(uuid);
+        }
+
+        float prevMax = previousMaxHealth.getOrDefault(uuid, 24f);
+        float targetHealth = world.isThundering() ? 48f : 24f;
+        if (isFlying) {
             targetHealth = 2f;
             player.fallDistance = 0;
-            // Remove fall immunity while flying
-            fallImmunityPlayers.remove(uuid);
-        } else if (player.isOnGround()) {
-            // Disable flying when on ground, restore health
-            if (abilities.flying) {
-                // Just landed - grant fall immunity
-                grantFallImmunity(uuid);
-            }
-            abilities.flying = false;
-            abilities.allowFlying = false;
         }
-        
-        // Apply health change with auto-heal
+
         if (player.getMaxHealth() != targetHealth) {
             player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
-            // Auto-heal when max health decreases
             if (targetHealth < prevMax && player.getHealth() < targetHealth) {
                 player.setHealth(targetHealth);
             }
         }
         previousMaxHealth.put(uuid, targetHealth);
-        
+
         player.sendAbilitiesUpdate();
     }
 
@@ -1085,20 +1076,20 @@ public class ArmorAbilityHandler {
         // Creative flight in The End (no health penalty)
         if (world.getRegistryKey() == World.END) {
             var abilities = player.getAbilities();
-            if (player.isSneaking() && !player.isOnGround()) {
-                abilities.allowFlying = true;
-                abilities.flying = true;
-                player.fallDistance = 0;
-                // Remove fall immunity while flying
-                fallImmunityPlayers.remove(uuid);
-            } else if (player.isOnGround()) {
-                if (abilities.flying) {
-                    // Just landed - grant fall immunity
-                    grantFallImmunity(uuid);
-                }
-                abilities.flying = false;
-                abilities.allowFlying = false;
+            abilities.allowFlying = true;
+
+            boolean wasFlying = previousFlying.getOrDefault(uuid, false);
+            boolean isFlying = abilities.flying;
+            previousFlying.put(uuid, isFlying);
+
+            if (wasFlying && !isFlying && !player.isOnGround()) {
+                grantFallImmunity(uuid);
             }
+            if (isFlying) {
+                player.fallDistance = 0;
+                fallImmunityPlayers.remove(uuid);
+            }
+
             player.sendAbilitiesUpdate();
         }
     }
@@ -1140,9 +1131,9 @@ public class ArmorAbilityHandler {
         UUID uuid = player.getUuid();
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         String currentId = SlayerItems.getCustomItemId(chestplate);
-        
+
         String previousId = previousChestplate.get(uuid);
-        
+
         // Check if player had a dragon chestplate and unequipped it
         if (previousId != null && previousId.contains("dragon_chestplate") && 
             (currentId == null || !currentId.contains("dragon_chestplate"))) {
@@ -1156,18 +1147,19 @@ public class ArmorAbilityHandler {
             abilities.allowFlying = false;
             abilities.flying = false;
             player.sendAbilitiesUpdate();
-            
+
             // Remove from fall immunity
             fallImmunityPlayers.remove(uuid);
+            previousFlying.remove(uuid);
         }
-        
+
         // Update tracking
         previousChestplate.put(uuid, currentId);
     }
 
     private static void tickFallImmunity(ServerPlayerEntity player) {
         UUID uuid = player.getUuid();
-        
+
         // If player has fall immunity and is on ground, remove it
         if (fallImmunityPlayers.contains(uuid) && player.isOnGround()) {
             fallImmunityPlayers.remove(uuid);

@@ -258,7 +258,7 @@ public class SlayerRecipes {
                 GemArmor.createLapisHelmet(),
                 new ItemStack[] {
                         new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI),
-                        new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LEATHER_HELMET), new ItemStack(Items.LAPIS_LAZULI),
+                        new ItemStack(Items.LAPIS_LAZULI), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.LAPIS_LAZULI),
                         ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
                 },
                 null, 0
@@ -270,7 +270,7 @@ public class SlayerRecipes {
                 GemArmor.createLapisChestplate(),
                 new ItemStack[] {
                         new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI),
-                        new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LEATHER_CHESTPLATE), new ItemStack(Items.LAPIS_LAZULI),
+                        new ItemStack(Items.LAPIS_LAZULI), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.LAPIS_LAZULI),
                         new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI)
                 },
                 null, 0
@@ -282,7 +282,7 @@ public class SlayerRecipes {
                 GemArmor.createLapisLeggings(),
                 new ItemStack[] {
                         new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI),
-                        new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LEATHER_LEGGINGS), new ItemStack(Items.LAPIS_LAZULI),
+                        new ItemStack(Items.LAPIS_LAZULI), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.LAPIS_LAZULI),
                         new ItemStack(Items.LAPIS_LAZULI), ItemStack.EMPTY, new ItemStack(Items.LAPIS_LAZULI)
                 },
                 null, 0
@@ -294,7 +294,7 @@ public class SlayerRecipes {
                 GemArmor.createLapisBoots(),
                 new ItemStack[] {
                         ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                        new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LEATHER_BOOTS), new ItemStack(Items.LAPIS_LAZULI),
+                        new ItemStack(Items.LAPIS_LAZULI), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.LAPIS_LAZULI),
                         new ItemStack(Items.LAPIS_LAZULI), ItemStack.EMPTY, new ItemStack(Items.LAPIS_LAZULI)
                 },
                 null, 0
@@ -306,7 +306,7 @@ public class SlayerRecipes {
                 GemArmor.createEmeraldHelmet(),
                 new ItemStack[] {
                         new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD),
-                        new ItemStack(Items.EMERALD), new ItemStack(Items.LEATHER_HELMET), new ItemStack(Items.EMERALD),
+                        new ItemStack(Items.EMERALD), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.EMERALD),
                         ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
                 },
                 null, 0
@@ -318,7 +318,7 @@ public class SlayerRecipes {
                 GemArmor.createEmeraldChestplate(),
                 new ItemStack[] {
                         new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD),
-                        new ItemStack(Items.EMERALD), new ItemStack(Items.LEATHER_CHESTPLATE), new ItemStack(Items.EMERALD),
+                        new ItemStack(Items.EMERALD), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.EMERALD),
                         new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD)
                 },
                 null, 0
@@ -330,7 +330,7 @@ public class SlayerRecipes {
                 GemArmor.createEmeraldLeggings(),
                 new ItemStack[] {
                         new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD),
-                        new ItemStack(Items.EMERALD), new ItemStack(Items.LEATHER_LEGGINGS), new ItemStack(Items.EMERALD),
+                        new ItemStack(Items.EMERALD), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.EMERALD),
                         new ItemStack(Items.EMERALD), ItemStack.EMPTY, new ItemStack(Items.EMERALD)
                 },
                 null, 0
@@ -342,7 +342,7 @@ public class SlayerRecipes {
                 GemArmor.createEmeraldBoots(),
                 new ItemStack[] {
                         ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                        new ItemStack(Items.EMERALD), new ItemStack(Items.LEATHER_BOOTS), new ItemStack(Items.EMERALD),
+                        new ItemStack(Items.EMERALD), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(Items.EMERALD),
                         new ItemStack(Items.EMERALD), ItemStack.EMPTY, new ItemStack(Items.EMERALD)
                 },
                 null, 0
@@ -1166,25 +1166,25 @@ public class SlayerRecipes {
         if (name.contains("Helmet")) {
             ingredients = new ItemStack[] {
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(blockItem),
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
             };
         } else if (name.contains("Chestplate")) {
             ingredients = new ItemStack[] {
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(blockItem),
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem)
             };
         } else if (name.contains("Leggings")) {
             ingredients = new ItemStack[] {
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(blockItem),
                 new ItemStack(blockItem), ItemStack.EMPTY, new ItemStack(blockItem)
             };
         } else { // Boots
             ingredients = new ItemStack[] {
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
+                new ItemStack(blockItem), SlayerItems.createCustomCrafterCoreT1(), new ItemStack(blockItem),
                 new ItemStack(blockItem), ItemStack.EMPTY, new ItemStack(blockItem)
             };
         }
@@ -1199,26 +1199,26 @@ public class SlayerRecipes {
         if (name.contains("Helmet")) {
             ingredients = new ItemStack[] {
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
-                ItemStack.EMPTY, core, ItemStack.EMPTY
+                new ItemStack(blockItem), core, new ItemStack(blockItem),
+                ItemStack.EMPTY, new ItemStack(armorBase), ItemStack.EMPTY
             };
         } else if (name.contains("Chestplate")) {
             ingredients = new ItemStack[] {
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
-                new ItemStack(blockItem), core, new ItemStack(blockItem)
+                new ItemStack(blockItem), core, new ItemStack(blockItem),
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem)
             };
         } else if (name.contains("Leggings")) {
             ingredients = new ItemStack[] {
                 new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
-                new ItemStack(blockItem), core, new ItemStack(blockItem)
+                new ItemStack(blockItem), core, new ItemStack(blockItem),
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem)
             };
         } else { // Boots
             ingredients = new ItemStack[] {
                 ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem),
-                new ItemStack(blockItem), core, new ItemStack(blockItem)
+                new ItemStack(blockItem), core, new ItemStack(blockItem),
+                new ItemStack(blockItem), new ItemStack(armorBase), new ItemStack(blockItem)
             };
         }
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
@@ -1230,8 +1230,8 @@ public class SlayerRecipes {
                          SlayerItems.createCustomCrafterCoreT3();
         ItemStack[] ingredients = new ItemStack[] {
             new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-            new ItemStack(blockItem), new ItemStack(weaponBase), new ItemStack(blockItem),
-            ItemStack.EMPTY, core, ItemStack.EMPTY
+            new ItemStack(blockItem), core, new ItemStack(blockItem),
+            ItemStack.EMPTY, new ItemStack(weaponBase), ItemStack.EMPTY
         };
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }
@@ -1242,8 +1242,8 @@ public class SlayerRecipes {
                          SlayerItems.createCustomCrafterCoreT3();
         ItemStack[] ingredients = new ItemStack[] {
             new ItemStack(blockItem), new ItemStack(blockItem), new ItemStack(blockItem),
-            new ItemStack(blockItem), new ItemStack(toolBase), new ItemStack(blockItem),
-            ItemStack.EMPTY, core, ItemStack.EMPTY
+            new ItemStack(blockItem), core, new ItemStack(blockItem),
+            ItemStack.EMPTY, new ItemStack(toolBase), ItemStack.EMPTY
         };
         RECIPES.add(new Recipe(name, result, ingredients, null, 0));
     }
