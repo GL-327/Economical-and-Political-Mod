@@ -4858,6 +4858,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("🐉 Inferno Dragon Chestplate").formatted(Formatting.DARK_RED, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
+
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 1]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
@@ -4875,6 +4876,8 @@ public class SlayerItems {
         lore.add(Text.literal("§8Born from the depths of the Nether").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
         setCustomItemId(chestplate, "inferno_dragon_chestplate");
         return chestplate;
     }
@@ -4884,6 +4887,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⚡ Storm Dragon Chestplate").formatted(Formatting.AQUA, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
+
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 2]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
@@ -4901,6 +4905,8 @@ public class SlayerItems {
         lore.add(Text.literal("§8Commands the fury of the storm").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
         setCustomItemId(chestplate, "storm_dragon_chestplate");
         return chestplate;
     }
@@ -4910,6 +4916,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("🌑 Void Dragon Chestplate").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
         List<Text> lore = new ArrayList<>();
+
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 3]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
@@ -4926,6 +4933,8 @@ public class SlayerItems {
         lore.add(Text.literal("§8Exists beyond the boundaries of reality").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
         setCustomItemId(chestplate, "void_dragon_chestplate");
         return chestplate;
     }
