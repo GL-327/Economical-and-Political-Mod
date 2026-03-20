@@ -69,6 +69,10 @@ public class ArmorAbilityHandler {
         tickSmoothBasaltSet(player);
         tickAmethystClusterSet(player);
         tickObsidianBlockSet(player);
+        // Dragon chestplate abilities
+        tickInfernoDragonChestplate(player);
+        tickStormDragonChestplate(player);
+        tickVoidDragonChestplate(player);
     }
 
     /**
@@ -919,6 +923,54 @@ public class ArmorAbilityHandler {
         if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
             player.addStatusEffect(new StatusEffectInstance(
                 StatusEffects.RESISTANCE, 100, 3, true, false, false
+            ));
+        }
+    }
+
+    // ============================================================
+    // DRAGON CHESTPLATE ABILITIES - Special Items
+    // ============================================================
+
+    // Inferno Dragon Chestplate - Fire Aura
+    public static void tickInfernoDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "inferno_dragon_chestplate")) return;
+
+        // Fire resistance
+        if (!player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.FIRE_RESISTANCE, 200, 0, true, false, false
+            ));
+        }
+    }
+
+    // Storm Dragon Chestplate - Thunder Aura + Speed
+    public static void tickStormDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
+
+        // Speed boost
+        if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.SPEED, 100, 2, true, false, false
+            ));
+        }
+    }
+
+    // Void Dragon Chestplate - Void Aura + Life Steal
+    public static void tickVoidDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return;
+
+        // Resistance + Strength
+        if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.RESISTANCE, 100, 2, true, false, false
+            ));
+        }
+        if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(
+                StatusEffects.STRENGTH, 100, 1, true, false, false
             ));
         }
     }
