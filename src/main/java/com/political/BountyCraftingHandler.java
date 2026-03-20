@@ -82,21 +82,21 @@ public class BountyCraftingHandler {
             return SlayerItems.createSkeletonBow();
         }
 
-        // Slime Boots: 3 Slime Cores + 2 Slime Balls + 1 Leather Boots
+        // Slime Boots: 3 Slime Cores + 2 Slime Balls + 1 Custom Crafting Core (T1)
         if (totalItems == 6
                 && countGridCores(grid, SlayerManager.SlayerType.SLIME) == 3
                 && countGridVanilla(grid, Items.SLIME_BALL) == 2
-                && countGridVanilla(grid, Items.LEATHER_BOOTS) == 1) {
+                && countGridCustomCores(grid, "custom_crafter_core_t1") == 1) {
             int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.SLIME);
             if (level < SlayerItems.SLIME_BOOTS_LEVEL_REQ) return null;
             return SlayerItems.createSlimeBoots();
         }
 
-        // Warden Chestplate: 3 Warden Cores + 2 Echo Shards + 1 Netherite Chestplate
+        // Warden Chestplate: 3 Warden Cores + 2 Echo Shards + 1 Custom Crafting Core (T2)
         if (totalItems == 6
                 && countGridCores(grid, SlayerManager.SlayerType.IRON_GOLEM) == 3
                 && countGridVanilla(grid, Items.ECHO_SHARD) == 2
-                && countGridVanilla(grid, Items.NETHERITE_CHESTPLATE) == 1) {
+                && countGridCustomCores(grid, "custom_crafter_core_t2") == 1) {
             int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), SlayerManager.SlayerType.IRON_GOLEM);
             if (level < SlayerItems.IRON_GOLEM_CHESTPLATE_LEVEL_REQ) return null;
             return SlayerItems.createWardenChestplate();
@@ -125,17 +125,18 @@ public class BountyCraftingHandler {
             }
         }
 
-        // ─── T1 Armor: 3 Cores + 1 Base Leather Armor + 2 Secondary = 6 items ──
+        // ─── T1 Armor: 3 Cores + 1 Custom Crafting Core (T1) + 2 Secondary = 6 items ──
         if (totalItems == 6) {
             for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
                 if (countGridCores(grid, type) != 3) continue;
                 Item secondary = getSecondaryMaterial(type);
                 if (countGridVanilla(grid, secondary) != 2) continue;
-                for (SlayerItems.ArmorPiece piece : SlayerItems.ArmorPiece.values()) {
-                    Item base = getBaseLeatherArmor(piece);
-                    if (countGridVanilla(grid, base) == 1) {
-                        int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
-                        if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) return null;
+                if (countGridCustomCores(grid, "custom_crafter_core_t1") == 1) {
+                    int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), type);
+                    if (level < SlayerItems.T1_ARMOR_LEVEL_REQ) return null;
+                    // Determine armor piece based on secondary material type
+                    SlayerItems.ArmorPiece piece = getArmorPieceFromSecondary(secondary);
+                    if (piece != null) {
                         return SlayerItems.createT1Armor(type, piece);
                     }
                 }
@@ -239,6 +240,18 @@ public class BountyCraftingHandler {
         return count;
     }
 
+    /** Count slots in grid that contain a Custom Crafting Core with the given ID. */
+    private static int countGridCustomCores(List<ItemStack> grid, String coreId) {
+        int count = 0;
+        for (ItemStack stack : grid) {
+            if (stack.isEmpty()) continue;
+            if (SlayerItems.hasCustomItemId(stack, coreId)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /** Total number of non-empty slots in the crafting grid. */
     private static int getTotalGridItems(List<ItemStack> grid) {
         int count = 0;
@@ -273,6 +286,18 @@ public class BountyCraftingHandler {
             case LEGGINGS   -> Items.LEATHER_LEGGINGS;
             case BOOTS      -> Items.LEATHER_BOOTS;
         };
+    }
+
+    /** Returns the armor piece that corresponds to the given slayer type's secondary material. */
+    private static SlayerItems.ArmorPiece getArmorPieceFromSecondary(Item secondary) {
+        if (secondary == Items.ROTTEN_FLESH) return SlayerItems.ArmorPiece.HELMET;     // Zombie -> Helmet
+        if (secondary == Items.STRING) return SlayerItems.ArmorPiece.LEGGINGS;         // Spider -> Leggings
+        if (secondary == Items.BONE) return SlayerItems.ArmorPiece.CHESTPLATE;         // Skeleton -> Chestplate
+        if (secondary == Items.SLIME_BALL) return SlayerItems.ArmorPiece.BOOTS;        // Slime -> Boots
+        if (secondary == Items.SCULK) return SlayerItems.ArmorPiece.CHESTPLATE;        // Iron Golem -> Chestplate
+        if (secondary == Items.GOLD_NUGGET) return SlayerItems.ArmorPiece.BOOTS;       // Piglin -> Boots
+        if (secondary == Items.ENDER_PEARL) return SlayerItems.ArmorPiece.HELMET;      // Enderman -> Helmet
+        return null;
     }
 
     /**
