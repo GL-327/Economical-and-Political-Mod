@@ -3,7 +3,6 @@ package com.political.mixin;
 import com.political.BeamCraftingHandler;
 import com.political.BountyCraftingHandler;
 import com.political.CustomItemHandler;
-import com.political.SlayerItems;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -13,7 +12,6 @@ import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -54,6 +52,14 @@ public class CraftingMixin {
             // Check if this grid matches a valid custom recipe
             if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return; // Allow beam recipes
             if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return; // Allow bounty recipes
+            
+            // Check RecipeConfigManager custom recipes (/setrecipe)
+            com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
+            if (matchedRecipe != null) {
+                // Valid custom recipe - set the result
+                resultInventory.setStack(0, matchedRecipe.result.copy());
+                return;
+            }
             
             // No valid custom recipe found - block vanilla crafting
             resultInventory.setStack(0, ItemStack.EMPTY);

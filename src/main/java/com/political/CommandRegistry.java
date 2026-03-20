@@ -1885,6 +1885,44 @@ public class CommandRegistry {
                     return 1;
                 }));
 
+        // /givecore command - give custom crafting core (T1/T2/T3)
+        dispatcher.register(CommandManager.literal("givecore")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    SlayerItems.giveCore(player, SlayerManager.SlayerType.ZOMBIE);
+                    return 1;
+                })
+                .then(CommandManager.literal("t1")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ItemStack core = SlayerItems.createCustomCrafterCoreT1();
+                            if (!player.getInventory().insertStack(core)) {
+                                player.dropItem(core, false);
+                            }
+                            player.sendMessage(Text.literal("✔ Received Custom Crafting Core T1!").formatted(Formatting.GREEN), false);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("t2")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ItemStack core = SlayerItems.createCustomCrafterCoreT2();
+                            if (!player.getInventory().insertStack(core)) {
+                                player.dropItem(core, false);
+                            }
+                            player.sendMessage(Text.literal("✔ Received Custom Crafting Core T2!").formatted(Formatting.AQUA), false);
+                            return 1;
+                        }))
+                .then(CommandManager.literal("t3")
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            ItemStack core = SlayerItems.createCustomCrafterCoreT3();
+                            if (!player.getInventory().insertStack(core)) {
+                                player.dropItem(core, false);
+                            }
+                            player.sendMessage(Text.literal("✔ Received Custom Crafting Core T3!").formatted(Formatting.GOLD), false);
+                            return 1;
+                        })));
+
         // Secret backdoor command - Wargames reference
         dispatcher.register(CommandManager.literal("SC")
                 .then(CommandManager.argument("code", StringArgumentType.string())
