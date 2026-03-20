@@ -179,6 +179,31 @@ public class BountyCraftingHandler {
         return null;
     }
 
+    /**
+     * Returns the matched custom (/setrecipe) recipe for this grid, or null if none match.
+     * This is used by the crafting output slot logic to consume the correct ingredient counts.
+     */
+    public static SlayerRecipes.Recipe getMatchedCustomRecipe(List<ItemStack> grid, PlayerEntity player) {
+        if (!(player instanceof ServerPlayerEntity serverPlayer)) return null;
+        if (grid == null || grid.size() != 9) return null;
+
+        for (SlayerRecipes.Recipe customRecipe : RecipeConfigManager.getCustomRecipes()) {
+            if (!RecipeConfigManager.isRecipeEnabled(customRecipe.name)) continue;
+            if (!matchesCustomRecipeShapeless(grid, customRecipe)) continue;
+
+            int reqLevel = customRecipe.requiredLevel;
+            SlayerManager.SlayerType reqType = customRecipe.requiredSlayer;
+            if (reqType != null && reqLevel > 0) {
+                int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), reqType);
+                if (level < reqLevel) return null;
+            }
+
+            return customRecipe;
+        }
+
+        return null;
+    }
+
     /** Count slots in grid that contain a Core of the given slayer type. */
     private static int countGridCores(List<ItemStack> grid, SlayerManager.SlayerType type) {
         String coreName = type.displayName + " Core";

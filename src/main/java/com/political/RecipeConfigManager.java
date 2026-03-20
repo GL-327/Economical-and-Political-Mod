@@ -176,12 +176,12 @@ public class RecipeConfigManager {
         obj.addProperty("name", recipe.name);
         obj.addProperty("requiredSlayer", recipe.requiredSlayer != null ? recipe.requiredSlayer.name() : "");
         obj.addProperty("requiredLevel", recipe.requiredLevel);
-        obj.addProperty("result", getItemId(recipe.result));
+        obj.add("result", serializeStack(recipe.result));
 
         JsonArray grid = new JsonArray();
         if (recipe.ingredients != null) {
             for (ItemStack ing : recipe.ingredients) {
-                grid.add(ing == null || ing.isEmpty() ? "" : getItemId(ing));
+                grid.add(serializeIngredient(ing));
             }
         } else {
             for (int i = 0; i < 9; i++) grid.add("");
@@ -206,21 +206,18 @@ public class RecipeConfigManager {
             String name = obj.get("name").getAsString();
             String slayerStr = obj.get("requiredSlayer").getAsString();
             int level = obj.get("requiredLevel").getAsInt();
-            String resultId = obj.get("result").getAsString();
+            ItemStack result = deserializeStack(obj.get("result"));
 
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
                 try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) {}
             }
-
-            ItemStack result = resolveItem(resultId);
             if (result.isEmpty()) return null;
 
             JsonArray gridArr = obj.getAsJsonArray("ingredients");
             ItemStack[] grid = new ItemStack[9];
             for (int i = 0; i < 9 && i < gridArr.size(); i++) {
-                String id = gridArr.get(i).getAsString();
-                grid[i] = id.isEmpty() ? ItemStack.EMPTY : resolveItem(id);
+                grid[i] = deserializeIngredient(gridArr.get(i));
             }
             for (int i = 0; i < 9; i++) {
                 if (grid[i] == null) grid[i] = ItemStack.EMPTY;
@@ -239,6 +236,41 @@ public class RecipeConfigManager {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private static com.google.gson.JsonElement serializeStack(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return new com.google.gson.JsonPrimitive("");
+        String id = getItemId(stack);
+        int count = stack.getCount();
+        if (count <= 1) return new com.google.gson.JsonPrimitive(id);
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", id);
+        obj.addProperty("count", count);
+        return obj;
+    }
+
+    private static ItemStack deserializeStack(com.google.gson.JsonElement elem) {
+        if (elem == null || elem.isJsonNull()) return ItemStack.EMPTY;
+        if (elem.isJsonPrimitive()) {
+            String id = elem.getAsString();
+            return id == null || id.isEmpty() ? ItemStack.EMPTY : resolveItem(id);
+        }
+        if (!elem.isJsonObject()) return ItemStack.EMPTY;
+        JsonObject obj = elem.getAsJsonObject();
+        String id = obj.has("id") ? obj.get("id").getAsString() : "";
+        int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
+        ItemStack stack = id == null || id.isEmpty() ? ItemStack.EMPTY : resolveItem(id);
+        if (!stack.isEmpty() && count > 1) stack.setCount(count);
+        return stack;
+    }
+
+    private static com.google.gson.JsonElement serializeIngredient(ItemStack ing) {
+        if (ing == null || ing.isEmpty()) return new com.google.gson.JsonPrimitive("");
+        return serializeStack(ing);
+    }
+
+    private static ItemStack deserializeIngredient(com.google.gson.JsonElement elem) {
+        return deserializeStack(elem);
     }
 
     private static String getItemId(ItemStack stack) {
