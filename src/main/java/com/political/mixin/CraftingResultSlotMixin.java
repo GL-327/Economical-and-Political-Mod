@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class CraftingResultSlotMixin {
     @Shadow @Final private RecipeInputInventory input;
 
     @Inject(method = "onTakeItem", at = @At("TAIL"))
-    private void political_consumeCustomRecipeIngredients(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+    private void political_consumeIngredients(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if (player == null || stack == null || stack.isEmpty()) return;
         if (this.input == null) return;
 
@@ -36,15 +37,12 @@ public class CraftingResultSlotMixin {
         }
         if (grid.size() != 9) return;
 
-        // /setrecipe custom recipes (may require stacked ingredient counts)
         SlayerRecipes.Recipe matchedCustom = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedCustom != null) {
             consumeForCustomRecipe(matchedCustom, grid);
             return;
         }
 
-        // Hardcoded bounty + beam recipes: consume 1 from each non-empty slot
-        // (vanilla will NOT consume because there is no backing vanilla recipe)
         ItemStack beam = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beam != null) {
             decrementOneEachNonEmpty();
@@ -57,14 +55,9 @@ public class CraftingResultSlotMixin {
         }
     }
 
-    private void decrementOneEachNonEmpty() {
-        for (int i = 0; i < this.input.size(); i++) {
-            ItemStack inSlot = this.input.getStack(i);
-            if (!inSlot.isEmpty()) {
-                inSlot.decrement(1);
-            }
-        }
-        this.input.markDirty();
+    @Redirect(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/RecipeInputInventory;markDirty()V"))
+    private void political_skipVanillaMarkDirty(RecipeInputInventory input) {
+        // Skip vanilla's markDirty - our code handles consumption and marks dirty
     }
 
     private void consumeForCustomRecipe(SlayerRecipes.Recipe recipe, List<ItemStack> grid) {
@@ -77,7 +70,6 @@ public class CraftingResultSlotMixin {
             required.merge(key, ing.getCount(), Integer::sum);
         }
 
-        // Decrement matching stacks until the required counts are satisfied
         for (int i = 0; i < 9; i++) {
             ItemStack slotStack = this.input.getStack(i);
             if (slotStack.isEmpty()) continue;
@@ -96,6 +88,16 @@ public class CraftingResultSlotMixin {
             if (required.isEmpty()) break;
         }
 
+        this.input.markDirty();
+    }
+
+    private void decrementOneEachNonEmpty() {
+        for (int i = 0; i < this.input.size(); i++) {
+            ItemStack inSlot = this.input.getStack(i);
+            if (!inSlot.isEmpty()) {
+                inSlot.decrement(1);
+            }
+        }
         this.input.markDirty();
     }
 
