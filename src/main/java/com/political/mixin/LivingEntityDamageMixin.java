@@ -1,9 +1,11 @@
 package com.political.mixin;
 
+import com.political.ArmorAbilityHandler;
 import com.political.BossAbilityManager;
 import com.political.SlayerManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,11 +20,16 @@ public abstract class LivingEntityDamageMixin {
             ordinal = 0,
             argsOnly = true
     )
-    private float modifyDamageForBoss(float amount) {
+    private float modifyDamageForBoss(float amount, ServerWorld world, DamageSource source) {
         LivingEntity self = (LivingEntity) (Object) this;
 
         if (SlayerManager.isSlayerBoss(self.getUuid())) {
             return BossAbilityManager.modifyIncomingDamage(self.getUuid(), amount);
+        }
+
+        // Void Dragon Chestplate damage immunity
+        if (self instanceof ServerPlayerEntity player) {
+            amount = ArmorAbilityHandler.onVoidDragonDamage(player, source, amount);
         }
 
         return amount;

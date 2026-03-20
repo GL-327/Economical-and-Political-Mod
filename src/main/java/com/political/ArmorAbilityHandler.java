@@ -1006,25 +1006,40 @@ public class ArmorAbilityHandler {
             player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
         }
 
-        // Creative flight (only 1 heart while flying)
+        // Creative flight (only 1 heart while flying) - enable flight ability
+        var abilities = player.getAbilities();
         if (player.isSneaking() && !player.isOnGround()) {
-            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(2f);
-            player.setVelocity(player.getVelocity().x, 0.15, player.getVelocity().z);
+            // Enable flying and set low health while flying
+            abilities.allowFlying = true;
+            abilities.flying = true;
+            if (player.getMaxHealth() > 2f) {
+                player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(2f);
+            }
             player.fallDistance = 0;
-        } else if (player.getMaxHealth() < 24f && !world.isThundering()) {
-            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
+        } else if (player.isOnGround()) {
+            // Disable flying when on ground, restore health
+            abilities.flying = false;
+            abilities.allowFlying = false;
+            if (player.getMaxHealth() < 24f && !world.isThundering()) {
+                player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
+            }
         }
+        player.sendAbilitiesUpdate();
     }
 
-    // Storm Dragon - Lightning strike on hit - simplified callback
+    // Storm Dragon - Lightning strike on hit
     public static void onStormDragonHit(ServerPlayerEntity player, LivingEntity target) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
 
-        // 1% chance to strike target with lightning - simplified
+        // 1% chance to strike target with lightning
         if (Math.random() < 0.01) {
             ServerWorld world = (ServerWorld) player.getEntityWorld();
-            target.setOnFire(true);
+            net.minecraft.entity.LightningEntity lightning = net.minecraft.entity.EntityType.LIGHTNING_BOLT.create(world, net.minecraft.entity.SpawnReason.TRIGGERED);
+            if (lightning != null) {
+                lightning.setPosition(target.getX(), target.getY(), target.getZ());
+                world.spawnEntity(lightning);
+            }
         }
     }
 
@@ -1054,12 +1069,18 @@ public class ArmorAbilityHandler {
             ));
         }
 
-        // Creative flight in The End
+        // Creative flight in The End (no health penalty)
         if (world.getRegistryKey() == World.END) {
+            var abilities = player.getAbilities();
             if (player.isSneaking() && !player.isOnGround()) {
-                player.setVelocity(player.getVelocity().x, 0.15, player.getVelocity().z);
+                abilities.allowFlying = true;
+                abilities.flying = true;
                 player.fallDistance = 0;
+            } else if (player.isOnGround()) {
+                abilities.flying = false;
+                abilities.allowFlying = false;
             }
+            player.sendAbilitiesUpdate();
         }
     }
 

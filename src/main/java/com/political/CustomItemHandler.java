@@ -159,6 +159,11 @@ public class CustomItemHandler {
                 BlockWeaponHandler.processDamage(sp, target, 0); // Damage applied separately
             }
             
+            // Storm Dragon Chestplate: Lightning strike on hit
+            if (entity instanceof LivingEntity target) {
+                ArmorAbilityHandler.onStormDragonHit(sp, target);
+            }
+            
             return ActionResult.PASS;
         });
         UseItemCallback.EVENT.register((player, world, hand) -> {

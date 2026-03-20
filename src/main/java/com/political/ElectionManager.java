@@ -145,12 +145,6 @@ public class ElectionManager {
 
         List<String> allPlayers = new ArrayList<>(DataManager.getAllPlayers().keySet());
 
-        String currentChair = DataManager.getChair();
-        int termCount = DataManager.getChairTermCount();
-        if (currentChair != null && termCount >= 2) {
-            allPlayers.remove(currentChair);
-        }
-
         Collections.shuffle(allPlayers);
         int candidateCount = Math.min(5, allPlayers.size());
         for (int i = 0; i < candidateCount; i++) {
