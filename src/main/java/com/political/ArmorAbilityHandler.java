@@ -24,9 +24,22 @@ public class ArmorAbilityHandler {
     /** How often (in server ticks) to sweep expired noise timestamps. */
     private static final int NOISE_CLEANUP_INTERVAL = 200; // ~10 seconds
     private static int armorAbilityTickCounter = 0;
+    
+    // Track previous chestplate for health reset on unequip
+    private static final Map<UUID, String> previousChestplate = new HashMap<>();
+    // Track players with fall damage immunity after flight
+    private static final Set<UUID> fallImmunityPlayers = new HashSet<>();
+    // Track previous max health for auto-heal
+    private static final Map<UUID, Float> previousMaxHealth = new HashMap<>();
 
     // Call this every tick from PoliticalServer.java
     public static void tick(ServerPlayerEntity player) {
+        // Check for chestplate unequip - reset health if dragon chestplate removed
+        checkChestplateUnequip(player);
+        
+        // Handle fall damage immunity after flight
+        tickFallImmunity(player);
+        
         tickVenomousLeggings(player);
         tickSlimeBoots(player);
         tickWardenChestplate(player);
@@ -984,6 +997,7 @@ public class ArmorAbilityHandler {
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
 
         ServerWorld world = (ServerWorld) player.getEntityWorld();
+        UUID uuid = player.getUuid();
 
         // Speed boost
         if (!player.hasStatusEffect(StatusEffects.SPEED)) {
@@ -999,48 +1013,46 @@ public class ArmorAbilityHandler {
             ));
         }
 
+        // Track previous max health for auto-heal
+        float prevMax = previousMaxHealth.getOrDefault(uuid, 24f);
+        
         // Double health during thunderstorms
-        if (world.isThundering() && player.getMaxHealth() <= 24f) {
-            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(48f);
-        } else if (!world.isThundering() && player.getMaxHealth() > 24f) {
-            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
+        float targetHealth = 24f;
+        if (world.isThundering()) {
+            targetHealth = 48f;
         }
-
+        
         // Creative flight (only 1 heart while flying) - enable flight ability
         var abilities = player.getAbilities();
         if (player.isSneaking() && !player.isOnGround()) {
             // Enable flying and set low health while flying
             abilities.allowFlying = true;
             abilities.flying = true;
-            if (player.getMaxHealth() > 2f) {
-                player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(2f);
-            }
+            targetHealth = 2f;
             player.fallDistance = 0;
+            // Remove fall immunity while flying
+            fallImmunityPlayers.remove(uuid);
         } else if (player.isOnGround()) {
             // Disable flying when on ground, restore health
+            if (abilities.flying) {
+                // Just landed - grant fall immunity
+                grantFallImmunity(uuid);
+            }
             abilities.flying = false;
             abilities.allowFlying = false;
-            if (player.getMaxHealth() < 24f && !world.isThundering()) {
-                player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(24f);
+        }
+        
+        // Apply health change with auto-heal
+        if (player.getMaxHealth() != targetHealth) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
+            // Auto-heal when max health decreases
+            if (targetHealth < prevMax && player.getHealth() < targetHealth) {
+                player.setHealth(targetHealth);
             }
         }
+        previousMaxHealth.put(uuid, targetHealth);
+        
         player.sendAbilitiesUpdate();
-    }
-
-    // Storm Dragon - Lightning strike on hit
-    public static void onStormDragonHit(ServerPlayerEntity player, LivingEntity target) {
-        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
-
-        // 1% chance to strike target with lightning
-        if (Math.random() < 0.01) {
-            ServerWorld world = (ServerWorld) player.getEntityWorld();
-            net.minecraft.entity.LightningEntity lightning = net.minecraft.entity.EntityType.LIGHTNING_BOLT.create(world, net.minecraft.entity.SpawnReason.TRIGGERED);
-            if (lightning != null) {
-                lightning.setPosition(target.getX(), target.getY(), target.getZ());
-                world.spawnEntity(lightning);
-            }
-        }
     }
 
     // Void Dragon Chestplate - Void Aura + Life Steal
@@ -1049,6 +1061,7 @@ public class ArmorAbilityHandler {
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return;
 
         ServerWorld world = (ServerWorld) player.getEntityWorld();
+        UUID uuid = player.getUuid();
 
         // Resistance + Strength
         if (!player.hasStatusEffect(StatusEffects.RESISTANCE)) {
@@ -1076,7 +1089,13 @@ public class ArmorAbilityHandler {
                 abilities.allowFlying = true;
                 abilities.flying = true;
                 player.fallDistance = 0;
+                // Remove fall immunity while flying
+                fallImmunityPlayers.remove(uuid);
             } else if (player.isOnGround()) {
+                if (abilities.flying) {
+                    // Just landed - grant fall immunity
+                    grantFallImmunity(uuid);
+                }
                 abilities.flying = false;
                 abilities.allowFlying = false;
             }
@@ -1084,16 +1103,97 @@ public class ArmorAbilityHandler {
         }
     }
 
-    // Void Dragon - Magic and arrow immunity - simplified
+    // Void Dragon - Magic and arrow immunity
     public static float onVoidDragonDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
         if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return amount;
 
-        // Check for magic/arrow damage types - simplified approach
+        // Check for magic/arrow damage types
         String damageType = source.getName();
         if (damageType != null && (damageType.contains("magic") || damageType.contains("arrow") || damageType.contains("projectile"))) {
             return 0f;
         }
         return amount;
+    }
+
+    // Storm Dragon - Lightning strike on hit
+    public static void onStormDragonHit(ServerPlayerEntity player, LivingEntity target) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
+
+        // 1% chance to strike target with lightning
+        if (Math.random() < 0.01) {
+            ServerWorld world = (ServerWorld) player.getEntityWorld();
+            net.minecraft.entity.LightningEntity lightning = net.minecraft.entity.EntityType.LIGHTNING_BOLT.create(world, net.minecraft.entity.SpawnReason.TRIGGERED);
+            if (lightning != null) {
+                lightning.setPosition(target.getX(), target.getY(), target.getZ());
+                world.spawnEntity(lightning);
+            }
+        }
+    }
+
+    // ============================================================
+    // DRAGON CHESTPLATE HEALTH MANAGEMENT
+    // ============================================================
+
+    private static void checkChestplateUnequip(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        String currentId = SlayerItems.getCustomItemId(chestplate);
+        
+        String previousId = previousChestplate.get(uuid);
+        
+        // Check if player had a dragon chestplate and unequipped it
+        if (previousId != null && previousId.contains("dragon_chestplate") && 
+            (currentId == null || !currentId.contains("dragon_chestplate"))) {
+            // Reset health to normal (20 HP = 10 hearts)
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(20.0);
+            if (player.getHealth() > player.getMaxHealth()) {
+                player.setHealth(player.getMaxHealth());
+            }
+            // Disable flight abilities
+            var abilities = player.getAbilities();
+            abilities.allowFlying = false;
+            abilities.flying = false;
+            player.sendAbilitiesUpdate();
+            
+            // Remove from fall immunity
+            fallImmunityPlayers.remove(uuid);
+        }
+        
+        // Update tracking
+        previousChestplate.put(uuid, currentId);
+    }
+
+    private static void tickFallImmunity(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        
+        // If player has fall immunity and is on ground, remove it
+        if (fallImmunityPlayers.contains(uuid) && player.isOnGround()) {
+            fallImmunityPlayers.remove(uuid);
+        }
+    }
+
+    // Check if player has fall damage immunity (called from damage mixin)
+    public static boolean hasFallImmunity(UUID uuid) {
+        return fallImmunityPlayers.contains(uuid);
+    }
+
+    // Grant fall damage immunity (called when flight ends)
+    public static void grantFallImmunity(UUID uuid) {
+        fallImmunityPlayers.add(uuid);
+    }
+
+    // Auto-heal player when max health decreases
+    private static void autoHealIfNeeded(ServerPlayerEntity player, float newMaxHealth) {
+        UUID uuid = player.getUuid();
+        Float prevMax = previousMaxHealth.get(uuid);
+        
+        if (prevMax != null && prevMax > newMaxHealth) {
+            // Max health decreased - heal to full
+            player.setHealth(newMaxHealth);
+        }
+        
+        previousMaxHealth.put(uuid, newMaxHealth);
     }
 }
