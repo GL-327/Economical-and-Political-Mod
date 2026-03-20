@@ -38,7 +38,7 @@ public class JudgeGui {
                 .glow()
                 .build());
 
-        // ── Row 1: Justice Actions ──
+        // ── Row 1: Justice Actions (with gaps) ──
         gui.setSlot(10, new GuiElementBuilder(Items.IRON_BARS)
                 .setName(Text.literal("⛓ View Prisoners").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -47,21 +47,23 @@ public class JudgeGui {
                 .setCallback((index, type, action) -> openPrisonerList(player))
                 .build());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.PLAYER_HEAD)
+        // Gap at 11
+        gui.setSlot(12, new GuiElementBuilder(Items.PLAYER_HEAD)
                 .setName(Text.literal("👥 Exile Player").formatted(Formatting.DARK_RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Exile a player from spawn").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Use /exile <player>").formatted(Formatting.YELLOW))
                 .build());
 
-        gui.setSlot(12, new GuiElementBuilder(Items.TRIDENT)
+        // Gap at 13
+        gui.setSlot(14, new GuiElementBuilder(Items.TRIDENT)
                 .setName(Text.literal("⚡ Smite Player").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Strike a player with lightning").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("Use /smite <player>").formatted(Formatting.YELLOW))
                 .build());
 
-        // ── Row 2: Government Info ──
+        // ── Row 2: Government Info (with gaps) ──
         String chair = DataManager.getChair();
         String chairName = chair != null ? DataManager.getPlayerName(chair) : "None";
         gui.setSlot(19, new GuiElementBuilder(Items.GOLDEN_HELMET)
@@ -70,16 +72,17 @@ public class JudgeGui {
                 .addLoreLine(Text.literal(chairName).formatted(Formatting.YELLOW))
                 .build());
 
+        // Gap at 20
         String viceChair = DataManager.getViceChair();
         String viceChairName = viceChair != null ? DataManager.getPlayerName(viceChair) : "None";
-        gui.setSlot(20, new GuiElementBuilder(Items.IRON_HELMET)
+        gui.setSlot(21, new GuiElementBuilder(Items.IRON_HELMET)
                 .setName(Text.literal("🎖 Vice Chair").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal(viceChairName).formatted(Formatting.YELLOW))
                 .build());
 
-        // Impeachment status
-        gui.setSlot(21, new GuiElementBuilder(Items.BARRIER)
+        // Gap at 22
+        gui.setSlot(23, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("⚖ Impeachment Status").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal(ElectionManager.isImpeachmentActive() ? "§cVote in progress!" : "§aNo active vote"))
@@ -87,7 +90,7 @@ public class JudgeGui {
                 .addLoreLine(Text.literal("Use /impeach to start").formatted(Formatting.GRAY))
                 .build());
 
-        // ── Row 3: Perks ──
+        // ── Row 3: Perks (with gaps) ──
         List<String> activePerks = PerkManager.getActivePerks();
         gui.setSlot(28, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✨ Active Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
@@ -105,7 +108,7 @@ public class JudgeGui {
                         .setName(Text.literal(perk.name).formatted(Formatting.GREEN))
                         .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
                         .build());
-                perkSlot++;
+                perkSlot += 2; // Gap between perks
             }
         }
 

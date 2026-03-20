@@ -38,7 +38,7 @@ public class ChairGui {
                 .glow()
                 .build());
 
-        // ── Row 1: Economy Controls ──
+        // ── Row 1: Economy Controls (with gaps) ──
         gui.setSlot(10, new GuiElementBuilder(Items.GOLD_INGOT)
                 .setName(Text.literal("💰 Main Interest Rate").formatted(Formatting.GREEN, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -57,7 +57,8 @@ public class ChairGui {
                 })
                 .build());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.BARREL)
+        // Gap at 11
+        gui.setSlot(12, new GuiElementBuilder(Items.BARREL)
                 .setName(Text.literal("🏦 Savings Interest Rate").formatted(Formatting.AQUA, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Current: " + formatRate(DataManager.getSavingsAccountInterestRate()) + "/hr").formatted(Formatting.YELLOW))
@@ -75,7 +76,8 @@ public class ChairGui {
                 })
                 .build());
 
-        gui.setSlot(12, new GuiElementBuilder(Items.GOLD_NUGGET)
+        // Gap at 13
+        gui.setSlot(14, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("📊 Set Tax Amount").formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Current: " + TaxManager.getDailyTaxAmount() + " credits/day").formatted(Formatting.GOLD))
@@ -95,7 +97,7 @@ public class ChairGui {
 
         // Tax toggle
         boolean taxEnabled = TaxManager.isTaxEnabled();
-        gui.setSlot(13, new GuiElementBuilder(taxEnabled ? Items.LIME_DYE : Items.RED_DYE)
+        gui.setSlot(15, new GuiElementBuilder(taxEnabled ? Items.LIME_DYE : Items.RED_DYE)
                 .setName(Text.literal("📋 Tax System").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Status: " + (taxEnabled ? "§aENABLED" : "§cDISABLED")))
@@ -108,7 +110,7 @@ public class ChairGui {
                 })
                 .build());
 
-        // ── Row 2: Government ──
+        // ── Row 2: Government (with gaps) ──
         int treasury = DataManager.getGovernmentTreasury();
         gui.setSlot(19, new GuiElementBuilder(Items.GOLD_BLOCK)
                 .setName(Text.literal("🏛 Government Treasury").formatted(Formatting.GOLD, Formatting.BOLD))
@@ -119,7 +121,8 @@ public class ChairGui {
                 .setCallback((index, type, action) -> GovernmentTreasuryGui.open(player))
                 .build());
 
-        gui.setSlot(20, new GuiElementBuilder(Items.PLAYER_HEAD)
+        // Gap at 20
+        gui.setSlot(21, new GuiElementBuilder(Items.PLAYER_HEAD)
                 .setName(Text.literal("👥 View Debtors").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("View players in debt").formatted(Formatting.GRAY))
@@ -127,13 +130,14 @@ public class ChairGui {
                 .setCallback((index, type, action) -> RulerGui.openDebtorsPage(player, "chair"))
                 .build());
 
-        gui.setSlot(21, new GuiElementBuilder(Items.BARRIER)
+        // Gap at 22
+        gui.setSlot(23, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("⚖ Impeachment Status").formatted(Formatting.RED, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal(ElectionManager.isImpeachmentActive() ? "§cVote in progress!" : "§aNo active vote"))
                 .build());
 
-        // ── Row 3: Perks ──
+        // ── Row 3: Perks (with gaps) ──
         List<String> activePerks = PerkManager.getActivePerks();
         gui.setSlot(28, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✨ Active Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
@@ -152,7 +156,7 @@ public class ChairGui {
                         .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
                         .addLoreLine(Text.literal("Points: " + perk.pointValue).formatted(Formatting.YELLOW))
                         .build());
-                perkSlot++;
+                perkSlot += 2; // Gap between perks
             }
         }
 

@@ -38,7 +38,7 @@ public class ViceChairGui {
                 .glow()
                 .build());
 
-        // ── Row 1: Chair Info ──
+        // ── Row 1: Chair Info (with gaps) ──
         String chair = DataManager.getChair();
         String chairName = chair != null ? DataManager.getPlayerName(chair) : "None";
         gui.setSlot(10, new GuiElementBuilder(Items.GOLDEN_HELMET)
@@ -47,18 +47,17 @@ public class ViceChairGui {
                 .addLoreLine(Text.literal(chairName).formatted(Formatting.YELLOW))
                 .build());
 
-        // Tax status (view only)
-        boolean taxEnabled = TaxManager.isTaxEnabled();
-        gui.setSlot(11, new GuiElementBuilder(taxEnabled ? Items.LIME_DYE : Items.RED_DYE)
+        // Gap at 11
+        gui.setSlot(12, new GuiElementBuilder(TaxManager.isTaxEnabled() ? Items.LIME_DYE : Items.RED_DYE)
                 .setName(Text.literal("📋 Tax Status").formatted(Formatting.GOLD, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("Status: " + (taxEnabled ? "§aENABLED" : "§cDISABLED")))
+                .addLoreLine(Text.literal("Status: " + (TaxManager.isTaxEnabled() ? "§aENABLED" : "§cDISABLED")))
                 .addLoreLine(Text.literal("Amount: " + TaxManager.getDailyTaxAmount() + " credits/day").formatted(Formatting.YELLOW))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("(Chair controls taxes)").formatted(Formatting.GRAY))
                 .build());
 
-        // ── Row 2: Perks ──
+        // ── Row 2: Perks (with gaps) ──
         List<String> activePerks = PerkManager.getActivePerks();
         gui.setSlot(19, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("✨ Active Perks").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
@@ -76,7 +75,7 @@ public class ViceChairGui {
                         .setName(Text.literal(perk.name).formatted(Formatting.GREEN))
                         .addLoreLine(Text.literal(perk.description).formatted(Formatting.GRAY))
                         .build());
-                perkSlot++;
+                perkSlot += 2; // Gap between perks
             }
         }
 
