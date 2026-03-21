@@ -305,6 +305,51 @@ public class CustomItemHandler {
         return name.getString().contains("Core");
     }
 
+    /**
+     * Returns true for any custom item that should be protected from vanilla consumption
+     * (placement, crafting, smelting).
+     */
+    public static boolean isProtectedItem(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        // Check NBT-based bounty identification first (works even without custom name)
+        if (SlayerItems.isAnyBountyItem(stack)) return true;
+        // Check custom item ID - if it has ANY custom ID, protect it from vanilla recipes
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId != null) {
+            return true;
+        }
+        // Then check custom name for other protected items
+        if (stack.get(DataComponentTypes.CUSTOM_NAME) == null) return false;
+        String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
+        return name.contains("Core") ||
+                name.contains("Chunk") ||
+                name.contains("Bounty") ||
+                name.contains("HPEBM") ||
+                name.contains("Overclocked") ||
+                name.contains("Hermes") ||
+                name.contains("Gavel") ||
+                name.contains("Harvey") ||
+                name.contains("Desperado") ||
+                name.contains("Venomous") ||
+                name.contains("Berserker") ||
+                name.contains("Crawler") ||
+                name.contains("Warden") ||
+                name.contains("Sculk Terror") ||
+                name.contains("Outlaw") ||
+                name.contains("Rustler") ||
+                name.contains("Phantom") ||
+                name.contains("Bandit") ||
+                name.contains("Plasma Emitter") ||
+                name.contains("Enchanted Gilded Blackstone") ||
+                name.contains("Enchanted Compacted") ||
+                name.contains("✦ Enchanted") ||
+                name.contains("✧ Enchanted") ||
+                name.contains("Compacted") ||
+                name.contains("Super Compacted") ||
+                name.contains("Gilded Netherite") ||
+                name.contains("Dragon Chestplate");
+    }
+
     // Slime boots death save tracking
     private static final Map<UUID, Long> slimeBootsCooldowns = new HashMap<>();
     private static final Map<UUID, Long> slimeBootsActiveUntil = new HashMap<>();
