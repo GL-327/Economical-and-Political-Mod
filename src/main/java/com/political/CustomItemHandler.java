@@ -312,6 +312,13 @@ public class CustomItemHandler {
                 customId.startsWith("super_compacted_") || customId.startsWith("enchanted_"))) {
             return true;
         }
+        // Check for custom armor items (helmet, chestplate, leggings, boots)
+        if (customId != null && (customId.endsWith("_helmet") || 
+                customId.endsWith("_chestplate") || 
+                customId.endsWith("_leggings") || 
+                customId.endsWith("_boots"))) {
+            return true;
+        }
         // Then check custom name for other protected items
         if (stack.get(DataComponentTypes.CUSTOM_NAME) == null) return false;
         String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
