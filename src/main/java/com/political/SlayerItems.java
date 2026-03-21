@@ -4875,14 +4875,18 @@ public class SlayerItems {
         lore.add(Text.literal(""));
         lore.add(Text.literal("§8Born from the depths of the Nether").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
         chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
-        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
-        chestplate.set(DataComponentTypes.DAMAGE, 0);
-        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x8B0000)); // Dark red
-        return chestplate;
-    }
 
-    public static ItemStack createDragonChestplate2() {
+    // Apply armor stats
+    AttributeModifiersComponent.Builder builder3 = AttributeModifiersComponent.builder();
+    builder3.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
+            Identifier.of("politicalserver", "void_dragon_armor"), 16.0,
+            EntityAttributeModifier.Operation.ADD_VALUE
+    ), AttributeModifierSlot.CHEST);
+    builder3.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
+            Identifier.of("politicalserver", "void_dragon_toughness"), 12.0,
+            EntityAttributeModifier.Operation.ADD_VALUE
+    ), AttributeModifierSlot.CHEST);
+    chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder3.build());
         ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
         chestplate.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("⚡ Storm Dragon Chestplate").formatted(Formatting.AQUA, Formatting.BOLD));
@@ -4908,6 +4912,19 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
         chestplate.set(DataComponentTypes.DAMAGE, 0);
         chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x00CED1)); // Dark cyan
+        
+        // Apply armor stats
+        AttributeModifiersComponent.Builder builder2 = AttributeModifiersComponent.builder();
+        builder2.add(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "storm_dragon_armor"), 14.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        builder2.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "storm_dragon_toughness"), 10.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder2.build());
+        
         return chestplate;
     }
 
@@ -4936,6 +4953,19 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
         chestplate.set(DataComponentTypes.DAMAGE, 0);
         chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x9400D3)); // Dark violet
+        
+        // Apply armor stats
+        AttributeModifiersComponent.Builder builder3 = AttributeModifiersComponent.builder();
+        builder3.add(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "void_dragon_armor"), 16.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        builder3.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "void_dragon_toughness"), 12.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder3.build());
+        
         return chestplate;
     }
 }
