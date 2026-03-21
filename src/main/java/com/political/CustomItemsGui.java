@@ -574,9 +574,9 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createVenomousDagger());
 
                 // DRAGON CHESTPLATES - Special Items (No Recipe)
-                items.add(SlayerItems.createDragonChestplate1());
-                items.add(SlayerItems.createDragonChestplate2());
-                items.add(SlayerItems.createDragonChestplate3());
+                items.add(DragonChestplates.createDragonChestplate1());
+                items.add(DragonChestplates.createDragonChestplate2());
+                items.add(DragonChestplates.createDragonChestplate3());
             }
             case CUSTOM_TOOLS -> {
                 // 15 NEW LEGENDARY TOOL SETS

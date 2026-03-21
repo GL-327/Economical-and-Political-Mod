@@ -10,7 +10,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.attribute.AttributeModifierSlot;
+import net.minecraft.entity.attribute.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,15 +21,9 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class SlayerItems {
-    // ============================================================
-    // CORE IDENTIFIERS
-    // ============================================================
-    
-    private static final String SLAYER_SWORD_TAG = "slayer_sword";
-    private static final String SLAYER_CORE_TAG = "slayer_core";
-    
+public class DragonChestplates {
     // ============================================================
     // CUSTOM ITEM ID SYSTEM
     // ============================================================
@@ -158,11 +152,11 @@ public class SlayerItems {
         builder.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "inferno_dragon_armor"), 12.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), AttributeModifierSlot.CHEST);
+        ), EquipmentSlot.CHEST);
         builder.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "inferno_dragon_toughness"), 8.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), AttributeModifierSlot.CHEST);
+        ), EquipmentSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
         
         setCustomItemId(chestplate, "inferno_dragon_chestplate");
@@ -201,11 +195,11 @@ public class SlayerItems {
         builder2.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "storm_dragon_armor"), 14.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), AttributeModifierSlot.CHEST);
+        ), EquipmentSlot.CHEST);
         builder2.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "storm_dragon_toughness"), 10.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), AttributeModifierSlot.CHEST);
+        ), EquipmentSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder2.build());
         
         setCustomItemId(chestplate, "storm_dragon_chestplate");
@@ -243,11 +237,11 @@ public class SlayerItems {
         builder3.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "void_dragon_armor"), 16.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), AttributeModifierSlot.CHEST);
+        ), EquipmentSlot.CHEST);
         builder3.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "void_dragon_toughness"), 12.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), AttributeModifierSlot.CHEST);
+        ), EquipmentSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder3.build());
         
         setCustomItemId(chestplate, "void_dragon_chestplate");
