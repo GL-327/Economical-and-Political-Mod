@@ -2775,7 +2775,7 @@ public class CommandRegistry {
         dispatcher.register(CommandManager.literal("settitle")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
                 .then(CommandManager.argument("player", EntityArgumentType.player())
-                        .then(CommandManager.argument("title", StringArgumentType.greedyString())
+                        .then(CommandManager.argument("title", StringArgumentType.string())
                                 .then(CommandManager.argument("color", StringArgumentType.string())
                                         .suggests((context, builder) -> {
                                             // Suggest Minecraft color codes
@@ -2804,7 +2804,7 @@ public class CommandRegistry {
                                             
                                             // Validate color code
                                             if (!color.matches("[0-9a-f]")) {
-                                                context.getSource().sendError(Text.literal("Invalid color code! Use 0-9 or a-f"));
+                                                context.getSource().sendError(Text.literal("Invalid color code! Use 0-9 or a-f. Available colors: 0=Black, 1=Dark Blue, 2=Dark Green, 3=Dark Aqua, 4=Dark Red, 5=Dark Purple, 6=Gold, 7=Gray, 8=Dark Gray, 9=Blue, a=Green, b=Aqua, c=Red, d=Light Purple, e=Yellow, f=White"));
                                                 return 0;
                                             }
                                             
@@ -2817,7 +2817,7 @@ public class CommandRegistry {
                                             context.getSource().sendFeedback(() -> 
                                                 Text.literal("Set title '" + title + "' with color §" + color + " for " + target.getName().getString())
                                                     .formatted(Formatting.GREEN), true);
-                                            target.sendMessage(Text.literal("You received the title: §" + color + title)
+                                            target.sendMessage(Text.literal("You received the title: §" + color + "[" + title + "]")
                                                     .formatted(Formatting.GREEN), false);
                                             return 1;
                                         })))));
