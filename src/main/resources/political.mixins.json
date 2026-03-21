@@ -40,8 +40,6 @@
         "SpawnHelperMixin",
         "TotemDisableMixin",
         "TradeOfferMixin",
-        "VillagerInteractionMixin",
-        "VillagerLightningMixin",
         "WardenDropMixin",
         "WardenEntityMixin"
     ],

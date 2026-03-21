@@ -244,6 +244,14 @@ public class BountyCraftingHandler {
                 return false; // Not enough of this ingredient
             }
         }
+
+        // Check that grid contains ONLY recipe ingredients (no unrelated extra items)
+        for (java.util.Map.Entry<String, Integer> gridEntry : gridCounts.entrySet()) {
+            if (!recipeCounts.containsKey(gridEntry.getKey())) {
+                return false; // Grid has an item not in the recipe
+            }
+        }
+
         return true;
     }
 
