@@ -224,7 +224,8 @@ public class BountyGui {
             boolean hasCoins = playerCoins >= config.coinCost;
             boolean canStart = hasLevel && hasCoins && !hasActiveQuest;
 
-            double actualHp = config.getActualHp(type);
+            double actualHp = config.getActualHp(type) * DataManager.getBossHpMultiplier(type);
+            double actualDmg = config.getActualDamage(type) * DataManager.getBossDamageMultiplier(type);
             int killsReq = SlayerManager.getKillsRequired(type, tier);
 
             List<Text> lore = new ArrayList<>();
@@ -233,6 +234,8 @@ public class BountyGui {
             lore.add(Text.literal(""));
             lore.add(Text.literal("Target Stats:").formatted(Formatting.RED));
             lore.add(Text.literal("  ❤ Health: " + formatNumber((long) actualHp))
+                    .formatted(Formatting.WHITE));
+            lore.add(Text.literal("  ⚔ Damage: " + formatNumber((long) actualDmg))
                     .formatted(Formatting.WHITE));
             lore.add(Text.literal("  ⚔ Danger: " + getDangerStars(type))
                     .formatted(Formatting.WHITE));
@@ -253,7 +256,8 @@ public class BountyGui {
 
             lore.add(Text.literal(""));
             lore.add(Text.literal("Reward:").formatted(Formatting.AQUA));
-            lore.add(Text.literal("  +" + config.xpReward + " Bounty XP")
+            int actualXp = (int) (config.xpReward * DataManager.getBossXpMultiplier(type));
+            lore.add(Text.literal("  +" + actualXp + " Bounty XP")
                     .formatted(Formatting.WHITE));
 
             lore.add(Text.literal(""));

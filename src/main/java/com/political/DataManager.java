@@ -410,6 +410,39 @@ public class DataManager {
     public static void setBossAbilitiesEnabled(SlayerManager.SlayerType type, boolean enabled) {
         data.bossAbilitiesEnabled.put(type.name(), enabled);
     }
+    public static float getBossXpMultiplier(SlayerManager.SlayerType type) {
+        return data.bossXpMultipliers.getOrDefault(type.name(), 1.0f);
+    }
+    public static void setBossXpMultiplier(SlayerManager.SlayerType type, float mult) {
+        data.bossXpMultipliers.put(type.name(), Math.max(0.1f, Math.min(10.0f, mult)));
+    }
+    public static int getBossAbilityCooldown(SlayerManager.SlayerType type) {
+        return data.bossAbilityCooldowns.getOrDefault(type.name(), 60);
+    }
+    public static void setBossAbilityCooldown(SlayerManager.SlayerType type, int seconds) {
+        data.bossAbilityCooldowns.put(type.name(), Math.max(5, Math.min(300, seconds)));
+    }
+    public static int getBossSpecificDefense(SlayerManager.SlayerType type) {
+        return data.bossSpecificDefense.getOrDefault(type.name(), 0);
+    }
+    public static void setBossSpecificDefense(SlayerManager.SlayerType type, int pct) {
+        data.bossSpecificDefense.put(type.name(), Math.max(0, Math.min(100, pct)));
+    }
+    public static int getBossUniversalDefense() {
+        return data.bossUniversalDefense;
+    }
+    public static void setBossUniversalDefense(int pct) {
+        data.bossUniversalDefense = Math.max(0, Math.min(100, pct));
+    }
+    public static void resetAllBossConfigs() {
+        data.bossHpMultipliers.clear();
+        data.bossDamageMultipliers.clear();
+        data.bossXpMultipliers.clear();
+        data.bossAbilityCooldowns.clear();
+        data.bossSpecificDefense.clear();
+        data.bossUniversalDefense = 0;
+        data.bossKillsRequiredMultiplier = 1.0f;
+    }
     public static int getItemLevelRequirement(String itemId, int defaultLevel) {
         return data.itemLevelRequirements.getOrDefault(itemId, defaultLevel);
     }
@@ -422,6 +455,10 @@ public class DataManager {
     public static void setT1SetBonusPct(int pct) { data.t1SetBonusPct = Math.max(0, Math.min(100, pct)); }
     public static int getT2SetBonusPct() { return data.t2SetBonusPct; }
     public static void setT2SetBonusPct(int pct) { data.t2SetBonusPct = Math.max(0, Math.min(100, pct)); }
+    public static double getT1SwordDamagePercent() { return data.t1SwordDamagePercent; }
+    public static void setT1SwordDamagePercent(double pct) { data.t1SwordDamagePercent = Math.max(0.0, Math.min(100.0, pct)); }
+    public static double getT2SwordDamagePercent() { return data.t2SwordDamagePercent; }
+    public static void setT2SwordDamagePercent(double pct) { data.t2SwordDamagePercent = Math.max(0.0, Math.min(100.0, pct)); }
     public static float getChunkDropMultiplier() { return data.chunkDropMultiplier; }
     public static void setChunkDropMultiplier(float mult) { data.chunkDropMultiplier = Math.max(0.0f, Math.min(10.0f, mult)); }
     public static float getCoreDropMultiplier() { return data.coreDropMultiplier; }
@@ -654,44 +691,50 @@ public class DataManager {
         public int spawnProtectionMinZ = 0;
         public int spawnProtectionMaxZ = 0;
 
-        // Government Treasury
-        public int governmentTreasury = 0;
+    // Government Treasury
+    public int governmentTreasury = 0;
 
-        // Game settings - Boss
-        public Map<String, Float> bossHpMultipliers = new HashMap<>();
-        public Map<String, Float> bossDamageMultipliers = new HashMap<>();
-        public float bossKillsRequiredMultiplier = 1.0f;
-        public Map<String, Boolean> bossAbilitiesEnabled = new HashMap<>();
+    // Game settings - Boss
+    public Map<String, Float> bossHpMultipliers = new HashMap<>();
+    public Map<String, Float> bossDamageMultipliers = new HashMap<>();
+    public float bossKillsRequiredMultiplier = 1.0f;
+    public Map<String, Boolean> bossAbilitiesEnabled = new HashMap<>();
+    public Map<String, Float> bossXpMultipliers = new HashMap<>();
+    public Map<String, Integer> bossAbilityCooldowns = new HashMap<>();
+    public Map<String, Integer> bossSpecificDefense = new HashMap<>();
+    public int bossUniversalDefense = 0;
 
-        // Game settings - Item level requirements
-        public Map<String, Integer> itemLevelRequirements = new HashMap<>();
+    // Game settings - Item level requirements
+    public Map<String, Integer> itemLevelRequirements = new HashMap<>();
 
-        // Game settings - Defence
-        public int defenceCapPct = 85;
-        public int t1SetBonusPct = 60;
-        public int t2SetBonusPct = 80;
-        public int t1SwordSpecificPct = 50;
-        public int t2SwordSpecificPct = 60;
-        public int t1SwordUniversalPct = 10;
-        public int t2SwordUniversalPct = 15;
+    // Game settings - Defence
+    public int defenceCapPct = 85;
+    public int t1SetBonusPct = 60;
+    public int t2SetBonusPct = 80;
+    public int t1SwordSpecificPct = 50;
+    public int t2SwordSpecificPct = 60;
+    public int t1SwordUniversalPct = 10;
+    public int t2SwordUniversalPct = 15;
+    public double t1SwordDamagePercent = 2.5;
+    public double t2SwordDamagePercent = 5.0;
 
-        // Game settings - Drops
-        public float chunkDropMultiplier = 1.0f;
-        public float coreDropMultiplier = 1.0f;
-        public float coinRewardMultiplier = 1.0f;
-        public float fleshDropMultiplier = 1.0f;
+    // Game settings - Drops
+    public float chunkDropMultiplier = 1.0f;
+    public float coreDropMultiplier = 1.0f;
+    public float coinRewardMultiplier = 1.0f;
+    public float fleshDropMultiplier = 1.0f;
 
-        // Game settings - Mobs
-        public float mobHealthScalingMultiplier = 1.0f;
+    // Game settings - Mobs
+    public float mobHealthScalingMultiplier = 1.0f;
 
-        // Game settings - Scoreboard
-        public boolean scoreboardShowAuction = true;
-        public boolean scoreboardShowBountyGear = true;
+    // Game settings - Scoreboard
+    public boolean scoreboardShowAuction = true;
+    public boolean scoreboardShowBountyGear = true;
 
-        // Player Buffs
-        public Map<String, Set<String>> playerBuffs = new HashMap<>();
-        public Map<String, Map<String, Long>> buffGrantTimes = new HashMap<>();
-        public Map<String, Set<String>> usedBuffEffects = new HashMap<>();
+    // Player Buffs
+    public Map<String, Set<String>> playerBuffs = new HashMap<>();
+    public Map<String, Map<String, Long>> buffGrantTimes = new HashMap<>();
+    public Map<String, Set<String>> usedBuffEffects = new HashMap<>();
 
         // Checkpoints
         public List<CheckpointManager.Checkpoint> checkpoints = new ArrayList<>();
