@@ -340,7 +340,8 @@ public class CustomItemHandler {
                 name.contains("✧ Enchanted") ||
                 name.contains("Compacted") ||
                 name.contains("Super Compacted") ||
-                name.contains("Gilded Netherite");
+                name.contains("Gilded Netherite") ||
+                name.contains("Dragon Chestplate");
     }
 
     public static boolean isSlayerCore(ItemStack stack) {
@@ -349,8 +350,6 @@ public class CustomItemHandler {
         if (name == null) return false;
         return name.getString().contains("Core");
     }
-// Add this method to CustomItemHandler.java:
-// Add this method to CustomItemHandler.java:
 
     // Slime boots death save tracking
     private static final Map<UUID, Long> slimeBootsCooldowns = new HashMap<>();

@@ -1062,32 +1062,15 @@ public class ArmorAbilityHandler {
             player.fallDistance = 0;
         }
 
+        // Update max health and heal if needed
         if (player.getMaxHealth() != targetHealth) {
             player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
-            if (targetHealth < prevMax && player.getHealth() < targetHealth) {
+            // Heal when health increases (e.g., stopping flight) or when health is below new max
+            if (player.getHealth() < targetHealth) {
                 player.setHealth(targetHealth);
             }
         }
         previousMaxHealth.put(uuid, targetHealth);
-
-        // Storm Aura particle trail
-        if (player.age % 2 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.8;
-            double y = player.getY() + Math.random() * 1.8;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.8;
-            world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 1, 0, 0, 0, 0.05);
-            if (world.isThundering() && player.age % 4 == 0) {
-                world.spawnParticles(ParticleTypes.ENCHANT, x, y, z, 1, 0, 0, 0, 0.1);
-            }
-        }
-
-        // Heal to max health when health increases
-        if (player.getMaxHealth() != targetHealth) {
-            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
-            if (targetHealth > prevMax && player.getHealth() < targetHealth) {
-                player.setHealth(targetHealth);
-            }
-        }
 
         player.sendAbilitiesUpdate();
     }
