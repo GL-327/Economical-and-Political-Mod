@@ -322,6 +322,21 @@ public class RecipeConfigManager {
         if ("skeleton_bow".equals(customId)) return SlayerItems.createSkeletonBow();
         if ("slime_boots".equals(customId)) return SlayerItems.createSlimeBoots();
         if ("warden_chestplate".equals(customId)) return SlayerItems.createWardenChestplate();
+        
+        // Block armor items - resolve via reflection to BlockArmor class
+        try {
+            java.lang.reflect.Method[] methods = BlockArmor.class.getDeclaredMethods();
+            for (java.lang.reflect.Method method : methods) {
+                if (method.getName().equals("create" + snakeToPascal(customId)) && 
+                    method.getParameterCount() == 0 && 
+                    method.getReturnType() == ItemStack.class) {
+                    return (ItemStack) method.invoke(null);
+                }
+            }
+        } catch (Exception e) {
+            // Fall through to registry lookup
+        }
+        
         // Backrooms/Fracture 3 items
         // Backrooms rune items — try direct registry lookup for any politicalserver: item
         try {
@@ -334,5 +349,19 @@ public class RecipeConfigManager {
             System.err.println("[RecipeConfigManager] Unexpected error resolving item '" + customId + "': " + e.getMessage());
         }
         return ItemStack.EMPTY;
+    }
+    
+    private static String snakeToPascal(String snake) {
+        StringBuilder result = new StringBuilder();
+        boolean capitalizeNext = true;
+        for (char c : snake.toCharArray()) {
+            if (c == '_') {
+                capitalizeNext = true;
+            } else {
+                result.append(capitalizeNext ? Character.toUpperCase(c) : c);
+                capitalizeNext = false;
+            }
+        }
+        return result.toString();
     }
 }
