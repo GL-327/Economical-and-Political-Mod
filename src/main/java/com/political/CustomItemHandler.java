@@ -298,59 +298,6 @@ public class CustomItemHandler {
         return SlayerItems.isAnyBountyItem(stack) || isSlayerCore(stack);
     }
 
-    /**
-     * Returns true for any custom item that should be protected from vanilla consumption
-     * (placement, crafting, smelting).
-     */
-    public static boolean isProtectedItem(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return false;
-        // Check NBT-based bounty identification first (works even without custom name)
-        if (SlayerItems.isAnyBountyItem(stack)) return true;
-        // Check custom item ID for compacted/super compacted/enchanted
-        String customId = SlayerItems.getCustomItemId(stack);
-        if (customId != null && (customId.startsWith("compacted_") || 
-                customId.startsWith("super_compacted_") || customId.startsWith("enchanted_"))) {
-            return true;
-        }
-        // Check for custom armor items (helmet, chestplate, leggings, boots)
-        if (customId != null && (customId.endsWith("_helmet") || 
-                customId.endsWith("_chestplate") || 
-                customId.endsWith("_leggings") || 
-                customId.endsWith("_boots"))) {
-            return true;
-        }
-        // Then check custom name for other protected items
-        if (stack.get(DataComponentTypes.CUSTOM_NAME) == null) return false;
-        String name = stack.get(DataComponentTypes.CUSTOM_NAME).getString();
-        return name.contains("Core") ||
-                name.contains("Chunk") ||
-                name.contains("Bounty") ||
-                name.contains("HPEBM") ||
-                name.contains("Overclocked") ||
-                name.contains("Hermes") ||
-                name.contains("Gavel") ||
-                name.contains("Harvey") ||
-                name.contains("Desperado") ||
-                name.contains("Venomous") ||
-                name.contains("Berserker") ||
-                name.contains("Crawler") ||
-                name.contains("Warden") ||
-                name.contains("Sculk Terror") ||
-                name.contains("Outlaw") ||
-                name.contains("Rustler") ||
-                name.contains("Phantom") ||
-                name.contains("Bandit") ||
-                name.contains("Plasma Emitter") ||
-                name.contains("Enchanted Gilded Blackstone") ||
-                name.contains("Enchanted Compacted") ||
-                name.contains("✦ Enchanted") ||
-                name.contains("✧ Enchanted") ||
-                name.contains("Compacted") ||
-                name.contains("Super Compacted") ||
-                name.contains("Gilded Netherite") ||
-                name.contains("Dragon Chestplate");
-    }
-
     public static boolean isSlayerCore(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         Text name = stack.get(DataComponentTypes.CUSTOM_NAME);
