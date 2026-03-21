@@ -188,6 +188,11 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createAbyssalBlade());
                 items.add(SlayerItems.createBouncySlime());
                 items.add(SlayerItems.createVenomousDagger());
+
+                // DRAGON CHESTPLATES
+                items.add(DragonChestplates.createDragonChestplate1());
+                items.add(DragonChestplates.createDragonChestplate2());
+                items.add(DragonChestplates.createDragonChestplate3());
             }
             case CUSTOM_TOOLS -> {
                 // 15 NEW LEGENDARY TOOL SETS
