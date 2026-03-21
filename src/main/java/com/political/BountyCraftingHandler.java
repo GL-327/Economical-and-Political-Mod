@@ -237,7 +237,14 @@ public class BountyCraftingHandler {
             recipeCounts.merge(key, ing.getCount(), Integer::sum);
         }
 
-        return gridCounts.equals(recipeCounts);
+        // Check if grid has at least the required amount of each ingredient
+        for (java.util.Map.Entry<String, Integer> req : recipeCounts.entrySet()) {
+            Integer gridCount = gridCounts.get(req.getKey());
+            if (gridCount == null || gridCount < req.getValue()) {
+                return false; // Not enough of this ingredient
+            }
+        }
+        return true;
     }
 
     /**
