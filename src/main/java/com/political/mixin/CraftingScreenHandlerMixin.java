@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles shift-click (quickMove) for custom recipes to prevent duplication.
@@ -51,23 +52,25 @@ public class CraftingScreenHandlerMixin {
             
             SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
             if (matchedRecipe != null) {
-                // This is a custom recipe - handle shift-click manually
-                // Copy the result to give to player
+                // This is a custom recipe - handle shift-click with max possible crafts
+                int maxCrafts = calculateMaxCrafts(handler, matchedRecipe);
+                if (maxCrafts <= 0) {
+                    cir.setReturnValue(ItemStack.EMPTY);
+                    return;
+                }
+                
                 ItemStack resultCopy = resultStack.copy();
+                resultCopy.setCount(Math.min(maxCrafts * resultStack.getCount(), resultCopy.getMaxCount()));
                 
                 // Try to add to player inventory
-                PlayerEntity playerInv = player;
-                boolean added = playerInv.getInventory().insertStack(resultCopy);
+                boolean added = player.getInventory().insertStack(resultCopy);
                 
                 if (added) {
-                    // Successfully added - now consume ingredients
+                    // Successfully added - consume ingredients for the actual crafted amount
+                    int craftedCount = resultCopy.getCount() / resultStack.getCount();
+                    consumeIngredientsForRecipe(handler, matchedRecipe, craftedCount);
                     slot.setStack(ItemStack.EMPTY);
-                    
-                    // Consume ingredients based on recipe requirements
-                    consumeIngredientsForRecipe(handler, matchedRecipe);
-                    
-                    // Return the original result count
-                    cir.setReturnValue(resultStack);
+                    cir.setReturnValue(resultCopy);
                     return;
                 }
                 
@@ -79,14 +82,44 @@ public class CraftingScreenHandlerMixin {
         }
     }
     
-    private void consumeIngredientsForRecipe(ScreenHandler handler, SlayerRecipes.Recipe recipe) {
-        if (recipe.ingredients == null) return;
+    private int calculateMaxCrafts(ScreenHandler handler, SlayerRecipes.Recipe recipe) {
+        if (recipe.ingredients == null) return 0;
+        
+        java.util.Map<String, Integer> available = new java.util.HashMap<>();
+        // Count available ingredients in crafting grid
+        for (int i = 1; i <= 9 && i < handler.slots.size(); i++) {
+            Slot craftSlot = handler.slots.get(i);
+            ItemStack slotStack = craftSlot.getStack();
+            if (slotStack.isEmpty()) continue;
+            String key = getIngredientKey(slotStack);
+            available.merge(key, slotStack.getCount(), Integer::sum);
+        }
         
         java.util.Map<String, Integer> required = new java.util.HashMap<>();
         for (ItemStack ing : recipe.ingredients) {
             if (ing == null || ing.isEmpty()) continue;
             String key = getIngredientKey(ing);
             required.merge(key, ing.getCount(), Integer::sum);
+        }
+        
+        int maxCrafts = Integer.MAX_VALUE;
+        for (Map.Entry<String, Integer> req : required.entrySet()) {
+            Integer avail = available.get(req.getKey());
+            if (avail == null) return 0;
+            maxCrafts = Math.min(maxCrafts, avail / req.getValue());
+        }
+        
+        return maxCrafts;
+    }
+    
+    private void consumeIngredientsForRecipe(ScreenHandler handler, SlayerRecipes.Recipe recipe, int craftCount) {
+        if (recipe.ingredients == null) return;
+        
+        java.util.Map<String, Integer> required = new java.util.HashMap<>();
+        for (ItemStack ing : recipe.ingredients) {
+            if (ing == null || ing.isEmpty()) continue;
+            String key = getIngredientKey(ing);
+            required.merge(key, ing.getCount() * craftCount, Integer::sum);
         }
         
         // Slots 1-9 are the crafting grid
