@@ -284,17 +284,29 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         // Chat formatting: Chair = bold+red, ViceChair = bold+blue, Judge = bold+yellow
         ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
             String senderUuid = sender.getUuidAsString();
-            String prefix = getRolePrefix(senderUuid);
-            if (!prefix.isEmpty()) {
-                // Send formatted message manually and block vanilla one
+            String rolePrefix = getRolePrefix(senderUuid);
+            String titlePrefix = getTitlePrefix(senderUuid);
+            
+            // Build the full name with title and role
+            StringBuilder nameBuilder = new StringBuilder();
+            if (!titlePrefix.isEmpty()) {
+                nameBuilder.append(titlePrefix).append(" ");
+            }
+            if (!rolePrefix.isEmpty()) {
+                nameBuilder.append(rolePrefix);
+            }
+            nameBuilder.append(sender.getName().getString()).append("§r");
+            
+            // If there's a title or role, send formatted message manually
+            if (!titlePrefix.isEmpty() || !rolePrefix.isEmpty()) {
                 Text formatted = Text.literal(
-                        prefix + sender.getName().getString() + "§r: " + message.getContent().getString());
+                        nameBuilder.toString() + ": " + message.getContent().getString());
                 for (ServerPlayerEntity online : server.getPlayerManager().getPlayerList()) {
                     online.sendMessage(formatted, false);
                 }
                 return false; // Block vanilla chat broadcast
             }
-            return true; // Allow normal broadcast for non-role players
+            return true; // Allow normal broadcast for players without title/role
         });
 
         ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
