@@ -34,7 +34,7 @@ public class DragonChestplates {
         var customData = stack.get(DataComponentTypes.CUSTOM_DATA);
         if (customData != null) {
             NbtCompound nbt = customData.copyNbt();
-            return nbt.getString("custom_item_id");
+            return nbt.getString("custom_item_id").orElse(null);
         }
         return null;
     }
