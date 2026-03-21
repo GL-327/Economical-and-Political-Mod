@@ -323,18 +323,126 @@ public class RecipeConfigManager {
         if ("slime_boots".equals(customId)) return SlayerItems.createSlimeBoots();
         if ("warden_chestplate".equals(customId)) return SlayerItems.createWardenChestplate();
         
-        // Block armor items - resolve via reflection to BlockArmor class
-        try {
-            java.lang.reflect.Method[] methods = BlockArmor.class.getDeclaredMethods();
-            for (java.lang.reflect.Method method : methods) {
-                if (method.getName().equals("create" + snakeToPascal(customId)) && 
-                    method.getParameterCount() == 0 && 
-                    method.getReturnType() == ItemStack.class) {
-                    return (ItemStack) method.invoke(null);
-                }
-            }
-        } catch (Exception e) {
-            // Fall through to registry lookup
+        // Block armor items - direct mapping
+        if (customId.startsWith("glass_")) {
+            if ("glass_helmet".equals(customId)) return BlockArmor.createGlassHelmet();
+            if ("glass_chestplate".equals(customId)) return BlockArmor.createGlassChestplate();
+            if ("glass_leggings".equals(customId)) return BlockArmor.createGlassLeggings();
+            if ("glass_boots".equals(customId)) return BlockArmor.createGlassBoots();
+        }
+        if (customId.startsWith("obsidian_")) {
+            if ("obsidian_helmet".equals(customId)) return BlockArmor.createObsidianHelmet();
+            if ("obsidian_chestplate".equals(customId)) return BlockArmor.createObsidianChestplate();
+            if ("obsidian_leggings".equals(customId)) return BlockArmor.createObsidianLeggings();
+            if ("obsidian_boots".equals(customId)) return BlockArmor.createObsidianBoots();
+        }
+        if (customId.startsWith("quartz_")) {
+            if ("quartz_helmet".equals(customId)) return BlockArmor.createQuartzHelmet();
+            if ("quartz_chestplate".equals(customId)) return BlockArmor.createQuartzChestplate();
+            if ("quartz_leggings".equals(customId)) return BlockArmor.createQuartzLeggings();
+            if ("quartz_boots".equals(customId)) return BlockArmor.createQuartzBoots();
+        }
+        if (customId.startsWith("glowstone_")) {
+            if ("glowstone_helmet".equals(customId)) return BlockArmor.createGlowstoneHelmet();
+            if ("glowstone_chestplate".equals(customId)) return BlockArmor.createGlowstoneChestplate();
+            if ("glowstone_leggings".equals(customId)) return BlockArmor.createGlowstoneLeggings();
+            if ("glowstone_boots".equals(customId)) return BlockArmor.createGlowstoneBoots();
+        }
+        if (customId.startsWith("redstone_")) {
+            if ("redstone_helmet".equals(customId)) return BlockArmor.createRedstoneHelmet();
+            if ("redstone_chestplate".equals(customId)) return BlockArmor.createRedstoneChestplate();
+            if ("redstone_leggings".equals(customId)) return BlockArmor.createRedstoneLeggings();
+            if ("redstone_boots".equals(customId)) return BlockArmor.createRedstoneBoots();
+        }
+        if (customId.startsWith("netherrack_")) {
+            if ("netherrack_helmet".equals(customId)) return BlockArmor.createNetherrackHelmet();
+            if ("netherrack_chestplate".equals(customId)) return BlockArmor.createNetherrackChestplate();
+            if ("netherrack_leggings".equals(customId)) return BlockArmor.createNetherrackLeggings();
+            if ("netherrack_boots".equals(customId)) return BlockArmor.createNetherrackBoots();
+        }
+        if (customId.startsWith("endstone_")) {
+            if ("endstone_helmet".equals(customId)) return BlockArmor.createEndstoneHelmet();
+            if ("endstone_chestplate".equals(customId)) return BlockArmor.createEndstoneChestplate();
+            if ("endstone_leggings".equals(customId)) return BlockArmor.createEndstoneLeggings();
+            if ("endstone_boots".equals(customId)) return BlockArmor.createEndstoneBoots();
+        }
+        if (customId.startsWith("ice_")) {
+            if ("ice_helmet".equals(customId)) return BlockArmor.createIceHelmet();
+            if ("ice_chestplate".equals(customId)) return BlockArmor.createIceChestplate();
+            if ("ice_leggings".equals(customId)) return BlockArmor.createIceLeggings();
+            if ("ice_boots".equals(customId)) return BlockArmor.createIceBoots();
+        }
+        if (customId.startsWith("prismarine_")) {
+            if ("prismarine_helmet".equals(customId)) return BlockArmor.createPrismarineHelmet();
+            if ("prismarine_chestplate".equals(customId)) return BlockArmor.createPrismarineChestplate();
+            if ("prismarine_leggings".equals(customId)) return BlockArmor.createPrismarineLeggings();
+            if ("prismarine_boots".equals(customId)) return BlockArmor.createPrismarineBoots();
+        }
+        if (customId.startsWith("terracotta_")) {
+            if ("terracotta_helmet".equals(customId)) return BlockArmor.createTerracottaHelmet();
+            if ("terracotta_chestplate".equals(customId)) return BlockArmor.createTerracottaChestplate();
+            if ("terracotta_leggings".equals(customId)) return BlockArmor.createTerracottaLeggings();
+            if ("terracotta_boots".equals(customId)) return BlockArmor.createTerracottaBoots();
+        }
+        if (customId.startsWith("mossy_")) {
+            if ("mossy_helmet".equals(customId)) return BlockArmor.createMossyHelmet();
+            if ("mossy_chestplate".equals(customId)) return BlockArmor.createMossyChestplate();
+            if ("mossy_leggings".equals(customId)) return BlockArmor.createMossyLeggings();
+            if ("mossy_boots".equals(customId)) return BlockArmor.createMossyBoots();
+        }
+        if (customId.startsWith("soul_sand_")) {
+            if ("soul_sand_helmet".equals(customId)) return BlockArmor.createSoulSandHelmet();
+            if ("soul_sand_chestplate".equals(customId)) return BlockArmor.createSoulSandChestplate();
+            if ("soul_sand_leggings".equals(customId)) return BlockArmor.createSoulSandLeggings();
+            if ("soul_sand_boots".equals(customId)) return BlockArmor.createSoulSandBoots();
+        }
+        if (customId.startsWith("sponge_")) {
+            if ("sponge_helmet".equals(customId)) return BlockArmor.createSpongeHelmet();
+            if ("sponge_chestplate".equals(customId)) return BlockArmor.createSpongeChestplate();
+            if ("sponge_leggings".equals(customId)) return BlockArmor.createSpongeLeggings();
+            if ("sponge_boots".equals(customId)) return BlockArmor.createSpongeBoots();
+        }
+        if (customId.startsWith("snow_")) {
+            if ("snow_helmet".equals(customId)) return BlockArmor.createSnowHelmet();
+            if ("snow_chestplate".equals(customId)) return BlockArmor.createSnowChestplate();
+            if ("snow_leggings".equals(customId)) return BlockArmor.createSnowLeggings();
+            if ("snow_boots".equals(customId)) return BlockArmor.createSnowBoots();
+        }
+        if (customId.startsWith("soul_soil_")) {
+            if ("soul_soil_helmet".equals(customId)) return BlockArmor.createSoulSoilHelmet();
+            if ("soul_soil_chestplate".equals(customId)) return BlockArmor.createSoulSoilChestplate();
+            if ("soul_soil_leggings".equals(customId)) return BlockArmor.createSoulSoilLeggings();
+            if ("soul_soil_boots".equals(customId)) return BlockArmor.createSoulSoilBoots();
+        }
+        if (customId.startsWith("sculk_")) {
+            if ("sculk_helmet".equals(customId)) return BlockArmor.createSculkHelmet();
+            if ("sculk_chestplate".equals(customId)) return BlockArmor.createSculkChestplate();
+            if ("sculk_leggings".equals(customId)) return BlockArmor.createSculkLeggings();
+            if ("sculk_boots".equals(customId)) return BlockArmor.createSculkBoots();
+        }
+        if (customId.startsWith("purpur_")) {
+            if ("purpur_helmet".equals(customId)) return BlockArmor.createPurpurHelmet();
+            if ("purpur_chestplate".equals(customId)) return BlockArmor.createPurpurChestplate();
+            if ("purpur_leggings".equals(customId)) return BlockArmor.createPurpurLeggings();
+            if ("purpur_boots".equals(customId)) return BlockArmor.createPurpurBoots();
+        }
+        if (customId.startsWith("smooth_stone_")) {
+            if ("smooth_stone_helmet".equals(customId)) return BlockArmor.createSmoothStoneHelmet();
+            if ("smooth_stone_chestplate".equals(customId)) return BlockArmor.createSmoothStoneChestplate();
+            if ("smooth_stone_leggings".equals(customId)) return BlockArmor.createSmoothStoneLeggings();
+            if ("smooth_stone_boots".equals(customId)) return BlockArmor.createSmoothStoneBoots();
+        }
+        if (customId.startsWith("crying_obsidian_")) {
+            if ("crying_obsidian_helmet".equals(customId)) return BlockArmor.createCryingObsidianHelmet();
+            if ("crying_obsidian_chestplate".equals(customId)) return BlockArmor.createCryingObsidianChestplate();
+            if ("crying_obsidian_leggings".equals(customId)) return BlockArmor.createCryingObsidianLeggings();
+            if ("crying_obsidian_boots".equals(customId)) return BlockArmor.createCryingObsidianBoots();
+        }
+        if (customId.startsWith("obsidian_block_")) {
+            if ("obsidian_block_helmet".equals(customId)) return BlockArmor.createObsidianBlockHelmet();
+            if ("obsidian_block_chestplate".equals(customId)) return BlockArmor.createObsidianBlockChestplate();
+            if ("obsidian_block_leggings".equals(customId)) return BlockArmor.createObsidianBlockLeggings();
+            if ("obsidian_block_boots".equals(customId)) return BlockArmor.createObsidianBlockBoots();
         }
         
         // Backrooms/Fracture 3 items
