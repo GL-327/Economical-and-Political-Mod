@@ -92,6 +92,7 @@ public class CraftingResultSlotMixin {
             if (required.isEmpty()) break;
         }
 
+        // Mark dirty to trigger result slot refresh so player can craft more without reopening table
         this.input.markDirty();
     }
     
