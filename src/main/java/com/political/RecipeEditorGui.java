@@ -324,6 +324,10 @@ public class RecipeEditorGui {
                 for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
                     items.add(SlayerItems.createAttributeCore(attr));
                 }
+                // Add Armor Crafter Cores
+                items.add(SlayerItems.createCustomCrafterCoreT1());
+                items.add(SlayerItems.createCustomCrafterCoreT2());
+                items.add(SlayerItems.createCustomCrafterCoreT3());
             }
             case COMPACTED -> {
                 items.add(SlayerItems.createCompactedIron());

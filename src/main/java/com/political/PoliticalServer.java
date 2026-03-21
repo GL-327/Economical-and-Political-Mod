@@ -256,6 +256,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             DataManager.save(s);
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
+            RecipeConfigManager.save();
             HealthScalingManager.clearAll();
             LOGGER.info("PoliticalServer data saved");
         });
@@ -345,6 +346,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     BlockArmorHandler.tick(player);
                     CustomItemHandler.tickSkeletonBow(player);
                     CustomItemHandler.tickUltraOverclockedLeftClick(player);
+                    CustomItemHandler.tickHPEBM(player);
                     SlayerArmorHandler.applyCustomArmorAttributes(player);
                     T2ArmorAbilityHandler.tick(player);
                     CustomItemHandler.tickCrownOfGreed(player);

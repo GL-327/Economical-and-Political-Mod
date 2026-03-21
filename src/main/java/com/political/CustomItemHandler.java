@@ -446,11 +446,11 @@ public class CustomItemHandler {
         lore.add(Text.literal("━━━ STATS ━━━").formatted(color));
         // Match actual fireBeam() damage values (mk1→tier2, mk2→tier3, etc.)
         float actualDamage = switch (mk) {
-            case 1 -> 3.0f;
-            case 2 -> 3.6f;
-            case 3 -> 4.2f;
-            case 4 -> 4.8f;
-            case 5 -> 5.4f;
+            case 1 -> 2.0f;
+            case 2 -> 3.5f;
+            case 3 -> 5.0f;
+            case 4 -> 6.5f;
+            case 5 -> 8.0f;
             default -> 1.0f;
         };
         lore.add(Text.literal("⚡ Damage/tick: ").formatted(Formatting.WHITE)
@@ -459,7 +459,7 @@ public class CustomItemHandler {
         lore.add(Text.literal("💡 XP Cost: ").formatted(Formatting.WHITE)
                 .append(Text.literal(xpCost + " level(s)/sec").formatted(Formatting.YELLOW)));
         lore.add(Text.literal("📡 Beam Range: ").formatted(Formatting.WHITE)
-                .append(Text.literal("30 blocks").formatted(Formatting.AQUA)));
+                .append(Text.literal((30 + mk * 2) + " blocks").formatted(Formatting.AQUA)));
 
         if (mk >= 3) {
             float explosionDmg = switch (mk) {
@@ -638,14 +638,14 @@ public class CustomItemHandler {
         int tier = getBeamTier(beamItem);
 
         float baseDamage = switch (tier) {
-            case 1 -> 1.0f;
-            case 2 -> 3.0f;
-            case 3 -> 3.6f;
-            case 4 -> 4.2f;
-            case 5 -> 4.8f;
-            case 6 -> 5.4f;
-            case 7 -> 6.0f;
-            default -> 1.0f;
+            case 1 -> 2.0f;
+            case 2 -> 3.5f;
+            case 3 -> 5.0f;
+            case 4 -> 6.5f;
+            case 5 -> 8.0f;
+            case 6 -> 9.5f;
+            case 7 -> 11.0f;
+            default -> 2.0f;
         };
 
         Vec3d eyePos = player.getEyePos();
@@ -654,13 +654,12 @@ public class CustomItemHandler {
         Vec3d start = eyePos.add(sideOffset).add(0, -0.7, 0);  // Was -0.4, now further down
         Vec3d direction = lookDir;
 
-        Vec3d endPoint = findBeamEndpoint(world, player, start, direction, 30.0);
+        Vec3d endPoint = findBeamEndpoint(world, player, start, direction, 30.0 + tier * 2.0);
         double beamLength = start.distanceTo(endPoint);
 
-
         Box searchBox = new Box(
-                start.x - 30, start.y - 30, start.z - 30,
-                start.x + 30, start.y + 30, start.z + 30);
+                start.x - (30 + tier * 2.0), start.y - (30 + tier * 2.0), start.z - (30 + tier * 2.0),
+                start.x + (30 + tier * 2.0), start.y + (30 + tier * 2.0), start.z + (30 + tier * 2.0));
 
         for (Entity entity : world.getOtherEntities(player, searchBox, e -> e instanceof LivingEntity && e != player)) {
             if (!(entity instanceof LivingEntity living)) continue;
@@ -673,7 +672,7 @@ public class CustomItemHandler {
             Vec3d projected = direction.multiply(toEntity.dotProduct(direction));
             double perpendicularDist = toEntity.subtract(projected).length();
 
-            if (perpendicularDist < 1.5 && toEntity.dotProduct(direction) > 0) {
+            if (perpendicularDist < (1.5 + tier * 0.1) && toEntity.dotProduct(direction) > 0) {
                 living.timeUntilRegen = 0;
                 living.damage(world, player.getDamageSources().magic(), baseDamage);
 

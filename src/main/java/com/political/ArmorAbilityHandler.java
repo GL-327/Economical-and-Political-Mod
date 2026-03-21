@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -963,9 +964,10 @@ public class ArmorAbilityHandler {
             ));
         }
 
-        // Explosion at 2.5 hearts (5 HP) - simplified
-        if (player.getHealth() <= 5f && !player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
-            player.setHealth(2f);
+        // Explosion at 2.5 hearts (5 HP)
+        if (player.getHealth() <= 5f) {
+            // Create explosion at player position
+            world.createExplosion(player, player.getX(), player.getY(), player.getZ(), 2.0f, World.ExplosionSourceType.NONE);
             // Visual feedback - fire effect
             player.setOnFire(true);
         }
@@ -990,6 +992,30 @@ public class ArmorAbilityHandler {
                 ));
             }
         }
+
+        // Fire Aura particle trail
+        if (player.age % 3 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.5;
+            double y = player.getY() + Math.random() * 1.5;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
+            world.spawnParticles(ParticleTypes.FLAME, x, y, z, 1, 0, 0, 0, 0.01);
+            world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0, 0, 0, 0.02);
+        }
+
+        // Heal to max health when health increases
+        UUID uuid = player.getUuid();
+        float prevMax = previousMaxHealth.getOrDefault(uuid, 20f);
+        float targetMax = 20f;
+        if (world.getRegistryKey() == World.NETHER) {
+            targetMax = 40f; // 2x health in Nether
+        }
+        if (player.getMaxHealth() != targetMax) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetMax);
+            if (targetMax > prevMax && player.getHealth() < targetMax) {
+                player.setHealth(targetMax);
+            }
+        }
+        previousMaxHealth.put(uuid, targetMax);
     }
 
     // Storm Dragon Chestplate - Thunder Aura + Speed
@@ -1043,6 +1069,25 @@ public class ArmorAbilityHandler {
         }
         previousMaxHealth.put(uuid, targetHealth);
 
+        // Storm Aura particle trail
+        if (player.age % 2 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.8;
+            double y = player.getY() + Math.random() * 1.8;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.8;
+            world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 1, 0, 0, 0, 0.05);
+            if (world.isThundering() && player.age % 4 == 0) {
+                world.spawnParticles(ParticleTypes.ENCHANT, x, y, z, 1, 0, 0, 0, 0.1);
+            }
+        }
+
+        // Heal to max health when health increases
+        if (player.getMaxHealth() != targetHealth) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
+            if (targetHealth > prevMax && player.getHealth() < targetHealth) {
+                player.setHealth(targetHealth);
+            }
+        }
+
         player.sendAbilitiesUpdate();
     }
 
@@ -1092,6 +1137,31 @@ public class ArmorAbilityHandler {
 
             player.sendAbilitiesUpdate();
         }
+
+        // Void Aura particle trail
+        if (player.age % 2 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.6;
+            double y = player.getY() + Math.random() * 1.6;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.6;
+            world.spawnParticles(ParticleTypes.PORTAL, x, y, z, 1, 0, 0, 0, 0.03);
+            if (player.age % 4 == 0) {
+                world.spawnParticles(ParticleTypes.REVERSE_PORTAL, x, y, z, 1, 0, 0, 0, 0.02);
+            }
+        }
+
+        // Heal to max health when health increases
+        float prevMax = previousMaxHealth.getOrDefault(uuid, 30f);
+        float targetMax = 30f;
+        if (world.getRegistryKey() == World.END) {
+            targetMax = 60f; // 2x health in The End
+        }
+        if (player.getMaxHealth() != targetMax) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetMax);
+            if (targetMax > prevMax && player.getHealth() < targetMax) {
+                player.setHealth(targetMax);
+            }
+        }
+        previousMaxHealth.put(uuid, targetMax);
     }
 
     // Void Dragon - Magic and arrow immunity
@@ -1122,10 +1192,6 @@ public class ArmorAbilityHandler {
             }
         }
     }
-
-    // ============================================================
-    // DRAGON CHESTPLATE HEALTH MANAGEMENT
-    // ============================================================
 
     private static void checkChestplateUnequip(ServerPlayerEntity player) {
         UUID uuid = player.getUuid();

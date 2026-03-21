@@ -4878,7 +4878,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
         chestplate.set(DataComponentTypes.DAMAGE, 0);
-        setCustomItemId(chestplate, "inferno_dragon_chestplate");
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x8B0000)); // Dark red
         return chestplate;
     }
 
@@ -4907,7 +4907,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
         chestplate.set(DataComponentTypes.DAMAGE, 0);
-        setCustomItemId(chestplate, "storm_dragon_chestplate");
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x00CED1)); // Dark cyan
         return chestplate;
     }
 
@@ -4935,7 +4935,7 @@ public class SlayerItems {
         chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
         chestplate.set(DataComponentTypes.DAMAGE, 0);
-        setCustomItemId(chestplate, "void_dragon_chestplate");
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x9400D3)); // Dark violet
         return chestplate;
     }
 }
