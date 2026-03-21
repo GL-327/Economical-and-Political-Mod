@@ -24,7 +24,7 @@ public abstract class TradeOfferMixin {
     @Unique
     private float political_gambitMultiplier = 1.0f;
 
-    @Inject(method = "<init>(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;IIFIF)V", at = @At("RETURN"))
+    @Inject(method = "<init>", at = @At("RETURN"), require = 0)
     private void political_modifyTrade(CallbackInfo ci) {
         // Triple max uses [4]
         this.maxUses = this.maxUses * 3;
@@ -41,7 +41,7 @@ public abstract class TradeOfferMixin {
         }
     }
 
-    @Inject(method = "getDisplayedFirstBuyItem", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getDisplayedFirstBuyItem", at = @At("RETURN"), cancellable = true, require = 0)
     private void political_modifyTradePrice(CallbackInfoReturnable<ItemStack> cir) {
         // Base economic multiplier [4]
         float multiplier = PerkManager.getTradeMultiplier();

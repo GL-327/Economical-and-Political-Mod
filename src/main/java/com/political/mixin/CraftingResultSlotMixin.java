@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.CraftingResultSlot;
-import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,27 +40,18 @@ public class CraftingResultSlotMixin {
         SlayerRecipes.Recipe matchedCustom = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedCustom != null) {
             consumeForCustomRecipe(matchedCustom);
-            ((Slot) (Object) this).setStack(ItemStack.EMPTY);
-            ((Slot) (Object) this).markDirty();
-            ci.cancel();
             return;
         }
 
         ItemStack beam = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beam != null) {
             decrementOneEachNonEmpty();
-            ((Slot) (Object) this).setStack(ItemStack.EMPTY);
-            ((Slot) (Object) this).markDirty();
-            ci.cancel();
             return;
         }
 
         ItemStack bounty = BountyCraftingHandler.checkBountyGridRecipe(grid, player);
         if (bounty != null) {
             decrementOneEachNonEmpty();
-            ((Slot) (Object) this).setStack(ItemStack.EMPTY);
-            ((Slot) (Object) this).markDirty();
-            ci.cancel();
         }
     }
 
