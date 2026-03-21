@@ -39,11 +39,6 @@ public class CraftingResultSlotMixin {
         // Check for custom recipe - if found, set result count to max crafts and handle consumption
         SlayerRecipes.Recipe matchedCustom = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedCustom != null) {
-            int maxCrafts = calculateMaxCraftsForGrid(matchedCustom);
-            if (maxCrafts > 0) {
-                // Set result stack count to max possible crafts (vanilla behavior)
-                stack.setCount(Math.min(maxCrafts, stack.getMaxCount()));
-            }
             consumeForCustomRecipe(matchedCustom);
             ci.cancel();
             return;
@@ -96,35 +91,6 @@ public class CraftingResultSlotMixin {
         this.input.markDirty();
     }
     
-    private int calculateMaxCraftsForGrid(SlayerRecipes.Recipe recipe) {
-        if (recipe.ingredients == null) return 0;
-        
-        Map<String, Integer> available = new HashMap<>();
-        // Count available ingredients in crafting grid
-        for (int i = 0; i < 9; i++) {
-            ItemStack slotStack = this.input.getStack(i);
-            if (slotStack.isEmpty()) continue;
-            String key = getIngredientKey(slotStack);
-            available.merge(key, slotStack.getCount(), Integer::sum);
-        }
-        
-        Map<String, Integer> required = new HashMap<>();
-        for (ItemStack ing : recipe.ingredients) {
-            if (ing == null || ing.isEmpty()) continue;
-            String key = getIngredientKey(ing);
-            required.merge(key, ing.getCount(), Integer::sum);
-        }
-        
-        int maxCrafts = Integer.MAX_VALUE;
-        for (Map.Entry<String, Integer> req : required.entrySet()) {
-            Integer avail = available.get(req.getKey());
-            if (avail == null) return 0;
-            maxCrafts = Math.min(maxCrafts, avail / req.getValue());
-        }
-        
-        return maxCrafts;
-    }
-
     private void decrementOneEachNonEmpty() {
         for (int i = 0; i < this.input.size(); i++) {
             ItemStack inSlot = this.input.getStack(i);

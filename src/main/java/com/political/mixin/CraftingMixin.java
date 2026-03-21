@@ -3,11 +3,9 @@ package com.political.mixin;
 import com.political.BeamCraftingHandler;
 import com.political.BountyCraftingHandler;
 import com.political.CustomItemHandler;
-import com.political.SlayerItems;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.CraftingScreenHandler;
@@ -19,9 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Mixin(CraftingScreenHandler.class)
 public class CraftingMixin {
@@ -50,13 +46,8 @@ public class CraftingMixin {
         // Check for custom recipes first - these need full control
         com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedRecipe != null) {
-            // Custom recipe found - calculate max crafts and set result count
-            ItemStack result = matchedRecipe.result.copy();
-            int maxCrafts = calculateMaxCraftsForGrid(grid, matchedRecipe);
-            if (maxCrafts > 0) {
-                result.setCount(Math.min(maxCrafts, result.getMaxCount()));
-            }
-            resultInventory.setStack(0, result);
+            // Custom recipe found - set result and CANCEL to prevent vanilla interference
+            resultInventory.setStack(0, matchedRecipe.result.copy());
             ci.cancel();
             return;
         }
@@ -84,37 +75,4 @@ public class CraftingMixin {
         }
     }
 
-    private static int calculateMaxCraftsForGrid(List<ItemStack> grid, com.political.SlayerRecipes.Recipe recipe) {
-        if (recipe.ingredients == null) return 0;
-
-        Map<String, Integer> available = new HashMap<>();
-        for (ItemStack slotStack : grid) {
-            if (slotStack.isEmpty()) continue;
-            String key = getIngredientKey(slotStack);
-            available.merge(key, slotStack.getCount(), Integer::sum);
-        }
-
-        Map<String, Integer> required = new HashMap<>();
-        for (ItemStack ing : recipe.ingredients) {
-            if (ing == null || ing.isEmpty()) continue;
-            String key = getIngredientKey(ing);
-            required.merge(key, ing.getCount(), Integer::sum);
-        }
-
-        int maxCrafts = Integer.MAX_VALUE;
-        for (Map.Entry<String, Integer> req : required.entrySet()) {
-            Integer avail = available.get(req.getKey());
-            if (avail == null) return 0;
-            maxCrafts = Math.min(maxCrafts, avail / req.getValue());
-        }
-
-        return maxCrafts;
-    }
-
-    private static String getIngredientKey(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return "";
-        String customId = SlayerItems.getCustomItemId(stack);
-        if (customId != null) return "political:" + customId;
-        return net.minecraft.registry.Registries.ITEM.getId(stack.getItem()).toString();
-    }
 }
