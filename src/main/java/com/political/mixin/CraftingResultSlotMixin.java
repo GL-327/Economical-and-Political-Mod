@@ -5,9 +5,11 @@ import com.political.BountyCraftingHandler;
 import com.political.SlayerItems;
 import com.political.SlayerRecipes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.CraftingResultSlot;
+import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,19 +42,68 @@ public class CraftingResultSlotMixin {
         SlayerRecipes.Recipe matchedCustom = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedCustom != null) {
             consumeForCustomRecipe(matchedCustom);
+            refreshResult(player);
+            ci.cancel();
             return;
         }
 
         ItemStack beam = BeamCraftingHandler.checkBeamRecipe(grid);
         if (beam != null) {
             decrementOneEachNonEmpty();
+            refreshResult(player);
+            ci.cancel();
             return;
         }
 
         ItemStack bounty = BountyCraftingHandler.checkBountyGridRecipe(grid, player);
         if (bounty != null) {
             decrementOneEachNonEmpty();
+            refreshResult(player);
+            ci.cancel();
         }
+    }
+
+    private void refreshResult(PlayerEntity player) {
+        CraftingResultInventory resultInventory;
+        try {
+            resultInventory = (CraftingResultInventory) ((Slot) (Object) this).inventory;
+        } catch (Exception e) {
+            return;
+        }
+
+        List<ItemStack> newGrid = new ArrayList<>();
+        for (int i = 0; i < this.input.size(); i++) {
+            newGrid.add(this.input.getStack(i));
+        }
+        if (newGrid.size() != 9) {
+            resultInventory.setStack(0, ItemStack.EMPTY);
+            resultInventory.markDirty();
+            return;
+        }
+
+        SlayerRecipes.Recipe matchedCustom = BountyCraftingHandler.getMatchedCustomRecipe(newGrid, player);
+        if (matchedCustom != null) {
+            resultInventory.setStack(0, matchedCustom.result.copy());
+            resultInventory.markDirty();
+            return;
+        }
+
+        ItemStack beam = BeamCraftingHandler.checkBeamRecipe(newGrid);
+        if (beam != null) {
+            resultInventory.setStack(0, beam);
+            resultInventory.markDirty();
+            return;
+        }
+
+        ItemStack bounty = BountyCraftingHandler.checkBountyGridRecipe(newGrid, player);
+        if (bounty != null) {
+            resultInventory.setStack(0, bounty);
+            resultInventory.markDirty();
+            return;
+        }
+
+        resultInventory.setStack(0, ItemStack.EMPTY);
+        resultInventory.markDirty();
     }
 
     private void consumeForCustomRecipe(SlayerRecipes.Recipe recipe) {
