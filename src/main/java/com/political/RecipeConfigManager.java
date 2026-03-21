@@ -500,6 +500,10 @@ public class RecipeConfigManager {
             if ("obsidian_block_boots".equals(customId)) return BlockArmor.createObsidianBlockBoots();
         }
         
+        if ("custom_crafter_core_t1".equals(customId)) return SlayerItems.createCustomCrafterCoreT1();
+        if ("custom_crafter_core_t2".equals(customId)) return SlayerItems.createCustomCrafterCoreT2();
+        if ("custom_crafter_core_t3".equals(customId)) return SlayerItems.createCustomCrafterCoreT3();
+        
         // Backrooms/Fracture 3 items
         // Backrooms rune items — try direct registry lookup for any politicalserver: item
         try {
