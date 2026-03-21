@@ -585,6 +585,28 @@ public class DataManager {
     }
 
     // ============================================================
+    // PLAYER TITLES
+    // ============================================================
+
+    public static void setPlayerTitle(String uuid, String title, String color) {
+        data.playerTitles.put(uuid, title);
+        data.playerTitleColors.put(uuid, color);
+    }
+
+    public static String getPlayerTitle(String uuid) {
+        return data.playerTitles.getOrDefault(uuid, null);
+    }
+
+    public static String getPlayerTitleColor(String uuid) {
+        return data.playerTitleColors.getOrDefault(uuid, "f"); // Default to white
+    }
+
+    public static void removePlayerTitle(String uuid) {
+        data.playerTitles.remove(uuid);
+        data.playerTitleColors.remove(uuid);
+    }
+
+    // ============================================================
     // DATA ACCESS
     // ============================================================
 
@@ -735,6 +757,10 @@ public class DataManager {
     public Map<String, Set<String>> playerBuffs = new HashMap<>();
     public Map<String, Map<String, Long>> buffGrantTimes = new HashMap<>();
     public Map<String, Set<String>> usedBuffEffects = new HashMap<>();
+
+    // Player Titles
+    public Map<String, String> playerTitles = new HashMap<>();
+    public Map<String, String> playerTitleColors = new HashMap<>();
 
         // Checkpoints
         public List<CheckpointManager.Checkpoint> checkpoints = new ArrayList<>();

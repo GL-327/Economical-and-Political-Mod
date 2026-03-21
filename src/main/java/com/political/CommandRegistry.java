@@ -472,6 +472,8 @@ public class CommandRegistry {
 
         registerShopPriceCommands(dispatcher);
         registerVanish(dispatcher);
+        registerSetTitle(dispatcher);
+        registerSummonChild(dispatcher);
     }
 
         // Helper method for stats display
@@ -2767,5 +2769,100 @@ public class CommandRegistry {
                             }
                             return 1;
                         })));
+    }
+
+    private static void registerSetTitle(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("settitle")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .then(CommandManager.argument("title", StringArgumentType.greedyString())
+                                .then(CommandManager.argument("color", StringArgumentType.string())
+                                        .suggests((context, builder) -> {
+                                            // Suggest Minecraft color codes
+                                            builder.suggest("0", Text.literal("Black"));
+                                            builder.suggest("1", Text.literal("Dark Blue"));
+                                            builder.suggest("2", Text.literal("Dark Green"));
+                                            builder.suggest("3", Text.literal("Dark Aqua"));
+                                            builder.suggest("4", Text.literal("Dark Red"));
+                                            builder.suggest("5", Text.literal("Dark Purple"));
+                                            builder.suggest("6", Text.literal("Gold"));
+                                            builder.suggest("7", Text.literal("Gray"));
+                                            builder.suggest("8", Text.literal("Dark Gray"));
+                                            builder.suggest("9", Text.literal("Blue"));
+                                            builder.suggest("a", Text.literal("Green"));
+                                            builder.suggest("b", Text.literal("Aqua"));
+                                            builder.suggest("c", Text.literal("Red"));
+                                            builder.suggest("d", Text.literal("Light Purple"));
+                                            builder.suggest("e", Text.literal("Yellow"));
+                                            builder.suggest("f", Text.literal("White"));
+                                            return builder.buildFuture();
+                                        })
+                                        .executes(context -> {
+                                            ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+                                            String title = StringArgumentType.getString(context, "title");
+                                            String color = StringArgumentType.getString(context, "color");
+                                            
+                                            // Validate color code
+                                            if (!color.matches("[0-9a-f]")) {
+                                                context.getSource().sendError(Text.literal("Invalid color code! Use 0-9 or a-f"));
+                                                return 0;
+                                            }
+                                            
+                                            // Store title in player data (using DataManager for persistence)
+                                            DataManager.setPlayerTitle(target.getUuidAsString(), title, color);
+                                            
+                                            // Apply title display
+                                            updatePlayerDisplayName(target);
+                                            
+                                            context.getSource().sendFeedback(() -> 
+                                                Text.literal("Set title '" + title + "' with color §" + color + " for " + target.getName().getString())
+                                                    .formatted(Formatting.GREEN), true);
+                                            target.sendMessage(Text.literal("You received the title: §" + color + title)
+                                                    .formatted(Formatting.GREEN), false);
+                                            return 1;
+                                        })))));
+    }
+
+    private static void registerSummonChild(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("summonchild")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    ServerWorld world = (ServerWorld) player.getEntityWorld();
+                    
+                    // Create baby villager
+                    net.minecraft.entity.passive.VillagerEntity villager = new net.minecraft.entity.passive.VillagerEntity(
+                        net.minecraft.entity.EntityType.VILLAGER, world);
+                    
+                    // Set as baby and prevent aging
+                    villager.setBaby(true);
+                    villager.setPersistent(); // Prevents despawning
+                    
+                    // Set custom name
+                    villager.setCustomName(Text.literal("victim"));
+                    villager.setCustomNameVisible(true);
+                    
+                    // Position at player location
+                    villager.setPosition(player.getX(), player.getY(), player.getZ());
+                    
+                    // Spawn the villager
+                    world.spawnEntity(villager);
+                    
+                    player.sendMessage(Text.literal("✅ Summoned baby villager 'victim'!")
+                        .formatted(Formatting.GREEN), false);
+                    
+                    return 1;
+                }));
+    }
+
+    // Helper method to update player display name with title
+    private static void updatePlayerDisplayName(ServerPlayerEntity player) {
+        String title = DataManager.getPlayerTitle(player.getUuidAsString());
+        if (title != null && !title.isEmpty()) {
+            String color = DataManager.getPlayerTitleColor(player.getUuidAsString());
+            String displayName = "§" + color + "[" + title + "]§r " + player.getName().getString();
+            player.setCustomName(Text.literal(displayName));
+            player.setCustomNameVisible(true);
+        }
     }
 }

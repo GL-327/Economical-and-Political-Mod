@@ -606,15 +606,39 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         return "";
     }
 
-    /** Updates the display name of a player to show their government role. */
+    /** Updates the display name of a player to show their government role and title. */
     public static void updatePlayerDisplayName(ServerPlayerEntity player) {
-        String prefix = getRolePrefix(player.getUuidAsString());
-        if (!prefix.isEmpty()) {
-            player.setCustomName(Text.literal(prefix + player.getName().getString()));
+        String rolePrefix = getRolePrefix(player.getUuidAsString());
+        String titlePrefix = getTitlePrefix(player.getUuidAsString());
+        
+        String displayName = player.getName().getString();
+        
+        // Add title if present
+        if (!titlePrefix.isEmpty()) {
+            displayName = titlePrefix + " " + displayName;
+        }
+        
+        // Add role prefix if present
+        if (!rolePrefix.isEmpty()) {
+            displayName = rolePrefix + " " + displayName;
+        }
+        
+        if (!rolePrefix.isEmpty() || !titlePrefix.isEmpty()) {
+            player.setCustomName(Text.literal(displayName));
             player.setCustomNameVisible(true);
         } else {
             player.setCustomName(null);
             player.setCustomNameVisible(false);
         }
+    }
+
+    /** Gets the title prefix for a player */
+    private static String getTitlePrefix(String uuid) {
+        String title = DataManager.getPlayerTitle(uuid);
+        if (title != null && !title.isEmpty()) {
+            String color = DataManager.getPlayerTitleColor(uuid);
+            return "§" + color + "[" + title + "]§r";
+        }
+        return "";
     }
 }
