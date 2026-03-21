@@ -9,7 +9,11 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -244,6 +248,22 @@ public class RecipeConfigManager {
 
     private static com.google.gson.JsonElement serializeStack(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return new com.google.gson.JsonPrimitive("");
+
+        if (PoliticalServer.server != null) {
+            try {
+                RegistryOps<net.minecraft.nbt.NbtElement> ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
+                var result = ItemStack.CODEC.encodeStart(ops, stack);
+                if (result.result().isPresent()) {
+                    JsonObject obj = new JsonObject();
+                    obj.addProperty("nbt", result.result().get().toString());
+                    obj.addProperty("count", stack.getCount());
+                    return obj;
+                }
+            } catch (Exception e) {
+                System.err.println("[RecipeConfigManager] Failed to serialize stack with CODEC: " + e.getMessage());
+            }
+        }
+
         JsonObject obj = new JsonObject();
         Identifier registryId = Registries.ITEM.getId(stack.getItem());
         obj.addProperty("id", registryId.toString());
@@ -265,6 +285,24 @@ public class RecipeConfigManager {
         }
         if (!elem.isJsonObject()) return ItemStack.EMPTY;
         JsonObject obj = elem.getAsJsonObject();
+
+        if (obj.has("nbt") && PoliticalServer.server != null) {
+            try {
+                String nbtString = obj.get("nbt").getAsString();
+                if (nbtString != null && !nbtString.isEmpty()) {
+                    NbtCompound parsed = StringNbtReader.readCompound(nbtString);
+                    RegistryOps<net.minecraft.nbt.NbtElement> ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
+                    var result = ItemStack.CODEC.parse(ops, parsed);
+                    ItemStack stack = result.result().orElse(ItemStack.EMPTY);
+                    int count = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
+                    if (!stack.isEmpty() && count > 1) stack.setCount(count);
+                    return stack;
+                }
+            } catch (Exception e) {
+                System.err.println("[RecipeConfigManager] Failed to deserialize stack with CODEC: " + e.getMessage());
+            }
+        }
+
         String id = obj.has("id") ? obj.get("id").getAsString() : "";
         int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
         String customId = obj.has("customId") ? obj.get("customId").getAsString() : "";
