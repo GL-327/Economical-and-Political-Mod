@@ -10,7 +10,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.attribute.EquipmentSlot;
+import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -152,11 +152,11 @@ public class DragonChestplates {
         builder.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "inferno_dragon_armor"), 12.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), EquipmentSlot.CHEST);
+        ), AttributeModifierSlot.CHEST);
         builder.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "inferno_dragon_toughness"), 8.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), EquipmentSlot.CHEST);
+        ), AttributeModifierSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
         
         setCustomItemId(chestplate, "inferno_dragon_chestplate");
@@ -195,11 +195,11 @@ public class DragonChestplates {
         builder2.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "storm_dragon_armor"), 14.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), EquipmentSlot.CHEST);
+        ), AttributeModifierSlot.CHEST);
         builder2.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "storm_dragon_toughness"), 10.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), EquipmentSlot.CHEST);
+        ), AttributeModifierSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder2.build());
         
         setCustomItemId(chestplate, "storm_dragon_chestplate");
@@ -237,11 +237,11 @@ public class DragonChestplates {
         builder3.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "void_dragon_armor"), 16.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), EquipmentSlot.CHEST);
+        ), AttributeModifierSlot.CHEST);
         builder3.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
                 Identifier.of("politicalserver", "void_dragon_toughness"), 12.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
-        ), EquipmentSlot.CHEST);
+        ), AttributeModifierSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder3.build());
         
         setCustomItemId(chestplate, "void_dragon_chestplate");
