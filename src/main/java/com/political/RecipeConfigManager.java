@@ -5,10 +5,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.io.*;
@@ -242,12 +244,16 @@ public class RecipeConfigManager {
 
     private static com.google.gson.JsonElement serializeStack(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return new com.google.gson.JsonPrimitive("");
-        String id = getItemId(stack);
-        int count = stack.getCount();
-        if (count <= 1) return new com.google.gson.JsonPrimitive(id);
         JsonObject obj = new JsonObject();
-        obj.addProperty("id", id);
-        obj.addProperty("count", count);
+        Identifier registryId = Registries.ITEM.getId(stack.getItem());
+        obj.addProperty("id", registryId.toString());
+        obj.addProperty("count", stack.getCount());
+
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId != null) obj.addProperty("customId", customId);
+
+        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
+        if (customName != null) obj.addProperty("customName", customName.getString());
         return obj;
     }
 
@@ -261,7 +267,24 @@ public class RecipeConfigManager {
         JsonObject obj = elem.getAsJsonObject();
         String id = obj.has("id") ? obj.get("id").getAsString() : "";
         int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
-        ItemStack stack = id == null || id.isEmpty() ? ItemStack.EMPTY : resolveItem(id);
+        String customId = obj.has("customId") ? obj.get("customId").getAsString() : "";
+        String customName = obj.has("customName") ? obj.get("customName").getAsString() : "";
+
+        ItemStack stack;
+
+        // Backward compatibility: older saves stored political:<customId> in the id field
+        if (id != null && id.startsWith("political:")) {
+            stack = resolveItem(id);
+        } else {
+            stack = (id == null || id.isEmpty()) ? ItemStack.EMPTY : resolveItem(id);
+            if (!stack.isEmpty() && customId != null && !customId.isEmpty()) {
+                SlayerItems.setCustomItemId(stack, customId);
+            }
+            if (!stack.isEmpty() && customName != null && !customName.isEmpty()) {
+                stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(customName));
+            }
+        }
+
         if (!stack.isEmpty() && count > 1) stack.setCount(count);
         return stack;
     }
@@ -273,16 +296,6 @@ public class RecipeConfigManager {
 
     private static ItemStack deserializeIngredient(com.google.gson.JsonElement elem) {
         return deserializeStack(elem);
-    }
-
-    private static String getItemId(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return "";
-        // Prefer custom item ID for custom items
-        String customId = SlayerItems.getCustomItemId(stack);
-        if (customId != null) return "political:" + customId;
-        // Fall back to registry ID
-        Identifier id = Registries.ITEM.getId(stack.getItem());
-        return id.toString();
     }
 
     private static ItemStack resolveItem(String id) {
