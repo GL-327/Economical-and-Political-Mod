@@ -16,6 +16,7 @@
         "CraftingResultMixin",
         "CraftingResultSlotMixin",
         "CraftingMixin",
+        "CraftingShiftClickBlockerMixin",
         "CropBlockMixin",
         "CustomEnchantDamageMixin",
         "EnchantmentScreenHandlerMixin",
