@@ -1,6 +1,7 @@
 package com.political;
 
 import net.minecraft.component.DataComponentTypes;
+import com.political.DragonChestplates;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -953,7 +954,7 @@ public class ArmorAbilityHandler {
     // Inferno Dragon Chestplate - Fire Aura
     public static void tickInfernoDragonChestplate(ServerPlayerEntity player) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "inferno_dragon_chestplate")) return;
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "inferno_dragon_chestplate")) return;
 
         ServerWorld world = (ServerWorld) player.getEntityWorld();
 
@@ -1021,7 +1022,7 @@ public class ArmorAbilityHandler {
     // Storm Dragon Chestplate - Thunder Aura + Speed
     public static void tickStormDragonChestplate(ServerPlayerEntity player) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
 
         ServerWorld world = (ServerWorld) player.getEntityWorld();
         UUID uuid = player.getUuid();
@@ -1094,7 +1095,7 @@ public class ArmorAbilityHandler {
     // Void Dragon Chestplate - Void Aura + Life Steal
     public static void tickVoidDragonChestplate(ServerPlayerEntity player) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return;
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "void_dragon_chestplate")) return;
 
         ServerWorld world = (ServerWorld) player.getEntityWorld();
         UUID uuid = player.getUuid();
@@ -1167,7 +1168,7 @@ public class ArmorAbilityHandler {
     // Void Dragon - Magic and arrow immunity
     public static float onVoidDragonDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "void_dragon_chestplate")) return amount;
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "void_dragon_chestplate")) return amount;
 
         // Check for magic/arrow damage types
         String damageType = source.getName();
@@ -1180,7 +1181,7 @@ public class ArmorAbilityHandler {
     // Storm Dragon - Lightning strike on hit
     public static void onStormDragonHit(ServerPlayerEntity player, LivingEntity target) {
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chestplate.isEmpty() || !SlayerItems.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "storm_dragon_chestplate")) return;
 
         // 1% chance to strike target with lightning
         if (Math.random() < 0.01) {
@@ -1196,7 +1197,7 @@ public class ArmorAbilityHandler {
     private static void checkChestplateUnequip(ServerPlayerEntity player) {
         UUID uuid = player.getUuid();
         ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
-        String currentId = SlayerItems.getCustomItemId(chestplate);
+        String currentId = DragonChestplates.getCustomItemId(chestplate);
 
         String previousId = previousChestplate.get(uuid);
 
