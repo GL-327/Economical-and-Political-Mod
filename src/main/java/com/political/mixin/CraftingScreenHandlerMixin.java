@@ -70,6 +70,8 @@ public class CraftingScreenHandlerMixin {
                     int craftedCount = resultCopy.getCount() / resultStack.getCount();
                     consumeIngredientsForRecipe(handler, matchedRecipe, craftedCount);
                     slot.setStack(ItemStack.EMPTY);
+                    // Sync state to ensure vanilla doesn't re-add items
+                    handler.syncState();
                     cir.setReturnValue(resultCopy);
                     return;
                 }
