@@ -2863,6 +2863,8 @@ public class CommandRegistry {
             String displayName = "§" + color + "[" + title + "]§r " + player.getName().getString();
             player.setCustomName(Text.literal(displayName));
             player.setCustomNameVisible(true);
+            // Also set display name for chat
+            player.setDisplayName(Text.literal(displayName));
         }
     }
 }
