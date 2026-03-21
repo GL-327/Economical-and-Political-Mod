@@ -90,7 +90,7 @@ public class DanielsPickaxe {
                 Text.literal(""),
                 Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD),
                 Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY),
-                Text.literal("  └ Haste V for extreme speed").formatted(Formatting.GRAY),
+                Text.literal("  └ Haste LX for extreme speed").formatted(Formatting.GRAY),
                 Text.literal("  └ Diamond Pickaxe").formatted(Formatting.GRAY),
                 Text.literal(""),
                 Text.literal("§7Toggle for TUNNEL MODE:").formatted(Formatting.GRAY),
@@ -134,7 +134,7 @@ public class DanielsPickaxe {
 
         long now = System.currentTimeMillis();
         long last = lastToggleTime.getOrDefault(uuid, 0L);
-        if (now - last < 2000) {
+        if (now - last < 5000) {
             player.sendMessage(Text.literal("⏳ Please wait before switching modes again").formatted(Formatting.RED), true);
             return;
         }
@@ -235,7 +235,7 @@ public class DanielsPickaxe {
         } else {
             lore.add(Text.literal("Mode: INSTANT BREAK").formatted(Formatting.AQUA, Formatting.BOLD));
             lore.add(Text.literal("  └ Breaks any block instantly").formatted(Formatting.GRAY));
-            lore.add(Text.literal("  └ Haste V for extreme speed").formatted(Formatting.GRAY));
+            lore.add(Text.literal("  └ Haste LX for extreme speed").formatted(Formatting.GRAY));
             lore.add(Text.literal("  └ Diamond Pickaxe").formatted(Formatting.GRAY));
         }
 
@@ -262,7 +262,7 @@ public class DanielsPickaxe {
             if (currentTime - lastTime >= 1000) {
                 if (isDanielsPickaxe(player.getMainHandStack())) {
                     player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.HASTE, 40, 4, true, false, false)); // Haste 5 (level 4)
+                        StatusEffects.HASTE, 40, 59, true, false, false)); // Haste 60 (level 59)
                     lastHasteTime.put(player.getUuid(), currentTime);
                 }
             }
