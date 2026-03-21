@@ -34,20 +34,7 @@ public class BountyCraftingHandler {
         if (!(player instanceof ServerPlayerEntity serverPlayer)) return null;
         if (grid.size() != 9) return null;
 
-        // Check hardcoded recipes first
-        for (SlayerRecipes.Recipe recipe : SlayerRecipes.getRecipes()) {
-            if (matchesCustomRecipeShapeless(grid, recipe)) {
-                int reqLevel = recipe.requiredLevel;
-                SlayerManager.SlayerType reqType = recipe.requiredSlayer;
-                if (reqType != null && reqLevel > 0) {
-                    int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), reqType);
-                    if (level < reqLevel) return null;
-                }
-                return recipe.result.copy();
-            }
-        }
-
-        // Then check custom recipes from RecipeConfigManager (/setrecipe)
+        // Only check custom recipes from RecipeConfigManager (/setrecipe)
         for (SlayerRecipes.Recipe customRecipe : RecipeConfigManager.getCustomRecipes()) {
             if (!RecipeConfigManager.isRecipeEnabled(customRecipe.name)) continue;
             if (matchesCustomRecipeShapeless(grid, customRecipe)) {
@@ -72,20 +59,7 @@ public class BountyCraftingHandler {
         if (!(player instanceof ServerPlayerEntity serverPlayer)) return null;
         if (grid == null || grid.size() != 9) return null;
 
-        // Check hardcoded recipes first
-        for (SlayerRecipes.Recipe recipe : SlayerRecipes.getRecipes()) {
-            if (!matchesCustomRecipeShapeless(grid, recipe)) continue;
-
-            int reqLevel = recipe.requiredLevel;
-            SlayerManager.SlayerType reqType = recipe.requiredSlayer;
-            if (reqType != null && reqLevel > 0) {
-                int level = SlayerData.getSlayerLevel(serverPlayer.getUuidAsString(), reqType);
-                if (level < reqLevel) continue;
-            }
-            return recipe;
-        }
-
-        // Then check custom recipes
+        // Only check custom recipes
         for (SlayerRecipes.Recipe customRecipe : RecipeConfigManager.getCustomRecipes()) {
             if (!RecipeConfigManager.isRecipeEnabled(customRecipe.name)) continue;
             if (!matchesCustomRecipeShapeless(grid, customRecipe)) continue;
