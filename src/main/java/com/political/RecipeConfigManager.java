@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -24,8 +25,9 @@ import java.util.List;
 public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_FILE = Path.of("config/political/custom_recipes.json");
-    private static final Path DISABLED_FILE = Path.of("config/political/disabled_recipes.json");
+    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
+    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
+    private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
     /** Custom recipes added via /setrecipe (in addition to hardcoded ones). */
     private static final List<SlayerRecipes.Recipe> CUSTOM_RECIPES = new ArrayList<>();
@@ -38,16 +40,18 @@ public class RecipeConfigManager {
     /** Load persisted custom recipes from disk. Call on server start. */
     public static void load() {
         CUSTOM_RECIPES.clear();
-        if (!Files.exists(CONFIG_FILE)) return;
-        try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
-            JsonArray arr = GSON.fromJson(reader, JsonArray.class);
-            if (arr == null) return;
-            for (var elem : arr) {
-                SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
-                if (recipe != null) CUSTOM_RECIPES.add(recipe);
+        if (Files.exists(CONFIG_FILE)) {
+            try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
+                JsonArray arr = GSON.fromJson(reader, JsonArray.class);
+                if (arr != null) {
+                    for (var elem : arr) {
+                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
+                        if (recipe != null) CUSTOM_RECIPES.add(recipe);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("[RecipeConfigManager] Failed to load custom recipes: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to load custom recipes: " + e.getMessage());
         }
         loadDisabled();
     }
@@ -55,7 +59,7 @@ public class RecipeConfigManager {
     /** Save current custom recipes to disk. */
     public static void save() {
         try {
-            Files.createDirectories(CONFIG_FILE.getParent());
+            Files.createDirectories(CONFIG_DIR);
             JsonArray arr = new JsonArray();
             for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
                 arr.add(serialize(r));
@@ -86,7 +90,7 @@ public class RecipeConfigManager {
     /** Persist the set of disabled recipe names to disk. */
     private static void saveDisabled() {
         try {
-            Files.createDirectories(DISABLED_FILE.getParent());
+            Files.createDirectories(CONFIG_DIR);
             JsonArray arr = new JsonArray();
             for (String name : DISABLED_RECIPES) arr.add(name);
             try (Writer writer = Files.newBufferedWriter(DISABLED_FILE)) {

@@ -32,6 +32,9 @@ bin/
 
 run/
 
+# runtime config
+config/
+
 # java
 
 hs_err_*.log

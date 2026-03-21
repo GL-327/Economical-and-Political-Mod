@@ -30,8 +30,18 @@ public class CraftingMixin {
                                                   CallbackInfo ci) {
 
         List<ItemStack> grid = new ArrayList<>();
+        boolean hasAnyItem = false;
         for (int i = 0; i < craftingInventory.size(); i++) {
-            grid.add(craftingInventory.getStack(i));
+            ItemStack stack = craftingInventory.getStack(i);
+            grid.add(stack);
+            if (!stack.isEmpty()) hasAnyItem = true;
+        }
+
+        // Block crafting if grid is completely empty
+        if (!hasAnyItem) {
+            resultInventory.setStack(0, ItemStack.EMPTY);
+            ci.cancel();
+            return;
         }
 
         // Check for custom recipes first - these need full control
