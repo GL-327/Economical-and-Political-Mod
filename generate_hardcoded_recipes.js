@@ -74,7 +74,7 @@ recipes.recipes.forEach((recipe, index) => {
                 }
             }
             
-            ingredients += `${ingItem}`;
+            ingredients += `new ItemStack(${ingItem})`;
         } else {
             ingredients += 'ItemStack.EMPTY';
         }
@@ -95,7 +95,7 @@ recipes.recipes.forEach((recipe, index) => {
     output += `        
         // Recipe ${index + 1}: ${name}
         {
-            ItemStack result = ${resultItem};
+            ItemStack result = new ItemStack(${resultItem});
             ${resultCustomId ? `SlayerItems.setCustomItemId(result, "${resultCustomId}");` : ''}
             ${recipe.result && recipe.result.nbt && recipe.result.nbt.includes('custom_name') ? generateSetNameCode(recipe.result.nbt) : ''}
             

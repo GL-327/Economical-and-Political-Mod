@@ -44,7 +44,7 @@ public class SlayerRecipes {
     public static final int BOW_DURABILITY = 3840;                // Default: 384
     // Level requirements are defined canonically in SlayerItems
 
-    private static final List<Recipe> RECIPES = new ArrayList<>();
+    static final List<Recipe> RECIPES = new ArrayList<>();
 
     public static void registerRecipes() {
         // Load hardcoded default recipes first
