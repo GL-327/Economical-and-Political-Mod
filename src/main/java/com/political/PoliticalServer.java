@@ -247,8 +247,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             AuctionHouseManager.load(s);
             UndergroundAuctionManager.load(s);
             ScoreboardManager.init(s);
-            SlayerRecipes.registerRecipes();
-            RecipeConfigManager.load();
+            RecipeConfigManager.load();  // Load custom recipes FIRST
+            SlayerRecipes.registerRecipes();  // Then register hardcoded + merge custom
             LOGGER.info("PoliticalServer data loaded");
         });
 
