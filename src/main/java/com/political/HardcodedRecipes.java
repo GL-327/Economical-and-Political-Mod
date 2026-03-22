@@ -13,6 +13,13 @@ import net.minecraft.util.Formatting;
  */
 public class HardcodedRecipes {
     
+    /** Helper to create custom items with custom_id */
+    private static ItemStack createCustomItem(String customId, net.minecraft.item.Item baseItem) {
+        ItemStack stack = new ItemStack(baseItem);
+        SlayerItems.setCustomItemId(stack, customId);
+        return stack;
+    }
+    
     public static void registerAllRecipes() {
         SlayerRecipes.RECIPES.clear();
         
@@ -32,7 +39,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "glass_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -50,7 +57,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "glass_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -68,7 +75,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "glass_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -86,7 +93,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "glass_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.GLASS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -104,7 +111,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "obsidian_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -122,7 +129,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "obsidian_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -140,7 +147,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "obsidian_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -158,7 +165,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "obsidian_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -176,7 +183,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "quartz_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -194,7 +201,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "quartz_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -212,7 +219,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "quartz_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -230,7 +237,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "quartz_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -248,7 +255,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "glowstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -266,7 +273,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "glowstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -284,7 +291,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "glowstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -302,7 +309,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "glowstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -320,7 +327,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "redstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -338,7 +345,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "redstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -356,7 +363,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "redstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -374,7 +381,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "redstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -392,7 +399,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "netherrack_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -410,7 +417,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "netherrack_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -428,7 +435,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "netherrack_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -446,7 +453,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "netherrack_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -464,7 +471,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "endstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -482,7 +489,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "endstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -500,7 +507,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "endstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -518,7 +525,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "endstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -536,7 +543,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "ice_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -554,7 +561,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ice_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -572,7 +579,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ice_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -590,7 +597,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "ice_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -608,7 +615,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "prismarine_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -626,7 +633,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "prismarine_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -644,7 +651,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "prismarine_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -662,7 +669,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "prismarine_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -680,7 +687,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "terracotta_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -698,7 +705,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "terracotta_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -716,7 +723,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "terracotta_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -734,7 +741,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "terracotta_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -752,7 +759,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mossy_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -770,7 +777,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mossy_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -788,7 +795,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mossy_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -806,7 +813,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mossy_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -824,7 +831,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "soul_sand_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -842,7 +849,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "soul_sand_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -860,7 +867,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "soul_sand_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -878,7 +885,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "soul_sand_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -896,7 +903,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "magma_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -914,7 +921,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "magma_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -932,7 +939,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "magma_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -950,7 +957,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "magma_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -968,7 +975,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "sandstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -986,7 +993,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "sandstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1004,7 +1011,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "sandstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1022,7 +1029,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "sandstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1040,7 +1047,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "amethyst_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1058,7 +1065,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "amethyst_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1076,7 +1083,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "amethyst_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1094,7 +1101,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "amethyst_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1112,7 +1119,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "coal_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1130,7 +1137,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "coal_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1148,7 +1155,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "coal_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1166,7 +1173,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "coal_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1184,7 +1191,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "diamond_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1202,7 +1209,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "diamond_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1220,7 +1227,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "diamond_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1238,7 +1245,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "diamond_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1256,7 +1263,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "emerald_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1274,7 +1281,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "emerald_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1292,7 +1299,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "emerald_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1310,7 +1317,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "emerald_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1328,7 +1335,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "gold_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1346,7 +1353,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "gold_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1364,7 +1371,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "gold_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1382,7 +1389,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "gold_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1400,7 +1407,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "iron_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1418,7 +1425,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "iron_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1436,7 +1443,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "iron_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1454,7 +1461,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "iron_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1472,7 +1479,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "lapis_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1490,7 +1497,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "lapis_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1508,7 +1515,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "lapis_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1526,7 +1533,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "lapis_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1544,7 +1551,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "copper_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1562,7 +1569,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "copper_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1580,7 +1587,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "copper_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1598,7 +1605,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "copper_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1616,7 +1623,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "ancient_debris_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1634,7 +1641,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ancient_debris_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1652,7 +1659,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ancient_debris_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1670,7 +1677,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "ancient_debris_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1688,7 +1695,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "basalt_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1706,7 +1713,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "basalt_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1724,7 +1731,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "basalt_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1742,7 +1749,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "basalt_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1760,7 +1767,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "blackstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1778,7 +1785,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "blackstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1796,7 +1803,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "blackstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1814,7 +1821,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "blackstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1832,7 +1839,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "bone_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1850,7 +1857,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "bone_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1868,7 +1875,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "bone_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1886,7 +1893,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "bone_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1904,7 +1911,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "brick_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1922,7 +1929,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "brick_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1940,7 +1947,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "brick_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1958,7 +1965,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "brick_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1976,7 +1983,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "cactus_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -1994,7 +2001,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "cactus_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2012,7 +2019,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "cactus_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2030,7 +2037,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "cactus_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2048,7 +2055,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "calcite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2066,7 +2073,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "calcite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2084,7 +2091,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "calcite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2102,7 +2109,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "calcite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2120,7 +2127,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "deepslate_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2138,7 +2145,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "deepslate_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2156,7 +2163,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "deepslate_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2174,7 +2181,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "deepslate_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2192,7 +2199,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "dripstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2210,7 +2217,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "dripstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2228,7 +2235,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "dripstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2246,7 +2253,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "dripstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2264,7 +2271,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "hay_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2282,7 +2289,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "hay_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2300,7 +2307,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "hay_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2318,7 +2325,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "hay_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2336,7 +2343,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "honeycomb_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2354,7 +2361,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "honeycomb_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2372,7 +2379,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "honeycomb_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2390,7 +2397,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "honeycomb_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2408,7 +2415,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "lily_pad_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2426,7 +2433,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "lily_pad_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2444,7 +2451,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "lily_pad_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2462,7 +2469,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "lily_pad_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2480,7 +2487,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "melon_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2498,7 +2505,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "melon_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2516,7 +2523,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "melon_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2534,7 +2541,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "melon_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2552,7 +2559,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "moss_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2570,7 +2577,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "moss_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2588,7 +2595,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "moss_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2606,7 +2613,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "moss_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2624,7 +2631,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mycelium_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2642,7 +2649,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mycelium_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2660,7 +2667,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mycelium_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2678,7 +2685,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mycelium_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2696,7 +2703,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "nether_brick_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2714,7 +2721,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "nether_brick_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2732,7 +2739,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "nether_brick_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2750,7 +2757,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "nether_brick_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2768,7 +2775,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "pumpkin_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2786,7 +2793,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "pumpkin_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2804,7 +2811,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "pumpkin_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2822,7 +2829,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "pumpkin_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2840,7 +2847,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "purpur_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2858,7 +2865,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "purpur_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2876,7 +2883,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "purpur_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2894,7 +2901,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "purpur_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2912,7 +2919,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "sand_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2930,7 +2937,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "sand_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2948,7 +2955,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "sand_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2966,7 +2973,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "sand_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND), new ItemStack(Items.SAND) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -2984,7 +2991,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "sculk_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3002,7 +3009,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "sculk_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3020,7 +3027,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "sculk_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3038,7 +3045,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "sculk_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3056,7 +3063,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "shroomlight_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3074,7 +3081,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "shroomlight_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3092,7 +3099,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "shroomlight_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3110,7 +3117,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "shroomlight_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3128,7 +3135,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "slime_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3146,7 +3153,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "slime_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3164,7 +3171,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "slime_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3182,7 +3189,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "slime_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3200,7 +3207,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "smooth_stone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3218,7 +3225,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "smooth_stone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3236,7 +3243,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "smooth_stone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3254,7 +3261,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "smooth_stone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3272,7 +3279,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "snow_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3290,7 +3297,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "snow_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3308,7 +3315,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "snow_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3326,7 +3333,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "snow_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3344,7 +3351,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "soul_soil_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3362,7 +3369,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "soul_soil_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3380,7 +3387,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "soul_soil_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3398,7 +3405,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "soul_soil_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3416,7 +3423,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "sponge_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3434,7 +3441,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "sponge_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3452,7 +3459,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "sponge_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3470,7 +3477,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "sponge_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3488,7 +3495,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "target_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3506,7 +3513,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "target_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3524,7 +3531,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "target_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3542,7 +3549,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "target_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3560,7 +3567,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "tnt_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3578,7 +3585,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "tnt_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3596,7 +3603,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "tnt_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3614,7 +3621,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "tnt_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3635,7 +3642,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "warped_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3653,7 +3660,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "warped_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3671,7 +3678,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "warped_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3689,7 +3696,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "warped_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3707,7 +3714,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "wet_sponge_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3725,7 +3732,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "wet_sponge_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3743,7 +3750,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "wet_sponge_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3761,7 +3768,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "wet_sponge_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3779,7 +3786,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "crimson_stem_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3797,7 +3804,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "crimson_stem_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3815,7 +3822,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "crimson_stem_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3833,7 +3840,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "crimson_stem_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3851,7 +3858,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "crying_obsidian_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3869,7 +3876,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "crying_obsidian_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3887,7 +3894,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "crying_obsidian_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3905,7 +3912,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "crying_obsidian_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3923,7 +3930,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "gilded_blackstone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3941,7 +3948,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "gilded_blackstone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3959,7 +3966,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "gilded_blackstone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3977,7 +3984,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "gilded_blackstone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -3995,7 +4002,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "granite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4013,7 +4020,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "granite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4031,7 +4038,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "granite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4049,7 +4056,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "granite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4067,7 +4074,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "diorite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4085,7 +4092,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "diorite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4103,7 +4110,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "diorite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4121,7 +4128,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "diorite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4139,7 +4146,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "andesite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4157,7 +4164,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "andesite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4175,7 +4182,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "andesite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4193,7 +4200,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "andesite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4211,7 +4218,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "polished_granite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4229,7 +4236,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "polished_granite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4247,7 +4254,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "polished_granite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4265,7 +4272,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "polished_granite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4283,7 +4290,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "polished_diorite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4301,7 +4308,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "polished_diorite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4319,7 +4326,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "polished_diorite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4337,7 +4344,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "polished_diorite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4355,7 +4362,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "polished_andesite_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4373,7 +4380,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "polished_andesite_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4391,7 +4398,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "polished_andesite_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4409,7 +4416,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "polished_andesite_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4427,7 +4434,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "packed_ice_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4445,7 +4452,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "packed_ice_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4463,7 +4470,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "packed_ice_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4481,7 +4488,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "packed_ice_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4499,7 +4506,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "blue_ice_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4517,7 +4524,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "blue_ice_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4535,7 +4542,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "blue_ice_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4553,7 +4560,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "blue_ice_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4571,7 +4578,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "nether_gold_ore_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4589,7 +4596,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "nether_gold_ore_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4607,7 +4614,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "nether_gold_ore_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4625,7 +4632,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "nether_gold_ore_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4643,7 +4650,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "dark_oak_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4661,7 +4668,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "dark_oak_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4679,7 +4686,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "dark_oak_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4697,7 +4704,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "dark_oak_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4715,7 +4722,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "jungle_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4733,7 +4740,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "jungle_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4751,7 +4758,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "jungle_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4769,7 +4776,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "jungle_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4787,7 +4794,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "acacia_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4805,7 +4812,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "acacia_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4823,7 +4830,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "acacia_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4841,7 +4848,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "acacia_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4859,7 +4866,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mangrove_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4877,7 +4884,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mangrove_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4895,7 +4902,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mangrove_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4913,7 +4920,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mangrove_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4931,7 +4938,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "cherry_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4949,7 +4956,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "cherry_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4967,7 +4974,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "cherry_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -4985,7 +4992,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "cherry_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5003,7 +5010,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "bamboo_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5021,7 +5028,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "bamboo_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5039,7 +5046,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "bamboo_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5057,7 +5064,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "bamboo_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5075,7 +5082,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "tuff_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5093,7 +5100,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "tuff_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5111,7 +5118,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "tuff_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5129,7 +5136,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "tuff_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), new ItemStack(Items.TUFF) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5147,7 +5154,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "polished_tuff_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5165,7 +5172,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "polished_tuff_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5183,7 +5190,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "polished_tuff_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5201,7 +5208,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "polished_tuff_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5219,7 +5226,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "nether_wart_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5237,7 +5244,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "nether_wart_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5255,7 +5262,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "nether_wart_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5273,7 +5280,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "nether_wart_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5291,7 +5298,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "warped_wart_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5309,7 +5316,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "warped_wart_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5327,7 +5334,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "warped_wart_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5345,7 +5352,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "warped_wart_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5363,7 +5370,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_spruce_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5381,7 +5388,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_spruce_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5399,7 +5406,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_spruce_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5417,7 +5424,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_spruce_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5435,7 +5442,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_birch_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5453,7 +5460,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_birch_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5471,7 +5478,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_birch_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5489,7 +5496,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_birch_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5507,7 +5514,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_dark_oak_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5525,7 +5532,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_dark_oak_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5543,7 +5550,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_dark_oak_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5561,7 +5568,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_dark_oak_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5579,7 +5586,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_jungle_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5597,7 +5604,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_jungle_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5615,7 +5622,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_jungle_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5633,7 +5640,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_jungle_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5651,7 +5658,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_acacia_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5669,7 +5676,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_acacia_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5687,7 +5694,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_acacia_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5705,7 +5712,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_acacia_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5723,7 +5730,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_mangrove_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5741,7 +5748,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_mangrove_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5759,7 +5766,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_mangrove_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5777,7 +5784,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_mangrove_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5795,7 +5802,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_cherry_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5813,7 +5820,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_cherry_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5831,7 +5838,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_cherry_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5849,7 +5856,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_cherry_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5867,7 +5874,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_bamboo_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5885,7 +5892,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_bamboo_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5903,7 +5910,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_bamboo_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5921,7 +5928,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_bamboo_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5939,7 +5946,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_crimson_stem_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5957,7 +5964,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_crimson_stem_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5975,7 +5982,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_crimson_stem_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -5993,7 +6000,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_crimson_stem_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6011,7 +6018,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stripped_warped_stem_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6029,7 +6036,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stripped_warped_stem_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6047,7 +6054,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stripped_warped_stem_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6065,7 +6072,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stripped_warped_stem_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6083,7 +6090,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "spruce_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6101,7 +6108,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "spruce_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6119,7 +6126,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "spruce_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6137,7 +6144,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "spruce_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6155,7 +6162,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "birch_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6173,7 +6180,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "birch_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6191,7 +6198,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "birch_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6209,7 +6216,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "birch_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6227,7 +6234,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "jungle_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6245,7 +6252,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "jungle_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6263,7 +6270,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "jungle_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6281,7 +6288,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "jungle_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6299,7 +6306,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "acacia_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6317,7 +6324,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "acacia_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6335,7 +6342,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "acacia_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6353,7 +6360,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "acacia_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6371,7 +6378,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "dark_oak_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6389,7 +6396,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "dark_oak_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6407,7 +6414,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "dark_oak_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6425,7 +6432,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "dark_oak_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6443,7 +6450,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mangrove_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6461,7 +6468,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mangrove_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6479,7 +6486,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mangrove_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6497,7 +6504,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mangrove_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6515,7 +6522,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "cherry_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6533,7 +6540,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "cherry_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6551,7 +6558,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "cherry_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6569,7 +6576,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "cherry_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6587,7 +6594,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "bamboo_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6605,7 +6612,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "bamboo_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6623,7 +6630,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "bamboo_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6641,7 +6648,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "bamboo_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6659,7 +6666,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "crimson_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6677,7 +6684,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "crimson_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6695,7 +6702,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "crimson_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6713,7 +6720,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "crimson_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6731,7 +6738,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "warped_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6749,7 +6756,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "warped_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6767,7 +6774,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "warped_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6785,7 +6792,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "warped_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6803,7 +6810,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "oak_planks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6821,7 +6828,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "oak_planks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6839,7 +6846,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "oak_planks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6857,7 +6864,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "oak_planks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6875,7 +6882,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "oak_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6893,7 +6900,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "oak_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6911,7 +6918,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "oak_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6929,7 +6936,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "oak_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6947,7 +6954,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "spruce_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6965,7 +6972,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "spruce_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -6983,7 +6990,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "spruce_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7001,7 +7008,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "spruce_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7019,7 +7026,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "birch_log_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7037,7 +7044,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "birch_log_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7055,7 +7062,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "birch_log_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7073,7 +7080,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "birch_log_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7091,7 +7098,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "stone_bricks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7109,7 +7116,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stone_bricks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7127,7 +7134,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stone_bricks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7145,7 +7152,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "stone_bricks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7163,7 +7170,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "cobblestone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7181,7 +7188,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "cobblestone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7199,7 +7206,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "cobblestone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7217,7 +7224,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "cobblestone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7238,7 +7245,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mossy_cobblestone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7256,7 +7263,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mossy_cobblestone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7274,7 +7281,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mossy_cobblestone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7292,7 +7299,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mossy_cobblestone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7310,7 +7317,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "cobbled_deepslate_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7328,7 +7335,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "cobbled_deepslate_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7346,7 +7353,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "cobbled_deepslate_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7364,7 +7371,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "cobbled_deepslate_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7382,7 +7389,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mud_bricks_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7400,7 +7407,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mud_bricks_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7418,7 +7425,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mud_bricks_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7436,7 +7443,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mud_bricks_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7454,7 +7461,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "mangrove_roots_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7472,7 +7479,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "mangrove_roots_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7490,7 +7497,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "mangrove_roots_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7508,7 +7515,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "mangrove_roots_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7526,7 +7533,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "muddy_mangrove_roots_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7544,7 +7551,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "muddy_mangrove_roots_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7562,7 +7569,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "muddy_mangrove_roots_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7580,7 +7587,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "muddy_mangrove_roots_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7598,7 +7605,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "netherite_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7616,7 +7623,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "netherite_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7634,7 +7641,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "netherite_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7652,7 +7659,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "netherite_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7670,7 +7677,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "chiseled_copper_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7688,7 +7695,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "chiseled_copper_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7706,7 +7713,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "chiseled_copper_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7724,7 +7731,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "chiseled_copper_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7742,7 +7749,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "cut_copper_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7760,7 +7767,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "cut_copper_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7778,7 +7785,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "cut_copper_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7796,7 +7803,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "cut_copper_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7814,7 +7821,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "exposed_copper_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7832,7 +7839,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "exposed_copper_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7850,7 +7857,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "exposed_copper_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7868,7 +7875,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "exposed_copper_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7886,7 +7893,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "weathered_copper_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7904,7 +7911,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "weathered_copper_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7922,7 +7929,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "weathered_copper_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7940,7 +7947,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "weathered_copper_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7958,7 +7965,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "oxidised_copper_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7976,7 +7983,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "oxidised_copper_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -7994,7 +8001,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "oxidised_copper_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8012,7 +8019,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "oxidised_copper_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8030,7 +8037,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "waxed_cut_copper_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8048,7 +8055,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "waxed_cut_copper_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8066,7 +8073,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "waxed_cut_copper_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8084,7 +8091,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "waxed_cut_copper_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8102,7 +8109,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "polished_basalt_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8120,7 +8127,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "polished_basalt_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8138,7 +8145,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "polished_basalt_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8156,7 +8163,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "polished_basalt_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8174,7 +8181,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "verdant_froglight_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8192,7 +8199,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "verdant_froglight_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8210,7 +8217,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "verdant_froglight_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8228,7 +8235,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "verdant_froglight_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8246,7 +8253,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "pearlescent_froglight_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8264,7 +8271,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "pearlescent_froglight_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8282,7 +8289,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "pearlescent_froglight_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8300,7 +8307,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "pearlescent_froglight_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8318,7 +8325,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "ochre_froglight_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8336,7 +8343,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ochre_froglight_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8354,7 +8361,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ochre_froglight_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8372,7 +8379,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "ochre_froglight_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8390,7 +8397,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "iron_nugget_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8408,7 +8415,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "iron_nugget_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8426,7 +8433,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "iron_nugget_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8444,7 +8451,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "iron_nugget_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8462,7 +8469,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "gold_nugget_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8480,7 +8487,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "gold_nugget_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8498,7 +8505,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "gold_nugget_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8516,7 +8523,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "gold_nugget_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8534,7 +8541,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "copper_ingot_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8552,7 +8559,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "copper_ingot_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8570,7 +8577,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "copper_ingot_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8588,7 +8595,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "copper_ingot_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8606,7 +8613,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "emerald_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8624,7 +8631,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "emerald_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8642,7 +8649,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "emerald_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8660,7 +8667,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "emerald_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8678,7 +8685,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "lapis_lazuli_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8696,7 +8703,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "lapis_lazuli_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8714,7 +8721,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "lapis_lazuli_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8732,7 +8739,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "lapis_lazuli_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8750,7 +8757,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "amethyst_shard_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8768,7 +8775,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "amethyst_shard_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8786,7 +8793,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "amethyst_shard_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8804,7 +8811,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "amethyst_shard_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8822,7 +8829,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "flint_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8840,7 +8847,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "flint_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8858,7 +8865,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "flint_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8876,7 +8883,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "flint_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8894,7 +8901,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "bone_meal_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8912,7 +8919,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "bone_meal_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8930,7 +8937,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "bone_meal_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8948,7 +8955,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "bone_meal_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8966,7 +8973,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "charcoal_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -8984,7 +8991,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "charcoal_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9002,7 +9009,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "charcoal_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9020,7 +9027,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "charcoal_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9038,7 +9045,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "end_stone_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9056,7 +9063,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "end_stone_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9074,7 +9081,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "end_stone_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9092,7 +9099,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "end_stone_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9110,7 +9117,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_HELMET);
             SlayerItems.setCustomItemId(result, "snow_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9128,7 +9135,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "snow_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9146,7 +9153,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_LEGGINGS);
             SlayerItems.setCustomItemId(result, "snow_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9164,7 +9171,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.LEATHER_BOOTS);
             SlayerItems.setCustomItemId(result, "snow_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9182,7 +9189,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "glass_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GLASS), new ItemStack(Items.GLASS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9200,7 +9207,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "obsidian_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9218,7 +9225,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "quartz_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9236,7 +9243,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "glowstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9254,7 +9261,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "redstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9272,7 +9279,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "netherrack_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.NETHERRACK), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9290,7 +9297,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "endstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9308,7 +9315,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "ice_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9326,7 +9333,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "prismarine_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9344,7 +9351,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "terracotta_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9362,7 +9369,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mossy_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9380,7 +9387,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "soulsand_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9398,7 +9405,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "magma_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9416,7 +9423,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "sandstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9434,7 +9441,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "amethyst_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AMETHYST_BLOCK), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9452,7 +9459,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "coal_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9470,7 +9477,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "diamond_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9488,7 +9495,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "emerald_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9506,7 +9513,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "gold_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9524,7 +9531,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "iron_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9542,7 +9549,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "lapis_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9560,7 +9567,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "copper_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9578,7 +9585,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "ancient_debris_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9596,7 +9603,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "basalt_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9614,7 +9621,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "blackstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9632,7 +9639,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "bone_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9650,7 +9657,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "brick_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9668,7 +9675,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "cactus_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CACTUS), new ItemStack(Items.CACTUS), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9686,7 +9693,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "calcite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CALCITE), new ItemStack(Items.CALCITE), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9704,7 +9711,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "deepslate_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DEEPSLATE), new ItemStack(Items.DEEPSLATE), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9722,7 +9729,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "dripstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9740,7 +9747,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "hay_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9758,7 +9765,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "honeycomb_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9776,7 +9783,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "lily_pad_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9794,7 +9801,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "melon_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9812,7 +9819,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "moss_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9830,7 +9837,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mycelium_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9848,7 +9855,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "nether_brick_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9866,7 +9873,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "pumpkin_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.PUMPKIN), new ItemStack(Items.PUMPKIN), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9884,7 +9891,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "purpur_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9902,7 +9909,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "sand_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SAND), new ItemStack(Items.SAND), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9920,7 +9927,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "sculk_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9938,7 +9945,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "shroomlight_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9956,7 +9963,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "slime_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9974,7 +9981,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "smooth_stone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -9992,7 +9999,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "snow_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10010,7 +10017,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "soul_soil_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10028,7 +10035,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "sponge_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10046,7 +10053,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "target_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10064,7 +10071,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "tnt_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10082,7 +10089,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "warped_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10100,7 +10107,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "wet_sponge_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10118,7 +10125,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "crimson_stem_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10136,7 +10143,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "crying_obsidian_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CRYING_OBSIDIAN), new ItemStack(Items.CRYING_OBSIDIAN), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10154,7 +10161,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "gilded_blackstone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10172,7 +10179,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "granite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10190,7 +10197,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "diorite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10208,7 +10215,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "andesite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10226,7 +10233,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "polished_granite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10244,7 +10251,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "polished_diorite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10262,7 +10269,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "polished_andesite_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10280,7 +10287,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "packed_ice_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10298,7 +10305,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "blue_ice_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10316,7 +10323,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "nether_gold_ore_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10334,7 +10341,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "dark_oak_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10352,7 +10359,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "jungle_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10370,7 +10377,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "acacia_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10388,7 +10395,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mangrove_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10406,7 +10413,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "cherry_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10424,7 +10431,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "bamboo_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10442,7 +10449,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "tuff_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.TUFF), new ItemStack(Items.TUFF), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10460,7 +10467,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "polished_tuff_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10478,7 +10485,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "nether_wart_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10496,7 +10503,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "warped_wart_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t3", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10514,7 +10521,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_spruce_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10532,7 +10539,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_birch_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10550,7 +10557,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_dark_oak_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10568,7 +10575,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_jungle_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10586,7 +10593,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_acacia_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10604,7 +10611,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_mangrove_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10622,7 +10629,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_cherry_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10640,7 +10647,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_bamboo_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10658,7 +10665,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_crimson_stem_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10676,7 +10683,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stripped_warped_stem_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10694,7 +10701,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "spruce_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10712,7 +10719,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "birch_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10730,7 +10737,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "jungle_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10748,7 +10755,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "acacia_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10766,7 +10773,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "dark_oak_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10784,7 +10791,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mangrove_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10802,7 +10809,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "cherry_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10820,7 +10827,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "bamboo_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10841,7 +10848,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "crimson_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10859,7 +10866,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "warped_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10877,7 +10884,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "oak_planks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10895,7 +10902,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "oak_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10913,7 +10920,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "spruce_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10931,7 +10938,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "birch_log_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10949,7 +10956,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stone_bricks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10967,7 +10974,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "cobblestone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COBBLESTONE), new ItemStack(Items.COBBLESTONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -10985,7 +10992,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mossy_cobblestone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11003,7 +11010,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "cobbled_deepslate_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11021,7 +11028,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mud_bricks_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11039,7 +11046,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "mangrove_roots_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11057,7 +11064,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "muddy_mangrove_roots_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11075,7 +11082,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "netherite_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11093,7 +11100,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "chiseled_copper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11111,7 +11118,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "cut_copper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11129,7 +11136,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "exposed_copper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11147,7 +11154,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "weathered_copper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11165,7 +11172,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "oxidised_copper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11183,7 +11190,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "waxed_cut_copper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11201,7 +11208,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "polished_basalt_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11219,7 +11226,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "verdant_froglight_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11237,7 +11244,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "pearlescent_froglight_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11255,7 +11262,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "ochre_froglight_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11273,7 +11280,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "iron_nugget_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11291,7 +11298,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "gold_nugget_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_NUGGET), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11309,7 +11316,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "copper_ingot_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COPPER_INGOT), new ItemStack(Items.COPPER_INGOT), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11327,7 +11334,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "emerald_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.EMERALD), new ItemStack(Items.EMERALD), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11345,7 +11352,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "lapis_lazuli_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.LAPIS_LAZULI), new ItemStack(Items.LAPIS_LAZULI), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11363,7 +11370,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "amethyst_shard_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11381,7 +11388,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "flint_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11399,7 +11406,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "bone_meal_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11417,7 +11424,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "charcoal_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11435,7 +11442,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "end_stone_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.END_STONE), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11453,7 +11460,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "snow_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t1", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11471,7 +11478,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "lapis_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11489,7 +11496,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "lapis_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11507,7 +11514,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "lapis_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11525,7 +11532,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "lapis_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("custom_crafter_core_t2", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11543,7 +11550,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "zombie_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11561,7 +11568,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "zombie_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11579,7 +11586,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "zombie_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11597,7 +11604,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "zombie_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11615,7 +11622,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "spider_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11633,7 +11640,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "spider_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11651,7 +11658,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "spider_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11669,7 +11676,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "spider_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11687,7 +11694,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "skeleton_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11705,7 +11712,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "skeleton_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11723,7 +11730,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "skeleton_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11741,7 +11748,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "skeleton_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11759,7 +11766,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "creeper_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11777,7 +11784,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "creeper_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11795,7 +11802,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "creeper_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11813,7 +11820,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "creeper_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11831,7 +11838,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "enderman_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11849,7 +11856,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "enderman_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11867,7 +11874,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "enderman_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11885,7 +11892,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "enderman_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11903,7 +11910,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "witch_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11921,7 +11928,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "witch_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11939,7 +11946,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "witch_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11957,7 +11964,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "witch_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11975,7 +11982,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "blaze_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -11993,7 +12000,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "blaze_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12011,7 +12018,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "blaze_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12029,7 +12036,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "blaze_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12047,7 +12054,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "ghast_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12065,7 +12072,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ghast_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12083,7 +12090,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ghast_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12101,7 +12108,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "ghast_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12119,7 +12126,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "wither_skeleton_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12137,7 +12144,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "wither_skeleton_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12155,7 +12162,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "wither_skeleton_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12173,7 +12180,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "wither_skeleton_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12191,7 +12198,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "piglin_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12209,7 +12216,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "piglin_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12227,7 +12234,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "piglin_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12245,7 +12252,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "piglin_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12263,7 +12270,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "hoglin_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12281,7 +12288,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "hoglin_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12299,7 +12306,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "hoglin_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12317,7 +12324,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "hoglin_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12335,7 +12342,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "zoglin_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12353,7 +12360,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "zoglin_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12371,7 +12378,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "zoglin_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12389,7 +12396,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "zoglin_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12407,7 +12414,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "pillager_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12425,7 +12432,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "pillager_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12443,7 +12450,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "pillager_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12461,7 +12468,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "pillager_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12479,7 +12486,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "vindicator_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12497,7 +12504,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "vindicator_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12515,7 +12522,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "vindicator_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12533,7 +12540,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "vindicator_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12551,7 +12558,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "evoker_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12569,7 +12576,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "evoker_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12587,7 +12594,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "evoker_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12605,7 +12612,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "evoker_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12623,7 +12630,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "ravager_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12641,7 +12648,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ravager_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12659,7 +12666,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ravager_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12677,7 +12684,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "ravager_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12695,7 +12702,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "vex_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12713,7 +12720,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "vex_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12731,7 +12738,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "vex_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12749,7 +12756,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "vex_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12767,7 +12774,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "phantom_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12785,7 +12792,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "phantom_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12803,7 +12810,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "phantom_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12821,7 +12828,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "phantom_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12839,7 +12846,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "drowned_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12857,7 +12864,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "drowned_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12875,7 +12882,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "drowned_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12893,7 +12900,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "drowned_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12911,7 +12918,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "husk_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12929,7 +12936,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "husk_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12947,7 +12954,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "husk_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12965,7 +12972,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "husk_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -12983,7 +12990,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "stray_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13001,7 +13008,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stray_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13019,7 +13026,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stray_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13037,7 +13044,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "stray_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13055,7 +13062,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "bogged_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13073,7 +13080,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "bogged_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13091,7 +13098,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "bogged_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13109,7 +13116,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "bogged_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13127,7 +13134,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "breeze_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13145,7 +13152,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "breeze_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13163,7 +13170,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "breeze_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13181,7 +13188,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "breeze_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13199,7 +13206,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "warden_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13217,7 +13224,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "warden_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13235,7 +13242,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "warden_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13253,7 +13260,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "warden_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13271,7 +13278,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "elder_guardian_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13289,7 +13296,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "elder_guardian_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13307,7 +13314,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "elder_guardian_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13325,7 +13332,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "elder_guardian_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13343,7 +13350,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "ender_dragon_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13361,7 +13368,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ender_dragon_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13379,7 +13386,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ender_dragon_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13397,7 +13404,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "ender_dragon_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13415,7 +13422,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "wither_helmet_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13433,7 +13440,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "wither_chestplate_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13451,7 +13458,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "wither_leggings_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13469,7 +13476,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "wither_boots_t1");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13487,7 +13494,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "zombie_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13505,7 +13512,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "zombie_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13523,7 +13530,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "zombie_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13541,7 +13548,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "zombie_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13559,7 +13566,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "spider_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13577,7 +13584,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "spider_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13595,7 +13602,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "spider_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13613,7 +13620,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "spider_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13631,7 +13638,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "skeleton_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13649,7 +13656,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "skeleton_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13667,7 +13674,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "skeleton_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13685,7 +13692,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "skeleton_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13703,7 +13710,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "creeper_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13721,7 +13728,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "creeper_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13739,7 +13746,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "creeper_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13757,7 +13764,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "creeper_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13775,7 +13782,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "enderman_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13793,7 +13800,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "enderman_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13811,7 +13818,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "enderman_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13829,7 +13836,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "enderman_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13847,7 +13854,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "witch_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13865,7 +13872,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "witch_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13883,7 +13890,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "witch_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13901,7 +13908,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "witch_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13919,7 +13926,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "blaze_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13937,7 +13944,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "blaze_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13955,7 +13962,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "blaze_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13973,7 +13980,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "blaze_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -13991,7 +13998,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "ghast_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14009,7 +14016,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ghast_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14027,7 +14034,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ghast_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14045,7 +14052,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "ghast_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14063,7 +14070,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "wither_skeleton_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14081,7 +14088,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "wither_skeleton_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14099,7 +14106,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "wither_skeleton_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14117,7 +14124,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "wither_skeleton_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14135,7 +14142,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "piglin_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14153,7 +14160,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "piglin_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14171,7 +14178,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "piglin_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14189,7 +14196,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "piglin_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14207,7 +14214,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "hoglin_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14225,7 +14232,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "hoglin_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14243,7 +14250,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "hoglin_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14261,7 +14268,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "hoglin_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14279,7 +14286,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "zoglin_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14297,7 +14304,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "zoglin_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14315,7 +14322,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "zoglin_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14333,7 +14340,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "zoglin_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14351,7 +14358,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "pillager_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14369,7 +14376,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "pillager_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14387,7 +14394,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "pillager_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14405,7 +14412,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "pillager_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14423,7 +14430,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "vindicator_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14444,7 +14451,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "vindicator_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14462,7 +14469,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "vindicator_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14480,7 +14487,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "vindicator_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14498,7 +14505,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "evoker_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14516,7 +14523,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "evoker_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14534,7 +14541,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "evoker_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14552,7 +14559,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "evoker_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14570,7 +14577,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "ravager_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14588,7 +14595,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ravager_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14606,7 +14613,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ravager_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14624,7 +14631,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "ravager_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14642,7 +14649,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "vex_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14660,7 +14667,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "vex_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14678,7 +14685,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "vex_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14696,7 +14703,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "vex_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14714,7 +14721,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "phantom_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14732,7 +14739,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "phantom_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14750,7 +14757,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "phantom_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14768,7 +14775,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "phantom_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14786,7 +14793,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "drowned_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14804,7 +14811,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "drowned_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14822,7 +14829,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "drowned_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14840,7 +14847,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "drowned_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14858,7 +14865,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "husk_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14876,7 +14883,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "husk_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14894,7 +14901,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "husk_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14912,7 +14919,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "husk_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14930,7 +14937,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "stray_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14948,7 +14955,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "stray_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14966,7 +14973,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "stray_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -14984,7 +14991,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "stray_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15002,7 +15009,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "bogged_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15020,7 +15027,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "bogged_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15038,7 +15045,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "bogged_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15056,7 +15063,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "bogged_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15074,7 +15081,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "breeze_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15092,7 +15099,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "breeze_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15110,7 +15117,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "breeze_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15128,7 +15135,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "breeze_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15146,7 +15153,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "warden_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15164,7 +15171,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "warden_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15182,7 +15189,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "warden_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15200,7 +15207,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "warden_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15218,7 +15225,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "elder_guardian_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15236,7 +15243,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "elder_guardian_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15254,7 +15261,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "elder_guardian_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15272,7 +15279,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "elder_guardian_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15290,7 +15297,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "ender_dragon_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15308,7 +15315,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "ender_dragon_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15326,7 +15333,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "ender_dragon_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15344,7 +15351,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "ender_dragon_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15362,7 +15369,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_HELMET);
             SlayerItems.setCustomItemId(result, "wither_helmet_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15380,7 +15387,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "wither_chestplate_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15398,7 +15405,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_LEGGINGS);
             SlayerItems.setCustomItemId(result, "wither_leggings_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15416,7 +15423,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_BOOTS);
             SlayerItems.setCustomItemId(result, "wither_boots_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR) };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, true, true, true, true };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15434,7 +15441,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "zombie_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15452,7 +15459,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "spider_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15470,7 +15477,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "skeleton_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15488,7 +15495,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "creeper_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15506,7 +15513,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "enderman_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15524,7 +15531,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "witch_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15542,7 +15549,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "blaze_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15560,7 +15567,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "ghast_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15578,7 +15585,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "wither_skeleton_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15596,7 +15603,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "piglin_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15614,7 +15621,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "hoglin_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15632,7 +15639,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "zoglin_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15650,7 +15657,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "pillager_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15668,7 +15675,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "vindicator_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15686,7 +15693,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "evoker_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15704,7 +15711,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "ravager_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15722,7 +15729,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "vex_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15740,7 +15747,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "phantom_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15758,7 +15765,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "drowned_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15776,7 +15783,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "husk_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15794,7 +15801,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "stray_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15812,7 +15819,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "bogged_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15830,7 +15837,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "breeze_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15848,7 +15855,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "warden_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15866,7 +15873,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "elder_guardian_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15884,7 +15891,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "ender_dragon_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15902,7 +15909,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "wither_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15920,7 +15927,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "zombie_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zombie_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15938,7 +15945,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "spider_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("spider_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15956,7 +15963,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "skeleton_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15974,7 +15981,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "creeper_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("creeper_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -15992,7 +15999,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "enderman_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("enderman_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16010,7 +16017,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "witch_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("witch_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16028,7 +16035,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "blaze_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("blaze_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16046,7 +16053,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "ghast_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ghast_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16064,7 +16071,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "wither_skeleton_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_skeleton_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16082,7 +16089,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "piglin_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("piglin_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16100,7 +16107,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "hoglin_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("hoglin_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16118,7 +16125,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "zoglin_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("zoglin_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16136,7 +16143,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "pillager_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("pillager_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16154,7 +16161,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "vindicator_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vindicator_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16172,7 +16179,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "evoker_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("evoker_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16190,7 +16197,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "ravager_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ravager_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16208,7 +16215,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "vex_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("vex_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16226,7 +16233,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "phantom_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("phantom_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16244,7 +16251,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "drowned_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("drowned_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16262,7 +16269,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "husk_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("husk_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16280,7 +16287,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "stray_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("stray_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16298,7 +16305,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "bogged_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("bogged_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16316,7 +16323,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "breeze_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("breeze_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16334,7 +16341,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "warden_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("warden_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16352,7 +16359,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "elder_guardian_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("elder_guardian_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16370,7 +16377,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "ender_dragon_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("ender_dragon_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16388,7 +16395,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.DIAMOND_SWORD);
             SlayerItems.setCustomItemId(result, "wither_sword_t2");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), createCustomItem("wither_core", Items.HEAVY_CORE), new ItemStack(Items.STICK), new ItemStack(Items.STICK), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { true, true, true, true, true, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16406,7 +16413,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_AXE);
             SlayerItems.setCustomItemId(result, "amethyst_axe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16514,7 +16521,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HOE);
             SlayerItems.setCustomItemId(result, "amethyst_hoe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16532,7 +16539,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_PICKAXE);
             SlayerItems.setCustomItemId(result, "amethyst_pickaxe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -16550,7 +16557,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SHOVEL);
             SlayerItems.setCustomItemId(result, "amethyst_shovel");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17591,10 +17598,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.AMETHYST_BLOCK);
             SlayerItems.setCustomItemId(result, "enchanted_amethyst_block");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AMETHYST_BLOCK), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17681,10 +17688,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.CALCITE);
             SlayerItems.setCustomItemId(result, "enchanted_calcite");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CALCITE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17699,10 +17706,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.CARROT);
             SlayerItems.setCustomItemId(result, "enchanted_carrot");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.CARROT), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17771,10 +17778,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.COBBLESTONE);
             SlayerItems.setCustomItemId(result, "enchanted_cobblestone");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.COBBLESTONE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17825,10 +17832,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.DEEPSLATE);
             SlayerItems.setCustomItemId(result, "enchanted_deepslate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DEEPSLATE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17879,10 +17886,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.END_STONE);
             SlayerItems.setCustomItemId(result, "enchanted_end_stone");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -17969,10 +17976,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.GRAVEL);
             SlayerItems.setCustomItemId(result, "enchanted_gravel");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.GRAVEL), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18080,10 +18087,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.NETHERRACK);
             SlayerItems.setCustomItemId(result, "enchanted_netherrack");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18116,10 +18123,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.OBSIDIAN);
             SlayerItems.setCustomItemId(result, "enchanted_obsidian");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18152,10 +18159,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.POTATO);
             SlayerItems.setCustomItemId(result, "enchanted_potato");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.POTATO), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18278,10 +18285,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.SAND);
             SlayerItems.setCustomItemId(result, "enchanted_sand");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SAND), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18350,10 +18357,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.SUGAR_CANE);
             SlayerItems.setCustomItemId(result, "enchanted_sugar_cane");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.SUGAR_CANE), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18386,10 +18393,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.TUFF);
             SlayerItems.setCustomItemId(result, "enchanted_tuff");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.TUFF), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18404,10 +18411,10 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.WHEAT);
             SlayerItems.setCustomItemId(result, "enchanted_wheat");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.WHEAT), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18533,7 +18540,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_AXE);
             SlayerItems.setCustomItemId(result, "endstone_axe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18551,7 +18558,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HOE);
             SlayerItems.setCustomItemId(result, "endstone_hoe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18569,7 +18576,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_PICKAXE);
             SlayerItems.setCustomItemId(result, "endstone_pickaxe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -18587,7 +18594,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SHOVEL);
             SlayerItems.setCustomItemId(result, "endstone_shovel");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.END_STONE), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19631,7 +19638,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_AXE);
             SlayerItems.setCustomItemId(result, "netherrack_axe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19649,7 +19656,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HOE);
             SlayerItems.setCustomItemId(result, "netherrack_hoe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19667,7 +19674,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_PICKAXE);
             SlayerItems.setCustomItemId(result, "netherrack_pickaxe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19685,7 +19692,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SHOVEL);
             SlayerItems.setCustomItemId(result, "netherrack_shovel");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.NETHERRACK), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19703,7 +19710,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_AXE);
             SlayerItems.setCustomItemId(result, "obsidian_axe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19721,7 +19728,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_BOOTS);
             SlayerItems.setCustomItemId(result, "obsidian_block_boots");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19739,7 +19746,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_CHESTPLATE);
             SlayerItems.setCustomItemId(result, "obsidian_block_chestplate");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19757,7 +19764,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HELMET);
             SlayerItems.setCustomItemId(result, "obsidian_block_helmet");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19775,7 +19782,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_LEGGINGS);
             SlayerItems.setCustomItemId(result, "obsidian_block_leggings");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19793,7 +19800,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SWORD);
             SlayerItems.setCustomItemId(result, "obsidian_block_sword");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19811,7 +19818,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_HOE);
             SlayerItems.setCustomItemId(result, "obsidian_hoe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19829,7 +19836,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_PICKAXE);
             SlayerItems.setCustomItemId(result, "obsidian_pickaxe");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19847,7 +19854,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.IRON_SHOVEL);
             SlayerItems.setCustomItemId(result, "obsidian_shovel");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.OBSIDIAN), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -19862,7 +19869,7 @@ public class HardcodedRecipes {
         }
 
         {
-            ItemStack result = new ItemStack(Items.AIR);
+            ItemStack result = new ItemStack(Items.NETHER_STAR);
             SlayerItems.setCustomItemId(result, "piglin_core");
             
             ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.AIR), new ItemStack(Items.AIR), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
@@ -21269,7 +21276,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.NETHERITE_INGOT);
             SlayerItems.setCustomItemId(result, "super_compacted_diamond");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { createCustomItem("compacted_diamond", Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -21287,7 +21294,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.NETHERITE_INGOT);
             SlayerItems.setCustomItemId(result, "super_compacted_emerald");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { createCustomItem("compacted_emerald", Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -21305,7 +21312,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.NETHERITE_INGOT);
             SlayerItems.setCustomItemId(result, "super_compacted_gold");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { createCustomItem("compacted_gold", Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -21323,7 +21330,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.NETHERITE_INGOT);
             SlayerItems.setCustomItemId(result, "super_compacted_iron");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { createCustomItem("compacted_iron", Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(
@@ -21341,7 +21348,7 @@ public class HardcodedRecipes {
             ItemStack result = new ItemStack(Items.NETHERITE_INGOT);
             SlayerItems.setCustomItemId(result, "super_compacted_netherite");
             
-            ItemStack[] ingredients = new ItemStack[] { new ItemStack(Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
+            ItemStack[] ingredients = new ItemStack[] { createCustomItem("compacted_netherite", Items.DIAMOND), new ItemStack(Items.AIR), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY };
             boolean[] lockedSlots = new boolean[] { false, false, false, false, false, false, false, false, false };
             
             SlayerRecipes.Recipe recipe = new SlayerRecipes.Recipe(

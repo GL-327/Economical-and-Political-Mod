@@ -8,8 +8,22 @@ function minecraftItemToJava(itemId) {
     const mapping = {
         'air': 'Items.AIR',
         'stone': 'Items.STONE',
+        'cobblestone': 'Items.COBBLESTONE',
         'glass_block': 'Items.GLASS',
         'glass': 'Items.GLASS',
+        'obsidian': 'Items.OBSIDIAN',
+        'crying_obsidian': 'Items.CRYING_OBSIDIAN',
+        'bedrock': 'Items.BEDROCK',
+        'dirt': 'Items.DIRT',
+        'grass_block': 'Items.GRASS_BLOCK',
+        'sand': 'Items.SAND',
+        'gravel': 'Items.GRAVEL',
+        'netherrack': 'Items.NETHERRACK',
+        'end_stone': 'Items.END_STONE',
+        'deepslate': 'Items.DEEPSLATE',
+        'tuff': 'Items.TUFF',
+        'calcite': 'Items.CALCITE',
+        'amethyst_block': 'Items.AMETHYST_BLOCK',
         'leather_helmet': 'Items.LEATHER_HELMET',
         'leather_chestplate': 'Items.LEATHER_CHESTPLATE',
         'leather_leggings': 'Items.LEATHER_LEGGINGS',
@@ -78,7 +92,39 @@ function minecraftItemToJava(itemId) {
         'slime_ball': 'Items.SLIME_BALL',
         'ender_pearl': 'Items.ENDER_PEARL',
         'gold_nugget': 'Items.GOLD_NUGGET',
-        'sculk_catalyst': 'Items.SCULK_CATALYST'
+        'sculk_catalyst': 'Items.SCULK_CATALYST',
+        'echo_shard': 'Items.ECHO_SHARD',
+        'recovery_compass': 'Items.RECOVERY_COMPASS',
+        'nether_star': 'Items.NETHER_STAR',
+        'blaze_rod': 'Items.BLAZE_ROD',
+        'blaze_powder': 'Items.BLAZE_POWDER',
+        'ghast_tear': 'Items.GHAST_TEAR',
+        'magma_cream': 'Items.MAGMA_CREAM',
+        'prismarine_shard': 'Items.PRISMARINE_SHARD',
+        'prismarine_crystals': 'Items.PRISMARINE_CRYSTALS',
+        'nautilus_shell': 'Items.NAUTILUS_SHELL',
+        'heart_of_the_sea': 'Items.HEART_OF_THE_SEA',
+        'phantom_membrane': 'Items.PHANTOM_MEMBRANE',
+        'shulker_shell': 'Items.SHULKER_SHELL',
+        'dragon_breath': 'Items.DRAGON_BREATH',
+        'chorus_fruit': 'Items.CHORUS_FRUIT',
+        'popped_chorus_fruit': 'Items.POPPED_CHORUS_FRUIT',
+        'beetroot': 'Items.BEETROOT',
+        'wheat': 'Items.WHEAT',
+        'carrot': 'Items.CARROT',
+        'potato': 'Items.POTATO',
+        'sweet_berries': 'Items.SWEET_BERRIES',
+        'glow_berries': 'Items.GLOW_BERRIES',
+        'apple': 'Items.APPLE',
+        'melon_slice': 'Items.MELON_SLICE',
+        'pumpkin': 'Items.PUMPKIN',
+        'egg': 'Items.EGG',
+        'sugar_cane': 'Items.SUGAR_CANE',
+        'bamboo': 'Items.BAMBOO',
+        'cactus': 'Items.CACTUS',
+        'vine': 'Items.VINE',
+        'kelp': 'Items.KELP',
+        'seagrass': 'Items.SEAGRASS'
     };
     return mapping[itemId.toLowerCase()] || 'Items.AIR';
 }
@@ -100,6 +146,13 @@ import net.minecraft.util.Formatting;
  * Custom recipes via /setrecipe can override these.
  */
 public class HardcodedRecipes {
+    
+    /** Helper to create custom items with custom_id */
+    private static ItemStack createCustomItem(String customId, net.minecraft.item.Item baseItem) {
+        ItemStack stack = new ItemStack(baseItem);
+        SlayerItems.setCustomItemId(stack, customId);
+        return stack;
+    }
     
     public static void registerAllRecipes() {
         SlayerRecipes.RECIPES.clear();
@@ -155,9 +208,12 @@ for (let batch = 1; batch <= totalBatches; batch++) {
             if (recipe.ingredients && recipe.ingredients[i]) {
                 const ing = recipe.ingredients[i];
                 let ingItem = 'Items.AIR';
+                let ingCustomId = '';
                 
                 if (ing.nbt) {
                     const idMatch = ing.nbt.match(/id:"minecraft:([^"]+)"/);
+                    const customIdMatch = ing.nbt.match(/custom_id:"([^"]+)"/);
+                    
                     if (idMatch) {
                         const itemId = idMatch[1];
                         const mcItem = minecraftItemToJava(itemId);
@@ -165,9 +221,17 @@ for (let batch = 1; batch <= totalBatches; batch++) {
                             ingItem = mcItem;
                         }
                     }
+                    
+                    if (customIdMatch) {
+                        ingCustomId = customIdMatch[1];
+                    }
                 }
                 
-                ingredients += `new ItemStack(${ingItem})`;
+                if (ingCustomId) {
+                    ingredients += `createCustomItem("${ingCustomId}", ${ingItem})`;
+                } else {
+                    ingredients += `new ItemStack(${ingItem})`;
+                }
             } else {
                 ingredients += 'ItemStack.EMPTY';
             }
