@@ -486,6 +486,10 @@ public class RecipeConfigManager {
             try {
                 String nbtString = obj.get("nbt").getAsString();
                 if (nbtString != null && !nbtString.isEmpty()) {
+                    // Try to fix common NBT issues
+                    nbtString = nbtString.replaceAll("([a-zA-Z_][a-zA-Z0-9_]*)\\s*:", "\"$1\":"); // Add quotes to unquoted property names
+                    nbtString = nbtString.replaceAll(":\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\b", ":\"$1\""); // Add quotes to unquoted string values
+                    
                     NbtCompound parsed = StringNbtReader.readCompound(nbtString);
                     
                     // Try to get registry ops - prefer server if available, otherwise use builtin
@@ -507,6 +511,12 @@ public class RecipeConfigManager {
                 }
             } catch (Exception e) {
                 System.err.println("[RecipeConfigManager] Failed to deserialize stack with CODEC: " + e.getMessage());
+                // Try manual parsing as fallback
+                try {
+                    return parseStackManually(obj);
+                } catch (Exception fallbackError) {
+                    System.err.println("[RecipeConfigManager] Manual fallback also failed: " + fallbackError.getMessage());
+                }
             }
         }
 
@@ -558,6 +568,37 @@ public class RecipeConfigManager {
         } catch (Exception e) {
             return ItemStack.EMPTY;
         }
+    }
+
+    private static ItemStack parseStackManually(JsonObject obj) {
+        // Manual fallback parsing for malformed NBT
+        String id = obj.has("id") ? obj.get("id").getAsString() : "";
+        int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
+        
+        // Extract custom_id from NBT string if present
+        String customId = "";
+        if (obj.has("nbt")) {
+            String nbtString = obj.get("nbt").getAsString();
+            if (nbtString.contains("custom_id:")) {
+                int start = nbtString.indexOf("custom_id:") + 10;
+                int end = nbtString.indexOf(",", start);
+                if (end == -1) end = nbtString.indexOf("}", start);
+                if (end > start) {
+                    customId = nbtString.substring(start, end).replace("\"", "").trim();
+                }
+            }
+        }
+        
+        ItemStack stack = resolveItem(id);
+        if (stack.isEmpty() && !customId.isEmpty()) {
+            stack = resolveCustomItem(customId);
+        }
+        
+        if (!stack.isEmpty()) {
+            stack.setCount(count);
+        }
+        
+        return stack;
     }
 
     private static ItemStack resolveCustomItem(String customId) {
