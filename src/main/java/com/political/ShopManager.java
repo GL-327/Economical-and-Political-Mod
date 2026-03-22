@@ -224,22 +224,8 @@ public class ShopManager {
         // ===== SUPER COMPACTED (REMOVED - Dupe Prevention) =====
         // Super compacted items removed to prevent crafting/selling dupe exploits
 
-        // ===== ENCHANTED ITEMS (Custom Items) =====
-        List<Item> enchantedItems = Arrays.asList(
-                // Original enchanted
-                Items.COBBLESTONE, Items.STONE, Items.IRON_BLOCK, Items.GOLD_BLOCK,
-                Items.DIAMOND_BLOCK, Items.BLACKSTONE, Items.GILDED_BLACKSTONE, Items.OAK_LOG,
-                Items.POPPY, Items.DANDELION, Items.WHEAT, Items.CARROT, Items.POTATO, Items.SUGAR_CANE,
-                // New enchanted blocks (excluding super compacted base items)
-                Items.SAND, Items.RED_SAND, Items.GRAVEL, Items.NETHERRACK, Items.END_STONE,
-                Items.OBSIDIAN, Items.GLOWSTONE, Items.PRISMARINE, Items.COPPER_BLOCK,
-                Items.LAPIS_BLOCK, Items.COAL_BLOCK, Items.QUARTZ_BLOCK, Items.REDSTONE_BLOCK,
-                Items.BASALT, Items.DEEPSLATE, Items.COBBLED_DEEPSLATE, Items.TUFF,
-                Items.CALCITE, Items.AMETHYST_BLOCK, Items.GLASS, Items.ICE,
-                Items.PACKED_ICE, Items.BLUE_ICE, Items.TERRACOTTA, Items.CLAY,
-                Items.BRICKS, Items.NETHER_BRICKS, Items.PURPUR_BLOCK, Items.SEA_LANTERN, Items.SHROOMLIGHT
-        );
-        CATEGORIES.put("Enchanted Items", enchantedItems);
+        // ===== ENCHANTED ITEMS (REMOVED - Dupe Prevention) =====
+        // Enchanted items removed to prevent potential dupe exploits
     }
 
     private static void initializePrices() {
@@ -345,9 +331,9 @@ public class ShopManager {
         // ===== ORES & RAW MATERIALS =====
         setPrice(Items.COAL, 1);
         setPrice(Items.CHARCOAL, 1);
-        setPrice(Items.RAW_IRON, 2);
-        setPrice(Items.RAW_COPPER, 1);
-        setPrice(Items.RAW_GOLD, 5);
+        setPrice(Items.RAW_IRON, 4);   // 4 > 3 (iron ingot) - prevents smelt dupe
+        setPrice(Items.RAW_COPPER, 3); // 3 > 2 (copper ingot) - prevents smelt dupe
+        setPrice(Items.RAW_GOLD, 5);   // 5 > 1 (gold ingot) - prevents smelt dupe
         setPrice(Items.IRON_INGOT, 3);
         setPrice(Items.COPPER_INGOT, 2);
         setPrice(Items.GOLD_INGOT, 1);
@@ -365,14 +351,15 @@ public class ShopManager {
         setPrice(Items.FLINT, 1);
 
         // Ore blocks - balanced pricing (9x base material cost, no crafting exploit)
-        setPrice(Items.COAL_BLOCK, 9);           // 9 coal = 9 coins
-        setPrice(Items.IRON_BLOCK, 27);         // 9 iron = 27 coins (was 9x3)
-        setPrice(Items.COPPER_BLOCK, 18);         // 9 copper = 18 coins
-        setPrice(Items.GOLD_BLOCK, 81);          // 9 gold = 81 coins (was 9, HUGE buff)
-        setPrice(Items.DIAMOND_BLOCK, 450);       // 9 diamonds = 450 coins (was 450, ok)
-        setPrice(Items.EMERALD_BLOCK, 270);       // 9 emeralds = 270 coins (was 270, ok)
-        setPrice(Items.LAPIS_BLOCK, 36);          // 9 lapis = 36 coins (was 36, ok)
-        setPrice(Items.REDSTONE_BLOCK, 18);      // 9 redstone = 18 coins
+        // Set to exactly 9x the ingot price to prevent crafting dupes
+        setPrice(Items.COAL_BLOCK, 9);           // 9 coal = 9 coins - no profit
+        setPrice(Items.IRON_BLOCK, 27);          // 9 iron = 27 coins - no profit
+        setPrice(Items.COPPER_BLOCK, 18);        // 9 copper = 18 coins - no profit
+        setPrice(Items.GOLD_BLOCK, 9);           // 9 gold = 9 coins - no profit (was 81!)
+        setPrice(Items.DIAMOND_BLOCK, 450);      // 9 diamonds = 450 coins - no profit
+        setPrice(Items.EMERALD_BLOCK, 270);      // 9 emeralds = 270 coins - no profit
+        setPrice(Items.LAPIS_BLOCK, 36);         // 9 lapis = 36 coins - no profit
+        setPrice(Items.REDSTONE_BLOCK, 18);      // 9 redstone = 18 coins - no profit
         setPrice(Items.NETHERITE_BLOCK, 6300);   // 9 netherite = 6300 coins (was 6300, ok)
 
         // ===== FOOD =====

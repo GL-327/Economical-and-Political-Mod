@@ -278,6 +278,15 @@ public class CommandRegistry {
                         })
                 )
         );
+
+        // /report command - Report system for players
+        dispatcher.register(CommandManager.literal("report")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                    ReportGui.openMainMenu(player);
+                    return 1;
+                }));
+
         dispatcher.register(CommandManager.literal("bounty")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
