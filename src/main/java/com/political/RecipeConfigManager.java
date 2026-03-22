@@ -173,7 +173,7 @@ public class RecipeConfigManager {
                 JsonArray recipesArray = json.getAsJsonArray("recipes");
                 for (JsonElement element : recipesArray) {
                     try {
-                        SlayerRecipes.Recipe recipe = deserializeRecipe(element.getAsJsonObject());
+                        SlayerRecipes.Recipe recipe = deserialize(element.getAsJsonObject());
                         if (recipe != null) {
                             baseRecipes.add(recipe);
                         }
