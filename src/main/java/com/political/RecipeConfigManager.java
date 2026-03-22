@@ -44,6 +44,9 @@ public class RecipeConfigManager {
     /** Names of recipes that are currently disabled. */
     private static final java.util.Set<String> DISABLED_RECIPES = new java.util.HashSet<>();
 
+    private static int EMPTY_RESULT_DEBUG_PRINTS = 0;
+    private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 30;
+
     // ── Lifecycle ──────────────────────────────────────────────
 
     /** Load persisted recipes from disk. Call on server start. */
@@ -375,6 +378,43 @@ public class RecipeConfigManager {
             
             if (result.isEmpty()) {
                 System.err.println("[RecipeConfigManager] FAILED to load recipe '" + name + "': result item is empty");
+
+                // Rate-limited detailed debug so we can see why SNBT/CODEC parse is failing
+                if (EMPTY_RESULT_DEBUG_PRINTS < MAX_EMPTY_RESULT_DEBUG_PRINTS) {
+                    EMPTY_RESULT_DEBUG_PRINTS++;
+                    try {
+                        com.google.gson.JsonElement resultElem = obj.get("result");
+                        if (resultElem != null && resultElem.isJsonObject()) {
+                            JsonObject resultObj = resultElem.getAsJsonObject();
+                            if (resultObj.has("nbt")) {
+                                String nbtString = resultObj.get("nbt").getAsString();
+                                System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "': has nbt (len=" + (nbtString == null ? 0 : nbtString.length()) + ")");
+
+                                if (nbtString != null && !nbtString.isEmpty()) {
+                                    NbtCompound parsed = StringNbtReader.readCompound(nbtString);
+                                    RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
+                                    if (PoliticalServer.server != null) {
+                                        ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
+                                    } else {
+                                        ops = net.minecraft.registry.BuiltinRegistries.createWrapperLookup().getOps(NbtOps.INSTANCE);
+                                    }
+
+                                    if (ops != null) {
+                                        var dataResult = ItemStack.CODEC.parse(ops, parsed);
+                                        dataResult.error().ifPresent(err ->
+                                                System.err.println("[RecipeConfigManager] DEBUG codec error for '" + name + "': " + err.message()));
+                                    }
+                                }
+                            } else {
+                                System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "': result object keys=" + resultObj.keySet());
+                            }
+                        } else {
+                            System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "': result is not an object");
+                        }
+                    } catch (Exception debugEx) {
+                        System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "' failed: " + debugEx.getMessage());
+                    }
+                }
                 return null;
             }
             
