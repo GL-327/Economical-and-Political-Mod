@@ -47,10 +47,11 @@ public class SlayerRecipes {
     static final List<Recipe> RECIPES = new ArrayList<>();
 
     public static void registerRecipes() {
-        // Load hardcoded default recipes first
-        HardcodedRecipes.registerAllRecipes();
+        // Load base recipes from RecipeConfigManager (this loads from JSON)
+        List<Recipe> baseRecipes = RecipeConfigManager.getBaseRecipes();
+        RECIPES.addAll(baseRecipes);
         
-        // Then load custom overrides from RecipeConfigManager
+        // Then add custom overrides
         List<Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();
         for (Recipe custom : customRecipes) {
             // Remove any existing recipe with the same output
@@ -63,7 +64,7 @@ public class SlayerRecipes {
             RECIPES.add(custom);
         }
         
-        System.out.println("[SlayerRecipes] Registered " + RECIPES.size() + " total recipes (hardcoded + custom)");
+        System.out.println("[SlayerRecipes] Registered " + RECIPES.size() + " total recipes (base + custom)");
     }
 
     public static List<Recipe> getRecipes() {

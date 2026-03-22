@@ -127,21 +127,21 @@ public class RecipeConfigManager {
     // ── Public API ─────────────────────────────────────────────
 
     /**
-     * Returns all recipes — hardcoded defaults merged with custom overrides.
+     * Returns all recipes — base recipes from JSON merged with custom overrides.
      * Custom recipes take precedence over defaults with the same output.
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        // Start with all hardcoded recipes from SlayerRecipes
-        List<SlayerRecipes.Recipe> merged = new ArrayList<>(SlayerRecipes.getRecipes());
+        // Start with all base recipes from JSON
+        List<SlayerRecipes.Recipe> merged = new ArrayList<>(getBaseRecipes());
         
         // Add custom recipes, replacing any defaults with same output
         for (SlayerRecipes.Recipe custom : CUSTOM_RECIPES) {
             String customOutputId = SlayerItems.getCustomItemId(custom.result);
             
-            // Remove any default recipe that produces the same output
+            // Remove any base recipe that produces the same output
             merged.removeIf(r -> {
-                String defaultOutputId = SlayerItems.getCustomItemId(r.result);
-                return defaultOutputId != null && defaultOutputId.equals(customOutputId);
+                String baseOutputId = SlayerItems.getCustomItemId(r.result);
+                return baseOutputId != null && baseOutputId.equals(customOutputId);
             });
             
             merged.add(custom);
@@ -153,6 +153,37 @@ public class RecipeConfigManager {
     /** Returns only the custom (admin-set) override recipes. */
     public static List<SlayerRecipes.Recipe> getCustomRecipes() {
         return new ArrayList<>(CUSTOM_RECIPES);
+    }
+    
+    /** Returns the base recipes from JSON (not custom overrides) */
+    public static List<SlayerRecipes.Recipe> getBaseRecipes() {
+        List<SlayerRecipes.Recipe> baseRecipes = new ArrayList<>();
+        try {
+            Path configFile = Paths.get("config/political/custom_recipes.json");
+            if (!Files.exists(configFile)) {
+                return baseRecipes;
+            }
+            
+            String content = Files.readString(configFile);
+            JsonObject json = JsonParser.parseString(content).getAsJsonObject();
+            
+            if (json.has("recipes")) {
+                JsonArray recipesArray = json.getAsJsonArray("recipes");
+                for (JsonElement element : recipesArray) {
+                    try {
+                        SlayerRecipes.Recipe recipe = deserializeRecipe(element.getAsJsonObject());
+                        if (recipe != null) {
+                            baseRecipes.add(recipe);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("[RecipeConfigManager] Failed to load base recipe: " + e.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Error loading base recipes: " + e.getMessage());
+        }
+        return baseRecipes;
     }
 
     /**
