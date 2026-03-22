@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.registry.Registries;
@@ -511,6 +512,9 @@ public class RecipeConfigManager {
                 if (nbtString != null && !nbtString.isEmpty()) {
                     // IMPORTANT: This file stores SNBT (not JSON). Do NOT try to quote keys.
                     NbtCompound parsed = StringNbtReader.readCompound(nbtString);
+
+                    // Normalize legacy or loosely-formatted components into the schema expected by ItemStack.CODEC.
+                    normalizeParsedStackNbt(parsed);
                     
                     RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
                     if (PoliticalServer.server != null) {
@@ -563,6 +567,26 @@ public class RecipeConfigManager {
         }
 
         return ItemStack.EMPTY;
+    }
+
+    private static void normalizeParsedStackNbt(NbtCompound parsed) {
+        if (parsed == null) return;
+
+        // Many recipes store dyed_color as a raw int (e.g. minecraft:dyed_color:16119285).
+        // Modern data components expect a compound: {rgb:<int>,show_in_tooltip:1b}.
+        if (!parsed.contains("components")) return;
+
+        parsed.getCompound("components").ifPresent(components -> {
+            if (!components.contains("minecraft:dyed_color")) return;
+
+            components.getInt("minecraft:dyed_color").ifPresent(rgb -> {
+                NbtCompound dyed = new NbtCompound();
+                dyed.put("rgb", NbtInt.of(rgb));
+                dyed.putByte("show_in_tooltip", (byte) 1);
+
+                components.put("minecraft:dyed_color", dyed);
+            });
+        });
     }
 
     private static ItemStack deserializeIngredient(com.google.gson.JsonElement elem) {
