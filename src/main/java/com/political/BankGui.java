@@ -1010,4 +1010,97 @@ public class BankGui {
         DataManager.save(PoliticalServer.server);
         BankGui.open(sender);
     }
+
+    // Admin version for invsee - allows admin to view/modify target's bank
+    public static void openForAdmin(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, admin, false);
+        gui.setTitle(Text.literal("🏦 " + target.getName().getString() + "'s Bank"));
+
+        // Fill background
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.GOLD_BLOCK)
+                        .setName(Text.literal("⬛").formatted(Formatting.YELLOW))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Show target's bank info
+        int purse = CoinManager.getCoins(target);
+        int main = DataManager.getBankMain(target.getUuidAsString());
+        int savings = DataManager.getBankSavings(target.getUuidAsString());
+        long lastWithdrawal = DataManager.getBankSavingsWithdrawTime(target.getUuidAsString());
+        
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Text.literal("💰 " + target.getName().getString() + "'s Wallet").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Balance: " + fmt(purse) + " coins").formatted(Formatting.YELLOW))
+                .build());
+
+        gui.setSlot(19, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("🏦 Main Account").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Balance: " + fmt(main) + " coins").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to modify").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> modifyMainAccount(admin, target))
+                .build());
+
+        gui.setSlot(25, new GuiElementBuilder(Items.DIAMOND_BLOCK)
+                .setName(Text.literal("💎 Savings Account").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Balance: " + fmt(savings) + " coins").formatted(Formatting.WHITE))
+                .addLoreLine(Text.literal("Last withdrawal: " + (lastWithdrawal > 0 ? new java.util.Date(lastWithdrawal).toString() : "Never")).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Click to modify").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> modifySavingsAccount(admin, target))
+                .build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .setCallback((index, type, action) -> admin.closeHandledScreen())
+                .build());
+
+        gui.open();
+    }
+    
+    private static void modifyMainAccount(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                try {
+                    int amount = Integer.parseInt(this.getLine(0).getString().trim());
+                    DataManager.setBankMain(target.getUuidAsString(), amount);
+                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s main account to " + fmt(amount) + " coins")
+                        .formatted(Formatting.GREEN), false);
+                    openForAdmin(admin, target);
+                } catch (NumberFormatException e) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                    openForAdmin(admin, target);
+                }
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.open();
+    }
+    
+    private static void modifySavingsAccount(ServerPlayerEntity admin, ServerPlayerEntity target) {
+        SignGui signGui = new SignGui(admin) {
+            @Override
+            public void onClose() {
+                try {
+                    int amount = Integer.parseInt(this.getLine(0).getString().trim());
+                    DataManager.setBankSavings(target.getUuidAsString(), amount);
+                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s savings to " + fmt(amount) + " coins")
+                        .formatted(Formatting.GREEN), false);
+                    openForAdmin(admin, target);
+                } catch (NumberFormatException e) {
+                    admin.sendMessage(Text.literal("✗ Invalid number!").formatted(Formatting.RED), false);
+                    openForAdmin(admin, target);
+                }
+            }
+        };
+        signGui.setLine(0, Text.literal("Enter amount:"));
+        signGui.open();
+    }
 }

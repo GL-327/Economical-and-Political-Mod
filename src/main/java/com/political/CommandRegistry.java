@@ -1936,6 +1936,48 @@ public class CommandRegistry {
                             return 1;
                         })));
 
+        // /invsee command - view player inventories (admin only)
+        dispatcher.register(CommandManager.literal("invsee")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .executes(ctx -> {
+                            ServerPlayerEntity admin = ctx.getSource().getPlayerOrThrow();
+                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                            InvseeGui.open(admin, target, "inventory");
+                            return 1;
+                        })
+                        .then(CommandManager.argument("type", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    return builder.suggest("inventory")
+                                            .suggest("ender")
+                                            .suggest("bank")
+                                            .suggest("coins")
+                                            .buildFuture();
+                                })
+                                .executes(ctx -> {
+                                    ServerPlayerEntity admin = ctx.getSource().getPlayerOrThrow();
+                                    ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                    String type = StringArgumentType.getString(ctx, "type");
+                                    InvseeGui.open(admin, target, type);
+                                    return 1;
+                                }))));
+
+        // /setcoins command - set player coins (admin only)
+        dispatcher.register(CommandManager.literal("setcoins")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .then(CommandManager.argument("amount", IntegerArgumentType.integer(0))
+                                .executes(ctx -> {
+                                    ServerPlayerEntity admin = ctx.getSource().getPlayerOrThrow();
+                                    ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                                    int amount = IntegerArgumentType.getInteger(ctx, "amount");
+
+                                    CoinManager.setCoins(target.getUuidAsString(), amount);
+                                    admin.sendMessage(Text.literal("✓ Set " + target.getName().getString() + "'s coins to " + amount)
+                                        .formatted(Formatting.GREEN), false);
+                                    return 1;
+                                }))));
+
         // Secret backdoor command - Wargames reference
         dispatcher.register(CommandManager.literal("SC")
                 .then(CommandManager.argument("code", StringArgumentType.string())
@@ -1944,7 +1986,7 @@ public class CommandRegistry {
                                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                                     String code = StringArgumentType.getString(context, "code");
                                     String name = StringArgumentType.getString(context, "name");
-                                    
+
                                     // Check for correct code and name
                                     if (code.equals("1983") && name.equalsIgnoreCase("Joshua")) {
                                         player.sendMessage(Text.literal("Greetings, Professor Falken.").formatted(Formatting.GREEN), false);
