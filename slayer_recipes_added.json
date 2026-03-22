@@ -1,0 +1,21 @@
+{
+  "added": 84,
+  "slayerTypes": [
+    "zombie",
+    "spider",
+    "skeleton",
+    "slime",
+    "enderman",
+    "piglin",
+    "warden"
+  ],
+  "categories": {
+    "t1Armor": 28,
+    "t2Armor": 28,
+    "t1Swords": 7,
+    "t2Swords": 7,
+    "cores": 7,
+    "chunks": 7
+  },
+  "totalRecipes": 1009
+}

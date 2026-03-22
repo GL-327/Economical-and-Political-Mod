@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manages custom crafting recipes that can be set via /setrecipe.
- * Recipes are persisted to config/political/custom_recipes.json and
- * loaded on server start. The combined list (hardcoded + custom) is
- * provided to BountyCraftingHandler for matching.
+ * Manages custom crafting recipes with support for preset defaults and user overrides.
+ * Preset recipes are loaded from the file initially and act as defaults.
+ * User overrides via /setrecipe take precedence and are saved separately.
+ * Both lists persist across server restarts.
  */
 public class RecipeConfigManager {
 
@@ -35,21 +35,45 @@ public class RecipeConfigManager {
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
-    /** Custom recipes added via /setrecipe (in addition to hardcoded ones). */
+    /** Preset default recipes loaded from file (act as fallbacks). */
+    private static final List<SlayerRecipes.Recipe> DEFAULT_RECIPES = new ArrayList<>();
+
+    /** Custom recipes added via /setrecipe (override defaults). */
     private static final List<SlayerRecipes.Recipe> CUSTOM_RECIPES = new ArrayList<>();
 
-    /** Names of recipes (hardcoded or custom) that are currently disabled. */
+    /** Names of recipes that are currently disabled. */
     private static final java.util.Set<String> DISABLED_RECIPES = new java.util.HashSet<>();
 
     // ── Lifecycle ──────────────────────────────────────────────
 
-    /** Load persisted custom recipes from disk. Call on server start. */
+    /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
+        DEFAULT_RECIPES.clear();
         CUSTOM_RECIPES.clear();
+        
         if (Files.exists(CONFIG_FILE)) {
             try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
-                JsonArray arr = GSON.fromJson(reader, JsonArray.class);
-                if (arr != null) {
+                JsonObject root = GSON.fromJson(reader, JsonObject.class);
+                
+                // Load default/preset recipes
+                if (root != null && root.has("recipes")) {
+                    JsonArray arr = root.getAsJsonArray("recipes");
+                    for (var elem : arr) {
+                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
+                        if (recipe != null) DEFAULT_RECIPES.add(recipe);
+                    }
+                } else if (root != null && root.isJsonArray()) {
+                    // Legacy format - load as defaults
+                    JsonArray arr = root.getAsJsonArray();
+                    for (var elem : arr) {
+                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
+                        if (recipe != null) DEFAULT_RECIPES.add(recipe);
+                    }
+                }
+                
+                // Load custom overrides
+                if (root != null && root.has("custom")) {
+                    JsonArray arr = root.getAsJsonArray("custom");
                     for (var elem : arr) {
                         SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
                         if (recipe != null) CUSTOM_RECIPES.add(recipe);
@@ -62,19 +86,31 @@ public class RecipeConfigManager {
         loadDisabled();
     }
 
-    /** Save current custom recipes to disk. */
+    /** Save both default and custom recipes to disk. */
     public static void save() {
         try {
             Files.createDirectories(CONFIG_DIR);
-            JsonArray arr = new JsonArray();
-            for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
-                arr.add(serialize(r));
+            JsonObject root = new JsonObject();
+            
+            // Save default/preset recipes
+            JsonArray defaultArr = new JsonArray();
+            for (SlayerRecipes.Recipe r : DEFAULT_RECIPES) {
+                defaultArr.add(serialize(r));
             }
+            root.add("recipes", defaultArr);
+            
+            // Save custom overrides
+            JsonArray customArr = new JsonArray();
+            for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
+                customArr.add(serialize(r));
+            }
+            root.add("custom", customArr);
+            
             try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                GSON.toJson(arr, writer);
+                GSON.toJson(root, writer);
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to save custom recipes: " + e.getMessage());
+            System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
         }
     }
 
@@ -110,20 +146,50 @@ public class RecipeConfigManager {
     // ── Public API ─────────────────────────────────────────────
 
     /**
-     * Returns all registered crafting recipes — only custom recipes from /setrecipe.
-     * Hardcoded SlayerRecipes are no longer used to avoid overriding /setrecipe.
+     * Returns all recipes — custom overrides merged with defaults.
+     * Custom recipes take precedence over defaults with the same output.
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        return new ArrayList<>(CUSTOM_RECIPES);
+        List<SlayerRecipes.Recipe> merged = new ArrayList<>(DEFAULT_RECIPES);
+        
+        // Add custom recipes, replacing any defaults with same output
+        for (SlayerRecipes.Recipe custom : CUSTOM_RECIPES) {
+            String customOutputId = SlayerItems.getCustomItemId(custom.result);
+            
+            // Remove any default recipe that produces the same output
+            merged.removeIf(r -> {
+                String defaultOutputId = SlayerItems.getCustomItemId(r.result);
+                return defaultOutputId != null && defaultOutputId.equals(customOutputId);
+            });
+            
+            merged.add(custom);
+        }
+        
+        return merged;
     }
 
-    /** Returns only the custom (admin-set) recipes. */
+    /** Returns only the custom (admin-set) override recipes. */
     public static List<SlayerRecipes.Recipe> getCustomRecipes() {
         return new ArrayList<>(CUSTOM_RECIPES);
     }
+    
+    /** Returns only the default/preset recipes. */
+    public static List<SlayerRecipes.Recipe> getDefaultRecipes() {
+        return new ArrayList<>(DEFAULT_RECIPES);
+    }
 
-    /** Adds a new custom recipe and persists it. */
+    /**
+     * Adds or updates a custom recipe override.
+     * If a recipe produces the same output as a default, the default is hidden.
+     */
     public static void addCustomRecipe(SlayerRecipes.Recipe recipe) {
+        // Remove any existing custom recipe with same output
+        String newOutputId = SlayerItems.getCustomItemId(recipe.result);
+        CUSTOM_RECIPES.removeIf(r -> {
+            String existingId = SlayerItems.getCustomItemId(r.result);
+            return existingId != null && existingId.equals(newOutputId);
+        });
+        
         CUSTOM_RECIPES.add(recipe);
         save();
     }
@@ -504,6 +570,285 @@ public class RecipeConfigManager {
         if ("custom_crafter_core_t2".equals(customId)) return SlayerItems.createCustomCrafterCoreT2();
         if ("custom_crafter_core_t3".equals(customId)) return SlayerItems.createCustomCrafterCoreT3();
         
+        // Block Weapons - Only materials that exist in BOTH BlockArmor AND BlockWeapons (146 materials)
+        if ("glass_sword".equals(customId)) return BlockWeapons.createGlassSword();
+        if ("obsidian_sword".equals(customId)) return BlockWeapons.createObsidianSword();
+        if ("quartz_sword".equals(customId)) return BlockWeapons.createQuartzSword();
+        if ("glowstone_sword".equals(customId)) return BlockWeapons.createGlowstoneSword();
+        if ("redstone_sword".equals(customId)) return BlockWeapons.createRedstoneSword();
+        if ("netherrack_sword".equals(customId)) return BlockWeapons.createNetherrackSword();
+        if ("endstone_sword".equals(customId)) return BlockWeapons.createEndstoneSword();
+        if ("ice_sword".equals(customId)) return BlockWeapons.createIceSword();
+        if ("prismarine_sword".equals(customId)) return BlockWeapons.createPrismarineSword();
+        if ("terracotta_sword".equals(customId)) return BlockWeapons.createTerracottaSword();
+        if ("mossy_sword".equals(customId)) return BlockWeapons.createMossySword();
+        if ("soul_sand_sword".equals(customId)) return BlockWeapons.createSoulSandSword();
+        if ("magma_sword".equals(customId)) return BlockWeapons.createMagmaSword();
+        if ("sandstone_sword".equals(customId)) return BlockWeapons.createSandstoneSword();
+        if ("amethyst_sword".equals(customId)) return BlockWeapons.createAmethystSword();
+        if ("coal_sword".equals(customId)) return BlockWeapons.createCoalSword();
+        if ("diamond_block_sword".equals(customId)) return BlockWeapons.createDiamondBlockSword();
+        if ("emerald_block_sword".equals(customId)) return BlockWeapons.createEmeraldBlockSword();
+        if ("gold_block_sword".equals(customId)) return BlockWeapons.createGoldBlockSword();
+        if ("iron_block_sword".equals(customId)) return BlockWeapons.createIronBlockSword();
+        if ("lapis_block_sword".equals(customId)) return BlockWeapons.createLapisBlockSword();
+        if ("copper_block_sword".equals(customId)) return BlockWeapons.createCopperBlockSword();
+        if ("ancient_debris_sword".equals(customId)) return BlockWeapons.createAncientDebrisSword();
+        if ("basalt_sword".equals(customId)) return BlockWeapons.createBasaltSword();
+        if ("blackstone_sword".equals(customId)) return BlockWeapons.createBlackstoneSword();
+        if ("bone_block_sword".equals(customId)) return BlockWeapons.createBoneBlockSword();
+        if ("brick_sword".equals(customId)) return BlockWeapons.createBrickSword();
+        if ("cactus_sword".equals(customId)) return BlockWeapons.createCactusSword();
+        if ("calcite_sword".equals(customId)) return BlockWeapons.createCalciteSword();
+        if ("deepslate_sword".equals(customId)) return BlockWeapons.createDeepslateSword();
+        if ("dripstone_sword".equals(customId)) return BlockWeapons.createDripstoneSword();
+        if ("hay_sword".equals(customId)) return BlockWeapons.createHaySword();
+        if ("honeycomb_sword".equals(customId)) return BlockWeapons.createHoneycombSword();
+        if ("lily_pad_sword".equals(customId)) return BlockWeapons.createLilyPadSword();
+        if ("melon_sword".equals(customId)) return BlockWeapons.createMelonSword();
+        if ("moss_block_sword".equals(customId)) return BlockWeapons.createMossBlockSword();
+        if ("mycelium_sword".equals(customId)) return BlockWeapons.createMyceliumSword();
+        if ("nether_brick_sword".equals(customId)) return BlockWeapons.createNetherBrickSword();
+        if ("pumpkin_sword".equals(customId)) return BlockWeapons.createPumpkinSword();
+        if ("purpur_sword".equals(customId)) return BlockWeapons.createPurpurSword();
+        if ("sand_sword".equals(customId)) return BlockWeapons.createSandSword();
+        if ("sculk_sword".equals(customId)) return BlockWeapons.createSculkSword();
+        if ("shroomlight_sword".equals(customId)) return BlockWeapons.createShroomlightSword();
+        if ("slime_sword".equals(customId)) return BlockWeapons.createSlimeSword();
+        if ("smooth_stone_sword".equals(customId)) return BlockWeapons.createSmoothStoneSword();
+        if ("snow_sword".equals(customId)) return BlockWeapons.createSnowSword();
+        if ("soul_soil_sword".equals(customId)) return BlockWeapons.createSoulSoilSword();
+        if ("sponge_sword".equals(customId)) return BlockWeapons.createSpongeSword();
+        if ("target_sword".equals(customId)) return BlockWeapons.createTargetSword();
+        if ("tnt_sword".equals(customId)) return BlockWeapons.createTntSword();
+        if ("warped_sword".equals(customId)) return BlockWeapons.createWarpedSword();
+        if ("wet_sponge_sword".equals(customId)) return BlockWeapons.createWetSpongeSword();
+        if ("crimson_stem_sword".equals(customId)) return BlockWeapons.createCrimsonStemSword();
+        if ("crying_obsidian_sword".equals(customId)) return BlockWeapons.createCryingObsidianSword();
+        if ("gilded_blackstone_sword".equals(customId)) return BlockWeapons.createGildedBlackstoneSword();
+        if ("granite_sword".equals(customId)) return BlockWeapons.createGraniteSword();
+        if ("diorite_sword".equals(customId)) return BlockWeapons.createDioriteSword();
+        if ("andesite_sword".equals(customId)) return BlockWeapons.createAndesiteSword();
+        if ("polished_granite_sword".equals(customId)) return BlockWeapons.createPolishedGraniteSword();
+        if ("polished_diorite_sword".equals(customId)) return BlockWeapons.createPolishedDioriteSword();
+        if ("polished_andesite_sword".equals(customId)) return BlockWeapons.createPolishedAndesiteSword();
+        if ("packed_ice_sword".equals(customId)) return BlockWeapons.createPackedIceSword();
+        if ("blue_ice_sword".equals(customId)) return BlockWeapons.createBlueIceSword();
+        if ("nether_gold_ore_sword".equals(customId)) return BlockWeapons.createNetherGoldOreSword();
+        if ("dark_oak_log_sword".equals(customId)) return BlockWeapons.createDarkOakLogSword();
+        if ("jungle_log_sword".equals(customId)) return BlockWeapons.createJungleLogSword();
+        if ("acacia_log_sword".equals(customId)) return BlockWeapons.createAcaciaLogSword();
+        if ("mangrove_log_sword".equals(customId)) return BlockWeapons.createMangroveLogSword();
+        if ("cherry_log_sword".equals(customId)) return BlockWeapons.createCherryLogSword();
+        if ("bamboo_block_sword".equals(customId)) return BlockWeapons.createBambooBlockSword();
+        if ("tuff_sword".equals(customId)) return BlockWeapons.createTuffSword();
+        if ("polished_tuff_sword".equals(customId)) return BlockWeapons.createPolishedTuffSword();
+        if ("nether_wart_block_sword".equals(customId)) return BlockWeapons.createNetherWartBlockSword();
+        if ("warped_wart_block_sword".equals(customId)) return BlockWeapons.createWarpedWartBlockSword();
+        if ("chiseled_deepslate_sword".equals(customId)) return BlockWeapons.createChiseledDeepslateSword();
+        if ("reinforced_deepslate_sword".equals(customId)) return BlockWeapons.createReinforcedDeepslateSword();
+        if ("chiseled_nether_brick_sword".equals(customId)) return BlockWeapons.createChiseledNetherBrickSword();
+        if ("cracked_nether_brick_sword".equals(customId)) return BlockWeapons.createCrackedNetherBrickSword();
+        if ("chiseled_stone_brick_sword".equals(customId)) return BlockWeapons.createChiseledStoneBrickSword();
+        if ("cracked_stone_brick_sword".equals(customId)) return BlockWeapons.createCrackedStoneBrickSword();
+        if ("end_stone_brick_sword".equals(customId)) return BlockWeapons.createEndStoneBrickSword();
+        if ("red_sandstone_sword".equals(customId)) return BlockWeapons.createRedSandstoneSword();
+        if ("raw_iron_block_sword".equals(customId)) return BlockWeapons.createRawIronBlockSword();
+        if ("raw_gold_block_sword".equals(customId)) return BlockWeapons.createRawGoldBlockSword();
+        if ("prismarine_bricks_sword".equals(customId)) return BlockWeapons.createPrismarineBricksSword();
+        if ("dark_prismarine_sword".equals(customId)) return BlockWeapons.createDarkPrismarineSword();
+        if ("sea_lantern_sword".equals(customId)) return BlockWeapons.createSeaLanternSword();
+        if ("lodestone_sword".equals(customId)) return BlockWeapons.createLodestoneSword();
+        if ("blackstone_bricks_sword".equals(customId)) return BlockWeapons.createBlackstoneBricksSword();
+        if ("polished_blackstone_sword".equals(customId)) return BlockWeapons.createPolishedBlackstoneSword();
+        if ("smooth_basalt_sword".equals(customId)) return BlockWeapons.createSmoothBasaltSword();
+        if ("amethyst_cluster_sword".equals(customId)) return BlockWeapons.createAmethystClusterSword();
+        if ("obsidian_block_sword".equals(customId)) return BlockWeapons.createObsidianBlockSword();
+        if ("stripped_spruce_log_sword".equals(customId)) return BlockWeapons.createStrippedSpruceLogSword();
+        if ("stripped_birch_log_sword".equals(customId)) return BlockWeapons.createStrippedBirchLogSword();
+        if ("stripped_dark_oak_log_sword".equals(customId)) return BlockWeapons.createStrippedDarkOakLogSword();
+        if ("stripped_jungle_log_sword".equals(customId)) return BlockWeapons.createStrippedJungleLogSword();
+        if ("stripped_acacia_log_sword".equals(customId)) return BlockWeapons.createStrippedAcaciaLogSword();
+        if ("stripped_mangrove_log_sword".equals(customId)) return BlockWeapons.createStrippedMangroveLogSword();
+        if ("stripped_cherry_log_sword".equals(customId)) return BlockWeapons.createStrippedCherryLogSword();
+        if ("stripped_bamboo_block_sword".equals(customId)) return BlockWeapons.createStrippedBambooBlockSword();
+        if ("stripped_crimson_stem_sword".equals(customId)) return BlockWeapons.createStrippedCrimsonStemSword();
+        if ("stripped_warped_stem_sword".equals(customId)) return BlockWeapons.createStrippedWarpedStemSword();
+        if ("spruce_planks_sword".equals(customId)) return BlockWeapons.createSprucePlanksSword();
+        if ("birch_planks_sword".equals(customId)) return BlockWeapons.createBirchPlanksSword();
+        if ("jungle_planks_sword".equals(customId)) return BlockWeapons.createJunglePlanksSword();
+        if ("acacia_planks_sword".equals(customId)) return BlockWeapons.createAcaciaPlanksSword();
+        if ("dark_oak_planks_sword".equals(customId)) return BlockWeapons.createDarkOakPlanksSword();
+        if ("mangrove_planks_sword".equals(customId)) return BlockWeapons.createMangrovePlanksSword();
+        if ("cherry_planks_sword".equals(customId)) return BlockWeapons.createCherryPlanksSword();
+        if ("bamboo_planks_sword".equals(customId)) return BlockWeapons.createBambooPlanksSword();
+        if ("crimson_planks_sword".equals(customId)) return BlockWeapons.createCrimsonPlanksSword();
+        if ("warped_planks_sword".equals(customId)) return BlockWeapons.createWarpedPlanksSword();
+        if ("oak_planks_sword".equals(customId)) return BlockWeapons.createOakPlanksSword();
+        if ("oak_log_sword".equals(customId)) return BlockWeapons.createOakLogSword();
+        if ("spruce_log_sword".equals(customId)) return BlockWeapons.createSpruceLogSword();
+        if ("birch_log_sword".equals(customId)) return BlockWeapons.createBirchLogSword();
+        if ("stone_bricks_sword".equals(customId)) return BlockWeapons.createStoneBricksSword();
+        if ("cobblestone_sword".equals(customId)) return BlockWeapons.createCobblestoneSword();
+        if ("mossy_cobblestone_sword".equals(customId)) return BlockWeapons.createMossyCobblestoneSword();
+        if ("cobbled_deepslate_sword".equals(customId)) return BlockWeapons.createCobbledDeepslateSword();
+        if ("mud_bricks_sword".equals(customId)) return BlockWeapons.createMudBricksSword();
+        if ("mangrove_roots_sword".equals(customId)) return BlockWeapons.createMangroveRootsSword();
+        if ("muddy_mangrove_roots_sword".equals(customId)) return BlockWeapons.createMuddyMangroveRootsSword();
+        if ("netherite_block_sword".equals(customId)) return BlockWeapons.createNetheriteBlockSword();
+        if ("chiseled_copper_sword".equals(customId)) return BlockWeapons.createChiseledCopperSword();
+        if ("cut_copper_sword".equals(customId)) return BlockWeapons.createCutCopperSword();
+        if ("exposed_copper_sword".equals(customId)) return BlockWeapons.createExposedCopperSword();
+        if ("weathered_copper_sword".equals(customId)) return BlockWeapons.createWeatheredCopperSword();
+        if ("oxidised_copper_sword".equals(customId)) return BlockWeapons.createOxidisedCopperSword();
+        if ("waxed_cut_copper_sword".equals(customId)) return BlockWeapons.createWaxedCutCopperSword();
+        if ("polished_basalt_sword".equals(customId)) return BlockWeapons.createPolishedBasaltSword();
+        if ("verdant_froglight_sword".equals(customId)) return BlockWeapons.createVerdantFroglightSword();
+        if ("pearlescent_froglight_sword".equals(customId)) return BlockWeapons.createPearlescentFroglightSword();
+        if ("ochre_froglight_sword".equals(customId)) return BlockWeapons.createOchreFroglightSword();
+        if ("iron_nugget_sword".equals(customId)) return BlockWeapons.createIronNuggetSword();
+        if ("gold_nugget_sword".equals(customId)) return BlockWeapons.createGoldNuggetSword();
+        if ("copper_ingot_sword".equals(customId)) return BlockWeapons.createCopperIngotSword();
+        if ("emerald_sword".equals(customId)) return BlockWeapons.createEmeraldSword();
+        if ("lapis_lazuli_sword".equals(customId)) return BlockWeapons.createLapisLazuliSword();
+        if ("amethyst_shard_sword".equals(customId)) return BlockWeapons.createAmethystShardSword();
+        if ("flint_sword".equals(customId)) return BlockWeapons.createFlintSword();
+        if ("bone_meal_sword".equals(customId)) return BlockWeapons.createBoneMealSword();
+        if ("charcoal_sword".equals(customId)) return BlockWeapons.createCharcoalSword();
+        if ("end_stone_sword".equals(customId)) return BlockWeapons.createEndStoneSword();
+        if ("snow_block_sword".equals(customId)) return BlockWeapons.createSnowBlockSword();
+        
+        // Gem Armor & Weapons
+        if ("emerald_helmet".equals(customId)) return GemGear.createEmeraldHelmet();
+        if ("emerald_chestplate".equals(customId)) return GemGear.createEmeraldChestplate();
+        if ("emerald_leggings".equals(customId)) return GemGear.createEmeraldLeggings();
+        if ("emerald_boots".equals(customId)) return GemGear.createEmeraldBoots();
+        if ("emerald_sword".equals(customId)) return GemGear.createEmeraldSword();
+        if ("emerald_pickaxe".equals(customId)) return GemGear.createEmeraldPickaxe();
+        if ("emerald_axe".equals(customId)) return GemGear.createEmeraldAxe();
+        if ("emerald_shovel".equals(customId)) return GemGear.createEmeraldShovel();
+        if ("emerald_hoe".equals(customId)) return GemGear.createEmeraldHoe();
+        if ("lapis_helmet".equals(customId)) return GemGear.createLapisHelmet();
+        if ("lapis_chestplate".equals(customId)) return GemGear.createLapisChestplate();
+        if ("lapis_leggings".equals(customId)) return GemGear.createLapisLeggings();
+        if ("lapis_boots".equals(customId)) return GemGear.createLapisBoots();
+        if ("lapis_sword".equals(customId)) return GemGear.createLapisSword();
+        if ("lapis_pickaxe".equals(customId)) return GemGear.createLapisPickaxe();
+        if ("lapis_axe".equals(customId)) return GemGear.createLapisAxe();
+        if ("lapis_shovel".equals(customId)) return GemGear.createLapisShovel();
+        if ("lapis_hoe".equals(customId)) return GemGear.createLapisHoe();
+        
+        // Slayer Armor T1 & T2
+        for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
+            String typeLower = type.name().toLowerCase();
+            if (customId.equals(typeLower + "_t1_helmet")) return SlayerItems.createSlayerHelmet(type, 1);
+            if (customId.equals(typeLower + "_t1_chestplate")) return SlayerItems.createSlayerChestplate(type, 1);
+            if (customId.equals(typeLower + "_t1_leggings")) return SlayerItems.createSlayerLeggings(type, 1);
+            if (customId.equals(typeLower + "_t1_boots")) return SlayerItems.createSlayerBoots(type, 1);
+            if (customId.equals(typeLower + "_t2_helmet")) return SlayerItems.createSlayerHelmet(type, 2);
+            if (customId.equals(typeLower + "_t2_chestplate")) return SlayerItems.createSlayerChestplate(type, 2);
+            if (customId.equals(typeLower + "_t2_leggings")) return SlayerItems.createSlayerLeggings(type, 2);
+            if (customId.equals(typeLower + "_t2_boots")) return SlayerItems.createSlayerBoots(type, 2);
+            if (customId.equals(typeLower + "_sword")) return SlayerItems.createSlayerSword(type);
+            if (customId.equals(typeLower + "_sword_t2")) return SlayerItems.createUpgradedSlayerSword(type);
+        }
+        
+        // Special Armor
+        if ("zombie_berserker_helmet".equals(customId)) return SlayerItems.createZombieBerserkerHelmet();
+        if ("spider_leggings".equals(customId)) return SlayerItems.createSpiderLeggings();
+        if ("skeleton_bow".equals(customId)) return SlayerItems.createSkeletonBow();
+        if ("slime_boots".equals(customId)) return SlayerItems.createSlimeBoots();
+        if ("warden_chestplate".equals(customId)) return SlayerItems.createWardenChestplate();
+        if ("voidwalker_crown".equals(customId)) return SlayerItems.createVoidwalkerCrown();
+        
+        // Special Items
+        if ("the_gavel".equals(customId)) return CustomItemHandler.createTheGavel();
+        if ("harveys_stick".equals(customId)) return CustomItemHandler.createHarveysStick();
+        if ("hermes_shoes".equals(customId)) return CustomItemHandler.createHermesShoes();
+        if ("daniels_pickaxe".equals(customId)) return DanielsPickaxe.create();
+        
+        // NEW BOSS DROPS
+        if ("undead_heart".equals(customId)) return SlayerItems.createUndeadHeart();
+        if ("spectral_quiver".equals(customId)) return SlayerItems.createSpectralQuiver();
+        if ("echoing_core".equals(customId)) return SlayerItems.createEchoingCore();
+        if ("ender_sword".equals(customId)) return SlayerItems.createEnderSword();
+        if ("abyssal_blade".equals(customId)) return SlayerItems.createAbyssalBlade();
+        if ("bouncy_slime".equals(customId)) return SlayerItems.createBouncySlime();
+        if ("venomous_dagger".equals(customId)) return SlayerItems.createVenomousDagger();
+        
+        // Dragon Chestplates (No Recipe - but add mapping for completeness)
+        if ("dragon_chestplate_1".equals(customId)) return DragonChestplates.createDragonChestplate1();
+        if ("dragon_chestplate_2".equals(customId)) return DragonChestplates.createDragonChestplate2();
+        if ("dragon_chestplate_3".equals(customId)) return DragonChestplates.createDragonChestplate3();
+        
+        // HPEBM Weapons
+        for (int mk = 1; mk <= 5; mk++) {
+            if (customId.equals("hpbeam_mk" + mk)) return CustomItemHandler.createHPEBM(mk);
+        }
+        if ("ultra_overclocked_beam".equals(customId)) return CustomItemHandler.createUltraOverclockedBeam();
+        
+        // Legendary Tools (15 sets)
+        if ("dragon_pickaxe".equals(customId)) return LegendaryTools.createDragonPickaxe();
+        if ("dragon_axe".equals(customId)) return LegendaryTools.createDragonAxe();
+        if ("dragon_shovel".equals(customId)) return LegendaryTools.createDragonShovel();
+        if ("dragon_hoe".equals(customId)) return LegendaryTools.createDragonHoe();
+        if ("aether_pickaxe".equals(customId)) return LegendaryTools.createAetherPickaxe();
+        if ("aether_axe".equals(customId)) return LegendaryTools.createAetherAxe();
+        if ("aether_shovel".equals(customId)) return LegendaryTools.createAetherShovel();
+        if ("aether_hoe".equals(customId)) return LegendaryTools.createAetherHoe();
+        if ("void_pickaxe".equals(customId)) return LegendaryTools.createVoidPickaxe();
+        if ("void_axe".equals(customId)) return LegendaryTools.createVoidAxe();
+        if ("void_shovel".equals(customId)) return LegendaryTools.createVoidShovel();
+        if ("void_hoe".equals(customId)) return LegendaryTools.createVoidHoe();
+        if ("nature_pickaxe".equals(customId)) return LegendaryTools.createNaturePickaxe();
+        if ("nature_axe".equals(customId)) return LegendaryTools.createNatureAxe();
+        if ("nature_shovel".equals(customId)) return LegendaryTools.createNatureShovel();
+        if ("nature_hoe".equals(customId)) return LegendaryTools.createNatureHoe();
+        if ("frost_pickaxe".equals(customId)) return LegendaryTools.createFrostPickaxe();
+        if ("frost_axe".equals(customId)) return LegendaryTools.createFrostAxe();
+        if ("frost_shovel".equals(customId)) return LegendaryTools.createFrostShovel();
+        if ("frost_hoe".equals(customId)) return LegendaryTools.createFrostHoe();
+        if ("thunder_pickaxe".equals(customId)) return LegendaryTools.createThunderPickaxe();
+        if ("thunder_axe".equals(customId)) return LegendaryTools.createThunderAxe();
+        if ("thunder_shovel".equals(customId)) return LegendaryTools.createThunderShovel();
+        if ("thunder_hoe".equals(customId)) return LegendaryTools.createThunderHoe();
+        if ("ocean_pickaxe".equals(customId)) return LegendaryTools.createOceanPickaxe();
+        if ("ocean_axe".equals(customId)) return LegendaryTools.createOceanAxe();
+        if ("ocean_shovel".equals(customId)) return LegendaryTools.createOceanShovel();
+        if ("ocean_hoe".equals(customId)) return LegendaryTools.createOceanHoe();
+        if ("lunar_pickaxe".equals(customId)) return LegendaryTools.createLunarPickaxe();
+        if ("lunar_axe".equals(customId)) return LegendaryTools.createLunarAxe();
+        if ("lunar_shovel".equals(customId)) return LegendaryTools.createLunarShovel();
+        if ("lunar_hoe".equals(customId)) return LegendaryTools.createLunarHoe();
+        if ("solar_pickaxe".equals(customId)) return LegendaryTools.createSolarPickaxe();
+        if ("solar_axe".equals(customId)) return LegendaryTools.createSolarAxe();
+        if ("solar_shovel".equals(customId)) return LegendaryTools.createSolarShovel();
+        if ("solar_hoe".equals(customId)) return LegendaryTools.createSolarHoe();
+        if ("terra_pickaxe".equals(customId)) return LegendaryTools.createTerraPickaxe();
+        if ("terra_axe".equals(customId)) return LegendaryTools.createTerraAxe();
+        if ("terra_shovel".equals(customId)) return LegendaryTools.createTerraShovel();
+        if ("terra_hoe".equals(customId)) return LegendaryTools.createTerraHoe();
+        if ("phantom_pickaxe".equals(customId)) return LegendaryTools.createPhantomPickaxe();
+        if ("phantom_axe".equals(customId)) return LegendaryTools.createPhantomAxe();
+        if ("phantom_shovel".equals(customId)) return LegendaryTools.createPhantomShovel();
+        if ("phantom_hoe".equals(customId)) return LegendaryTools.createPhantomHoe();
+        if ("blood_pickaxe".equals(customId)) return LegendaryTools.createBloodPickaxe();
+        if ("blood_axe".equals(customId)) return LegendaryTools.createBloodAxe();
+        if ("blood_shovel".equals(customId)) return LegendaryTools.createBloodShovel();
+        if ("blood_hoe".equals(customId)) return LegendaryTools.createBloodHoe();
+        if ("celestial_pickaxe".equals(customId)) return LegendaryTools.createCelestialPickaxe();
+        if ("celestial_axe".equals(customId)) return LegendaryTools.createCelestialAxe();
+        if ("celestial_shovel".equals(customId)) return LegendaryTools.createCelestialShovel();
+        if ("celestial_hoe".equals(customId)) return LegendaryTools.createCelestialHoe();
+        if ("shadow_pickaxe".equals(customId)) return LegendaryTools.createShadowPickaxe();
+        if ("shadow_axe".equals(customId)) return LegendaryTools.createShadowAxe();
+        if ("shadow_shovel".equals(customId)) return LegendaryTools.createShadowShovel();
+        if ("shadow_hoe".equals(customId)) return LegendaryTools.createShadowHoe();
+        if ("crystal_pickaxe".equals(customId)) return LegendaryTools.createCrystalPickaxe();
+        if ("crystal_axe".equals(customId)) return LegendaryTools.createCrystalAxe();
+        if ("crystal_shovel".equals(customId)) return LegendaryTools.createCrystalShovel();
+        if ("crystal_hoe".equals(customId)) return LegendaryTools.createCrystalHoe();
+        
         // Backrooms/Fracture 3 items
         // Backrooms rune items — try direct registry lookup for any politicalserver: item
         try {
@@ -516,19 +861,5 @@ public class RecipeConfigManager {
             System.err.println("[RecipeConfigManager] Unexpected error resolving item '" + customId + "': " + e.getMessage());
         }
         return ItemStack.EMPTY;
-    }
-    
-    private static String snakeToPascal(String snake) {
-        StringBuilder result = new StringBuilder();
-        boolean capitalizeNext = true;
-        for (char c : snake.toCharArray()) {
-            if (c == '_') {
-                capitalizeNext = true;
-            } else {
-                result.append(capitalizeNext ? Character.toUpperCase(c) : c);
-                capitalizeNext = false;
-            }
-        }
-        return result.toString();
     }
 }

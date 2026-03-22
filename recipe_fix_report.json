@@ -1,0 +1,1381 @@
+{
+  "summary": {
+    "totalInFile": 909,
+    "valid": 639,
+    "removed": 270,
+    "missing": 289
+  },
+  "removed": [
+    {
+      "id": "zombie_helmet_t1",
+      "name": "Zombie Hunter Helmet"
+    },
+    {
+      "id": "zombie_chestplate_t1",
+      "name": "Zombie Hunter Chestplate"
+    },
+    {
+      "id": "zombie_leggings_t1",
+      "name": "Zombie Hunter Leggings"
+    },
+    {
+      "id": "zombie_boots_t1",
+      "name": "Zombie Hunter Boots"
+    },
+    {
+      "id": "spider_helmet_t1",
+      "name": "Spider Hunter Helmet"
+    },
+    {
+      "id": "spider_chestplate_t1",
+      "name": "Spider Hunter Chestplate"
+    },
+    {
+      "id": "spider_leggings_t1",
+      "name": "Spider Hunter Leggings"
+    },
+    {
+      "id": "spider_boots_t1",
+      "name": "Spider Hunter Boots"
+    },
+    {
+      "id": "skeleton_helmet_t1",
+      "name": "Skeleton Hunter Helmet"
+    },
+    {
+      "id": "skeleton_chestplate_t1",
+      "name": "Skeleton Hunter Chestplate"
+    },
+    {
+      "id": "skeleton_leggings_t1",
+      "name": "Skeleton Hunter Leggings"
+    },
+    {
+      "id": "skeleton_boots_t1",
+      "name": "Skeleton Hunter Boots"
+    },
+    {
+      "id": "creeper_helmet_t1",
+      "name": "Creeper Hunter Helmet"
+    },
+    {
+      "id": "creeper_chestplate_t1",
+      "name": "Creeper Hunter Chestplate"
+    },
+    {
+      "id": "creeper_leggings_t1",
+      "name": "Creeper Hunter Leggings"
+    },
+    {
+      "id": "creeper_boots_t1",
+      "name": "Creeper Hunter Boots"
+    },
+    {
+      "id": "enderman_helmet_t1",
+      "name": "Enderman Hunter Helmet"
+    },
+    {
+      "id": "enderman_chestplate_t1",
+      "name": "Enderman Hunter Chestplate"
+    },
+    {
+      "id": "enderman_leggings_t1",
+      "name": "Enderman Hunter Leggings"
+    },
+    {
+      "id": "enderman_boots_t1",
+      "name": "Enderman Hunter Boots"
+    },
+    {
+      "id": "witch_helmet_t1",
+      "name": "Witch Hunter Helmet"
+    },
+    {
+      "id": "witch_chestplate_t1",
+      "name": "Witch Hunter Chestplate"
+    },
+    {
+      "id": "witch_leggings_t1",
+      "name": "Witch Hunter Leggings"
+    },
+    {
+      "id": "witch_boots_t1",
+      "name": "Witch Hunter Boots"
+    },
+    {
+      "id": "blaze_helmet_t1",
+      "name": "Blaze Hunter Helmet"
+    },
+    {
+      "id": "blaze_chestplate_t1",
+      "name": "Blaze Hunter Chestplate"
+    },
+    {
+      "id": "blaze_leggings_t1",
+      "name": "Blaze Hunter Leggings"
+    },
+    {
+      "id": "blaze_boots_t1",
+      "name": "Blaze Hunter Boots"
+    },
+    {
+      "id": "ghast_helmet_t1",
+      "name": "Ghast Hunter Helmet"
+    },
+    {
+      "id": "ghast_chestplate_t1",
+      "name": "Ghast Hunter Chestplate"
+    },
+    {
+      "id": "ghast_leggings_t1",
+      "name": "Ghast Hunter Leggings"
+    },
+    {
+      "id": "ghast_boots_t1",
+      "name": "Ghast Hunter Boots"
+    },
+    {
+      "id": "wither_skeleton_helmet_t1",
+      "name": "Wither Skeleton Hunter Helmet"
+    },
+    {
+      "id": "wither_skeleton_chestplate_t1",
+      "name": "Wither Skeleton Hunter Chestplate"
+    },
+    {
+      "id": "wither_skeleton_leggings_t1",
+      "name": "Wither Skeleton Hunter Leggings"
+    },
+    {
+      "id": "wither_skeleton_boots_t1",
+      "name": "Wither Skeleton Hunter Boots"
+    },
+    {
+      "id": "piglin_helmet_t1",
+      "name": "Piglin Hunter Helmet"
+    },
+    {
+      "id": "piglin_chestplate_t1",
+      "name": "Piglin Hunter Chestplate"
+    },
+    {
+      "id": "piglin_leggings_t1",
+      "name": "Piglin Hunter Leggings"
+    },
+    {
+      "id": "piglin_boots_t1",
+      "name": "Piglin Hunter Boots"
+    },
+    {
+      "id": "hoglin_helmet_t1",
+      "name": "Hoglin Hunter Helmet"
+    },
+    {
+      "id": "hoglin_chestplate_t1",
+      "name": "Hoglin Hunter Chestplate"
+    },
+    {
+      "id": "hoglin_leggings_t1",
+      "name": "Hoglin Hunter Leggings"
+    },
+    {
+      "id": "hoglin_boots_t1",
+      "name": "Hoglin Hunter Boots"
+    },
+    {
+      "id": "zoglin_helmet_t1",
+      "name": "Zoglin Hunter Helmet"
+    },
+    {
+      "id": "zoglin_chestplate_t1",
+      "name": "Zoglin Hunter Chestplate"
+    },
+    {
+      "id": "zoglin_leggings_t1",
+      "name": "Zoglin Hunter Leggings"
+    },
+    {
+      "id": "zoglin_boots_t1",
+      "name": "Zoglin Hunter Boots"
+    },
+    {
+      "id": "pillager_helmet_t1",
+      "name": "Pillager Hunter Helmet"
+    },
+    {
+      "id": "pillager_chestplate_t1",
+      "name": "Pillager Hunter Chestplate"
+    },
+    {
+      "id": "pillager_leggings_t1",
+      "name": "Pillager Hunter Leggings"
+    },
+    {
+      "id": "pillager_boots_t1",
+      "name": "Pillager Hunter Boots"
+    },
+    {
+      "id": "vindicator_helmet_t1",
+      "name": "Vindicator Hunter Helmet"
+    },
+    {
+      "id": "vindicator_chestplate_t1",
+      "name": "Vindicator Hunter Chestplate"
+    },
+    {
+      "id": "vindicator_leggings_t1",
+      "name": "Vindicator Hunter Leggings"
+    },
+    {
+      "id": "vindicator_boots_t1",
+      "name": "Vindicator Hunter Boots"
+    },
+    {
+      "id": "evoker_helmet_t1",
+      "name": "Evoker Hunter Helmet"
+    },
+    {
+      "id": "evoker_chestplate_t1",
+      "name": "Evoker Hunter Chestplate"
+    },
+    {
+      "id": "evoker_leggings_t1",
+      "name": "Evoker Hunter Leggings"
+    },
+    {
+      "id": "evoker_boots_t1",
+      "name": "Evoker Hunter Boots"
+    },
+    {
+      "id": "ravager_helmet_t1",
+      "name": "Ravager Hunter Helmet"
+    },
+    {
+      "id": "ravager_chestplate_t1",
+      "name": "Ravager Hunter Chestplate"
+    },
+    {
+      "id": "ravager_leggings_t1",
+      "name": "Ravager Hunter Leggings"
+    },
+    {
+      "id": "ravager_boots_t1",
+      "name": "Ravager Hunter Boots"
+    },
+    {
+      "id": "vex_helmet_t1",
+      "name": "Vex Hunter Helmet"
+    },
+    {
+      "id": "vex_chestplate_t1",
+      "name": "Vex Hunter Chestplate"
+    },
+    {
+      "id": "vex_leggings_t1",
+      "name": "Vex Hunter Leggings"
+    },
+    {
+      "id": "vex_boots_t1",
+      "name": "Vex Hunter Boots"
+    },
+    {
+      "id": "phantom_helmet_t1",
+      "name": "Phantom Hunter Helmet"
+    },
+    {
+      "id": "phantom_chestplate_t1",
+      "name": "Phantom Hunter Chestplate"
+    },
+    {
+      "id": "phantom_leggings_t1",
+      "name": "Phantom Hunter Leggings"
+    },
+    {
+      "id": "phantom_boots_t1",
+      "name": "Phantom Hunter Boots"
+    },
+    {
+      "id": "drowned_helmet_t1",
+      "name": "Drowned Hunter Helmet"
+    },
+    {
+      "id": "drowned_chestplate_t1",
+      "name": "Drowned Hunter Chestplate"
+    },
+    {
+      "id": "drowned_leggings_t1",
+      "name": "Drowned Hunter Leggings"
+    },
+    {
+      "id": "drowned_boots_t1",
+      "name": "Drowned Hunter Boots"
+    },
+    {
+      "id": "husk_helmet_t1",
+      "name": "Husk Hunter Helmet"
+    },
+    {
+      "id": "husk_chestplate_t1",
+      "name": "Husk Hunter Chestplate"
+    },
+    {
+      "id": "husk_leggings_t1",
+      "name": "Husk Hunter Leggings"
+    },
+    {
+      "id": "husk_boots_t1",
+      "name": "Husk Hunter Boots"
+    },
+    {
+      "id": "stray_helmet_t1",
+      "name": "Stray Hunter Helmet"
+    },
+    {
+      "id": "stray_chestplate_t1",
+      "name": "Stray Hunter Chestplate"
+    },
+    {
+      "id": "stray_leggings_t1",
+      "name": "Stray Hunter Leggings"
+    },
+    {
+      "id": "stray_boots_t1",
+      "name": "Stray Hunter Boots"
+    },
+    {
+      "id": "bogged_helmet_t1",
+      "name": "Bogged Hunter Helmet"
+    },
+    {
+      "id": "bogged_chestplate_t1",
+      "name": "Bogged Hunter Chestplate"
+    },
+    {
+      "id": "bogged_leggings_t1",
+      "name": "Bogged Hunter Leggings"
+    },
+    {
+      "id": "bogged_boots_t1",
+      "name": "Bogged Hunter Boots"
+    },
+    {
+      "id": "breeze_helmet_t1",
+      "name": "Breeze Hunter Helmet"
+    },
+    {
+      "id": "breeze_chestplate_t1",
+      "name": "Breeze Hunter Chestplate"
+    },
+    {
+      "id": "breeze_leggings_t1",
+      "name": "Breeze Hunter Leggings"
+    },
+    {
+      "id": "breeze_boots_t1",
+      "name": "Breeze Hunter Boots"
+    },
+    {
+      "id": "warden_helmet_t1",
+      "name": "Warden Hunter Helmet"
+    },
+    {
+      "id": "warden_chestplate_t1",
+      "name": "Warden Hunter Chestplate"
+    },
+    {
+      "id": "warden_leggings_t1",
+      "name": "Warden Hunter Leggings"
+    },
+    {
+      "id": "warden_boots_t1",
+      "name": "Warden Hunter Boots"
+    },
+    {
+      "id": "elder_guardian_helmet_t1",
+      "name": "Elder Guardian Hunter Helmet"
+    },
+    {
+      "id": "elder_guardian_chestplate_t1",
+      "name": "Elder Guardian Hunter Chestplate"
+    },
+    {
+      "id": "elder_guardian_leggings_t1",
+      "name": "Elder Guardian Hunter Leggings"
+    },
+    {
+      "id": "elder_guardian_boots_t1",
+      "name": "Elder Guardian Hunter Boots"
+    },
+    {
+      "id": "ender_dragon_helmet_t1",
+      "name": "Ender Dragon Hunter Helmet"
+    },
+    {
+      "id": "ender_dragon_chestplate_t1",
+      "name": "Ender Dragon Hunter Chestplate"
+    },
+    {
+      "id": "ender_dragon_leggings_t1",
+      "name": "Ender Dragon Hunter Leggings"
+    },
+    {
+      "id": "ender_dragon_boots_t1",
+      "name": "Ender Dragon Hunter Boots"
+    },
+    {
+      "id": "wither_helmet_t1",
+      "name": "Wither Hunter Helmet"
+    },
+    {
+      "id": "wither_chestplate_t1",
+      "name": "Wither Hunter Chestplate"
+    },
+    {
+      "id": "wither_leggings_t1",
+      "name": "Wither Hunter Leggings"
+    },
+    {
+      "id": "wither_boots_t1",
+      "name": "Wither Hunter Boots"
+    },
+    {
+      "id": "zombie_helmet_t2",
+      "name": "Zombie Slayer Helmet"
+    },
+    {
+      "id": "zombie_chestplate_t2",
+      "name": "Zombie Slayer Chestplate"
+    },
+    {
+      "id": "zombie_leggings_t2",
+      "name": "Zombie Slayer Leggings"
+    },
+    {
+      "id": "zombie_boots_t2",
+      "name": "Zombie Slayer Boots"
+    },
+    {
+      "id": "spider_helmet_t2",
+      "name": "Spider Slayer Helmet"
+    },
+    {
+      "id": "spider_chestplate_t2",
+      "name": "Spider Slayer Chestplate"
+    },
+    {
+      "id": "spider_leggings_t2",
+      "name": "Spider Slayer Leggings"
+    },
+    {
+      "id": "spider_boots_t2",
+      "name": "Spider Slayer Boots"
+    },
+    {
+      "id": "skeleton_helmet_t2",
+      "name": "Skeleton Slayer Helmet"
+    },
+    {
+      "id": "skeleton_chestplate_t2",
+      "name": "Skeleton Slayer Chestplate"
+    },
+    {
+      "id": "skeleton_leggings_t2",
+      "name": "Skeleton Slayer Leggings"
+    },
+    {
+      "id": "skeleton_boots_t2",
+      "name": "Skeleton Slayer Boots"
+    },
+    {
+      "id": "creeper_helmet_t2",
+      "name": "Creeper Slayer Helmet"
+    },
+    {
+      "id": "creeper_chestplate_t2",
+      "name": "Creeper Slayer Chestplate"
+    },
+    {
+      "id": "creeper_leggings_t2",
+      "name": "Creeper Slayer Leggings"
+    },
+    {
+      "id": "creeper_boots_t2",
+      "name": "Creeper Slayer Boots"
+    },
+    {
+      "id": "enderman_helmet_t2",
+      "name": "Enderman Slayer Helmet"
+    },
+    {
+      "id": "enderman_chestplate_t2",
+      "name": "Enderman Slayer Chestplate"
+    },
+    {
+      "id": "enderman_leggings_t2",
+      "name": "Enderman Slayer Leggings"
+    },
+    {
+      "id": "enderman_boots_t2",
+      "name": "Enderman Slayer Boots"
+    },
+    {
+      "id": "witch_helmet_t2",
+      "name": "Witch Slayer Helmet"
+    },
+    {
+      "id": "witch_chestplate_t2",
+      "name": "Witch Slayer Chestplate"
+    },
+    {
+      "id": "witch_leggings_t2",
+      "name": "Witch Slayer Leggings"
+    },
+    {
+      "id": "witch_boots_t2",
+      "name": "Witch Slayer Boots"
+    },
+    {
+      "id": "blaze_helmet_t2",
+      "name": "Blaze Slayer Helmet"
+    },
+    {
+      "id": "blaze_chestplate_t2",
+      "name": "Blaze Slayer Chestplate"
+    },
+    {
+      "id": "blaze_leggings_t2",
+      "name": "Blaze Slayer Leggings"
+    },
+    {
+      "id": "blaze_boots_t2",
+      "name": "Blaze Slayer Boots"
+    },
+    {
+      "id": "ghast_helmet_t2",
+      "name": "Ghast Slayer Helmet"
+    },
+    {
+      "id": "ghast_chestplate_t2",
+      "name": "Ghast Slayer Chestplate"
+    },
+    {
+      "id": "ghast_leggings_t2",
+      "name": "Ghast Slayer Leggings"
+    },
+    {
+      "id": "ghast_boots_t2",
+      "name": "Ghast Slayer Boots"
+    },
+    {
+      "id": "wither_skeleton_helmet_t2",
+      "name": "Wither Skeleton Slayer Helmet"
+    },
+    {
+      "id": "wither_skeleton_chestplate_t2",
+      "name": "Wither Skeleton Slayer Chestplate"
+    },
+    {
+      "id": "wither_skeleton_leggings_t2",
+      "name": "Wither Skeleton Slayer Leggings"
+    },
+    {
+      "id": "wither_skeleton_boots_t2",
+      "name": "Wither Skeleton Slayer Boots"
+    },
+    {
+      "id": "piglin_helmet_t2",
+      "name": "Piglin Slayer Helmet"
+    },
+    {
+      "id": "piglin_chestplate_t2",
+      "name": "Piglin Slayer Chestplate"
+    },
+    {
+      "id": "piglin_leggings_t2",
+      "name": "Piglin Slayer Leggings"
+    },
+    {
+      "id": "piglin_boots_t2",
+      "name": "Piglin Slayer Boots"
+    },
+    {
+      "id": "hoglin_helmet_t2",
+      "name": "Hoglin Slayer Helmet"
+    },
+    {
+      "id": "hoglin_chestplate_t2",
+      "name": "Hoglin Slayer Chestplate"
+    },
+    {
+      "id": "hoglin_leggings_t2",
+      "name": "Hoglin Slayer Leggings"
+    },
+    {
+      "id": "hoglin_boots_t2",
+      "name": "Hoglin Slayer Boots"
+    },
+    {
+      "id": "zoglin_helmet_t2",
+      "name": "Zoglin Slayer Helmet"
+    },
+    {
+      "id": "zoglin_chestplate_t2",
+      "name": "Zoglin Slayer Chestplate"
+    },
+    {
+      "id": "zoglin_leggings_t2",
+      "name": "Zoglin Slayer Leggings"
+    },
+    {
+      "id": "zoglin_boots_t2",
+      "name": "Zoglin Slayer Boots"
+    },
+    {
+      "id": "pillager_helmet_t2",
+      "name": "Pillager Slayer Helmet"
+    },
+    {
+      "id": "pillager_chestplate_t2",
+      "name": "Pillager Slayer Chestplate"
+    },
+    {
+      "id": "pillager_leggings_t2",
+      "name": "Pillager Slayer Leggings"
+    },
+    {
+      "id": "pillager_boots_t2",
+      "name": "Pillager Slayer Boots"
+    },
+    {
+      "id": "vindicator_helmet_t2",
+      "name": "Vindicator Slayer Helmet"
+    },
+    {
+      "id": "vindicator_chestplate_t2",
+      "name": "Vindicator Slayer Chestplate"
+    },
+    {
+      "id": "vindicator_leggings_t2",
+      "name": "Vindicator Slayer Leggings"
+    },
+    {
+      "id": "vindicator_boots_t2",
+      "name": "Vindicator Slayer Boots"
+    },
+    {
+      "id": "evoker_helmet_t2",
+      "name": "Evoker Slayer Helmet"
+    },
+    {
+      "id": "evoker_chestplate_t2",
+      "name": "Evoker Slayer Chestplate"
+    },
+    {
+      "id": "evoker_leggings_t2",
+      "name": "Evoker Slayer Leggings"
+    },
+    {
+      "id": "evoker_boots_t2",
+      "name": "Evoker Slayer Boots"
+    },
+    {
+      "id": "ravager_helmet_t2",
+      "name": "Ravager Slayer Helmet"
+    },
+    {
+      "id": "ravager_chestplate_t2",
+      "name": "Ravager Slayer Chestplate"
+    },
+    {
+      "id": "ravager_leggings_t2",
+      "name": "Ravager Slayer Leggings"
+    },
+    {
+      "id": "ravager_boots_t2",
+      "name": "Ravager Slayer Boots"
+    },
+    {
+      "id": "vex_helmet_t2",
+      "name": "Vex Slayer Helmet"
+    },
+    {
+      "id": "vex_chestplate_t2",
+      "name": "Vex Slayer Chestplate"
+    },
+    {
+      "id": "vex_leggings_t2",
+      "name": "Vex Slayer Leggings"
+    },
+    {
+      "id": "vex_boots_t2",
+      "name": "Vex Slayer Boots"
+    },
+    {
+      "id": "phantom_helmet_t2",
+      "name": "Phantom Slayer Helmet"
+    },
+    {
+      "id": "phantom_chestplate_t2",
+      "name": "Phantom Slayer Chestplate"
+    },
+    {
+      "id": "phantom_leggings_t2",
+      "name": "Phantom Slayer Leggings"
+    },
+    {
+      "id": "phantom_boots_t2",
+      "name": "Phantom Slayer Boots"
+    },
+    {
+      "id": "drowned_helmet_t2",
+      "name": "Drowned Slayer Helmet"
+    },
+    {
+      "id": "drowned_chestplate_t2",
+      "name": "Drowned Slayer Chestplate"
+    },
+    {
+      "id": "drowned_leggings_t2",
+      "name": "Drowned Slayer Leggings"
+    },
+    {
+      "id": "drowned_boots_t2",
+      "name": "Drowned Slayer Boots"
+    },
+    {
+      "id": "husk_helmet_t2",
+      "name": "Husk Slayer Helmet"
+    },
+    {
+      "id": "husk_chestplate_t2",
+      "name": "Husk Slayer Chestplate"
+    },
+    {
+      "id": "husk_leggings_t2",
+      "name": "Husk Slayer Leggings"
+    },
+    {
+      "id": "husk_boots_t2",
+      "name": "Husk Slayer Boots"
+    },
+    {
+      "id": "stray_helmet_t2",
+      "name": "Stray Slayer Helmet"
+    },
+    {
+      "id": "stray_chestplate_t2",
+      "name": "Stray Slayer Chestplate"
+    },
+    {
+      "id": "stray_leggings_t2",
+      "name": "Stray Slayer Leggings"
+    },
+    {
+      "id": "stray_boots_t2",
+      "name": "Stray Slayer Boots"
+    },
+    {
+      "id": "bogged_helmet_t2",
+      "name": "Bogged Slayer Helmet"
+    },
+    {
+      "id": "bogged_chestplate_t2",
+      "name": "Bogged Slayer Chestplate"
+    },
+    {
+      "id": "bogged_leggings_t2",
+      "name": "Bogged Slayer Leggings"
+    },
+    {
+      "id": "bogged_boots_t2",
+      "name": "Bogged Slayer Boots"
+    },
+    {
+      "id": "breeze_helmet_t2",
+      "name": "Breeze Slayer Helmet"
+    },
+    {
+      "id": "breeze_chestplate_t2",
+      "name": "Breeze Slayer Chestplate"
+    },
+    {
+      "id": "breeze_leggings_t2",
+      "name": "Breeze Slayer Leggings"
+    },
+    {
+      "id": "breeze_boots_t2",
+      "name": "Breeze Slayer Boots"
+    },
+    {
+      "id": "warden_helmet_t2",
+      "name": "Warden Slayer Helmet"
+    },
+    {
+      "id": "warden_chestplate_t2",
+      "name": "Warden Slayer Chestplate"
+    },
+    {
+      "id": "warden_leggings_t2",
+      "name": "Warden Slayer Leggings"
+    },
+    {
+      "id": "warden_boots_t2",
+      "name": "Warden Slayer Boots"
+    },
+    {
+      "id": "elder_guardian_helmet_t2",
+      "name": "Elder Guardian Slayer Helmet"
+    },
+    {
+      "id": "elder_guardian_chestplate_t2",
+      "name": "Elder Guardian Slayer Chestplate"
+    },
+    {
+      "id": "elder_guardian_leggings_t2",
+      "name": "Elder Guardian Slayer Leggings"
+    },
+    {
+      "id": "elder_guardian_boots_t2",
+      "name": "Elder Guardian Slayer Boots"
+    },
+    {
+      "id": "ender_dragon_helmet_t2",
+      "name": "Ender Dragon Slayer Helmet"
+    },
+    {
+      "id": "ender_dragon_chestplate_t2",
+      "name": "Ender Dragon Slayer Chestplate"
+    },
+    {
+      "id": "ender_dragon_leggings_t2",
+      "name": "Ender Dragon Slayer Leggings"
+    },
+    {
+      "id": "ender_dragon_boots_t2",
+      "name": "Ender Dragon Slayer Boots"
+    },
+    {
+      "id": "wither_helmet_t2",
+      "name": "Wither Slayer Helmet"
+    },
+    {
+      "id": "wither_chestplate_t2",
+      "name": "Wither Slayer Chestplate"
+    },
+    {
+      "id": "wither_leggings_t2",
+      "name": "Wither Slayer Leggings"
+    },
+    {
+      "id": "wither_boots_t2",
+      "name": "Wither Slayer Boots"
+    },
+    {
+      "id": "zombie_sword",
+      "name": "Zombie Hunter Sword"
+    },
+    {
+      "id": "spider_sword",
+      "name": "Spider Hunter Sword"
+    },
+    {
+      "id": "skeleton_sword",
+      "name": "Skeleton Hunter Sword"
+    },
+    {
+      "id": "creeper_sword",
+      "name": "Creeper Hunter Sword"
+    },
+    {
+      "id": "enderman_sword",
+      "name": "Enderman Hunter Sword"
+    },
+    {
+      "id": "witch_sword",
+      "name": "Witch Hunter Sword"
+    },
+    {
+      "id": "blaze_sword",
+      "name": "Blaze Hunter Sword"
+    },
+    {
+      "id": "ghast_sword",
+      "name": "Ghast Hunter Sword"
+    },
+    {
+      "id": "wither_skeleton_sword",
+      "name": "Wither Skeleton Hunter Sword"
+    },
+    {
+      "id": "piglin_sword",
+      "name": "Piglin Hunter Sword"
+    },
+    {
+      "id": "hoglin_sword",
+      "name": "Hoglin Hunter Sword"
+    },
+    {
+      "id": "zoglin_sword",
+      "name": "Zoglin Hunter Sword"
+    },
+    {
+      "id": "pillager_sword",
+      "name": "Pillager Hunter Sword"
+    },
+    {
+      "id": "vindicator_sword",
+      "name": "Vindicator Hunter Sword"
+    },
+    {
+      "id": "evoker_sword",
+      "name": "Evoker Hunter Sword"
+    },
+    {
+      "id": "ravager_sword",
+      "name": "Ravager Hunter Sword"
+    },
+    {
+      "id": "vex_sword",
+      "name": "Vex Hunter Sword"
+    },
+    {
+      "id": "phantom_sword",
+      "name": "Phantom Hunter Sword"
+    },
+    {
+      "id": "drowned_sword",
+      "name": "Drowned Hunter Sword"
+    },
+    {
+      "id": "husk_sword",
+      "name": "Husk Hunter Sword"
+    },
+    {
+      "id": "stray_sword",
+      "name": "Stray Hunter Sword"
+    },
+    {
+      "id": "bogged_sword",
+      "name": "Bogged Hunter Sword"
+    },
+    {
+      "id": "breeze_sword",
+      "name": "Breeze Hunter Sword"
+    },
+    {
+      "id": "warden_sword",
+      "name": "Warden Hunter Sword"
+    },
+    {
+      "id": "elder_guardian_sword",
+      "name": "Elder Guardian Hunter Sword"
+    },
+    {
+      "id": "ender_dragon_sword",
+      "name": "Ender Dragon Hunter Sword"
+    },
+    {
+      "id": "wither_sword",
+      "name": "Wither Hunter Sword"
+    },
+    {
+      "id": "zombie_sword_t2",
+      "name": "Zombie Slayer Sword"
+    },
+    {
+      "id": "spider_sword_t2",
+      "name": "Spider Slayer Sword"
+    },
+    {
+      "id": "skeleton_sword_t2",
+      "name": "Skeleton Slayer Sword"
+    },
+    {
+      "id": "creeper_sword_t2",
+      "name": "Creeper Slayer Sword"
+    },
+    {
+      "id": "enderman_sword_t2",
+      "name": "Enderman Slayer Sword"
+    },
+    {
+      "id": "witch_sword_t2",
+      "name": "Witch Slayer Sword"
+    },
+    {
+      "id": "blaze_sword_t2",
+      "name": "Blaze Slayer Sword"
+    },
+    {
+      "id": "ghast_sword_t2",
+      "name": "Ghast Slayer Sword"
+    },
+    {
+      "id": "wither_skeleton_sword_t2",
+      "name": "Wither Skeleton Slayer Sword"
+    },
+    {
+      "id": "piglin_sword_t2",
+      "name": "Piglin Slayer Sword"
+    },
+    {
+      "id": "hoglin_sword_t2",
+      "name": "Hoglin Slayer Sword"
+    },
+    {
+      "id": "zoglin_sword_t2",
+      "name": "Zoglin Slayer Sword"
+    },
+    {
+      "id": "pillager_sword_t2",
+      "name": "Pillager Slayer Sword"
+    },
+    {
+      "id": "vindicator_sword_t2",
+      "name": "Vindicator Slayer Sword"
+    },
+    {
+      "id": "evoker_sword_t2",
+      "name": "Evoker Slayer Sword"
+    },
+    {
+      "id": "ravager_sword_t2",
+      "name": "Ravager Slayer Sword"
+    },
+    {
+      "id": "vex_sword_t2",
+      "name": "Vex Slayer Sword"
+    },
+    {
+      "id": "phantom_sword_t2",
+      "name": "Phantom Slayer Sword"
+    },
+    {
+      "id": "drowned_sword_t2",
+      "name": "Drowned Slayer Sword"
+    },
+    {
+      "id": "husk_sword_t2",
+      "name": "Husk Slayer Sword"
+    },
+    {
+      "id": "stray_sword_t2",
+      "name": "Stray Slayer Sword"
+    },
+    {
+      "id": "bogged_sword_t2",
+      "name": "Bogged Slayer Sword"
+    },
+    {
+      "id": "breeze_sword_t2",
+      "name": "Breeze Slayer Sword"
+    },
+    {
+      "id": "warden_sword_t2",
+      "name": "Warden Slayer Sword"
+    },
+    {
+      "id": "elder_guardian_sword_t2",
+      "name": "Elder Guardian Slayer Sword"
+    },
+    {
+      "id": "ender_dragon_sword_t2",
+      "name": "Ender Dragon Slayer Sword"
+    },
+    {
+      "id": "wither_sword_t2",
+      "name": "Wither Slayer Sword"
+    }
+  ],
+  "missing": [
+    "amethyst_axe",
+    "amethyst_cluster_boots",
+    "amethyst_cluster_chestplate",
+    "amethyst_cluster_helmet",
+    "amethyst_cluster_leggings",
+    "amethyst_cluster_sword",
+    "amethyst_hoe",
+    "amethyst_pickaxe",
+    "amethyst_shovel",
+    "attribute_core_",
+    "attribute_token_",
+    "blackstone_bricks_boots",
+    "blackstone_bricks_chestplate",
+    "blackstone_bricks_helmet",
+    "blackstone_bricks_leggings",
+    "blackstone_bricks_sword",
+    "chiseled_deepslate_boots",
+    "chiseled_deepslate_chestplate",
+    "chiseled_deepslate_helmet",
+    "chiseled_deepslate_leggings",
+    "chiseled_deepslate_sword",
+    "chiseled_nether_brick_boots",
+    "chiseled_nether_brick_chestplate",
+    "chiseled_nether_brick_helmet",
+    "chiseled_nether_brick_leggings",
+    "chiseled_nether_brick_sword",
+    "chiseled_stone_brick_boots",
+    "chiseled_stone_brick_chestplate",
+    "chiseled_stone_brick_helmet",
+    "chiseled_stone_brick_leggings",
+    "chiseled_stone_brick_sword",
+    "coal_axe",
+    "coal_hoe",
+    "coal_pickaxe",
+    "coal_shovel",
+    "compacted_coal",
+    "compacted_copper",
+    "compacted_diamond",
+    "compacted_emerald",
+    "compacted_gold",
+    "compacted_iron",
+    "compacted_lapis",
+    "compacted_netherite",
+    "compacted_quartz",
+    "compacted_redstone",
+    "cracked_nether_brick_boots",
+    "cracked_nether_brick_chestplate",
+    "cracked_nether_brick_helmet",
+    "cracked_nether_brick_leggings",
+    "cracked_nether_brick_sword",
+    "cracked_stone_brick_boots",
+    "cracked_stone_brick_chestplate",
+    "cracked_stone_brick_helmet",
+    "cracked_stone_brick_leggings",
+    "cracked_stone_brick_sword",
+    "crown_of_greed",
+    "crown_of_midas",
+    "custom_crafter_core_t1",
+    "custom_crafter_core_t2",
+    "custom_crafter_core_t3",
+    "dark_prismarine_boots",
+    "dark_prismarine_chestplate",
+    "dark_prismarine_helmet",
+    "dark_prismarine_leggings",
+    "dark_prismarine_sword",
+    "emerald_axe",
+    "emerald_hoe",
+    "emerald_pickaxe",
+    "emerald_shovel",
+    "enchanted_amethyst_block",
+    "enchanted_basalt",
+    "enchanted_blackstone",
+    "enchanted_blue_ice",
+    "enchanted_brick",
+    "enchanted_calcite",
+    "enchanted_carrot",
+    "enchanted_clay",
+    "enchanted_coal_block",
+    "enchanted_cobbled_deepslate",
+    "enchanted_cobblestone",
+    "enchanted_copper_block",
+    "enchanted_dandelion",
+    "enchanted_deepslate",
+    "enchanted_diamond_block",
+    "enchanted_emerald_block",
+    "enchanted_end_stone",
+    "enchanted_gilded_blackstone",
+    "enchanted_glass",
+    "enchanted_glowstone",
+    "enchanted_gold_block",
+    "enchanted_gravel",
+    "enchanted_ice",
+    "enchanted_iron_block",
+    "enchanted_lapis_block",
+    "enchanted_nether_brick",
+    "enchanted_netherite_block",
+    "enchanted_netherrack",
+    "enchanted_oak_log",
+    "enchanted_obsidian",
+    "enchanted_packed_ice",
+    "enchanted_potato",
+    "enchanted_prismarine",
+    "enchanted_purpur_block",
+    "enchanted_quartz_block",
+    "enchanted_red_sand",
+    "enchanted_redstone_block",
+    "enchanted_rose",
+    "enchanted_sand",
+    "enchanted_sea_lantern",
+    "enchanted_shroomlight",
+    "enchanted_stone",
+    "enchanted_sugar_cane",
+    "enchanted_terracotta",
+    "enchanted_tuff",
+    "enchanted_wheat",
+    "end_stone_brick_boots",
+    "end_stone_brick_chestplate",
+    "end_stone_brick_helmet",
+    "end_stone_brick_leggings",
+    "end_stone_brick_sword",
+    "ender_phase_helmet",
+    "endstone_axe",
+    "endstone_hoe",
+    "endstone_pickaxe",
+    "endstone_shovel",
+    "gilded_boots",
+    "gilded_chestplate",
+    "gilded_helmet",
+    "gilded_leggings",
+    "gilded_netherite_boots",
+    "gilded_netherite_chestplate",
+    "gilded_netherite_helmet",
+    "gilded_netherite_leggings",
+    "glass_axe",
+    "glass_hoe",
+    "glass_pickaxe",
+    "glass_shovel",
+    "glistening_gold_boots",
+    "glistening_gold_chestplate",
+    "glistening_gold_helmet",
+    "glistening_gold_leggings",
+    "glowstone_axe",
+    "glowstone_hoe",
+    "glowstone_pickaxe",
+    "glowstone_shovel",
+    "hardened_diamond_sword",
+    "harveys_stick",
+    "hay_block_boots",
+    "hay_block_chestplate",
+    "hay_block_helmet",
+    "hay_block_leggings",
+    "heavy_stone_sword",
+    "hermes_shoes",
+    "honeycomb_block_boots",
+    "honeycomb_block_chestplate",
+    "honeycomb_block_helmet",
+    "honeycomb_block_leggings",
+    "hpebm_mk",
+    "hpebm_ultra",
+    "ice_axe",
+    "ice_hoe",
+    "ice_pickaxe",
+    "ice_shovel",
+    "lapis_axe",
+    "lapis_hoe",
+    "lapis_pickaxe",
+    "lapis_shovel",
+    "lapis_sword",
+    "lodestone_boots",
+    "lodestone_chestplate",
+    "lodestone_helmet",
+    "lodestone_leggings",
+    "lodestone_sword",
+    "magma_axe",
+    "magma_hoe",
+    "magma_pickaxe",
+    "magma_shovel",
+    "midas_sword",
+    "mossy_axe",
+    "mossy_hoe",
+    "mossy_pickaxe",
+    "mossy_shovel",
+    "netherrack_axe",
+    "netherrack_hoe",
+    "netherrack_pickaxe",
+    "netherrack_shovel",
+    "obsidian_axe",
+    "obsidian_block_boots",
+    "obsidian_block_chestplate",
+    "obsidian_block_helmet",
+    "obsidian_block_leggings",
+    "obsidian_block_sword",
+    "obsidian_hoe",
+    "obsidian_pickaxe",
+    "obsidian_shovel",
+    "piglin_core",
+    "piglin_flesh",
+    "polished_blackstone_boots",
+    "polished_blackstone_chestplate",
+    "polished_blackstone_helmet",
+    "polished_blackstone_leggings",
+    "polished_blackstone_sword",
+    "polished_gold_boots",
+    "polished_gold_chestplate",
+    "polished_gold_helmet",
+    "polished_gold_leggings",
+    "prismarine_axe",
+    "prismarine_bricks_boots",
+    "prismarine_bricks_chestplate",
+    "prismarine_bricks_helmet",
+    "prismarine_bricks_leggings",
+    "prismarine_bricks_sword",
+    "prismarine_hoe",
+    "prismarine_pickaxe",
+    "prismarine_shovel",
+    "pure_gold_boots",
+    "pure_gold_chestplate",
+    "pure_gold_helmet",
+    "pure_gold_leggings",
+    "quartz_axe",
+    "quartz_hoe",
+    "quartz_pickaxe",
+    "quartz_shovel",
+    "raw_gold_block_boots",
+    "raw_gold_block_chestplate",
+    "raw_gold_block_helmet",
+    "raw_gold_block_leggings",
+    "raw_gold_block_sword",
+    "raw_iron_block_boots",
+    "raw_iron_block_chestplate",
+    "raw_iron_block_helmet",
+    "raw_iron_block_leggings",
+    "raw_iron_block_sword",
+    "red_sandstone_boots",
+    "red_sandstone_chestplate",
+    "red_sandstone_helmet",
+    "red_sandstone_leggings",
+    "red_sandstone_sword",
+    "redstone_axe",
+    "redstone_hoe",
+    "redstone_pickaxe",
+    "redstone_shovel",
+    "reinforced_deepslate_boots",
+    "reinforced_deepslate_chestplate",
+    "reinforced_deepslate_helmet",
+    "reinforced_deepslate_leggings",
+    "reinforced_deepslate_sword",
+    "reinforced_iron_sword",
+    "sandstone_axe",
+    "sandstone_hoe",
+    "sandstone_pickaxe",
+    "sandstone_shovel",
+    "sea_lantern_boots",
+    "sea_lantern_chestplate",
+    "sea_lantern_helmet",
+    "sea_lantern_leggings",
+    "sea_lantern_sword",
+    "sharpened_gold_sword",
+    "shiny_gold_boots",
+    "shiny_gold_chestplate",
+    "shiny_gold_helmet",
+    "shiny_gold_leggings",
+    "skeleton_bow",
+    "smooth_basalt_boots",
+    "smooth_basalt_chestplate",
+    "smooth_basalt_helmet",
+    "smooth_basalt_leggings",
+    "smooth_basalt_sword",
+    "soul_sand_axe",
+    "soul_sand_hoe",
+    "soul_sand_pickaxe",
+    "soul_sand_shovel",
+    "spider_leggings",
+    "super_compacted_diamond",
+    "super_compacted_emerald",
+    "super_compacted_gold",
+    "super_compacted_iron",
+    "super_compacted_netherite",
+    "swift_wooden_sword",
+    "terracotta_axe",
+    "terracotta_hoe",
+    "terracotta_pickaxe",
+    "terracotta_shovel",
+    "venomous_dagger",
+    "void_touched_sword",
+    "voidwalker_crown",
+    "warden_chestplate",
+    "weapon_attribute_token_",
+    "zombie_berserker_helmet"
+  ]
+}
