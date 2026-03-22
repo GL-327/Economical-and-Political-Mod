@@ -40,6 +40,7 @@ public class SlayerRecipes {
     static final List<Recipe> RECIPES = new ArrayList<>();
 
     public static void registerRecipes() {
+        RECIPES.clear();
         // All recipes are now loaded as custom recipes in RecipeConfigManager.load()
         // Just copy them from CUSTOM_RECIPES to RECIPES
         List<Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();

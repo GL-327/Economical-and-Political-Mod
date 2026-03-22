@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
@@ -198,13 +197,17 @@ public class RecipeConfigManager {
     public static List<SlayerRecipes.Recipe> getBaseRecipes() {
         List<SlayerRecipes.Recipe> baseRecipes = new ArrayList<>();
         try {
-            Path configFile = Paths.get("config/political/custom_recipes.json");
-            if (!Files.exists(configFile)) {
+            // Always use the mod's resolved config path (works both in dev and on servers)
+            Path configFile = CONFIG_FILE;
+            if (configFile == null || !Files.exists(configFile)) {
                 return baseRecipes;
             }
             
-            String content = Files.readString(configFile);
-            JsonObject json = JsonParser.parseString(content).getAsJsonObject();
+            JsonObject json;
+            try (Reader reader = Files.newBufferedReader(configFile)) {
+                json = GSON.fromJson(reader, JsonObject.class);
+            }
+            if (json == null) return baseRecipes;
             
             if (json.has("recipes")) {
                 JsonArray recipesArray = json.getAsJsonArray("recipes");
