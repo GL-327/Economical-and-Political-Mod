@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class BankGui {
 
     private static final int MAIN_MAX = 100_000;
-    private static final long SAVINGS_COOLDOWN_MS = TimeUnit.HOURS.toMillis(6);
+    private static final long SAVINGS_COOLDOWN_MS = TimeUnit.HOURS.toMillis(3);
 
     /** Formats a fractional rate (e.g. 0.05) as a percent string like "5%". */
     private static String fmtRate(double rate) {
@@ -81,7 +81,7 @@ public class BankGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("♾️ Unlimited deposits").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("📈 Interest: " + fmtRate(DataManager.getSavingsAccountInterestRate()) + "/hr").formatted(Formatting.GREEN))
-                .addLoreLine(Text.literal("⏰ Withdrawal: 6hr cooldown").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("⏰ Withdrawal: 3hr cooldown").formatted(Formatting.RED))
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to manage").formatted(Formatting.YELLOW))
                 .setCallback((index, type, action) -> openSavingsAccount(player))
@@ -129,7 +129,7 @@ public class BankGui {
                 .addLoreLine(Text.literal("Interest rates & fees").formatted(Formatting.GRAY))
                 .setCallback((index, type, action) -> {
                     player.sendMessage(Text.literal("Main account: 2% interest, capped at 100k").formatted(Formatting.GRAY), false);
-                    player.sendMessage(Text.literal("Savings: 1.5% interest, unlimited, 6hr withdrawal cooldown").formatted(Formatting.GRAY), false);
+                    player.sendMessage(Text.literal("Savings: 1.5% interest, unlimited, 3hr withdrawal cooldown").formatted(Formatting.GRAY), false);
                     player.sendMessage(Text.literal("Loans: 5% interest, 10k max").formatted(Formatting.GRAY), false);
                 })
                 .build());
