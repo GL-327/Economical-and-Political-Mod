@@ -48,25 +48,39 @@ public class RecipeConfigManager {
     public static void load() {
         CUSTOM_RECIPES.clear();
         
-        // First, load all base recipes and add them as custom recipes
+        // Always load hardcoded recipes first
+        HardcodedRecipes.registerAllRecipes();
+        List<SlayerRecipes.Recipe> hardcodedRecipes = SlayerRecipes.getAllRecipes();
+        
+        // Then load any additional base recipes from JSON (these can override hardcoded ones)
         List<SlayerRecipes.Recipe> baseRecipes = getBaseRecipes();
         if (baseRecipes.isEmpty()) {
-            // Fallback: if the config file got overwritten and no longer contains the base "recipes" array,
-            // load the built-in hardcoded defaults so the server always has recipes.
-            try {
-                HardcodedRecipes.registerAllRecipes();
-                baseRecipes = SlayerRecipes.getAllRecipes();
-                System.out.println("[RecipeConfigManager] Base recipes missing from JSON; loaded " + baseRecipes.size() + " hardcoded recipes instead");
-            } catch (Exception e) {
-                System.err.println("[RecipeConfigManager] Failed to load hardcoded fallback recipes: " + e.getMessage());
-            }
+            System.out.println("[RecipeConfigManager] No base recipes in JSON, using only hardcoded recipes");
+        } else {
+            System.out.println("[RecipeConfigManager] Loaded " + baseRecipes.size() + " base recipes from JSON");
         }
-        for (SlayerRecipes.Recipe recipe : baseRecipes) {
+        
+        // Add hardcoded recipes first
+        for (SlayerRecipes.Recipe recipe : hardcodedRecipes) {
             if (recipe != null) {
                 CUSTOM_RECIPES.add(recipe);
             }
         }
-        System.out.println("[RecipeConfigManager] Added " + baseRecipes.size() + " base recipes as custom recipes");
+        
+        // Then add base recipes from JSON (these will replace hardcoded ones with same output)
+        for (SlayerRecipes.Recipe recipe : baseRecipes) {
+            if (recipe != null) {
+                // Remove existing recipe with same output
+                String newOutputId = SlayerItems.getCustomItemId(recipe.result);
+                CUSTOM_RECIPES.removeIf(r -> {
+                    String existingId = SlayerItems.getCustomItemId(r.result);
+                    return existingId != null && existingId.equals(newOutputId);
+                });
+                CUSTOM_RECIPES.add(recipe);
+            }
+        }
+        
+        System.out.println("[RecipeConfigManager] Total base recipes (hardcoded + JSON): " + CUSTOM_RECIPES.size());
         
         // Then load any additional custom overrides from file (these will replace base recipes with same output)
         if (Files.exists(CONFIG_FILE)) {
