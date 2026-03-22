@@ -112,8 +112,9 @@ public class CommandRegistry {
                 })
         );
 
-        // Customitems command - opens CustomItemsGui
+        // Customitems command - opens CustomItemsGui (admin only)
         dispatcher.register(CommandManager.literal("customitems")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                     CustomItemsGui.open(player);
@@ -1887,8 +1888,9 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-        // /givecore command - give custom crafting core (T1/T2/T3)
+        // /givecore command - give custom crafting core (T1/T2/T3) (admin only)
         dispatcher.register(CommandManager.literal("givecore")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                     SlayerItems.giveCore(player, SlayerManager.SlayerType.ZOMBIE);
