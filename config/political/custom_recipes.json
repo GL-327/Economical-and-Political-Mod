@@ -5,7 +5,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:2.0d,id:\"politicalserver:glass_helmet_armor\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor\"},{amount:1.0d,id:\"politicalserver:glass_helmet_toughness\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"glass_helmet\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Helmet\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"white\",text:\"+2\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"white\",text:\"+1\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency \u0026 Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":50},count:1,id:\"minecraft:leather_helmet\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:2,id:\"politicalserver:glass_helmet_armor\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor\"},{amount:1,id:\"politicalserver:glass_helmet_toughness\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"glass_helmet\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Helmet\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"white\",text:\"+2\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"white\",text:\"+1\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency & Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":50},count:1,id:\"minecraft:leather_helmet\"}",
         "count": 1
       },
       "ingredients": [
@@ -60,7 +60,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:6.0d,id:\"politicalserver:glass_chestplate_armor\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:glass_chestplate_toughness\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"glass_chestplate\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Chestplate\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"white\",text:\"+6\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"white\",text:\"+2\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency \u0026 Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":80},count:1,id:\"minecraft:leather_chestplate\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:6,id:\"politicalserver:glass_chestplate_armor\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor\"},{amount:2,id:\"politicalserver:glass_chestplate_toughness\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"glass_chestplate\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Chestplate\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"white\",text:\"+6\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"white\",text:\"+2\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency & Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":80},count:1,id:\"minecraft:leather_chestplate\"}",
         "count": 1
       },
       "ingredients": [
@@ -68,10 +68,7 @@
           "nbt": "{count:1,id:\"minecraft:glass_block\"}",
           "count": 1
         },
-        {
-          "nbt": "{count:1,id:\"minecraft:glass_block\"}",
-          "count": 1
-        },
+        "",
         {
           "nbt": "{count:1,id:\"minecraft:glass_block\"}",
           "count": 1
@@ -103,7 +100,7 @@
       ],
       "lockedSlots": [
         true,
-        true,
+        false,
         true,
         true,
         true,
@@ -118,7 +115,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:5.0d,id:\"politicalserver:glass_leggings_armor\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:glass_leggings_toughness\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"glass_leggings\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Leggings\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"white\",text:\"+5\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"white\",text:\"+2\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency \u0026 Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":75},count:1,id:\"minecraft:leather_leggings\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:5,id:\"politicalserver:glass_leggings_armor\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor\"},{amount:2,id:\"politicalserver:glass_leggings_toughness\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"glass_leggings\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Leggings\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"white\",text:\"+5\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"white\",text:\"+2\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency & Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":75},count:1,id:\"minecraft:leather_leggings\"}",
         "count": 1
       },
       "ingredients": [
@@ -126,10 +123,7 @@
           "nbt": "{count:1,id:\"minecraft:glass_block\"}",
           "count": 1
         },
-        {
-          "nbt": "{count:1,id:\"minecraft:glass_block\"}",
-          "count": 1
-        },
+        "",
         {
           "nbt": "{count:1,id:\"minecraft:glass_block\"}",
           "count": 1
@@ -158,7 +152,7 @@
       ],
       "lockedSlots": [
         true,
-        true,
+        false,
         true,
         true,
         true,
@@ -173,7 +167,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:2.0d,id:\"politicalserver:glass_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:1.0d,id:\"politicalserver:glass_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"glass_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Boots\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"white\",text:\"+2\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"white\",text:\"+1\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency \u0026 Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":65},count:1,id:\"minecraft:leather_boots\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:2,id:\"politicalserver:glass_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:1,id:\"politicalserver:glass_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"glass_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Glass Boots\"},\"minecraft:dyed_color\":15328988,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"white\",text:\"+2\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"white\",text:\"+1\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Transparency & Speed boost\"},\"\",{color:\"dark_gray\",text:\"§8Fragile but beautiful\"}]},\"minecraft:max_damage\":65},count:1,id:\"minecraft:leather_boots\"}",
         "count": 1
       },
       "ingredients": [
@@ -219,7 +213,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:obsidian_helmet_armor\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor\"},{amount:3.0d,id:\"politicalserver:obsidian_helmet_toughness\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor_toughness\"},{amount:-0.05d,id:\"politicalserver:obsidian_helmet_speed\",operation:\"add_multiplied_total\",slot:\"head\",type:\"minecraft:movement_speed\"}],\"minecraft:custom_data\":{block_armor_id:\"obsidian_helmet\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Helmet\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+3\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+3\"}],text:\"💎 Toughness: \"},{color:\"white\",extra:[{color:\"red\",text:\"-5% per piece\"}],text:\"🏃 Speed: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance \u0026 Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":165},count:1,id:\"minecraft:leather_helmet\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3,id:\"politicalserver:obsidian_helmet_armor\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor\"},{amount:3,id:\"politicalserver:obsidian_helmet_toughness\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"obsidian_helmet\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Helmet\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"dark_purple\",text:\"+3\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"dark_purple\",text:\"+3\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance & Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":165},count:1,id:\"minecraft:leather_helmet\"}",
         "count": 1
       },
       "ingredients": [
@@ -274,7 +268,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:8.0d,id:\"politicalserver:obsidian_chestplate_armor\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor\"},{amount:8.0d,id:\"politicalserver:obsidian_chestplate_toughness\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor_toughness\"},{amount:-0.05d,id:\"politicalserver:obsidian_chestplate_speed\",operation:\"add_multiplied_total\",slot:\"chest\",type:\"minecraft:movement_speed\"}],\"minecraft:custom_data\":{block_armor_id:\"obsidian_chestplate\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Chestplate\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+8\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+8\"}],text:\"💎 Toughness: \"},{color:\"white\",extra:[{color:\"red\",text:\"-5% per piece\"}],text:\"🏃 Speed: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance \u0026 Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":2000},count:1,id:\"minecraft:leather_chestplate\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:8,id:\"politicalserver:obsidian_chestplate_armor\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor\"},{amount:8,id:\"politicalserver:obsidian_chestplate_toughness\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"obsidian_chestplate\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Chestplate\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"dark_purple\",text:\"+8\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"dark_purple\",text:\"+8\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance & Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":2000},count:1,id:\"minecraft:leather_chestplate\"}",
         "count": 1
       },
       "ingredients": [
@@ -329,7 +323,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:7.0d,id:\"politicalserver:obsidian_leggings_armor\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor\"},{amount:7.0d,id:\"politicalserver:obsidian_leggings_toughness\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor_toughness\"},{amount:-0.05d,id:\"politicalserver:obsidian_leggings_speed\",operation:\"add_multiplied_total\",slot:\"legs\",type:\"minecraft:movement_speed\"}],\"minecraft:custom_data\":{block_armor_id:\"obsidian_leggings\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Leggings\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+7\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+7\"}],text:\"💎 Toughness: \"},{color:\"white\",extra:[{color:\"red\",text:\"-5% per piece\"}],text:\"🏃 Speed: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance \u0026 Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":195},count:1,id:\"minecraft:leather_leggings\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:7,id:\"politicalserver:obsidian_leggings_armor\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor\"},{amount:7,id:\"politicalserver:obsidian_leggings_toughness\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"obsidian_leggings\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Leggings\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"dark_purple\",text:\"+7\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"dark_purple\",text:\"+7\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance & Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":195},count:1,id:\"minecraft:leather_leggings\"}",
         "count": 1
       },
       "ingredients": [
@@ -337,10 +331,7 @@
           "nbt": "{count:1,id:\"minecraft:obsidian\"}",
           "count": 1
         },
-        {
-          "nbt": "{count:1,id:\"minecraft:obsidian\"}",
-          "count": 1
-        },
+        "",
         {
           "nbt": "{count:1,id:\"minecraft:obsidian\"}",
           "count": 1
@@ -369,7 +360,7 @@
       ],
       "lockedSlots": [
         true,
-        true,
+        false,
         true,
         true,
         true,
@@ -384,7 +375,7 @@
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:obsidian_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:3.0d,id:\"politicalserver:obsidian_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"},{amount:-0.05d,id:\"politicalserver:obsidian_boots_speed\",operation:\"add_multiplied_total\",slot:\"feet\",type:\"minecraft:movement_speed\"}],\"minecraft:custom_data\":{block_armor_id:\"obsidian_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Boots\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+3\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"dark_purple\",text:\"+3\"}],text:\"💎 Toughness: \"},{color:\"white\",extra:[{color:\"red\",text:\"-5% per piece\"}],text:\"🏃 Speed: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance \u0026 Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":180},count:1,id:\"minecraft:leather_boots\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3,id:\"politicalserver:obsidian_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:3,id:\"politicalserver:obsidian_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{custom_id:\"obsidian_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_purple\",text:\"Obsidian Boots\"},\"minecraft:dyed_color\":1706542,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"dark_purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: \"},{color:\"dark_purple\",text:\"+3\"},{color:\"white\",text:\"💎 Toughness: \"},{color:\"dark_purple\",text:\"+3\"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Blast resistance & Fire immunity\"},\"\",{color:\"dark_gray\",text:\"§8Forged in volcanic fury\"}]},\"minecraft:max_damage\":180},count:1,id:\"minecraft:leather_boots\"}",
         "count": 1
       },
       "ingredients": [
@@ -423,409 +414,6 @@
         false,
         true,
         false
-      ]
-    },
-    {
-      "name": "Ice Helmet",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:ice_helmet_armor\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor\"},{amount:1.0d,id:\"politicalserver:ice_helmet_toughness\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"ice_helmet\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"Ice Helmet\"},\"minecraft:dyed_color\":5636095,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"aqua\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"aqua\",text:\"+3\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"aqua\",text:\"+1\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Freeze immunity \u0026 Frost aura\"},\"\",{color:\"dark_gray\",text:\"§8Frozen in time\"}]},\"minecraft:max_damage\":55},count:1,id:\"minecraft:leather_helmet\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"green\",text:\"✦ Uncommon Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
-      "name": "Ice Chestplate",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:7.0d,id:\"politicalserver:ice_chestplate_armor\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:ice_chestplate_toughness\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"ice_chestplate\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"Ice Chestplate\"},\"minecraft:dyed_color\":5636095,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"aqua\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"aqua\",text:\"+7\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"aqua\",text:\"+2\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Freeze immunity \u0026 Frost aura\"},\"\",{color:\"dark_gray\",text:\"§8Frozen in time\"}]},\"minecraft:max_damage\":85},count:1,id:\"minecraft:leather_chestplate\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"green\",text:\"✦ Uncommon Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
-      "name": "Ice Leggings",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:6.0d,id:\"politicalserver:ice_leggings_armor\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:ice_leggings_toughness\",operation:\"add_value\",slot:\"legs\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"ice_leggings\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"Ice Leggings\"},\"minecraft:dyed_color\":5636095,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"aqua\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"aqua\",text:\"+6\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"aqua\",text:\"+2\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Freeze immunity \u0026 Frost aura\"},\"\",{color:\"dark_gray\",text:\"§8Frozen in time\"}]},\"minecraft:max_damage\":80},count:1,id:\"minecraft:leather_leggings\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"green\",text:\"✦ Uncommon Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true
-      ]
-    },
-    {
-      "name": "Ice Boots",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:ice_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:1.0d,id:\"politicalserver:ice_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"ice_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"Ice Boots\"},\"minecraft:dyed_color\":5636095,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"aqua\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"aqua\",text:\"+3\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"aqua\",text:\"+1\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Freeze immunity \u0026 Frost aura\"},\"\",{color:\"dark_gray\",text:\"§8Frozen in time\"}]},\"minecraft:max_damage\":70},count:1,id:\"minecraft:leather_boots\"}",
-        "count": 1
-      },
-      "ingredients": [
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"green\",text:\"✦ Uncommon Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ice_block\"}",
-          "count": 1
-        },
-        ""
-      ],
-      "lockedSlots": [
-        false,
-        true,
-        false,
-        true,
-        true,
-        true,
-        false,
-        true,
-        false
-      ]
-    },
-    {
-      "name": "Quartz Helmet",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:quartz_helmet_armor\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:quartz_helmet_toughness\",operation:\"add_value\",slot:\"head\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"quartz_helmet\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Quartz Helmet\"},\"minecraft:dyed_color\":16119285,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"white\",text:\"+3\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"white\",text:\"+2\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Experience boost\"},\"\",{color:\"dark_gray\",text:\"§8Crystalline perfection\"}]},\"minecraft:max_damage\":300},count:1,id:\"minecraft:leather_helmet\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t2\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"⚙ Custom Crafting Core (T2)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"aqua\",text:\"✦ Rare Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 2 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"aqua\",text:\"• All T2 Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
-      "name": "Quartz Chestplate",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:8.0d,id:\"politicalserver:quartz_chestplate_armor\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor\"},{amount:3.0d,id:\"politicalserver:quartz_chestplate_toughness\",operation:\"add_value\",slot:\"chest\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"quartz_chestplate\"},\"minecraft:custom_name\":{bold:1b,color:\"white\",text:\"Quartz Chestplate\"},\"minecraft:dyed_color\":16119285,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"white\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"white\",text:\"+8\"}],text:\"🛡 Armor: \"},{color:\"white\",extra:[{color:\"white\",text:\"+3\"}],text:\"💎 Toughness: \"},\"\",{color:\"gold\",text:\"━━━ SET BONUS ━━━\"},{color:\"yellow\",text:\"✦ Full set: Experience boost\"},\"\",{color:\"dark_gray\",text:\"§8Crystalline perfection\"}]},\"minecraft:max_damage\":400},count:1,id:\"minecraft:leather_chestplate\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t2\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"⚙ Custom Crafting Core (T2)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"aqua\",text:\"✦ Rare Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 2 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"aqua\",text:\"• All T2 Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:quartz_block\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
-      "name": "Amethyst Sword",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:6.0d,id:\"politicalserver:amethyst_sword_damage\",operation:\"add_value\",slot:\"mainhand\",type:\"minecraft:attack_damage\"}],\"minecraft:custom_data\":{block_weapon_id:\"amethyst_sword\"},\"minecraft:custom_name\":{bold:1b,color:\"purple\",text:\"Amethyst Sword\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"purple\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"purple\",text:\"+6\"}],text:\"⚔ Attack Damage: \"},\"\",{color:\"gold\",text:\"━━━ ABILITY ━━━\"},{color:\"yellow\",text:\"✦ Mind control\"},\"\",{color:\"dark_gray\",text:\"§8Crystal resonance\"}]},\"minecraft:max_damage\":700},count:1,id:\"minecraft:iron_sword\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:amethyst_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:amethyst_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t3\"},\"minecraft:custom_name\":{bold:1b,color:\"gold\",text:\"⚙ Custom Crafting Core (T3)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"light_purple\",text:\"✦ Legendary Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 3 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"gold\",text:\"• All T3 Custom Weapons\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:stick\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:stick\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
-      "name": "Diamond Block Sword",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:9.0d,id:\"politicalserver:diamond_block_sword_damage\",operation:\"add_value\",slot:\"mainhand\",type:\"minecraft:attack_damage\"}],\"minecraft:custom_data\":{block_weapon_id:\"diamond_block_sword\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"Diamond Block Sword\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{color:\"aqua\",text:\"━━━ STATS ━━━\"},{color:\"white\",extra:[{color:\"aqua\",text:\"+9\"}],text:\"⚔ Attack Damage: \"},\"\",{color:\"gold\",text:\"━━━ ABILITY ━━━\"},{color:\"yellow\",text:\"✦ Enhanced damage\"},\"\",{color:\"dark_gray\",text:\"§8Crafted with care\"}]},\"minecraft:max_damage\":2000},count:1,id:\"minecraft:iron_sword\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:diamond_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:diamond_block\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_item_id:\"custom_crafter_core_t3\"},\"minecraft:custom_name\":{bold:1b,color:\"gold\",text:\"⚙ Custom Crafting Core (T3)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"light_purple\",text:\"✦ Legendary Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier 3 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"gold\",text:\"• All T3 Custom Weapons\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:stick\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:stick\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        true
       ]
     }
   ]
