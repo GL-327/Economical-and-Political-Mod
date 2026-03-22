@@ -49,16 +49,31 @@ public class RecipeConfigManager {
     public static void load() {
         CUSTOM_RECIPES.clear();
         
+        // First, load all base recipes and add them as custom recipes
+        List<SlayerRecipes.Recipe> baseRecipes = getBaseRecipes();
+        for (SlayerRecipes.Recipe recipe : baseRecipes) {
+            if (recipe != null) {
+                CUSTOM_RECIPES.add(recipe);
+            }
+        }
+        System.out.println("[RecipeConfigManager] Added " + baseRecipes.size() + " base recipes as custom recipes");
+        
+        // Then load any additional custom overrides from file (these will replace base recipes with same output)
         if (Files.exists(CONFIG_FILE)) {
             try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
                 JsonObject root = GSON.fromJson(reader, JsonObject.class);
                 
-                // Only load custom overrides - defaults are now hardcoded
                 if (root != null && root.has("custom")) {
                     JsonArray arr = root.getAsJsonArray("custom");
                     for (var elem : arr) {
                         SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
                         if (recipe != null) {
+                            // Remove existing recipe with same output
+                            String newOutputId = SlayerItems.getCustomItemId(recipe.result);
+                            CUSTOM_RECIPES.removeIf(r -> {
+                                String existingId = SlayerItems.getCustomItemId(r.result);
+                                return existingId != null && existingId.equals(newOutputId);
+                            });
                             CUSTOM_RECIPES.add(recipe);
                             System.out.println("[RecipeConfigManager] Loaded custom override: " + recipe.name);
                         }
@@ -69,7 +84,7 @@ public class RecipeConfigManager {
             }
         }
         
-        System.out.println("[RecipeConfigManager] Loaded " + CUSTOM_RECIPES.size() + " custom recipe overrides");
+        System.out.println("[RecipeConfigManager] Total custom recipes: " + CUSTOM_RECIPES.size());
         loadDisabled();
     }
 
