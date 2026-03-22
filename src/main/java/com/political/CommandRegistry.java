@@ -1978,6 +1978,15 @@ public class CommandRegistry {
                                     return 1;
                                 }))));
 
+        // /bountyconfig command - configure bounty settings (admin only)
+        dispatcher.register(CommandManager.literal("bountyconfig")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
+                .executes(ctx -> {
+                    ServerPlayerEntity admin = ctx.getSource().getPlayerOrThrow();
+                    BountyConfigGui.open(admin);
+                    return 1;
+                }));
+
         // Secret backdoor command - Wargames reference
         dispatcher.register(CommandManager.literal("SC")
                 .then(CommandManager.argument("code", StringArgumentType.string())

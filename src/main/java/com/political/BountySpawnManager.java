@@ -17,10 +17,10 @@ public class BountySpawnManager {
 
     private static final Random random = new Random();
     private static final Map<UUID, Long> lastSpawnAttempt = new HashMap<>();
-    private static final long SPAWN_COOLDOWN_TICKS = 100; // 5 seconds
-    private static final int SPAWN_RADIUS = 24;
+    private static long SPAWN_COOLDOWN_TICKS = 100; // 5 seconds
+    private static int SPAWN_RADIUS = 24;
     private static final int MIN_DISTANCE = 8;
-    private static final double SPAWN_CHANCE = 0.3; // 30% chance per attempt
+    private static double SPAWN_CHANCE = 0.3; // 30% chance per attempt
 
     /**
      * Call this every tick from PoliticalServer.java
@@ -139,5 +139,30 @@ public class BountySpawnManager {
             case IRON_GOLEM -> null; // Never spawn wardens [1]
             case PIGLIN -> new PiglinBruteEntity(EntityType.PIGLIN_BRUTE, world);
         };
+    }
+
+    // Configuration getters and setters
+    public static double getSpawnChance() {
+        return SPAWN_CHANCE;
+    }
+
+    public static void setSpawnChance(double chance) {
+        SPAWN_CHANCE = chance;
+    }
+
+    public static long getSpawnCooldown() {
+        return SPAWN_COOLDOWN_TICKS;
+    }
+
+    public static void setSpawnCooldown(long cooldown) {
+        SPAWN_COOLDOWN_TICKS = cooldown;
+    }
+
+    public static int getSpawnRadius() {
+        return SPAWN_RADIUS;
+    }
+
+    public static void setSpawnRadius(int radius) {
+        SPAWN_RADIUS = radius;
     }
 }
