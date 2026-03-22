@@ -453,67 +453,57 @@ public class RecipeConfigManager {
         if (!elem.isJsonObject()) return ItemStack.EMPTY;
         JsonObject obj = elem.getAsJsonObject();
 
+        // First try manual parsing (id, count, customId, customName)
+        String id = obj.has("id") ? obj.get("id").getAsString() : "";
+        int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
+        String customId = obj.has("customId") ? obj.get("customId").getAsString() : "";
+        String customName = obj.has("customName") ? obj.get("customName").getAsString() : "";
+
+        if (id != null && !id.isEmpty()) {
+            ItemStack stack = resolveItem(id);
+            if (!stack.isEmpty()) {
+                if (count > 1) stack.setCount(count);
+                if (customId != null && !customId.isEmpty()) {
+                    SlayerItems.setCustomItemId(stack, customId);
+                }
+                if (customName != null && !customName.isEmpty()) {
+                    stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(customName));
+                }
+                return stack;
+            }
+        }
+
+        // If manual parsing didn't work, try NBT parsing
         if (obj.has("nbt")) {
             try {
                 String nbtString = obj.get("nbt").getAsString();
                 if (nbtString != null && !nbtString.isEmpty()) {
-                    // Fix unquoted keys - NBT requires all keys to be quoted
-                    // Also handle escaped quotes in JSON
-                    nbtString = nbtString.replace("\\\"", "\""); // Unescape JSON quotes
-                    nbtString = nbtString.replaceAll("([a-zA-Z_][a-zA-Z0-9_]*):", "\"$1\":"); // Quote unquoted keys
+                    // Fix unquoted keys
+                    nbtString = nbtString.replaceAll("([a-zA-Z_][a-zA-Z0-9_]*):", "\"$1\":");
                     
                     NbtCompound parsed = StringNbtReader.readCompound(nbtString);
                     
-                    // Try to get registry ops - prefer server if available, otherwise use builtin
                     RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
                     if (PoliticalServer.server != null) {
                         ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
                     } else {
-                        // Fallback: use builtin registries for early loading
                         ops = net.minecraft.registry.BuiltinRegistries.createWrapperLookup().getOps(NbtOps.INSTANCE);
                     }
                     
                     if (ops != null) {
                         var result = ItemStack.CODEC.parse(ops, parsed);
                         ItemStack stack = result.result().orElse(ItemStack.EMPTY);
-                        int count = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
-                        if (!stack.isEmpty() && count > 1) stack.setCount(count);
+                        int stackCount = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
+                        if (!stack.isEmpty() && stackCount > 1) stack.setCount(stackCount);
                         if (!stack.isEmpty()) return stack;
                     }
                 }
             } catch (Exception e) {
-                System.err.println("[RecipeConfigManager] Failed to deserialize stack with CODEC: " + e.getMessage());
-                // Try manual parsing as fallback
-                try {
-                    return parseStackManually(obj);
-                } catch (Exception fallbackError) {
-                    System.err.println("[RecipeConfigManager] Manual fallback also failed: " + fallbackError.getMessage());
-                }
+                System.err.println("[RecipeConfigManager] NBT parse failed: " + e.getMessage());
             }
         }
 
-        String id = obj.has("id") ? obj.get("id").getAsString() : "";
-        int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
-        String customId = obj.has("customId") ? obj.get("customId").getAsString() : "";
-        String customName = obj.has("customName") ? obj.get("customName").getAsString() : "";
-
-        ItemStack stack;
-
-        // Backward compatibility: older saves stored political:<customId> in the id field
-        if (id != null && id.startsWith("political:")) {
-            stack = resolveItem(id);
-        } else {
-            stack = (id == null || id.isEmpty()) ? ItemStack.EMPTY : resolveItem(id);
-            if (!stack.isEmpty() && customId != null && !customId.isEmpty()) {
-                SlayerItems.setCustomItemId(stack, customId);
-            }
-            if (!stack.isEmpty() && customName != null && !customName.isEmpty()) {
-                stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(customName));
-            }
-        }
-
-        if (!stack.isEmpty() && count > 1) stack.setCount(count);
-        return stack;
+        return ItemStack.EMPTY;
     }
 
     private static com.google.gson.JsonElement serializeIngredient(ItemStack ing) {
