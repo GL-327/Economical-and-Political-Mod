@@ -107,7 +107,7 @@ recipes.recipes.forEach((recipe, index) => {
                 result,
                 ingredients,
                 lockedSlots,
-                ${slayerType !== 'null' ? `SlayerManager.SlayerType.${slayerType}` : 'null'},
+                ${slayerType !== 'null' ? `SlayerManager.SlayerType.${slayerType.toUpperCase()}` : 'null'},
                 ${level}
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -234,7 +234,7 @@ function minecraftItemToJava(itemId) {
         'gold_helmet': 'Items.GOLDEN_HELMET',
         'gold_chestplate': 'Items.GOLDEN_CHESTPLATE',
         'gold_leggings': 'Items.GOLDEN_LEGGINGS',
-        'gold_boots': 'Items.GOLD_BOOTS',
+        'gold_boots': 'Items.GOLDEN_BOOTS',
         'golden_helmet': 'Items.GOLDEN_HELMET',
         'golden_chestplate': 'Items.GOLDEN_CHESTPLATE',
         'golden_leggings': 'Items.GOLDEN_LEGGINGS',
@@ -277,8 +277,30 @@ function minecraftItemToJava(itemId) {
         'slime_ball': 'Items.SLIME_BALL',
         'ender_pearl': 'Items.ENDER_PEARL',
         'gold_nugget': 'Items.GOLD_NUGGET',
-        'sculk_catalyst': 'Items.SCULK_CATALYST'
+        'sculk_catalyst': 'Items.SCULK_CATALYST',
+        // Spawn eggs
+        'zombie_spawn_egg': 'Items.ZOMBIE_SPAWN_EGG',
+        'ghast_spawn_egg': 'Items.GHAST_SPAWN_EGG',
+        'wither_skeleton_spawn_egg': 'Items.WITHER_SKELETON_SPAWN_EGG',
+        'piglin_spawn_egg': 'Items.PIGLIN_SPAWN_EGG',
+        'hoglin_spawn_egg': 'Items.HOGLIN_SPAWN_EGG',
+        'zoglin_spawn_egg': 'Items.ZOGLIN_SPAWN_EGG',
+        'pillager_spawn_egg': 'Items.PILLAGER_SPAWN_EGG',
+        'vindicator_spawn_egg': 'Items.VINDICATOR_SPAWN_EGG',
+        'evoker_spawn_egg': 'Items.EVOKER_SPAWN_EGG',
+        'ravager_spawn_egg': 'Items.RAVAGER_SPAWN_EGG',
+        'creeper_spawn_egg': 'Items.CREEPER_SPAWN_EGG',
+        'skeleton_spawn_egg': 'Items.SKELETON_SPAWN_EGG',
+        'spider_spawn_egg': 'Items.SPIDER_SPAWN_EGG',
+        'cave_spider_spawn_egg': 'Items.CAVE_SPIDER_SPAWN_EGG',
+        'enderman_spawn_egg': 'Items.ENDERMAN_SPAWN_EGG'
     };
+    
+    // Check for spawn eggs - if it contains "_spawn_egg" use the mapping
+    if (itemId.includes('_spawn_egg')) {
+        return mapping[itemId] || 'Items.AIR';
+    }
+    
     return mapping[itemId] || 'Items.AIR';
 }
 

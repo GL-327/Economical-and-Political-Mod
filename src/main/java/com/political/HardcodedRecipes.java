@@ -12814,7 +12814,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12834,7 +12834,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12854,7 +12854,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12874,7 +12874,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12894,7 +12894,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12914,7 +12914,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12934,7 +12934,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12954,7 +12954,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12974,7 +12974,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -12994,7 +12994,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13014,7 +13014,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13034,7 +13034,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13054,7 +13054,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13074,7 +13074,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13094,7 +13094,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13114,7 +13114,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13134,7 +13134,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13154,7 +13154,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13174,7 +13174,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13194,7 +13194,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13214,7 +13214,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13234,7 +13234,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13254,7 +13254,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13274,7 +13274,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13294,7 +13294,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13314,7 +13314,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13334,7 +13334,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13354,7 +13354,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13374,7 +13374,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13394,7 +13394,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13414,7 +13414,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13434,7 +13434,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13454,7 +13454,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13474,7 +13474,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13494,7 +13494,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13514,7 +13514,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13534,7 +13534,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13554,7 +13554,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13574,7 +13574,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13594,7 +13594,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13614,7 +13614,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13634,7 +13634,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13654,7 +13654,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13674,7 +13674,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13694,7 +13694,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13714,7 +13714,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13734,7 +13734,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13754,7 +13754,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13774,7 +13774,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13794,7 +13794,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13814,7 +13814,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13834,7 +13834,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13854,7 +13854,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13874,7 +13874,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13894,7 +13894,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13914,7 +13914,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13934,7 +13934,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13954,7 +13954,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13974,7 +13974,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -13994,7 +13994,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14014,7 +14014,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14034,7 +14034,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14054,7 +14054,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14074,7 +14074,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14094,7 +14094,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14114,7 +14114,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14134,7 +14134,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14154,7 +14154,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14174,7 +14174,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14194,7 +14194,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14214,7 +14214,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14234,7 +14234,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14254,7 +14254,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14274,7 +14274,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14294,7 +14294,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14314,7 +14314,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14334,7 +14334,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14354,7 +14354,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14374,7 +14374,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14394,7 +14394,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14414,7 +14414,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14434,7 +14434,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14454,7 +14454,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14474,7 +14474,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14494,7 +14494,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14514,7 +14514,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14534,7 +14534,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14554,7 +14554,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14574,7 +14574,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14594,7 +14594,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14614,7 +14614,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14634,7 +14634,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14654,7 +14654,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14674,7 +14674,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14694,7 +14694,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14714,7 +14714,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14734,7 +14734,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14754,7 +14754,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14774,7 +14774,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14794,7 +14794,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14814,7 +14814,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14834,7 +14834,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14854,7 +14854,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14874,7 +14874,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14894,7 +14894,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14914,7 +14914,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14934,7 +14934,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14954,7 +14954,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14974,7 +14974,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -14994,7 +14994,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15014,7 +15014,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15034,7 +15034,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15054,7 +15054,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15074,7 +15074,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15094,7 +15094,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15114,7 +15114,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15134,7 +15134,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15154,7 +15154,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15174,7 +15174,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15194,7 +15194,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15214,7 +15214,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15234,7 +15234,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15254,7 +15254,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15274,7 +15274,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15294,7 +15294,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15314,7 +15314,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15334,7 +15334,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15354,7 +15354,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15374,7 +15374,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15394,7 +15394,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15414,7 +15414,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15434,7 +15434,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15454,7 +15454,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15474,7 +15474,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15494,7 +15494,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15514,7 +15514,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15534,7 +15534,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15554,7 +15554,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15574,7 +15574,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15594,7 +15594,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15614,7 +15614,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15634,7 +15634,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15654,7 +15654,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15674,7 +15674,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15694,7 +15694,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15714,7 +15714,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15734,7 +15734,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15754,7 +15754,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15774,7 +15774,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15794,7 +15794,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15814,7 +15814,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15834,7 +15834,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15854,7 +15854,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15874,7 +15874,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15894,7 +15894,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15914,7 +15914,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15934,7 +15934,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15954,7 +15954,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15974,7 +15974,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -15994,7 +15994,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16014,7 +16014,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16034,7 +16034,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16054,7 +16054,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16074,7 +16074,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16094,7 +16094,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16114,7 +16114,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16134,7 +16134,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16154,7 +16154,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16174,7 +16174,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16194,7 +16194,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16214,7 +16214,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16234,7 +16234,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16254,7 +16254,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16274,7 +16274,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16294,7 +16294,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16314,7 +16314,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16334,7 +16334,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16354,7 +16354,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16374,7 +16374,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16394,7 +16394,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16414,7 +16414,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16434,7 +16434,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16454,7 +16454,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16474,7 +16474,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16494,7 +16494,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16514,7 +16514,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16534,7 +16534,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16554,7 +16554,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16574,7 +16574,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16594,7 +16594,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16614,7 +16614,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16634,7 +16634,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16654,7 +16654,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16674,7 +16674,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16694,7 +16694,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16714,7 +16714,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16734,7 +16734,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16754,7 +16754,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16774,7 +16774,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16794,7 +16794,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16814,7 +16814,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16834,7 +16834,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16854,7 +16854,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16874,7 +16874,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16894,7 +16894,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16914,7 +16914,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16934,7 +16934,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16954,7 +16954,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16974,7 +16974,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -16994,7 +16994,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17014,7 +17014,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17034,7 +17034,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17054,7 +17054,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17074,7 +17074,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17094,7 +17094,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17114,7 +17114,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17134,7 +17134,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17154,7 +17154,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17174,7 +17174,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17194,7 +17194,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17214,7 +17214,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17234,7 +17234,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17254,7 +17254,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17274,7 +17274,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17294,7 +17294,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17314,7 +17314,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17334,7 +17334,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17354,7 +17354,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17374,7 +17374,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17394,7 +17394,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17414,7 +17414,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17434,7 +17434,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17454,7 +17454,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17474,7 +17474,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17494,7 +17494,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17514,7 +17514,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17534,7 +17534,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17554,7 +17554,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17574,7 +17574,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17594,7 +17594,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17614,7 +17614,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17634,7 +17634,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17654,7 +17654,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 10
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17674,7 +17674,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zombie,
+                SlayerManager.SlayerType.ZOMBIE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17694,7 +17694,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.spider,
+                SlayerManager.SlayerType.SPIDER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17714,7 +17714,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.skeleton,
+                SlayerManager.SlayerType.SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17734,7 +17734,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.creeper,
+                SlayerManager.SlayerType.CREEPER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17754,7 +17754,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.enderman,
+                SlayerManager.SlayerType.ENDERMAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17774,7 +17774,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.witch,
+                SlayerManager.SlayerType.WITCH,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17794,7 +17794,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.blaze,
+                SlayerManager.SlayerType.BLAZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17814,7 +17814,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ghast,
+                SlayerManager.SlayerType.GHAST,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17834,7 +17834,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither_skeleton,
+                SlayerManager.SlayerType.WITHER_SKELETON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17854,7 +17854,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.piglin,
+                SlayerManager.SlayerType.PIGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17874,7 +17874,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.hoglin,
+                SlayerManager.SlayerType.HOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17894,7 +17894,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.zoglin,
+                SlayerManager.SlayerType.ZOGLIN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17914,7 +17914,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.pillager,
+                SlayerManager.SlayerType.PILLAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17934,7 +17934,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vindicator,
+                SlayerManager.SlayerType.VINDICATOR,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17954,7 +17954,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.evoker,
+                SlayerManager.SlayerType.EVOKER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17974,7 +17974,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ravager,
+                SlayerManager.SlayerType.RAVAGER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -17994,7 +17994,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.vex,
+                SlayerManager.SlayerType.VEX,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18014,7 +18014,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.phantom,
+                SlayerManager.SlayerType.PHANTOM,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18034,7 +18034,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.drowned,
+                SlayerManager.SlayerType.DROWNED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18054,7 +18054,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.husk,
+                SlayerManager.SlayerType.HUSK,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18074,7 +18074,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.stray,
+                SlayerManager.SlayerType.STRAY,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18094,7 +18094,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.bogged,
+                SlayerManager.SlayerType.BOGGED,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18114,7 +18114,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.breeze,
+                SlayerManager.SlayerType.BREEZE,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18134,7 +18134,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.warden,
+                SlayerManager.SlayerType.WARDEN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18154,7 +18154,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.elder_guardian,
+                SlayerManager.SlayerType.ELDER_GUARDIAN,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18174,7 +18174,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.ender_dragon,
+                SlayerManager.SlayerType.ENDER_DRAGON,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
@@ -18194,7 +18194,7 @@ public class HardcodedRecipes {
                 result,
                 ingredients,
                 lockedSlots,
-                SlayerManager.SlayerType.wither,
+                SlayerManager.SlayerType.WITHER,
                 20
             );
             SlayerRecipes.RECIPES.add(recipe);
