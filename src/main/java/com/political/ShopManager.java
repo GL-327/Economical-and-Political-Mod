@@ -218,20 +218,11 @@ public class ShopManager {
         // Note: Block Armor, Block Tools, and Block Weapons are custom items
         // They are not sold as vanilla items - players craft them via /recipes
 
-        // ===== COMPACTED ITEMS (Custom Items) =====
-        List<Item> compactedItems = Arrays.asList(
-                Items.RAW_IRON, Items.RAW_GOLD, Items.DIAMOND, Items.EMERALD,
-                Items.NETHERITE_INGOT, Items.RAW_COPPER, Items.COAL,
-                Items.LAPIS_LAZULI, Items.REDSTONE, Items.QUARTZ
-        );
-        CATEGORIES.put("Compacted Items", compactedItems);
-
-        // ===== SUPER COMPACTED (Custom Items) =====
-        List<Item> superCompacted = Arrays.asList(
-                Items.GOLD_BLOCK, Items.IRON_BLOCK, Items.DIAMOND_BLOCK,
-                Items.EMERALD_BLOCK, Items.NETHERITE_BLOCK
-        );
-        CATEGORIES.put("Super Compacted", superCompacted);
+        // ===== COMPACTED ITEMS (REMOVED - Dupe Prevention) =====
+        // Compacted items removed to prevent crafting/selling dupe exploits
+        
+        // ===== SUPER COMPACTED (REMOVED - Dupe Prevention) =====
+        // Super compacted items removed to prevent crafting/selling dupe exploits
 
         // ===== ENCHANTED ITEMS (Custom Items) =====
         List<Item> enchantedItems = Arrays.asList(
@@ -696,26 +687,11 @@ public class ShopManager {
         setPrice(Items.RESPAWN_ANCHOR, 200);
         setPrice(Items.LODESTONE, 300);
 
-        // ===== CUSTOM ITEMS - COMPACTED MATERIALS =====
-        // 64 base materials compacted - HEAVILY discounted to prevent uncraft dupe
-        setCustomPrice(SlayerItems.createCompactedIron().getItem(), 16);       // 64 iron = 192, now 16 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedGold().getItem(), 6);        // 64 gold = 64, now 6 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedDiamond().getItem(), 288);   // 64 diamonds = 3200, now 288 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedEmerald().getItem(), 172);    // 64 emeralds = 1920, now 172 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedNetherite().getItem(), 4032); // 64 netherite = 44800, now 4032 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedCopper().getItem(), 10);      // 64 copper = 128, now 10 (92% reduction)
-        setCustomPrice(SlayerItems.createCompactedCoal().getItem(), 6);        // 64 coal = 64, now 6 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedLapis().getItem(), 23);      // 64 lapis = 256, now 23 (91% reduction)
-        setCustomPrice(SlayerItems.createCompactedRedstone().getItem(), 10);   // 64 redstone = 128, now 10 (92% reduction)
-        setCustomPrice(SlayerItems.createCompactedQuartz().getItem(), 10);     // 64 quartz = 128, now 10 (92% reduction)
-
-        // ===== CUSTOM ITEMS - SUPER COMPACTED MATERIALS =====
-        // 9x compacted = 576 base materials, HEAVILY discounted
-        setCustomPrice(SlayerItems.createSuperCompactedGold().getItem(), 43);      // 576 gold = 576, now 43 (93% reduction)
-        setCustomPrice(SlayerItems.createSuperCompactedIron().getItem(), 129);     // 576 iron = 1728, now 129 (93% reduction)
-        setCustomPrice(SlayerItems.createSuperCompactedDiamond().getItem(), 2304); // 576 diamonds = 28800, now 2304 (92% reduction)
-        setCustomPrice(SlayerItems.createSuperCompactedEmerald().getItem(), 1382);  // 576 emeralds = 17280, now 1382 (92% reduction)
-        setCustomPrice(SlayerItems.createSuperCompactedNetherite().getItem(), 32256); // 576 netherite = 403200, now 32256 (92% reduction)
+        // ===== CUSTOM ITEMS - COMPACTED MATERIALS (REMOVED - Dupe Prevention) =====
+        // Compacted items pricing removed to prevent crafting/selling dupe exploits
+        
+        // ===== CUSTOM ITEMS - SUPER COMPACTED MATERIALS (REMOVED - Dupe Prevention) =====
+        // Super compacted items pricing removed to prevent crafting/selling dupe exploits
 
         // ===== CUSTOM ITEMS - ENCHANTED MATERIALS =====
         // Premium materials - heavily reduced to prevent dupes
