@@ -16,11 +16,13 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryOps;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Manages custom crafting recipes with support for preset defaults and user overrides.
@@ -108,27 +110,52 @@ public class RecipeConfigManager {
         return count;
     }
 
-    /** Save all recipes to disk - overwrites "recipes" array */
+    /** Save recipes by merging with existing - add new or replace existing by name */
     public static void save() {
         try {
             Files.createDirectories(CONFIG_DIR);
 
-            JsonObject root = new JsonObject();
-            
-            // Save ALL recipes to the "recipes" array
-            JsonArray recipesArr = new JsonArray();
-            for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
-                recipesArr.add(serialize(r));
+            // Load existing recipes to preserve them
+            Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
+            if (Files.exists(CONFIG_FILE)) {
+                try {
+                    String jsonString = Files.readString(CONFIG_FILE);
+                    JsonObject existing = GSON.fromJson(jsonString, JsonObject.class);
+                    if (existing != null && existing.has("recipes")) {
+                        JsonArray arr = existing.getAsJsonArray("recipes");
+                        for (var elem : arr) {
+                            JsonObject obj = elem.getAsJsonObject();
+                            if (obj.has("name")) {
+                                existingRecipes.put(obj.get("name").getAsString(), obj);
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {}
             }
+
+            // Add/update recipes from CUSTOM_RECIPES
+            for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
+                String name = r.name != null ? r.name : "Unknown";
+                existingRecipes.put(name, serialize(r));
+            }
+
+            // Build new recipes array
+            JsonArray recipesArr = new JsonArray();
+            for (JsonObject obj : existingRecipes.values()) {
+                recipesArr.add(obj);
+            }
+
+            JsonObject root = new JsonObject();
             root.add("recipes", recipesArr);
             
             try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
                 GSON.toJson(root, writer);
             }
             
-            System.out.println("[RecipeConfigManager] Saved " + CUSTOM_RECIPES.size() + " recipes to JSON");
+            System.out.println("[RecipeConfigManager] Saved " + existingRecipes.size() + " recipes (merged)");
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
