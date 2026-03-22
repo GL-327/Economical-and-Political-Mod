@@ -90,6 +90,13 @@ public class RecipeConfigManager {
     public static void save() {
         try {
             Files.createDirectories(CONFIG_DIR);
+            
+            // Safety check: don't save if we somehow lost most recipes
+            if (DEFAULT_RECIPES.size() < 50 && DEFAULT_RECIPES.size() > 0) {
+                System.err.println("[RecipeConfigManager] WARNING: Only " + DEFAULT_RECIPES.size() + " default recipes loaded, refusing to save to prevent data loss!");
+                return;
+            }
+            
             JsonObject root = new JsonObject();
             
             // Save default/preset recipes
@@ -352,17 +359,28 @@ public class RecipeConfigManager {
         if (!elem.isJsonObject()) return ItemStack.EMPTY;
         JsonObject obj = elem.getAsJsonObject();
 
-        if (obj.has("nbt") && PoliticalServer.server != null) {
+        if (obj.has("nbt")) {
             try {
                 String nbtString = obj.get("nbt").getAsString();
                 if (nbtString != null && !nbtString.isEmpty()) {
                     NbtCompound parsed = StringNbtReader.readCompound(nbtString);
-                    RegistryOps<net.minecraft.nbt.NbtElement> ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
-                    var result = ItemStack.CODEC.parse(ops, parsed);
-                    ItemStack stack = result.result().orElse(ItemStack.EMPTY);
-                    int count = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
-                    if (!stack.isEmpty() && count > 1) stack.setCount(count);
-                    return stack;
+                    
+                    // Try to get registry ops - prefer server if available, otherwise use builtin
+                    RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
+                    if (PoliticalServer.server != null) {
+                        ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
+                    } else {
+                        // Fallback: use builtin registries for early loading
+                        ops = net.minecraft.registry.BuiltinRegistries.createWrapperLookup().getOps(NbtOps.INSTANCE);
+                    }
+                    
+                    if (ops != null) {
+                        var result = ItemStack.CODEC.parse(ops, parsed);
+                        ItemStack stack = result.result().orElse(ItemStack.EMPTY);
+                        int count = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
+                        if (!stack.isEmpty() && count > 1) stack.setCount(count);
+                        if (!stack.isEmpty()) return stack;
+                    }
                 }
             } catch (Exception e) {
                 System.err.println("[RecipeConfigManager] Failed to deserialize stack with CODEC: " + e.getMessage());
