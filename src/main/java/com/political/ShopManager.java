@@ -1,9 +1,9 @@
 package com.political;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -844,11 +844,7 @@ public class ShopManager {
             return false;
         }
 
-        // Get expected custom item for this category (if any)
-        ItemStack expectedCustom = getCustomItemForCategory(item);
-        String expectedCustomId = expectedCustom != null ? SlayerItems.getCustomItemId(expectedCustom) : null;
-
-        // Check if player has valid items to sell (vanilla or matching custom)
+        // Check if player has valid vanilla items to sell
         int validCount = 0;
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack invStack = player.getInventory().getStack(i);
@@ -859,13 +855,9 @@ public class ShopManager {
                 continue;
             }
             
-            // Count vanilla items of this type
+            // Only count vanilla items with no custom names or IDs
             if (invStack.getItem() == item && invStack.get(DataComponentTypes.CUSTOM_NAME) == null 
                     && SlayerItems.getCustomItemId(invStack) == null) {
-                validCount += invStack.getCount();
-            }
-            // Count matching custom items for this shop category
-            else if (expectedCustomId != null && expectedCustomId.equals(SlayerItems.getCustomItemId(invStack))) {
                 validCount += invStack.getCount();
             }
         }
@@ -875,26 +867,18 @@ public class ShopManager {
             return false;
         }
 
-        // Remove the items (vanilla first, then custom if needed)
+        // Remove the vanilla items
         int remaining = quantity;
         for (int i = 0; i < player.getInventory().size() && remaining > 0; i++) {
             ItemStack invStack = player.getInventory().getStack(i);
             if (invStack.isEmpty()) continue;
             
-            int toRemove = Math.min(remaining, invStack.getCount());
-            
-            // Remove vanilla items
+            // Only remove vanilla items
             if (invStack.getItem() == item && invStack.get(DataComponentTypes.CUSTOM_NAME) == null 
                     && SlayerItems.getCustomItemId(invStack) == null) {
-                int removed = Math.min(toRemove, invStack.getCount());
-                invStack.decrement(removed);
-                remaining -= removed;
-            }
-            // Remove matching custom items
-            else if (expectedCustomId != null && expectedCustomId.equals(SlayerItems.getCustomItemId(invStack))) {
-                int removed = Math.min(toRemove, invStack.getCount());
-                invStack.decrement(removed);
-                remaining -= removed;
+                int toRemove = Math.min(remaining, invStack.getCount());
+                invStack.decrement(toRemove);
+                remaining -= toRemove;
             }
         }
         
@@ -965,185 +949,18 @@ public class ShopManager {
             }
         }
     }
-
-    // Map of custom item suppliers for proper buying
-    private static final Map<Item, java.util.function.Supplier<ItemStack>> CUSTOM_ITEM_SUPPLIERS = new LinkedHashMap<>();
-    
-    static {
-        // Compacted items
-        CUSTOM_ITEM_SUPPLIERS.put(Items.RAW_IRON, SlayerItems::createCompactedIron);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.RAW_GOLD, SlayerItems::createCompactedGold);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.DIAMOND, SlayerItems::createCompactedDiamond);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.EMERALD, SlayerItems::createCompactedEmerald);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.NETHERITE_INGOT, SlayerItems::createCompactedNetherite);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.RAW_COPPER, SlayerItems::createCompactedCopper);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.COAL, SlayerItems::createCompactedCoal);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.LAPIS_LAZULI, SlayerItems::createCompactedLapis);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.REDSTONE, SlayerItems::createCompactedRedstone);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.QUARTZ, SlayerItems::createCompactedQuartz);
-        
-        // Super compacted items
-        CUSTOM_ITEM_SUPPLIERS.put(Items.GOLD_BLOCK, SlayerItems::createSuperCompactedGold);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.IRON_BLOCK, SlayerItems::createSuperCompactedIron);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.DIAMOND_BLOCK, SlayerItems::createSuperCompactedDiamond);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.EMERALD_BLOCK, SlayerItems::createSuperCompactedEmerald);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.NETHERITE_BLOCK, SlayerItems::createSuperCompactedNetherite);
-        
-        // Enchanted blocks
-        CUSTOM_ITEM_SUPPLIERS.put(Items.COBBLESTONE, SlayerItems::createEnchantedCobblestone);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.STONE, SlayerItems::createEnchantedStone);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.IRON_BLOCK, SlayerItems::createEnchantedIronBlock);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.GOLD_BLOCK, SlayerItems::createEnchantedGoldBlock);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.DIAMOND_BLOCK, SlayerItems::createEnchantedDiamondBlock);
-        CUSTOM_ITEM_SUPPLIERS.put(Items.BLACKSTONE, SlayerItems::createEnchantedBlackstone);
-    }
     
     public static void giveItems(ServerPlayerEntity player, Item item, int quantity) {
         int remaining = quantity;
         int maxStack = item.getMaxCount();
 
-        // Check if this is a custom item category
-        ItemStack customTemplate = getCustomItemForCategory(item);
-        
+        // Shop only gives vanilla items
         while (remaining > 0) {
             int toGive = Math.min(remaining, maxStack);
-            ItemStack stack;
-            
-            if (customTemplate != null) {
-                // Give the custom item
-                stack = customTemplate.copy();
-                stack.setCount(toGive);
-            } else {
-                // Give vanilla item
-                stack = new net.minecraft.item.ItemStack(item, toGive);
-            }
+            ItemStack stack = new net.minecraft.item.ItemStack(item, toGive);
             player.getInventory().insertStack(stack);
             remaining -= toGive;
         }
-    }
-    
-    /**
-     * Gets the appropriate custom item for a shop category base item.
-     * Returns null for vanilla items that should stay vanilla.
-     */
-    public static ItemStack getCustomItemForCategory(Item baseItem) {
-        // Check categories to determine if this should be a custom item
-        String category = getCategoryForItem(baseItem);
-        if (category == null) return null;
-        
-        return switch (category) {
-            case "Compacted Items" -> {
-                if (baseItem == Items.RAW_IRON) yield SlayerItems.createCompactedIron();
-                else if (baseItem == Items.RAW_GOLD) yield SlayerItems.createCompactedGold();
-                else if (baseItem == Items.DIAMOND) yield SlayerItems.createCompactedDiamond();
-                else if (baseItem == Items.EMERALD) yield SlayerItems.createCompactedEmerald();
-                else if (baseItem == Items.NETHERITE_INGOT) yield SlayerItems.createCompactedNetherite();
-                else if (baseItem == Items.RAW_COPPER) yield SlayerItems.createCompactedCopper();
-                else if (baseItem == Items.COAL) yield SlayerItems.createCompactedCoal();
-                else if (baseItem == Items.LAPIS_LAZULI) yield SlayerItems.createCompactedLapis();
-                else if (baseItem == Items.REDSTONE) yield SlayerItems.createCompactedRedstone();
-                else if (baseItem == Items.QUARTZ) yield SlayerItems.createCompactedQuartz();
-                else yield null;
-            }
-            case "Super Compacted" -> {
-                if (baseItem == Items.GOLD_BLOCK) yield SlayerItems.createSuperCompactedGold();
-                else if (baseItem == Items.IRON_BLOCK) yield SlayerItems.createSuperCompactedIron();
-                else if (baseItem == Items.DIAMOND_BLOCK) yield SlayerItems.createSuperCompactedDiamond();
-                else if (baseItem == Items.EMERALD_BLOCK) yield SlayerItems.createSuperCompactedEmerald();
-                else if (baseItem == Items.NETHERITE_BLOCK) yield SlayerItems.createSuperCompactedNetherite();
-                else yield null;
-            }
-            case "Enchanted Items" -> {
-                if (baseItem == Items.COBBLESTONE) yield SlayerItems.createEnchantedCobblestone();
-                else if (baseItem == Items.STONE) yield SlayerItems.createEnchantedStone();
-                else if (baseItem == Items.IRON_BLOCK) yield SlayerItems.createEnchantedIronBlock();
-                else if (baseItem == Items.GOLD_BLOCK) yield SlayerItems.createEnchantedGoldBlock();
-                else if (baseItem == Items.DIAMOND_BLOCK) yield SlayerItems.createEnchantedDiamondBlock();
-                else if (baseItem == Items.BLACKSTONE) yield SlayerItems.createEnchantedBlackstone();
-                else if (baseItem == Items.GILDED_BLACKSTONE) yield SlayerItems.createEnchantedGildedBlackstone();
-                else if (baseItem == Items.OAK_LOG) yield SlayerItems.createEnchantedOakLog();
-                else if (baseItem == Items.POPPY) yield SlayerItems.createEnchantedRose();
-                else if (baseItem == Items.DANDELION) yield SlayerItems.createEnchantedDandelion();
-                else if (baseItem == Items.WHEAT) yield SlayerItems.createEnchantedWheat();
-                else if (baseItem == Items.CARROT) yield SlayerItems.createEnchantedCarrot();
-                else if (baseItem == Items.POTATO) yield SlayerItems.createEnchantedPotato();
-                else if (baseItem == Items.SUGAR_CANE) yield SlayerItems.createEnchantedSugarCane();
-                // New enchanted blocks
-                else if (baseItem == Items.EMERALD_BLOCK) yield SlayerItems.createEnchantedEmeraldBlock();
-                else if (baseItem == Items.LAPIS_BLOCK) yield SlayerItems.createEnchantedLapisBlock();
-                else if (baseItem == Items.COAL_BLOCK) yield SlayerItems.createEnchantedCoalBlock();
-                else if (baseItem == Items.COPPER_BLOCK) yield SlayerItems.createEnchantedCopperBlock();
-                else if (baseItem == Items.NETHERITE_BLOCK) yield SlayerItems.createEnchantedNetheriteBlock();
-                else if (baseItem == Items.QUARTZ_BLOCK) yield SlayerItems.createEnchantedQuartzBlock();
-                else if (baseItem == Items.REDSTONE_BLOCK) yield SlayerItems.createEnchantedRedstoneBlock();
-                else if (baseItem == Items.SAND) yield SlayerItems.createEnchantedSand();
-                else if (baseItem == Items.RED_SAND) yield SlayerItems.createEnchantedRedSand();
-                else if (baseItem == Items.GRAVEL) yield SlayerItems.createEnchantedGravel();
-                else if (baseItem == Items.NETHERRACK) yield SlayerItems.createEnchantedNetherrack();
-                else if (baseItem == Items.END_STONE) yield SlayerItems.createEnchantedEndStone();
-                else if (baseItem == Items.OBSIDIAN) yield SlayerItems.createEnchantedObsidian();
-                else if (baseItem == Items.GLOWSTONE) yield SlayerItems.createEnchantedGlowstone();
-                else if (baseItem == Items.PRISMARINE) yield SlayerItems.createEnchantedPrismarine();
-                else if (baseItem == Items.BASALT) yield SlayerItems.createEnchantedBasalt();
-                else if (baseItem == Items.DEEPSLATE) yield SlayerItems.createEnchantedDeepslate();
-                else if (baseItem == Items.COBBLED_DEEPSLATE) yield SlayerItems.createEnchantedCobbledDeepslate();
-                else if (baseItem == Items.TUFF) yield SlayerItems.createEnchantedTuff();
-                else if (baseItem == Items.CALCITE) yield SlayerItems.createEnchantedCalcite();
-                else if (baseItem == Items.AMETHYST_BLOCK) yield SlayerItems.createEnchantedAmethystBlock();
-                else if (baseItem == Items.GLASS) yield SlayerItems.createEnchantedGlass();
-                else if (baseItem == Items.ICE) yield SlayerItems.createEnchantedIce();
-                else if (baseItem == Items.PACKED_ICE) yield SlayerItems.createEnchantedPackedIce();
-                else if (baseItem == Items.BLUE_ICE) yield SlayerItems.createEnchantedBlueIce();
-                else if (baseItem == Items.TERRACOTTA) yield SlayerItems.createEnchantedTerracotta();
-                else if (baseItem == Items.CLAY) yield SlayerItems.createEnchantedClay();
-                else if (baseItem == Items.BRICKS) yield SlayerItems.createEnchantedBrick();
-                else if (baseItem == Items.NETHER_BRICKS) yield SlayerItems.createEnchantedNetherBrick();
-                else if (baseItem == Items.PURPUR_BLOCK) yield SlayerItems.createEnchantedPurpurBlock();
-                else if (baseItem == Items.SEA_LANTERN) yield SlayerItems.createEnchantedSeaLantern();
-                else if (baseItem == Items.SHROOMLIGHT) yield SlayerItems.createEnchantedShroomlight();
-                else yield null;
-            }
-            case "Block Armor" -> {
-                // Return a sample block armor piece for display
-                if (baseItem == Items.LEATHER_HELMET) yield BlockArmor.createGlassHelmet();
-                else if (baseItem == Items.LEATHER_CHESTPLATE) yield BlockArmor.createGlassChestplate();
-                else if (baseItem == Items.LEATHER_LEGGINGS) yield BlockArmor.createGlassLeggings();
-                else if (baseItem == Items.LEATHER_BOOTS) yield BlockArmor.createGlassBoots();
-                else yield null;
-            }
-            case "Block Tools" -> {
-                // Return a sample block tool for display
-                if (baseItem == Items.DIAMOND_PICKAXE) yield BlockTools.createGlassPickaxe();
-                else if (baseItem == Items.DIAMOND_AXE) yield BlockTools.createGlassAxe();
-                else if (baseItem == Items.DIAMOND_SHOVEL) yield BlockTools.createGlassShovel();
-                else if (baseItem == Items.DIAMOND_HOE) yield BlockTools.createGlassHoe();
-                else yield null;
-            }
-            case "Block Weapons" -> {
-                // Return a sample block weapon for display
-                if (baseItem == Items.DIAMOND_SWORD) yield BlockWeapons.createGlassSword();
-                else yield null;
-            }
-            default -> null;
-        };
-    }
-    
-    private static String getCategoryForItem(Item item) {
-        // Priority: Custom item categories first (to ensure custom items are given, not vanilla)
-        String[] customCategories = {"Compacted Items", "Super Compacted", "Enchanted Items"};
-        for (String category : customCategories) {
-            List<Item> items = CATEGORIES.get(category);
-            if (items != null && items.contains(item)) {
-                return category;
-            }
-        }
-        // Then check other categories
-        for (Map.Entry<String, List<Item>> entry : CATEGORIES.entrySet()) {
-            if (entry.getValue().contains(item)) {
-                return entry.getKey();
-            }
-        }
-        return null;
     }
 
     public static boolean hasInventorySpace(ServerPlayerEntity player, Item item, int quantity) {
