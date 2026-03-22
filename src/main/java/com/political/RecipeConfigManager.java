@@ -64,51 +64,36 @@ public class RecipeConfigManager {
         loadDisabled();
     }
 
-    /** Simple JSON loading - only reads from "recipes" array */
+    /** Simple JSON loading - reads ALL recipes from "recipes" array */
     private static int loadFromJsonSimple() {
         int count = 0;
 
         try {
-            // Check file exists
             if (!Files.exists(CONFIG_FILE)) {
                 System.err.println("[RecipeConfigManager] ERROR: File not found: " + CONFIG_FILE);
                 return 0;
             }
 
-            System.out.println("[RecipeConfigManager] Reading from: " + CONFIG_FILE);
-
-            // Read JSON
             String jsonString = Files.readString(CONFIG_FILE);
             JsonObject json = GSON.fromJson(jsonString, JsonObject.class);
 
-            if (json == null) {
-                System.err.println("[RecipeConfigManager] ERROR: Failed to parse JSON");
-                return 0;
-            }
-
-            // Get recipes array
-            if (!json.has("recipes")) {
+            if (json == null || !json.has("recipes")) {
                 System.err.println("[RecipeConfigManager] ERROR: No 'recipes' array in JSON");
                 return 0;
             }
 
             JsonArray recipes = json.getAsJsonArray("recipes");
-            System.out.println("[RecipeConfigManager] Found " + recipes.size() + " recipes in JSON file");
+            System.out.println("[RecipeConfigManager] Loading " + recipes.size() + " recipes from JSON");
 
-            // Load each recipe from "recipes" array
             for (int i = 0; i < recipes.size(); i++) {
                 try {
                     JsonObject recipeObj = recipes.get(i).getAsJsonObject();
                     String name = recipeObj.has("name") ? recipeObj.get("name").getAsString() : "Unknown" + i;
 
-                    // System.out.println("[RecipeConfigManager] Loading recipe " + (i+1) + "/" + recipes.size() + ": " + name);
-
                     SlayerRecipes.Recipe recipe = deserialize(recipeObj);
                     if (recipe != null && !recipe.result.isEmpty()) {
                         CUSTOM_RECIPES.add(recipe);
                         count++;
-                    } else {
-                        System.err.println("[RecipeConfigManager] FAILED to load recipe: " + name);
                     }
                 } catch (Exception e) {
                     System.err.println("[RecipeConfigManager] ERROR loading recipe " + i + ": " + e.getMessage());
@@ -120,66 +105,28 @@ public class RecipeConfigManager {
             e.printStackTrace();
         }
 
-        // Also load from "custom" array (recipes added via /setrecipe)
-        try {
-            String jsonString = Files.readString(CONFIG_FILE);
-            JsonObject json = GSON.fromJson(jsonString, JsonObject.class);
-            if (json != null && json.has("custom")) {
-                JsonArray customArr = json.getAsJsonArray("custom");
-                System.out.println("[RecipeConfigManager] Found " + customArr.size() + " custom recipes");
-                for (int i = 0; i < customArr.size(); i++) {
-                    try {
-                        JsonObject recipeObj = customArr.get(i).getAsJsonObject();
-                        String name = recipeObj.has("name") ? recipeObj.get("name").getAsString() : "Custom" + i;
-                        SlayerRecipes.Recipe recipe = deserialize(recipeObj);
-                        if (recipe != null && !recipe.result.isEmpty()) {
-                            CUSTOM_RECIPES.add(recipe);
-                            count++;
-                        }
-                    } catch (Exception e) {
-                        System.err.println("[RecipeConfigManager] ERROR loading custom recipe: " + e.getMessage());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore if file doesn't exist yet
-        }
-
         return count;
     }
 
-    /** Save custom recipe overrides to disk. */
+    /** Save all recipes to disk - overwrites "recipes" array */
     public static void save() {
         try {
             Files.createDirectories(CONFIG_DIR);
 
-            // Load existing file to preserve base recipes
             JsonObject root = new JsonObject();
-            if (Files.exists(CONFIG_FILE)) {
-                try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
-                    JsonObject existing = GSON.fromJson(reader, JsonObject.class);
-                    if (existing != null) {
-                        // Preserve existing recipes array
-                        if (existing.has("recipes")) {
-                            root.add("recipes", existing.get("recipes"));
-                        }
-                    }
-                } catch (Exception ignored) {
-                }
-            }
-
-            // Save custom overrides (recipes added via /setrecipe)
-            JsonArray customArr = new JsonArray();
+            
+            // Save ALL recipes to the "recipes" array
+            JsonArray recipesArr = new JsonArray();
             for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
-                customArr.add(serialize(r));
+                recipesArr.add(serialize(r));
             }
-            root.add("custom", customArr);
+            root.add("recipes", recipesArr);
             
             try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
                 GSON.toJson(root, writer);
             }
             
-            System.out.println("[RecipeConfigManager] Saved " + CUSTOM_RECIPES.size() + " recipes");
+            System.out.println("[RecipeConfigManager] Saved " + CUSTOM_RECIPES.size() + " recipes to JSON");
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
         }
