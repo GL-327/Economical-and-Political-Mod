@@ -285,6 +285,58 @@ public class RecipeConfigManager {
         return obj;
     }
 
+    private static SlayerRecipes.Recipe deserializeBaseRecipe(JsonObject obj) {
+        try {
+            String name = obj.get("name").getAsString();
+            String slayerStr = obj.get("requiredSlayer").getAsString();
+            int level = obj.get("requiredLevel").getAsInt();
+            
+            // Log recipe being loaded
+            System.out.println("[RecipeConfigManager] Loading base recipe: " + name);
+            
+            // Handle result with nbt field
+            JsonObject resultObj = obj.getAsJsonObject("result");
+            ItemStack result = deserializeStack(resultObj);
+            
+            if (result.isEmpty()) {
+                System.err.println("[RecipeConfigManager] FAILED to load base recipe '" + name + "': result item is empty");
+                return null;
+            }
+            
+            System.out.println("[RecipeConfigManager] Successfully parsed result for base recipe: " + name);
+
+            SlayerManager.SlayerType slayerType = null;
+            if (!slayerStr.isEmpty()) {
+                try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) {}
+            }
+
+            JsonArray gridArr = obj.getAsJsonArray("ingredients");
+            ItemStack[] grid = new ItemStack[9];
+            for (int i = 0; i < 9 && i < gridArr.size(); i++) {
+                grid[i] = deserializeIngredient(gridArr.get(i));
+            }
+            for (int i = 0; i < 9; i++) {
+                if (grid[i] == null) grid[i] = ItemStack.EMPTY;
+            }
+
+            // Deserialize locked slots
+            boolean[] lockedSlots = new boolean[9];
+            if (obj.has("lockedSlots")) {
+                JsonArray lockedArr = obj.getAsJsonArray("lockedSlots");
+                for (int i = 0; i < 9 && i < lockedArr.size(); i++) {
+                    lockedSlots[i] = lockedArr.get(i).getAsBoolean();
+                }
+            }
+
+            System.out.println("[RecipeConfigManager] Successfully loaded base recipe: " + name);
+            return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Error deserializing base recipe: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private static SlayerRecipes.Recipe deserialize(JsonObject obj) {
         try {
             String name = obj.get("name").getAsString();
