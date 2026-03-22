@@ -212,8 +212,20 @@ public class BlockToolHandler {
     private static void handleObsidianToolBreak(ServerPlayerEntity player, World world, BlockPos pos, BlockState state, String toolType) {
         // Obsidian pickaxe can slowly break bedrock
         if ("pickaxe".equals(toolType) && state.getBlock() == Blocks.BEDROCK) {
-            // Very slow - takes many hits
+            // Very slow - takes many hits, but can actually break it
             player.sendMessage(Text.literal("⛏ Breaking bedrock...").formatted(Formatting.DARK_PURPLE), true);
+            
+            // Actually break the bedrock with a small chance
+            if (player.getRandom().nextFloat() < 0.1f) { // 10% chance per hit
+                if (world instanceof ServerWorld serverWorld) {
+                    serverWorld.breakBlock(pos, true, player);
+                    serverWorld.spawnParticles(ParticleTypes.EXPLOSION,
+                            pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            10, 0.5, 0.5, 0.5, 0.1);
+                    player.sendMessage(Text.literal("💥 Bedrock shattered!").formatted(Formatting.DARK_RED, Formatting.BOLD), true);
+                    return;
+                }
+            }
         }
         
         // Obsidian Pickaxe: Fortune III effect - bonus drops

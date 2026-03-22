@@ -1090,6 +1090,16 @@ public class CustomItemsGui {
                     items.add(CustomArrows.createArrow(type, 1));
                 }
             }
+            case BOSS_DROPS -> {
+                // NEW BOSS DROPS
+                items.add(SlayerItems.createUndeadHeart());
+                items.add(SlayerItems.createSpectralQuiver());
+                items.add(SlayerItems.createEchoingCore());
+                items.add(SlayerItems.createEnderSword());
+                items.add(SlayerItems.createAbyssalBlade());
+                items.add(SlayerItems.createBouncySlime());
+                items.add(SlayerItems.createVenomousDagger());
+            }
         }
         return items;
     }
