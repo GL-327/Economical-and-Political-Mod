@@ -969,6 +969,15 @@ public class CommandRegistry {
                     return 1;
                 }));
 
+        // /uah - shortcut for players to open underground auction (public)
+        dispatcher.register(CommandManager.literal("uah")
+                .executes(context -> {
+                    ServerPlayerEntity player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    UndergroundAuctionGui.open(player);
+                    return 1;
+                }));
+
         // ADMIN ONLY: /placeundergroundauctioneer
         dispatcher.register(CommandManager.literal("placeundergroundauctioneer")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
