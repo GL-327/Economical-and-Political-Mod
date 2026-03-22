@@ -333,7 +333,7 @@ public class ShopGui {
         for (int i = 0; i < player.getInventory().size(); i++) {
             ItemStack stack = player.getInventory().getStack(i);
             if (!stack.isEmpty() && ShopManager.canBeSold(stack.getItem())) {
-                sellableItems.merge(stack.getItem(), stack.getCount(), Integer::sum);
+                sellableItems.merge(stack.getItem(), stack.getCount(), (oldVal, newVal) -> oldVal + newVal);
             }
         }
 

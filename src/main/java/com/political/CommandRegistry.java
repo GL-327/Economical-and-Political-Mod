@@ -683,7 +683,7 @@ public class CommandRegistry {
                     for (Map.Entry<String, Integer> entry : allCredits.entrySet()) {
                         String uuid = entry.getKey();
                         long creditValue = entry.getValue() * 1000L;
-                        totalWealth.merge(uuid, creditValue, Long::sum);
+                        totalWealth.merge(uuid, creditValue, (oldVal, newVal) -> oldVal + newVal);
                     }
 
                     // Sort by wealth descending
