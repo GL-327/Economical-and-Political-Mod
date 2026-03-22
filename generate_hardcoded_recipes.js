@@ -91,6 +91,11 @@ recipes.recipes.forEach((recipe, index) => {
     }
     lockedSlots += ' }';
     
+    // Valid SlayerType enum values
+    const validSlayerTypes = ['ZOMBIE', 'SPIDER', 'SKELETON', 'SLIME', 'ENDERMAN', 'PIGLIN', 'IRON_GOLEM'];
+    const slayerTypeUpper = slayerType !== 'null' ? slayerType.toUpperCase() : 'null';
+    const validSlayerType = slayerTypeUpper !== 'null' && validSlayerTypes.includes(slayerTypeUpper) ? slayerTypeUpper : 'null';
+    
     // Generate the recipe registration code
     output += `        
         // Recipe ${index + 1}: ${name}
@@ -107,7 +112,7 @@ recipes.recipes.forEach((recipe, index) => {
                 result,
                 ingredients,
                 lockedSlots,
-                ${slayerType !== 'null' ? `SlayerManager.SlayerType.${slayerType.toUpperCase()}` : 'null'},
+                ${validSlayerType !== 'null' ? `SlayerManager.SlayerType.${validSlayerType}` : 'null'},
                 ${level}
             );
             SlayerRecipes.RECIPES.add(recipe);
