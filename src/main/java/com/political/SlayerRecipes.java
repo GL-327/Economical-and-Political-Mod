@@ -47,8 +47,23 @@ public class SlayerRecipes {
     private static final List<Recipe> RECIPES = new ArrayList<>();
 
     public static void registerRecipes() {
-        // All hardcoded recipes removed - recipes are now managed via /setrecipe commands
-        // and stored in RecipeConfigManager
+        // Load hardcoded default recipes first
+        HardcodedRecipes.registerAllRecipes();
+        
+        // Then load custom overrides from RecipeConfigManager
+        List<Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();
+        for (Recipe custom : customRecipes) {
+            // Remove any existing recipe with the same output
+            RECIPES.removeIf(r -> {
+                String rId = SlayerItems.getCustomItemId(r.result);
+                String cId = SlayerItems.getCustomItemId(custom.result);
+                return rId != null && rId.equals(cId);
+            });
+            
+            RECIPES.add(custom);
+        }
+        
+        System.out.println("[SlayerRecipes] Registered " + RECIPES.size() + " total recipes (hardcoded + custom)");
     }
 
     public static List<Recipe> getRecipes() {

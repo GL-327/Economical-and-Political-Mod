@@ -35,9 +35,6 @@ public class RecipeConfigManager {
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
-    /** Preset default recipes loaded from file (act as fallbacks). */
-    private static final List<SlayerRecipes.Recipe> DEFAULT_RECIPES = new ArrayList<>();
-
     /** Custom recipes added via /setrecipe (override defaults). */
     private static final List<SlayerRecipes.Recipe> CUSTOM_RECIPES = new ArrayList<>();
 
@@ -48,65 +45,40 @@ public class RecipeConfigManager {
 
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
-        DEFAULT_RECIPES.clear();
         CUSTOM_RECIPES.clear();
         
         if (Files.exists(CONFIG_FILE)) {
             try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
                 JsonObject root = GSON.fromJson(reader, JsonObject.class);
                 
-                // Load default/preset recipes
-                if (root != null && root.has("recipes")) {
-                    JsonArray arr = root.getAsJsonArray("recipes");
-                    for (var elem : arr) {
-                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
-                        if (recipe != null) DEFAULT_RECIPES.add(recipe);
-                    }
-                } else if (root != null && root.isJsonArray()) {
-                    // Legacy format - load as defaults
-                    JsonArray arr = root.getAsJsonArray();
-                    for (var elem : arr) {
-                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
-                        if (recipe != null) DEFAULT_RECIPES.add(recipe);
-                    }
-                }
-                
-                // Load custom overrides
+                // Only load custom overrides - defaults are now hardcoded
                 if (root != null && root.has("custom")) {
                     JsonArray arr = root.getAsJsonArray("custom");
                     for (var elem : arr) {
                         SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
-                        if (recipe != null) CUSTOM_RECIPES.add(recipe);
+                        if (recipe != null) {
+                            CUSTOM_RECIPES.add(recipe);
+                            System.out.println("[RecipeConfigManager] Loaded custom override: " + recipe.name);
+                        }
                     }
                 }
             } catch (Exception e) {
                 System.err.println("[RecipeConfigManager] Failed to load custom recipes: " + e.getMessage());
             }
         }
+        
+        System.out.println("[RecipeConfigManager] Loaded " + CUSTOM_RECIPES.size() + " custom recipe overrides");
         loadDisabled();
     }
 
-    /** Save both default and custom recipes to disk. */
+    /** Save custom recipe overrides to disk. */
     public static void save() {
         try {
             Files.createDirectories(CONFIG_DIR);
             
-            // Safety check: don't save if we somehow lost most recipes
-            if (DEFAULT_RECIPES.size() < 50 && DEFAULT_RECIPES.size() > 0) {
-                System.err.println("[RecipeConfigManager] WARNING: Only " + DEFAULT_RECIPES.size() + " default recipes loaded, refusing to save to prevent data loss!");
-                return;
-            }
-            
             JsonObject root = new JsonObject();
             
-            // Save default/preset recipes
-            JsonArray defaultArr = new JsonArray();
-            for (SlayerRecipes.Recipe r : DEFAULT_RECIPES) {
-                defaultArr.add(serialize(r));
-            }
-            root.add("recipes", defaultArr);
-            
-            // Save custom overrides
+            // Only save custom overrides - defaults are hardcoded
             JsonArray customArr = new JsonArray();
             for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
                 customArr.add(serialize(r));
@@ -116,6 +88,8 @@ public class RecipeConfigManager {
             try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
                 GSON.toJson(root, writer);
             }
+            
+            System.out.println("[RecipeConfigManager] Saved " + CUSTOM_RECIPES.size() + " custom recipe overrides");
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
         }
@@ -153,11 +127,12 @@ public class RecipeConfigManager {
     // ── Public API ─────────────────────────────────────────────
 
     /**
-     * Returns all recipes — custom overrides merged with defaults.
+     * Returns all recipes — hardcoded defaults merged with custom overrides.
      * Custom recipes take precedence over defaults with the same output.
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        List<SlayerRecipes.Recipe> merged = new ArrayList<>(DEFAULT_RECIPES);
+        // Start with all hardcoded recipes from SlayerRecipes
+        List<SlayerRecipes.Recipe> merged = new ArrayList<>(SlayerRecipes.getRecipes());
         
         // Add custom recipes, replacing any defaults with same output
         for (SlayerRecipes.Recipe custom : CUSTOM_RECIPES) {
@@ -178,11 +153,6 @@ public class RecipeConfigManager {
     /** Returns only the custom (admin-set) override recipes. */
     public static List<SlayerRecipes.Recipe> getCustomRecipes() {
         return new ArrayList<>(CUSTOM_RECIPES);
-    }
-    
-    /** Returns only the default/preset recipes. */
-    public static List<SlayerRecipes.Recipe> getDefaultRecipes() {
-        return new ArrayList<>(DEFAULT_RECIPES);
     }
 
     /**
@@ -287,13 +257,23 @@ public class RecipeConfigManager {
             String name = obj.get("name").getAsString();
             String slayerStr = obj.get("requiredSlayer").getAsString();
             int level = obj.get("requiredLevel").getAsInt();
+            
+            // Log recipe being loaded
+            System.out.println("[RecipeConfigManager] Loading recipe: " + name);
+            
             ItemStack result = deserializeStack(obj.get("result"));
+            
+            if (result.isEmpty()) {
+                System.err.println("[RecipeConfigManager] FAILED to load recipe '" + name + "': result item is empty");
+                return null;
+            }
+            
+            System.out.println("[RecipeConfigManager] Successfully parsed result for: " + name);
 
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
                 try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) {}
             }
-            if (result.isEmpty()) return null;
 
             JsonArray gridArr = obj.getAsJsonArray("ingredients");
             ItemStack[] grid = new ItemStack[9];
@@ -313,8 +293,12 @@ public class RecipeConfigManager {
                 }
             }
 
+            System.out.println("[RecipeConfigManager] Successfully loaded recipe: " + name);
             return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
         } catch (Exception e) {
+            String name = obj.has("name") ? obj.get("name").getAsString() : "UNKNOWN";
+            System.err.println("[RecipeConfigManager] EXCEPTION loading recipe '" + name + "': " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
