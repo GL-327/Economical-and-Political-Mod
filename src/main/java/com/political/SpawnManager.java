@@ -8,6 +8,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Set;
 
@@ -53,8 +54,17 @@ public class SpawnManager {
     }
 
     public static void teleportToSpawn(ServerPlayerEntity player) {
+        // Default to worldspawn if no custom spawn is set
         if (spawnWorld == null) {
-            player.sendMessage(Text.literal("Spawn has not been set yet!").formatted(Formatting.RED));
+            // Use vanilla worldspawn coordinates (default Minecraft spawn)
+            ServerWorld overworld = PoliticalServer.server.getWorld(RegistryKey.of(RegistryKeys.WORLD, Identifier.of("minecraft:overworld")));
+            if (overworld != null) {
+                // Default spawn is at y=64 in Minecraft
+                player.teleport(overworld, 0.5, 64, 0.5, Set.of(), 0, 0, false);
+                player.sendMessage(Text.literal("Teleported to world spawn!").formatted(Formatting.GREEN));
+            } else {
+                player.sendMessage(Text.literal("Could not find overworld!").formatted(Formatting.RED));
+            }
             return;
         }
 

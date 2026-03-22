@@ -109,6 +109,16 @@ public class DanielsPickaxe {
         // Make unbreakable (very high durability)
         stack.set(DataComponentTypes.MAX_DAMAGE, Integer.MAX_VALUE);
 
+        // Add Fortune V and Efficiency V enchantments via NBT
+        NbtCompound display = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(new NbtCompound())).copyNbt();
+        
+        // Store enchantments in custom data for the pickaxe
+        NbtCompound enchantNbt = new NbtCompound();
+        enchantNbt.putInt("fortune", 5);
+        enchantNbt.putInt("efficiency", 5);
+        display.put("StoredEnchantments", enchantNbt);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(display));
+
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         SlayerItems.setCustomItemId(stack, "daniels_pickaxe");
 

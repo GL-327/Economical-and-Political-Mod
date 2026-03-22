@@ -286,15 +286,15 @@ public class ShopManager {
         setPrice(Items.CHERRY_LOG, 1);
         setPrice(Items.CRIMSON_STEM, 2);
         setPrice(Items.WARPED_STEM, 2);
-        setPrice(Items.OAK_PLANKS, 1);
-        setPrice(Items.SPRUCE_PLANKS, 1);
-        setPrice(Items.BIRCH_PLANKS, 1);
-        setPrice(Items.JUNGLE_PLANKS, 1);
-        setPrice(Items.ACACIA_PLANKS, 1);
-        setPrice(Items.DARK_OAK_PLANKS, 1);
-        setPrice(Items.MANGROVE_PLANKS, 1);
-        setPrice(Items.CHERRY_PLANKS, 1);
-        setPrice(Items.BAMBOO_PLANKS, 1);
+        setPrice(Items.OAK_PLANKS, 0);  // Cannot sell - prevents log conversion dupe (1 log = 4 planks)
+        setPrice(Items.SPRUCE_PLANKS, 0);  // Cannot sell
+        setPrice(Items.BIRCH_PLANKS, 0);  // Cannot sell
+        setPrice(Items.JUNGLE_PLANKS, 0);  // Cannot sell
+        setPrice(Items.ACACIA_PLANKS, 0);  // Cannot sell
+        setPrice(Items.DARK_OAK_PLANKS, 0);  // Cannot sell
+        setPrice(Items.MANGROVE_PLANKS, 0);  // Cannot sell
+        setPrice(Items.CHERRY_PLANKS, 0);  // Cannot sell
+        setPrice(Items.BAMBOO_PLANKS, 0);  // Cannot sell
         setPrice(Items.CRIMSON_PLANKS, 1);
         setPrice(Items.WARPED_PLANKS, 1);
 
@@ -351,8 +351,8 @@ public class ShopManager {
         setPrice(Items.IRON_INGOT, 3);
         setPrice(Items.COPPER_INGOT, 2);
         setPrice(Items.GOLD_INGOT, 1);
-        setPrice(Items.IRON_NUGGET, 1);
-        setPrice(Items.GOLD_NUGGET, 1);
+        setPrice(Items.IRON_NUGGET, 0);  // Cannot sell - prevents ingot conversion dupe
+        setPrice(Items.GOLD_NUGGET, 0);  // Cannot sell - prevents ingot conversion dupe
         setPrice(Items.DIAMOND, 50);
         setPrice(Items.EMERALD, 30);
         setPrice(Items.LAPIS_LAZULI, 4);
@@ -674,9 +674,9 @@ public class ShopManager {
         setPrice(Items.ACTIVATOR_RAIL, 10);
         setPrice(Items.CHEST, 4);
         setPrice(Items.ENDER_CHEST, 200);
-        setPrice(Items.SHULKER_BOX, 320);
-        setPrice(Items.WHITE_SHULKER_BOX, 330);
-        setPrice(Items.BLACK_SHULKER_BOX, 330);
+        setPrice(Items.SHULKER_BOX, 0);  // Cannot sell - prevents shulker box dupe (2 shells + chest = profit)
+        setPrice(Items.WHITE_SHULKER_BOX, 0);  // Cannot sell
+        setPrice(Items.BLACK_SHULKER_BOX, 0);  // Cannot sell
         setPrice(Items.BUNDLE, 15);
         setPrice(Items.RECOVERY_COMPASS, 120);
         setPrice(Items.SPONGE, 100);
@@ -828,7 +828,7 @@ public class ShopManager {
 
     public static int getBuyPrice(Item item) {
         int sellPrice = getSellPrice(item);
-        return sellPrice > 0 ? sellPrice * 3 : 0;  // CHANGED: 3x instead of 2x
+        return sellPrice > 0 ? sellPrice * 4 : 0;  // 4x sell price - very unforgiving
     }
 
     public static boolean canBeSold(Item item) {
