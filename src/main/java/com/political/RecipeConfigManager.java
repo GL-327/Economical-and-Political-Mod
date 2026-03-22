@@ -451,9 +451,10 @@ public class RecipeConfigManager {
             try {
                 String nbtString = obj.get("nbt").getAsString();
                 if (nbtString != null && !nbtString.isEmpty()) {
-                    // Try to fix common NBT issues
-                    nbtString = nbtString.replaceAll("([a-zA-Z_][a-zA-Z0-9_]*)\\s*:", "\"$1\":"); // Add quotes to unquoted property names
-                    nbtString = nbtString.replaceAll(":\\s*([a-zA-Z_][a-zA-Z0-9_]*)\\b", ":\"$1\""); // Add quotes to unquoted string values
+                    // Fix unquoted keys - NBT requires all keys to be quoted
+                    // Also handle escaped quotes in JSON
+                    nbtString = nbtString.replace("\\\"", "\""); // Unescape JSON quotes
+                    nbtString = nbtString.replaceAll("([a-zA-Z_][a-zA-Z0-9_]*):", "\"$1\":"); // Quote unquoted keys
                     
                     NbtCompound parsed = StringNbtReader.readCompound(nbtString);
                     
