@@ -1,9 +1,90 @@
 const fs = require('fs');
 
-// Load the recipe data
 const recipes = JSON.parse(fs.readFileSync('config/political/custom_recipes.json'));
-
 console.log(`Generating ${recipes.recipes.length} hardcoded Java recipes...`);
+
+// Helper function
+function minecraftItemToJava(itemId) {
+    const mapping = {
+        'air': 'Items.AIR',
+        'stone': 'Items.STONE',
+        'glass_block': 'Items.GLASS',
+        'glass': 'Items.GLASS',
+        'leather_helmet': 'Items.LEATHER_HELMET',
+        'leather_chestplate': 'Items.LEATHER_CHESTPLATE',
+        'leather_leggings': 'Items.LEATHER_LEGGINGS',
+        'leather_boots': 'Items.LEATHER_BOOTS',
+        'iron_helmet': 'Items.IRON_HELMET',
+        'iron_chestplate': 'Items.IRON_CHESTPLATE',
+        'iron_leggings': 'Items.IRON_LEGGINGS',
+        'iron_boots': 'Items.IRON_BOOTS',
+        'iron_sword': 'Items.IRON_SWORD',
+        'iron_pickaxe': 'Items.IRON_PICKAXE',
+        'iron_axe': 'Items.IRON_AXE',
+        'iron_shovel': 'Items.IRON_SHOVEL',
+        'iron_hoe': 'Items.IRON_HOE',
+        'diamond_helmet': 'Items.DIAMOND_HELMET',
+        'diamond_chestplate': 'Items.DIAMOND_CHESTPLATE',
+        'diamond_leggings': 'Items.DIAMOND_LEGGINGS',
+        'diamond_boots': 'Items.DIAMOND_BOOTS',
+        'diamond_sword': 'Items.DIAMOND_SWORD',
+        'diamond_pickaxe': 'Items.DIAMOND_PICKAXE',
+        'diamond_axe': 'Items.DIAMOND_AXE',
+        'diamond_shovel': 'Items.DIAMOND_SHOVEL',
+        'diamond_hoe': 'Items.DIAMOND_HOE',
+        'gold_helmet': 'Items.GOLDEN_HELMET',
+        'golden_helmet': 'Items.GOLDEN_HELMET',
+        'gold_chestplate': 'Items.GOLDEN_CHESTPLATE',
+        'golden_chestplate': 'Items.GOLDEN_CHESTPLATE',
+        'gold_leggings': 'Items.GOLDEN_LEGGINGS',
+        'golden_leggings': 'Items.GOLDEN_LEGGINGS',
+        'gold_boots': 'Items.GOLDEN_BOOTS',
+        'golden_boots': 'Items.GOLDEN_BOOTS',
+        'golden_sword': 'Items.GOLDEN_SWORD',
+        'golden_pickaxe': 'Items.GOLDEN_PICKAXE',
+        'golden_axe': 'Items.GOLDEN_AXE',
+        'golden_shovel': 'Items.GOLDEN_SHOVEL',
+        'golden_hoe': 'Items.GOLDEN_HOE',
+        'netherite_helmet': 'Items.NETHERITE_HELMET',
+        'netherite_chestplate': 'Items.NETHERITE_CHESTPLATE',
+        'netherite_leggings': 'Items.NETHERITE_LEGGINGS',
+        'netherite_boots': 'Items.NETHERITE_BOOTS',
+        'netherite_sword': 'Items.NETHERITE_SWORD',
+        'netherite_pickaxe': 'Items.NETHERITE_PICKAXE',
+        'netherite_axe': 'Items.NETHERITE_AXE',
+        'netherite_shovel': 'Items.NETHERITE_SHOVEL',
+        'netherite_hoe': 'Items.NETHERITE_HOE',
+        'chainmail_helmet': 'Items.CHAINMAIL_HELMET',
+        'chainmail_chestplate': 'Items.CHAINMAIL_CHESTPLATE',
+        'chainmail_leggings': 'Items.CHAINMAIL_LEGGINGS',
+        'chainmail_boots': 'Items.CHAINMAIL_BOOTS',
+        'bow': 'Items.BOW',
+        'crossbow': 'Items.CROSSBOW',
+        'shield': 'Items.SHIELD',
+        'heavy_core': 'Items.HEAVY_CORE',
+        'emerald': 'Items.EMERALD',
+        'diamond': 'Items.DIAMOND',
+        'iron_ingot': 'Items.IRON_INGOT',
+        'gold_ingot': 'Items.GOLD_INGOT',
+        'lapis_lazuli': 'Items.LAPIS_LAZULI',
+        'redstone': 'Items.REDSTONE',
+        'coal': 'Items.COAL',
+        'copper_ingot': 'Items.COPPER_INGOT',
+        'netherite_ingot': 'Items.NETHERITE_INGOT',
+        'stick': 'Items.STICK',
+        'rotten_flesh': 'Items.ROTTEN_FLESH',
+        'spider_eye': 'Items.SPIDER_EYE',
+        'bone': 'Items.BONE',
+        'slime_ball': 'Items.SLIME_BALL',
+        'ender_pearl': 'Items.ENDER_PEARL',
+        'gold_nugget': 'Items.GOLD_NUGGET',
+        'sculk_catalyst': 'Items.SCULK_CATALYST'
+    };
+    return mapping[itemId.toLowerCase()] || 'Items.AIR';
+}
+
+const batchSize = 200;
+const totalBatches = Math.ceil(recipes.recipes.length / batchSize);
 
 let output = `package com.political;
 
@@ -12,8 +93,6 @@ import net.minecraft.item.Items;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ALL HARDCODED RECIPES - Generated from JSON
@@ -25,84 +104,93 @@ public class HardcodedRecipes {
     public static void registerAllRecipes() {
         SlayerRecipes.RECIPES.clear();
         
-        // Register all default recipes
 `;
 
-// Generate each recipe as Java code
-recipes.recipes.forEach((recipe, index) => {
-    const name = recipe.name.replace(/"/g, '\\"');
-    const slayerType = recipe.requiredSlayer || 'null';
-    const level = recipe.requiredLevel || 0;
-    
-    // Parse result NBT to extract item ID and custom ID
-    let resultItem = 'Items.AIR';
-    let resultCustomId = '';
-    
-    if (recipe.result && recipe.result.nbt) {
-        const nbt = recipe.result.nbt;
-        const idMatch = nbt.match(/id:"minecraft:([^"]+)"/);
-        const customIdMatch = nbt.match(/custom_id:"([^"]+)"/);
-        
-        if (idMatch) {
-            const itemId = idMatch[1];
-            const mcItem = minecraftItemToJava(itemId);
-            if (mcItem && mcItem !== 'Items.AIR') {
-                resultItem = mcItem;
-            }
-        }
-        
-        if (customIdMatch) {
-            resultCustomId = customIdMatch[1];
-        }
+for (let batch = 1; batch <= totalBatches; batch++) {
+    output += `        registerRecipesBatch${batch}();\n`;
+}
+
+output += `        
+        System.out.println("[HardcodedRecipes] Registered " + SlayerRecipes.RECIPES.size() + " default recipes");
     }
     
-    // Generate ingredients array
-    let ingredients = 'new ItemStack[] { ';
-    for (let i = 0; i < 9; i++) {
-        if (recipe.ingredients && recipe.ingredients[i]) {
-            const ing = recipe.ingredients[i];
-            let ingItem = 'Items.AIR';
+`;
+
+for (let batch = 1; batch <= totalBatches; batch++) {
+    const startIdx = (batch - 1) * batchSize;
+    const endIdx = Math.min(batch * batchSize, recipes.recipes.length);
+    const batchRecipes = recipes.recipes.slice(startIdx, endIdx);
+    
+    output += `    private static void registerRecipesBatch${batch}() {\n`;
+    
+    batchRecipes.forEach((recipe, idx) => {
+        const globalIdx = startIdx + idx;
+        const name = recipe.name.replace(/"/g, '\\"');
+        const slayerType = recipe.requiredSlayer || 'null';
+        const level = recipe.requiredLevel || 0;
+        
+        let resultItem = 'Items.AIR';
+        let resultCustomId = '';
+        
+        if (recipe.result && recipe.result.nbt) {
+            const nbt = recipe.result.nbt;
+            const idMatch = nbt.match(/id:"minecraft:([^"]+)"/);
+            const customIdMatch = nbt.match(/custom_id:"([^"]+)"/);
             
-            if (ing.nbt) {
-                const idMatch = ing.nbt.match(/id:"minecraft:([^"]+)"/);
-                if (idMatch) {
-                    const itemId = idMatch[1];
-                    const mcItem = minecraftItemToJava(itemId);
-                    if (mcItem && mcItem !== 'Items.AIR') {
-                        ingItem = mcItem;
-                    }
+            if (idMatch) {
+                const itemId = idMatch[1];
+                const mcItem = minecraftItemToJava(itemId);
+                if (mcItem && mcItem !== 'Items.AIR') {
+                    resultItem = mcItem;
                 }
             }
             
-            ingredients += `new ItemStack(${ingItem})`;
-        } else {
-            ingredients += 'ItemStack.EMPTY';
+            if (customIdMatch) {
+                resultCustomId = customIdMatch[1];
+            }
         }
         
-        if (i < 8) ingredients += ', ';
-    }
-    ingredients += ' }';
-    
-    // Generate locked slots
-    let lockedSlots = 'new boolean[] { ';
-    for (let i = 0; i < 9; i++) {
-        lockedSlots += recipe.lockedSlots && recipe.lockedSlots[i] ? 'true' : 'false';
-        if (i < 8) lockedSlots += ', ';
-    }
-    lockedSlots += ' }';
-    
-    // Valid SlayerType enum values
-    const validSlayerTypes = ['ZOMBIE', 'SPIDER', 'SKELETON', 'SLIME', 'ENDERMAN', 'PIGLIN', 'IRON_GOLEM'];
-    const slayerTypeUpper = slayerType !== 'null' ? slayerType.toUpperCase() : 'null';
-    const validSlayerType = slayerTypeUpper !== 'null' && validSlayerTypes.includes(slayerTypeUpper) ? slayerTypeUpper : 'null';
-    
-    // Generate the recipe registration code
-    output += `        
-        // Recipe ${index + 1}: ${name}
+        let ingredients = 'new ItemStack[] { ';
+        for (let i = 0; i < 9; i++) {
+            if (recipe.ingredients && recipe.ingredients[i]) {
+                const ing = recipe.ingredients[i];
+                let ingItem = 'Items.AIR';
+                
+                if (ing.nbt) {
+                    const idMatch = ing.nbt.match(/id:"minecraft:([^"]+)"/);
+                    if (idMatch) {
+                        const itemId = idMatch[1];
+                        const mcItem = minecraftItemToJava(itemId);
+                        if (mcItem && mcItem !== 'Items.AIR') {
+                            ingItem = mcItem;
+                        }
+                    }
+                }
+                
+                ingredients += `new ItemStack(${ingItem})`;
+            } else {
+                ingredients += 'ItemStack.EMPTY';
+            }
+            
+            if (i < 8) ingredients += ', ';
+        }
+        ingredients += ' }';
+        
+        let lockedSlots = 'new boolean[] { ';
+        for (let i = 0; i < 9; i++) {
+            lockedSlots += recipe.lockedSlots && recipe.lockedSlots[i] ? 'true' : 'false';
+            if (i < 8) lockedSlots += ', ';
+        }
+        lockedSlots += ' }';
+        
+        const validSlayerTypes = ['ZOMBIE', 'SPIDER', 'SKELETON', 'SLIME', 'ENDERMAN', 'PIGLIN', 'IRON_GOLEM'];
+        const slayerTypeUpper = slayerType !== 'null' ? slayerType.toUpperCase() : 'null';
+        const validSlayerType = slayerTypeUpper !== 'null' && validSlayerTypes.includes(slayerTypeUpper) ? slayerTypeUpper : 'null';
+        
+        output += `
         {
             ItemStack result = new ItemStack(${resultItem});
             ${resultCustomId ? `SlayerItems.setCustomItemId(result, "${resultCustomId}");` : ''}
-            ${recipe.result && recipe.result.nbt && recipe.result.nbt.includes('custom_name') ? generateSetNameCode(recipe.result.nbt) : ''}
             
             ItemStack[] ingredients = ${ingredients};
             boolean[] lockedSlots = ${lockedSlots};
@@ -118,18 +206,19 @@ recipes.recipes.forEach((recipe, index) => {
             SlayerRecipes.RECIPES.add(recipe);
         }
 `;
-});
+    });
+    
+    output += `    }
+    
+`;
+}
 
 output += `
-        
-        System.out.println("[HardcodedRecipes] Registered " + SlayerRecipes.RECIPES.size() + " default recipes");
-    }
-    
     private static String minecraftItemToJava(String itemId) {
         switch (itemId.toLowerCase()) {
             case "air": return "Items.AIR";
             case "stone": return "Items.STONE";
-            case "glass_block": return "Items.GLASS";
+            case "glass_block": 
             case "glass": return "Items.GLASS";
             case "leather_helmet": return "Items.LEATHER_HELMET";
             case "leather_chestplate": return "Items.LEATHER_CHESTPLATE";
@@ -153,13 +242,13 @@ output += `
             case "diamond_axe": return "Items.DIAMOND_AXE";
             case "diamond_shovel": return "Items.DIAMOND_SHOVEL";
             case "diamond_hoe": return "Items.DIAMOND_HOE";
-            case "gold_helmet": return "Items.GOLDEN_HELMET";
-            case "gold_chestplate": return "Items.GOLDEN_CHESTPLATE";
-            case "gold_leggings": return "Items.GOLDEN_LEGGINGS";
-            case "gold_boots": return "Items.GOLDEN_BOOTS";
+            case "gold_helmet": 
             case "golden_helmet": return "Items.GOLDEN_HELMET";
+            case "gold_chestplate": 
             case "golden_chestplate": return "Items.GOLDEN_CHESTPLATE";
+            case "gold_leggings": 
             case "golden_leggings": return "Items.GOLDEN_LEGGINGS";
+            case "gold_boots": 
             case "golden_boots": return "Items.GOLDEN_BOOTS";
             case "golden_sword": return "Items.GOLDEN_SWORD";
             case "golden_pickaxe": return "Items.GOLDEN_PICKAXE";
@@ -203,117 +292,8 @@ output += `
             default: return "Items.AIR";
         }
     }
-}`;
+}
+`;
 
 fs.writeFileSync('src/main/java/com/political/HardcodedRecipes.java', output);
-console.log('✅ Generated HardcodedRecipes.java with ' + recipes.recipes.length + ' recipes');
-
-function minecraftItemToJava(itemId) {
-    const mapping = {
-        'air': 'Items.AIR',
-        'stone': 'Items.STONE',
-        'glass_block': 'Items.GLASS',
-        'glass': 'Items.GLASS',
-        'leather_helmet': 'Items.LEATHER_HELMET',
-        'leather_chestplate': 'Items.LEATHER_CHESTPLATE',
-        'leather_leggings': 'Items.LEATHER_LEGGINGS',
-        'leather_boots': 'Items.LEATHER_BOOTS',
-        'iron_helmet': 'Items.IRON_HELMET',
-        'iron_chestplate': 'Items.IRON_CHESTPLATE',
-        'iron_leggings': 'Items.IRON_LEGGINGS',
-        'iron_boots': 'Items.IRON_BOOTS',
-        'iron_sword': 'Items.IRON_SWORD',
-        'iron_pickaxe': 'Items.IRON_PICKAXE',
-        'iron_axe': 'Items.IRON_AXE',
-        'iron_shovel': 'Items.IRON_SHOVEL',
-        'iron_hoe': 'Items.IRON_HOE',
-        'diamond_helmet': 'Items.DIAMOND_HELMET',
-        'diamond_chestplate': 'Items.DIAMOND_CHESTPLATE',
-        'diamond_leggings': 'Items.DIAMOND_LEGGINGS',
-        'diamond_boots': 'Items.DIAMOND_BOOTS',
-        'diamond_sword': 'Items.DIAMOND_SWORD',
-        'diamond_pickaxe': 'Items.DIAMOND_PICKAXE',
-        'diamond_axe': 'Items.DIAMOND_AXE',
-        'diamond_shovel': 'Items.DIAMOND_SHOVEL',
-        'diamond_hoe': 'Items.DIAMOND_HOE',
-        'gold_helmet': 'Items.GOLDEN_HELMET',
-        'gold_chestplate': 'Items.GOLDEN_CHESTPLATE',
-        'gold_leggings': 'Items.GOLDEN_LEGGINGS',
-        'gold_boots': 'Items.GOLDEN_BOOTS',
-        'golden_helmet': 'Items.GOLDEN_HELMET',
-        'golden_chestplate': 'Items.GOLDEN_CHESTPLATE',
-        'golden_leggings': 'Items.GOLDEN_LEGGINGS',
-        'golden_boots': 'Items.GOLDEN_BOOTS',
-        'golden_sword': 'Items.GOLDEN_SWORD',
-        'golden_pickaxe': 'Items.GOLDEN_PICKAXE',
-        'golden_axe': 'Items.GOLDEN_AXE',
-        'golden_shovel': 'Items.GOLDEN_SHOVEL',
-        'golden_hoe': 'Items.GOLDEN_HOE',
-        'netherite_helmet': 'Items.NETHERITE_HELMET',
-        'netherite_chestplate': 'Items.NETHERITE_CHESTPLATE',
-        'netherite_leggings': 'Items.NETHERITE_LEGGINGS',
-        'netherite_boots': 'Items.NETHERITE_BOOTS',
-        'netherite_sword': 'Items.NETHERITE_SWORD',
-        'netherite_pickaxe': 'Items.NETHERITE_PICKAXE',
-        'netherite_axe': 'Items.NETHERITE_AXE',
-        'netherite_shovel': 'Items.NETHERITE_SHOVEL',
-        'netherite_hoe': 'Items.NETHERITE_HOE',
-        'chainmail_helmet': 'Items.CHAINMAIL_HELMET',
-        'chainmail_chestplate': 'Items.CHAINMAIL_CHESTPLATE',
-        'chainmail_leggings': 'Items.CHAINMAIL_LEGGINGS',
-        'chainmail_boots': 'Items.CHAINMAIL_BOOTS',
-        'bow': 'Items.BOW',
-        'crossbow': 'Items.CROSSBOW',
-        'shield': 'Items.SHIELD',
-        'heavy_core': 'Items.HEAVY_CORE',
-        'emerald': 'Items.EMERALD',
-        'diamond': 'Items.DIAMOND',
-        'iron_ingot': 'Items.IRON_INGOT',
-        'gold_ingot': 'Items.GOLD_INGOT',
-        'lapis_lazuli': 'Items.LAPIS_LAZULI',
-        'redstone': 'Items.REDSTONE',
-        'coal': 'Items.COAL',
-        'copper_ingot': 'Items.COPPER_INGOT',
-        'netherite_ingot': 'Items.NETHERITE_INGOT',
-        'stick': 'Items.STICK',
-        'rotten_flesh': 'Items.ROTTEN_FLESH',
-        'spider_eye': 'Items.SPIDER_EYE',
-        'bone': 'Items.BONE',
-        'slime_ball': 'Items.SLIME_BALL',
-        'ender_pearl': 'Items.ENDER_PEARL',
-        'gold_nugget': 'Items.GOLD_NUGGET',
-        'sculk_catalyst': 'Items.SCULK_CATALYST',
-        // Spawn eggs
-        'zombie_spawn_egg': 'Items.ZOMBIE_SPAWN_EGG',
-        'ghast_spawn_egg': 'Items.GHAST_SPAWN_EGG',
-        'wither_skeleton_spawn_egg': 'Items.WITHER_SKELETON_SPAWN_EGG',
-        'piglin_spawn_egg': 'Items.PIGLIN_SPAWN_EGG',
-        'hoglin_spawn_egg': 'Items.HOGLIN_SPAWN_EGG',
-        'zoglin_spawn_egg': 'Items.ZOGLIN_SPAWN_EGG',
-        'pillager_spawn_egg': 'Items.PILLAGER_SPAWN_EGG',
-        'vindicator_spawn_egg': 'Items.VINDICATOR_SPAWN_EGG',
-        'evoker_spawn_egg': 'Items.EVOKER_SPAWN_EGG',
-        'ravager_spawn_egg': 'Items.RAVAGER_SPAWN_EGG',
-        'creeper_spawn_egg': 'Items.CREEPER_SPAWN_EGG',
-        'skeleton_spawn_egg': 'Items.SKELETON_SPAWN_EGG',
-        'spider_spawn_egg': 'Items.SPIDER_SPAWN_EGG',
-        'cave_spider_spawn_egg': 'Items.CAVE_SPIDER_SPAWN_EGG',
-        'enderman_spawn_egg': 'Items.ENDERMAN_SPAWN_EGG'
-    };
-    
-    // Check for spawn eggs - if it contains "_spawn_egg" use the mapping
-    if (itemId.includes('_spawn_egg')) {
-        return mapping[itemId] || 'Items.AIR';
-    }
-    
-    return mapping[itemId] || 'Items.AIR';
-}
-
-function generateSetNameCode(nbt) {
-    const nameMatch = nbt.match(/text:"([^"]+)"/);
-    if (nameMatch) {
-        const name = nameMatch[1].replace(/"/g, '\\"');
-        return `result.set(DataComponentTypes.CUSTOM_NAME, Text.literal("${name}").formatted(Formatting.WHITE));`;
-    }
-    return '';
-}
+console.log(`✅ Generated HardcodedRecipes.java with ${recipes.recipes.length} recipes in ${totalBatches} batches`);
