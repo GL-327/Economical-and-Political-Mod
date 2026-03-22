@@ -1,6 +1,5 @@
 package com.political;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.fabricmc.api.DedicatedServerModInitializer;
@@ -13,10 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
@@ -24,16 +20,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.ActionResult;
-import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PoliticalServer implements DedicatedServerModInitializer {
     public static final String MOD_ID = "politicalserver";
@@ -45,8 +38,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     private static int visibilityTickCounter = 0;
     private static int bankInterestTickCounter = 0;
     private static boolean runSpawnProtection = true;
-    
-    private static final Map<UUID, List<ItemStack>> pendingSoulboundItems = new ConcurrentHashMap<>();
 
     @Override
     public void onInitializeServer() {
@@ -515,10 +506,13 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         }
 
         if (stack.contains(net.minecraft.component.DataComponentTypes.CUSTOM_NAME)) {
-            String name = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_NAME).getString();
-            return name.contains("HPEBM") ||
-                    name.contains("Plasma Emitter") ||
-                    name.contains("Ultra Overclocked");
+            var customName = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_NAME);
+            if (customName != null) {
+                String name = customName.getString();
+                return name.contains("HPEBM") ||
+                        name.contains("Plasma Emitter") ||
+                        name.contains("Ultra Overclocked");
+            }
         }
         return false;
     }

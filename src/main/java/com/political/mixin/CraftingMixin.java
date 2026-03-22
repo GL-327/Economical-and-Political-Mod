@@ -23,7 +23,7 @@ import java.util.List;
 public class CraftingMixin {
 
     @Inject(method = "updateResult", at = @At("HEAD"), cancellable = true)
-    private static void preventCustomItemCrafting(ScreenHandler handler, ServerWorld world,
+    private static void onUpdateResult(ScreenHandler handler, ServerWorld world,
                                                   net.minecraft.entity.player.PlayerEntity player, RecipeInputInventory craftingInventory,
                                                   CraftingResultInventory resultInventory, RecipeEntry<CraftingRecipe> recipe,
                                                   CallbackInfo ci) {
@@ -36,23 +36,21 @@ public class CraftingMixin {
             if (!stack.isEmpty()) hasAnyItem = true;
         }
 
-        // Block crafting if grid is completely empty
+        // If grid is empty, let vanilla handle it
         if (!hasAnyItem) {
-            resultInventory.setStack(0, ItemStack.EMPTY);
-            ci.cancel();
             return;
         }
 
-        // Check for custom recipes first - these need full control
+        // Check for custom recipes from /setrecipe
         com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedRecipe != null) {
-            // Custom recipe found - set result and CANCEL to prevent vanilla interference
+            // Custom recipe found - set result
             resultInventory.setStack(0, matchedRecipe.result.copy());
             ci.cancel();
             return;
         }
 
-        // Check for protected items that shouldn't be used in vanilla recipes
+        // Check for protected items - if present, check for beam/bounty recipes
         boolean hasProtectedItem = false;
         for (int i = 0; i < craftingInventory.size(); i++) {
             ItemStack stack = craftingInventory.getStack(i);
@@ -63,16 +61,19 @@ public class CraftingMixin {
             }
         }
 
-        // If protected items present but no valid custom recipe, block crafting
+        // If protected items present, check for valid recipes
         if (hasProtectedItem) {
-            // Check beam and bounty recipes
             if (BeamCraftingHandler.checkBeamRecipe(grid) != null) return;
             if (BountyCraftingHandler.checkBountyGridRecipe(grid, player) != null) return;
 
-            // No valid recipe - block
+            // No valid recipe for protected items - block
             resultInventory.setStack(0, ItemStack.EMPTY);
             ci.cancel();
+            return;
         }
+
+        // No protected items and no custom recipe - let VANILLA handle it normally
+        // DO NOT cancel - let vanilla crafting work!
     }
 
 }

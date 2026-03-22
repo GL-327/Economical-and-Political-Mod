@@ -20,8 +20,9 @@ public class RecipesGui {
     // MAIN MENU - Double chest organized layout
     // ============================================================
     public static void openMainMenu(ServerPlayerEntity player) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
-        gui.setTitle(Text.literal("📖 Recipe Browser"));
+        try {
+            SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+            gui.setTitle(Text.literal("📖 Recipe Browser"));
 
         for (int i = 0; i < 54; i++) {
             if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
@@ -206,6 +207,11 @@ public class RecipesGui {
         }
 
         gui.open();
+        } catch (Exception e) {
+            System.err.println("[RecipesGui] Error: " + e.getMessage());
+            e.printStackTrace();
+            player.sendMessage(net.minecraft.text.Text.literal("Error: " + e.getMessage()).formatted(Formatting.RED), false);
+        }
     }
 
     private static void placeDiamondPlaceholder(SimpleGui gui, int slot) {

@@ -27,8 +27,6 @@ public class ScoreboardManager {
     private static int displayTickCounter = 0;
     // Animation frame counter (increments each update cycle)
     private static int animFrame = 0;
-    // How often (in update cycles) to re-send the display packet
-    private static final int DISPLAY_REFRESH_INTERVAL = 20;
 
     // Per-player data: objective name → objective
     private static final Map<UUID, String> playerObjectiveNames = new ConcurrentHashMap<>();
@@ -68,15 +66,15 @@ public class ScoreboardManager {
 
     public static void tick(MinecraftServer server) {
         tickCounter++;
-        if (tickCounter < 20) return;
+        if (tickCounter < 5) return;  // Update every 5 ticks instead of 20 for better reliability
         tickCounter = 0;
         animFrame++;
         displayTickCounter++;
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             updateScoreboard(player);
-            // Re-send display packet periodically to ensure scoreboard stays visible
-            if (displayTickCounter % DISPLAY_REFRESH_INTERVAL == 0) {
-                sendDisplayPacket(player);
+            // Re-send display packet more frequently to ensure scoreboard stays visible
+            if (displayTickCounter % 5 == 0) {  // Every 25 ticks instead of 400
+                sendDisplayPacketInternal(player);
             }
         }
     }
@@ -163,13 +161,17 @@ public class ScoreboardManager {
         }
     }
 
-    private static void sendDisplayPacket(ServerPlayerEntity player) {
+    private static void sendDisplayPacketInternal(ServerPlayerEntity player) {
         String objName = playerObjectiveNames.get(player.getUuid());
         if (objName == null) return;
         ServerScoreboard scoreboard = PoliticalServer.server.getScoreboard();
         ScoreboardObjective obj = scoreboard.getNullableObjective(objName);
         if (obj == null) return;
         player.networkHandler.sendPacket(new ScoreboardDisplayS2CPacket(ScoreboardDisplaySlot.SIDEBAR, obj));
+    }
+    
+    public static void sendDisplayPacket(ServerPlayerEntity player) {
+        sendDisplayPacketInternal(player);
     }
 
     // ── Update ────────────────────────────────────────────────────

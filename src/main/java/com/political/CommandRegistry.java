@@ -145,7 +145,14 @@ public class CommandRegistry {
         dispatcher.register(CommandManager.literal("recipe")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    RecipesGui.openMainMenu(player);
+                    System.out.println("[CommandRegistry] /recipe called by " + player.getName().getString());
+                    try {
+                        RecipesGui.openMainMenu(player);
+                        player.sendMessage(Text.literal("✓ Recipe Browser opened!").formatted(Formatting.GREEN), false);
+                    } catch (Exception e) {
+                        player.sendMessage(Text.literal("Error: " + e.getMessage()).formatted(Formatting.RED), false);
+                        e.printStackTrace();
+                    }
                     return 1;
                 })
                 .then(CommandManager.argument("item", StringArgumentType.string())

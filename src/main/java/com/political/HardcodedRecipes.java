@@ -21,8 +21,11 @@ public class HardcodedRecipes {
     }
     
     public static void registerAllRecipes() {
+        // Clear any existing hardcoded recipes
         SlayerRecipes.RECIPES.clear();
         
+        // Add all hardcoded recipes to RecipeConfigManager.CUSTOM_RECIPES
+        // This makes them behave exactly like player-added recipes
         registerRecipesBatch1();
         registerRecipesBatch2();
         registerRecipesBatch3();

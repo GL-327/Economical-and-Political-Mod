@@ -3,7 +3,6 @@ package com.political;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.DataComponentTypes;
@@ -34,6 +33,7 @@ public class RecipeConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
+    private static final Path MODULAR_FILE = CONFIG_DIR.resolve("custom_recipes_modular.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
     /** Custom recipes added via /setrecipe (override defaults). */
@@ -47,69 +47,80 @@ public class RecipeConfigManager {
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
         CUSTOM_RECIPES.clear();
-        
-        // Always load hardcoded recipes first
-        HardcodedRecipes.registerAllRecipes();
-        List<SlayerRecipes.Recipe> hardcodedRecipes = SlayerRecipes.getAllRecipes();
-        
-        // Then load any additional base recipes from JSON (these can override hardcoded ones)
-        List<SlayerRecipes.Recipe> baseRecipes = getBaseRecipes();
-        if (baseRecipes.isEmpty()) {
-            System.out.println("[RecipeConfigManager] No base recipes in JSON, using only hardcoded recipes");
-        } else {
-            System.out.println("[RecipeConfigManager] Loaded " + baseRecipes.size() + " base recipes from JSON");
-        }
-        
-        // Add hardcoded recipes first
-        for (SlayerRecipes.Recipe recipe : hardcodedRecipes) {
-            if (recipe != null) {
-                CUSTOM_RECIPES.add(recipe);
-            }
-        }
-        
-        // Then add base recipes from JSON (these will replace hardcoded ones with same output)
-        for (SlayerRecipes.Recipe recipe : baseRecipes) {
-            if (recipe != null) {
-                // Remove existing recipe with same output
-                String newOutputId = SlayerItems.getCustomItemId(recipe.result);
-                CUSTOM_RECIPES.removeIf(r -> {
-                    String existingId = SlayerItems.getCustomItemId(r.result);
-                    return existingId != null && existingId.equals(newOutputId);
-                });
-                CUSTOM_RECIPES.add(recipe);
-            }
-        }
-        
-        System.out.println("[RecipeConfigManager] Total base recipes (hardcoded + JSON): " + CUSTOM_RECIPES.size());
-        
-        // Then load any additional custom overrides from file (these will replace base recipes with same output)
-        if (Files.exists(CONFIG_FILE)) {
-            try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
-                JsonObject root = GSON.fromJson(reader, JsonObject.class);
-                
-                if (root != null && root.has("custom")) {
-                    JsonArray arr = root.getAsJsonArray("custom");
-                    for (var elem : arr) {
-                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
-                        if (recipe != null) {
-                            // Remove existing recipe with same output
-                            String newOutputId = SlayerItems.getCustomItemId(recipe.result);
-                            CUSTOM_RECIPES.removeIf(r -> {
-                                String existingId = SlayerItems.getCustomItemId(r.result);
-                                return existingId != null && existingId.equals(newOutputId);
-                            });
-                            CUSTOM_RECIPES.add(recipe);
-                            System.out.println("[RecipeConfigManager] Loaded custom override: " + recipe.name);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("[RecipeConfigManager] Failed to load custom recipes: " + e.getMessage());
-            }
-        }
-        
-        System.out.println("[RecipeConfigManager] Total custom recipes: " + CUSTOM_RECIPES.size());
+
+        System.out.println("[RecipeConfigManager] Starting recipe load...");
+
+        // Simple approach: just load from JSON file
+        int count = loadFromJsonSimple();
+
+        System.out.println("[RecipeConfigManager] Loaded " + count + " recipes into CUSTOM_RECIPES");
+
+        // Copy to SlayerRecipes.RECIPES for crafting system
+        SlayerRecipes.RECIPES.clear();
+        SlayerRecipes.RECIPES.addAll(CUSTOM_RECIPES);
+
+        System.out.println("[RecipeConfigManager] Copied " + SlayerRecipes.RECIPES.size() + " recipes to SlayerRecipes.RECIPES");
+
         loadDisabled();
+    }
+
+    /** Simple JSON loading - only reads from "recipes" array */
+    private static int loadFromJsonSimple() {
+        int count = 0;
+
+        try {
+            // Check file exists
+            if (!Files.exists(CONFIG_FILE)) {
+                System.err.println("[RecipeConfigManager] ERROR: File not found: " + CONFIG_FILE);
+                return 0;
+            }
+
+            System.out.println("[RecipeConfigManager] Reading from: " + CONFIG_FILE);
+
+            // Read JSON
+            String jsonString = Files.readString(CONFIG_FILE);
+            JsonObject json = GSON.fromJson(jsonString, JsonObject.class);
+
+            if (json == null) {
+                System.err.println("[RecipeConfigManager] ERROR: Failed to parse JSON");
+                return 0;
+            }
+
+            // Get recipes array
+            if (!json.has("recipes")) {
+                System.err.println("[RecipeConfigManager] ERROR: No 'recipes' array in JSON");
+                return 0;
+            }
+
+            JsonArray recipes = json.getAsJsonArray("recipes");
+            System.out.println("[RecipeConfigManager] Found " + recipes.size() + " recipes in JSON file");
+
+            // Load each recipe
+            for (int i = 0; i < recipes.size(); i++) {
+                try {
+                    JsonObject recipeObj = recipes.get(i).getAsJsonObject();
+                    String name = recipeObj.has("name") ? recipeObj.get("name").getAsString() : "Unknown" + i;
+
+                    System.out.println("[RecipeConfigManager] Loading recipe " + (i+1) + "/" + recipes.size() + ": " + name);
+
+                    SlayerRecipes.Recipe recipe = deserialize(recipeObj);
+                    if (recipe != null && !recipe.result.isEmpty()) {
+                        CUSTOM_RECIPES.add(recipe);
+                        count++;
+                    } else {
+                        System.err.println("[RecipeConfigManager] FAILED to load recipe: " + name);
+                    }
+                } catch (Exception e) {
+                    System.err.println("[RecipeConfigManager] ERROR loading recipe " + i + ": " + e.getMessage());
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] ERROR: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return count;
     }
 
     /** Save custom recipe overrides to disk. */
@@ -117,20 +128,22 @@ public class RecipeConfigManager {
         try {
             Files.createDirectories(CONFIG_DIR);
 
-            // Preserve the base "recipes" array if it exists in the current file.
-            // This prevents admin edits (/setrecipe -> save()) from wiping the default recipe list.
+            // Load existing file to preserve base recipes
             JsonObject root = new JsonObject();
             if (Files.exists(CONFIG_FILE)) {
                 try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
                     JsonObject existing = GSON.fromJson(reader, JsonObject.class);
-                    if (existing != null && existing.has("recipes")) {
-                        root.add("recipes", existing.get("recipes"));
+                    if (existing != null) {
+                        // Preserve existing recipes array
+                        if (existing.has("recipes")) {
+                            root.add("recipes", existing.get("recipes"));
+                        }
                     }
                 } catch (Exception ignored) {
                 }
             }
 
-            // Save custom overrides
+            // Save custom overrides (recipes added via /setrecipe)
             JsonArray customArr = new JsonArray();
             for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
                 customArr.add(serialize(r));
@@ -141,7 +154,7 @@ public class RecipeConfigManager {
                 GSON.toJson(root, writer);
             }
             
-            System.out.println("[RecipeConfigManager] Saved " + CUSTOM_RECIPES.size() + " custom recipe overrides");
+            System.out.println("[RecipeConfigManager] Saved " + CUSTOM_RECIPES.size() + " recipes");
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
         }
@@ -179,67 +192,19 @@ public class RecipeConfigManager {
     // ── Public API ─────────────────────────────────────────────
 
     /**
-     * Returns all recipes — base recipes from JSON merged with custom overrides.
-     * Custom recipes take precedence over defaults with the same output.
+     * Returns all recipes from CUSTOM_RECIPES list.
+     * For compatibility with other classes.
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        // Start with all base recipes from JSON
-        List<SlayerRecipes.Recipe> merged = new ArrayList<>(getBaseRecipes());
-        
-        // Add custom recipes, replacing any defaults with same output
-        for (SlayerRecipes.Recipe custom : CUSTOM_RECIPES) {
-            String customOutputId = SlayerItems.getCustomItemId(custom.result);
-            
-            // Remove any base recipe that produces the same output
-            merged.removeIf(r -> {
-                String baseOutputId = SlayerItems.getCustomItemId(r.result);
-                return baseOutputId != null && baseOutputId.equals(customOutputId);
-            });
-            
-            merged.add(custom);
-        }
-        
-        return merged;
-    }
-
-    /** Returns only the custom (admin-set) override recipes. */
-    public static List<SlayerRecipes.Recipe> getCustomRecipes() {
         return new ArrayList<>(CUSTOM_RECIPES);
     }
     
-    /** Returns the base recipes from JSON (not custom overrides) */
-    public static List<SlayerRecipes.Recipe> getBaseRecipes() {
-        List<SlayerRecipes.Recipe> baseRecipes = new ArrayList<>();
-        try {
-            // Always use the mod's resolved config path (works both in dev and on servers)
-            Path configFile = CONFIG_FILE;
-            if (configFile == null || !Files.exists(configFile)) {
-                return baseRecipes;
-            }
-            
-            JsonObject json;
-            try (Reader reader = Files.newBufferedReader(configFile)) {
-                json = GSON.fromJson(reader, JsonObject.class);
-            }
-            if (json == null) return baseRecipes;
-            
-            if (json.has("recipes")) {
-                JsonArray recipesArray = json.getAsJsonArray("recipes");
-                for (JsonElement element : recipesArray) {
-                    try {
-                        SlayerRecipes.Recipe recipe = deserialize(element.getAsJsonObject());
-                        if (recipe != null) {
-                            baseRecipes.add(recipe);
-                        }
-                    } catch (Exception e) {
-                        System.err.println("[RecipeConfigManager] Failed to load base recipe: " + e.getMessage());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Error loading base recipes: " + e.getMessage());
-        }
-        return baseRecipes;
+    /**
+     * Returns all recipes from CUSTOM_RECIPES list.
+     * For compatibility with other classes that call getCustomRecipes().
+     */
+    public static List<SlayerRecipes.Recipe> getCustomRecipes() {
+        return new ArrayList<>(CUSTOM_RECIPES);
     }
 
     /**
