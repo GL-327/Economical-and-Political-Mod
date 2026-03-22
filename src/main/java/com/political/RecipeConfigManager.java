@@ -51,6 +51,17 @@ public class RecipeConfigManager {
         
         // First, load all base recipes and add them as custom recipes
         List<SlayerRecipes.Recipe> baseRecipes = getBaseRecipes();
+        if (baseRecipes.isEmpty()) {
+            // Fallback: if the config file got overwritten and no longer contains the base "recipes" array,
+            // load the built-in hardcoded defaults so the server always has recipes.
+            try {
+                HardcodedRecipes.registerAllRecipes();
+                baseRecipes = SlayerRecipes.getAllRecipes();
+                System.out.println("[RecipeConfigManager] Base recipes missing from JSON; loaded " + baseRecipes.size() + " hardcoded recipes instead");
+            } catch (Exception e) {
+                System.err.println("[RecipeConfigManager] Failed to load hardcoded fallback recipes: " + e.getMessage());
+            }
+        }
         for (SlayerRecipes.Recipe recipe : baseRecipes) {
             if (recipe != null) {
                 CUSTOM_RECIPES.add(recipe);
@@ -92,10 +103,21 @@ public class RecipeConfigManager {
     public static void save() {
         try {
             Files.createDirectories(CONFIG_DIR);
-            
+
+            // Preserve the base "recipes" array if it exists in the current file.
+            // This prevents admin edits (/setrecipe -> save()) from wiping the default recipe list.
             JsonObject root = new JsonObject();
-            
-            // Only save custom overrides - defaults are hardcoded
+            if (Files.exists(CONFIG_FILE)) {
+                try (Reader reader = Files.newBufferedReader(CONFIG_FILE)) {
+                    JsonObject existing = GSON.fromJson(reader, JsonObject.class);
+                    if (existing != null && existing.has("recipes")) {
+                        root.add("recipes", existing.get("recipes"));
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+
+            // Save custom overrides
             JsonArray customArr = new JsonArray();
             for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
                 customArr.add(serialize(r));
