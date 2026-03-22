@@ -284,6 +284,26 @@ public class CommandRegistry {
                             return 1;
                         })
                 )
+                .then(CommandManager.literal("generate")
+                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
+                        .executes(context -> {
+                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                            try {
+                                player.sendMessage(Text.literal("Generating default recipes for all custom items...").formatted(Formatting.YELLOW), false);
+                                
+                                // Generate recipes
+                                var recipes = RecipeGenerator.generateAllDefaultRecipes();
+                                
+                                player.sendMessage(Text.literal("Generated " + recipes.size() + " default recipes!").formatted(Formatting.GREEN), false);
+                                player.sendMessage(Text.literal("Use /setrecipe to edit and save them.").formatted(Formatting.GRAY), false);
+                                
+                            } catch (Exception e) {
+                                player.sendMessage(Text.literal("Error generating recipes: " + e.getMessage()).formatted(Formatting.RED), false);
+                                e.printStackTrace();
+                            }
+                            return 1;
+                        })
+                )
         );
 
         // /report command - Report system for players
