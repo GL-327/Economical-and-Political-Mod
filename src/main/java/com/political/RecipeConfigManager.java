@@ -455,33 +455,42 @@ public class RecipeConfigManager {
 
     private static com.google.gson.JsonElement serializeStack(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return new com.google.gson.JsonPrimitive("");
-
-        if (PoliticalServer.server != null) {
-            try {
-                RegistryOps<net.minecraft.nbt.NbtElement> ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
+        
+        try {
+            RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
+            if (PoliticalServer.server != null) {
+                ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
+            } else {
+                ops = net.minecraft.registry.BuiltinRegistries.createWrapperLookup().getOps(NbtOps.INSTANCE);
+            }
+            
+            if (ops != null) {
                 var result = ItemStack.CODEC.encodeStart(ops, stack);
-                if (result.result().isPresent()) {
+                var nbtResult = result.result().orElse(null);
+                if (nbtResult != null) {
                     JsonObject obj = new JsonObject();
-                    obj.addProperty("nbt", result.result().get().toString());
+                    obj.addProperty("nbt", nbtResult.toString());
                     obj.addProperty("count", stack.getCount());
                     return obj;
                 }
-            } catch (Exception e) {
-                System.err.println("[RecipeConfigManager] Failed to serialize stack with CODEC: " + e.getMessage());
             }
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to serialize stack: " + e.getMessage());
         }
+        
+        return new com.google.gson.JsonPrimitive("");
+    }
+    
+    /**
+     * Public method to serialize ItemStack for external use
+     */
+    public static com.google.gson.JsonElement serializeItemStack(ItemStack stack) {
+        return serializeStack(stack);
+    }
 
-        JsonObject obj = new JsonObject();
-        Identifier registryId = Registries.ITEM.getId(stack.getItem());
-        obj.addProperty("id", registryId.toString());
-        obj.addProperty("count", stack.getCount());
-
-        String customId = SlayerItems.getCustomItemId(stack);
-        if (customId != null) obj.addProperty("customId", customId);
-
-        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
-        if (customName != null) obj.addProperty("customName", customName.getString());
-        return obj;
+    private static com.google.gson.JsonElement serializeIngredient(ItemStack ing) {
+        if (ing == null || ing.isEmpty()) return new com.google.gson.JsonPrimitive("");
+        return serializeStack(ing);
     }
 
     private static ItemStack deserializeStack(com.google.gson.JsonElement elem) {
@@ -552,11 +561,6 @@ public class RecipeConfigManager {
         }
 
         return ItemStack.EMPTY;
-    }
-
-    private static com.google.gson.JsonElement serializeIngredient(ItemStack ing) {
-        if (ing == null || ing.isEmpty()) return new com.google.gson.JsonPrimitive("");
-        return serializeStack(ing);
     }
 
     private static ItemStack deserializeIngredient(com.google.gson.JsonElement elem) {
