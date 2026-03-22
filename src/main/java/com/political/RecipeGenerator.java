@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -19,6 +18,7 @@ import java.util.*;
  */
 public class RecipeGenerator {
 
+    // GSON instance for JSON serialization (unused but kept for potential future use)
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     // Crafting cores for different tiers

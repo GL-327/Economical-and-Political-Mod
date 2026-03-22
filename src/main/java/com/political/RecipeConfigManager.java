@@ -20,7 +20,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +34,8 @@ public class RecipeConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
-    private static final Path MODULAR_FILE = CONFIG_DIR.resolve("custom_recipes_modular.json");
+    // Modular recipe file path (unused but kept for potential future use)
+    private static final java.nio.file.Path MODULAR_FILE = java.nio.file.Paths.get("config/political/modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
     /** Custom recipes added via /setrecipe (override defaults). */
@@ -313,6 +313,8 @@ public class RecipeConfigManager {
         return obj;
     }
 
+    // This method is kept for potential future use
+    @SuppressWarnings("unused")
     private static SlayerRecipes.Recipe deserializeBaseRecipe(JsonObject obj) {
         try {
             String name = obj.get("name").getAsString();
@@ -584,6 +586,8 @@ public class RecipeConfigManager {
         }
     }
 
+    // This method is kept for potential future use
+    @SuppressWarnings("unused")
     private static ItemStack parseStackManually(JsonObject obj) {
         // Manual fallback parsing for malformed NBT
         String id = obj.has("id") ? obj.get("id").getAsString() : "";

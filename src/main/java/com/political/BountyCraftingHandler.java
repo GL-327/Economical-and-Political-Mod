@@ -234,7 +234,7 @@ public class BountyCraftingHandler {
         for (ItemStack ing : recipe.ingredients) {
             if (ing == null || ing.isEmpty()) continue;
             String key = getIngredientKey(ing);
-            recipeCounts.merge(key, ing.getCount(), Integer::sum);
+            recipeCounts.merge(key, ing.getCount(), (oldVal, newVal) -> oldVal + newVal);
         }
 
         // Check if grid has at least the required amount of each ingredient
