@@ -36,6 +36,7 @@ public class CustomItemsGui {
         ARMOR_T2     ("🛡 Bounty Armor T2",                  Items.DIAMOND_CHESTPLATE, Formatting.DARK_AQUA),
         SPECIAL_ARMOR("🛡 Special / Legendary Armor",        Items.NETHERITE_HELMET,   Formatting.GOLD),
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
+        BOSS_DROPS   ("🎁 Boss Drops",                       Items.WITHER_SKELETON_SKULL, Formatting.DARK_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
         CUSTOM_TOOLS ("⛏ Custom Tools",                    Items.NETHERITE_PICKAXE,  Formatting.DARK_PURPLE),
         PIGLIN       ("👑 Piglin Items",                     Items.GOLDEN_HELMET,      Formatting.GOLD),
@@ -563,16 +564,6 @@ public class CustomItemsGui {
                 items.add(CustomItemHandler.createHarveysStick());
                 items.add(CustomItemHandler.createHermesShoes());
                 items.add(DanielsPickaxe.create());
-                
-                // NEW BOSS DROPS
-                items.add(SlayerItems.createUndeadHeart());
-                items.add(SlayerItems.createSpectralQuiver());
-                items.add(SlayerItems.createEchoingCore());
-                items.add(SlayerItems.createEnderSword());
-                items.add(SlayerItems.createAbyssalBlade());
-                items.add(SlayerItems.createBouncySlime());
-                items.add(SlayerItems.createVenomousDagger());
-
                 // DRAGON CHESTPLATES - Special Items (No Recipe)
                 items.add(DragonChestplates.createDragonChestplate1());
                 items.add(DragonChestplates.createDragonChestplate2());
@@ -1190,6 +1181,14 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openToolSetsPage(player, 0,
                         (p, item) -> giveItem(p, item),
                         CustomItemsGui::open))
+                .build());
+
+        gui.setSlot(23, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Text.literal("🎁 Boss Drops").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Rare boss drop items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("💀 Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCategoryPage(player, Category.BOSS_DROPS, 0))
                 .build());
 
         gui.setSlot(24, new GuiElementBuilder(Items.STICK)

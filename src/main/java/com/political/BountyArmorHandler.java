@@ -114,6 +114,7 @@ public class BountyArmorHandler {
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
         if ("spider_t1_helmet".equals(helmetId)) {
             if (!player.hasStatusEffect(StatusEffects.SPEED) ||
+                    player.getStatusEffect(StatusEffects.SPEED) == null ||
                     player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SPEED, 40, 0, true, false, false));
@@ -140,6 +141,7 @@ public class BountyArmorHandler {
                 player.removeStatusEffect(StatusEffects.POISON);
             }
             if (!player.hasStatusEffect(StatusEffects.SPEED) ||
+                    player.getStatusEffect(StatusEffects.SPEED) == null ||
                     player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SPEED, 40, 0, true, false, false));
@@ -150,6 +152,7 @@ public class BountyArmorHandler {
         String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
         if ("spider_t1_boots".equals(bootsId)) {
             if (!player.hasStatusEffect(StatusEffects.SPEED) ||
+                    player.getStatusEffect(StatusEffects.SPEED) == null ||
                     player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SPEED, 40, 0, true, false, false));
@@ -190,6 +193,7 @@ public class BountyArmorHandler {
         String legsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.LEGS));
         if ("slime_t1_leggings".equals(legsId)) {
             if (!player.hasStatusEffect(StatusEffects.JUMP_BOOST) ||
+                    player.getStatusEffect(StatusEffects.JUMP_BOOST) == null ||
                     player.getStatusEffect(StatusEffects.JUMP_BOOST).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.JUMP_BOOST, 40, 0, true, false, false));
@@ -197,6 +201,7 @@ public class BountyArmorHandler {
         }
         if ("slime_t2_leggings".equals(legsId)) {
             if (!player.hasStatusEffect(StatusEffects.JUMP_BOOST) ||
+                    player.getStatusEffect(StatusEffects.JUMP_BOOST) == null ||
                     player.getStatusEffect(StatusEffects.JUMP_BOOST).getAmplifier() < 1) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.JUMP_BOOST, 40, 1, true, false, false));
@@ -217,6 +222,7 @@ public class BountyArmorHandler {
         }
         if ("slime_t2_boots".equals(bootsId)) {
             if (!player.hasStatusEffect(StatusEffects.JUMP_BOOST) ||
+                    player.getStatusEffect(StatusEffects.JUMP_BOOST) == null ||
                     player.getStatusEffect(StatusEffects.JUMP_BOOST).getAmplifier() < 1) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.JUMP_BOOST, 40, 1, true, false, false));
@@ -234,6 +240,7 @@ public class BountyArmorHandler {
         String helmetId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.HEAD));
         if ("enderman_t1_helmet".equals(helmetId) || "enderman_t2_helmet".equals(helmetId)) {
             if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) ||
+                    player.getStatusEffect(StatusEffects.NIGHT_VISION) == null ||
                     player.getStatusEffect(StatusEffects.NIGHT_VISION).getDuration() < 30) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
@@ -258,6 +265,7 @@ public class BountyArmorHandler {
         String chestId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.CHEST));
         if ("warden_t2_chestplate".equals(chestId)) {
             if (!player.hasStatusEffect(StatusEffects.RESISTANCE) ||
+                    player.getStatusEffect(StatusEffects.RESISTANCE) == null ||
                     player.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.RESISTANCE, 40, 0, true, false, false));
@@ -320,6 +328,7 @@ public class BountyArmorHandler {
 
         // Speed boost: keep Speed II active while wearing spider leggings
         if (!player.hasStatusEffect(StatusEffects.SPEED) ||
+                player.getStatusEffect(StatusEffects.SPEED) == null ||
                 player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 1) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 40, 1, false, false, false));
         }
@@ -347,6 +356,7 @@ public class BountyArmorHandler {
         String legsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.LEGS));
         if ("skeleton_t1_leggings".equals(legsId)) {
             if (!player.hasStatusEffect(StatusEffects.SPEED) ||
+                    player.getStatusEffect(StatusEffects.SPEED) == null ||
                     player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SPEED, 40, 0, true, false, false));
@@ -357,6 +367,7 @@ public class BountyArmorHandler {
         String bootsId = SlayerItems.getCustomItemId(player.getEquippedStack(EquipmentSlot.FEET));
         if ("skeleton_t1_boots".equals(bootsId)) {
             if (!player.hasStatusEffect(StatusEffects.SPEED) ||
+                    player.getStatusEffect(StatusEffects.SPEED) == null ||
                     player.getStatusEffect(StatusEffects.SPEED).getAmplifier() < 0) {
                 player.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SPEED, 40, 0, true, false, false));
