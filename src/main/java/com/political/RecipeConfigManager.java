@@ -85,7 +85,7 @@ public class RecipeConfigManager {
             }
 
             JsonArray recipes = json.getAsJsonArray("recipes");
-            System.out.println("[RecipeConfigManager] Loading " + recipes.size() + " recipes from JSON");
+            System.out.println("[RecipeConfigManager] Loading " + recipes.size() + " recipes from JSON...");
 
             for (int i = 0; i < recipes.size(); i++) {
                 try {
@@ -96,11 +96,18 @@ public class RecipeConfigManager {
                     if (recipe != null && !recipe.result.isEmpty()) {
                         CUSTOM_RECIPES.add(recipe);
                         count++;
+                        if (count % 100 == 0) {
+                            System.out.println("[RecipeConfigManager] Loaded " + count + " recipes...");
+                        }
+                    } else {
+                        System.err.println("[RecipeConfigManager] SKIPPED recipe (empty result): " + name);
                     }
                 } catch (Exception e) {
                     System.err.println("[RecipeConfigManager] ERROR loading recipe " + i + ": " + e.getMessage());
                 }
             }
+
+            System.out.println("[RecipeConfigManager] Finished loading " + count + " recipes");
 
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] ERROR: " + e.getMessage());
