@@ -696,10 +696,19 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createGildedNetheriteBoots());
             }
             case MATERIALS -> {
+                // Cores & Chunks
                 for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
                     items.add(SlayerItems.createCore(t));
                     items.add(SlayerItems.createChunk(t));
                 }
+                // Boss Drops - rare items from bosses
+                items.add(SlayerItems.createUndeadHeart());
+                items.add(SlayerItems.createSpectralQuiver());
+                items.add(SlayerItems.createEchoingCore());
+                items.add(SlayerItems.createEnderSword());
+                items.add(SlayerItems.createAbyssalBlade());
+                items.add(SlayerItems.createBouncySlime());
+                items.add(SlayerItems.createVenomousDagger());
                 // Add attribute cores
                 for (com.political.ArmourAttribute attr : com.political.ArmourAttribute.values()) {
                     items.add(SlayerItems.createAttributeCore(attr));
