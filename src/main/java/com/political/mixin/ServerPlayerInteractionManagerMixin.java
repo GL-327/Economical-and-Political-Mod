@@ -1,6 +1,9 @@
 package com.political.mixin;
 
 import com.political.SpawnProtectionManager;
+import com.political.DanielsPickaxe;
+import com.political.LegendaryToolHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
@@ -16,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Prevents non-operator players from breaking blocks inside the spawn-protection region.
+ * Handles special tool block breaking effects (Daniel's Pickaxe, Legendary Tools).
  */
 @Mixin(ServerPlayerInteractionManager.class)
 public class ServerPlayerInteractionManagerMixin {
@@ -33,5 +37,23 @@ public class ServerPlayerInteractionManagerMixin {
         player.sendMessage(
                 Text.literal("⛔ This area is under Government Protection!").formatted(Formatting.RED),
                 true);
+    }
+
+    @Inject(method = "tryBreakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"), cancellable = true)
+    private void political_handleSpecialToolBreak(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        ServerWorld world = player.getEntityWorld();
+        BlockState state = world.getBlockState(pos);
+        
+        // Handle Daniel's Pickaxe special effects
+        if (DanielsPickaxe.onBlockBreak(player, world, pos, state)) {
+            cir.setReturnValue(true);
+            return;
+        }
+        
+        // Handle Legendary Tool effects
+        if (LegendaryToolHandler.onBlockBreak(player, world, pos, state, player.getMainHandStack())) {
+            cir.setReturnValue(true);
+            return;
+        }
     }
 }
