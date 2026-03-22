@@ -95,13 +95,13 @@ public class RecipeConfigManager {
             JsonArray recipes = json.getAsJsonArray("recipes");
             System.out.println("[RecipeConfigManager] Found " + recipes.size() + " recipes in JSON file");
 
-            // Load each recipe
+            // Load each recipe from "recipes" array
             for (int i = 0; i < recipes.size(); i++) {
                 try {
                     JsonObject recipeObj = recipes.get(i).getAsJsonObject();
                     String name = recipeObj.has("name") ? recipeObj.get("name").getAsString() : "Unknown" + i;
 
-                    System.out.println("[RecipeConfigManager] Loading recipe " + (i+1) + "/" + recipes.size() + ": " + name);
+                    // System.out.println("[RecipeConfigManager] Loading recipe " + (i+1) + "/" + recipes.size() + ": " + name);
 
                     SlayerRecipes.Recipe recipe = deserialize(recipeObj);
                     if (recipe != null && !recipe.result.isEmpty()) {
@@ -118,6 +118,31 @@ public class RecipeConfigManager {
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] ERROR: " + e.getMessage());
             e.printStackTrace();
+        }
+
+        // Also load from "custom" array (recipes added via /setrecipe)
+        try {
+            String jsonString = Files.readString(CONFIG_FILE);
+            JsonObject json = GSON.fromJson(jsonString, JsonObject.class);
+            if (json != null && json.has("custom")) {
+                JsonArray customArr = json.getAsJsonArray("custom");
+                System.out.println("[RecipeConfigManager] Found " + customArr.size() + " custom recipes");
+                for (int i = 0; i < customArr.size(); i++) {
+                    try {
+                        JsonObject recipeObj = customArr.get(i).getAsJsonObject();
+                        String name = recipeObj.has("name") ? recipeObj.get("name").getAsString() : "Custom" + i;
+                        SlayerRecipes.Recipe recipe = deserialize(recipeObj);
+                        if (recipe != null && !recipe.result.isEmpty()) {
+                            CUSTOM_RECIPES.add(recipe);
+                            count++;
+                        }
+                    } catch (Exception e) {
+                        System.err.println("[RecipeConfigManager] ERROR loading custom recipe: " + e.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore if file doesn't exist yet
         }
 
         return count;
