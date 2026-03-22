@@ -493,27 +493,7 @@ public class RecipeConfigManager {
         if (!elem.isJsonObject()) return ItemStack.EMPTY;
         JsonObject obj = elem.getAsJsonObject();
 
-        // First try manual parsing (id, count, customId, customName)
-        String id = obj.has("id") ? obj.get("id").getAsString() : "";
-        int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
-        String customId = obj.has("customId") ? obj.get("customId").getAsString() : "";
-        String customName = obj.has("customName") ? obj.get("customName").getAsString() : "";
-
-        if (id != null && !id.isEmpty()) {
-            ItemStack stack = resolveItem(id);
-            if (!stack.isEmpty()) {
-                if (count > 1) stack.setCount(count);
-                if (customId != null && !customId.isEmpty()) {
-                    SlayerItems.setCustomItemId(stack, customId);
-                }
-                if (customName != null && !customName.isEmpty()) {
-                    stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(customName));
-                }
-                return stack;
-            }
-        }
-
-        // If manual parsing didn't work, try NBT parsing
+        // Try NBT parsing first (this is what most recipes use)
         if (obj.has("nbt")) {
             try {
                 String nbtString = obj.get("nbt").getAsString();
@@ -530,14 +510,44 @@ public class RecipeConfigManager {
                     
                     if (ops != null) {
                         var result = ItemStack.CODEC.parse(ops, parsed);
-                        ItemStack stack = result.result().orElse(ItemStack.EMPTY);
-                        int stackCount = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
-                        if (!stack.isEmpty() && stackCount > 1) stack.setCount(stackCount);
-                        if (!stack.isEmpty()) return stack;
+                        if (result.result().isPresent()) {
+                            ItemStack stack = result.result().get();
+                            int stackCount = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
+                            if (!stack.isEmpty() && stackCount > 1) stack.setCount(stackCount);
+                            if (!stack.isEmpty()) return stack;
+                        } else {
+                            // Log the specific codec error for debugging
+                            result.error().ifPresent(err -> {
+                                System.err.println("[RecipeConfigManager] CODEC error for recipe: " + err.message());
+                                if (EMPTY_RESULT_DEBUG_PRINTS < MAX_EMPTY_RESULT_DEBUG_PRINTS) {
+                                    System.err.println("[RecipeConfigManager] Failed NBT string: " + nbtString.substring(0, Math.min(200, nbtString.length())));
+                                }
+                            });
+                        }
                     }
                 }
             } catch (Exception e) {
                 System.err.println("[RecipeConfigManager] NBT parse failed: " + e.getMessage());
+            }
+        }
+
+        // Fallback: try manual parsing (id, count, customId, customName)
+        String id = obj.has("id") ? obj.get("id").getAsString() : "";
+        int count = obj.has("count") ? obj.get("count").getAsInt() : 1;
+        String customId = obj.has("customId") ? obj.get("customId").getAsString() : "";
+        String customName = obj.has("customName") ? obj.get("customName").getAsString() : "";
+
+        if (id != null && !id.isEmpty()) {
+            ItemStack stack = resolveItem(id);
+            if (!stack.isEmpty()) {
+                if (count > 1) stack.setCount(count);
+                if (customId != null && !customId.isEmpty()) {
+                    SlayerItems.setCustomItemId(stack, customId);
+                }
+                if (customName != null && !customName.isEmpty()) {
+                    stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(customName));
+                }
+                return stack;
             }
         }
 
