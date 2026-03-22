@@ -478,9 +478,7 @@ public class RecipeConfigManager {
             try {
                 String nbtString = obj.get("nbt").getAsString();
                 if (nbtString != null && !nbtString.isEmpty()) {
-                    // Fix unquoted keys
-                    nbtString = nbtString.replaceAll("([a-zA-Z_][a-zA-Z0-9_]*):", "\"$1\":");
-                    
+                    // IMPORTANT: This file stores SNBT (not JSON). Do NOT try to quote keys.
                     NbtCompound parsed = StringNbtReader.readCompound(nbtString);
                     
                     RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
