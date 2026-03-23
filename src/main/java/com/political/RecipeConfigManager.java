@@ -90,6 +90,8 @@ public class RecipeConfigManager {
 
             JsonArray recipes = json.getAsJsonArray("recipes");
             System.out.println("[RecipeConfigManager] Found " + recipes.size() + " recipes in JSON file");
+            int validCount = 0;
+            int emptyCount = 0;
 
             for (int i = 0; i < recipes.size(); i++) {
                 try {
@@ -100,19 +102,23 @@ public class RecipeConfigManager {
                     if (recipe != null && !recipe.result.isEmpty()) {
                         CUSTOM_RECIPES.add(recipe);
                         count++;
+                        validCount++;
                         if (count % 100 == 0) {
                             System.out.println("[RecipeConfigManager] Loaded " + count + " recipes...");
                         }
                     } else {
+                        emptyCount++;
                         System.err.println("[RecipeConfigManager] Failed to load recipe at index " + i + ": " + name + " (empty result)");
                     }
                 } catch (Exception e) {
+                    emptyCount++;
                     System.err.println("[RecipeConfigManager] Exception parsing recipe at index " + i + ": " + e.getMessage());
                     e.printStackTrace();
                 }
             }
 
             System.out.println("[RecipeConfigManager] Finished loading " + count + " recipes");
+            System.out.println("[RecipeConfigManager] Valid recipes: " + validCount + ", Empty/Failed recipes: " + emptyCount);
 
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] ERROR: " + e.getMessage());
