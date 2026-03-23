@@ -247,7 +247,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             DataManager.save(s);
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
-            RecipeConfigManager.save();
+            // RecipeConfigManager.save() no longer needed - saves directly on changes
             HealthScalingManager.clearAll();
             LOGGER.info("PoliticalServer data saved");
         });

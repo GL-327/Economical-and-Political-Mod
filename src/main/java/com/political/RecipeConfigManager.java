@@ -134,59 +134,6 @@ public class RecipeConfigManager {
         return count;
     }
 
-    /** Save recipes by merging with existing - add new or replace existing by name */
-    public static void save() {
-        try {
-            Files.createDirectories(CONFIG_DIR);
-
-            // Load existing recipes to preserve them
-            Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
-            if (Files.exists(CONFIG_FILE)) {
-                try {
-                    String jsonString = Files.readString(CONFIG_FILE);
-                    JsonObject existing = GSON.fromJson(jsonString, JsonObject.class);
-                    if (existing != null && existing.has("recipes")) {
-                        JsonArray arr = existing.getAsJsonArray("recipes");
-                        for (var elem : arr) {
-                            JsonObject obj = elem.getAsJsonObject();
-                            if (obj.has("name")) {
-                                existingRecipes.put(obj.get("name").getAsString(), obj);
-                            }
-                        }
-                    }
-                    System.out.println("[RecipeConfigManager] Loaded " + existingRecipes.size() + " existing recipes from disk for merge");
-                } catch (Exception e) {
-                    System.err.println("[RecipeConfigManager] Warning: Failed to load existing recipes for merge: " + e.getMessage());
-                }
-            }
-
-            // Add/update recipes from CUSTOM_RECIPES
-            for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
-                String name = r.name != null ? r.name : "Unknown";
-                existingRecipes.put(name, serialize(r));
-                System.out.println("[RecipeConfigManager] Adding/updating recipe: " + name);
-            }
-
-            // Build new recipes array
-            JsonArray recipesArr = new JsonArray();
-            for (JsonObject obj : existingRecipes.values()) {
-                recipesArr.add(obj);
-            }
-
-            JsonObject root = new JsonObject();
-            root.add("recipes", recipesArr);
-            
-            try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                GSON.toJson(root, writer);
-            }
-            
-            System.out.println("[RecipeConfigManager] Saved " + existingRecipes.size() + " recipes to " + CONFIG_FILE);
-        } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     /** Load the set of disabled recipe names from disk. */
     private static void loadDisabled() {
         DISABLED_RECIPES.clear();
@@ -234,45 +181,119 @@ public class RecipeConfigManager {
         return new ArrayList<>(CUSTOM_RECIPES);
     }
 
-    /**
-     * Adds or updates a custom recipe override.
-     * If a recipe produces the same output as a default, the default is hidden.
-     */
+    /** Adds or updates a custom recipe override directly to JSON file */
     public static void addCustomRecipe(SlayerRecipes.Recipe recipe) {
-        // Ensure we have all current recipes loaded from disk
-        ensureRecipesLoaded();
-        
-        // Remove any existing custom recipe with same output
-        String newOutputId = SlayerItems.getCustomItemId(recipe.result);
-        int removed = 0;
-        for (java.util.Iterator<SlayerRecipes.Recipe> it = CUSTOM_RECIPES.iterator(); it.hasNext();) {
-            SlayerRecipes.Recipe r = it.next();
-            String existingId = SlayerItems.getCustomItemId(r.result);
-            if (existingId != null && existingId.equals(newOutputId)) {
-                it.remove();
-                removed++;
+        try {
+            // Load existing recipes from disk
+            Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
+            if (Files.exists(CONFIG_FILE)) {
+                String jsonString = Files.readString(CONFIG_FILE);
+                JsonObject existing = GSON.fromJson(jsonString, JsonObject.class);
+                if (existing != null && existing.has("recipes")) {
+                    JsonArray arr = existing.getAsJsonArray("recipes");
+                    for (var elem : arr) {
+                        JsonObject obj = elem.getAsJsonObject();
+                        if (obj.has("name")) {
+                            existingRecipes.put(obj.get("name").getAsString(), obj);
+                        }
+                    }
+                }
             }
-        }
-        
-        CUSTOM_RECIPES.add(recipe);
-        System.out.println("[RecipeConfigManager] Added recipe '" + recipe.name + "' (removed " + removed + " duplicates, total now: " + CUSTOM_RECIPES.size() + ")");
-        save();
-    }
-    
-    /** Ensure recipes are loaded from disk (called before adding new recipes) */
-    private static void ensureRecipesLoaded() {
-        if (CUSTOM_RECIPES.isEmpty() && Files.exists(CONFIG_FILE)) {
-            System.out.println("[RecipeConfigManager] CUSTOM_RECIPES is empty, reloading from disk...");
-            int loaded = loadFromJsonSimple();
-            System.out.println("[RecipeConfigManager] Reloaded " + loaded + " recipes from disk");
+
+            // Remove any existing recipe with same output
+            String newOutputId = SlayerItems.getCustomItemId(recipe.result);
+            int removed = 0;
+            for (java.util.Iterator<Map.Entry<String, JsonObject>> it = existingRecipes.entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, JsonObject> entry = it.next();
+                JsonObject recipeObj = entry.getValue();
+                if (recipeObj.has("result")) {
+                    JsonObject resultObj = recipeObj.getAsJsonObject("result");
+                    if (resultObj.has("nbt")) {
+                        String nbt = resultObj.get("nbt").getAsString();
+                        if (nbt.contains("custom_item_id\":\"" + newOutputId + "\"")) {
+                            it.remove();
+                            removed++;
+                        }
+                    }
+                }
+            }
+
+            // Add new recipe
+            existingRecipes.put(recipe.name, serialize(recipe));
+            
+            // Save back to file
+            JsonArray recipesArr = new JsonArray();
+            for (JsonObject obj : existingRecipes.values()) {
+                recipesArr.add(obj);
+            }
+            
+            JsonObject root = new JsonObject();
+            root.add("recipes", recipesArr);
+            
+            Files.createDirectories(CONFIG_FILE.getParent());
+            try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+                GSON.toJson(root, writer);
+            }
+            
+            System.out.println("[RecipeConfigManager] Saved recipe '" + recipe.name + "' directly to JSON (removed " + removed + " duplicates)");
+            
+            // Reload recipes into memory
+            load();
+            
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to save recipe: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    /** Removes a custom recipe by name and persists. */
+    /** Removes a custom recipe by name and persists directly to JSON */
     public static boolean removeCustomRecipe(String name) {
-        boolean removed = CUSTOM_RECIPES.removeIf(r -> r.name.equalsIgnoreCase(name));
-        if (removed) save();
-        return removed;
+        try {
+            // Load existing recipes
+            Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
+            if (Files.exists(CONFIG_FILE)) {
+                String jsonString = Files.readString(CONFIG_FILE);
+                JsonObject existing = GSON.fromJson(jsonString, JsonObject.class);
+                if (existing != null && existing.has("recipes")) {
+                    JsonArray arr = existing.getAsJsonArray("recipes");
+                    for (var elem : arr) {
+                        JsonObject obj = elem.getAsJsonObject();
+                        if (obj.has("name")) {
+                            existingRecipes.put(obj.get("name").getAsString(), obj);
+                        }
+                    }
+                }
+            }
+
+            // Remove recipe by name
+            boolean removed = existingRecipes.remove(name) != null;
+            
+            if (removed) {
+                // Save back to file
+                JsonArray recipesArr = new JsonArray();
+                for (JsonObject obj : existingRecipes.values()) {
+                    recipesArr.add(obj);
+                }
+                
+                JsonObject root = new JsonObject();
+                root.add("recipes", recipesArr);
+                
+                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+                    GSON.toJson(root, writer);
+                }
+                
+                System.out.println("[RecipeConfigManager] Removed recipe '" + name + "' from JSON");
+                
+                // Reload recipes into memory
+                load();
+            }
+            
+            return removed;
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to remove recipe: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /** Returns true if a recipe with this name is currently enabled. */
