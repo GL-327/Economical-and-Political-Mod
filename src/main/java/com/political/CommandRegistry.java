@@ -141,9 +141,8 @@ public class CommandRegistry {
                             return 1;
                         })));
 
-        // Recipe command with arguments - accessible to all players
+        // Recipe command with arguments - accessible to all players (no permission check)
         dispatcher.register(CommandManager.literal("recipe")
-                .requires(CommandManager.requirePermissionLevel(0)) // All players can use
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                     System.out.println("[CommandRegistry] /recipe called by " + player.getName().getString());
