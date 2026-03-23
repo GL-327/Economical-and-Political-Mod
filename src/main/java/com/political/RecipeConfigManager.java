@@ -39,6 +39,11 @@ public class RecipeConfigManager {
     private static final java.nio.file.Path MODULAR_FILE = java.nio.file.Paths.get("config/political/modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
+    static {
+        System.out.println("[RecipeConfigManager] CONFIG_FILE resolved to: " + CONFIG_FILE);
+        System.out.println("[RecipeConfigManager] File exists: " + java.nio.file.Files.exists(CONFIG_FILE));
+    }
+
     /** Custom recipes added via /setrecipe (override defaults). */
     private static final List<SlayerRecipes.Recipe> CUSTOM_RECIPES = new ArrayList<>();
 
