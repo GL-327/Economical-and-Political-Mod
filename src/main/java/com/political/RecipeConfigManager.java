@@ -572,20 +572,11 @@ public class RecipeConfigManager {
     private static void normalizeParsedStackNbt(NbtCompound parsed) {
         if (parsed == null) return;
 
-        // Many recipes store dyed_color as a raw int (e.g. minecraft:dyed_color:16119285).
-        // Modern data components expect a compound: {rgb:<int>,show_in_tooltip:1b}.
+        // Keep dyed_color as plain int - compound format causes CODEC errors
         if (!parsed.contains("components")) return;
 
         parsed.getCompound("components").ifPresent(components -> {
-            if (!components.contains("minecraft:dyed_color")) return;
-
-            components.getInt("minecraft:dyed_color").ifPresent(rgb -> {
-                NbtCompound dyed = new NbtCompound();
-                dyed.put("rgb", NbtInt.of(rgb));
-                dyed.putByte("show_in_tooltip", (byte) 1);
-
-                components.put("minecraft:dyed_color", dyed);
-            });
+            // dyed_color stays as plain int, no conversion needed
         });
     }
 
