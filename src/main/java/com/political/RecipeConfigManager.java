@@ -166,19 +166,40 @@ public class RecipeConfigManager {
     // ── Public API ─────────────────────────────────────────────
 
     /**
-     * Returns all recipes from CUSTOM_RECIPES list.
-     * For compatibility with other classes.
+     * Returns all recipes by reading directly from JSON file (real-time).
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        return new ArrayList<>(CUSTOM_RECIPES);
+        List<SlayerRecipes.Recipe> recipes = new ArrayList<>();
+        if (!Files.exists(CONFIG_FILE)) {
+            return recipes;
+        }
+        try {
+            String jsonString = Files.readString(CONFIG_FILE);
+            JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
+            if (root != null && root.has("recipes")) {
+                JsonArray arr = root.getAsJsonArray("recipes");
+                for (var elem : arr) {
+                    try {
+                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
+                        if (recipe != null) {
+                            recipes.add(recipe);
+                        }
+                    } catch (Exception e) {
+                        // skip invalid recipes
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Error reading recipes: " + e.getMessage());
+        }
+        return recipes;
     }
     
     /**
-     * Returns all recipes from CUSTOM_RECIPES list.
-     * For compatibility with other classes that call getCustomRecipes().
+     * Returns all recipes from JSON file (real-time).
      */
     public static List<SlayerRecipes.Recipe> getCustomRecipes() {
-        return new ArrayList<>(CUSTOM_RECIPES);
+        return getRecipes();
     }
 
     /** Adds or updates a custom recipe override directly to JSON file */
