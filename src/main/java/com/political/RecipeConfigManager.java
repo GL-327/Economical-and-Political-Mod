@@ -33,11 +33,22 @@ import java.util.Map;
 public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_DIR = java.nio.file.Paths.get("config/political");
-    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
+    private static Path CONFIG_DIR;
+    private static Path CONFIG_FILE;
     // Modular recipe file path (unused but kept for potential future use)
-    private static final java.nio.file.Path MODULAR_FILE = java.nio.file.Paths.get("config/political/modular_recipes.json");
-    private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
+    private static java.nio.file.Path MODULAR_FILE;
+    private static Path DISABLED_FILE;
+
+    /** Initialize paths after server starts - call this from PoliticalServer */
+    public static void initPaths(net.minecraft.server.MinecraftServer server) {
+        // Use server's run directory (where server is launched from)
+        Path serverDir = server.getSavePath(net.minecraft.util.WorldSavePath.ROOT).getParent();
+        CONFIG_DIR = serverDir.resolve("config/political");
+        CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
+        MODULAR_FILE = serverDir.resolve("config/political/modular_recipes.json");
+        DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
+        System.out.println("[RecipeConfigManager] Config paths initialized: " + CONFIG_FILE);
+    }
 
     /** Custom recipes added via /setrecipe (override defaults). */
     private static final List<SlayerRecipes.Recipe> CUSTOM_RECIPES = new ArrayList<>();
