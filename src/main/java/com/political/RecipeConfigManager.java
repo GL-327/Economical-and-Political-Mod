@@ -636,6 +636,11 @@ public class RecipeConfigManager {
     }
 
     private static ItemStack resolveCustomItem(String customId) {
+        // First try the custom crafter cores
+        if ("custom_crafter_core_t1".equals(customId)) return SlayerItems.createCustomCrafterCoreT1();
+        if ("custom_crafter_core_t2".equals(customId)) return SlayerItems.createCustomCrafterCoreT2();
+        if ("custom_crafter_core_t3".equals(customId)) return SlayerItems.createCustomCrafterCoreT3();
+        
         // Map custom IDs to item creation methods
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             String typeLower = type.name().toLowerCase();
@@ -781,10 +786,6 @@ public class RecipeConfigManager {
             if ("obsidian_block_leggings".equals(customId)) return BlockArmor.createObsidianBlockLeggings();
             if ("obsidian_block_boots".equals(customId)) return BlockArmor.createObsidianBlockBoots();
         }
-        
-        if ("custom_crafter_core_t1".equals(customId)) return SlayerItems.createCustomCrafterCoreT1();
-        if ("custom_crafter_core_t2".equals(customId)) return SlayerItems.createCustomCrafterCoreT2();
-        if ("custom_crafter_core_t3".equals(customId)) return SlayerItems.createCustomCrafterCoreT3();
         
         // Block Weapons - Only materials that exist in BOTH BlockArmor AND BlockWeapons (146 materials)
         if ("glass_sword".equals(customId)) return BlockWeapons.createGlassSword();

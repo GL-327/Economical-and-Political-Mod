@@ -223,9 +223,9 @@ public class RecipeGenerator {
     
     private static String[] getArmorPattern(String piece) {
         return switch (piece) {
-            case "helmet" -> new String[]{"block", "core", "block", "block", "block", "block", "", "", ""};
+            case "helmet" -> new String[]{"block", "block", "block", "block", "core", "block", "", "", ""};
             case "chestplate" -> new String[]{"block", "", "block", "block", "core", "block", "block", "block", "block"};
-            case "leggings" -> new String[]{"block", "block", "block", "block", "core", "block", "", "block", ""};
+            case "leggings" -> new String[]{"block", "core", "block", "block", "block", "block", "", "block", ""};
             case "boots" -> new String[]{"", "", "", "block", "core", "block", "", "block", ""};
             default -> new String[]{"", "", "", "", "", "", "", "", ""};
         };
