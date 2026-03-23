@@ -46,7 +46,7 @@ public class RecipeConfigManager {
     private static final java.util.Set<String> DISABLED_RECIPES = new java.util.HashSet<>();
 
     private static int EMPTY_RESULT_DEBUG_PRINTS = 0;
-    private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 30;
+    private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 915;
 
     // ── Lifecycle ──────────────────────────────────────────────
 
