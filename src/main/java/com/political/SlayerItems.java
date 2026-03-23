@@ -29,7 +29,7 @@ public class SlayerItems {
     // CUSTOM ITEM ID SYSTEM (for texture packs)
     // ============================================================
 
-    public static final String CUSTOM_ITEM_ID_KEY = "custom_item_id";
+    public static final String CUSTOM_ITEM_ID_KEY = "custom_id";
 
     /** Sets the custom_item_id field in this item's CUSTOM_DATA NBT. */
     public static void setCustomItemId(ItemStack stack, String id) {

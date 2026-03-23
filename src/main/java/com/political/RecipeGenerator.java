@@ -223,10 +223,15 @@ public class RecipeGenerator {
     
     private static String[] getArmorPattern(String piece) {
         return switch (piece) {
+            // Vanilla armor patterns with core in center (slot 4)
+            // Helmet: X X X / X . X / . . .
             case "helmet" -> new String[]{"block", "block", "block", "block", "core", "block", "", "", ""};
+            // Chestplate: X . X / X . X / X X X
             case "chestplate" -> new String[]{"block", "", "block", "block", "core", "block", "block", "block", "block"};
-            case "leggings" -> new String[]{"block", "core", "block", "block", "block", "block", "", "block", ""};
-            case "boots" -> new String[]{"", "", "", "block", "core", "block", "", "block", ""};
+            // Leggings: X X X / X . X / X . X
+            case "leggings" -> new String[]{"block", "block", "block", "block", "core", "block", "block", "", "block"};
+            // Boots: . . . / X . X / X . X
+            case "boots" -> new String[]{"", "", "", "block", "core", "block", "block", "", "block"};
             default -> new String[]{"", "", "", "", "", "", "", "", ""};
         };
     }
@@ -240,7 +245,7 @@ public class RecipeGenerator {
     
     private static JsonObject createCoreIngredient(String coreId) {
         JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("nbt", "{components:{\"minecraft:custom_data\":{custom_item_id:\"" + coreId + "\"}},count:1,id:\"minecraft:heavy_core\"}");
+        ingredient.addProperty("nbt", "{components:{\"minecraft:custom_data\":{custom_id:\"" + coreId + "\"}},count:1,id:\"minecraft:heavy_core\"}");
         ingredient.addProperty("count", 1);
         return ingredient;
     }
