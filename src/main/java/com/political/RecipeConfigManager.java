@@ -148,13 +148,17 @@ public class RecipeConfigManager {
                             }
                         }
                     }
-                } catch (Exception ignored) {}
+                    System.out.println("[RecipeConfigManager] Loaded " + existingRecipes.size() + " existing recipes from disk for merge");
+                } catch (Exception e) {
+                    System.err.println("[RecipeConfigManager] Warning: Failed to load existing recipes for merge: " + e.getMessage());
+                }
             }
 
             // Add/update recipes from CUSTOM_RECIPES
             for (SlayerRecipes.Recipe r : CUSTOM_RECIPES) {
                 String name = r.name != null ? r.name : "Unknown";
                 existingRecipes.put(name, serialize(r));
+                System.out.println("[RecipeConfigManager] Adding/updating recipe: " + name);
             }
 
             // Build new recipes array
@@ -170,7 +174,7 @@ public class RecipeConfigManager {
                 GSON.toJson(root, writer);
             }
             
-            System.out.println("[RecipeConfigManager] Saved " + existingRecipes.size() + " recipes (merged)");
+            System.out.println("[RecipeConfigManager] Saved " + existingRecipes.size() + " recipes to " + CONFIG_FILE);
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipes: " + e.getMessage());
             e.printStackTrace();
@@ -229,15 +233,33 @@ public class RecipeConfigManager {
      * If a recipe produces the same output as a default, the default is hidden.
      */
     public static void addCustomRecipe(SlayerRecipes.Recipe recipe) {
+        // Ensure we have all current recipes loaded from disk
+        ensureRecipesLoaded();
+        
         // Remove any existing custom recipe with same output
         String newOutputId = SlayerItems.getCustomItemId(recipe.result);
-        CUSTOM_RECIPES.removeIf(r -> {
+        int removed = 0;
+        for (java.util.Iterator<SlayerRecipes.Recipe> it = CUSTOM_RECIPES.iterator(); it.hasNext();) {
+            SlayerRecipes.Recipe r = it.next();
             String existingId = SlayerItems.getCustomItemId(r.result);
-            return existingId != null && existingId.equals(newOutputId);
-        });
+            if (existingId != null && existingId.equals(newOutputId)) {
+                it.remove();
+                removed++;
+            }
+        }
         
         CUSTOM_RECIPES.add(recipe);
+        System.out.println("[RecipeConfigManager] Added recipe '" + recipe.name + "' (removed " + removed + " duplicates, total now: " + CUSTOM_RECIPES.size() + ")");
         save();
+    }
+    
+    /** Ensure recipes are loaded from disk (called before adding new recipes) */
+    private static void ensureRecipesLoaded() {
+        if (CUSTOM_RECIPES.isEmpty() && Files.exists(CONFIG_FILE)) {
+            System.out.println("[RecipeConfigManager] CUSTOM_RECIPES is empty, reloading from disk...");
+            int loaded = loadFromJsonSimple();
+            System.out.println("[RecipeConfigManager] Reloaded " + loaded + " recipes from disk");
+        }
     }
 
     /** Removes a custom recipe by name and persists. */
