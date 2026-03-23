@@ -75,8 +75,12 @@ public class RecipeConfigManager {
         int count = 0;
 
         try {
+            System.out.println("[RecipeConfigManager] Current working directory: " + System.getProperty("user.dir"));
+            System.out.println("[RecipeConfigManager] Looking for file at: " + CONFIG_FILE.toAbsolutePath());
             if (!Files.exists(CONFIG_FILE)) {
                 System.err.println("[RecipeConfigManager] ERROR: File not found: " + CONFIG_FILE);
+                System.err.println("[RecipeConfigManager] Absolute path: " + CONFIG_FILE.toAbsolutePath());
+                System.err.println("[RecipeConfigManager] File exists check: " + Files.exists(CONFIG_FILE.toAbsolutePath()));
                 return 0;
             }
 
