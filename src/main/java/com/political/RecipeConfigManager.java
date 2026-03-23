@@ -41,8 +41,8 @@ public class RecipeConfigManager {
 
     /** Initialize paths after server starts - call this from PoliticalServer */
     public static void initPaths(net.minecraft.server.MinecraftServer server) {
-        // Use server's run directory (where server is launched from)
-        Path serverDir = server.getSavePath(net.minecraft.util.WorldSavePath.ROOT).getParent();
+        // Use server's working directory (the run folder)
+        Path serverDir = server.getRunDirectory().toPath();
         CONFIG_DIR = serverDir.resolve("config/political");
         CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
         MODULAR_FILE = serverDir.resolve("config/political/modular_recipes.json");
