@@ -34,6 +34,8 @@ run/
 
 # runtime config
 config/
+!config/political/
+!config/political/custom_recipes.json
 
 # java
 

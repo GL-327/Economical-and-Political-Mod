@@ -34,7 +34,7 @@ public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_DIR = java.nio.file.Paths.get("config/political");
-    private static final Path CONFIG_FILE = java.nio.file.Paths.get("C:/Users/Arthur/Documents/CivilCraftMod/config/political/custom_recipes.json");
+    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
     // Modular recipe file path (unused but kept for potential future use)
     private static final java.nio.file.Path MODULAR_FILE = java.nio.file.Paths.get("config/political/modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
@@ -46,7 +46,7 @@ public class RecipeConfigManager {
     private static final java.util.Set<String> DISABLED_RECIPES = new java.util.HashSet<>();
 
     private static int EMPTY_RESULT_DEBUG_PRINTS = 0;
-    private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 915;
+    private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 30;
 
     // ── Lifecycle ──────────────────────────────────────────────
 
@@ -75,12 +75,8 @@ public class RecipeConfigManager {
         int count = 0;
 
         try {
-            System.out.println("[RecipeConfigManager] Current working directory: " + System.getProperty("user.dir"));
-            System.out.println("[RecipeConfigManager] Looking for file at: " + CONFIG_FILE.toAbsolutePath());
             if (!Files.exists(CONFIG_FILE)) {
                 System.err.println("[RecipeConfigManager] ERROR: File not found: " + CONFIG_FILE);
-                System.err.println("[RecipeConfigManager] Absolute path: " + CONFIG_FILE.toAbsolutePath());
-                System.err.println("[RecipeConfigManager] File exists check: " + Files.exists(CONFIG_FILE.toAbsolutePath()));
                 return 0;
             }
 
@@ -551,8 +547,20 @@ public class RecipeConfigManager {
                             });
                         }
                     }
+
+                    // Fallback: if SNBT parses but CODEC fails, try extracting minimal identifiers
+                    ItemStack fallback = parseStackFromSnbtString(nbtString, obj);
+                    if (fallback != null && !fallback.isEmpty()) return fallback;
                 }
             } catch (Exception e) {
+                try {
+                    String nbtString = obj.get("nbt").getAsString();
+                    ItemStack fallback = parseStackFromSnbtString(nbtString, obj);
+                    if (fallback != null && !fallback.isEmpty()) return fallback;
+                } catch (Exception ignored) {
+                    // ignore
+                }
+
                 System.err.println("[RecipeConfigManager] NBT parse failed: " + e.getMessage());
             }
         }
@@ -578,6 +586,49 @@ public class RecipeConfigManager {
         }
 
         return ItemStack.EMPTY;
+    }
+
+    private static ItemStack parseStackFromSnbtString(String nbtString, JsonObject wrapperObj) {
+        if (nbtString == null || nbtString.isEmpty()) return ItemStack.EMPTY;
+
+        String customId = extractSnbtStringValue(nbtString, "custom_id");
+        if (customId == null || customId.isEmpty()) {
+            // legacy key used by some generators
+            customId = extractSnbtStringValue(nbtString, "custom_item_id");
+        }
+
+        String id = extractSnbtStringValue(nbtString, "id");
+        int count = wrapperObj != null && wrapperObj.has("count") ? wrapperObj.get("count").getAsInt() : 1;
+
+        // Prefer resolving by custom id (ensures exact NBT matches SlayerItems.create* methods)
+        ItemStack stack = ItemStack.EMPTY;
+        if (customId != null && !customId.isEmpty()) {
+            stack = resolveCustomItem(customId);
+        }
+        if ((stack == null || stack.isEmpty()) && id != null && !id.isEmpty()) {
+            stack = resolveItem(id);
+            if (!stack.isEmpty() && customId != null && !customId.isEmpty()) {
+                SlayerItems.setCustomItemId(stack, customId);
+            }
+        }
+
+        if (stack == null || stack.isEmpty()) return ItemStack.EMPTY;
+        if (count > 1) stack.setCount(count);
+        return stack;
+    }
+
+    private static String extractSnbtStringValue(String snbt, String key) {
+        if (snbt == null || snbt.isEmpty() || key == null || key.isEmpty()) return null;
+
+        // Matches patterns like: key:"value" or key:"value", or key:"value"}
+        String needle = key + ":\"";
+        int start = snbt.indexOf(needle);
+        if (start < 0) return null;
+        start += needle.length();
+
+        int end = snbt.indexOf("\"", start);
+        if (end < 0 || end <= start) return null;
+        return snbt.substring(start, end);
     }
 
     private static void normalizeParsedStackNbt(NbtCompound parsed) {

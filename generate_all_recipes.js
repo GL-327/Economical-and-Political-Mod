@@ -7,6 +7,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Prefer id-based stack definitions instead of SNBT strings.
+// RecipeConfigManager can always parse {id,count} and resolve political:<custom_id> via resolveCustomItem.
+const USE_ID_STACKS = true;
+
 // ALL CUSTOM ITEM IDs EXTRACTED FROM ENTIRE JAVA CODEBASE
 
 // Block Armor Materials (160+ materials including all variants)
@@ -309,13 +313,47 @@ function createCoreNBT(coreType) {
     return `{components:{\"minecraft:custom_data\":{custom_item_id:\"${coreType}\"},\"minecraft:custom_name\":{bold:1b,color:\"${color}\",text:\"⚙ Custom Crafting Core (T${tier})\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[\"\",{bold:1b,color:\"${color}\",text:\"✦ ${rarity} Crafting Component\"},\"\",{color:\"gray\",text:\"Used to craft Tier ${tier} custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},\"\",{color:\"yellow\",text:\"Required for:\"},{color:\"${color}\",text:\"• All T${tier} Custom Armor Sets\"},\"\",{color:\"dark_gray\",text:\"§8[Rare drop from high-tier bosses]\"}]},count:1,id:\"minecraft:heavy_core\"}`;
 }
 
+function stackId(id, count = 1) {
+    return { id, count };
+}
+
+function politicalStack(customId, count = 1) {
+    return stackId(`political:${customId}`, count);
+}
+
+function vanillaStack(id, count = 1) {
+    return stackId(id, count);
+}
+
 function createArmorRecipe(material, piece) {
-    const itemId = `${material}_${piece}`;
+    const materialName = getDisplayName(material);
+    const pieceName = piece.charAt(0).toUpperCase() + piece.slice(1);
     const coreId = getCoreForMaterial(material);
     const materialId = getMaterialIngredient(material);
-    
+
+    if (USE_ID_STACKS) {
+        return {
+            name: `${materialName} ${pieceName}`,
+            requiredSlayer: "",
+            requiredLevel: 0,
+            result: politicalStack(`${material}_${piece}`, 1),
+            ingredients: [
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                politicalStack(coreId, 1),
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1)
+            ],
+            lockedSlots: [true, true, true, true, true, true, true, true, true]
+        };
+    }
+
     return {
-        name: `${getDisplayName(material)} ${piece.charAt(0).toUpperCase() + piece.slice(1)}`,
+        name: `${materialName} ${pieceName}`,
         requiredSlayer: "",
         requiredLevel: 0,
         result: {
@@ -338,11 +376,29 @@ function createArmorRecipe(material, piece) {
 }
 
 function createWeaponRecipe(material) {
+    const materialName = getDisplayName(material);
     const coreId = getCoreForMaterial(material);
     const materialId = getMaterialIngredient(material);
-    
+
+    if (USE_ID_STACKS) {
+        return {
+            name: `${materialName} Sword`,
+            requiredSlayer: "",
+            requiredLevel: 0,
+            result: politicalStack(`${material}_sword`, 1),
+            ingredients: [
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                politicalStack(coreId, 1),
+                vanillaStack("minecraft:stick", 1),
+                vanillaStack("minecraft:stick", 1)
+            ],
+            lockedSlots: [true, true, true, true, true]
+        };
+    }
+
     return {
-        name: `${getDisplayName(material)} Sword`,
+        name: `${materialName} Sword`,
         requiredSlayer: "",
         requiredLevel: 0,
         result: {
@@ -361,11 +417,31 @@ function createWeaponRecipe(material) {
 }
 
 function createToolRecipe(material, toolType) {
+    const materialName = getDisplayName(material);
+    const toolName = toolType.charAt(0).toUpperCase() + toolType.slice(1);
     const coreId = getCoreForMaterial(material);
     const materialId = getMaterialIngredient(material);
-    
+
+    if (USE_ID_STACKS) {
+        return {
+            name: `${materialName} ${toolName}`,
+            requiredSlayer: "",
+            requiredLevel: 0,
+            result: politicalStack(`${material}_${toolType}`, 1),
+            ingredients: [
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                vanillaStack(materialId, 1),
+                politicalStack(coreId, 1),
+                vanillaStack("minecraft:stick", 1),
+                vanillaStack("minecraft:stick", 1)
+            ],
+            lockedSlots: [true, true, true, true, true, true]
+        };
+    }
+
     return {
-        name: `${getDisplayName(material)} ${toolType.charAt(0).toUpperCase() + toolType.slice(1)}`,
+        name: `${materialName} ${toolName}`,
         requiredSlayer: "",
         requiredLevel: 0,
         result: {
@@ -612,10 +688,10 @@ function generateAllRecipes() {
 const recipes = generateAllRecipes();
 const output = { recipes };
 
-const outputPath = path.join(__dirname, 'config', 'political', 'custom_recipes_all.json');
+const outputPath = path.join(__dirname, 'config', 'political', 'custom_recipes.json');
 fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
 
-console.log(`Generated ${recipes.length} complete recipes with NBT format`);
+console.log(`Generated ${recipes.length} complete recipes`);
 console.log(`Output: ${outputPath}`);
 console.log('\nRecipe types included:');
 console.log(`- Block Armor: ${blockArmorMaterials.length * armorPieces.length} recipes`);
