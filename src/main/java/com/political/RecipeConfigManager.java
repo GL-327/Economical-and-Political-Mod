@@ -41,8 +41,8 @@ public class RecipeConfigManager {
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
     static {
-        System.out.println("[RecipeConfigManager] CONFIG_FILE resolved to: " + CONFIG_FILE);
-        System.out.println("[RecipeConfigManager] File exists: " + java.nio.file.Files.exists(CONFIG_FILE));
+        boolean fileExists = java.nio.file.Files.exists(CONFIG_FILE);
+        System.out.println("[RecipeConfigManager] JSON: " + (fileExists ? "OK" : "MISSING") + " | Path: " + CONFIG_FILE);
     }
 
     /** Custom recipes added via /setrecipe (override defaults). */
@@ -59,20 +59,9 @@ public class RecipeConfigManager {
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
         CUSTOM_RECIPES.clear();
-
-        System.out.println("[RecipeConfigManager] Starting recipe load...");
-
-        // Simple approach: just load from JSON file
-        int count = loadFromJsonSimple();
-
-        System.out.println("[RecipeConfigManager] Loaded " + count + " recipes into CUSTOM_RECIPES");
-
-        // Copy to SlayerRecipes.RECIPES for crafting system
+        loadFromJsonSimple();
+        CUSTOM_RECIPES.clear(); // Clear since we read live now
         SlayerRecipes.RECIPES.clear();
-        SlayerRecipes.RECIPES.addAll(CUSTOM_RECIPES);
-
-        System.out.println("[RecipeConfigManager] Copied " + SlayerRecipes.RECIPES.size() + " recipes to SlayerRecipes.RECIPES");
-
         loadDisabled();
     }
 
@@ -188,9 +177,10 @@ public class RecipeConfigManager {
                         // skip invalid recipes
                     }
                 }
+                System.out.println("[RecipeConfigManager] /recipe: OK | " + recipes.size() + " recipes loaded");
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Error reading recipes: " + e.getMessage());
+            System.err.println("[RecipeConfigManager] /recipe: ERROR | " + e.getMessage());
         }
         return recipes;
     }
@@ -256,7 +246,7 @@ public class RecipeConfigManager {
                 GSON.toJson(root, writer);
             }
             
-            System.out.println("[RecipeConfigManager] Saved recipe '" + recipe.name + "' directly to JSON (removed " + removed + " duplicates)");
+            System.out.println("[RecipeConfigManager] /setrecipe: OK | Wrote '" + recipe.name + "' (" + removed + " replaced)");
             
             // Reload recipes into memory
             load();
