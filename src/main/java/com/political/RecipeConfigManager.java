@@ -34,7 +34,7 @@ public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_DIR = java.nio.file.Paths.get("config/political");
-    private static final Path CONFIG_FILE = java.nio.file.Paths.get("../config/political/custom_recipes.json");
+    private static final Path CONFIG_FILE = java.nio.file.Paths.get("config/political/custom_recipes.json");
     // Modular recipe file path (unused but kept for potential future use)
     private static final java.nio.file.Path MODULAR_FILE = java.nio.file.Paths.get("config/political/modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
@@ -75,10 +75,8 @@ public class RecipeConfigManager {
         int count = 0;
 
         try {
-            System.out.println("[RecipeConfigManager] Looking for file at: " + CONFIG_FILE.toAbsolutePath());
             if (!Files.exists(CONFIG_FILE)) {
                 System.err.println("[RecipeConfigManager] ERROR: File not found: " + CONFIG_FILE);
-                System.err.println("[RecipeConfigManager] Absolute path: " + CONFIG_FILE.toAbsolutePath());
                 return 0;
             }
 
