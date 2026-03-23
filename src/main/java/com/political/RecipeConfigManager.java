@@ -41,16 +41,16 @@ public class RecipeConfigManager {
 
     /** Initialize paths after server starts - call this from PoliticalServer */
     public static void initPaths(net.minecraft.server.MinecraftServer server) {
-        // Use project root directory (where config folder should be)
-        // When running from IntelliJ, this should be the project root
-        Path projectRoot = java.nio.file.Paths.get("").toAbsolutePath();
+        // Server runs from 'run' directory, so look in parent directory for config
+        Path serverDir = server.getRunDirectory();
+        Path projectRoot = serverDir.getParent();
         CONFIG_DIR = projectRoot.resolve("config/political");
         CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
         MODULAR_FILE = projectRoot.resolve("config/political/modular_recipes.json");
         DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
         System.out.println("[RecipeConfigManager] Config paths initialized: " + CONFIG_FILE);
         System.out.println("[RecipeConfigManager] Project root: " + projectRoot);
-        System.out.println("[RecipeConfigManager] Server run directory: " + server.getRunDirectory().toAbsolutePath());
+        System.out.println("[RecipeConfigManager] Server run directory: " + serverDir);
     }
 
     /** Custom recipes added via /setrecipe (override defaults). */
