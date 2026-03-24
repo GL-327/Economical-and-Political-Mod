@@ -885,14 +885,19 @@ public class StockMarket {
         public final double targetPrice;
         public final int shares;
         public final long createdTick;
-        
-        public LimitOrder(String playerUuid, String symbol, OrderType type, double targetPrice, int shares) {
+
+        public LimitOrder(String playerUuid, String symbol, OrderType type, double targetPrice, int shares, long createdTick) {
             this.playerUuid = playerUuid;
             this.symbol = symbol;
             this.type = type;
             this.targetPrice = targetPrice;
             this.shares = shares;
-            this.createdTick = PoliticalServer.server.getTicks();
+            this.createdTick = createdTick;
+        }
+
+        public LimitOrder(String playerUuid, String symbol, OrderType type, double targetPrice, int shares) {
+            this(playerUuid, symbol, type, targetPrice, shares,
+                    PoliticalServer.server != null ? PoliticalServer.server.getTicks() : 0L);
         }
     }
 
@@ -1042,5 +1047,197 @@ public class StockMarket {
             totalVol += stock.volatility;
         }
         return totalVol / Stock.values().length;
+    }
+
+    // ── Admin (invsee) ───────────────────────────────────────────────
+
+    public static void adminSetShares(String uuid, String symbol, int shares) {
+        if (shares <= 0) {
+            Map<String, Integer> pf = playerPortfolios.get(uuid);
+            if (pf != null) {
+                pf.remove(symbol);
+                if (pf.isEmpty()) playerPortfolios.remove(uuid);
+            }
+            return;
+        }
+        playerPortfolios.computeIfAbsent(uuid, k -> new HashMap<>()).put(symbol, shares);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PERSISTENCE (save/load with server shutdown)
+    // ═══════════════════════════════════════════════════════════════
+
+    public static void persistSave(net.minecraft.server.MinecraftServer server) {
+        if (server == null) return;
+        StockPersisted root = new StockPersisted();
+        root.playerPortfolios = new HashMap<>();
+        for (Map.Entry<String, Map<String, Integer>> e : playerPortfolios.entrySet()) {
+            root.playerPortfolios.put(e.getKey(), new HashMap<>(e.getValue()));
+        }
+        root.currentPrices = new HashMap<>(currentPrices);
+        root.priceHistory = new HashMap<>();
+        for (Map.Entry<String, LinkedList<Double>> e : priceHistory.entrySet()) {
+            root.priceHistory.put(e.getKey(), new ArrayList<>(e.getValue()));
+        }
+        root.lastUpdateTick = lastUpdateTick;
+        root.marketOpen = marketOpen;
+        root.currentTrend = currentTrend.name();
+        root.playerTradeCounts = new HashMap<>(playerTradeCounts);
+        root.recentBuyPressure = new HashMap<>(recentBuyPressure);
+        root.shortPositions = new HashMap<>();
+        for (Map.Entry<String, Map<String, Integer>> e : shortPositions.entrySet()) {
+            root.shortPositions.put(e.getKey(), new HashMap<>(e.getValue()));
+        }
+        root.shortEntryPrices = new HashMap<>();
+        for (Map.Entry<String, Map<String, Double>> e : shortEntryPrices.entrySet()) {
+            root.shortEntryPrices.put(e.getKey(), new HashMap<>(e.getValue()));
+        }
+        root.dividendYields = new HashMap<>(dividendYields);
+        root.limitOrders = new ArrayList<>();
+        for (LimitOrder o : limitOrders) {
+            LimitOrderSnapshot s = new LimitOrderSnapshot();
+            s.playerUuid = o.playerUuid;
+            s.symbol = o.symbol;
+            s.type = o.type.name();
+            s.targetPrice = o.targetPrice;
+            s.shares = o.shares;
+            s.createdTick = o.createdTick;
+            root.limitOrders.add(s);
+        }
+        root.activeEvents = new ArrayList<>();
+        for (MarketEvent ev : activeEvents) {
+            MarketEventSnapshot ms = new MarketEventSnapshot();
+            ms.name = ev.name;
+            ms.description = ev.description;
+            ms.affectedStocks = new ArrayList<>(ev.affectedStocks);
+            ms.priceModifier = ev.priceModifier;
+            ms.durationTicks = ev.durationTicks;
+            root.activeEvents.add(ms);
+        }
+        java.nio.file.Path path = server.getSavePath(net.minecraft.util.WorldSavePath.ROOT).resolve("political_stock_state.json");
+        try {
+            java.nio.file.Files.createDirectories(path.getParent());
+            try (java.io.Writer w = java.nio.file.Files.newBufferedWriter(path)) {
+                new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(root, w);
+            }
+        } catch (java.io.IOException e) {
+            PoliticalServer.LOGGER.error("Failed to save stock market state", e);
+        }
+    }
+
+    public static void persistLoad(net.minecraft.server.MinecraftServer server) {
+        java.nio.file.Path path = server.getSavePath(net.minecraft.util.WorldSavePath.ROOT).resolve("political_stock_state.json");
+        if (!java.nio.file.Files.exists(path)) return;
+        try (java.io.Reader r = java.nio.file.Files.newBufferedReader(path)) {
+            com.google.gson.Gson gson = new com.google.gson.Gson();
+            StockPersisted root = gson.fromJson(r, StockPersisted.class);
+            if (root == null) return;
+            if (root.playerPortfolios != null) {
+                playerPortfolios.clear();
+                for (Map.Entry<String, Map<String, Integer>> e : root.playerPortfolios.entrySet()) {
+                    playerPortfolios.put(e.getKey(), new ConcurrentHashMap<>(e.getValue()));
+                }
+            }
+            if (root.currentPrices != null) {
+                for (Map.Entry<String, Double> e : root.currentPrices.entrySet()) {
+                    if (e.getValue() != null && currentPrices.containsKey(e.getKey())) {
+                        currentPrices.put(e.getKey(), e.getValue());
+                    }
+                }
+            }
+            if (root.priceHistory != null) {
+                for (Map.Entry<String, ArrayList<Double>> e : root.priceHistory.entrySet()) {
+                    LinkedList<Double> list = priceHistory.get(e.getKey());
+                    if (list != null) {
+                        list.clear();
+                        for (Double d : e.getValue()) {
+                            if (d != null) list.addLast(d);
+                        }
+                    }
+                }
+            }
+            if (root.lastUpdateTick != null) lastUpdateTick = root.lastUpdateTick;
+            if (root.marketOpen != null) marketOpen = root.marketOpen;
+            try {
+                if (root.currentTrend != null) currentTrend = MarketTrend.valueOf(root.currentTrend);
+            } catch (Exception ignored) {}
+            if (root.playerTradeCounts != null) {
+                playerTradeCounts.clear();
+                playerTradeCounts.putAll(root.playerTradeCounts);
+            }
+            if (root.recentBuyPressure != null) {
+                recentBuyPressure.clear();
+                recentBuyPressure.putAll(root.recentBuyPressure);
+            }
+            if (root.shortPositions != null) {
+                shortPositions.clear();
+                for (Map.Entry<String, Map<String, Integer>> e : root.shortPositions.entrySet()) {
+                    shortPositions.put(e.getKey(), new ConcurrentHashMap<>(e.getValue()));
+                }
+            }
+            if (root.shortEntryPrices != null) {
+                shortEntryPrices.clear();
+                for (Map.Entry<String, Map<String, Double>> e : root.shortEntryPrices.entrySet()) {
+                    shortEntryPrices.put(e.getKey(), new ConcurrentHashMap<>(e.getValue()));
+                }
+            }
+            if (root.dividendYields != null) dividendYields.putAll(root.dividendYields);
+            limitOrders.clear();
+            if (root.limitOrders != null) {
+                for (LimitOrderSnapshot s : root.limitOrders) {
+                    try {
+                        OrderType t = OrderType.valueOf(s.type);
+                        limitOrders.add(new LimitOrder(s.playerUuid, s.symbol, t, s.targetPrice, s.shares, s.createdTick));
+                    } catch (Exception ignored) {}
+                }
+            }
+            activeEvents.clear();
+            if (root.activeEvents != null) {
+                for (MarketEventSnapshot ms : root.activeEvents) {
+                    if (ms != null && ms.name != null && ms.affectedStocks != null) {
+                        activeEvents.add(new MarketEvent(ms.name, ms.description != null ? ms.description : "",
+                                ms.affectedStocks, ms.priceModifier, ms.durationTicks));
+                    }
+                }
+            }
+            PoliticalServer.LOGGER.info("PoliticalServer: loaded stock market state from political_stock_state.json");
+        } catch (java.io.IOException e) {
+            PoliticalServer.LOGGER.error("Failed to load stock market state", e);
+        }
+    }
+
+    /** Gson DTO */
+    @SuppressWarnings("unused")
+    static final class StockPersisted {
+        Map<String, Map<String, Integer>> playerPortfolios;
+        Map<String, Double> currentPrices;
+        Map<String, ArrayList<Double>> priceHistory;
+        Long lastUpdateTick;
+        Boolean marketOpen;
+        String currentTrend;
+        Map<String, Integer> playerTradeCounts;
+        Map<String, Integer> recentBuyPressure;
+        Map<String, Map<String, Integer>> shortPositions;
+        Map<String, Map<String, Double>> shortEntryPrices;
+        Map<String, Double> dividendYields;
+        List<LimitOrderSnapshot> limitOrders;
+        List<MarketEventSnapshot> activeEvents;
+    }
+
+    static final class LimitOrderSnapshot {
+        String playerUuid;
+        String symbol;
+        String type;
+        double targetPrice;
+        int shares;
+        long createdTick;
+    }
+
+    static final class MarketEventSnapshot {
+        String name;
+        String description;
+        List<String> affectedStocks;
+        double priceModifier;
+        long durationTicks;
     }
 }

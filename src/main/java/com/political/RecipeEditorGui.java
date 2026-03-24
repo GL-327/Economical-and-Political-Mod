@@ -193,6 +193,11 @@ public class RecipeEditorGui {
                 items.add(DragonChestplates.createDragonChestplate1());
                 items.add(DragonChestplates.createDragonChestplate2());
                 items.add(DragonChestplates.createDragonChestplate3());
+                items.add(DragonChestplates.createDragonChestplateAurora());
+                items.add(DragonChestplates.createDragonChestplateFrost());
+                items.add(DragonChestplates.createDragonChestplateVenom());
+                items.add(DragonChestplates.createDragonChestplateBlood());
+                items.add(DragonChestplates.createDragonChestplateEclipse());
             }
             case CUSTOM_TOOLS -> {
                 // 15 NEW LEGENDARY TOOL SETS

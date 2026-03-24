@@ -162,6 +162,8 @@ public class CustomItemHandler {
             // Storm Dragon Chestplate: Lightning strike on hit
             if (entity instanceof LivingEntity target) {
                 ArmorAbilityHandler.onStormDragonHit(sp, target);
+                ArmorAbilityHandler.onVenomDragonHit(sp, target);
+                ArmorAbilityHandler.onBloodDragonHit(sp, target);
             }
             
             return ActionResult.PASS;

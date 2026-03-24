@@ -13113,7 +13113,7 @@
           "count": 1
         },
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         {
@@ -13750,7 +13750,10 @@
           "id": "minecraft:cobblestone",
           "count": 1
         },
-        "",
+        {
+          "id": "minecraft:wheat_seeds",
+          "count": 1
+        },
         "",
         {
           "id": "political:custom_crafter_core_t3",
@@ -18305,7 +18308,10 @@
         "count": 1
       },
       "ingredients": [
-        "",
+        {
+          "id": "minecraft:blaze_powder",
+          "count": 1
+        },
         "",
         "",
         "",
@@ -20151,7 +20157,7 @@
           "count": 1
         },
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         {
@@ -29772,7 +29778,7 @@
           "count": 1
         },
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         {
@@ -35088,7 +35094,7 @@
         "",
         "",
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         "",
@@ -39847,7 +39853,7 @@
           "count": 1
         },
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         {
@@ -66539,7 +66545,7 @@
         },
         "",
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         "",
@@ -66585,7 +66591,7 @@
         },
         "",
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         "",
@@ -66631,7 +66637,7 @@
         },
         "",
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         "",
@@ -66677,7 +66683,7 @@
         },
         "",
         {
-          "id": "political:custom_crafter_core_t1",
+          "id": "political:custom_crafter_core_t3",
           "count": 1
         },
         "",
@@ -74804,16 +74810,16 @@
       },
       "ingredients": [
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         },
         "",
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         },
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         },
         {
@@ -74821,19 +74827,19 @@
           "count": 1
         },
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         },
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         },
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         },
         {
-          "id": "minecraft:inferno_dragon",
+          "id": "minecraft:magma_block",
           "count": 1
         }
       ],
@@ -74859,16 +74865,16 @@
       },
       "ingredients": [
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         },
         "",
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         },
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         },
         {
@@ -74876,19 +74882,19 @@
           "count": 1
         },
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         },
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         },
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         },
         {
-          "id": "minecraft:storm_dragon",
+          "id": "minecraft:prismarine_bricks",
           "count": 1
         }
       ],
@@ -75244,16 +75250,16 @@
       },
       "ingredients": [
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
           "count": 1
         },
         "",
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
           "count": 1
         },
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
           "count": 1
         },
         {
@@ -75261,19 +75267,294 @@
           "count": 1
         },
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
           "count": 1
         },
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
           "count": 1
         },
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
           "count": 1
         },
         {
-          "id": "minecraft:void_dragon",
+          "id": "minecraft:obsidian",
+          "count": 1
+        }
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Aurora Dragon Chestplate",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:aurora_dragon_chestplate",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        },
+        "",
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        },
+        {
+          "id": "political:custom_crafter_core_t3",
+          "count": 1
+        },
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:amethyst_block",
+          "count": 1
+        }
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Frost Dragon Chestplate",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:frost_dragon_chestplate",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        "",
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        {
+          "id": "political:custom_crafter_core_t3",
+          "count": 1
+        },
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        }
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Venom Dragon Chestplate",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:venom_dragon_chestplate",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        },
+        "",
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        },
+        {
+          "id": "political:custom_crafter_core_t3",
+          "count": 1
+        },
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:slime_block",
+          "count": 1
+        }
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Blood Dragon Chestplate",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:blood_dragon_chestplate",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        },
+        "",
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        },
+        {
+          "id": "political:custom_crafter_core_t3",
+          "count": 1
+        },
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:redstone_block",
+          "count": 1
+        }
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Eclipse Dragon Chestplate",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:eclipse_dragon_chestplate",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:sculk",
+          "count": 1
+        },
+        "",
+        {
+          "id": "minecraft:sculk",
+          "count": 1
+        },
+        {
+          "id": "minecraft:sculk",
+          "count": 1
+        },
+        {
+          "id": "political:custom_crafter_core_t3",
+          "count": 1
+        },
+        {
+          "id": "minecraft:sculk",
+          "count": 1
+        },
+        {
+          "id": "minecraft:sculk",
+          "count": 1
+        },
+        {
+          "id": "minecraft:sculk",
+          "count": 1
+        },
+        {
+          "id": "minecraft:sculk",
           "count": 1
         }
       ],

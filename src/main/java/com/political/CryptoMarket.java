@@ -1,10 +1,18 @@
 package com.political;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.WorldSavePath;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -918,5 +926,211 @@ public class CryptoMarket {
             total += marketCaps.getOrDefault(crypto.symbol, 0.0);
         }
         return total;
+    }
+
+    // ── Admin (invsee) ─────────────────────────────────────────────────
+
+    /** Sets wallet balance for a symbol (admin). Use 0 to clear that coin for the player. */
+    public static void adminSetWalletBalance(String uuid, String symbol, double amount) {
+        if (amount <= 0) {
+            Map<String, Double> w = wallets.get(uuid);
+            if (w != null) {
+                w.remove(symbol);
+                if (w.isEmpty()) wallets.remove(uuid);
+            }
+            return;
+        }
+        wallets.computeIfAbsent(uuid, k -> new HashMap<>()).put(symbol, amount);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PERSISTENCE
+    // ═══════════════════════════════════════════════════════════════
+
+    public static void persistSave(MinecraftServer server) {
+        if (server == null) return;
+        CryptoPersisted root = new CryptoPersisted();
+        root.wallets = new HashMap<>();
+        for (Map.Entry<String, Map<String, Double>> e : wallets.entrySet()) {
+            root.wallets.put(e.getKey(), new HashMap<>(e.getValue()));
+        }
+        root.stakingPositions = new HashMap<>();
+        for (Map.Entry<String, Map<String, Double>> e : stakingPositions.entrySet()) {
+            root.stakingPositions.put(e.getKey(), new HashMap<>(e.getValue()));
+        }
+        root.stakingStartTimes = new HashMap<>();
+        for (Map.Entry<String, Map<String, Long>> e : stakingStartTimes.entrySet()) {
+            root.stakingStartTimes.put(e.getKey(), new HashMap<>(e.getValue()));
+        }
+        root.marginPositions = new HashMap<>();
+        for (Map.Entry<String, Map<String, MarginPosition>> e : marginPositions.entrySet()) {
+            Map<String, MarginSnapshot> inner = new HashMap<>();
+            for (Map.Entry<String, MarginPosition> me : e.getValue().entrySet()) {
+                MarginPosition p = me.getValue();
+                MarginSnapshot ms = new MarginSnapshot();
+                ms.symbol = p.symbol;
+                ms.isLong = p.isLong;
+                ms.size = p.size;
+                ms.entryPrice = p.entryPrice;
+                ms.leverage = p.leverage;
+                ms.collateral = p.collateral;
+                inner.put(me.getKey(), ms);
+            }
+            root.marginPositions.put(e.getKey(), inner);
+        }
+        root.currentPrices = new HashMap<>(currentPrices);
+        root.priceHistory = new HashMap<>();
+        for (Map.Entry<String, LinkedList<Double>> e : priceHistory.entrySet()) {
+            root.priceHistory.put(e.getKey(), new ArrayList<>(e.getValue()));
+        }
+        root.marketCaps = new HashMap<>(marketCaps);
+        root.circulatingSupply = new HashMap<>(circulatingSupply);
+        root.lastUpdateTick = lastUpdateTick;
+        root.currentPhase = currentPhase.name();
+        root.fearGreedIndex = fearGreedIndex;
+        root.liquidityPools = new HashMap<>();
+        for (Map.Entry<String, LiquidityPool> e : liquidityPools.entrySet()) {
+            LiquidityPool p = e.getValue();
+            PoolSnapshot ps = new PoolSnapshot();
+            ps.tokenA = p.tokenA;
+            ps.tokenB = p.tokenB;
+            ps.reserveA = p.reserveA;
+            ps.reserveB = p.reserveB;
+            ps.providerShares = p.providerShares == null ? new HashMap<>() : new HashMap<>(p.providerShares);
+            root.liquidityPools.put(e.getKey(), ps);
+        }
+        root.recentBuyPressure = new HashMap<>(recentBuyPressure);
+        root.tradeCount = new HashMap<>(tradeCount);
+
+        Path path = server.getSavePath(WorldSavePath.ROOT).resolve("political_crypto_state.json");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            Files.createDirectories(path.getParent());
+            try (Writer w = Files.newBufferedWriter(path)) {
+                gson.toJson(root, w);
+            }
+        } catch (IOException e) {
+            PoliticalServer.LOGGER.error("Failed to save crypto market state", e);
+        }
+    }
+
+    public static void persistLoad(MinecraftServer server) {
+        Path path = server.getSavePath(WorldSavePath.ROOT).resolve("political_crypto_state.json");
+        if (!Files.exists(path)) return;
+        Gson gson = new Gson();
+        try (Reader r = Files.newBufferedReader(path)) {
+            CryptoPersisted root = gson.fromJson(r, CryptoPersisted.class);
+            if (root == null) return;
+            if (root.wallets != null) {
+                wallets.clear();
+                for (Map.Entry<String, Map<String, Double>> e : root.wallets.entrySet()) {
+                    wallets.put(e.getKey(), new ConcurrentHashMap<>(e.getValue()));
+                }
+            }
+            if (root.stakingPositions != null) {
+                stakingPositions.clear();
+                for (Map.Entry<String, Map<String, Double>> e : root.stakingPositions.entrySet()) {
+                    stakingPositions.put(e.getKey(), new ConcurrentHashMap<>(e.getValue()));
+                }
+            }
+            if (root.stakingStartTimes != null) {
+                stakingStartTimes.clear();
+                for (Map.Entry<String, Map<String, Long>> e : root.stakingStartTimes.entrySet()) {
+                    stakingStartTimes.put(e.getKey(), new ConcurrentHashMap<>(e.getValue()));
+                }
+            }
+            if (root.marginPositions != null) {
+                marginPositions.clear();
+                for (Map.Entry<String, Map<String, MarginSnapshot>> e : root.marginPositions.entrySet()) {
+                    Map<String, MarginPosition> inner = new ConcurrentHashMap<>();
+                    for (Map.Entry<String, MarginSnapshot> me : e.getValue().entrySet()) {
+                        MarginSnapshot s = me.getValue();
+                        if (s == null) continue;
+                        inner.put(me.getKey(), new MarginPosition(s.symbol, s.isLong, s.size, s.entryPrice, s.leverage, s.collateral));
+                    }
+                    marginPositions.put(e.getKey(), inner);
+                }
+            }
+            if (root.currentPrices != null) {
+                for (Map.Entry<String, Double> e : root.currentPrices.entrySet()) {
+                    if (e.getValue() != null && currentPrices.containsKey(e.getKey())) {
+                        currentPrices.put(e.getKey(), e.getValue());
+                    }
+                }
+            }
+            if (root.priceHistory != null) {
+                for (Map.Entry<String, ArrayList<Double>> e : root.priceHistory.entrySet()) {
+                    LinkedList<Double> list = priceHistory.get(e.getKey());
+                    if (list != null) {
+                        list.clear();
+                        for (Double d : e.getValue()) {
+                            if (d != null) list.addLast(d);
+                        }
+                    }
+                }
+            }
+            if (root.marketCaps != null) marketCaps.putAll(root.marketCaps);
+            if (root.circulatingSupply != null) circulatingSupply.putAll(root.circulatingSupply);
+            if (root.lastUpdateTick != null) lastUpdateTick = root.lastUpdateTick;
+            try {
+                if (root.currentPhase != null) currentPhase = MarketPhase.valueOf(root.currentPhase);
+            } catch (Exception ignored) {}
+            if (root.fearGreedIndex != null) fearGreedIndex = root.fearGreedIndex;
+            if (root.liquidityPools != null) {
+                for (Map.Entry<String, PoolSnapshot> e : root.liquidityPools.entrySet()) {
+                    PoolSnapshot ps = e.getValue();
+                    if (ps == null) continue;
+                    LiquidityPool pool = new LiquidityPool(ps.tokenA, ps.tokenB, ps.reserveA, ps.reserveB);
+                    if (ps.providerShares != null) pool.providerShares.putAll(ps.providerShares);
+                    liquidityPools.put(e.getKey(), pool);
+                }
+            }
+            if (root.recentBuyPressure != null) {
+                recentBuyPressure.clear();
+                recentBuyPressure.putAll(root.recentBuyPressure);
+            }
+            if (root.tradeCount != null) {
+                tradeCount.clear();
+                tradeCount.putAll(root.tradeCount);
+            }
+            PoliticalServer.LOGGER.info("PoliticalServer: loaded crypto market state from political_crypto_state.json");
+        } catch (IOException e) {
+            PoliticalServer.LOGGER.error("Failed to load crypto market state", e);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static final class CryptoPersisted {
+        Map<String, Map<String, Double>> wallets;
+        Map<String, Map<String, Double>> stakingPositions;
+        Map<String, Map<String, Long>> stakingStartTimes;
+        Map<String, Map<String, MarginSnapshot>> marginPositions;
+        Map<String, Double> currentPrices;
+        Map<String, ArrayList<Double>> priceHistory;
+        Map<String, Double> marketCaps;
+        Map<String, Long> circulatingSupply;
+        Long lastUpdateTick;
+        String currentPhase;
+        Double fearGreedIndex;
+        Map<String, PoolSnapshot> liquidityPools;
+        Map<String, Double> recentBuyPressure;
+        Map<String, Integer> tradeCount;
+    }
+
+    static final class MarginSnapshot {
+        String symbol;
+        boolean isLong;
+        double size;
+        double entryPrice;
+        double leverage;
+        double collateral;
+    }
+
+    static final class PoolSnapshot {
+        String tokenA;
+        String tokenB;
+        double reserveA;
+        double reserveB;
+        Map<String, Double> providerShares;
     }
 }

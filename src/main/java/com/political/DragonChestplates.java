@@ -247,4 +247,183 @@ public class DragonChestplates {
         setCustomItemId(chestplate, "void_dragon_chestplate");
         return chestplate;
     }
+
+    public static ItemStack createDragonChestplateAurora() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🌈 Aurora Dragon Chestplate").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Aurora]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("❤ Max Health: scales with ability").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 18").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 12").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("✦ Flight + prismatic trail").formatted(Formatting.AQUA));
+        lore.add(Text.literal("✦ While flying: 1 heart max (heavy strain)").formatted(Formatting.RED));
+        lore.add(Text.literal("✦ Speed & regen when raining").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Born in polar lights").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xFF66FF));
+        AttributeModifiersComponent.Builder b = AttributeModifiersComponent.builder();
+        b.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "aurora_dragon_armor"), 18.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        b.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "aurora_dragon_toughness"), 12.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, b.build());
+        setCustomItemId(chestplate, "aurora_dragon_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createDragonChestplateFrost() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("❄ Frost Dragon Chestplate").formatted(Formatting.AQUA, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Frost]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("🛡 Armour: 18").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 13").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.AQUA));
+        lore.add(Text.literal("❄ Snowflake trail + frost slow aura").formatted(Formatting.BLUE));
+        lore.add(Text.literal("❄ Slowness in the Nether (cold imbalance)").formatted(Formatting.RED));
+        lore.add(Text.literal("❄ Speed on snow or ice").formatted(Formatting.GREEN));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Heart of the blizzard").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0xB0E0E6));
+        AttributeModifiersComponent.Builder b = AttributeModifiersComponent.builder();
+        b.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "frost_dragon_armor"), 18.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        b.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "frost_dragon_toughness"), 13.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, b.build());
+        setCustomItemId(chestplate, "frost_dragon_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createDragonChestplateVenom() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("☠ Venom Dragon Chestplate").formatted(Formatting.DARK_GREEN, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Venom]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.GREEN));
+        lore.add(Text.literal("🛡 Armour: 20").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 14").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.DARK_GREEN));
+        lore.add(Text.literal("☠ Toxic spores + poison cloud on hits").formatted(Formatting.GREEN));
+        lore.add(Text.literal("☠ Hunger when poisoned (self-strain)").formatted(Formatting.RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8Breath of the basilisk").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x228B22));
+        AttributeModifiersComponent.Builder b = AttributeModifiersComponent.builder();
+        b.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "venom_dragon_armor"), 20.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        b.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "venom_dragon_toughness"), 14.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, b.build());
+        setCustomItemId(chestplate, "venom_dragon_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createDragonChestplateBlood() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🩸 Blood Dragon Chestplate").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Blood]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
+        lore.add(Text.literal("🛡 Armour: 20").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 14").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal("🩸 Lifesteal on melee hits").formatted(Formatting.RED));
+        lore.add(Text.literal("🩸 Wither when badly wounded").formatted(Formatting.DARK_RED));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8The heart still beats").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x8B0000));
+        AttributeModifiersComponent.Builder b = AttributeModifiersComponent.builder();
+        b.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "blood_dragon_armor"), 20.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        b.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "blood_dragon_toughness"), 14.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, b.build());
+        setCustomItemId(chestplate, "blood_dragon_chestplate");
+        return chestplate;
+    }
+
+    public static ItemStack createDragonChestplateEclipse() {
+        ItemStack chestplate = new ItemStack(Items.LEATHER_CHESTPLATE);
+        chestplate.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🌑 Eclipse Dragon Chestplate").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Legendary Dragon Armor - Eclipse]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
+        lore.add(Text.literal("🛡 Armour: 22").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 16").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.DARK_PURPLE));
+        lore.add(Text.literal("🌑 Night: flight + shadow trail").formatted(Formatting.GRAY));
+        lore.add(Text.literal("🌑 While flying at night: wither strain").formatted(Formatting.RED));
+        lore.add(Text.literal("🌑 Daylight: blindness in open sky").formatted(Formatting.YELLOW));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8When the sun dies").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        chestplate.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        chestplate.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        chestplate.set(DataComponentTypes.MAX_DAMAGE, 50000);
+        chestplate.set(DataComponentTypes.DAMAGE, 0);
+        chestplate.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(0x1C1C1C));
+        AttributeModifiersComponent.Builder b = AttributeModifiersComponent.builder();
+        b.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "eclipse_dragon_armor"), 22.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        b.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
+                Identifier.of("politicalserver", "eclipse_dragon_toughness"), 16.0,
+                EntityAttributeModifier.Operation.ADD_VALUE
+        ), AttributeModifierSlot.CHEST);
+        chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, b.build());
+        setCustomItemId(chestplate, "eclipse_dragon_chestplate");
+        return chestplate;
+    }
 }

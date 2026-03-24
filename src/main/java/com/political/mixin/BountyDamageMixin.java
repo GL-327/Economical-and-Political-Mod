@@ -32,9 +32,6 @@ public abstract class BountyDamageMixin {
         LivingEntity self = (LivingEntity) (Object) this;
         float modifiedAmount = amount;
 
-        // Try to scale mob on first damage
-        HealthScalingManager.tryScaleMob(self);
-
         // === Player taking damage from slayer boss ===
         if (self instanceof ServerPlayerEntity player) {
             if (source.getAttacker() instanceof LivingEntity attacker) {
