@@ -271,14 +271,15 @@ public class BountyCraftingHandler {
                 continue; // Both empty - good
             }
             if (!gridItem.isEmpty() && recipeItem != null && !recipeItem.isEmpty()) {
-                // Both have items - check if they match AND have same count
+                // Both have items — match type; grid must contain *at least* the recipe count per slot
+                // (recipes use count 1; players almost always place stacks > 1).
                 String gridKey = getIngredientKey(gridItem);
                 String recipeKey = getIngredientKey(recipeItem);
                 if (!gridKey.equals(recipeKey)) {
                     return false; // Different items in this slot
                 }
-                if (gridItem.getCount() != recipeItem.getCount()) {
-                    return false; // Different counts in this slot
+                if (gridItem.getCount() < recipeItem.getCount()) {
+                    return false; // Not enough items in this slot
                 }
                 continue; // Items match - good
             }

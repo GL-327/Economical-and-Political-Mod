@@ -76,6 +76,7 @@ public class RecipeConfigManager {
                 try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
                     GSON.toJson(root, writer);
                 }
+                System.out.println("[RecipeConfigManager] Created empty custom_recipes.json at " + CONFIG_FILE.toAbsolutePath());
                 return;
             }
 
@@ -86,34 +87,34 @@ public class RecipeConfigManager {
                 try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
                     GSON.toJson(root, writer);
                 }
+                System.out.println("[RecipeConfigManager] custom_recipes.json was blank; initialized empty recipes at " + CONFIG_FILE.toAbsolutePath());
                 return;
             }
 
             JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
             if (root == null || !root.has("recipes") || !root.get("recipes").isJsonArray()) {
-                // Keep JSON as the only source of truth; repair shape without generating defaults.
-                JsonObject fixed = new JsonObject();
-                fixed.add("recipes", new JsonArray());
-                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                    GSON.toJson(fixed, writer);
-                }
+                // Never overwrite a non-trivial file — that was wiping large recipe lists on parse quirks.
+                long bytes = Files.size(CONFIG_FILE);
+                System.err.println("[RecipeConfigManager] custom_recipes.json missing valid \"recipes\" array — leaving file unchanged (size=" + bytes + " bytes). Path: " + CONFIG_FILE.toAbsolutePath());
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to read custom_recipes.json: " + e.getMessage());
+            System.err.println("[RecipeConfigManager] Failed to read custom_recipes.json: " + e.getMessage() + " | Path: " + CONFIG_FILE.toAbsolutePath());
         }
     }
 
     private static void logRecipeJsonSummary() {
         try {
+            Path abs = CONFIG_FILE.toAbsolutePath();
+            long bytes = Files.exists(CONFIG_FILE) ? Files.size(CONFIG_FILE) : 0;
             String jsonString = Files.readString(CONFIG_FILE);
             JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
             int count = 0;
             if (root != null && root.has("recipes") && root.get("recipes").isJsonArray()) {
                 count = root.getAsJsonArray("recipes").size();
             }
-            System.out.println("[RecipeConfigManager] JSON recipes loaded: " + count);
+            System.out.println("[RecipeConfigManager] JSON recipes in file: " + count + " | size=" + bytes + " bytes | " + abs);
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Could not summarize JSON recipes: " + e.getMessage());
+            System.err.println("[RecipeConfigManager] Could not summarize JSON recipes: " + e.getMessage() + " | Path: " + CONFIG_FILE.toAbsolutePath());
         }
     }
 
