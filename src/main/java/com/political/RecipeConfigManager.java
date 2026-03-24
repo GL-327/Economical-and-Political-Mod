@@ -648,15 +648,16 @@ public class RecipeConfigManager {
             }
         }
         
-        // For custom_item_id, also check nested under components:minecraft:custom_data
+        // For custom_item_id, also check nested under components -> custom_data
         if ("custom_item_id".equals(key)) {
-            // Look for pattern: components:{"minecraft:custom_data":{custom_item_id:"..."}}
+            // Look for: components:{"minecraft:custom_data":{custom_item_id:"..."}}
+            // The NBT format uses quotes around keys
             String customDataPattern = "\"minecraft:custom_data\":{";
             int customDataStart = snbt.indexOf(customDataPattern);
             if (customDataStart >= 0) {
                 customDataStart += customDataPattern.length();
                 // Find the custom_item_id within this section
-                needle = "custom_item_id\":\"";
+                needle = "\"custom_item_id\":\"";
                 start = snbt.indexOf(needle, customDataStart);
                 if (start >= 0) {
                     start += needle.length();
