@@ -612,6 +612,11 @@ public class RecipeConfigManager {
         String id = extractSnbtStringValue(nbtString, "id");
         int count = wrapperObj != null && wrapperObj.has("count") ? wrapperObj.get("count").getAsInt() : 1;
 
+        // Debug: Only log for result items (not ingredients)
+        if (id != null && (id.contains("diamond_chestplate") || id.contains("netherite_sword"))) {
+            System.out.println("[RecipeConfigManager] RESULT ITEM: customId=" + customId + " id=" + id);
+        }
+
         // Prefer resolving by custom id (ensures exact NBT matches SlayerItems.create* methods)
         ItemStack stack = ItemStack.EMPTY;
         if (customId != null && !customId.isEmpty()) {
