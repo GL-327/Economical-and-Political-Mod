@@ -29,13 +29,16 @@ public class SlayerItems {
     // CUSTOM ITEM ID SYSTEM (for texture packs)
     // ============================================================
 
-    public static final String CUSTOM_ITEM_ID_KEY = "custom_id";
+    public static final String CUSTOM_ITEM_ID_KEY = "custom_item_id";
+    private static final String LEGACY_CUSTOM_ITEM_ID_KEY = "custom_id";
 
     /** Sets the custom_item_id field in this item's CUSTOM_DATA NBT. */
     public static void setCustomItemId(ItemStack stack, String id) {
         NbtComponent existing = stack.get(DataComponentTypes.CUSTOM_DATA);
         NbtCompound nbt = (existing != null) ? existing.copyNbt() : new NbtCompound();
         nbt.putString(CUSTOM_ITEM_ID_KEY, id);
+        // Backwards compatibility: older code paths read from custom_id
+        nbt.putString(LEGACY_CUSTOM_ITEM_ID_KEY, id);
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
     }
 
@@ -46,6 +49,9 @@ public class SlayerItems {
         if (data == null) return null;
         NbtCompound nbt = data.copyNbt();
         String id = nbt.getString(CUSTOM_ITEM_ID_KEY, null);
+        if (id == null || id.isEmpty()) {
+            id = nbt.getString(LEGACY_CUSTOM_ITEM_ID_KEY, null);
+        }
         return (id != null && !id.isEmpty()) ? id : null;
     }
 

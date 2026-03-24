@@ -2994,6 +2994,7 @@ public class BlockArmor {
                 : new NbtCompound();
         nbt.putString("block_armor_id", id);
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        SlayerItems.setCustomItemId(stack, id);
     }
     
     public static String getBlockArmorId(ItemStack stack) {

@@ -436,9 +436,7 @@ public class GemGear {
     // ============================================================
 
     private static void setCustomItemId(ItemStack stack, String id) {
-        var nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, net.minecraft.component.type.NbtComponent.DEFAULT);
-        nbt = nbt.apply(nbtCompound -> nbtCompound.putString("custom_id", id));
-        stack.set(DataComponentTypes.CUSTOM_DATA, nbt);
+        SlayerItems.setCustomItemId(stack, id);
     }
 
     private static void applyEmeraldArmorStats(ItemStack stack, EquipmentSlot slot, int armor, int toughness) {

@@ -612,11 +612,6 @@ public class RecipeConfigManager {
         String id = extractSnbtStringValue(nbtString, "id");
         int count = wrapperObj != null && wrapperObj.has("count") ? wrapperObj.get("count").getAsInt() : 1;
 
-        // Debug: Only log for result items (not ingredients)
-        if (id != null && (id.contains("diamond_chestplate") || id.contains("netherite_sword"))) {
-            System.out.println("[RecipeConfigManager] RESULT ITEM: customId=" + customId + " id=" + id);
-        }
-
         // Prefer resolving by custom id (ensures exact NBT matches SlayerItems.create* methods)
         ItemStack stack = ItemStack.EMPTY;
         if (customId != null && !customId.isEmpty()) {
@@ -657,13 +652,18 @@ public class RecipeConfigManager {
             if (customDataStart >= 0) {
                 customDataStart += customDataPattern.length();
                 // Find the custom_item_id within this section
-                needle = "\"custom_item_id\":\"";
-                start = snbt.indexOf(needle, customDataStart);
-                if (start >= 0) {
-                    start += needle.length();
-                    int end = snbt.indexOf("\"", start);
-                    if (end > start) {
-                        return snbt.substring(start, end);
+                String[] needles = {
+                        "\"custom_item_id\":\"",   // quoted key
+                        "custom_item_id:\""          // unquoted key
+                };
+                for (String n : needles) {
+                    start = snbt.indexOf(n, customDataStart);
+                    if (start >= 0) {
+                        start += n.length();
+                        int end = snbt.indexOf("\"", start);
+                        if (end > start) {
+                            return snbt.substring(start, end);
+                        }
                     }
                 }
             }
