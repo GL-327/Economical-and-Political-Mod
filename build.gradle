@@ -52,6 +52,21 @@ processResources {
 	}
 }
 
+// Keep run/ in sync with repo-tracked recipe JSON (Fabric uses run/config/... at dev time).
+def politicalRecipeSource = file('config/political/custom_recipes.json')
+def politicalRecipeRunDir = file('run/config/political')
+
+tasks.register('syncPoliticalRecipeConfig', Copy) {
+	group = 'mod development'
+	description = 'Copies config/political/custom_recipes.json into run/config/political for local runClient/runServer'
+	onlyIf { politicalRecipeSource.exists() }
+	from politicalRecipeSource
+	into politicalRecipeRunDir
+}
+
+tasks.named('runClient').configure { dependsOn tasks.named('syncPoliticalRecipeConfig') }
+tasks.named('runServer').configure { dependsOn tasks.named('syncPoliticalRecipeConfig') }
+
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
 }
