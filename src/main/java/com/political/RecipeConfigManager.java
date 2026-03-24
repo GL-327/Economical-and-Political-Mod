@@ -720,6 +720,21 @@ public class RecipeConfigManager {
     private static String extractSnbtStringValue(String snbt, String key) {
         if (snbt == null || snbt.isEmpty() || key == null || key.isEmpty()) return null;
 
+        // Root registry id — must NOT use naive key:" (matches suffix of custom_item_id:"...)
+        if ("id".equals(key)) {
+            String[] rootIdNeedles = { ",id:\"", "{id:\"" };
+            for (String n : rootIdNeedles) {
+                int pos = snbt.lastIndexOf(n);
+                if (pos < 0) continue;
+                int valStart = pos + n.length();
+                int valEnd = snbt.indexOf("\"", valStart);
+                if (valEnd > valStart) {
+                    return snbt.substring(valStart, valEnd);
+                }
+            }
+            return null;
+        }
+
         // First try simple pattern: key:"value"
         String needle = key + ":\"";
         int start = snbt.indexOf(needle);
