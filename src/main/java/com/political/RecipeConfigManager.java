@@ -4,13 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.registry.Registries;
@@ -54,73 +52,102 @@ public class RecipeConfigManager {
     private static int EMPTY_RESULT_DEBUG_PRINTS = 0;
     private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 30;
 
+     private static final Object RECIPE_CACHE_LOCK = new Object();
+     private static volatile List<SlayerRecipes.Recipe> RECIPE_CACHE = java.util.Collections.emptyList();
+     private static volatile long RECIPE_CACHE_LAST_MODIFIED = -1L;
+     private static volatile long RECIPE_CACHE_LAST_SIZE = -1L;
+     private static volatile long LAST_CRAFTING_STATUS_PRINT_MS = 0L;
+
     // ── Lifecycle ──────────────────────────────────────────────
 
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
-        CUSTOM_RECIPES.clear();
-        loadFromJsonSimple();
-        CUSTOM_RECIPES.clear(); // Clear since we read live now
+        // Do not parse the recipe JSON at startup. Recipes are loaded lazily and cached.
+        invalidateRecipeCache();
         SlayerRecipes.RECIPES.clear();
         loadDisabled();
     }
 
-    /** Simple JSON loading - reads ALL recipes from "recipes" array */
-    private static int loadFromJsonSimple() {
-        int count = 0;
+    private static void invalidateRecipeCache() {
+        synchronized (RECIPE_CACHE_LOCK) {
+            RECIPE_CACHE_LAST_MODIFIED = -1L;
+            RECIPE_CACHE_LAST_SIZE = -1L;
+            RECIPE_CACHE = java.util.Collections.emptyList();
+        }
+    }
 
+    private static List<SlayerRecipes.Recipe> getRecipesCached(String contextForLog) {
         try {
             if (!Files.exists(CONFIG_FILE)) {
-                System.err.println("[RecipeConfigManager] ERROR: File not found: " + CONFIG_FILE);
-                return 0;
+                return java.util.Collections.emptyList();
             }
 
-            String jsonString = Files.readString(CONFIG_FILE);
-            JsonObject json = GSON.fromJson(jsonString, JsonObject.class);
+            var attrs = Files.readAttributes(CONFIG_FILE, java.nio.file.attribute.BasicFileAttributes.class);
+            long modified = attrs.lastModifiedTime().toMillis();
+            long size = attrs.size();
 
-            if (json == null || !json.has("recipes")) {
-                System.err.println("[RecipeConfigManager] ERROR: No 'recipes' array in JSON");
-                return 0;
+            if (modified == RECIPE_CACHE_LAST_MODIFIED && size == RECIPE_CACHE_LAST_SIZE && !RECIPE_CACHE.isEmpty()) {
+                return RECIPE_CACHE;
             }
 
-            JsonArray recipes = json.getAsJsonArray("recipes");
-            System.out.println("[RecipeConfigManager] Found " + recipes.size() + " recipes in JSON file");
-            int validCount = 0;
-            int emptyCount = 0;
-
-            for (int i = 0; i < recipes.size(); i++) {
-                try {
-                    JsonObject recipeObj = recipes.get(i).getAsJsonObject();
-                    String name = recipeObj.has("name") ? recipeObj.get("name").getAsString() : "Unknown" + i;
-
-                    SlayerRecipes.Recipe recipe = deserialize(recipeObj);
-                    if (recipe != null && !recipe.result.isEmpty()) {
-                        CUSTOM_RECIPES.add(recipe);
-                        count++;
-                        validCount++;
-                        if (count % 100 == 0) {
-                            System.out.println("[RecipeConfigManager] Loaded " + count + " recipes...");
-                        }
-                    } else {
-                        emptyCount++;
-                        System.err.println("[RecipeConfigManager] Failed to load recipe at index " + i + ": " + name + " (empty result)");
-                    }
-                } catch (Exception e) {
-                    emptyCount++;
-                    System.err.println("[RecipeConfigManager] Exception parsing recipe at index " + i + ": " + e.getMessage());
-                    e.printStackTrace();
+            synchronized (RECIPE_CACHE_LOCK) {
+                // Double-check inside lock
+                if (modified == RECIPE_CACHE_LAST_MODIFIED && size == RECIPE_CACHE_LAST_SIZE && !RECIPE_CACHE.isEmpty()) {
+                    return RECIPE_CACHE;
                 }
+
+                List<SlayerRecipes.Recipe> recipes = new ArrayList<>();
+                int failed = 0;
+
+                String jsonString = Files.readString(CONFIG_FILE);
+                JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
+                if (root != null && root.has("recipes")) {
+                    JsonArray arr = root.getAsJsonArray("recipes");
+                    for (var elem : arr) {
+                        try {
+                            SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
+                            if (recipe != null && recipe.result != null && !recipe.result.isEmpty()) {
+                                recipes.add(recipe);
+                            } else {
+                                failed++;
+                            }
+                        } catch (Exception e) {
+                            failed++;
+                        }
+                    }
+                }
+
+                RECIPE_CACHE = recipes;
+                RECIPE_CACHE_LAST_MODIFIED = modified;
+                RECIPE_CACHE_LAST_SIZE = size;
+
+                if (contextForLog != null && !contextForLog.isBlank()) {
+                    // Only log crafting reloads (rate-limited) to avoid spam.
+                    if ("crafting".equals(contextForLog)) {
+                        long now = System.currentTimeMillis();
+                        if (now - LAST_CRAFTING_STATUS_PRINT_MS > 10_000L) {
+                            LAST_CRAFTING_STATUS_PRINT_MS = now;
+                            System.out.println("[RecipeConfigManager] crafting: OK | " + recipes.size() + " recipes (" + failed + " failed)");
+                        }
+                    }
+                }
+
+                return RECIPE_CACHE;
             }
-
-            System.out.println("[RecipeConfigManager] Finished loading " + count + " recipes");
-            System.out.println("[RecipeConfigManager] Valid recipes: " + validCount + ", Empty/Failed recipes: " + emptyCount);
-
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] ERROR: " + e.getMessage());
-            e.printStackTrace();
+            return java.util.Collections.emptyList();
         }
+    }
 
-        return count;
+    public static void logRecipeFileStatusForRecipeCommand() {
+        try {
+            boolean exists = Files.exists(CONFIG_FILE);
+            boolean readable = Files.isReadable(CONFIG_FILE);
+            long size = exists ? Files.size(CONFIG_FILE) : 0;
+            System.out.println("[RecipeConfigManager] /recipe file: " + (exists && readable ? "OK" : "BAD") + " | size=" + size + " | " + CONFIG_FILE);
+        } catch (Exception e) {
+            System.out.println("[RecipeConfigManager] /recipe file: BAD | " + e.getMessage());
+        }
     }
 
     /** Load the set of disabled recipe names from disk. */
@@ -158,38 +185,16 @@ public class RecipeConfigManager {
      * Returns all recipes by reading directly from JSON file (real-time).
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        List<SlayerRecipes.Recipe> recipes = new ArrayList<>();
-        if (!Files.exists(CONFIG_FILE)) {
-            return recipes;
-        }
-        try {
-            String jsonString = Files.readString(CONFIG_FILE);
-            JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
-            if (root != null && root.has("recipes")) {
-                JsonArray arr = root.getAsJsonArray("recipes");
-                for (var elem : arr) {
-                    try {
-                        SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
-                        if (recipe != null) {
-                            recipes.add(recipe);
-                        }
-                    } catch (Exception e) {
-                        // skip invalid recipes
-                    }
-                }
-                System.out.println("[RecipeConfigManager] /recipe: OK | " + recipes.size() + " recipes loaded");
-            }
-        } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] /recipe: ERROR | " + e.getMessage());
-        }
-        return recipes;
+        // Used by /recipe UI; do not print here to avoid log spam.
+        return new ArrayList<>(getRecipesCached(""));
     }
     
     /**
      * Returns all recipes from JSON file (real-time).
      */
     public static List<SlayerRecipes.Recipe> getCustomRecipes() {
-        return getRecipes();
+        // Called frequently by crafting code; use cached recipes and only reload when file changes.
+        return new ArrayList<>(getRecipesCached("crafting"));
     }
 
     /** Adds or updates a custom recipe override directly to JSON file */
@@ -248,8 +253,8 @@ public class RecipeConfigManager {
             
             System.out.println("[RecipeConfigManager] /setrecipe: OK | Wrote '" + recipe.name + "' (" + removed + " replaced)");
             
-            // Reload recipes into memory
-            load();
+            // Force cache refresh on next access
+            invalidateRecipeCache();
             
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipe: " + e.getMessage());
@@ -440,55 +445,13 @@ public class RecipeConfigManager {
             String name = obj.get("name").getAsString();
             String slayerStr = obj.get("requiredSlayer").getAsString();
             int level = obj.get("requiredLevel").getAsInt();
-            
-            // Log recipe being loaded
-            System.out.println("[RecipeConfigManager] Loading recipe: " + name);
+
             
             ItemStack result = deserializeStack(obj.get("result"));
             
             if (result.isEmpty()) {
-                System.err.println("[RecipeConfigManager] FAILED to load recipe '" + name + "': result item is empty");
-
-                // Rate-limited detailed debug so we can see why SNBT/CODEC parse is failing
-                if (EMPTY_RESULT_DEBUG_PRINTS < MAX_EMPTY_RESULT_DEBUG_PRINTS) {
-                    EMPTY_RESULT_DEBUG_PRINTS++;
-                    try {
-                        com.google.gson.JsonElement resultElem = obj.get("result");
-                        if (resultElem != null && resultElem.isJsonObject()) {
-                            JsonObject resultObj = resultElem.getAsJsonObject();
-                            if (resultObj.has("nbt")) {
-                                String nbtString = resultObj.get("nbt").getAsString();
-                                System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "': has nbt (len=" + (nbtString == null ? 0 : nbtString.length()) + ")");
-
-                                if (nbtString != null && !nbtString.isEmpty()) {
-                                    NbtCompound parsed = StringNbtReader.readCompound(nbtString);
-                                    RegistryOps<net.minecraft.nbt.NbtElement> ops = null;
-                                    if (PoliticalServer.server != null) {
-                                        ops = PoliticalServer.server.getRegistryManager().getOps(NbtOps.INSTANCE);
-                                    } else {
-                                        ops = net.minecraft.registry.BuiltinRegistries.createWrapperLookup().getOps(NbtOps.INSTANCE);
-                                    }
-
-                                    if (ops != null) {
-                                        var dataResult = ItemStack.CODEC.parse(ops, parsed);
-                                        dataResult.error().ifPresent(err ->
-                                                System.err.println("[RecipeConfigManager] DEBUG codec error for '" + name + "': " + err.message()));
-                                    }
-                                }
-                            } else {
-                                System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "': result object keys=" + resultObj.keySet());
-                            }
-                        } else {
-                            System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "': result is not an object");
-                        }
-                    } catch (Exception debugEx) {
-                        System.err.println("[RecipeConfigManager] DEBUG empty result for '" + name + "' failed: " + debugEx.getMessage());
-                    }
-                }
                 return null;
             }
-            
-            System.out.println("[RecipeConfigManager] Successfully parsed result for: " + name);
 
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
@@ -513,12 +476,8 @@ public class RecipeConfigManager {
                 }
             }
 
-            System.out.println("[RecipeConfigManager] Successfully loaded recipe: " + name);
             return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
         } catch (Exception e) {
-            String name = obj.has("name") ? obj.get("name").getAsString() : "UNKNOWN";
-            System.err.println("[RecipeConfigManager] EXCEPTION loading recipe '" + name + "': " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
@@ -621,7 +580,6 @@ public class RecipeConfigManager {
                     // ignore
                 }
 
-                System.err.println("[RecipeConfigManager] NBT parse failed: " + e.getMessage());
             }
         }
 

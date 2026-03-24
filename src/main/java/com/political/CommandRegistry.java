@@ -145,7 +145,7 @@ public class CommandRegistry {
         dispatcher.register(CommandManager.literal("recipe")
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                    System.out.println("[CommandRegistry] /recipe called by " + player.getName().getString());
+                    RecipeConfigManager.logRecipeFileStatusForRecipeCommand();
                     try {
                         RecipesGui.openMainMenu(player);
                         player.sendMessage(Text.literal("✓ Recipe Browser opened!").formatted(Formatting.GREEN), false);
