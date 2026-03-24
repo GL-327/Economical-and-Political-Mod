@@ -284,27 +284,23 @@ public class CommandRegistry {
                             return 1;
                         })
                 )
-                .then(CommandManager.literal("generate")
-                        .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK)) // Admin only
-                        .executes(context -> {
-                            ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                            try {
-                                player.sendMessage(Text.literal("Generating default recipes for all custom items...").formatted(Formatting.YELLOW), false);
-                                
-                                // Generate recipes
-                                var recipes = RecipeGenerator.generateAllDefaultRecipes();
-                                
-                                player.sendMessage(Text.literal("Generated " + recipes.size() + " default recipes!").formatted(Formatting.GREEN), false);
-                                player.sendMessage(Text.literal("Use /setrecipe to edit and save them.").formatted(Formatting.GRAY), false);
-                                
-                            } catch (Exception e) {
-                                player.sendMessage(Text.literal("Error generating recipes: " + e.getMessage()).formatted(Formatting.RED), false);
-                                e.printStackTrace();
-                            }
-                            return 1;
-                        })
-                )
         );
+
+        // Debug command to list recipes (admin only)
+        dispatcher.register(CommandManager.literal("debugrecipes")
+                .requires(CommandManager.requirePermissionLevel(2))
+                .executes(context -> {
+                    List<SlayerRecipes.Recipe> recipes = RecipeConfigManager.getRecipes();
+                    context.getSource().sendFeedback(() -> Text.literal("Found " + recipes.size() + " recipes:"), false);
+                    for (SlayerRecipes.Recipe recipe : recipes) {
+                        String customId = SlayerItems.getCustomItemId(recipe.result);
+                        String name = recipe.result.get(DataComponentTypes.CUSTOM_NAME) != null ? 
+                            recipe.result.get(DataComponentTypes.CUSTOM_NAME).getString() : "Unknown";
+                        context.getSource().sendFeedback(() -> 
+                            Text.literal("- " + recipe.name + " -> " + name + " (ID: " + customId + ")"), false);
+                    }
+                    return 1;
+                }));
 
         // /report command - Report system for players
         dispatcher.register(CommandManager.literal("report")
