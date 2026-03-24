@@ -1654,7 +1654,11 @@ public class CustomItemsGui {
                 .glow().build());
 
         // Define armor sets: Block Item, Sword, Armor pieces
-        ArmorSetDisplay[] sets = {
+        // Only include items that have actual recipes
+        List<ArmorSetDisplay> setsWithRecipes = new ArrayList<>();
+        
+        // Check each set for recipes
+        ArmorSetDisplay[] allSets = {
             new ArmorSetDisplay(Items.GLASS, BlockWeapons.createGlassSword(),
                 BlockArmor.createGlassHelmet(), BlockArmor.createGlassChestplate(),
                 BlockArmor.createGlassLeggings(), BlockArmor.createGlassBoots()),
@@ -2049,7 +2053,24 @@ public class CustomItemsGui {
                 BlockArmor.createAmethystClusterLeggings(), BlockArmor.createAmethystClusterBoots()),
         };
 
+        // Filter sets to only include those that have recipes
+        for (ArmorSetDisplay set : allSets) {
+            boolean setHasRecipe = false;
+            // Check each item in the set for a recipe
+            ItemStack[] itemsToCheck = {set.sword, set.helmet, set.chestplate, set.leggings, set.boots};
+            for (ItemStack item : itemsToCheck) {
+                if (findRecipeForOutput(item) != null) {
+                    setHasRecipe = true;
+                    break;
+                }
+            }
+            if (setHasRecipe) {
+                setsWithRecipes.add(set);
+            }
+        }
+
         final int SETS_PER_PAGE = 4;
+        ArmorSetDisplay[] sets = setsWithRecipes.toArray(new ArmorSetDisplay[0]);
         int totalPages = (sets.length + SETS_PER_PAGE - 1) / SETS_PER_PAGE;
         int clampedPage = Math.min(page, totalPages - 1);
 
