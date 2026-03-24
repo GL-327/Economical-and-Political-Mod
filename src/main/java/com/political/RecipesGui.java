@@ -51,6 +51,15 @@ public class RecipesGui {
                 .setCallback((idx, type, action) -> openSearchGui(player))
                 .build());
 
+        // All JSON recipes index
+        gui.setSlot(7, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("📚 All JSON Recipes").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Browse every loaded recipe").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to open full index").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openAllRecipesPage(player, 0))
+                .build());
+
         // Row 1: Armor categories - spread across more slots
         gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
                 .setName(Text.literal("💎 Custom Armor").formatted(Formatting.GREEN, Formatting.BOLD))
@@ -2051,6 +2060,85 @@ public class RecipesGui {
                 .setCallback((slot, type, action) -> openSearchGui(player))
                 .build());
         
+        gui.open();
+    }
+
+    // ============================================================
+    // ALL RECIPES INDEX - Paginated view of every JSON recipe
+    // ============================================================
+    public static void openAllRecipesPage(ServerPlayerEntity player, int page) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+
+        List<SlayerRecipes.Recipe> all = new ArrayList<>();
+        for (SlayerRecipes.Recipe recipe : RecipeConfigManager.getRecipes()) {
+            if (recipe == null || recipe.result == null || recipe.result.isEmpty()) continue;
+            if (!hasValidIngredients(recipe)) continue;
+            all.add(recipe);
+        }
+
+        all.sort((a, b) -> {
+            String aId = SlayerItems.getCustomItemId(a.result);
+            String bId = SlayerItems.getCustomItemId(b.result);
+            if (aId == null) aId = a.name;
+            if (bId == null) bId = b.name;
+            return aId.compareToIgnoreCase(bId);
+        });
+
+        final int perPage = 45;
+        final int totalPages = Math.max(1, (all.size() + perPage - 1) / perPage);
+        final int safePage = Math.max(0, Math.min(page, totalPages - 1));
+        final int start = safePage * perPage;
+        final int end = Math.min(start + perPage, all.size());
+
+        gui.setTitle(Text.literal("📚 All Recipes (" + all.size() + ") - Page " + (safePage + 1) + "/" + totalPages));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build());
+        }
+
+        int slot = 0;
+        for (int i = start; i < end; i++) {
+            SlayerRecipes.Recipe recipe = all.get(i);
+            ItemStack result = recipe.result.copy();
+
+            Text name = result.get(DataComponentTypes.CUSTOM_NAME);
+            if (name == null) {
+                String id = SlayerItems.getCustomItemId(result);
+                name = Text.literal(id != null ? id : recipe.name);
+            }
+
+            gui.setSlot(slot++, new GuiElementBuilder(result)
+                    .setName(name)
+                    .addLoreLine(Text.literal(""))
+                    .addLoreLine(Text.literal("✨ Click for recipe").formatted(Formatting.YELLOW))
+                    .setCallback((idx, type, action) -> showItemInfo(player, result))
+                    .build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Menu").formatted(Formatting.YELLOW))
+                .setCallback((s, t, a) -> openMainMenu(player))
+                .build());
+
+        if (safePage > 0) {
+            gui.setSlot(48, new GuiElementBuilder(Items.SPECTRAL_ARROW)
+                    .setName(Text.literal("◀ Previous Page").formatted(Formatting.AQUA))
+                    .setCallback((s, t, a) -> openAllRecipesPage(player, safePage - 1))
+                    .build());
+        }
+
+        if (safePage < totalPages - 1) {
+            gui.setSlot(50, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next Page ▶").formatted(Formatting.AQUA))
+                    .setCallback((s, t, a) -> openAllRecipesPage(player, safePage + 1))
+                    .build());
+        }
+
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((s, t, a) -> gui.close())
+                .build());
+
         gui.open();
     }
 

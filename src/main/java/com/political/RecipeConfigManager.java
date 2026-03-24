@@ -59,11 +59,62 @@ public class RecipeConfigManager {
 
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
-        // Regenerate recipes from code on startup to ensure correct NBT data
-        regenerateRecipes();
+        // JSON-only source of truth: never auto-regenerate on startup.
+        ensureRecipeFileExists();
+        logRecipeJsonSummary();
         invalidateRecipeCache();
         SlayerRecipes.RECIPES.clear();
         loadDisabled();
+    }
+
+    private static void ensureRecipeFileExists() {
+        try {
+            if (!Files.exists(CONFIG_FILE)) {
+                Files.createDirectories(CONFIG_FILE.getParent());
+                JsonObject root = new JsonObject();
+                root.add("recipes", new JsonArray());
+                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+                    GSON.toJson(root, writer);
+                }
+                return;
+            }
+
+            String jsonString = Files.readString(CONFIG_FILE);
+            if (jsonString == null || jsonString.isBlank()) {
+                JsonObject root = new JsonObject();
+                root.add("recipes", new JsonArray());
+                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+                    GSON.toJson(root, writer);
+                }
+                return;
+            }
+
+            JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
+            if (root == null || !root.has("recipes") || !root.get("recipes").isJsonArray()) {
+                // Keep JSON as the only source of truth; repair shape without generating defaults.
+                JsonObject fixed = new JsonObject();
+                fixed.add("recipes", new JsonArray());
+                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+                    GSON.toJson(fixed, writer);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to read custom_recipes.json: " + e.getMessage());
+        }
+    }
+
+    private static void logRecipeJsonSummary() {
+        try {
+            String jsonString = Files.readString(CONFIG_FILE);
+            JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
+            int count = 0;
+            if (root != null && root.has("recipes") && root.get("recipes").isJsonArray()) {
+                count = root.getAsJsonArray("recipes").size();
+            }
+            System.out.println("[RecipeConfigManager] JSON recipes loaded: " + count);
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Could not summarize JSON recipes: " + e.getMessage());
+        }
     }
 
     private static void invalidateRecipeCache() {
@@ -1137,10 +1188,10 @@ public class RecipeConfigManager {
         if ("bouncy_slime".equals(customId)) return SlayerItems.createBouncySlime();
         if ("venomous_dagger".equals(customId)) return SlayerItems.createVenomousDagger();
         
-        // Dragon Chestplates (No Recipe - but add mapping for completeness)
-        if ("dragon_chestplate_1".equals(customId)) return DragonChestplates.createDragonChestplate1();
-        if ("dragon_chestplate_2".equals(customId)) return DragonChestplates.createDragonChestplate2();
-        if ("dragon_chestplate_3".equals(customId)) return DragonChestplates.createDragonChestplate3();
+        // Dragon Chestplates
+        if ("inferno_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate1();
+        if ("storm_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate2();
+        if ("void_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate3();
         
         // HPEBM Weapons
         for (int mk = 1; mk <= 5; mk++) {
