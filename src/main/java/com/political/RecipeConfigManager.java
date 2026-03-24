@@ -49,9 +49,6 @@ public class RecipeConfigManager {
     /** Names of recipes that are currently disabled. */
     private static final java.util.Set<String> DISABLED_RECIPES = new java.util.HashSet<>();
 
-    private static int EMPTY_RESULT_DEBUG_PRINTS = 0;
-    private static final int MAX_EMPTY_RESULT_DEBUG_PRINTS = 30;
-
      private static final Object RECIPE_CACHE_LOCK = new Object();
      private static volatile List<SlayerRecipes.Recipe> RECIPE_CACHE = java.util.Collections.emptyList();
      private static volatile long RECIPE_CACHE_LAST_MODIFIED = -1L;
@@ -556,14 +553,6 @@ public class RecipeConfigManager {
                             int stackCount = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
                             if (!stack.isEmpty() && stackCount > 1) stack.setCount(stackCount);
                             if (!stack.isEmpty()) return stack;
-                        } else {
-                            // Log the specific codec error for debugging
-                            result.error().ifPresent(err -> {
-                                System.err.println("[RecipeConfigManager] CODEC error for recipe: " + err.message());
-                                if (EMPTY_RESULT_DEBUG_PRINTS < MAX_EMPTY_RESULT_DEBUG_PRINTS) {
-                                    System.err.println("[RecipeConfigManager] Failed NBT string: " + nbtString.substring(0, Math.min(200, nbtString.length())));
-                                }
-                            });
                         }
                     }
 
