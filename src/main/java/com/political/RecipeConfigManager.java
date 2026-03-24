@@ -31,11 +31,11 @@ import java.util.Map;
 public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    // Hardcoded path to the project config directory
-    private static final Path CONFIG_DIR = java.nio.file.Paths.get("C:/Users/Arthur/Documents/CivilCraftMod/config/political");
+    // Use server working-directory relative config path.
+    private static final Path CONFIG_DIR = java.nio.file.Paths.get("config", "political");
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
     // Modular recipe file path (unused but kept for potential future use)
-    private static final java.nio.file.Path MODULAR_FILE = java.nio.file.Paths.get("C:/Users/Arthur/Documents/CivilCraftMod/config/political/modular_recipes.json");
+    private static final java.nio.file.Path MODULAR_FILE = CONFIG_DIR.resolve("modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
 
     static {
@@ -216,21 +216,37 @@ public class RecipeConfigManager {
                 }
             }
 
-            // Remove any existing recipe with same output
+            // Remove any existing recipe with same output (robust to nbt/id encoded stacks).
             String newOutputId = SlayerItems.getCustomItemId(recipe.result);
             int removed = 0;
             for (java.util.Iterator<Map.Entry<String, JsonObject>> it = existingRecipes.entrySet().iterator(); it.hasNext();) {
                 Map.Entry<String, JsonObject> entry = it.next();
                 JsonObject recipeObj = entry.getValue();
-                if (recipeObj.has("result")) {
+                if (!recipeObj.has("result")) continue;
+                try {
+                    ItemStack existingResult = deserializeStack(recipeObj.get("result"));
+                    String existingOutputId = SlayerItems.getCustomItemId(existingResult);
+                    if (newOutputId != null && !newOutputId.isEmpty() && newOutputId.equals(existingOutputId)) {
+                        it.remove();
+                        removed++;
+                        continue;
+                    }
+                } catch (Exception ignored) {
+                    // Fallback below for malformed entries.
+                }
+
+                // Fallback string-based match for legacy malformed entries.
+                try {
                     JsonObject resultObj = recipeObj.getAsJsonObject("result");
-                    if (resultObj.has("nbt")) {
+                    if (resultObj != null && resultObj.has("nbt")) {
                         String nbt = resultObj.get("nbt").getAsString();
-                        if (nbt.contains("custom_item_id\":\"" + newOutputId + "\"")) {
+                        if (nbt.contains("custom_item_id\":\"" + newOutputId + "\"") || nbt.contains("custom_id\":\"" + newOutputId + "\"")) {
                             it.remove();
                             removed++;
                         }
                     }
+                } catch (Exception ignored) {
+                    // ignore malformed recipe object
                 }
             }
 
@@ -468,7 +484,6 @@ public class RecipeConfigManager {
             String slayerStr = obj.get("requiredSlayer").getAsString();
             int level = obj.get("requiredLevel").getAsInt();
 
-            
             ItemStack result = deserializeStack(obj.get("result"));
             
             if (result.isEmpty()) {
@@ -476,8 +491,6 @@ public class RecipeConfigManager {
                 return null;
             }
             
-            System.out.println("[RecipeConfigManager] Successfully parsed result for recipe: " + name);
-
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
                 try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) {}
