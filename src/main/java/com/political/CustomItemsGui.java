@@ -2071,6 +2071,23 @@ public class CustomItemsGui {
 
         final int SETS_PER_PAGE = 4;
         ArmorSetDisplay[] sets = setsWithRecipes.toArray(new ArmorSetDisplay[0]);
+        
+        // If no sets have recipes, show empty message
+        if (sets.length == 0) {
+            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
+                    .setName(Text.literal("No Recipes Available").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("No custom recipes found for this category").formatted(Formatting.GRAY))
+                    .build());
+            
+            // Back button
+            gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("← Back to Categories").formatted(Formatting.YELLOW))
+                    .setCallback((s, t, a) -> onBack.open(player)).build());
+            
+            gui.open();
+            return;
+        }
+        
         int totalPages = (sets.length + SETS_PER_PAGE - 1) / SETS_PER_PAGE;
         int clampedPage = Math.min(page, totalPages - 1);
 
