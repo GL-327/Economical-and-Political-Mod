@@ -288,7 +288,7 @@ public class CommandRegistry {
 
         // Debug command to list recipes (admin only)
         dispatcher.register(CommandManager.literal("debugrecipes")
-                .requires(CommandManager.requirePermissionLevel(2))
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .executes(context -> {
                     List<SlayerRecipes.Recipe> recipes = RecipeConfigManager.getRecipes();
                     context.getSource().sendFeedback(() -> Text.literal("Found " + recipes.size() + " recipes:"), false);
