@@ -126,6 +126,8 @@ public class RecipeConfigManager {
                             LAST_CRAFTING_STATUS_PRINT_MS = now;
                             System.out.println("[RecipeConfigManager] crafting: OK | " + recipes.size() + " recipes (" + failed + " failed)");
                         }
+                    } else if ("recipe".equals(contextForLog)) {
+                        System.out.println("[RecipeConfigManager] /recipe: loaded " + recipes.size() + " recipes (" + failed + " failed)");
                     }
                 }
 
@@ -182,8 +184,8 @@ public class RecipeConfigManager {
      * Returns all recipes by reading directly from JSON file (real-time).
      */
     public static List<SlayerRecipes.Recipe> getRecipes() {
-        // Used by /recipe UI; do not print here to avoid log spam.
-        return new ArrayList<>(getRecipesCached(""));
+        // Used by /recipe UI; log when /recipe command is used
+        return new ArrayList<>(getRecipesCached("recipe"));
     }
     
     /**
