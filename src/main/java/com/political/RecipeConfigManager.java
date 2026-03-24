@@ -632,15 +632,38 @@ public class RecipeConfigManager {
     private static String extractSnbtStringValue(String snbt, String key) {
         if (snbt == null || snbt.isEmpty() || key == null || key.isEmpty()) return null;
 
-        // Matches patterns like: key:"value" or key:"value", or key:"value"}
+        // First try simple pattern: key:"value"
         String needle = key + ":\"";
         int start = snbt.indexOf(needle);
-        if (start < 0) return null;
-        start += needle.length();
+        if (start >= 0) {
+            start += needle.length();
+            int end = snbt.indexOf("\"", start);
+            if (end > start) {
+                return snbt.substring(start, end);
+            }
+        }
+        
+        // For custom_item_id, also check nested under components:minecraft:custom_data
+        if ("custom_item_id".equals(key)) {
+            // Look for pattern: components:{"minecraft:custom_data":{custom_item_id:"..."}}
+            String customDataPattern = "\"minecraft:custom_data\":{";
+            int customDataStart = snbt.indexOf(customDataPattern);
+            if (customDataStart >= 0) {
+                customDataStart += customDataPattern.length();
+                // Find the custom_item_id within this section
+                needle = "custom_item_id\":\"";
+                start = snbt.indexOf(needle, customDataStart);
+                if (start >= 0) {
+                    start += needle.length();
+                    int end = snbt.indexOf("\"", start);
+                    if (end > start) {
+                        return snbt.substring(start, end);
+                    }
+                }
+            }
+        }
 
-        int end = snbt.indexOf("\"", start);
-        if (end < 0 || end <= start) return null;
-        return snbt.substring(start, end);
+        return null;
     }
 
     private static void normalizeParsedStackNbt(NbtCompound parsed) {
