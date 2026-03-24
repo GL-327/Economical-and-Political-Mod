@@ -608,6 +608,9 @@ public class RecipeConfigManager {
             // legacy key used by some generators
             customId = extractSnbtStringValue(nbtString, "custom_item_id");
         }
+        
+        // Debug: Print what we found
+        System.out.println("[RecipeConfigManager] parseStack: customId=" + customId + " from NBT: " + nbtString.substring(0, Math.min(100, nbtString.length())) + "...");
 
         String id = extractSnbtStringValue(nbtString, "id");
         int count = wrapperObj != null && wrapperObj.has("count") ? wrapperObj.get("count").getAsInt() : 1;
@@ -616,6 +619,7 @@ public class RecipeConfigManager {
         ItemStack stack = ItemStack.EMPTY;
         if (customId != null && !customId.isEmpty()) {
             stack = resolveCustomItem(customId);
+            System.out.println("[RecipeConfigManager] resolveCustomItem returned: " + (stack.isEmpty() ? "EMPTY" : stack.getItem().toString()));
         }
         if ((stack == null || stack.isEmpty()) && id != null && !id.isEmpty()) {
             stack = resolveItem(id);
