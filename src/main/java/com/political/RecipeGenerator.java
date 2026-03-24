@@ -221,7 +221,8 @@ public class RecipeGenerator {
         return recipe;
     }
     
-    private static String[] getArmorPattern(String piece) {
+    /** 3×3 pattern tags: {@code block}, {@code core}, {@code ""} (empty). */
+    public static String[] getArmorPattern(String piece) {
         return switch (piece) {
             // Vanilla armor patterns with core in center (slot 4)
             // Helmet: X X X / X . X / . . .
@@ -494,7 +495,8 @@ public class RecipeGenerator {
         return recipe;
     }
     
-    private static String[] getToolPattern(String tool) {
+    /** 3×3 pattern tags: {@code block}, {@code core}, {@code stick}, {@code ""}. */
+    public static String[] getToolPattern(String tool) {
         return switch (tool) {
             case "sword" -> new String[]{"", "block", "", "", "core", "", "", "stick", ""};
             case "pickaxe" -> new String[]{"block", "block", "block", "", "core", "", "", "stick", ""};

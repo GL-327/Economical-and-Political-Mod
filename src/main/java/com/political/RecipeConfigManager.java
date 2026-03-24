@@ -157,6 +157,7 @@ public class RecipeConfigManager {
                         try {
                             SlayerRecipes.Recipe recipe = deserialize(elem.getAsJsonObject());
                             if (recipe != null && recipe.result != null && !recipe.result.isEmpty()) {
+                                recipe = RecipeIngredientHydrator.hydrate(recipe);
                                 recipes.add(recipe);
                             } else {
                                 failed++;

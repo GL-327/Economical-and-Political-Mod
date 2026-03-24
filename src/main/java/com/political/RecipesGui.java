@@ -1872,13 +1872,13 @@ public class RecipesGui {
             for (int i = 0; i < 9 && i < recipe.ingredients.length; i++) {
                 ItemStack input = recipe.ingredients[i];
                 if (input != null && !input.isEmpty()) {
-                    Text inputName = input.get(DataComponentTypes.CUSTOM_NAME);
+                    ItemStack display = input.copy();
+                    Text inputName = display.get(DataComponentTypes.CUSTOM_NAME);
                     if (inputName == null) {
-                        inputName = Text.literal(input.getItem().toString());
+                        inputName = Text.literal(display.getItem().toString());
                     }
-                    gui.setSlot(gridSlots[i], new GuiElementBuilder(input.getItem())
+                    gui.setSlot(gridSlots[i], new GuiElementBuilder(display)
                             .setName(inputName)
-                            .setCount(input.getCount())
                             .build());
                 } else {
                     // Empty slot indicator
@@ -2169,7 +2169,7 @@ public class RecipesGui {
         
         // No recipe found - open main menu with message
         player.sendMessage(Text.literal("✖ No recipe found for: " + itemName).formatted(Formatting.RED), false);
-        player.sendMessage(Text.literal("Use /recipe to browse all categories").formatted(Formatting.GRAY), false);
+        player.sendMessage(Text.literal("Use /recipe to open the recipe browser").formatted(Formatting.GRAY), false);
         openMainMenu(player);
         return false;
     }
