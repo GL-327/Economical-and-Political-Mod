@@ -513,28 +513,49 @@ public class RecipeGenerator {
     }
     
     private static JsonObject createGemResult(String gem, String piece) {
-        // This would call GemGear.createEmeraldHelmet() etc.
-        // For now, return a placeholder
-        JsonObject result = new JsonObject();
-        result.addProperty("nbt", "{components:{\"minecraft:custom_name\":{text:\"" + capitalize(gem) + " " + capitalize(piece) + "\"}},count:1,id:\"minecraft:leather_" + piece + "\"}");
-        result.addProperty("count", 1);
-        return result;
+        // Call actual GemGear creation methods
+        ItemStack result = switch (gem) {
+            case "emerald" -> switch (piece) {
+                case "helmet" -> GemGear.createEmeraldHelmet();
+                case "chestplate" -> GemGear.createEmeraldChestplate();
+                case "leggings" -> GemGear.createEmeraldLeggings();
+                case "boots" -> GemGear.createEmeraldBoots();
+                default -> ItemStack.EMPTY;
+            };
+            case "lapis" -> switch (piece) {
+                case "helmet" -> GemGear.createLapisHelmet();
+                case "chestplate" -> GemGear.createLapisChestplate();
+                case "leggings" -> GemGear.createLapisLeggings();
+                case "boots" -> GemGear.createLapisBoots();
+                default -> ItemStack.EMPTY;
+            };
+            default -> ItemStack.EMPTY;
+        };
+        return RecipeConfigManager.serializeItemStack(result).getAsJsonObject();
     }
     
     private static JsonObject createGemToolResult(String gem, String tool) {
-        // This would call GemGear.createEmeraldSword() etc.
-        JsonObject result = new JsonObject();
-        String baseItem = switch (tool) {
-            case "sword" -> "iron_sword";
-            case "pickaxe" -> "iron_pickaxe";
-            case "axe" -> "iron_axe";
-            case "shovel" -> "iron_shovel";
-            case "hoe" -> "iron_hoe";
-            default -> "iron_sword";
+        // Call actual GemGear creation methods
+        ItemStack result = switch (gem) {
+            case "emerald" -> switch (tool) {
+                case "sword" -> GemGear.createEmeraldSword();
+                case "pickaxe" -> GemGear.createEmeraldPickaxe();
+                case "axe" -> GemGear.createEmeraldAxe();
+                case "shovel" -> GemGear.createEmeraldShovel();
+                case "hoe" -> GemGear.createEmeraldHoe();
+                default -> ItemStack.EMPTY;
+            };
+            case "lapis" -> switch (tool) {
+                case "sword" -> GemGear.createLapisSword();
+                case "pickaxe" -> GemGear.createLapisPickaxe();
+                case "axe" -> GemGear.createLapisAxe();
+                case "shovel" -> GemGear.createLapisShovel();
+                case "hoe" -> GemGear.createLapisHoe();
+                default -> ItemStack.EMPTY;
+            };
+            default -> ItemStack.EMPTY;
         };
-        result.addProperty("nbt", "{components:{\"minecraft:custom_name\":{text:\"" + capitalize(gem) + " " + capitalize(tool) + "\"}},count:1,id:\"minecraft:" + baseItem + "\"}");
-        result.addProperty("count", 1);
-        return result;
+        return RecipeConfigManager.serializeItemStack(result).getAsJsonObject();
     }
     
     private static JsonObject createSlayerArmorRecipe(String type, int tier, String piece, String core) {
@@ -613,18 +634,22 @@ public class RecipeGenerator {
     }
     
     private static JsonObject createSlayerResult(String type, int tier, String piece) {
-        // This would call SlayerItems.createT1Helmet(type) etc.
-        JsonObject result = new JsonObject();
-        result.addProperty("nbt", "{components:{\"minecraft:custom_name\":{text:\"" + capitalize(type) + " T" + tier + " " + capitalize(piece) + "\"}},count:1,id:\"minecraft:leather_" + piece + "\"}");
-        result.addProperty("count", 1);
-        return result;
+        // Call actual SlayerItems creation methods
+        SlayerManager.SlayerType slayerType = SlayerManager.SlayerType.valueOf(type.toUpperCase());
+        ItemStack result = switch (piece) {
+            case "helmet" -> SlayerItems.createSlayerHelmet(slayerType, tier);
+            case "chestplate" -> SlayerItems.createSlayerChestplate(slayerType, tier);
+            case "leggings" -> SlayerItems.createSlayerLeggings(slayerType, tier);
+            case "boots" -> SlayerItems.createSlayerBoots(slayerType, tier);
+            default -> ItemStack.EMPTY;
+        };
+        return RecipeConfigManager.serializeItemStack(result).getAsJsonObject();
     }
     
     private static JsonObject createSlayerSwordResult(String type, int tier) {
-        // This would call SlayerItems.createT1Sword(type) etc.
-        JsonObject result = new JsonObject();
-        result.addProperty("nbt", "{components:{\"minecraft:custom_name\":{text:\"" + capitalize(type) + " T" + tier + " Sword\"}},count:1,id:\"minecraft:iron_sword\"}");
-        result.addProperty("count", 1);
-        return result;
+        // Call actual SlayerItems creation method
+        SlayerManager.SlayerType slayerType = SlayerManager.SlayerType.valueOf(type.toUpperCase());
+        ItemStack result = SlayerItems.createSlayerSword(slayerType);
+        return RecipeConfigManager.serializeItemStack(result).getAsJsonObject();
     }
 }

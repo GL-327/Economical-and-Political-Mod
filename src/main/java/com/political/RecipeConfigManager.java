@@ -59,7 +59,8 @@ public class RecipeConfigManager {
 
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
-        // Do not parse the recipe JSON at startup. Recipes are loaded lazily and cached.
+        // Regenerate recipes from code on startup to ensure correct NBT data
+        regenerateRecipes();
         invalidateRecipeCache();
         SlayerRecipes.RECIPES.clear();
         loadDisabled();
@@ -308,6 +309,28 @@ public class RecipeConfigManager {
             System.err.println("[RecipeConfigManager] Failed to remove recipe: " + e.getMessage());
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /** Regenerates all recipes from code and saves to JSON file */
+    public static void regenerateRecipes() {
+        try {
+            JsonArray recipes = RecipeGenerator.generateAllDefaultRecipes();
+            
+            JsonObject root = new JsonObject();
+            root.add("recipes", recipes);
+            
+            Files.createDirectories(CONFIG_FILE.getParent());
+            try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+                GSON.toJson(root, writer);
+            }
+            
+            System.out.println("[RecipeConfigManager] Regenerated " + recipes.size() + " recipes to " + CONFIG_FILE);
+            invalidateRecipeCache();
+            
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to regenerate recipes: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

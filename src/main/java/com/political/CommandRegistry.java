@@ -303,6 +303,17 @@ public class CommandRegistry {
                     return 1;
                 }));
 
+        // Regenerate recipes command (admin only)
+        dispatcher.register(CommandManager.literal("regeneraterecipes")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(context -> {
+                    context.getSource().sendFeedback(() -> Text.literal("Regenerating all recipes from code..."), false);
+                    RecipeConfigManager.regenerateRecipes();
+                    List<SlayerRecipes.Recipe> recipes = RecipeConfigManager.getRecipes();
+                    context.getSource().sendFeedback(() -> Text.literal("Done! Generated " + recipes.size() + " recipes."), false);
+                    return 1;
+                }));
+
         // /report command - Report system for players
         dispatcher.register(CommandManager.literal("report")
                 .executes(context -> {
