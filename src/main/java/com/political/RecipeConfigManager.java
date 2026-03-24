@@ -449,8 +449,11 @@ public class RecipeConfigManager {
             ItemStack result = deserializeStack(obj.get("result"));
             
             if (result.isEmpty()) {
+                System.err.println("[RecipeConfigManager] FAILED to load recipe '" + name + "': result item is empty");
                 return null;
             }
+            
+            System.out.println("[RecipeConfigManager] Successfully parsed result for recipe: " + name);
 
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
