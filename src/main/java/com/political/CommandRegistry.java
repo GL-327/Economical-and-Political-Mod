@@ -148,8 +148,8 @@ public class CommandRegistry {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                     RecipeConfigManager.logRecipeFileStatusForRecipeCommand();
                     try {
-                        RecipesGui.openAllRecipesPage(player, 0);
-                        player.sendMessage(Text.literal("✓ Full recipe index opened!").formatted(Formatting.GREEN), false);
+                        RecipesGui.openMainMenu(player);
+                        player.sendMessage(Text.literal("✓ Recipe browser opened — use the book for the full JSON index.").formatted(Formatting.GREEN), false);
                     } catch (Exception e) {
                         player.sendMessage(Text.literal("Error: " + e.getMessage()).formatted(Formatting.RED), false);
                         e.printStackTrace();
