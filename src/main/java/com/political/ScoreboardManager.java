@@ -358,7 +358,7 @@ public class ScoreboardManager {
         // Footer (not counted toward the budget)
         String footSep = SEPARATOR_FRAMES[(animFrame + SEPARATOR_FRAMES.length / 2) % SEPARATOR_FRAMES.length];
         lines.add(footSep);
-        lines.add("§eplay.civilcraft.net");
+        lines.add("§eplay.civilcraft.xyz");
 
         return lines;
     }

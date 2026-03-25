@@ -41,7 +41,8 @@
         "TotemDisableMixin",
         "TradeOfferMixin",
         "WardenDropMixin",
-        "WardenEntityMixin"
+        "WardenEntityMixin",
+        "RecipeCommandMixin"
     ],
     "injectors": {
         "defaultRequire": 1

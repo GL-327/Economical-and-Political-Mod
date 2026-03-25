@@ -823,7 +823,7 @@ public class CommandRegistry {
                                 .formatted(Formatting.GRAY))
                             .append(Text.literal("\n\nVisit our website at: ")
                                 .formatted(Formatting.YELLOW))
-                            .append(Text.literal("https://store.example.com")
+                            .append(Text.literal("play.civilcraft.xyz")
                                 .formatted(Formatting.AQUA, Formatting.UNDERLINE))
                             .append(Text.literal("\n\n")
                                 .formatted(Formatting.RESET))

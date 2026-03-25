@@ -80,7 +80,7 @@ public class TabListManager {
             buffsSection +
             overflowSection +
             "§8────────────────────────\n" +
-            "§7play.§bcivil§7craft.net"
+            "§7play.civilcraft.xyz"
         );
 
         player.networkHandler.sendPacket(new PlayerListHeaderS2CPacket(header, footer));
