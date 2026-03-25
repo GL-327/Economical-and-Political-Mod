@@ -645,7 +645,7 @@ public class RecipeConfigManager {
             ItemStack result = deserializeStack(obj.get("result"));
             
             if (result.isEmpty()) {
-                System.err.println("[RecipeConfigManager] FAILED to load recipe '" + name + "': result item is empty");
+                // Avoid log spam for malformed/unsupported recipes; those entries are ignored anyway.
                 return null;
             }
             
