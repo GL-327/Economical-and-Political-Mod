@@ -71,6 +71,16 @@ public class RecipesGui {
                         RecipesGui::openMainMenu))
                 .build());
 
+        gui.setSlot(11, new GuiElementBuilder(Items.DRAGON_HEAD)
+                .setName(Text.literal("🐉 Dragon chestplates").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("All dragon plates & cores").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> CustomItemsGui.openCategoryPage(player, CustomItemsGui.Category.DRAGON_CHESTPLATES, 0,
+                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenu),
+                        RecipesGui::openMainMenu))
+                .build());
+
         gui.setSlot(12, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))

@@ -101,6 +101,38 @@ public class ArmorAbilityHandler {
         tickVenomDragonChestplate(player);
         tickBloodDragonChestplate(player);
         tickEclipseDragonChestplate(player);
+        MoreDragonChestplateAbilities.tickAll(player);
+    }
+
+    /**
+     * Shared creative-flight handling for dragon chestplates (fall immunity when toggling off mid-air).
+     */
+    public static void applyConditionalCreativeFlight(ServerPlayerEntity player, boolean shouldAllowFlight) {
+        UUID uuid = player.getUuid();
+        var abilities = player.getAbilities();
+        if (!shouldAllowFlight) {
+            boolean wasAirborneFly = abilities.flying && !player.isOnGround();
+            abilities.allowFlying = false;
+            abilities.flying = false;
+            if (wasAirborneFly) {
+                grantFallImmunity(uuid);
+            }
+            previousFlying.put(uuid, false);
+            player.sendAbilitiesUpdate();
+            return;
+        }
+        abilities.allowFlying = true;
+        boolean wasFlying = previousFlying.getOrDefault(uuid, false);
+        boolean isFlying = abilities.flying;
+        previousFlying.put(uuid, isFlying);
+        if (wasFlying && !isFlying && !player.isOnGround()) {
+            grantFallImmunity(uuid);
+        }
+        if (isFlying) {
+            fallImmunityPlayers.remove(uuid);
+            player.fallDistance = 0;
+        }
+        player.sendAbilitiesUpdate();
     }
 
     /**
@@ -1002,13 +1034,12 @@ public class ArmorAbilityHandler {
             }
         }
 
-        // Fire Aura particle trail
-        if (player.age % 3 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.5;
-            double y = player.getY() + Math.random() * 1.5;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
-            world.spawnParticles(ParticleTypes.FLAME, x, y, z, 1, 0, 0, 0, 0.01);
-            world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0, 0, 0, 0.02);
+        if (player.age % 8 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.4;
+            double y = player.getY() + 0.2;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.4;
+            world.spawnParticles(ParticleTypes.SMALL_FLAME, x, y, z, 1, 0, 0, 0, 0);
+            world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0, 0.02, 0, 0);
         }
 
         // Heal to max health when health increases
@@ -1130,15 +1161,11 @@ public class ArmorAbilityHandler {
             player.sendAbilitiesUpdate();
         }
 
-        // Void Aura particle trail
-        if (player.age % 2 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.6;
-            double y = player.getY() + Math.random() * 1.6;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.6;
-            world.spawnParticles(ParticleTypes.PORTAL, x, y, z, 1, 0, 0, 0, 0.03);
-            if (player.age % 4 == 0) {
-                world.spawnParticles(ParticleTypes.REVERSE_PORTAL, x, y, z, 1, 0, 0, 0, 0.02);
-            }
+        if (player.age % 7 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.35;
+            double y = player.getY() + 0.18;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.35;
+            world.spawnParticles(ParticleTypes.REVERSE_PORTAL, x, y, z, 1, 0, 0, 0, 0);
         }
 
         // Heal to max health when health increases
@@ -1202,12 +1229,11 @@ public class ArmorAbilityHandler {
 
         player.sendAbilitiesUpdate();
 
-        if (player.age % 3 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.6;
-            double y = player.getY() + Math.random() * 1.4;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.6;
-            world.spawnParticles(ParticleTypes.END_ROD, x, y, z, 1, 0.02, 0.05, 0.02, 0.01);
-            world.spawnParticles(ParticleTypes.ENCHANT, x, y, z, 2, 0.2, 0.1, 0.2, 0.02);
+        if (player.age % 8 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.3;
+            double y = player.getY() + 0.2;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.3;
+            world.spawnParticles(ParticleTypes.END_ROD, x, y, z, 1, 0, 0, 0, 0);
         }
     }
 
@@ -1226,11 +1252,17 @@ public class ArmorAbilityHandler {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 120, 1, true, false, false));
         }
 
-        if (player.age % 4 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.5;
-            double y = player.getY() + Math.random() * 1.3;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
-            world.spawnParticles(ParticleTypes.SNOWFLAKE, x, y, z, 2, 0.08, 0.06, 0.08, 0.01);
+        if (player.age % 10 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.25;
+            double y = player.getY() + 0.15;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.25;
+            world.spawnParticles(ParticleTypes.SNOWFLAKE, x, y, z, 1, 0, 0, 0, 0);
+        }
+        if (player.age % 50 == 0) {
+            for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(3),
+                    ent -> ent != player && ent instanceof HostileEntity)) {
+                e.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 0, true, false, false));
+            }
         }
     }
 
@@ -1251,11 +1283,11 @@ public class ArmorAbilityHandler {
             }
         }
 
-        if (player.age % 3 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.5;
-            double y = player.getY() + Math.random() * 1.2;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
-            world.spawnParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 2, 0.12, 0.08, 0.12, 0);
+        if (player.age % 12 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.3;
+            double y = player.getY() + 0.12;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.3;
+            world.spawnParticles(ParticleTypes.ITEM_SLIME, x, y, z, 1, 0, 0, 0, 0);
         }
     }
 
@@ -1266,18 +1298,18 @@ public class ArmorAbilityHandler {
         ServerWorld world = (ServerWorld) player.getEntityWorld();
         float hp = player.getHealth();
         float max = player.getMaxHealth();
-        if (hp < max * 0.28f && player.age % 45 == 0) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 35, 0, true, false, true));
+        if (hp < max * 0.35f && player.age % 55 == 0) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 45, 0, false, false, true));
         }
         if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 120, 0, true, false, false));
         }
 
-        if (player.age % 4 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.4;
-            double y = player.getY() + 1.0 + Math.random() * 0.3;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.4;
-            world.spawnParticles(ParticleTypes.DAMAGE_INDICATOR, x, y, z, 2, 0.15, 0.02, 0.15, 0.01);
+        if (player.age % 10 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.35;
+            double y = player.getY() + 0.25;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.35;
+            world.spawnParticles(ParticleTypes.DAMAGE_INDICATOR, x, y, z, 1, 0, 0, 0, 0);
         }
     }
 
@@ -1286,48 +1318,32 @@ public class ArmorAbilityHandler {
         if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "eclipse_dragon_chestplate")) return;
 
         ServerWorld world = (ServerWorld) player.getEntityWorld();
-        UUID uuid = player.getUuid();
         boolean night = !world.isDay();
-        var abilities = player.getAbilities();
 
         if (night) {
-            abilities.allowFlying = true;
-            boolean wasFlying = previousFlying.getOrDefault(uuid, false);
-            boolean isFlying = abilities.flying;
-            previousFlying.put(uuid, isFlying);
-
-            if (wasFlying && !isFlying && !player.isOnGround()) {
-                grantFallImmunity(uuid);
+            applyConditionalCreativeFlight(player, true);
+            StatusEffectInstance nv = player.getStatusEffect(StatusEffects.NIGHT_VISION);
+            if (nv == null || nv.getDuration() < 220) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 600, 0, false, false, false));
             }
-            if (isFlying) {
-                fallImmunityPlayers.remove(uuid);
-                player.fallDistance = 0;
-                if (player.age % 25 == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 30, 0, true, false, true));
-                }
+            if (player.getAbilities().flying && player.age % 35 == 0) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 80, 0, false, false, true));
             }
-            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
-            }
-            player.sendAbilitiesUpdate();
         } else {
-            abilities.allowFlying = false;
-            abilities.flying = false;
-            previousFlying.put(uuid, false);
-            player.sendAbilitiesUpdate();
+            applyConditionalCreativeFlight(player, false);
             if (player.getY() > (double) world.getSeaLevel() + 2 && world.isSkyVisible(player.getBlockPos())) {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 50, 0, true, false, true));
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 50, 0, true, false, true));
             }
         }
 
-        if (player.age % 3 == 0) {
-            double x = player.getX() + (Math.random() - 0.5) * 0.5;
-            double y = player.getY() + Math.random() * 1.3;
-            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
-            world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 2, 0.06, 0.05, 0.06, 0.01);
+        if (player.age % 9 == 0) {
+            double x = player.getX() - player.getRotationVec(1.0f).x * 0.3;
+            double y = player.getY() + 0.15;
+            double z = player.getZ() - player.getRotationVec(1.0f).z * 0.3;
+            world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0, 0, 0, 0);
             if (night) {
-                world.spawnParticles(ParticleTypes.REVERSE_PORTAL, x, y, z, 1, 0.04, 0.04, 0.04, 0.01);
+                world.spawnParticles(ParticleTypes.REVERSE_PORTAL, x, y, z, 1, 0, 0, 0, 0);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.political.mixin;
 
+import com.political.DragonChestplateRegistry;
 import com.political.SlayerArmorHandler;
 import com.political.SlayerItems;
 import com.political.SlayerManager;
@@ -90,15 +91,8 @@ public class BountyDefenseMixin {
 
         // ── Dragon Chestplates - 50% universal reduction ───────────────────
         String chestId = SlayerItems.getCustomItemId(chestplate);
-        if ("inferno_dragon_chestplate".equals(chestId) ||
-            "storm_dragon_chestplate".equals(chestId) ||
-            "void_dragon_chestplate".equals(chestId) ||
-            "aurora_dragon_chestplate".equals(chestId) ||
-            "frost_dragon_chestplate".equals(chestId) ||
-            "venom_dragon_chestplate".equals(chestId) ||
-            "blood_dragon_chestplate".equals(chestId) ||
-            "eclipse_dragon_chestplate".equals(chestId)) {
-            universalDef += 0.50f; // 50% damage reduction vs all bounty bosses
+        if (DragonChestplateRegistry.isRegistered(chestId)) {
+            universalDef += 0.50f;
         }
 
 

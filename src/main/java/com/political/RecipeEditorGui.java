@@ -40,6 +40,7 @@ public class RecipeEditorGui {
     public enum Category {
         GEM_BLOCK_GEAR ("💎 Gem & Block Armor",         Items.EMERALD,            Formatting.GREEN),
         SPECIAL_ARMOR("🛡 Special / Legendary Armor",        Items.NETHERITE_HELMET,   Formatting.GOLD),
+        DRAGON_CHESTPLATES("🐉 Dragon chestplates",          Items.DRAGON_HEAD,        Formatting.DARK_PURPLE),
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
         CUSTOM_TOOLS ("⛏ Custom Tools",                    Items.NETHERITE_PICKAXE,  Formatting.DARK_PURPLE),
@@ -169,6 +170,12 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createWardenChestplate());
                 items.add(SlayerItems.createVoidwalkerCrown());
             }
+            case DRAGON_CHESTPLATES -> {
+                items.addAll(DragonChestplateRegistry.allStacks());
+                items.add(SlayerItems.createDragonCrafterCoreT1());
+                items.add(SlayerItems.createDragonCrafterCoreT2());
+                items.add(SlayerItems.createDragonCrafterCoreT3());
+            }
             case HPEBM -> {
                 for (int mk = 1; mk <= 5; mk++)
                     items.add(CustomItemHandler.createHPEBM(mk));
@@ -188,16 +195,6 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createAbyssalBlade());
                 items.add(SlayerItems.createBouncySlime());
                 items.add(SlayerItems.createVenomousDagger());
-
-                // DRAGON CHESTPLATES
-                items.add(DragonChestplates.createDragonChestplate1());
-                items.add(DragonChestplates.createDragonChestplate2());
-                items.add(DragonChestplates.createDragonChestplate3());
-                items.add(DragonChestplates.createDragonChestplateAurora());
-                items.add(DragonChestplates.createDragonChestplateFrost());
-                items.add(DragonChestplates.createDragonChestplateVenom());
-                items.add(DragonChestplates.createDragonChestplateBlood());
-                items.add(DragonChestplates.createDragonChestplateEclipse());
             }
             case CUSTOM_TOOLS -> {
                 // 15 NEW LEGENDARY TOOL SETS
@@ -338,6 +335,9 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createCustomCrafterCoreT1());
                 items.add(SlayerItems.createCustomCrafterCoreT2());
                 items.add(SlayerItems.createCustomCrafterCoreT3());
+                items.add(SlayerItems.createDragonCrafterCoreT1());
+                items.add(SlayerItems.createDragonCrafterCoreT2());
+                items.add(SlayerItems.createDragonCrafterCoreT3());
             }
             case COMPACTED -> {
                 items.add(SlayerItems.createCompactedIron());
@@ -1186,6 +1186,13 @@ public class RecipeEditorGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("✨ Click to browse items").formatted(Formatting.YELLOW))
                 .setCallback((slot, type, action) -> openCategoryPage(player, Category.GEM_BLOCK_GEAR, 0))
+                .build());
+
+        gui.setSlot(11, new GuiElementBuilder(Category.DRAGON_CHESTPLATES.icon)
+                .setName(Text.literal(Category.DRAGON_CHESTPLATES.label).formatted(Category.DRAGON_CHESTPLATES.colour, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("✨ Dragon plates & cores").formatted(Formatting.GRAY))
+                .setCallback((slot, type, action) -> openCategoryPage(player, Category.DRAGON_CHESTPLATES, 0))
                 .build());
 
         gui.setSlot(12, new GuiElementBuilder(Category.BOUNTY_SETS.icon)

@@ -2,7 +2,6 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -10,6 +9,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.World;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -33,8 +33,8 @@ public final class RemoteChestAdminGui {
             admin.sendMessage(Text.literal("Chunk not loaded.").formatted(Formatting.RED), false);
             return;
         }
-        BlockEntity be = world.getBlockEntity(pos);
-        if (!(be instanceof Inventory inv)) {
+        Inventory inv = ContainerInventoryUtil.getContainerInventory(world, pos);
+        if (inv == null) {
             admin.sendMessage(Text.literal("No container at that position.").formatted(Formatting.RED), false);
             return;
         }
@@ -50,19 +50,14 @@ public final class RemoteChestAdminGui {
         SimpleGui gui = new SimpleGui(type, admin, false);
         gui.setTitle(Text.literal("Remote: " + entry.blockId).formatted(Formatting.GOLD));
 
-        final BlockEntity containerBe = be;
-        Runnable redraw = () -> drawInventoryContainer(gui, admin, inv, containerBe);
-        int gs = rows * 9;
-        gui.setSlot(gs - 1, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Refresh / close with Esc"))
-                .setCallback((a, b, c) -> redraw.run())
-                .build());
+        MinecraftServer server = world.getServer();
+        Runnable redraw = () -> drawInventoryContainer(gui, admin, inv, world, pos, server);
         redraw.run();
         gui.open();
     }
 
     private static void drawInventoryContainer(SimpleGui gui, ServerPlayerEntity admin, Inventory inv,
-                                               BlockEntity beMark) {
+                                               ServerWorld world, BlockPos pos, MinecraftServer server) {
         int size = inv.size();
         for (int i = 0; i < size; i++) {
             final int idx = i;
@@ -78,10 +73,10 @@ public final class RemoteChestAdminGui {
                 admin.currentScreenHandler.setCursorStack(ItemStack.EMPTY);
                 inv.setStack(idx, cursor.isEmpty() ? ItemStack.EMPTY : cursor.copy());
                 admin.currentScreenHandler.setCursorStack(slot.isEmpty() ? ItemStack.EMPTY : slot.copy());
-                if (beMark != null) {
-                    beMark.markDirty();
+                ContainerInventoryUtil.markContainerDirty(world, pos);
+                if (server != null) {
+                    server.execute(() -> drawInventoryContainer(gui, admin, inv, world, pos, server));
                 }
-                drawInventoryContainer(gui, admin, inv, beMark);
             });
             gui.setSlot(i, b.build());
         }
