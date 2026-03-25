@@ -1110,6 +1110,57 @@ public class SlayerItems {
         return core;
     }
 
+    public static ItemStack createDragonCrafterCoreT1() {
+        ItemStack core = new ItemStack(Items.HEAVY_CORE);
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🐉 Dragon Crafting Core (T1)").formatted(Formatting.DARK_RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ Draconic reagent").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Used for legendary dragon-forged recipes.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Tier 1 dragon core]").formatted(Formatting.DARK_GRAY));
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(core, "dragon_crafter_core_t1");
+        return core;
+    }
+
+    public static ItemStack createDragonCrafterCoreT2() {
+        ItemStack core = new ItemStack(Items.HEAVY_CORE);
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🐉 Dragon Crafting Core (T2)").formatted(Formatting.RED, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ Infused draconic heart").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Required for mid-tier dragon armor smithing.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Tier 2 dragon core]").formatted(Formatting.DARK_GRAY));
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(core, "dragon_crafter_core_t2");
+        return core;
+    }
+
+    public static ItemStack createDragonCrafterCoreT3() {
+        ItemStack core = new ItemStack(Items.HEAVY_CORE);
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🐉 Dragon Crafting Core (T3)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ Ancient wyrm nucleus").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Reserved for apex dragon recipes.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Tier 3 dragon core]").formatted(Formatting.DARK_GRAY));
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(core, "dragon_crafter_core_t3");
+        return core;
+    }
+
     public static ItemStack createSkeletonSword() {
         return createSlayerSword(SlayerManager.SlayerType.SKELETON);
     }

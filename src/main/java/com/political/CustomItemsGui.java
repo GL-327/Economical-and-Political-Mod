@@ -35,6 +35,7 @@ public class CustomItemsGui {
         ARMOR_T1     ("🛡 Bounty Armor T1",                  Items.IRON_CHESTPLATE,    Formatting.GREEN),
         ARMOR_T2     ("🛡 Bounty Armor T2",                  Items.DIAMOND_CHESTPLATE, Formatting.DARK_AQUA),
         SPECIAL_ARMOR("🛡 Special / Legendary Armor",        Items.NETHERITE_HELMET,   Formatting.GOLD),
+        DRAGON_CHESTPLATES("🐉 Dragon chestplates",          Items.DRAGON_HEAD,        Formatting.DARK_PURPLE),
         HPEBM        ("⚡ HPEBM Weapons",                    Items.BLAZE_ROD,          Formatting.LIGHT_PURPLE),
         BOSS_DROPS   ("🎁 Boss Drops",                       Items.WITHER_SKELETON_SKULL, Formatting.DARK_PURPLE),
         SPECIAL_ITEMS("🎁 Special Items",                    Items.STICK,              Formatting.GREEN),
@@ -554,6 +555,12 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createWardenChestplate());
                 items.add(SlayerItems.createVoidwalkerCrown());
             }
+            case DRAGON_CHESTPLATES -> {
+                items.addAll(DragonChestplateRegistry.allStacks());
+                items.add(SlayerItems.createDragonCrafterCoreT1());
+                items.add(SlayerItems.createDragonCrafterCoreT2());
+                items.add(SlayerItems.createDragonCrafterCoreT3());
+            }
             case HPEBM -> {
                 for (int mk = 1; mk <= 5; mk++)
                     items.add(CustomItemHandler.createHPEBM(mk));
@@ -564,15 +571,6 @@ public class CustomItemsGui {
                 items.add(CustomItemHandler.createHarveysStick());
                 items.add(CustomItemHandler.createHermesShoes());
                 items.add(DanielsPickaxe.create());
-                // DRAGON CHESTPLATES - Special Items (No Recipe)
-                items.add(DragonChestplates.createDragonChestplate1());
-                items.add(DragonChestplates.createDragonChestplate2());
-                items.add(DragonChestplates.createDragonChestplate3());
-                items.add(DragonChestplates.createDragonChestplateAurora());
-                items.add(DragonChestplates.createDragonChestplateFrost());
-                items.add(DragonChestplates.createDragonChestplateVenom());
-                items.add(DragonChestplates.createDragonChestplateBlood());
-                items.add(DragonChestplates.createDragonChestplateEclipse());
             }
             case CUSTOM_TOOLS -> {
                 // 15 NEW LEGENDARY TOOL SETS
@@ -722,6 +720,9 @@ public class CustomItemsGui {
                 items.add(SlayerItems.createCustomCrafterCoreT1());
                 items.add(SlayerItems.createCustomCrafterCoreT2());
                 items.add(SlayerItems.createCustomCrafterCoreT3());
+                items.add(SlayerItems.createDragonCrafterCoreT1());
+                items.add(SlayerItems.createDragonCrafterCoreT2());
+                items.add(SlayerItems.createDragonCrafterCoreT3());
             }
             case COMPACTED -> {
                 items.add(SlayerItems.createCompactedIron());
@@ -1162,6 +1163,14 @@ public class CustomItemsGui {
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.CUSTOM_ARMOR, 0))
                 .build());
 
+        gui.setSlot(11, new GuiElementBuilder(Items.DRAGON_HEAD)
+                .setName(Text.literal("🐉 Dragon chestplates").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("All draconic plates + dragon cores").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCategoryPage(player, Category.DRAGON_CHESTPLATES, 0))
+                .build());
+
         gui.setSlot(12, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Text.literal("⚔ Bounty Sets").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
@@ -1287,7 +1296,7 @@ public class CustomItemsGui {
                 .setCallback((slot, clickType, action) -> gui.close())
                 .build());
 
-        int[] menuSlots = {10, 12, 14, 16, 20, 22, 24, 28, 30, 32, 34, 38, 40, 42};
+        int[] menuSlots = {10, 11, 12, 14, 16, 20, 22, 24, 28, 30, 32, 34, 38, 40, 42};
         for (int slot : menuSlots) {
             placeDiamondPlaceholder(gui, slot);
         }

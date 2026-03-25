@@ -859,6 +859,9 @@ public class RecipeConfigManager {
         if ("custom_crafter_core_t1".equals(customId)) return SlayerItems.createCustomCrafterCoreT1();
         if ("custom_crafter_core_t2".equals(customId)) return SlayerItems.createCustomCrafterCoreT2();
         if ("custom_crafter_core_t3".equals(customId)) return SlayerItems.createCustomCrafterCoreT3();
+        if ("dragon_crafter_core_t1".equals(customId)) return SlayerItems.createDragonCrafterCoreT1();
+        if ("dragon_crafter_core_t2".equals(customId)) return SlayerItems.createDragonCrafterCoreT2();
+        if ("dragon_crafter_core_t3".equals(customId)) return SlayerItems.createDragonCrafterCoreT3();
         
         // Map custom IDs to item creation methods
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
@@ -1221,6 +1224,21 @@ public class RecipeConfigManager {
         if ("venom_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateVenom();
         if ("blood_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateBlood();
         if ("eclipse_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateEclipse();
+        if ("dune_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createDune();
+        if ("reef_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createReef();
+        if ("ember_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createEmber();
+        if ("crystal_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createCrystal();
+        if ("shadow_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createShadow();
+        if ("solar_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createSolar();
+        if ("lunar_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createLunar();
+        if ("terra_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createTerra();
+        if ("tempest_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createTempest();
+        if ("auric_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createAuric();
+        if ("glacier_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createGlacier();
+        if ("mire_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createMire();
+        if ("starfall_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createStarfall();
+        if ("mirage_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createMirage();
+        if ("obsidian_wyrm_chestplate".equals(customId)) return MoreDragonChestplates.createObsidianWyrm();
         
         // HPEBM Weapons
         for (int mk = 1; mk <= 5; mk++) {

@@ -12,19 +12,29 @@ import java.util.List;
 
 public final class PrevChestsAdminGui {
 
+    private static final int PER_PAGE = 21;
+
     public static void open(ServerPlayerEntity admin, ServerPlayerEntity watchedPlayer) {
+        open(admin, watchedPlayer, 0);
+    }
+
+    private static void open(ServerPlayerEntity admin, ServerPlayerEntity watchedPlayer, int page) {
         List<ChestAccessHistory.Entry> entries = ChestAccessHistory.copyFor(watchedPlayer.getUuid());
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, admin, false);
-        gui.setTitle(Text.literal("Chests: ").append(watchedPlayer.getDisplayName()));
+        int totalPages = Math.max(1, (entries.size() + PER_PAGE - 1) / PER_PAGE);
+        int p = Math.min(Math.max(0, page), totalPages - 1);
+        gui.setTitle(Text.literal("Chests (page " + (p + 1) + "/" + totalPages + "): ")
+                .formatted(Formatting.GOLD).append(watchedPlayer.getDisplayName()));
 
         var bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build();
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg);
 
+        int start = p * PER_PAGE;
         int slot = 10;
-        for (ChestAccessHistory.Entry e : entries) {
-            if (slot >= 44) break;
+        for (int i = start; i < entries.size() && slot < 44; i++) {
             while (slot < 44 && (slot % 9 == 0 || slot % 9 == 8)) slot++;
             if (slot >= 44) break;
+            ChestAccessHistory.Entry e = entries.get(i);
             final ChestAccessHistory.Entry fe = e;
             gui.setSlot(slot, new GuiElementBuilder(Items.CHEST)
                     .setName(Text.literal(e.blockId).formatted(Formatting.GOLD))
@@ -35,6 +45,19 @@ public final class PrevChestsAdminGui {
                     .setCallback((a, b, c) -> RemoteChestAdminGui.open(admin, fe))
                     .build());
             slot++;
+        }
+
+        if (p > 0) {
+            gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Previous page").formatted(Formatting.YELLOW))
+                    .setCallback((a, b, c) -> open(admin, watchedPlayer, p - 1))
+                    .build());
+        }
+        if (p < totalPages - 1) {
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next page").formatted(Formatting.YELLOW))
+                    .setCallback((a, b, c) -> open(admin, watchedPlayer, p + 1))
+                    .build());
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)

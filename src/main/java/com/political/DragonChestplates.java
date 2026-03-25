@@ -130,8 +130,8 @@ public class DragonChestplates {
         lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 1]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.RED));
         lore.add(Text.literal("❤ Max Health: 20 HP (10 hearts)").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armour: 12").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Toughness: 8").formatted(Formatting.GRAY));
+        lore.add(Text.literal("🛡 Armour: 20").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 14").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.DARK_RED));
         lore.add(Text.literal("🔥 Fire Aura: Particle trail").formatted(Formatting.GOLD));
@@ -150,11 +150,11 @@ public class DragonChestplates {
         // Apply armor stats
         AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
         builder.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
-                Identifier.of("politicalserver", "inferno_dragon_armor"), 12.0,
+                Identifier.of("politicalserver", "inferno_dragon_armor"), 20.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ), AttributeModifierSlot.CHEST);
         builder.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
-                Identifier.of("politicalserver", "inferno_dragon_toughness"), 8.0,
+                Identifier.of("politicalserver", "inferno_dragon_toughness"), 14.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ), AttributeModifierSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
@@ -173,8 +173,8 @@ public class DragonChestplates {
         lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 2]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("❤ Max Health: 24 HP (12 hearts)").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armour: 14").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Toughness: 10").formatted(Formatting.GRAY));
+        lore.add(Text.literal("🛡 Armour: 20").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 14").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.AQUA));
         lore.add(Text.literal("⚡ Storm Aura: Particle trail").formatted(Formatting.YELLOW));
@@ -193,11 +193,11 @@ public class DragonChestplates {
         // Apply armor stats
         AttributeModifiersComponent.Builder builder2 = AttributeModifiersComponent.builder();
         builder2.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
-                Identifier.of("politicalserver", "storm_dragon_armor"), 14.0,
+                Identifier.of("politicalserver", "storm_dragon_armor"), 20.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ), AttributeModifierSlot.CHEST);
         builder2.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
-                Identifier.of("politicalserver", "storm_dragon_toughness"), 10.0,
+                Identifier.of("politicalserver", "storm_dragon_toughness"), 14.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ), AttributeModifierSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder2.build());
@@ -216,8 +216,8 @@ public class DragonChestplates {
         lore.add(Text.literal("§8[Legendary Dragon Armor - Tier 3]").formatted(Formatting.DARK_GRAY));
         lore.add(Text.literal("━━━ STATS ━━━").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("❤ Max Health: 30 HP (15 hearts)").formatted(Formatting.RED));
-        lore.add(Text.literal("🛡 Armour: 16").formatted(Formatting.GRAY));
-        lore.add(Text.literal("⚔ Toughness: 12").formatted(Formatting.GRAY));
+        lore.add(Text.literal("🛡 Armour: 20").formatted(Formatting.GRAY));
+        lore.add(Text.literal("⚔ Toughness: 14").formatted(Formatting.GRAY));
         lore.add(Text.literal(""));
         lore.add(Text.literal("━━━ DRAGON ABILITY ━━━").formatted(Formatting.LIGHT_PURPLE));
         lore.add(Text.literal("🌀 Void Aura: Particle trail").formatted(Formatting.DARK_PURPLE));
@@ -235,11 +235,11 @@ public class DragonChestplates {
         // Apply armor stats
         AttributeModifiersComponent.Builder builder3 = AttributeModifiersComponent.builder();
         builder3.add(EntityAttributes.ARMOR, new EntityAttributeModifier(
-                Identifier.of("politicalserver", "void_dragon_armor"), 16.0,
+                Identifier.of("politicalserver", "void_dragon_armor"), 20.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ), AttributeModifierSlot.CHEST);
         builder3.add(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(
-                Identifier.of("politicalserver", "void_dragon_toughness"), 12.0,
+                Identifier.of("politicalserver", "void_dragon_toughness"), 14.0,
                 EntityAttributeModifier.Operation.ADD_VALUE
         ), AttributeModifierSlot.CHEST);
         chestplate.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder3.build());

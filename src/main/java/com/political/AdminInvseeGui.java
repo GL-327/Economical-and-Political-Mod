@@ -17,33 +17,65 @@ import java.util.Map;
  */
 public final class AdminInvseeGui {
 
+    private static final int ENDER_ROWS = 3;
+    private static final int ENDER_COLS = 9;
+
     public static void openMainMenu(ServerPlayerEntity admin, ServerPlayerEntity target) {
-        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, admin, false);
-        gui.setTitle(Text.literal("Invsee: ").formatted(Formatting.GOLD).append(target.getDisplayName()));
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, admin, false);
+        gui.setTitle(Text.literal("Invsee — ").formatted(Formatting.GOLD).append(target.getDisplayName()));
 
-        var edge = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build();
-        for (int i = 0; i < 27; i++) gui.setSlot(i, edge);
+        var border = new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE).setName(Text.literal("")).build();
+        for (int i = 0; i < 36; i++) {
+            gui.setSlot(i, border);
+        }
 
-        gui.setSlot(10, btn(Items.CHEST, "Inventory", Formatting.GREEN, () -> openPlayerInventory(admin, target)));
-        gui.setSlot(11, btn(Items.ENDER_CHEST, "Ender chest", Formatting.DARK_PURPLE, () -> openEnderChest(admin, target)));
-        gui.setSlot(12, btn(Items.GOLD_BLOCK, "Bank + wallet", Formatting.YELLOW, () -> BankGui.openForAdmin(admin, target)));
-        gui.setSlot(13, btn(Items.EMERALD, "Coins (set amount)", Formatting.GREEN, () -> openCoinsEditor(admin, target)));
-        gui.setSlot(14, btn(Items.AMETHYST_SHARD, "Crypto wallets", Formatting.LIGHT_PURPLE, () -> openCryptoEditor(admin, target)));
-        gui.setSlot(15, btn(Items.PAPER, "Stock portfolio", Formatting.AQUA, () -> openStockEditor(admin, target)));
-        gui.setSlot(16, btn(Items.BARRIER, "Close", Formatting.RED, admin::closeHandledScreen));
+        var head = new GuiElementBuilder(Items.PLAYER_HEAD)
+                .setName(Text.literal("Inspecting").formatted(Formatting.GOLD, Formatting.BOLD)
+                        .append(Text.literal(" ").append(target.getDisplayName())))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Choose a storage or economy view below.").formatted(Formatting.GRAY))
+                .build();
+        gui.setSlot(4, head);
+
+        gui.setSlot(10, menuBtn(Items.CHEST, "Player inventory", Formatting.GREEN,
+                Text.literal("Hotbar, main, armor, off-hand").formatted(Formatting.DARK_GRAY),
+                () -> openPlayerInventory(admin, target)));
+        gui.setSlot(12, menuBtn(Items.ENDER_CHEST, "Ender chest (27 slots)", Formatting.LIGHT_PURPLE,
+                Text.literal("Full width — no clipped slots").formatted(Formatting.DARK_GRAY),
+                () -> openEnderChest(admin, target)));
+        gui.setSlot(14, menuBtn(Items.GOLD_BLOCK, "Bank + wallet", Formatting.YELLOW,
+                Text.literal("Account balances").formatted(Formatting.DARK_GRAY),
+                () -> BankGui.openForAdmin(admin, target)));
+        gui.setSlot(16, menuBtn(Items.EMERALD, "Set coin amount", Formatting.GREEN,
+                Text.literal("Opens numeric prompt").formatted(Formatting.DARK_GRAY),
+                () -> openCoinsEditor(admin, target)));
+
+        gui.setSlot(20, menuBtn(Items.AMETHYST_SHARD, "Crypto wallets", Formatting.LIGHT_PURPLE,
+                Text.literal("Per-coin balances").formatted(Formatting.DARK_GRAY),
+                () -> openCryptoEditor(admin, target)));
+        gui.setSlot(22, menuBtn(Items.PAPER, "Stock portfolio", Formatting.AQUA,
+                Text.literal("Share holdings").formatted(Formatting.DARK_GRAY),
+                () -> openStockEditor(admin, target)));
+        gui.setSlot(31, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("Close").formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((a, b, c) -> admin.closeHandledScreen())
+                .build());
 
         gui.open();
     }
 
-    private static GuiElementBuilder btn(net.minecraft.item.Item icon, String title, Formatting color, Runnable onClick) {
+    private static GuiElementBuilder menuBtn(net.minecraft.item.Item icon, String title, Formatting color,
+                                             Text subtitle, Runnable onClick) {
         return new GuiElementBuilder(icon)
                 .setName(Text.literal(title).formatted(color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(subtitle)
                 .setCallback((a, b, c) -> onClick.run());
     }
 
     public static void openPlayerInventory(ServerPlayerEntity admin, ServerPlayerEntity target) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, admin, false);
-        gui.setTitle(Text.literal("Inventory: ").append(target.getDisplayName()));
+        gui.setTitle(Text.literal("Inventory — ").formatted(Formatting.GOLD).append(target.getDisplayName()));
         Runnable redraw = () -> drawPlayerInventory(gui, admin, target);
         gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
                 .setName(Text.literal("Back").formatted(Formatting.GRAY))
@@ -98,14 +130,11 @@ public final class AdminInvseeGui {
         gui.setSlot(guiIndex, b.build());
     }
 
+    /** Ender chest: slots 0–26 map to GUI rows 0–2 across full 9 columns; row 3 is padding + back. */
     public static void openEnderChest(ServerPlayerEntity admin, ServerPlayerEntity target) {
         SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X4, admin, false);
-        gui.setTitle(Text.literal("Ender: ").append(target.getDisplayName()));
+        gui.setTitle(Text.literal("Ender — ").formatted(Formatting.LIGHT_PURPLE).append(target.getDisplayName()));
         Runnable redraw = () -> drawEnder(gui, admin, target);
-        gui.setSlot(35, new GuiElementBuilder(Items.ARROW)
-                .setName(Text.literal("Back"))
-                .setCallback((i, t, a) -> openMainMenu(admin, target))
-                .build());
         redraw.run();
         gui.open();
     }
@@ -113,34 +142,35 @@ public final class AdminInvseeGui {
     private static void drawEnder(SimpleGui gui, ServerPlayerEntity admin, ServerPlayerEntity target) {
         var filler = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build();
         for (int i = 0; i < 36; i++) {
-            if (i == 35) continue;
             gui.setSlot(i, filler);
         }
-        int[] slots = {
-                10, 11, 12, 13, 14, 15, 16,
-                19, 20, 21, 22, 23, 24, 25,
-                28, 29, 30, 31, 32, 33, 34
-        };
-        for (int i = 0; i < 27 && i < slots.length; i++) {
-            final int idx = i;
-            int g = slots[i];
-            ItemStack st = target.getEnderChestInventory().getStack(idx);
-            GuiElementBuilder b = st.isEmpty()
-                    ? new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
-                    .setName(Text.literal("Ender empty #" + idx).formatted(Formatting.DARK_GRAY))
-                    : new GuiElementBuilder(st.copy());
-            b.setCallback((a, b2, c) -> {
-                ItemStack cursor = admin.currentScreenHandler.getCursorStack().copy();
-                ItemStack slot = target.getEnderChestInventory().getStack(idx).copy();
-                target.getEnderChestInventory().setStack(idx, ItemStack.EMPTY);
-                admin.currentScreenHandler.setCursorStack(ItemStack.EMPTY);
-                target.getEnderChestInventory().setStack(idx, cursor.isEmpty() ? ItemStack.EMPTY : cursor.copy());
-                admin.currentScreenHandler.setCursorStack(slot.isEmpty() ? ItemStack.EMPTY : slot.copy());
-                target.getEnderChestInventory().markDirty();
-                drawEnder(gui, admin, target);
-            });
-            gui.setSlot(g, b.build());
+        for (int row = 0; row < ENDER_ROWS; row++) {
+            for (int col = 0; col < ENDER_COLS; col++) {
+                int idx = row * ENDER_COLS + col;
+                int gSlot = row * 9 + col;
+                final int enderIndex = idx;
+                ItemStack st = target.getEnderChestInventory().getStack(enderIndex);
+                GuiElementBuilder b = st.isEmpty()
+                        ? new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                        .setName(Text.literal("Ender #" + enderIndex).formatted(Formatting.DARK_GRAY))
+                        : new GuiElementBuilder(st.copy());
+                b.setCallback((a, b2, c) -> {
+                    ItemStack cursor = admin.currentScreenHandler.getCursorStack().copy();
+                    ItemStack slot = target.getEnderChestInventory().getStack(enderIndex).copy();
+                    target.getEnderChestInventory().setStack(enderIndex, ItemStack.EMPTY);
+                    admin.currentScreenHandler.setCursorStack(ItemStack.EMPTY);
+                    target.getEnderChestInventory().setStack(enderIndex, cursor.isEmpty() ? ItemStack.EMPTY : cursor.copy());
+                    admin.currentScreenHandler.setCursorStack(slot.isEmpty() ? ItemStack.EMPTY : slot.copy());
+                    target.getEnderChestInventory().markDirty();
+                    drawEnder(gui, admin, target);
+                });
+                gui.setSlot(gSlot, b.build());
+            }
         }
+        gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.GRAY))
+                .setCallback((i, t, a) -> openMainMenu(admin, target))
+                .build());
     }
 
     public static void openCoinsEditor(ServerPlayerEntity admin, ServerPlayerEntity target) {

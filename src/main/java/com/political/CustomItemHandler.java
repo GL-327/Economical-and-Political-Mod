@@ -164,6 +164,7 @@ public class CustomItemHandler {
                 ArmorAbilityHandler.onStormDragonHit(sp, target);
                 ArmorAbilityHandler.onVenomDragonHit(sp, target);
                 ArmorAbilityHandler.onBloodDragonHit(sp, target);
+                MoreDragonChestplateAbilities.onHit(sp, target);
             }
             
             return ActionResult.PASS;
