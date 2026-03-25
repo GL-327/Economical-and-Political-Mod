@@ -101,7 +101,7 @@ final class MoreDragonChestplateAbilities {
     }
 
     private static void tickNewDragonChestplate(ServerPlayerEntity player, int index1Based) {
-        if (index1Based < 1 || index1Based > 60) return;
+        if (index1Based < 1 || index1Based > 80) return;
 
         int zeroBased = index1Based - 1;
         int effectIndex = zeroBased % NEW_EFFECT_CYCLE.length;

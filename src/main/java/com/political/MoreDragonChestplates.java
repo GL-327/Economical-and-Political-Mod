@@ -180,7 +180,12 @@ public final class MoreDragonChestplates {
             "Skyforge", "Stonepulse", "Starveil", "Thunderwake", "Ashbound", "Icelace",
             "Moonfall", "Dawnspire", "Runeclad", "Coralbrand", "Driftglass", "Venombloom",
             "Galeshard", "Nightflare", "Sunkenlord", "Blightward", "Voidpetal", "Silverscale",
-            "Cragwarden"
+            "Cragwarden",
+            "Rimevanguard", "Verdantwyrm", "Astralreef", "Emberlynx", "Nocturnespire",
+            "Skyscour", "Gravemoss", "Tempestine", "Vortexmantle", "Duskbloom"
+            ,
+            "Ashenwaltz", "Frostmantle", "Coralhymn", "Verdigrisheart", "Solarvortex",
+            "Moonkiln", "Dunewarden", "Stormcrown", "Obsidianring", "Thornhollow"
     };
 
     private static final String[] EFFECT_DISPLAY_CYCLE = {
@@ -200,7 +205,7 @@ public final class MoreDragonChestplates {
     private static int dyeRgbForNewChestplateIndex(int index1Based) {
         // Deterministic "HSV-ish" rainbow without extra deps.
         // Good variety for the GUI dye.
-        double t = (index1Based - 1) / 60.0;
+        double t = (index1Based - 1) / 80.0;
         double a = t * Math.PI * 2.0;
         int r = (int) Math.round(128 + 127 * Math.sin(a));
         int g = (int) Math.round(128 + 127 * Math.sin(a * 2.0 + 1.1));
@@ -222,11 +227,11 @@ public final class MoreDragonChestplates {
     }
 
     private static int armorForNewChestplate(int index1Based) {
-        return (index1Based <= 15) ? 17 : (index1Based <= 30) ? 18 : (index1Based <= 45) ? 19 : 20;
+        return (index1Based <= 20) ? 17 : (index1Based <= 40) ? 18 : (index1Based <= 60) ? 19 : 20;
     }
 
     private static int toughnessForNewChestplate(int index1Based) {
-        return (index1Based <= 15) ? 11 : (index1Based <= 30) ? 12 : (index1Based <= 45) ? 13 : 14;
+        return (index1Based <= 20) ? 11 : (index1Based <= 40) ? 12 : (index1Based <= 60) ? 13 : 14;
     }
 
     private static int intervalTicksForNewChestplate(int index1Based) {
@@ -246,7 +251,11 @@ public final class MoreDragonChestplates {
     }
 
     public static ItemStack createNewDragonChestplate(int index1Based) {
-        if (index1Based < 1 || index1Based > 60) throw new IllegalArgumentException("index1Based must be 1..60");
+        if (index1Based < 1 || index1Based > 80) throw new IllegalArgumentException("index1Based must be 1..80");
+        if (NEW_THEME_PREFIXES.length < index1Based) {
+            throw new IllegalStateException("NEW_THEME_PREFIXES missing entries for index " + index1Based
+                    + " (have " + NEW_THEME_PREFIXES.length + ")");
+        }
 
         String prefix = NEW_THEME_PREFIXES[index1Based - 1];
         Formatting nameColor = nameColorForNewChestplateIndex(index1Based);

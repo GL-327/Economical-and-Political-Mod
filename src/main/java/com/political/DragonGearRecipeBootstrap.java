@@ -24,7 +24,7 @@ public final class DragonGearRecipeBootstrap {
     }
 
     private static void ensureChestplateRecipes(Set<String> existingOutputIds) {
-        for (int i = 1; i <= 60; i++) {
+        for (int i = 1; i <= 80; i++) {
             ItemStack result = MoreDragonChestplates.createNewDragonChestplate(i);
             String id = SlayerItems.getCustomItemId(result);
             if (existingOutputIds.contains(id)) continue;
@@ -57,18 +57,20 @@ public final class DragonGearRecipeBootstrap {
     }
 
     private static void ensureSwordRecipes(Set<String> existingOutputIds) {
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= 45; i++) {
             ItemStack result = DragonSwords.createDragonSword(i);
             String id = SlayerItems.getCustomItemId(result);
             if (existingOutputIds.contains(id)) continue;
-            ItemStack core = (i <= 5) ? SlayerItems.createDragonCrafterCoreT1()
-                    : (i <= 10) ? SlayerItems.createDragonCrafterCoreT2()
+
+            ItemStack core = (i <= 15) ? SlayerItems.createDragonCrafterCoreT1()
+                    : (i <= 30) ? SlayerItems.createDragonCrafterCoreT2()
                     : SlayerItems.createDragonCrafterCoreT3();
 
+            // Crafted "the same as chestplates", but sword instead of chestplate ingredient.
             ItemStack[] ing = new ItemStack[] {
-                    s(Items.AIR), s(Items.DRAGON_EGG), s(Items.AIR),
-                    s(Items.AIR), core.copy(), s(Items.AIR),
-                    s(Items.AIR), s(Items.NETHERITE_SWORD), s(Items.BLAZE_ROD)
+                    s(Items.NETHERITE_INGOT), s(Items.DRAGON_EGG), s(Items.NETHERITE_INGOT),
+                    s(Items.DIAMOND), core.copy(), s(Items.DIAMOND),
+                    s(Items.NETHERITE_INGOT), s(Items.NETHERITE_SWORD), s(Items.NETHERITE_INGOT)
             };
             RecipeConfigManager.addCustomRecipe(new SlayerRecipes.Recipe(
                     "dragon_sword_" + String.format("%02d", i), result, ing, null, 0

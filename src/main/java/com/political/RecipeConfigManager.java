@@ -823,7 +823,10 @@ public class RecipeConfigManager {
 
         boolean looksLikeArmor = looksLikeBlockArmorCustomId(customId);
         boolean looksLikeTool = looksLikeBlockToolCustomId(customId);
-        if (!looksLikeArmor && !looksLikeTool) return stack;
+        boolean looksLikeDragonChestplate = looksLikeDragonChestplateCustomId(customId);
+        boolean looksLikeDragonSword = looksLikeDragonSwordCustomId(customId);
+        boolean looksLikeOmegaDragonCore = "dragon_crafter_core_omega".equals(customId);
+        if (!looksLikeArmor && !looksLikeTool && !looksLikeDragonChestplate && !looksLikeDragonSword && !looksLikeOmegaDragonCore) return stack;
 
         boolean missing;
         if (looksLikeArmor) {
@@ -833,6 +836,20 @@ public class RecipeConfigManager {
                     || stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS) == null
                     || stack.get(DataComponentTypes.MAX_DAMAGE) == null
                     || dyedColorMissing;
+        } else if (looksLikeDragonChestplate) {
+            missing = stack.get(DataComponentTypes.DYED_COLOR) == null
+                    || stack.get(DataComponentTypes.LORE) == null
+                    || stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS) == null
+                    || stack.get(DataComponentTypes.MAX_DAMAGE) == null
+                    || stack.get(DataComponentTypes.CUSTOM_NAME) == null;
+        } else if (looksLikeDragonSword) {
+            missing = stack.get(DataComponentTypes.LORE) == null
+                    || stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS) == null
+                    || stack.get(DataComponentTypes.MAX_DAMAGE) == null
+                    || stack.get(DataComponentTypes.CUSTOM_NAME) == null;
+        } else if (looksLikeOmegaDragonCore) {
+            missing = stack.get(DataComponentTypes.LORE) == null
+                    || stack.get(DataComponentTypes.CUSTOM_NAME) == null;
         } else {
             missing = stack.get(DataComponentTypes.LORE) == null
                     || stack.get(DataComponentTypes.MAX_DAMAGE) == null
@@ -862,6 +879,14 @@ public class RecipeConfigManager {
                 || customId.endsWith("_axe")
                 || customId.endsWith("_shovel")
                 || customId.endsWith("_hoe");
+    }
+
+    private static boolean looksLikeDragonChestplateCustomId(String customId) {
+        return DragonChestplateRegistry.isRegistered(customId);
+    }
+
+    private static boolean looksLikeDragonSwordCustomId(String customId) {
+        return customId != null && customId.startsWith("dragon_sword_");
     }
 
     private static ItemStack deserializeIngredient(com.google.gson.JsonElement elem) {
@@ -1013,6 +1038,61 @@ public class RecipeConfigManager {
         if ("dragon_crafter_core_t1".equals(customId)) return SlayerItems.createDragonCrafterCoreT1();
         if ("dragon_crafter_core_t2".equals(customId)) return SlayerItems.createDragonCrafterCoreT2();
         if ("dragon_crafter_core_t3".equals(customId)) return SlayerItems.createDragonCrafterCoreT3();
+        if ("dragon_crafter_core_omega".equals(customId)) return SlayerItems.createDragonCrafterCoreOmega();
+
+        // Dragon swords (dragon_sword_XX)
+        if (customId != null && customId.startsWith("dragon_sword_")) {
+            try {
+                int idx = Integer.parseInt(customId.substring("dragon_sword_".length()));
+                return DragonSwords.createDragonSword(idx);
+            } catch (Exception ignored) {
+            }
+        }
+
+        // New dragon chestplates (new_dragon_chestplate_XX)
+        if (customId != null && customId.startsWith("new_dragon_chestplate_")) {
+            try {
+                int idx = Integer.parseInt(customId.substring("new_dragon_chestplate_".length()));
+                return MoreDragonChestplates.createNewDragonChestplate(idx);
+            } catch (Exception ignored) {
+            }
+        }
+
+        // Omega dragon chestplates (omega_dragon_chestplate_X)
+        if (customId != null && customId.startsWith("omega_dragon_chestplate_")) {
+            try {
+                int idx = Integer.parseInt(customId.substring("omega_dragon_chestplate_".length()));
+                return MoreDragonChestplates.createOmegaDragonChestplate(idx);
+            } catch (Exception ignored) {
+            }
+        }
+
+        // Known fixed dragon chestplates
+        if ("inferno_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate1();
+        if ("storm_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate2();
+        if ("void_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate3();
+        if ("aurora_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateAurora();
+        if ("frost_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateFrost();
+        if ("venom_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateVenom();
+        if ("blood_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateBlood();
+        if ("eclipse_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateEclipse();
+
+        // Extended set (15)
+        if ("dune_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createDune();
+        if ("reef_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createReef();
+        if ("ember_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createEmber();
+        if ("crystal_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createCrystal();
+        if ("shadow_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createShadow();
+        if ("solar_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createSolar();
+        if ("lunar_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createLunar();
+        if ("terra_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createTerra();
+        if ("tempest_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createTempest();
+        if ("auric_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createAuric();
+        if ("glacier_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createGlacier();
+        if ("mire_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createMire();
+        if ("starfall_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createStarfall();
+        if ("mirage_dragon_chestplate".equals(customId)) return MoreDragonChestplates.createMirage();
+        if ("obsidian_wyrm_chestplate".equals(customId)) return MoreDragonChestplates.createObsidianWyrm();
         
         // Map custom IDs to item creation methods
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
