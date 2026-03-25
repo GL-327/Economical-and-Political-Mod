@@ -82,7 +82,7 @@ public class ShopManager {
 
         // ===== FOOD =====
         List<Item> food = Arrays.asList(
-                Items.APPLE, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE,
+                Items.APPLE, Items.GOLDEN_APPLE,
                 Items.BREAD, Items.WHEAT, Items.WHEAT_SEEDS,
                 Items.CARROT, Items.GOLDEN_CARROT, Items.POTATO, Items.BAKED_POTATO, Items.POISONOUS_POTATO,
                 Items.BEETROOT, Items.BEETROOT_SEEDS, Items.BEETROOT_SOUP,
@@ -107,13 +107,12 @@ public class ShopManager {
                 Items.GUNPOWDER, Items.SLIME_BALL, Items.SLIME_BLOCK,
                 Items.ENDER_PEARL, Items.ENDER_EYE,
                 Items.BLAZE_ROD, Items.BLAZE_POWDER, Items.GHAST_TEAR, Items.MAGMA_CREAM, Items.MAGMA_BLOCK,
-                Items.NETHER_STAR, Items.WITHER_SKELETON_SKULL,
                 Items.PRISMARINE_SHARD, Items.PRISMARINE_CRYSTALS, Items.SHULKER_SHELL, Items.PHANTOM_MEMBRANE,
                 Items.DRAGON_BREATH, Items.INK_SAC, Items.GLOW_INK_SAC,
                 Items.HONEYCOMB, Items.HONEYCOMB_BLOCK, Items.FERMENTED_SPIDER_EYE,
                 Items.TURTLE_SCUTE, Items.ARMADILLO_SCUTE, Items.GOAT_HORN,
-                Items.EXPERIENCE_BOTTLE, Items.TOTEM_OF_UNDYING, Items.TRIDENT,
-                Items.NAUTILUS_SHELL, Items.HEART_OF_THE_SEA, Items.TURTLE_EGG,
+                Items.EXPERIENCE_BOTTLE,
+                Items.NAUTILUS_SHELL, Items.TURTLE_EGG,
                 Items.WHITE_WOOL, Items.BLACK_WOOL, Items.COBWEB
         );
         CATEGORIES.put("Mob Drops", mobDrops);
@@ -158,7 +157,7 @@ public class ShopManager {
                 Items.CORNFLOWER, Items.LILY_OF_THE_VALLEY, Items.WITHER_ROSE, Items.TORCHFLOWER, Items.PITCHER_PLANT,
                 Items.SPORE_BLOSSOM, Items.SUNFLOWER, Items.LILAC, Items.ROSE_BUSH, Items.PEONY, Items.PINK_PETALS,
                 Items.BROWN_MUSHROOM, Items.RED_MUSHROOM, Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS,
-                Items.NETHER_WART, Items.CHORUS_FLOWER
+                Items.NETHER_WART, Items.SOUL_SAND, Items.CHORUS_FLOWER
         );
         CATEGORIES.put("Plants & Flowers", plantsFlowers);
 
@@ -197,7 +196,7 @@ public class ShopManager {
                 Items.RAIL, Items.POWERED_RAIL, Items.DETECTOR_RAIL, Items.ACTIVATOR_RAIL,
                 Items.CHEST, Items.ENDER_CHEST, Items.SHULKER_BOX, Items.WHITE_SHULKER_BOX, Items.BLACK_SHULKER_BOX,
                 Items.BUNDLE, Items.RECOVERY_COMPASS, Items.SPONGE, Items.WET_SPONGE,
-                Items.CONDUIT, Items.BEACON, Items.END_CRYSTAL, Items.RESPAWN_ANCHOR, Items.LODESTONE
+                Items.RESPAWN_ANCHOR, Items.LODESTONE
         );
         CATEGORIES.put("Miscellaneous", miscellaneous);
 
@@ -365,7 +364,7 @@ public class ShopManager {
         // ===== FOOD =====
         setPrice(Items.APPLE, 2);
         setPrice(Items.GOLDEN_APPLE, 10);
-        setPrice(Items.ENCHANTED_GOLDEN_APPLE, 2000);
+        // Boss/endgame items are intentionally NOT sold.
         setPrice(Items.BREAD, 2);
         setPrice(Items.WHEAT, 1);
         setPrice(Items.WHEAT_SEEDS, 1);
@@ -436,8 +435,8 @@ public class ShopManager {
         setPrice(Items.GHAST_TEAR, 30);
         setPrice(Items.MAGMA_CREAM, 10);
         setPrice(Items.MAGMA_BLOCK, 4);
-        setPrice(Items.NETHER_STAR, 1000);
-        setPrice(Items.WITHER_SKELETON_SKULL, 200);
+        // setPrice(Items.NETHER_STAR, ...)
+        // setPrice(Items.WITHER_SKELETON_SKULL, ...)
         setPrice(Items.PRISMARINE_SHARD, 3);
         setPrice(Items.PRISMARINE_CRYSTALS, 4);
         setPrice(Items.SHULKER_SHELL, 50);
@@ -453,10 +452,10 @@ public class ShopManager {
         setPrice(Items.ARMADILLO_SCUTE, 100);
         setPrice(Items.GOAT_HORN, 10);
         setPrice(Items.EXPERIENCE_BOTTLE, 15);
-        setPrice(Items.TOTEM_OF_UNDYING, 500);
-        setPrice(Items.TRIDENT, 400);
+        // setPrice(Items.TOTEM_OF_UNDYING, ...)
+        // setPrice(Items.TRIDENT, ...)
         setPrice(Items.NAUTILUS_SHELL, 5);
-        setPrice(Items.HEART_OF_THE_SEA, 50);
+        // setPrice(Items.HEART_OF_THE_SEA, ...)
         setPrice(Items.TURTLE_EGG, 5);
         setPrice(Items.WHITE_WOOL, 1);
         setPrice(Items.BLACK_WOOL, 1);
@@ -668,9 +667,9 @@ public class ShopManager {
         setPrice(Items.RECOVERY_COMPASS, 120);
         setPrice(Items.SPONGE, 100);
         setPrice(Items.WET_SPONGE, 90);
-        setPrice(Items.CONDUIT, 600);
-        setPrice(Items.BEACON, 1500);
-        setPrice(Items.END_CRYSTAL, 500);
+        // setPrice(Items.CONDUIT, ...)
+        // setPrice(Items.BEACON, ...)
+        // setPrice(Items.END_CRYSTAL, ...)
         setPrice(Items.RESPAWN_ANCHOR, 200);
         setPrice(Items.LODESTONE, 300);
 

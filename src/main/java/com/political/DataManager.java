@@ -341,6 +341,18 @@ public class DataManager {
         return new HashMap<>(data.playerNames);
     }
 
+    /**
+     * Returns all UUIDs that currently have bank-related state (main/savings/loans),
+     * even if they are not present in the player registry map.
+     */
+    public static java.util.Set<String> getAllBankAccountUuids() {
+        java.util.Set<String> out = new java.util.HashSet<>();
+        out.addAll(data.playerBankMain.keySet());
+        out.addAll(data.playerBankSavings.keySet());
+        out.addAll(data.playerBankLoans.keySet());
+        return out;
+    }
+
     // ============================================================
     // CREDITS SYSTEM (NON-PHYSICAL)
     // ============================================================

@@ -2179,10 +2179,10 @@ public class CommandRegistry {
     }
 
     // ============================================================
-    // VANISH COMMAND (OP Level 2)
+    // SOFT VANISH COMMAND (OP Level 2)
     // ============================================================
     private static void registerVanish(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("vanish")
+        dispatcher.register(CommandManager.literal("softvanish")
                 .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
                 .executes(ctx -> {
                     ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();

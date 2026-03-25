@@ -2,6 +2,7 @@ package com.political;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -13,6 +14,7 @@ import net.minecraft.util.Formatting;
 import java.util.List;
 
 public class ShopGui {
+    private static final String ENCHANTED_BOOKS_CATEGORY = "Enchanted Books";
 
     // ════════════════════════════════════════════════════════════
     // MAIN MENU - Category Selection
@@ -87,6 +89,16 @@ public class ShopGui {
                     .build());
         }
 
+        // Enchanted books (buy-only, expensive)
+        gui.setSlot(40, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("📘 Enchanted Books").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Buy specific max-level books").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Sell disabled").formatted(Formatting.DARK_RED))
+                .addLoreLine(Text.literal("Villagers are still cheaper").formatted(Formatting.DARK_GRAY))
+                .setCallback((i, t, a) -> openEnchantedBooksPage(player, 0))
+                .build());
+
         // Bottom row action buttons - improved layout
         gui.setSlot(47, new GuiElementBuilder(Items.HOPPER)
                 .setName(Text.literal("⚡ Quick Sell").formatted(Formatting.GREEN, Formatting.BOLD))
@@ -146,6 +158,90 @@ public class ShopGui {
                         player.sendMessage(Text.literal("✗ You have no credits to exchange!").formatted(Formatting.RED), false);
                     }
                 })
+                .build());
+
+        gui.open();
+    }
+
+    private static void openEnchantedBooksPage(ServerPlayerEntity player, int page) {
+        if (PoliticalServer.server == null) {
+            player.sendMessage(Text.literal("Server not ready.").formatted(Formatting.RED), false);
+            return;
+        }
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("📘 Enchanted Books — Page " + (page + 1)).formatted(Formatting.AQUA));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build());
+        }
+
+        var reg = PoliticalServer.server.getRegistryManager().getOrThrow(net.minecraft.registry.RegistryKeys.ENCHANTMENT);
+        java.util.List<net.minecraft.registry.entry.RegistryEntry<net.minecraft.enchantment.Enchantment>> enchants = new java.util.ArrayList<>();
+        reg.streamEntries().forEach(enchants::add);
+        enchants.sort(java.util.Comparator.comparing(a -> a.getKey().map(k -> k.getValue().toString()).orElse("")));
+
+        int perPage = 36;
+        int totalPages = Math.max(1, (enchants.size() + perPage - 1) / perPage);
+        int p = Math.min(Math.max(0, page), totalPages - 1);
+        int start = p * perPage;
+        int end = Math.min(start + perPage, enchants.size());
+
+        int slot = 9;
+        for (int idx = start; idx < end && slot < 45; idx++) {
+            var entry = enchants.get(idx);
+            var ench = entry.value();
+            int max = Math.max(1, ench.getMaxLevel());
+
+            ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+            var builder = new net.minecraft.component.type.ItemEnchantmentsComponent.Builder(
+                    book.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, net.minecraft.component.type.ItemEnchantmentsComponent.DEFAULT)
+            );
+            builder.add(entry, max);
+            book.set(DataComponentTypes.STORED_ENCHANTMENTS, builder.build());
+
+            int price = 2500 + (max * 1500);
+
+            gui.setSlot(slot, new GuiElementBuilder(book)
+                    .setName(Text.literal("Max book").formatted(Formatting.AQUA))
+                    .addLoreLine(Text.literal("Max level: " + max).formatted(Formatting.YELLOW))
+                    .addLoreLine(Text.literal("Price: " + price + " coins").formatted(Formatting.GOLD))
+                    .addLoreLine(Text.literal("Click to buy").formatted(Formatting.GREEN))
+                    .setCallback((s, ct, ac) -> {
+                        if (CoinManager.getCoins(player) < price) {
+                            player.sendMessage(Text.literal("Not enough coins.").formatted(Formatting.RED), false);
+                            return;
+                        }
+                        CoinManager.removeCoins(player, price);
+                        if (!player.getInventory().insertStack(book.copy())) {
+                            player.dropItem(book.copy(), false);
+                        }
+                        player.sendMessage(Text.literal("✓ Purchased enchanted book.").formatted(Formatting.GREEN), false);
+                    })
+                    .build());
+            slot++;
+            if (slot % 9 == 0) slot++; // keep in inner 8-wide area
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((s, t, a) -> openMainMenu(player))
+                .build());
+        if (p > 0) {
+            gui.setSlot(48, new GuiElementBuilder(Items.SPECTRAL_ARROW)
+                    .setName(Text.literal("◀ Prev").formatted(Formatting.AQUA))
+                    .setCallback((s, t, a) -> openEnchantedBooksPage(player, p - 1))
+                    .build());
+        }
+        if (p < totalPages - 1) {
+            gui.setSlot(50, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.literal("Next ▶").formatted(Formatting.AQUA))
+                    .setCallback((s, t, a) -> openEnchantedBooksPage(player, p + 1))
+                    .build());
+        }
+        gui.setSlot(53, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED, Formatting.BOLD))
+                .setCallback((s, t, a) -> gui.close())
                 .build());
 
         gui.open();

@@ -187,6 +187,11 @@ public class RecipeEditorGui {
                 items.add(CustomItemHandler.createHarveysStick());
                 items.add(CustomItemHandler.createHermesShoes());
                 items.add(DanielsPickaxe.create());
+                items.add(CustomItemHandler.createRiftMirror());
+                items.add(CustomItemHandler.createEmberSignet());
+                items.add(CustomItemHandler.createFrostboundTalisman());
+                items.add(CustomItemHandler.createEchoChime());
+                items.add(CustomItemHandler.createTerraRelay());
                 
                 // NEW BOSS DROPS
                 items.add(SlayerItems.createUndeadHeart());

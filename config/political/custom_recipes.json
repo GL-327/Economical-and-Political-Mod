@@ -84008,6 +84008,236 @@
         true,
         true
       ]
+    },
+    {
+      "name": "Rift Mirror",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:rift_mirror",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:amethyst_shard",
+          "count": 1
+        },
+        {
+          "id": "minecraft:ender_pearl",
+          "count": 1
+        },
+        {
+          "id": "minecraft:amethyst_shard",
+          "count": 1
+        },
+        "",
+        {
+          "id": "political:custom_crafter_core_t2",
+          "count": 1
+        },
+        "",
+        "",
+        {
+          "id": "minecraft:glass",
+          "count": 1
+        },
+        ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Ember Signet",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:ember_signet",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:blaze_powder",
+          "count": 1
+        },
+        {
+          "id": "minecraft:magma_cream",
+          "count": 1
+        },
+        {
+          "id": "minecraft:blaze_powder",
+          "count": 1
+        },
+        "",
+        {
+          "id": "political:custom_crafter_core_t2",
+          "count": 1
+        },
+        "",
+        "",
+        {
+          "id": "minecraft:gold_ingot",
+          "count": 1
+        },
+        ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Frostbound Talisman",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:frostbound_talisman",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:snowball",
+          "count": 1
+        },
+        {
+          "id": "minecraft:packed_ice",
+          "count": 1
+        },
+        {
+          "id": "minecraft:snowball",
+          "count": 1
+        },
+        "",
+        {
+          "id": "political:custom_crafter_core_t2",
+          "count": 1
+        },
+        "",
+        "",
+        {
+          "id": "minecraft:blue_ice",
+          "count": 1
+        },
+        ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Echo Chime",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:echo_chime",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:bell",
+          "count": 1
+        },
+        {
+          "id": "minecraft:echo_shard",
+          "count": 1
+        },
+        {
+          "id": "minecraft:bell",
+          "count": 1
+        },
+        "",
+        {
+          "id": "political:custom_crafter_core_t2",
+          "count": 1
+        },
+        "",
+        "",
+        {
+          "id": "minecraft:sculk_sensor",
+          "count": 1
+        },
+        ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Terra Relay",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "id": "political:terra_relay",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "id": "minecraft:moss_block",
+          "count": 1
+        },
+        {
+          "id": "minecraft:dirt",
+          "count": 1
+        },
+        {
+          "id": "minecraft:moss_block",
+          "count": 1
+        },
+        "",
+        {
+          "id": "political:custom_crafter_core_t2",
+          "count": 1
+        },
+        "",
+        "",
+        {
+          "id": "minecraft:bone_meal",
+          "count": 1
+        },
+        ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
     }
   ]
 }

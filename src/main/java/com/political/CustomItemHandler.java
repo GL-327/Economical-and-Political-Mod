@@ -68,6 +68,8 @@ public class CustomItemHandler {
     private static final Map<UUID, Boolean> berserkerHelmetActive = new HashMap<>();
     private static final Map<UUID, Long> berserkerWarningCooldown = new HashMap<>();
     private static final long WARNING_COOLDOWN_MS = 3000; // 3 seconds between warnings
+    private static final Map<UUID, Long> harveyStormcallCooldowns = new HashMap<>();
+    private static final Map<UUID, Long> relicCooldowns = new HashMap<>();
 
     public static boolean isInEnderPhaseMode(UUID uuid) {
         return false;
@@ -123,11 +125,31 @@ public class CustomItemHandler {
             ItemStack weapon = player.getStackInHand(hand);
             if (isHarveysStick(weapon) && entity instanceof LivingEntity target) {
                 if (target != player) {
-                    LightningEntity lightning = EntityType.LIGHTNING_BOLT.create((ServerWorld) world, SpawnReason.TRIGGERED);
+                    ServerWorld sw = (ServerWorld) world;
+
+                    // Primary strike
+                    LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(sw, SpawnReason.TRIGGERED);
                     if (lightning != null) {
                         lightning.setPosition(target.getX(), target.getY(), target.getZ());
-                        world.spawnEntity(lightning);
+                        sw.spawnEntity(lightning);
                     }
+
+                    // Chain arcs to nearby hostiles
+                    int zaps = 0;
+                    for (LivingEntity e : sw.getEntitiesByClass(LivingEntity.class, target.getBoundingBox().expand(6.0),
+                            e -> e != null && e.isAlive() && e != player && e != target && !(e instanceof net.minecraft.entity.player.PlayerEntity))) {
+                        LightningEntity chain = EntityType.LIGHTNING_BOLT.create(sw, SpawnReason.TRIGGERED);
+                        if (chain != null) {
+                            chain.setPosition(e.getX(), e.getY(), e.getZ());
+                            sw.spawnEntity(chain);
+                        }
+                        e.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 1, false, false, true));
+                        zaps++;
+                        if (zaps >= 4) break;
+                    }
+
+                    // Small cost so it isn't free DPS
+                    sp.addExhaustion(0.6f);
                 }
             }
             
@@ -188,6 +210,123 @@ public class CustomItemHandler {
                     return ActionResult.SUCCESS;
                 }
                 return ActionResult.FAIL;
+            }
+
+            // Harvey's Stick: Stormcall (right-click) — consumes 1 copper ingot
+            if (isHarveysStick(held)) {
+                long now = System.currentTimeMillis();
+                long last = harveyStormcallCooldowns.getOrDefault(serverPlayer.getUuid(), 0L);
+                if (now - last < 8000L) { // 8s cooldown
+                    return ActionResult.FAIL;
+                }
+                if (!consumeOne(serverPlayer, Items.COPPER_INGOT)) {
+                    serverPlayer.sendMessage(Text.literal("⚡ Stormcall requires 1 Copper Ingot.").formatted(Formatting.RED), true);
+                    return ActionResult.FAIL;
+                }
+
+                harveyStormcallCooldowns.put(serverPlayer.getUuid(), now);
+                serverPlayer.getItemCooldownManager().set(held, 160); // 8s
+
+                ServerWorld sw = (ServerWorld) world;
+                Vec3d start = serverPlayer.getEyePos();
+                Vec3d dir = serverPlayer.getRotationVec(1.0f).normalize();
+                Vec3d center = start.add(dir.multiply(28.0));
+
+                int strikes = 0;
+                Box area = new Box(center.subtract(6, 4, 6), center.add(6, 4, 6));
+                for (LivingEntity e : sw.getEntitiesByClass(LivingEntity.class, area,
+                        e -> e != null && e.isAlive() && !(e instanceof net.minecraft.entity.player.PlayerEntity))) {
+                    LightningEntity bolt = EntityType.LIGHTNING_BOLT.create(sw, SpawnReason.TRIGGERED);
+                    if (bolt != null) {
+                        bolt.setPosition(e.getX(), e.getY(), e.getZ());
+                        sw.spawnEntity(bolt);
+                    }
+                    e.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 60, 0, false, false, true));
+                    strikes++;
+                    if (strikes >= 8) break;
+                }
+
+                sw.spawnParticles(ParticleTypes.ELECTRIC_SPARK, center.x, center.y, center.z, 35, 1.8, 1.0, 1.8, 0.08);
+                sw.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(),
+                        SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.PLAYERS, 0.7f, 1.2f);
+
+                // Drawback: brief frailty after calling the storm
+                serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0, true, false, false));
+                serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 0, true, false, false));
+                return ActionResult.SUCCESS;
+            }
+
+            // ── Relic items (modern special items) ─────────────────────────────
+            String cid = SlayerItems.getCustomItemId(held);
+            if (cid != null && (cid.equals("rift_mirror") || cid.equals("ember_signet") || cid.equals("frostbound_talisman")
+                    || cid.equals("echo_chime") || cid.equals("terra_relay"))) {
+                long now = System.currentTimeMillis();
+                long last = relicCooldowns.getOrDefault(serverPlayer.getUuid(), 0L);
+                if (now - last < 6000L) { // shared 6s cooldown
+                    return ActionResult.FAIL;
+                }
+                relicCooldowns.put(serverPlayer.getUuid(), now);
+                serverPlayer.getItemCooldownManager().set(held, 120);
+
+                if ("rift_mirror".equals(cid)) {
+                    if (!consumeOne(serverPlayer, Items.ENDER_PEARL)) {
+                        serverPlayer.sendMessage(Text.literal("Requires 1 Ender Pearl.").formatted(Formatting.RED), true);
+                        return ActionResult.FAIL;
+                    }
+                    Vec3d dir = serverPlayer.getRotationVec(1.0f).normalize();
+                    Vec3d dest = new Vec3d(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ()).add(dir.multiply(24.0));
+                    serverPlayer.teleport((ServerWorld) world, dest.x, dest.y, dest.z, Set.of(), serverPlayer.getYaw(), serverPlayer.getPitch(), true);
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 60, 0, true, false, false));
+                    world.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(),
+                            SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                    return ActionResult.SUCCESS;
+                }
+                if ("ember_signet".equals(cid)) {
+                    if (!consumeOne(serverPlayer, Items.BLAZE_POWDER)) {
+                        serverPlayer.sendMessage(Text.literal("Requires 1 Blaze Powder.").formatted(Formatting.RED), true);
+                        return ActionResult.FAIL;
+                    }
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 240, 0, true, false, false));
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 160, 1, true, false, false));
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 60, 0, true, false, false));
+                    world.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(),
+                            SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 0.8f, 1.2f);
+                    return ActionResult.SUCCESS;
+                }
+                if ("frostbound_talisman".equals(cid)) {
+                    if (!consumeOne(serverPlayer, Items.SNOWBALL)) {
+                        serverPlayer.sendMessage(Text.literal("Requires 1 Snowball.").formatted(Formatting.RED), true);
+                        return ActionResult.FAIL;
+                    }
+                    ServerWorld sw = (ServerWorld) world;
+                    for (LivingEntity e : sw.getEntitiesByClass(LivingEntity.class, serverPlayer.getBoundingBox().expand(5.0),
+                            e -> e != null && e.isAlive() && !(e instanceof net.minecraft.entity.player.PlayerEntity))) {
+                        e.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 80, 1, false, false, true));
+                    }
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 120, 1, true, false, false));
+                    sw.spawnParticles(ParticleTypes.SNOWFLAKE, serverPlayer.getX(), serverPlayer.getY() + 0.8, serverPlayer.getZ(),
+                            25, 1.5, 0.6, 1.5, 0.02);
+                    return ActionResult.SUCCESS;
+                }
+                if ("echo_chime".equals(cid)) {
+                    if (!consumeOne(serverPlayer, Items.ECHO_SHARD)) {
+                        serverPlayer.sendMessage(Text.literal("Requires 1 Echo Shard.").formatted(Formatting.RED), true);
+                        return ActionResult.FAIL;
+                    }
+                    fireSonicBoom(serverPlayer, world);
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 40, 0, true, false, false));
+                    return ActionResult.SUCCESS;
+                }
+                if ("terra_relay".equals(cid)) {
+                    if (!consumeOne(serverPlayer, Items.DIRT)) {
+                        serverPlayer.sendMessage(Text.literal("Requires 1 Dirt.").formatted(Formatting.RED), true);
+                        return ActionResult.FAIL;
+                    }
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 240, 1, true, false, false));
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 80, 0, true, false, false));
+                    serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 60, 0, true, false, false));
+                    return ActionResult.SUCCESS;
+                }
             }
 
             // Echoing Core: Sonic Boom
@@ -880,6 +1019,19 @@ public class CustomItemHandler {
         return stack.isOf(Items.STICK) && hasCustomTag(stack, "harveys_stick");
     }
 
+    private static boolean consumeOne(ServerPlayerEntity player, Item item) {
+        var inv = player.getInventory();
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack st = inv.getStack(i);
+            if (!st.isEmpty() && st.isOf(item)) {
+                st.decrement(1);
+                inv.markDirty();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isTheGavel(ItemStack stack) {
         return stack.isOf(Items.MACE) && hasCustomTag(stack, "the_gavel");
     }
@@ -1224,13 +1376,18 @@ public class CustomItemHandler {
                 Text.literal("Harvey's Stick").formatted(Formatting.GOLD, Formatting.BOLD));
         stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
                 Text.literal(""),
-                Text.literal("◆ LEGENDARY WEAPON ◆").formatted(Formatting.GOLD, Formatting.BOLD),
+                Text.literal("◆ LEGENDARY — STORM RELIC ◆").formatted(Formatting.GOLD, Formatting.BOLD),
                 Text.literal(""),
-                Text.literal("Attack: Lightning Strike").formatted(Formatting.YELLOW),
-                Text.literal("  └ Summons lightning on hit").formatted(Formatting.GRAY),
+                Text.literal("Attack: Chain Lightning").formatted(Formatting.YELLOW),
+                Text.literal("  └ Strikes target + arcs to nearby hostiles").formatted(Formatting.GRAY),
+                Text.literal(""),
+                Text.literal("Right-click: Stormcall").formatted(Formatting.AQUA),
+                Text.literal("  └ Calls lightning in an area at your aim point").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Copper Ingot").formatted(Formatting.GRAY),
+                Text.literal("  └ 8s cooldown").formatted(Formatting.DARK_GRAY),
                 Text.literal(""),
                 Text.literal("Damage: ").formatted(Formatting.GRAY)
-                        .append(Text.literal("Lightning Strike").formatted(Formatting.RED, Formatting.BOLD)),
+                        .append(Text.literal("Lightning").formatted(Formatting.RED, Formatting.BOLD)),
                 Text.literal(""),
                 Text.literal("§8[MFLUX: Contractor-issued armament | CRD-experimental]").formatted(Formatting.DARK_GRAY),
                 Text.literal("「Unique」").formatted(Formatting.GOLD)
@@ -1287,6 +1444,118 @@ public class CustomItemHandler {
         )));
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
         SlayerItems.setCustomItemId(stack, "hermes_shoes");
+        return stack;
+    }
+
+    // ── Modern relic items ───────────────────────────────────────────────────
+
+    public static ItemStack createRiftMirror() {
+        ItemStack stack = new ItemStack(Items.AMETHYST_SHARD);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("rift_mirror", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Rift Mirror").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ LEGENDARY — SPACE RELIC ◆").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Right-click: Blink").formatted(Formatting.AQUA),
+                Text.literal("  └ Teleports you forward").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Ender Pearl").formatted(Formatting.GRAY),
+                Text.literal("  └ Shared relic cooldown").formatted(Formatting.DARK_GRAY),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.LIGHT_PURPLE)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "rift_mirror");
+        return stack;
+    }
+
+    public static ItemStack createEmberSignet() {
+        ItemStack stack = new ItemStack(Items.BLAZE_POWDER);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("ember_signet", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Ember Signet").formatted(Formatting.GOLD, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ LEGENDARY — FIRE SEAL ◆").formatted(Formatting.GOLD, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Right-click: Ember Oath").formatted(Formatting.AQUA),
+                Text.literal("  └ Strength + Fire Resistance").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Blaze Powder").formatted(Formatting.GRAY),
+                Text.literal("  └ Drawback: brief weakness").formatted(Formatting.DARK_RED),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.GOLD)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "ember_signet");
+        return stack;
+    }
+
+    public static ItemStack createFrostboundTalisman() {
+        ItemStack stack = new ItemStack(Items.SNOWBALL);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("frostbound_talisman", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Frostbound Talisman").formatted(Formatting.AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ LEGENDARY — ICE CHARM ◆").formatted(Formatting.AQUA, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Right-click: Permafrost Pulse").formatted(Formatting.AQUA),
+                Text.literal("  └ Slows nearby hostiles").formatted(Formatting.GRAY),
+                Text.literal("  └ Grants Absorption").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Snowball").formatted(Formatting.DARK_GRAY),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.AQUA)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "frostbound_talisman");
+        return stack;
+    }
+
+    public static ItemStack createEchoChime() {
+        ItemStack stack = new ItemStack(Items.BELL);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("echo_chime", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Echo Chime").formatted(Formatting.DARK_AQUA, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ LEGENDARY — SONIC RELIC ◆").formatted(Formatting.DARK_AQUA, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Right-click: Resonant Blast").formatted(Formatting.AQUA),
+                Text.literal("  └ Sonic boom line attack").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Echo Shard").formatted(Formatting.DARK_GRAY),
+                Text.literal("  └ Drawback: brief darkness").formatted(Formatting.DARK_RED),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.DARK_AQUA)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "echo_chime");
+        return stack;
+    }
+
+    public static ItemStack createTerraRelay() {
+        ItemStack stack = new ItemStack(Items.MOSS_BLOCK);
+        NbtCompound nbt = new NbtCompound();
+        nbt.putByte("terra_relay", (byte) 1);
+        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Terra Relay").formatted(Formatting.GREEN, Formatting.BOLD));
+        stack.set(DataComponentTypes.LORE, new LoreComponent(List.of(
+                Text.literal(""),
+                Text.literal("◆ LEGENDARY — EARTH NODE ◆").formatted(Formatting.GREEN, Formatting.BOLD),
+                Text.literal(""),
+                Text.literal("Right-click: Root Drive").formatted(Formatting.AQUA),
+                Text.literal("  └ Haste + small regen").formatted(Formatting.GRAY),
+                Text.literal("  └ Consumes 1 Dirt").formatted(Formatting.DARK_GRAY),
+                Text.literal("  └ Drawback: brief fatigue").formatted(Formatting.DARK_RED),
+                Text.literal(""),
+                Text.literal("「Unique」").formatted(Formatting.GREEN)
+        )));
+        stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        SlayerItems.setCustomItemId(stack, "terra_relay");
         return stack;
     }
 

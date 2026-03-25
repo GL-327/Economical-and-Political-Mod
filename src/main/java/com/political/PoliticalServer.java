@@ -405,8 +405,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     }
 
     private static void applyBankInterest(MinecraftServer server) {
-        for (Map.Entry<String, String> entry : DataManager.getAllPlayers().entrySet()) {
-            String uuid = entry.getKey();
+        for (String uuid : DataManager.getAllBankAccountUuids()) {
             java.util.UUID playerUUID;
             try {
                 playerUUID = java.util.UUID.fromString(uuid);
@@ -507,6 +506,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 break;
             }
         }
+
+        // Persist hourly interest so it survives restarts/crashes.
+        DataManager.save(server);
     }
 
     public static boolean isAnyBeamWeapon(ItemStack stack) {

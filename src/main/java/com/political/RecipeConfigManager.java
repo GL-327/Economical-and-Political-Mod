@@ -32,14 +32,29 @@ import java.util.Map;
 public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    /** Primary path — Fabric config dir (matches dedicated server and dev run). */
-    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
-    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
+    /** Canonical path in the server root (works on real servers and in dev from the project root). */
+    private static final Path CANONICAL_DIR = Path.of("config", "political");
+    private static final Path CANONICAL_FILE = CANONICAL_DIR.resolve("custom_recipes.json");
+
+    /** Fabric config dir (dev runs use run/config; dedicated server uses config). */
+    private static final Path FABRIC_CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
+    private static final Path FABRIC_CONFIG_FILE = FABRIC_CONFIG_DIR.resolve("custom_recipes.json");
+
+    /**
+     * The file we read/write as the source of truth.
+     * Prefer the canonical server-root config file, falling back to Fabric's config dir.
+     */
+    private static final Path CONFIG_FILE =
+            Files.exists(CANONICAL_FILE) || !Files.exists(FABRIC_CONFIG_FILE) ? CANONICAL_FILE : FABRIC_CONFIG_FILE;
+    private static final Path CONFIG_DIR = CONFIG_FILE.getParent();
     // Modular recipe file path (unused but kept for potential future use)
     private static final java.nio.file.Path MODULAR_FILE = CONFIG_DIR.resolve("modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
-    /** Optional mirror (cwd) when it differs from Fabric config — keeps repo / IDE copy in sync with /setrecipe. */
-    private static final Path RECIPE_JSON_MIRROR = Path.of("config", "political", "custom_recipes.json");
+    /** Mirror to keep both locations in sync when they differ. */
+    private static final Path RECIPE_JSON_MIRROR =
+            CONFIG_FILE.toAbsolutePath().normalize().equals(CANONICAL_FILE.toAbsolutePath().normalize())
+                    ? FABRIC_CONFIG_FILE
+                    : CANONICAL_FILE;
 
     static {
         boolean fileExists = java.nio.file.Files.exists(CONFIG_FILE);
@@ -51,12 +66,12 @@ public class RecipeConfigManager {
         try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
             GSON.toJson(root, writer);
         }
+        // Mirror to the "other" location so dev + dedicated server stay consistent.
         if (!CONFIG_FILE.toAbsolutePath().normalize().equals(RECIPE_JSON_MIRROR.toAbsolutePath().normalize())) {
             Files.createDirectories(RECIPE_JSON_MIRROR.getParent());
             try (Writer writer = Files.newBufferedWriter(RECIPE_JSON_MIRROR)) {
                 GSON.toJson(root, writer);
             }
-            System.out.println("[RecipeConfigManager] Mirrored recipes to " + RECIPE_JSON_MIRROR.toAbsolutePath());
         }
     }
 
@@ -1534,6 +1549,11 @@ public class RecipeConfigManager {
         // Special Items
         if ("the_gavel".equals(customId)) return CustomItemHandler.createTheGavel();
         if ("harveys_stick".equals(customId)) return CustomItemHandler.createHarveysStick();
+        if ("rift_mirror".equals(customId)) return CustomItemHandler.createRiftMirror();
+        if ("ember_signet".equals(customId)) return CustomItemHandler.createEmberSignet();
+        if ("frostbound_talisman".equals(customId)) return CustomItemHandler.createFrostboundTalisman();
+        if ("echo_chime".equals(customId)) return CustomItemHandler.createEchoChime();
+        if ("terra_relay".equals(customId)) return CustomItemHandler.createTerraRelay();
         if ("hermes_shoes".equals(customId)) return CustomItemHandler.createHermesShoes();
         if ("daniels_pickaxe".equals(customId)) return DanielsPickaxe.create();
         

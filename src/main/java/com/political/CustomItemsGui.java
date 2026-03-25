@@ -573,6 +573,11 @@ public class CustomItemsGui {
                 items.add(CustomItemHandler.createHarveysStick());
                 items.add(CustomItemHandler.createHermesShoes());
                 items.add(DanielsPickaxe.create());
+                items.add(CustomItemHandler.createRiftMirror());
+                items.add(CustomItemHandler.createEmberSignet());
+                items.add(CustomItemHandler.createFrostboundTalisman());
+                items.add(CustomItemHandler.createEchoChime());
+                items.add(CustomItemHandler.createTerraRelay());
             }
             case CUSTOM_TOOLS -> {
                 // 15 NEW LEGENDARY TOOL SETS

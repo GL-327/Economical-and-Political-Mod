@@ -419,17 +419,17 @@ public class DanielsPickaxe {
     private static void breakBlockWithAutoSmelt(ServerPlayerEntity player, ServerWorld world, BlockPos pos, BlockState state, ItemStack tool) {
         Block block = state.getBlock();
 
-        // Check for auto-smelt
+        // Always break without world drops, then route drops into inventory (fallback: ground).
+        world.breakBlock(pos, false);
+
+        // Auto-smelt in tunnel mode for mapped ores.
         if (isAbilityActive(player.getUuid()) && SMELT_RESULTS.containsKey(block)) {
-            // Drop the smelted result instead
             net.minecraft.item.Item smeltedResult = SMELT_RESULTS.get(block);
             if (smeltedResult != Items.AIR) {
-                // Break the block and drop smelted item
-                world.breakBlock(pos, false);
-                net.minecraft.item.ItemStack drop = new net.minecraft.item.ItemStack(smeltedResult);
-                Block.dropStack(world, pos, drop);
-
-                // Particles for auto-smelt effect
+                ItemStack drop = new ItemStack(smeltedResult);
+                if (!player.getInventory().insertStack(drop)) {
+                    Block.dropStack(world, pos, drop);
+                }
                 world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME,
                         pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                         5, 0.3, 0.3, 0.3, 0.05);
@@ -437,8 +437,13 @@ public class DanielsPickaxe {
             }
         }
 
-        // Normal break
-        world.breakBlock(pos, true);
+        // Normal drops routed to inventory.
+        var drops = Block.getDroppedStacks(state, world, pos, null, player, tool);
+        for (ItemStack drop : drops) {
+            if (!player.getInventory().insertStack(drop)) {
+                Block.dropStack(world, pos, drop);
+            }
+        }
     }
 
     private static boolean isOreBlock(Block block) {
