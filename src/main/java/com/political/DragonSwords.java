@@ -28,7 +28,11 @@ public final class DragonSwords {
             "Crownspire", "Emberlynx", "Skyforged", "Runeclad", "Moonfall",
             "Dreadreef", "Thorncrown", "Stonepulse", "Starveil", "Arcaneharbor",
             "Auricwave", "Verdantwyrm", "Glacierkin", "Swampmender", "Vortexmantle",
-            "Duskbloom", "Rimevanguard", "Nightflare", "Cragwarden", "Obsidianveil"
+            "Duskbloom", "Rimevanguard", "Nightflare", "Cragwarden", "Obsidianveil",
+
+            // Extra sword themes so indices can reach 1..55.
+            "Cindervein", "Frostwarden", "Tideweaver", "Reefgloom", "Voidbastion",
+            "Auroraforge", "Verdantlore", "Obsidianrelic", "Glowstar", "Runehaven"
     };
 
     private static final Formatting[] COLORS = {
@@ -45,6 +49,13 @@ public final class DragonSwords {
             "Blindness", "Hunger", "Nausea", "Levitation", "Darkness"
     };
 
+    static String themeForSwordIndex(int index1Based) {
+        int i = index1Based - 1;
+        if (i >= 0 && i < THEMES.length) return THEMES[i];
+        // Should never happen because we cap index1Based to 1..55
+        return "DrakeVariant" + index1Based;
+    }
+
     public static ItemStack createDragonSword(int index1Based) {
         if (index1Based < 1 || index1Based > 55) throw new IllegalArgumentException("index1Based must be 1..55");
         int i = index1Based - 1;
@@ -54,7 +65,7 @@ public final class DragonSwords {
 
         ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
         String customId = String.format("dragon_sword_%02d", index1Based);
-        String theme = i < THEMES.length ? THEMES[i] : "DrakeVariant" + index1Based;
+        String theme = themeForSwordIndex(index1Based);
         String title = "⚔ " + theme + " Dragon Sword";
         String debuffName = DEBUFF_NAMES[within];
 

@@ -185,7 +185,13 @@ public final class MoreDragonChestplates {
             "Skyscour", "Gravemoss", "Tempestine", "Vortexmantle", "Duskbloom"
             ,
             "Ashenwaltz", "Frostmantle", "Coralhymn", "Verdigrisheart", "Solarvortex",
-            "Moonkiln", "Dunewarden", "Stormcrown", "Obsidianring", "Thornhollow"
+            "Moonkiln", "Dunewarden", "Stormcrown", "Obsidianring", "Thornhollow",
+
+            // Extra themes so new chestplates can reach the full 1..95 range.
+            "Cinderchime", "Emberhollow", "Frostsear", "Glacierbastion", "Tidemorrow",
+            "Reefmosaic", "Prismrelic", "Nightguardian", "Bloomflare", "Ironrootspring",
+            "Stormcoda", "Thundercoil", "Venomwhorl", "Bloodsable", "Eclipsetide",
+            "Voidwreath", "Obsidianrelay", "Terrafernsong", "Starshard"
     };
 
     private static final String[] EFFECT_DISPLAY_CYCLE = {
@@ -205,12 +211,19 @@ public final class MoreDragonChestplates {
     private static int dyeRgbForNewChestplateIndex(int index1Based) {
         // Deterministic "HSV-ish" rainbow without extra deps.
         // Good variety for the GUI dye.
-        double t = (index1Based - 1) / 80.0;
+        double t = (index1Based - 1) / 95.0;
         double a = t * Math.PI * 2.0;
         int r = (int) Math.round(128 + 127 * Math.sin(a));
         int g = (int) Math.round(128 + 127 * Math.sin(a * 2.0 + 1.1));
         int b = (int) Math.round(128 + 127 * Math.sin(a * 3.0 + 2.2));
         return (clampRgb(r) << 16) | (clampRgb(g) << 8) | clampRgb(b);
+    }
+
+    static String themePrefixForNewChestplateIndex(int index1Based) {
+        if (index1Based < 1) return "DrakeVariant" + index1Based;
+        int zeroBased = index1Based - 1;
+        if (zeroBased < NEW_THEME_PREFIXES.length) return NEW_THEME_PREFIXES[zeroBased];
+        return "DrakeVariant" + index1Based;
     }
 
     private static Formatting nameColorForNewChestplateIndex(int index1Based) {
@@ -254,9 +267,7 @@ public final class MoreDragonChestplates {
         if (index1Based < 1 || index1Based > 95) throw new IllegalArgumentException("index1Based must be 1..95");
 
         // Avoid hard crashes if the prefix list is shorter than the index range.
-        String prefix = (index1Based - 1) < NEW_THEME_PREFIXES.length
-                ? NEW_THEME_PREFIXES[index1Based - 1]
-                : "DrakeVariant" + index1Based;
+        String prefix = themePrefixForNewChestplateIndex(index1Based);
         Formatting nameColor = nameColorForNewChestplateIndex(index1Based);
         int dyeRgb = dyeRgbForNewChestplateIndex(index1Based);
 

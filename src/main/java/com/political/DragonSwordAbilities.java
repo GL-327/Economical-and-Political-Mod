@@ -60,13 +60,13 @@ public final class DragonSwordAbilities {
             case 0 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, duration, debuffAmp, false, true, true));
             case 1 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, duration, debuffAmp, false, true, true));
             case 2 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, duration, debuffAmp, false, true, true));
-            case 3 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 60 + tier * 20, 0, false, true, true));
-            case 4 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 40 + tier * 10, 0, false, true, true));
+            case 3 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 60 + tierScaled * 20, 0, false, true, true));
+            case 4 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 40 + tierScaled * 10, 0, false, true, true));
             case 5 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 60 + tier * 10, debuffAmp, false, true, true));
             case 6 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, duration, debuffAmp, false, true, true));
-            case 7 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 60 + tier * 10, debuffAmp, false, true, true));
+            case 7 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 60 + tierScaled * 10, debuffAmp, false, true, true));
             case 8 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 40 + tier * 5, 0, false, true, true));
-            case 9 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60 + tier * 10, debuffAmp, false, true, true));
+            case 9 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60 + tierScaled * 10, debuffAmp, false, true, true));
             default -> { }
         }
 

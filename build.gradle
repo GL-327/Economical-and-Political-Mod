@@ -67,6 +67,43 @@ tasks.register('syncPoliticalRecipeConfig', Copy) {
 tasks.named('runClient').configure { dependsOn tasks.named('syncPoliticalRecipeConfig') }
 tasks.named('runServer').configure { dependsOn tasks.named('syncPoliticalRecipeConfig') }
 
+// Ensure dedicated-server required files exist for dev launch.
+tasks.register('ensureDevServerFiles') {
+	onlyIf { return true }
+	doLast {
+		def runDir = file('run')
+		runDir.mkdirs()
+
+		def serverProps = file('run/server.properties')
+		if (!serverProps.exists()) {
+			serverProps.text = """\
+server-port=25565
+max-players=20
+view-distance=8
+simulation-distance=4
+spawn-protection=0
+level-name=world
+online-mode=false
+allow-flight=true
+motd=PoliticalServer
+enable-rcon=false
+"""
+		}
+
+		def eulaFile = file('run/eula.txt')
+		if (!eulaFile.exists()) {
+			eulaFile.text = "eula=true\n"
+		} else {
+			// Force acceptance for dev launches.
+			if (!eulaFile.text.toLowerCase().contains("eula=true")) {
+				eulaFile.text = "eula=true\n"
+			}
+		}
+	}
+}
+
+tasks.named('runServer').configure { dependsOn tasks.named('ensureDevServerFiles') }
+
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
 }

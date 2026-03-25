@@ -273,6 +273,89 @@ public class RecipeConfigManager {
         addCustomRecipeInternal(recipe, true, false);
     }
 
+    /** Bulk upsert for server bootstrap: writes JSON once, no log spam, does not auto-register. */
+    public static void upsertCustomRecipesSilent(List<SlayerRecipes.Recipe> recipes) {
+        if (recipes == null || recipes.isEmpty()) return;
+
+        try {
+            // Load existing recipes from disk
+            Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
+            if (Files.exists(CONFIG_FILE)) {
+                String jsonString = Files.readString(CONFIG_FILE);
+                JsonObject existing = GSON.fromJson(jsonString, JsonObject.class);
+                if (existing != null && existing.has("recipes")) {
+                    JsonArray arr = existing.getAsJsonArray("recipes");
+                    for (var elem : arr) {
+                        JsonObject obj = elem.getAsJsonObject();
+                        if (obj.has("name")) {
+                            existingRecipes.put(obj.get("name").getAsString(), obj);
+                        }
+                    }
+                }
+            }
+
+            // Determine all custom outputs we are going to replace.
+            java.util.Set<String> newOutputIds = new java.util.HashSet<>();
+            for (SlayerRecipes.Recipe r : recipes) {
+                String outId = SlayerItems.getCustomItemId(r.result);
+                if (outId != null && !outId.isBlank()) newOutputIds.add(outId);
+            }
+
+            // Remove any existing recipe whose output custom id matches.
+            for (java.util.Iterator<Map.Entry<String, JsonObject>> it = existingRecipes.entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, JsonObject> entry = it.next();
+                JsonObject recipeObj = entry.getValue();
+                if (!recipeObj.has("result")) continue;
+
+                try {
+                    ItemStack existingResult = deserializeStack(recipeObj.get("result"));
+                    String existingOutputId = SlayerItems.getCustomItemId(existingResult);
+                    if (existingOutputId != null && newOutputIds.contains(existingOutputId)) {
+                        it.remove();
+                        continue;
+                    }
+                } catch (Exception ignored) {
+                    // Fallback below for malformed entries.
+                }
+
+                // Fallback string-based match for legacy malformed entries.
+                try {
+                    JsonObject resultObj = recipeObj.getAsJsonObject("result");
+                    if (resultObj != null && resultObj.has("nbt")) {
+                        String nbt = resultObj.get("nbt").getAsString();
+                        for (String oid : newOutputIds) {
+                            if (nbt.contains("custom_item_id\":\"" + oid + "\"") || nbt.contains("custom_id\":\"" + oid + "\"")) {
+                                it.remove();
+                                break;
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {
+                    // ignore malformed recipe object
+                }
+            }
+
+            // Add all new/updated recipes
+            for (SlayerRecipes.Recipe r : recipes) {
+                existingRecipes.put(r.name, serialize(r));
+            }
+
+            // Save back to file once
+            JsonArray recipesArr = new JsonArray();
+            for (JsonObject obj : existingRecipes.values()) recipesArr.add(obj);
+
+            JsonObject root = new JsonObject();
+            root.add("recipes", recipesArr);
+
+            writeRecipeJsonRoot(root);
+            invalidateRecipeCache();
+
+        } catch (Exception e) {
+            // Bootstrap should never hard-crash the server because of recipe file I/O.
+            System.err.println("[RecipeConfigManager] Bulk upsert failed: " + e.getMessage());
+        }
+    }
+
     private static void addCustomRecipeInternal(SlayerRecipes.Recipe recipe, boolean silent, boolean registerNow) {
         try {
             // Load existing recipes from disk
