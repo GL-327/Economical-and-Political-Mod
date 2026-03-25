@@ -924,6 +924,8 @@ public class RecipeConfigManager {
         boolean looksLikeDragonChestplate = looksLikeDragonChestplateCustomId(customId);
         boolean looksLikeDragonSword = looksLikeDragonSwordCustomId(customId);
         boolean looksLikeOmegaDragonCore = "dragon_crafter_core_omega".equals(customId);
+        boolean forceRebuildDragonGear =
+                (customId != null && (customId.startsWith("new_dragon_chestplate_") || customId.startsWith("omega_dragon_chestplate_")));
         if (!looksLikeArmor && !looksLikeTool && !looksLikeDragonChestplate && !looksLikeDragonSword && !looksLikeOmegaDragonCore) return stack;
 
         boolean missing;
@@ -954,7 +956,7 @@ public class RecipeConfigManager {
                     || stack.get(DataComponentTypes.CUSTOM_NAME) == null;
         }
 
-        if (!missing) return stack;
+        if (!missing && !forceRebuildDragonGear) return stack;
 
         ItemStack rebuilt = resolveCustomItem(customId);
         return (rebuilt == null || rebuilt.isEmpty()) ? stack : rebuilt;

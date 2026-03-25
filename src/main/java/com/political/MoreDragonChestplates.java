@@ -204,6 +204,88 @@ public final class MoreDragonChestplates {
             "Ash", "End Rod", "Electric Spark", "Wax On", "Snowflake", "Large Smoke"
     };
 
+    private static List<Text> abilityLinesForBaseChestplate(int index1Based) {
+        // Distribute the 15 "classic" dragon chestplate abilities across the expanded set.
+        int base = (index1Based - 1) % 15;
+        return switch (base) {
+            case 0 -> L(
+                    Text.literal("✦ Desert flight: hunger drains while airborne").formatted(Formatting.YELLOW),
+                    Text.literal("✦ Speed & haste on sand").formatted(Formatting.GREEN),
+                    Text.literal("✦ Mining fatigue away from sand").formatted(Formatting.RED)
+            );
+            case 1 -> L(
+                    Text.literal("✦ Water breathing & dolphin grace in water").formatted(Formatting.AQUA),
+                    Text.literal("✦ Flight only above sea level — drowns faster if starving").formatted(Formatting.YELLOW),
+                    Text.literal("✦ Slowness on dry land (heavy scales)").formatted(Formatting.RED)
+            );
+            case 2 -> L(
+                    Text.literal("✦ Short flight: burns you unless sneaking").formatted(Formatting.GOLD),
+                    Text.literal("✦ Fire affinity + strength when not burning").formatted(Formatting.RED),
+                    Text.literal("✦ Ash trail (cosmetic)").formatted(Formatting.DARK_GRAY)
+            );
+            case 3 -> L(
+                    Text.literal("✦ No flight — prism shield").formatted(Formatting.LIGHT_PURPLE),
+                    Text.literal("✦ Resistance + thorns-style chip damage to attackers").formatted(Formatting.AQUA),
+                    Text.literal("✦ Shatter sparks at feet").formatted(Formatting.GRAY)
+            );
+            case 4 -> L(
+                    Text.literal("✦ Night flight: weakness I while flying").formatted(Formatting.DARK_PURPLE),
+                    Text.literal("✦ Speed & darkness immunity at low light").formatted(Formatting.GRAY),
+                    Text.literal("✦ Glowing in direct sunlight").formatted(Formatting.YELLOW)
+            );
+            case 5 -> L(
+                    Text.literal("✦ Day flight: hunger cost + brief nausea when landing hard").formatted(Formatting.GOLD),
+                    Text.literal("✦ Strength in daylight").formatted(Formatting.RED),
+                    Text.literal("✦ Slowness I at night").formatted(Formatting.BLUE)
+            );
+            case 6 -> L(
+                    Text.literal("✦ Night-only creative flight").formatted(Formatting.AQUA),
+                    Text.literal("✦ Regeneration under moonlight — weakness by day").formatted(Formatting.LIGHT_PURPLE),
+                    Text.literal("✦ Star wisps behind you").formatted(Formatting.GRAY)
+            );
+            case 7 -> L(
+                    Text.literal("✦ Hover-flight on natural blocks only (grass/dirt)").formatted(Formatting.GREEN),
+                    Text.literal("✦ Mining fatigue in air when not over earth").formatted(Formatting.RED),
+                    Text.literal("✦ Bonemeal pulse hurts undead nearby").formatted(Formatting.GOLD)
+            );
+            case 8 -> L(
+                    Text.literal("✦ Rain/thunder flight — raw damage from clear skies").formatted(Formatting.AQUA),
+                    Text.literal("✦ Chain slow to nearby hostiles in storms").formatted(Formatting.YELLOW),
+                    Text.literal("✦ Static sparks (subtle)").formatted(Formatting.GRAY)
+            );
+            case 9 -> L(
+                    Text.literal("✦ Greedy flight: loses saturation quickly").formatted(Formatting.YELLOW),
+                    Text.literal("✦ Luck + looting aura (weak regen when full hunger)").formatted(Formatting.GREEN),
+                    Text.literal("✦ Withering pulse when starving").formatted(Formatting.DARK_RED)
+            );
+            case 10 -> L(
+                    Text.literal("✦ No flight — frost nova aura").formatted(Formatting.AQUA),
+                    Text.literal("✦ Slowness to attackers; stride on ice").formatted(Formatting.BLUE),
+                    Text.literal("✦ Melts in Nether (slowness II)").formatted(Formatting.RED)
+            );
+            case 11 -> L(
+                    Text.literal("✦ No flight: poison mastery").formatted(Formatting.DARK_GREEN),
+                    Text.literal("✦ Hunger foes on hit — you take hunger in dry biomes").formatted(Formatting.RED),
+                    Text.literal("✦ Swamp spore trail").formatted(Formatting.GRAY)
+            );
+            case 12 -> L(
+                    Text.literal("✦ Elytra-like boosts + brief creative flight (cooldown)").formatted(Formatting.LIGHT_PURPLE),
+                    Text.literal("✦ After flight: levitation junk debuffs").formatted(Formatting.RED),
+                    Text.literal("✦ End rod meteors at feet").formatted(Formatting.DARK_PURPLE)
+            );
+            case 13 -> L(
+                    Text.literal("✦ Desert-day flight + short nausea when dodging").formatted(Formatting.YELLOW),
+                    Text.literal("✦ Invisibility flash while sprinting on sand").formatted(Formatting.GREEN),
+                    Text.literal("✦ Blindness near cold biomes").formatted(Formatting.BLUE)
+            );
+            default -> L(
+                    Text.literal("✦ Slow flight — resistance III but heavy hunger").formatted(Formatting.DARK_PURPLE),
+                    Text.literal("✦ Blast & knockback resistance vibes").formatted(Formatting.GRAY),
+                    Text.literal("✦ Obsidian dust at heels").formatted(Formatting.DARK_GRAY)
+            );
+        };
+    }
+
     private static int clampRgb(int v) {
         return Math.max(0, Math.min(255, v));
     }
@@ -271,18 +353,13 @@ public final class MoreDragonChestplates {
         Formatting nameColor = nameColorForNewChestplateIndex(index1Based);
         int dyeRgb = dyeRgbForNewChestplateIndex(index1Based);
 
-        String effectName = EFFECT_DISPLAY_CYCLE[(index1Based - 1) % EFFECT_DISPLAY_CYCLE.length];
-        int amplifier = amplifierForNewChestplate(index1Based);
-        int interval = intervalTicksForNewChestplate(index1Based);
-        int duration = durationTicksForNewChestplate(index1Based);
-        String particleName = PARTICLE_DISPLAY_CYCLE[particleCycleIndexForNewChestplate(index1Based)];
-
         String customId = customIdForNewChestplate(index1Based);
 
         int armor = armorForNewChestplate(index1Based);
         int toughness = toughnessForNewChestplate(index1Based);
 
-        String title = "✦ " + prefix + " Dragon Chestplate #" + index1Based;
+        String title = "✦ " + prefix + " Dragon Chestplate";
+        List<Text> abilityLines = abilityLinesForBaseChestplate(index1Based);
 
         return base(
                 title,
@@ -291,12 +368,7 @@ public final class MoreDragonChestplates {
                 customId,
                 armor,
                 toughness,
-                L(
-                        Text.literal("✦ Always-on draconic flight").formatted(Formatting.GREEN),
-                        Text.literal("✦ Grants §e" + effectName + " §r(Amp " + amplifier + ")").formatted(Formatting.YELLOW),
-                        Text.literal("✦ Refresh: every §b" + interval + "t §rfor §d" + duration + "t (" + particleName + " trail)").formatted(Formatting.AQUA),
-                        Text.literal("✦ Drawback: brief strain on refresh (keeps it balanced)").formatted(Formatting.DARK_RED)
-                )
+                abilityLines
         );
     }
 
@@ -315,42 +387,42 @@ public final class MoreDragonChestplates {
 
         return switch (index1Based) {
             case 1 -> base(
-                    "⚙ Omega Bulwark Chestplate",
+                    "✶ Omega Bulwark Chestplate",
                     Formatting.GOLD,
                     0xFFB300,
                     customId,
                     armor,
                     toughness,
                     L(
-                            Text.literal("✦ Omega Core: boosts Resilience").formatted(Formatting.GOLD),
-                            Text.literal("✦ Strong Resist every 30t (Amp 2+)").formatted(Formatting.YELLOW),
-                            Text.literal("✦ Occasional Weakness strain (balanced debuff)").formatted(Formatting.RED)
+                            Text.literal("✦ Omega Core: unlocks the Bulwark Protocol").formatted(Formatting.GOLD),
+                            Text.literal("✦ While flying: Resistance + burst Regeneration (very strong)").formatted(Formatting.YELLOW),
+                            Text.literal("✦ Drawback: health is capped to 1 heart while airborne").formatted(Formatting.RED)
                     )
             );
             case 2 -> base(
-                    "⚙ Omega Aegisweave Chestplate",
+                    "✶ Omega Aegisweave Chestplate",
                     Formatting.LIGHT_PURPLE,
                     0xB48CFF,
                     customId,
                     armor,
                     toughness,
                     L(
-                            Text.literal("✦ Omega Core: boosts Durability").formatted(Formatting.GOLD),
-                            Text.literal("✦ Absorption surges frequently (Amp 4)").formatted(Formatting.YELLOW),
-                            Text.literal("✦ Occasional Slowness strain (balanced debuff)").formatted(Formatting.RED)
+                            Text.literal("✦ Omega Core: unlocks the Aegis-Weave Engine").formatted(Formatting.GOLD),
+                            Text.literal("✦ While flying: Absorption surges + thermal protection (very strong)").formatted(Formatting.YELLOW),
+                            Text.literal("✦ Drawback: health is capped to 1 heart while airborne").formatted(Formatting.RED)
                     )
             );
             case 3 -> base(
-                    "⚙ Omega Draconic Prism Chestplate",
+                    "✶ Omega Draconic Prism Chestplate",
                     Formatting.AQUA,
                     0x38BDF8,
                     customId,
                     armor,
                     toughness,
                     L(
-                            Text.literal("✦ Omega Core: boosts Vision + Fire Immunity").formatted(Formatting.GOLD),
-                            Text.literal("✦ Night Vision + Fire Resistance (stacked)").formatted(Formatting.YELLOW),
-                            Text.literal("✦ Occasional Darkness strain (balanced debuff)").formatted(Formatting.RED)
+                            Text.literal("✦ Omega Core: unlocks the Prism Ascension").formatted(Formatting.GOLD),
+                            Text.literal("✦ While flying: Night Vision + Haste + Strength (very strong)").formatted(Formatting.YELLOW),
+                            Text.literal("✦ Drawback: health is capped to 1 heart while airborne").formatted(Formatting.RED)
                     )
             );
             default -> throw new IllegalArgumentException("Invalid omega index");

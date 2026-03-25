@@ -12,10 +12,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Tracks the last 30 lootable containers a player opened for admin review (/view ... prevchests).
+ * Tracks recently opened lootable containers a player opened for admin review (/view ... prevchests).
  */
 public final class ChestAccessHistory {
-    public static final int MAX_ENTRIES = 30;
+    public static final int MAX_ENTRIES = 150;
 
     public static final class Entry {
         public final long tick;

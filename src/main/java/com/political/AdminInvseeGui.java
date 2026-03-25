@@ -98,10 +98,11 @@ public final class AdminInvseeGui {
             int g = guiSlotForMain(inv);
             if (g >= 0) bindInvSlot(gui, admin, target, inv, g, () -> drawPlayerInventory(gui, admin, target));
         }
-        bindInvSlot(gui, admin, target, 36, 32, () -> drawPlayerInventory(gui, admin, target));
-        bindInvSlot(gui, admin, target, 37, 23, () -> drawPlayerInventory(gui, admin, target));
-        bindInvSlot(gui, admin, target, 38, 14, () -> drawPlayerInventory(gui, admin, target));
-        bindInvSlot(gui, admin, target, 39, 5, () -> drawPlayerInventory(gui, admin, target));
+        // Armor order in GUI: helmet (top) -> boots (bottom)
+        bindInvSlot(gui, admin, target, 36, 5, () -> drawPlayerInventory(gui, admin, target));
+        bindInvSlot(gui, admin, target, 37, 14, () -> drawPlayerInventory(gui, admin, target));
+        bindInvSlot(gui, admin, target, 38, 23, () -> drawPlayerInventory(gui, admin, target));
+        bindInvSlot(gui, admin, target, 39, 32, () -> drawPlayerInventory(gui, admin, target));
         bindInvSlot(gui, admin, target, 40, 49, () -> drawPlayerInventory(gui, admin, target));
     }
 

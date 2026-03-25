@@ -119,6 +119,21 @@ public class ArmorAbilityHandler {
                 grantFallImmunity(uuid);
             }
             previousFlying.put(uuid, false);
+
+            // Restore max health when flight is disabled so the "flight debuff"
+            // only applies while the player is actually flying.
+            ServerWorld world = (ServerWorld) player.getEntityWorld();
+            float targetHealth = world.isThundering() ? 48f : 24f;
+            if (player.getMaxHealth() != targetHealth) {
+                player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
+                if (player.getHealth() < targetHealth) {
+                    player.setHealth(targetHealth);
+                } else if (player.getHealth() > targetHealth) {
+                    player.setHealth(targetHealth);
+                }
+            }
+            previousMaxHealth.put(uuid, targetHealth);
+
             player.sendAbilitiesUpdate();
             return;
         }
@@ -1174,6 +1189,10 @@ public class ArmorAbilityHandler {
         float targetMax = 30f;
         if (world.getRegistryKey() == World.END) {
             targetMax = 60f; // 2x health in The End
+        }
+        // Flight drawback: keep the same 1-heart (2 HP) cap while airborne.
+        if (world.getRegistryKey() == World.END && player.getAbilities().flying) {
+            targetMax = 2f;
         }
         if (player.getMaxHealth() != targetMax) {
             player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetMax);

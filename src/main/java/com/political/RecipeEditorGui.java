@@ -175,6 +175,7 @@ public class RecipeEditorGui {
                 items.add(SlayerItems.createDragonCrafterCoreT1());
                 items.add(SlayerItems.createDragonCrafterCoreT2());
                 items.add(SlayerItems.createDragonCrafterCoreT3());
+                items.add(SlayerItems.createDragonCrafterCoreOmega());
             }
             case HPEBM -> {
                 for (int mk = 1; mk <= 5; mk++)

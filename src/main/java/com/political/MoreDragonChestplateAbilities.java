@@ -118,29 +118,26 @@ final class MoreDragonChestplateAbilities {
     private static void tickNewDragonChestplate(ServerPlayerEntity player, int index1Based) {
         if (index1Based < 1 || index1Based > 95) return;
 
-        int zeroBased = index1Based - 1;
-        int effectIndex = zeroBased % NEW_EFFECT_CYCLE.length;
-        net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> effect = NEW_EFFECT_CYCLE[effectIndex];
-        int amplifier = Math.min(zeroBased / NEW_EFFECT_CYCLE.length, 3); // capped for balance
-        int interval = 30 + (zeroBased % 7) * 5; // 30..60
-        int duration = 160 + (zeroBased % 5) * 20; // 160..240
-
-        net.minecraft.particle.ParticleEffect particle = NEW_PARTICLE_CYCLE[effectIndex];
-        int stride = 6 + ((zeroBased + effectIndex) % 8);
-
-        ArmorAbilityHandler.applyConditionalCreativeFlight(player, true);
-        if (player.age % interval == 0) {
-            player.addStatusEffect(new StatusEffectInstance(effect, duration, amplifier, true, false, false));
-
-            // Drawback: a short strain debuff to keep the chestplates balanced.
-            net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> drawback =
-                    NEW_DRAWBACK_CYCLE[effectIndex % NEW_DRAWBACK_CYCLE.length];
-            int drawbackAmp = Math.max(0, amplifier - 1);
-            int drawbackDuration = Math.max(40, duration / 3);
-            player.addStatusEffect(new StatusEffectInstance(drawback, drawbackDuration, drawbackAmp, true, false, false));
+        // Map the expanded numbered set onto the original 15 "classic" ability patterns.
+        // This makes the numbered chestplates feel consistent with the non-numbered ones.
+        int base = (index1Based - 1) % 15;
+        switch (base) {
+            case 0 -> tickDune(player);
+            case 1 -> tickReef(player);
+            case 2 -> tickEmber(player);
+            case 3 -> tickCrystal(player);
+            case 4 -> tickShadow(player);
+            case 5 -> tickSolar(player);
+            case 6 -> tickLunar(player);
+            case 7 -> tickTerra(player);
+            case 8 -> tickTempest(player);
+            case 9 -> tickAuric(player);
+            case 10 -> tickGlacier(player);
+            case 11 -> tickMire(player);
+            case 12 -> tickStarfall(player);
+            case 13 -> tickMirage(player);
+            default -> tickObsidianWyrm(player);
         }
-        ServerWorld world = (ServerWorld) player.getEntityWorld();
-        trailFeet(player, world, particle, stride);
     }
 
     private static boolean playerHasOmegaCore(ServerPlayerEntity player) {
@@ -161,58 +158,63 @@ final class MoreDragonChestplateAbilities {
 
         ArmorAbilityHandler.applyConditionalCreativeFlight(player, true);
         ServerWorld world = (ServerWorld) player.getEntityWorld();
+        if (!player.getAbilities().flying) {
+            // Focus omega power on actual flight; health cap is already handled by applyConditionalCreativeFlight.
+            return;
+        }
 
         switch (index1Based) {
             case 1 -> {
-                // Omega Bulwark: Resilience (+ weakness strain)
-                net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> strong = StatusEffects.RESISTANCE;
-                net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> weak = StatusEffects.RESISTANCE;
-                int strongAmp = 2;
-                int weakAmp = 0;
-                int interval = omegaEnabled ? 30 : 45;
-                int duration = omegaEnabled ? 240 : 160;
+                // Omega Bulwark: Resistance + burst regeneration (no extra debuffs; health cap is the drawback).
+                int interval = omegaEnabled ? 25 : 40;
+                int duration = omegaEnabled ? 260 : 180;
+                int resAmp = omegaEnabled ? 4 : 1;
+                int regenAmp = omegaEnabled ? 1 : 0;
+
                 if (player.age % interval == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(
-                            strong, duration, omegaEnabled ? strongAmp : weakAmp, true, false, false
-                    ));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, duration, resAmp, true, false, false));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 160, regenAmp, true, false, false));
                 }
-                if (omegaEnabled && player.age % 90 == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 60, 0, true, false, false));
+                // Light offensive assist while empowered.
+                if (omegaEnabled && player.age % (interval + 10) == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 120, 1, true, false, false));
                 }
+
                 trailFeet(player, world, ParticleTypes.ENCHANT, 9);
             }
             case 2 -> {
-                // Omega Aegisweave: Absorption (+ slow strain)
-                int interval = omegaEnabled ? 25 : 45;
-                int duration = omegaEnabled ? 240 : 160;
-                int amp = omegaEnabled ? 4 : 1;
+                // Omega Aegisweave: Absorption surges + fire-grade protection (few drawbacks; health cap is the drawback).
+                int interval = omegaEnabled ? 20 : 40;
+                int duration = omegaEnabled ? 260 : 180;
+                int absAmp = omegaEnabled ? 8 : 2;
+
                 if (player.age % interval == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.ABSORPTION, duration, amp, true, false, false
-                    ));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, duration, absAmp, true, false, false));
                 }
-                if (omegaEnabled && player.age % 75 == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 80, 1, true, false, false));
+
+                if (player.age % (interval + 35) == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 220, 0, true, false, false));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 220, 0, true, false, false));
                 }
+
                 trailFeet(player, world, ParticleTypes.CRIT, 8);
             }
             case 3 -> {
-                // Omega Prism: Vision + Fire immunity (+ darkness strain)
-                int interval = omegaEnabled ? 30 : 45;
-                int duration = omegaEnabled ? 240 : 160;
-                int visionAmp = omegaEnabled ? 2 : 0;
-                int fireAmp = omegaEnabled ? 1 : 0;
+                // Omega Draconic Prism: Vision + haste + combat buffs (no extra debuffs; health cap is the drawback).
+                int interval = omegaEnabled ? 25 : 45;
+                int duration = omegaEnabled ? 260 : 180;
+
                 if (player.age % interval == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.NIGHT_VISION, duration, visionAmp, true, false, false
-                    ));
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.FIRE_RESISTANCE, duration, fireAmp, true, false, false
-                    ));
+                    int visionAmp = omegaEnabled ? 3 : 1;
+                    int hasteAmp = omegaEnabled ? 2 : 0;
+                    int strengthAmp = omegaEnabled ? 2 : 0;
+
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, duration, visionAmp, true, false, false));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, duration, hasteAmp, true, false, false));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, duration, strengthAmp, true, false, false));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 220, 0, true, false, false));
                 }
-                if (omegaEnabled && player.age % 90 == 0) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 0, true, false, false));
-                }
+
                 trailFeet(player, world, ParticleTypes.CLOUD, 8);
             }
             default -> {
