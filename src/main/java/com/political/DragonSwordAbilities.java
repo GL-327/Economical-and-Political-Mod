@@ -16,7 +16,7 @@ public final class DragonSwordAbilities {
         String id = SlayerItems.getCustomItemId(held);
         if (id == null || !id.startsWith("dragon_sword_")) return;
         int idx = parseIndex(id);
-        if (idx < 1 || idx > 45) return;
+        if (idx < 1 || idx > 55) return;
 
         if (player.age % 14 != 0) return;
         int tier = (idx - 1) / 10;    // 0..4
@@ -44,7 +44,7 @@ public final class DragonSwordAbilities {
         String id = SlayerItems.getCustomItemId(weapon);
         if (id == null || !id.startsWith("dragon_sword_")) return;
         int idx = parseIndex(id);
-        if (idx < 1 || idx > 45) return;
+        if (idx < 1 || idx > 55) return;
 
         int tier = (idx - 1) / 10;    // 0..4
         int within = (idx - 1) % 10; // 0..9
@@ -68,6 +68,15 @@ public final class DragonSwordAbilities {
             case 8 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 40 + tier * 5, 0, false, true, true));
             case 9 -> target.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60 + tier * 10, debuffAmp, false, true, true));
             default -> { }
+        }
+
+        // Extra drawback for higher sword tiers (subtle, balanced).
+        if (tier >= 4) {
+            if (within % 2 == 0) {
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 0, false, true, true));
+            } else {
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 40, 0, false, true, true));
+            }
         }
 
         // Self-debuff to prevent overpowered stacking.

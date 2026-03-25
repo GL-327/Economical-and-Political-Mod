@@ -43,7 +43,7 @@ public final class DragonChestplateRegistry {
                 "obsidian_wyrm_chestplate");
 
         // New set (35) - generated for easier maintenance.
-        for (int i = 1; i <= 80; i++) {
+        for (int i = 1; i <= 95; i++) {
             IDS.add(String.format("new_dragon_chestplate_%02d", i));
         }
         // Omega set (3)
@@ -96,7 +96,7 @@ public final class DragonChestplateRegistry {
         out.add(MoreDragonChestplates.createMirage());
         out.add(MoreDragonChestplates.createObsidianWyrm());
 
-        for (int i = 1; i <= 80; i++) {
+        for (int i = 1; i <= 95; i++) {
             out.add(MoreDragonChestplates.createNewDragonChestplate(i));
         }
         for (int i = 1; i <= 3; i++) {

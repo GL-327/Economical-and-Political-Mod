@@ -263,8 +263,17 @@ public class RecipeConfigManager {
         return new ArrayList<>(getRecipesCached("crafting"));
     }
 
-    /** Adds or updates a custom recipe override directly to JSON file */
+    /** Adds or updates a custom recipe override directly to JSON file (logs + registers immediately). */
     public static void addCustomRecipe(SlayerRecipes.Recipe recipe) {
+        addCustomRecipeInternal(recipe, false, true);
+    }
+
+    /** Silent variant for server bootstrap (no log spam, no immediate register). */
+    public static void addCustomRecipeSilent(SlayerRecipes.Recipe recipe) {
+        addCustomRecipeInternal(recipe, true, false);
+    }
+
+    private static void addCustomRecipeInternal(SlayerRecipes.Recipe recipe, boolean silent, boolean registerNow) {
         try {
             // Load existing recipes from disk
             Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
@@ -318,27 +327,33 @@ public class RecipeConfigManager {
 
             // Add new recipe
             existingRecipes.put(recipe.name, serialize(recipe));
-            
+
             // Save back to file
             JsonArray recipesArr = new JsonArray();
             for (JsonObject obj : existingRecipes.values()) {
                 recipesArr.add(obj);
             }
-            
+
             JsonObject root = new JsonObject();
             root.add("recipes", recipesArr);
-            
+
             writeRecipeJsonRoot(root);
-            
-            System.out.println("[RecipeConfigManager] /setrecipe: OK | Wrote '" + recipe.name + "' (" + removed + " replaced)");
-            
+
+            if (!silent) {
+                System.out.println("[RecipeConfigManager] /setrecipe: OK | Wrote '" + recipe.name + "' (" + removed + " replaced)");
+            }
+
             // Force cache refresh on next access
             invalidateRecipeCache();
-            SlayerRecipes.registerRecipes();
-            
+            if (registerNow) {
+                SlayerRecipes.registerRecipes();
+            }
+
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to save recipe: " + e.getMessage());
-            e.printStackTrace();
+            if (!silent) {
+                System.err.println("[RecipeConfigManager] Failed to save recipe: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

@@ -243,7 +243,7 @@ public final class MoreDragonChestplates {
     }
 
     private static int amplifierForNewChestplate(int index1Based) {
-        return (index1Based - 1) / 12; // 0..2
+        return Math.min((index1Based - 1) / 12, 3); // capped for balance
     }
 
     private static int particleCycleIndexForNewChestplate(int index1Based) {
@@ -251,13 +251,12 @@ public final class MoreDragonChestplates {
     }
 
     public static ItemStack createNewDragonChestplate(int index1Based) {
-        if (index1Based < 1 || index1Based > 80) throw new IllegalArgumentException("index1Based must be 1..80");
-        if (NEW_THEME_PREFIXES.length < index1Based) {
-            throw new IllegalStateException("NEW_THEME_PREFIXES missing entries for index " + index1Based
-                    + " (have " + NEW_THEME_PREFIXES.length + ")");
-        }
+        if (index1Based < 1 || index1Based > 95) throw new IllegalArgumentException("index1Based must be 1..95");
 
-        String prefix = NEW_THEME_PREFIXES[index1Based - 1];
+        // Avoid hard crashes if the prefix list is shorter than the index range.
+        String prefix = (index1Based - 1) < NEW_THEME_PREFIXES.length
+                ? NEW_THEME_PREFIXES[index1Based - 1]
+                : "DrakeVariant" + index1Based;
         Formatting nameColor = nameColorForNewChestplateIndex(index1Based);
         int dyeRgb = dyeRgbForNewChestplateIndex(index1Based);
 
@@ -284,7 +283,8 @@ public final class MoreDragonChestplates {
                 L(
                         Text.literal("✦ Always-on draconic flight").formatted(Formatting.GREEN),
                         Text.literal("✦ Grants §e" + effectName + " §r(Amp " + amplifier + ")").formatted(Formatting.YELLOW),
-                        Text.literal("✦ Refresh: every §b" + interval + "t §rfor §d" + duration + "t (" + particleName + " trail)").formatted(Formatting.AQUA)
+                        Text.literal("✦ Refresh: every §b" + interval + "t §rfor §d" + duration + "t (" + particleName + " trail)").formatted(Formatting.AQUA),
+                        Text.literal("✦ Drawback: brief strain on refresh (keeps it balanced)").formatted(Formatting.DARK_RED)
                 )
         );
     }

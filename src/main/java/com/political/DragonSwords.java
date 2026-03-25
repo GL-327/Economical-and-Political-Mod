@@ -46,19 +46,16 @@ public final class DragonSwords {
     };
 
     public static ItemStack createDragonSword(int index1Based) {
-        if (index1Based < 1 || index1Based > 45) throw new IllegalArgumentException("index1Based must be 1..45");
+        if (index1Based < 1 || index1Based > 55) throw new IllegalArgumentException("index1Based must be 1..55");
         int i = index1Based - 1;
-        if (THEMES.length < index1Based) {
-            throw new IllegalStateException("THEMES missing entries for sword index " + index1Based
-                    + " (have " + THEMES.length + ")");
-        }
         int tier = i / 10;        // 0..4
         int within = i % 10;     // 0..9
         int tierScaled = Math.min(tier, 3); // cap power scaling
 
         ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
         String customId = String.format("dragon_sword_%02d", index1Based);
-        String title = "⚔ " + THEMES[i] + " Dragon Sword";
+        String theme = i < THEMES.length ? THEMES[i] : "DrakeVariant" + index1Based;
+        String title = "⚔ " + theme + " Dragon Sword";
         String debuffName = DEBUFF_NAMES[within];
 
         sword.set(DataComponentTypes.CUSTOM_NAME,
@@ -100,7 +97,7 @@ public final class DragonSwords {
 
     public static List<ItemStack> allStacks() {
         List<ItemStack> out = new ArrayList<>();
-        for (int i = 1; i <= 45; i++) out.add(createDragonSword(i));
+        for (int i = 1; i <= 55; i++) out.add(createDragonSword(i));
         return out;
     }
 }

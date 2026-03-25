@@ -24,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -85,34 +84,17 @@ public class EnchantmentScreenHandlerMixin {
                 if (perkMultiplier != 1.0f) {
                     base = Math.max(1, (int) Math.ceil(base * perkMultiplier));
                 }
-                // Scale costs up to reflect that higher-level enchantments are being given
-                this.enchantmentPower[i] = (int) Math.ceil(base * ENCHANT_COST_MULTIPLIER);
+                // Scale costs + level strength so both the UI and the actual applied enchantment match.
+                // Vanilla uses enchantmentPower for both generation and application; if we only boosted the
+                // returned list, the UI could show higher levels while the item still receives vanilla-capped levels.
+                this.enchantmentPower[i] = (int) Math.ceil(base * ENCHANT_COST_MULTIPLIER * ENCHANT_LEVEL_MULTIPLIER);
             }
         }
 
         political_lastMultiplier = perkMultiplier;
 
-        // ── Boost enchantment levels in the returned list ──────────────────
-        List<EnchantmentLevelEntry> original = cir.getReturnValue();
-        if (original == null || original.isEmpty()) return;
-
-        List<EnchantmentLevelEntry> boosted = new ArrayList<>(original.size());
-        for (EnchantmentLevelEntry entry : original) {
-            RegistryEntry<Enchantment> enchantEntry = entry.enchantment();
-            Enchantment enchantment = enchantEntry.value();
-            int vanillaMaxLevel = enchantment.getMaxLevel();
-            int currentLevel = entry.level();
-
-            // Boost the level up to ENCHANT_LEVEL_MULTIPLIER × vanilla max
-            int boostedMax = (int) Math.ceil(vanillaMaxLevel * ENCHANT_LEVEL_MULTIPLIER);
-            int newLevel = Math.min(
-                    (int) Math.ceil(currentLevel * ENCHANT_LEVEL_MULTIPLIER),
-                    boostedMax
-            );
-            newLevel = Math.max(1, newLevel); // never go below 1
-            boosted.add(new EnchantmentLevelEntry(enchantEntry, newLevel));
-        }
-        cir.setReturnValue(boosted);
+        // Note: do not further boost the returned list here.
+        // enchantmentPower scaling above keeps UI + applied levels in sync.
     }
 
     @Unique
@@ -125,7 +107,7 @@ public class EnchantmentScreenHandlerMixin {
             if (perkMultiplier != 1.0f) {
                 base = (int) Math.ceil(base * perkMultiplier);
             }
-            int expected = (int) Math.ceil(base * ENCHANT_COST_MULTIPLIER);
+            int expected = (int) Math.ceil(base * ENCHANT_COST_MULTIPLIER * ENCHANT_LEVEL_MULTIPLIER);
             if (this.enchantmentPower[i] != expected && political_originalPower[i] > 0) {
                 return false; // Values are fresh, not yet modified
             }

@@ -42,6 +42,21 @@ final class MoreDragonChestplateAbilities {
             StatusEffects.SLOW_FALLING
     };
 
+    private static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>[] NEW_DRAWBACK_CYCLE = new net.minecraft.registry.entry.RegistryEntry[]{
+            StatusEffects.HUNGER,
+            StatusEffects.SLOWNESS,
+            StatusEffects.WEAKNESS,
+            StatusEffects.WITHER,
+            StatusEffects.POISON,
+            StatusEffects.BLINDNESS,
+            StatusEffects.WEAKNESS,
+            StatusEffects.NAUSEA,
+            StatusEffects.MINING_FATIGUE,
+            StatusEffects.SLOW_FALLING, // intentional fatigue-style strain
+            StatusEffects.HUNGER,
+            StatusEffects.BLINDNESS
+    };
+
     private static final net.minecraft.particle.ParticleEffect[] NEW_PARTICLE_CYCLE = new net.minecraft.particle.ParticleEffect[]{
             ParticleTypes.CRIT,
             ParticleTypes.ENCHANT,
@@ -101,12 +116,12 @@ final class MoreDragonChestplateAbilities {
     }
 
     private static void tickNewDragonChestplate(ServerPlayerEntity player, int index1Based) {
-        if (index1Based < 1 || index1Based > 80) return;
+        if (index1Based < 1 || index1Based > 95) return;
 
         int zeroBased = index1Based - 1;
         int effectIndex = zeroBased % NEW_EFFECT_CYCLE.length;
         net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> effect = NEW_EFFECT_CYCLE[effectIndex];
-        int amplifier = zeroBased / NEW_EFFECT_CYCLE.length; // 0..2
+        int amplifier = Math.min(zeroBased / NEW_EFFECT_CYCLE.length, 3); // capped for balance
         int interval = 30 + (zeroBased % 7) * 5; // 30..60
         int duration = 160 + (zeroBased % 5) * 20; // 160..240
 
@@ -116,6 +131,13 @@ final class MoreDragonChestplateAbilities {
         ArmorAbilityHandler.applyConditionalCreativeFlight(player, true);
         if (player.age % interval == 0) {
             player.addStatusEffect(new StatusEffectInstance(effect, duration, amplifier, true, false, false));
+
+            // Drawback: a short strain debuff to keep the chestplates balanced.
+            net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> drawback =
+                    NEW_DRAWBACK_CYCLE[effectIndex % NEW_DRAWBACK_CYCLE.length];
+            int drawbackAmp = Math.max(0, amplifier - 1);
+            int drawbackDuration = Math.max(40, duration / 3);
+            player.addStatusEffect(new StatusEffectInstance(drawback, drawbackDuration, drawbackAmp, true, false, false));
         }
         ServerWorld world = (ServerWorld) player.getEntityWorld();
         trailFeet(player, world, particle, stride);
