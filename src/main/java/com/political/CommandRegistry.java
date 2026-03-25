@@ -539,14 +539,14 @@ public class CommandRegistry {
 // ============ BALTOP COMMAND ============
         dispatcher.register(CommandManager.literal("baltop")
                 .executes(ctx -> {
-                    Map<String, Integer> allCoins = DataManager.getData().playerCoins;
+                    Map<String, Long> allCoins = DataManager.getData().playerCoins;
                     Map<String, Integer> allCredits = DataManager.getData().playerCredits;
 
                     // Combine into total wealth (credits * 1000 + coins)
                     Map<String, Long> totalWealth = new java.util.HashMap<>();
 
-                    for (Map.Entry<String, Integer> entry : allCoins.entrySet()) {
-                        totalWealth.put(entry.getKey(), (long) entry.getValue());
+                    for (Map.Entry<String, Long> entry : allCoins.entrySet()) {
+                        totalWealth.put(entry.getKey(), entry.getValue());
                     }
 
                     for (Map.Entry<String, Integer> entry : allCredits.entrySet()) {
@@ -566,7 +566,7 @@ public class CommandRegistry {
                     int rank = 1;
                     for (Map.Entry<String, Long> entry : sorted) {
                         String name = DataManager.getPlayerName(entry.getKey());
-                        int coins = allCoins.getOrDefault(entry.getKey(), 0);
+                        long coins = allCoins.getOrDefault(entry.getKey(), 0L);
                         int credits = allCredits.getOrDefault(entry.getKey(), 0);
 
                         ctx.getSource().sendMessage(Text.literal(
@@ -836,11 +836,11 @@ public class CommandRegistry {
     private static void registerUndergroundAuction(CommandDispatcher<ServerCommandSource> dispatcher) {
         // /bid <amount> - anyone can use
         dispatcher.register(CommandManager.literal("bid")
-                .then(CommandManager.argument("amount", IntegerArgumentType.integer(1))
+                .then(CommandManager.argument("amount", LongArgumentType.longArg(1))
                         .executes(context -> {
                             ServerPlayerEntity player = context.getSource().getPlayer();
                             if (player == null) return 0;
-                            int amount = IntegerArgumentType.getInteger(context, "amount");
+                            long amount = LongArgumentType.getLong(context, "amount");
                             UndergroundAuctionManager.placeBid(player, amount);
                             return 1;
                         })));
@@ -1839,8 +1839,11 @@ public class CommandRegistry {
                                             .suggest("ender")
                                             .suggest("bank")
                                             .suggest("coins")
+                                            .suggest("wallet")
                                             .suggest("crypto")
+                                            .suggest("stock")
                                             .suggest("stocks")
+                                            .suggest("prevchests")
                                             .buildFuture();
                                 })
                                 .executes(ctx -> {
@@ -1926,6 +1929,16 @@ public class CommandRegistry {
                 .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
                 .then(CommandManager.argument("player", EntityArgumentType.player())
                         .then(CommandManager.literal("prevchests")
+                                .executes(ctx -> {
+                                    ServerPlayerEntity adminP = ctx.getSource().getPlayerOrThrow();
+                                    ServerPlayerEntity watched = EntityArgumentType.getPlayer(ctx, "player");
+                                    PrevChestsAdminGui.open(adminP, watched);
+                                    return 1;
+                                }))));
+        dispatcher.register(CommandManager.literal("view")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.literal("prevchests")
+                        .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .executes(ctx -> {
                                     ServerPlayerEntity adminP = ctx.getSource().getPlayerOrThrow();
                                     ServerPlayerEntity watched = EntityArgumentType.getPlayer(ctx, "player");

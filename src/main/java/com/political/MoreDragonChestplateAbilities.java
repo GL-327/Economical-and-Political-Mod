@@ -27,6 +27,36 @@ final class MoreDragonChestplateAbilities {
     private static final Map<UUID, Integer> starfallStoredTicks = new HashMap<>();
     private static final Map<UUID, Integer> starfallGroundAccumulator = new HashMap<>();
 
+    private static final net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect>[] NEW_EFFECT_CYCLE = new net.minecraft.registry.entry.RegistryEntry[]{
+            StatusEffects.STRENGTH,
+            StatusEffects.SPEED,
+            StatusEffects.RESISTANCE,
+            StatusEffects.REGENERATION,
+            StatusEffects.ABSORPTION,
+            StatusEffects.FIRE_RESISTANCE,
+            StatusEffects.WATER_BREATHING,
+            StatusEffects.NIGHT_VISION,
+            StatusEffects.HASTE,
+            StatusEffects.JUMP_BOOST,
+            StatusEffects.LUCK,
+            StatusEffects.SLOW_FALLING
+    };
+
+    private static final net.minecraft.particle.ParticleEffect[] NEW_PARTICLE_CYCLE = new net.minecraft.particle.ParticleEffect[]{
+            ParticleTypes.CRIT,
+            ParticleTypes.ENCHANT,
+            ParticleTypes.CLOUD,
+            ParticleTypes.HAPPY_VILLAGER,
+            ParticleTypes.BUBBLE_POP,
+            ParticleTypes.SMALL_FLAME,
+            ParticleTypes.ASH,
+            ParticleTypes.END_ROD,
+            ParticleTypes.ELECTRIC_SPARK,
+            ParticleTypes.WAX_ON,
+            ParticleTypes.SNOWFLAKE,
+            ParticleTypes.LARGE_SMOKE
+    };
+
     private MoreDragonChestplateAbilities() {
     }
 
@@ -34,6 +64,21 @@ final class MoreDragonChestplateAbilities {
         ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
         String id = DragonChestplates.getCustomItemId(chest);
         if (id == null) return;
+
+        if (id.startsWith("new_dragon_chestplate_")) {
+            String suffix = id.substring("new_dragon_chestplate_".length());
+            int index1Based = Integer.parseInt(suffix); // supports leading zeroes
+            tickNewDragonChestplate(player, index1Based);
+            return;
+        }
+
+        if (id.startsWith("omega_dragon_chestplate_")) {
+            String suffix = id.substring("omega_dragon_chestplate_".length());
+            int index1Based = Integer.parseInt(suffix);
+            tickOmegaDragonChestplate(player, index1Based);
+            return;
+        }
+
         switch (id) {
             case "dune_dragon_chestplate" -> tickDune(player);
             case "reef_dragon_chestplate" -> tickReef(player);
@@ -50,6 +95,104 @@ final class MoreDragonChestplateAbilities {
             case "starfall_dragon_chestplate" -> tickStarfall(player);
             case "mirage_dragon_chestplate" -> tickMirage(player);
             case "obsidian_wyrm_chestplate" -> tickObsidianWyrm(player);
+            default -> {
+            }
+        }
+    }
+
+    private static void tickNewDragonChestplate(ServerPlayerEntity player, int index1Based) {
+        if (index1Based < 1 || index1Based > 60) return;
+
+        int zeroBased = index1Based - 1;
+        int effectIndex = zeroBased % NEW_EFFECT_CYCLE.length;
+        net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> effect = NEW_EFFECT_CYCLE[effectIndex];
+        int amplifier = zeroBased / NEW_EFFECT_CYCLE.length; // 0..2
+        int interval = 30 + (zeroBased % 7) * 5; // 30..60
+        int duration = 160 + (zeroBased % 5) * 20; // 160..240
+
+        net.minecraft.particle.ParticleEffect particle = NEW_PARTICLE_CYCLE[effectIndex];
+        int stride = 6 + ((zeroBased + effectIndex) % 8);
+
+        ArmorAbilityHandler.applyConditionalCreativeFlight(player, true);
+        if (player.age % interval == 0) {
+            player.addStatusEffect(new StatusEffectInstance(effect, duration, amplifier, true, false, false));
+        }
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        trailFeet(player, world, particle, stride);
+    }
+
+    private static boolean playerHasOmegaCore(ServerPlayerEntity player) {
+        // Omega core is a separate item: `dragon_crafter_core_omega`
+        // Scan is only done when omega chestplates are equipped.
+        var inv = player.getInventory();
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack = inv.getStack(i);
+            if (stack == null || stack.isEmpty()) continue;
+            String cid = SlayerItems.getCustomItemId(stack);
+            if ("dragon_crafter_core_omega".equals(cid)) return true;
+        }
+        return false;
+    }
+
+    private static void tickOmegaDragonChestplate(ServerPlayerEntity player, int index1Based) {
+        boolean omegaEnabled = playerHasOmegaCore(player);
+
+        ArmorAbilityHandler.applyConditionalCreativeFlight(player, true);
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+
+        switch (index1Based) {
+            case 1 -> {
+                // Omega Bulwark: Resilience (+ weakness strain)
+                net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> strong = StatusEffects.RESISTANCE;
+                net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> weak = StatusEffects.RESISTANCE;
+                int strongAmp = 2;
+                int weakAmp = 0;
+                int interval = omegaEnabled ? 30 : 45;
+                int duration = omegaEnabled ? 240 : 160;
+                if (player.age % interval == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(
+                            strong, duration, omegaEnabled ? strongAmp : weakAmp, true, false, false
+                    ));
+                }
+                if (omegaEnabled && player.age % 90 == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 60, 0, true, false, false));
+                }
+                trailFeet(player, world, ParticleTypes.ENCHANT, 9);
+            }
+            case 2 -> {
+                // Omega Aegisweave: Absorption (+ slow strain)
+                int interval = omegaEnabled ? 25 : 45;
+                int duration = omegaEnabled ? 240 : 160;
+                int amp = omegaEnabled ? 4 : 1;
+                if (player.age % interval == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.ABSORPTION, duration, amp, true, false, false
+                    ));
+                }
+                if (omegaEnabled && player.age % 75 == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 80, 1, true, false, false));
+                }
+                trailFeet(player, world, ParticleTypes.CRIT, 8);
+            }
+            case 3 -> {
+                // Omega Prism: Vision + Fire immunity (+ darkness strain)
+                int interval = omegaEnabled ? 30 : 45;
+                int duration = omegaEnabled ? 240 : 160;
+                int visionAmp = omegaEnabled ? 2 : 0;
+                int fireAmp = omegaEnabled ? 1 : 0;
+                if (player.age % interval == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.NIGHT_VISION, duration, visionAmp, true, false, false
+                    ));
+                    player.addStatusEffect(new StatusEffectInstance(
+                            StatusEffects.FIRE_RESISTANCE, duration, fireAmp, true, false, false
+                    ));
+                }
+                if (omegaEnabled && player.age % 90 == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 0, true, false, false));
+                }
+                trailFeet(player, world, ParticleTypes.CLOUD, 8);
+            }
             default -> {
             }
         }

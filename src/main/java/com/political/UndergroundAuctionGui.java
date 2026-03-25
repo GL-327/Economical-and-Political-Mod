@@ -61,7 +61,7 @@ public class UndergroundAuctionGui {
         }
 
         // Player coins display
-        int playerCoins = CoinManager.getCoins(player);
+        long playerCoins = CoinManager.getCoinsLong(player);
         gui.setSlot(4, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Text.literal("Your Coins: " + playerCoins).formatted(Formatting.GOLD, Formatting.BOLD))
                 .glow()
@@ -133,10 +133,10 @@ public class UndergroundAuctionGui {
 
                 for (int i = 0; i < bidIncrements.length; i++) {
                     int increment = bidIncrements[i];
-                    int bidAmount = currentItem.currentBid + increment;
+                    long bidAmount = currentItem.currentBid + increment;
                     boolean canAfford = playerCoins >= bidAmount;
 
-                    final int finalBid = bidAmount;
+                    final long finalBid = bidAmount;
                     gui.setSlot(slots[i], new GuiElementBuilder(canAfford ? Items.GOLD_INGOT : Items.IRON_INGOT)
                             .setName(Text.literal("Bid " + bidAmount).formatted(canAfford ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
                             .addLoreLine(Text.literal("(+" + increment + " from current)").formatted(Formatting.GRAY))
@@ -211,7 +211,7 @@ public class UndergroundAuctionGui {
                 .setCallback((index, type, action) -> {
                     String input = gui.getInput();
                     try {
-                        int amount = Integer.parseInt(input.trim());
+                        long amount = Long.parseLong(input.trim());
                         gui.close();
                         UndergroundAuctionManager.placeBid(player, amount);
                         open(player); // Reopen main GUI

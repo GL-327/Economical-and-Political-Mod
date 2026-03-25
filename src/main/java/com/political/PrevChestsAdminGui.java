@@ -29,6 +29,13 @@ public final class PrevChestsAdminGui {
         var bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build();
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg);
 
+        gui.setSlot(4, new GuiElementBuilder(Items.SPYGLASS)
+                .setName(Text.literal("Recent Containers").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Target: " + watchedPlayer.getName().getString()).formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Entries: " + entries.size() + " (max " + ChestAccessHistory.MAX_ENTRIES + ")")
+                        .formatted(Formatting.DARK_GRAY))
+                .build());
+
         int start = p * PER_PAGE;
         int slot = 10;
         for (int i = start; i < entries.size() && slot < 44; i++) {
@@ -42,7 +49,7 @@ public final class PrevChestsAdminGui {
                     .addLoreLine(Text.literal(e.x + ", " + e.y + ", " + e.z).formatted(Formatting.AQUA))
                     .addLoreLine(Text.literal("Tick " + e.tick).formatted(Formatting.DARK_GRAY))
                     .addLoreLine(Text.literal("Open remote").formatted(Formatting.YELLOW))
-                    .setCallback((a, b, c) -> RemoteChestAdminGui.open(admin, fe))
+                    .setCallback((a, b, c) -> RemoteChestAdminGui.open(admin, watchedPlayer, fe))
                     .build());
             slot++;
         }
@@ -63,6 +70,10 @@ public final class PrevChestsAdminGui {
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED))
                 .setCallback((a, b, c) -> admin.closeHandledScreen())
+                .build());
+        gui.setSlot(48, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back to Invsee").formatted(Formatting.YELLOW))
+                .setCallback((a, b, c) -> AdminInvseeGui.openMainMenu(admin, watchedPlayer))
                 .build());
 
         gui.open();

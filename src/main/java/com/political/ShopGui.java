@@ -42,7 +42,7 @@ public class ShopGui {
                 .addLoreLine(Text.literal(""))
                 .addLoreLine(Text.literal("Coins: " + ShopManager.formatCoins(coins)).formatted(Formatting.YELLOW, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("• Buy items at 2x sell price").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• Buy items at 10x sell price").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("• Sell items for instant coins!").formatted(Formatting.GRAY))
                 .glow()
                 .build());

@@ -652,8 +652,15 @@ public class RecipeConfigManager {
                         if (result.result().isPresent()) {
                             ItemStack stack = result.result().get();
                             int stackCount = obj.has("count") ? obj.get("count").getAsInt() : stack.getCount();
-                            if (!stack.isEmpty() && stackCount > 1) stack.setCount(stackCount);
-                            if (!stack.isEmpty()) return stack;
+                            if (!stack.isEmpty()) {
+                                ItemStack ensured = ensureFullCustomItemComponents(stack);
+                                if (ensured != null && !ensured.isEmpty()) {
+                                    ensured.setCount(stackCount);
+                                    return ensured;
+                                }
+                                stack.setCount(stackCount);
+                                return stack;
+                            }
                         }
                     }
 
@@ -800,6 +807,63 @@ public class RecipeConfigManager {
         });
     }
 
+    /**
+     * Some exported recipe JSON entries store "partial" NBT for custom items
+     * (often only custom_id/custom_name), which makes the resulting item
+     * render blank/missing stats in GUIs.
+     *
+     * If we detect that key components are missing, rebuild the item from its
+     * custom_item_id so it has the full lore/attributes/dyed color/etc.
+     */
+    private static ItemStack ensureFullCustomItemComponents(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return stack;
+
+        String customId = SlayerItems.getCustomItemId(stack);
+        if (customId == null || customId.isEmpty()) return stack;
+
+        boolean looksLikeArmor = looksLikeBlockArmorCustomId(customId);
+        boolean looksLikeTool = looksLikeBlockToolCustomId(customId);
+        if (!looksLikeArmor && !looksLikeTool) return stack;
+
+        boolean missing;
+        if (looksLikeArmor) {
+            // Leather armor items should carry dyed color unless it's a player head.
+            boolean dyedColorMissing = !stack.isOf(Items.PLAYER_HEAD) && stack.get(DataComponentTypes.DYED_COLOR) == null;
+            missing = stack.get(DataComponentTypes.LORE) == null
+                    || stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS) == null
+                    || stack.get(DataComponentTypes.MAX_DAMAGE) == null
+                    || dyedColorMissing;
+        } else {
+            missing = stack.get(DataComponentTypes.LORE) == null
+                    || stack.get(DataComponentTypes.MAX_DAMAGE) == null
+                    || stack.get(DataComponentTypes.CUSTOM_NAME) == null;
+        }
+
+        if (!missing) return stack;
+
+        ItemStack rebuilt = resolveCustomItem(customId);
+        return (rebuilt == null || rebuilt.isEmpty()) ? stack : rebuilt;
+    }
+
+    private static boolean looksLikeBlockArmorCustomId(String customId) {
+        if (customId == null) return false;
+        // Slayer bounty armor IDs include _t1_/_t2_ and may not use block-style dyed color.
+        if (customId.contains("_t1_") || customId.contains("_t2_")) return false;
+        return customId.endsWith("_helmet")
+                || customId.endsWith("_chestplate")
+                || customId.endsWith("_leggings")
+                || customId.endsWith("_boots");
+    }
+
+    private static boolean looksLikeBlockToolCustomId(String customId) {
+        if (customId == null) return false;
+        return customId.endsWith("_sword")
+                || customId.endsWith("_pickaxe")
+                || customId.endsWith("_axe")
+                || customId.endsWith("_shovel")
+                || customId.endsWith("_hoe");
+    }
+
     private static ItemStack deserializeIngredient(com.google.gson.JsonElement elem) {
         return deserializeStack(elem);
     }
@@ -852,6 +916,93 @@ public class RecipeConfigManager {
         }
         
         return stack;
+    }
+
+    /**
+     * Reflection fallback to reconstruct block-style armor from its custom_id
+     * (e.g. {@code blackstone_helmet} -> {@code BlockArmor.createBlackstoneHelmet()}).
+     *
+     * This is important because some exported JSON entries store partial NBT,
+     * and relying only on explicit mappings can leave items blank.
+     */
+    private static ItemStack tryCreateFromBlockArmorCustomId(String customId) {
+        if (customId == null || customId.isEmpty()) return ItemStack.EMPTY;
+        // Avoid accidental attempts for dragon chestplates / other non-block items.
+        if (customId.contains("_dragon_")) return ItemStack.EMPTY;
+        if (customId.contains("_t1_") || customId.contains("_t2_")) return ItemStack.EMPTY;
+
+        String[] armorSuffixes = {"_helmet", "_chestplate", "_leggings", "_boots"};
+        for (String suffix : armorSuffixes) {
+            if (!customId.endsWith(suffix)) continue;
+            String materialKey = customId.substring(0, customId.length() - suffix.length());
+            if (materialKey.isEmpty()) return ItemStack.EMPTY;
+
+            String piece = suffix.substring(1); // helmet/chestplate/...
+            String piecePascal = capitalizeFirst(piece);
+            String methodName = "create" + toPascalCase(materialKey) + piecePascal;
+
+            try {
+                var m = BlockArmor.class.getMethod(methodName);
+                Object out = m.invoke(null);
+                if (out instanceof ItemStack stack && !stack.isEmpty()) {
+                    return stack;
+                }
+            } catch (Exception ignored) {
+            }
+
+            return ItemStack.EMPTY;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    /**
+     * Reflection fallback to reconstruct block-style tools from its custom_id
+     * (e.g. {@code blackstone_bricks_sword} -> {@code BlockWeapons.createBlackstoneBricksSword()}).
+     */
+    private static ItemStack tryCreateFromBlockWeaponCustomId(String customId) {
+        if (customId == null || customId.isEmpty()) return ItemStack.EMPTY;
+        if (customId.contains("_dragon_")) return ItemStack.EMPTY;
+        if (customId.contains("_t1_") || customId.contains("_t2_")) return ItemStack.EMPTY;
+
+        String[] toolSuffixes = {"_sword", "_pickaxe", "_axe", "_shovel", "_hoe"};
+        for (String suffix : toolSuffixes) {
+            if (!customId.endsWith(suffix)) continue;
+            String materialKey = customId.substring(0, customId.length() - suffix.length());
+            if (materialKey.isEmpty()) return ItemStack.EMPTY;
+
+            String piece = suffix.substring(1); // sword/pickaxe/...
+            String piecePascal = capitalizeFirst(piece);
+            String methodName = "create" + toPascalCase(materialKey) + piecePascal;
+
+            try {
+                var m = BlockWeapons.class.getMethod(methodName);
+                Object out = m.invoke(null);
+                if (out instanceof ItemStack stack && !stack.isEmpty()) {
+                    return stack;
+                }
+            } catch (Exception ignored) {
+            }
+
+            return ItemStack.EMPTY;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private static String capitalizeFirst(String s) {
+        if (s == null || s.isEmpty()) return s;
+        if (s.length() == 1) return s.substring(0, 1).toUpperCase();
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+
+    private static String toPascalCase(String snake) {
+        if (snake == null || snake.isEmpty()) return snake;
+        String[] parts = snake.split("_");
+        StringBuilder out = new StringBuilder();
+        for (String p : parts) {
+            if (p == null || p.isEmpty()) continue;
+            out.append(capitalizeFirst(p));
+        }
+        return out.toString();
     }
 
     private static ItemStack resolveCustomItem(String customId) {
@@ -1307,6 +1458,12 @@ public class RecipeConfigManager {
         if ("crystal_axe".equals(customId)) return LegendaryTools.createCrystalAxe();
         if ("crystal_shovel".equals(customId)) return LegendaryTools.createCrystalShovel();
         if ("crystal_hoe".equals(customId)) return LegendaryTools.createCrystalHoe();
+        
+        // Reflection fallback (covers lots of block armor/tool custom ids)
+        ItemStack blockArmorAttempt = tryCreateFromBlockArmorCustomId(customId);
+        if (blockArmorAttempt != null && !blockArmorAttempt.isEmpty()) return blockArmorAttempt;
+        ItemStack blockWeaponAttempt = tryCreateFromBlockWeaponCustomId(customId);
+        if (blockWeaponAttempt != null && !blockWeaponAttempt.isEmpty()) return blockWeaponAttempt;
         
         // Backrooms/Fracture 3 items
         // Backrooms rune items — try direct registry lookup for any politicalserver: item

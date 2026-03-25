@@ -1060,6 +1060,15 @@ public class BankGui {
                 .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
                 .setCallback((index, type, action) -> admin.closeHandledScreen())
                 .build());
+        gui.setSlot(48, new GuiElementBuilder(Items.EMERALD)
+                .setName(Text.literal("✏ Edit Wallet").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Opens coin amount editor").formatted(Formatting.GRAY))
+                .setCallback((index, type, action) -> AdminInvseeGui.openCoinsEditor(admin, target))
+                .build());
+        gui.setSlot(50, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back to Invsee").formatted(Formatting.YELLOW))
+                .setCallback((index, type, action) -> AdminInvseeGui.openMainMenu(admin, target))
+                .build());
 
         gui.open();
     }

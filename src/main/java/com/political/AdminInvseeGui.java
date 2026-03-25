@@ -56,6 +56,9 @@ public final class AdminInvseeGui {
         gui.setSlot(22, menuBtn(Items.PAPER, "Stock portfolio", Formatting.AQUA,
                 Text.literal("Share holdings").formatted(Formatting.DARK_GRAY),
                 () -> openStockEditor(admin, target)));
+        gui.setSlot(24, menuBtn(Items.CHEST, "Viewed chests", Formatting.GOLD,
+                Text.literal("/view prevchests shortcut").formatted(Formatting.DARK_GRAY),
+                () -> PrevChestsAdminGui.open(admin, target)));
         gui.setSlot(31, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.literal("Close").formatted(Formatting.RED, Formatting.BOLD))
                 .setCallback((a, b, c) -> admin.closeHandledScreen())
@@ -125,6 +128,8 @@ public final class AdminInvseeGui {
             target.getInventory().setStack(invIndex, cursor.isEmpty() ? ItemStack.EMPTY : cursor.copy());
             admin.currentScreenHandler.setCursorStack(slot.isEmpty() ? ItemStack.EMPTY : slot.copy());
             target.getInventory().markDirty();
+            target.playerScreenHandler.sendContentUpdates();
+            admin.playerScreenHandler.sendContentUpdates();
             redraw.run();
         });
         gui.setSlot(guiIndex, b.build());
@@ -162,6 +167,8 @@ public final class AdminInvseeGui {
                     target.getEnderChestInventory().setStack(enderIndex, cursor.isEmpty() ? ItemStack.EMPTY : cursor.copy());
                     admin.currentScreenHandler.setCursorStack(slot.isEmpty() ? ItemStack.EMPTY : slot.copy());
                     target.getEnderChestInventory().markDirty();
+                    target.playerScreenHandler.sendContentUpdates();
+                    admin.playerScreenHandler.sendContentUpdates();
                     drawEnder(gui, admin, target);
                 });
                 gui.setSlot(gSlot, b.build());

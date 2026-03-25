@@ -102,6 +102,7 @@ public class ArmorAbilityHandler {
         tickBloodDragonChestplate(player);
         tickEclipseDragonChestplate(player);
         MoreDragonChestplateAbilities.tickAll(player);
+        DragonSwordAbilities.tickHeld(player);
     }
 
     /**

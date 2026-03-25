@@ -41,6 +41,15 @@ public final class DragonChestplateRegistry {
                 "starfall_dragon_chestplate",
                 "mirage_dragon_chestplate",
                 "obsidian_wyrm_chestplate");
+
+        // New set (35) - generated for easier maintenance.
+        for (int i = 1; i <= 60; i++) {
+            IDS.add(String.format("new_dragon_chestplate_%02d", i));
+        }
+        // Omega set (3)
+        for (int i = 1; i <= 3; i++) {
+            IDS.add("omega_dragon_chestplate_" + i);
+        }
         ID_SET = Set.copyOf(IDS);
     }
 
@@ -86,6 +95,13 @@ public final class DragonChestplateRegistry {
         out.add(MoreDragonChestplates.createStarfall());
         out.add(MoreDragonChestplates.createMirage());
         out.add(MoreDragonChestplates.createObsidianWyrm());
+
+        for (int i = 1; i <= 60; i++) {
+            out.add(MoreDragonChestplates.createNewDragonChestplate(i));
+        }
+        for (int i = 1; i <= 3; i++) {
+            out.add(MoreDragonChestplates.createOmegaDragonChestplate(i));
+        }
         return out;
     }
 }

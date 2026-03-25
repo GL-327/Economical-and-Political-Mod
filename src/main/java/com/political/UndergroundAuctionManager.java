@@ -46,6 +46,7 @@ public class UndergroundAuctionManager {
     private static final long NO_BID_TIMEOUT_MS = 60L * 1000L; // 60 seconds with no bids
     private static final long MIN_ITEM_DURATION_MS = 20L * 1000L; // Minimum 20 seconds per item
     private static final int MAX_ITEMS_PER_AUCTION = 5;
+    private static final long MIN_AUCTION_STARTING_BID = 1_000_000_000L; // 1b floor
     private static final double BROADCAST_RADIUS_SQUARED = 625.0; // 25^2 = 625
 
     // State variables
@@ -63,8 +64,8 @@ public class UndergroundAuctionManager {
     public static class AuctionItem {
         public String name;
         public String itemType;
-        public int startingBid;
-        public int currentBid;
+        public long startingBid;
+        public long currentBid;
         public String highestBidderUuid;
         public String highestBidderName;
         public boolean sold;
@@ -73,7 +74,7 @@ public class UndergroundAuctionManager {
         public AuctionItem() {
         }
 
-        public AuctionItem(String name, String itemType, int startingBid, ItemStack stack) {
+        public AuctionItem(String name, String itemType, long startingBid, ItemStack stack) {
             this.name = name;
             this.itemType = itemType;
             this.startingBid = startingBid;
@@ -446,7 +447,7 @@ public class UndergroundAuctionManager {
     // BIDDING
     // ═══════════════════════════════════════════════════════════════
 
-    public static boolean placeBid(ServerPlayerEntity player, int amount) {
+    public static boolean placeBid(ServerPlayerEntity player, long amount) {
         if (player == null) return false;
 
         if (!auctionActive) {
@@ -470,7 +471,7 @@ public class UndergroundAuctionManager {
             return false;
         }
 
-        int playerCoins = CoinManager.getCoins(player);
+        long playerCoins = CoinManager.getCoinsLong(player);
         if (playerCoins < amount) {
             player.sendMessage(Text.literal("❌ Not enough coins! You have: " + playerCoins + ", Need: " + amount).formatted(Formatting.RED));
             return false;
@@ -529,6 +530,8 @@ public class UndergroundAuctionManager {
             allPossible.add(createSuperBow());
             allPossible.add(createFortunePick());
             allPossible.add(createWardenCore());
+            allPossible.add(createDragonCrafterCoreT1());
+            allPossible.add(createDragonEgg());
             allPossible.removeIf(Objects::isNull);
             Collections.shuffle(allPossible);
 
@@ -538,6 +541,10 @@ public class UndergroundAuctionManager {
             PoliticalServer.LOGGER.error("Error generating auction items", e);
             return new ArrayList<>();
         }
+    }
+
+    private static long normalizeStartingBid(long bid) {
+        return Math.max(MIN_AUCTION_STARTING_BID, bid);
     }
 
     private static NbtCompound createCustomNbt(String key, boolean value) {
@@ -572,8 +579,36 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Crafting Material」").formatted(Formatting.DARK_AQUA));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 15000000, stack);
+        return new AuctionItem(name, "special", normalizeStartingBid(15000000), stack);
     }
+
+    private static AuctionItem createDragonCrafterCoreT1() {
+        ItemStack core = SlayerItems.createDragonCrafterCoreT1();
+        String name = "Dragon Crafting Core (T1)";
+        // Starting price: 2.5b
+        return new AuctionItem(name, "core", normalizeStartingBid(2_500_000_000L), core);
+    }
+
+    private static AuctionItem createDragonEgg() {
+        ItemStack egg = new ItemStack(Items.DRAGON_EGG);
+        egg.set(DataComponentTypes.CUSTOM_NAME, Text.literal("Dragon Egg").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Mythic resource]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Used in high-tier draconic crafting.").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
+        egg.set(DataComponentTypes.LORE, new LoreComponent(lore));
+
+        egg.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+
+        String name = "Dragon Egg";
+        // Starting price: 15b
+        return new AuctionItem(name, "special", normalizeStartingBid(15_000_000_000L), egg);
+    }
+
     private static AuctionItem createNetheriteArmor() {
         ItemStack stack;
         String name;
@@ -624,7 +659,12 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name + " (Prot " + protLevel + ")", "armor", 15000000 + (protLevel * 1000000), stack);
+        return new AuctionItem(
+                name + " (Prot " + protLevel + ")",
+                "armor",
+                normalizeStartingBid(15000000 + (protLevel * 1000000)),
+                stack
+        );
     }
 
     private static AuctionItem createNetheriteSword() {
@@ -656,7 +696,12 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name + " (Sharp " + sharpLevel + ")", "weapon", 15000000 + (sharpLevel * 1000000), stack);
+        return new AuctionItem(
+                name + " (Sharp " + sharpLevel + ")",
+                "weapon",
+                normalizeStartingBid(15000000 + (sharpLevel * 1000000)),
+                stack
+        );
     }
 
     private static AuctionItem createUltimatePotion() {
@@ -686,7 +731,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("From the Underground Auction").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "potion", 15000000, stack);
+        return new AuctionItem(name, "potion", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createHarveysStick() {
@@ -714,7 +759,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 15000000, stack);
+        return new AuctionItem(name, "special", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createTheGavel() {
@@ -746,7 +791,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 15000000, stack);
+        return new AuctionItem(name, "special", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createHermesShoes() {
@@ -779,7 +824,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 15000000, stack);
+        return new AuctionItem(name, "special", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createHPEBM() {
@@ -811,7 +856,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "special", 15000000, stack);
+        return new AuctionItem(name, "special", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createEnchantedElytra() {
@@ -839,7 +884,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "armor", 15000000, stack);
+        return new AuctionItem(name, "armor", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createSuperBow() {
@@ -872,7 +917,7 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name, "weapon", 15000000, stack);
+        return new AuctionItem(name, "weapon", normalizeStartingBid(15000000), stack);
     }
 
     private static AuctionItem createFortunePick() {
@@ -905,7 +950,12 @@ public class UndergroundAuctionManager {
         lore.add(Text.literal("「Underground Auction」").formatted(Formatting.DARK_PURPLE));
         stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
 
-        return new AuctionItem(name + " (Fortune " + fortuneLevel + ")", "tool", 15000000 + (fortuneLevel * 1000000), stack);
+        return new AuctionItem(
+                name + " (Fortune " + fortuneLevel + ")",
+                "tool",
+                normalizeStartingBid(15000000 + (fortuneLevel * 1000000)),
+                stack
+        );
     }
 
     private static void addEnchantment(ItemStack stack, RegistryKey<Enchantment> enchantmentKey, int level) {

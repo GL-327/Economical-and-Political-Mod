@@ -1161,6 +1161,26 @@ public class SlayerItems {
         return core;
     }
 
+    public static ItemStack createDragonCrafterCoreOmega() {
+        ItemStack core = new ItemStack(Items.HEAVY_CORE);
+        core.set(DataComponentTypes.CUSTOM_NAME,
+                Text.literal("🐉 Omega Dragon Crafting Core").formatted(Formatting.GOLD, Formatting.BOLD));
+
+        List<Text> lore = new ArrayList<>();
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("✦ Apex crafting component").formatted(Formatting.GOLD, Formatting.BOLD));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("Reserved for omega-tier dragon recipes").formatted(Formatting.GRAY));
+        lore.add(Text.literal(""));
+        lore.add(Text.literal("§8[Omega Core]").formatted(Formatting.DARK_GRAY));
+        lore.add(Text.literal("• Powers omega chestplate enhancements").formatted(Formatting.LIGHT_PURPLE));
+
+        core.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        core.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        setCustomItemId(core, "dragon_crafter_core_omega");
+        return core;
+    }
+
     public static ItemStack createSkeletonSword() {
         return createSlayerSword(SlayerManager.SlayerType.SKELETON);
     }

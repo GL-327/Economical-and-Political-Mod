@@ -75,7 +75,7 @@ public class ShopManager {
                 Items.COAL, Items.CHARCOAL, Items.RAW_IRON, Items.RAW_COPPER, Items.RAW_GOLD,
                 Items.IRON_INGOT, Items.COPPER_INGOT, Items.GOLD_INGOT, Items.IRON_NUGGET, Items.GOLD_NUGGET,
                 Items.DIAMOND, Items.EMERALD, Items.LAPIS_LAZULI, Items.REDSTONE, Items.QUARTZ,
-                Items.NETHERITE_SCRAP, Items.NETHERITE_INGOT, Items.AMETHYST_SHARD, Items.ECHO_SHARD, Items.FLINT
+                Items.NETHERITE_SCRAP, Items.AMETHYST_SHARD, Items.ECHO_SHARD, Items.FLINT
                 // Ore blocks REMOVED - see Material Blocks category
         );
         CATEGORIES.put("Ores & Materials", oresMaterials);
@@ -741,6 +741,8 @@ public class ShopManager {
         // ===== DISABLED ITEMS (cannot be bought on shop) =====
         // Disable gilded blackstone
         disableItem(Items.GILDED_BLACKSTONE);
+        // Remove netherite ingots from /shop (prevents ingot conversions)
+        disableItem(Items.NETHERITE_INGOT);
     }
 
     private static void setPrice(Item item, int sellPrice) {
@@ -815,7 +817,7 @@ public class ShopManager {
 
     public static int getBuyPrice(Item item) {
         int sellPrice = getSellPrice(item);
-        return sellPrice > 0 ? sellPrice * 4 : 0;  // 4x sell price - very unforgiving
+        return sellPrice > 0 ? sellPrice * 10 : 0; // 10x sell price - hard anti-dupe
     }
 
     public static boolean canBeSold(Item item) {

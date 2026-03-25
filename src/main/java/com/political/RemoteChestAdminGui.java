@@ -20,6 +20,10 @@ import net.minecraft.util.math.BlockPos;
 public final class RemoteChestAdminGui {
 
     public static void open(ServerPlayerEntity admin, ChestAccessHistory.Entry entry) {
+        open(admin, null, entry);
+    }
+
+    public static void open(ServerPlayerEntity admin, ServerPlayerEntity watchedPlayer, ChestAccessHistory.Entry entry) {
         if (PoliticalServer.server == null) return;
         Identifier dim = Identifier.of(entry.worldId);
         RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, dim);
@@ -51,14 +55,18 @@ public final class RemoteChestAdminGui {
         gui.setTitle(Text.literal("Remote: " + entry.blockId).formatted(Formatting.GOLD));
 
         MinecraftServer server = world.getServer();
-        Runnable redraw = () -> drawInventoryContainer(gui, admin, inv, world, pos, server);
+        Runnable redraw = () -> drawInventoryContainer(gui, admin, watchedPlayer, entry, inv, world, pos, server);
         redraw.run();
         gui.open();
     }
 
-    private static void drawInventoryContainer(SimpleGui gui, ServerPlayerEntity admin, Inventory inv,
+    private static void drawInventoryContainer(SimpleGui gui, ServerPlayerEntity admin, ServerPlayerEntity watchedPlayer,
+                                               ChestAccessHistory.Entry entry, Inventory inv,
                                                ServerWorld world, BlockPos pos, MinecraftServer server) {
         int size = inv.size();
+        for (int i = size; i < gui.getSize(); i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Text.literal("")).build());
+        }
         for (int i = 0; i < size; i++) {
             final int idx = i;
             ItemStack st = inv.getStack(idx);
@@ -74,11 +82,24 @@ public final class RemoteChestAdminGui {
                 inv.setStack(idx, cursor.isEmpty() ? ItemStack.EMPTY : cursor.copy());
                 admin.currentScreenHandler.setCursorStack(slot.isEmpty() ? ItemStack.EMPTY : slot.copy());
                 ContainerInventoryUtil.markContainerDirty(world, pos);
+                admin.playerScreenHandler.sendContentUpdates();
                 if (server != null) {
-                    server.execute(() -> drawInventoryContainer(gui, admin, inv, world, pos, server));
+                    server.execute(() -> drawInventoryContainer(gui, admin, watchedPlayer, entry, inv, world, pos, server));
                 }
             });
             gui.setSlot(i, b.build());
         }
+
+        int backSlot = Math.max(0, gui.getSize() - 5);
+        gui.setSlot(backSlot, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("Back").formatted(Formatting.YELLOW))
+                .setCallback((a, b, c) -> {
+                    if (watchedPlayer != null) {
+                        PrevChestsAdminGui.open(admin, watchedPlayer);
+                    } else {
+                        admin.closeHandledScreen();
+                    }
+                })
+                .build());
     }
 }

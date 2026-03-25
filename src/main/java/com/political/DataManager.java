@@ -22,7 +22,7 @@ public class DataManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static SaveData data = new SaveData();
     public Map<String, String> playerHomes = new HashMap<>();
-    public Map<String, Integer> playerCoins = new HashMap<>();
+    public Map<String, Long> playerCoins = new HashMap<>();
     public static void load(MinecraftServer server) {
         Path path = getDataPath(server);
         if (Files.exists(path)) {
@@ -100,22 +100,22 @@ public class DataManager {
             PoliticalServer.LOGGER.error("Failed to save data", e);
         }
     }
-    public static int getCoins(String uuid) {
-        return data.playerCoins.getOrDefault(uuid, 0);
+    public static long getCoins(String uuid) {
+        return data.playerCoins.getOrDefault(uuid, 0L);
     }
 
-    public static void setCoins(String uuid, int amount) {
-        data.playerCoins.put(uuid, Math.max(0, amount));
+    public static void setCoins(String uuid, long amount) {
+        data.playerCoins.put(uuid, Math.max(0L, amount));
     }
 
-    public static void addCoins(String uuid, int amount) {
+    public static void addCoins(String uuid, long amount) {
         setCoins(uuid, getCoins(uuid) + amount);
     }
 
-    public static boolean removeCoins(String uuid, int amount) {
-        int current = getCoins(uuid);
+    public static boolean removeCoins(String uuid, long amount) {
+        long current = getCoins(uuid);
         if (current < amount) return false;
-        setCoins(uuid, current - amount);
+        setCoins(uuid, (long) current - amount);
         return true;
     }
 
@@ -624,7 +624,7 @@ public class DataManager {
         public String viceChair = null;
         public String judge = null;
         public int chairTermCount = 0;
-        public Map<String, Integer> playerCoins = new HashMap<>();
+        public Map<String, Long> playerCoins = new HashMap<>();
         public Map<String, String> playerHomes = new HashMap<>();
         public Map<String, SlayerData.PlayerSlayerData> playerSlayerData = new HashMap<>();
         public Map<String, SlayerManager.ActiveQuest> activeSlayerQuests = new HashMap<>();

@@ -557,9 +557,11 @@ public class CustomItemsGui {
             }
             case DRAGON_CHESTPLATES -> {
                 items.addAll(DragonChestplateRegistry.allStacks());
+                items.addAll(DragonSwords.allStacks());
                 items.add(SlayerItems.createDragonCrafterCoreT1());
                 items.add(SlayerItems.createDragonCrafterCoreT2());
                 items.add(SlayerItems.createDragonCrafterCoreT3());
+                items.add(SlayerItems.createDragonCrafterCoreOmega());
             }
             case HPEBM -> {
                 for (int mk = 1; mk <= 5; mk++)
@@ -1166,7 +1168,8 @@ public class CustomItemsGui {
         gui.setSlot(11, new GuiElementBuilder(Items.DRAGON_HEAD)
                 .setName(Text.literal("🐉 Dragon chestplates").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
                 .addLoreLine(Text.literal(""))
-                .addLoreLine(Text.literal("All draconic plates + dragon cores").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("All draconic plates").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Dragon crafting cores (T1–T3 + Omega)").formatted(Formatting.GRAY))
                 .addLoreLine(Text.literal("✨ Click to browse").formatted(Formatting.YELLOW))
                 .setCallback((idx, type, action) -> openCategoryPage(player, Category.DRAGON_CHESTPLATES, 0))
                 .build());
@@ -1366,7 +1369,7 @@ public class CustomItemsGui {
 
             Text displayName = item.get(DataComponentTypes.CUSTOM_NAME);
             ItemStack clickItem = item;
-            gui.setSlot(slot, new GuiElementBuilder(item.getItem())
+            gui.setSlot(slot, new GuiElementBuilder(item)
                     .setName(displayName != null ? displayName : Text.literal(item.getItem().toString()))
                     .addLoreLine(Text.literal(""))
                     .addLoreLine(Text.literal("✨ Click to get item").formatted(Formatting.YELLOW))
@@ -2196,7 +2199,7 @@ public class CustomItemsGui {
             Text displayName = item.get(DataComponentTypes.CUSTOM_NAME);
 
             final ItemStack finalItem = item;
-            GuiElementBuilder elem = new GuiElementBuilder(item.getItem())
+            GuiElementBuilder elem = new GuiElementBuilder(finalItem)
                     .setName(displayName != null ? displayName
                             : Text.literal(item.getItem().toString()))
                     .addLoreLine(Text.literal(""))
