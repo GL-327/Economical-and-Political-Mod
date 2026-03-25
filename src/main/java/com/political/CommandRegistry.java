@@ -61,6 +61,7 @@ public class CommandRegistry {
         registerSpawnProtection(dispatcher);
         registerCheckpoint(dispatcher);
         registerCustomSpawn(dispatcher);
+        registerCivilAntiCheatAndViewCommands(dispatcher);
 
         // /playerbuff command (admin only)
         registerPlayerBuff(dispatcher);
@@ -1828,15 +1829,18 @@ public class CommandRegistry {
                         .executes(ctx -> {
                             ServerPlayerEntity admin = ctx.getSource().getPlayerOrThrow();
                             ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
-                            InvseeGui.open(admin, target, "inventory");
+                            AdminInvseeGui.openMainMenu(admin, target);
                             return 1;
                         })
                         .then(CommandManager.argument("type", StringArgumentType.word())
                                 .suggests((ctx, builder) -> {
-                                    return builder.suggest("inventory")
+                                    return builder.suggest("menu")
+                                            .suggest("inventory")
                                             .suggest("ender")
                                             .suggest("bank")
                                             .suggest("coins")
+                                            .suggest("crypto")
+                                            .suggest("stocks")
                                             .buildFuture();
                                 })
                                 .executes(ctx -> {
@@ -1891,6 +1895,66 @@ public class CommandRegistry {
                                         return 0;
                                     }
                                 }))));
+    }
+
+    private static void registerCivilAntiCheatAndViewCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("CivilAC")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(ctx -> {
+                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrThrow());
+                    return 1;
+                }));
+        dispatcher.register(CommandManager.literal("civilac")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(ctx -> {
+                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrThrow());
+                    return 1;
+                }));
+        dispatcher.register(CommandManager.literal("CivilAntiCheat")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(ctx -> {
+                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrThrow());
+                    return 1;
+                }));
+        dispatcher.register(CommandManager.literal("civilanticheat")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .executes(ctx -> {
+                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrThrow());
+                    return 1;
+                }));
+        dispatcher.register(CommandManager.literal("view")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .then(CommandManager.literal("prevchests")
+                                .executes(ctx -> {
+                                    ServerPlayerEntity adminP = ctx.getSource().getPlayerOrThrow();
+                                    ServerPlayerEntity watched = EntityArgumentType.getPlayer(ctx, "player");
+                                    PrevChestsAdminGui.open(adminP, watched);
+                                    return 1;
+                                }))));
+        dispatcher.register(CommandManager.literal("View")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .then(CommandManager.literal("prevchests")
+                                .executes(ctx -> {
+                                    ServerPlayerEntity adminP = ctx.getSource().getPlayerOrThrow();
+                                    ServerPlayerEntity watched = EntityArgumentType.getPlayer(ctx, "player");
+                                    PrevChestsAdminGui.open(adminP, watched);
+                                    return 1;
+                                }))));
+        dispatcher.register(CommandManager.literal("quarantine")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.OWNERS_CHECK))
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .executes(ctx -> {
+                            ServerPlayerEntity adminP = ctx.getSource().getPlayerOrThrow();
+                            ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
+                            DupeGuard.captureForQuarantine(target);
+                            int n = DupeGuard.quarantinePlayer(target);
+                            adminP.sendMessage(Text.literal(
+                                    "Quarantine removed " + n + " stack(s) from " + target.getName().getString())
+                                    .formatted(Formatting.GREEN), false);
+                            return 1;
+                        })));
     }
 
     private static void registerResetImpeachment(CommandDispatcher<ServerCommandSource> dispatcher) {

@@ -8,6 +8,9 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -93,6 +96,11 @@ public class ArmorAbilityHandler {
         tickInfernoDragonChestplate(player);
         tickStormDragonChestplate(player);
         tickVoidDragonChestplate(player);
+        tickAuroraDragonChestplate(player);
+        tickFrostDragonChestplate(player);
+        tickVenomDragonChestplate(player);
+        tickBloodDragonChestplate(player);
+        tickEclipseDragonChestplate(player);
     }
 
     /**
@@ -1146,6 +1154,194 @@ public class ArmorAbilityHandler {
             }
         }
         previousMaxHealth.put(uuid, targetMax);
+    }
+
+    public static void tickAuroraDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "aurora_dragon_chestplate")) return;
+
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        UUID uuid = player.getUuid();
+        var abilities = player.getAbilities();
+        abilities.allowFlying = true;
+
+        boolean wasFlying = previousFlying.getOrDefault(uuid, false);
+        boolean isFlying = abilities.flying;
+        previousFlying.put(uuid, isFlying);
+
+        if (wasFlying && !isFlying && !player.isOnGround()) {
+            grantFallImmunity(uuid);
+        }
+        if (isFlying) {
+            fallImmunityPlayers.remove(uuid);
+        }
+
+        float targetHealth = world.isRaining() ? 36f : 28f;
+        if (isFlying) {
+            targetHealth = 2f;
+            player.fallDistance = 0;
+        }
+        if (player.getMaxHealth() != targetHealth) {
+            player.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(targetHealth);
+            if (player.getHealth() > targetHealth) {
+                player.setHealth(targetHealth);
+            } else if (player.getHealth() < targetHealth && !isFlying) {
+                player.setHealth(Math.min(targetHealth, player.getHealth() + 0.05f));
+            }
+        }
+        previousMaxHealth.put(uuid, targetHealth);
+
+        if (world.isRaining()) {
+            if (!player.hasStatusEffect(StatusEffects.SPEED)) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 120, 1, true, false, false));
+            }
+            if (!player.hasStatusEffect(StatusEffects.REGENERATION)) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 120, 0, true, false, false));
+            }
+        }
+
+        player.sendAbilitiesUpdate();
+
+        if (player.age % 3 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.6;
+            double y = player.getY() + Math.random() * 1.4;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.6;
+            world.spawnParticles(ParticleTypes.END_ROD, x, y, z, 1, 0.02, 0.05, 0.02, 0.01);
+            world.spawnParticles(ParticleTypes.ENCHANT, x, y, z, 2, 0.2, 0.1, 0.2, 0.02);
+        }
+    }
+
+    public static void tickFrostDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "frost_dragon_chestplate")) return;
+
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        BlockState below = world.getBlockState(player.getBlockPos().down());
+        boolean onCold = below.isOf(Blocks.SNOW_BLOCK) || below.isOf(Blocks.ICE) || below.isOf(Blocks.PACKED_ICE)
+                || below.isOf(Blocks.BLUE_ICE) || below.isOf(Blocks.SNOW);
+
+        if (world.getRegistryKey() == World.NETHER) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 120, 1, true, false, false));
+        } else if (onCold) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 120, 1, true, false, false));
+        }
+
+        if (player.age % 4 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.5;
+            double y = player.getY() + Math.random() * 1.3;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
+            world.spawnParticles(ParticleTypes.SNOWFLAKE, x, y, z, 2, 0.08, 0.06, 0.08, 0.01);
+        }
+    }
+
+    public static void tickVenomDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "venom_dragon_chestplate")) return;
+
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        if (player.hasStatusEffect(StatusEffects.POISON)) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 80, 0, true, false, false));
+        }
+
+        if (player.age % 90 == 0) {
+            for (Entity e : world.getOtherEntities(player, player.getBoundingBox().expand(3.5))) {
+                if (e instanceof HostileEntity hostile) {
+                    hostile.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 50, 0, true, false, true));
+                }
+            }
+        }
+
+        if (player.age % 3 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.5;
+            double y = player.getY() + Math.random() * 1.2;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
+            world.spawnParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 2, 0.12, 0.08, 0.12, 0);
+        }
+    }
+
+    public static void tickBloodDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "blood_dragon_chestplate")) return;
+
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        float hp = player.getHealth();
+        float max = player.getMaxHealth();
+        if (hp < max * 0.28f && player.age % 45 == 0) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 35, 0, true, false, true));
+        }
+        if (!player.hasStatusEffect(StatusEffects.STRENGTH)) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 120, 0, true, false, false));
+        }
+
+        if (player.age % 4 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.4;
+            double y = player.getY() + 1.0 + Math.random() * 0.3;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.4;
+            world.spawnParticles(ParticleTypes.DAMAGE_INDICATOR, x, y, z, 2, 0.15, 0.02, 0.15, 0.01);
+        }
+    }
+
+    public static void tickEclipseDragonChestplate(ServerPlayerEntity player) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "eclipse_dragon_chestplate")) return;
+
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        UUID uuid = player.getUuid();
+        boolean night = !world.isDay();
+        var abilities = player.getAbilities();
+
+        if (night) {
+            abilities.allowFlying = true;
+            boolean wasFlying = previousFlying.getOrDefault(uuid, false);
+            boolean isFlying = abilities.flying;
+            previousFlying.put(uuid, isFlying);
+
+            if (wasFlying && !isFlying && !player.isOnGround()) {
+                grantFallImmunity(uuid);
+            }
+            if (isFlying) {
+                fallImmunityPlayers.remove(uuid);
+                player.fallDistance = 0;
+                if (player.age % 25 == 0) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 30, 0, true, false, true));
+                }
+            }
+            if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 400, 0, true, false, false));
+            }
+            player.sendAbilitiesUpdate();
+        } else {
+            abilities.allowFlying = false;
+            abilities.flying = false;
+            previousFlying.put(uuid, false);
+            player.sendAbilitiesUpdate();
+            if (player.getY() > (double) world.getSeaLevel() + 2 && world.isSkyVisible(player.getBlockPos())) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 50, 0, true, false, true));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 50, 0, true, false, true));
+            }
+        }
+
+        if (player.age % 3 == 0) {
+            double x = player.getX() + (Math.random() - 0.5) * 0.5;
+            double y = player.getY() + Math.random() * 1.3;
+            double z = player.getZ() + (Math.random() - 0.5) * 0.5;
+            world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 2, 0.06, 0.05, 0.06, 0.01);
+            if (night) {
+                world.spawnParticles(ParticleTypes.REVERSE_PORTAL, x, y, z, 1, 0.04, 0.04, 0.04, 0.01);
+            }
+        }
+    }
+
+    public static void onVenomDragonHit(ServerPlayerEntity player, LivingEntity target) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "venom_dragon_chestplate")) return;
+        target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 70, 1, true, false, true));
+    }
+
+    public static void onBloodDragonHit(ServerPlayerEntity player, LivingEntity target) {
+        ItemStack chestplate = player.getEquippedStack(EquipmentSlot.CHEST);
+        if (chestplate.isEmpty() || !DragonChestplates.hasCustomItemId(chestplate, "blood_dragon_chestplate")) return;
+        player.heal(1.0f);
     }
 
     // Void Dragon - Magic and arrow immunity

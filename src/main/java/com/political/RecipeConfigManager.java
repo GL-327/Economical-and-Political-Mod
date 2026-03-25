@@ -15,6 +15,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryOps;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.fabricmc.loader.api.FabricLoader;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,16 +32,32 @@ import java.util.Map;
 public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    // Use server working-directory relative config path.
-    private static final Path CONFIG_DIR = java.nio.file.Paths.get("config", "political");
+    /** Primary path — Fabric config dir (matches dedicated server and dev run). */
+    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
     // Modular recipe file path (unused but kept for potential future use)
     private static final java.nio.file.Path MODULAR_FILE = CONFIG_DIR.resolve("modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
+    /** Optional mirror (cwd) when it differs from Fabric config — keeps repo / IDE copy in sync with /setrecipe. */
+    private static final Path RECIPE_JSON_MIRROR = Path.of("config", "political", "custom_recipes.json");
 
     static {
         boolean fileExists = java.nio.file.Files.exists(CONFIG_FILE);
-        System.out.println("[RecipeConfigManager] JSON: " + (fileExists ? "OK" : "MISSING") + " | Path: " + CONFIG_FILE);
+        System.out.println("[RecipeConfigManager] JSON: " + (fileExists ? "OK" : "MISSING") + " | Path: " + CONFIG_FILE.toAbsolutePath());
+    }
+
+    private static void writeRecipeJsonRoot(JsonObject root) throws IOException {
+        Files.createDirectories(CONFIG_FILE.getParent());
+        try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
+            GSON.toJson(root, writer);
+        }
+        if (!CONFIG_FILE.toAbsolutePath().normalize().equals(RECIPE_JSON_MIRROR.toAbsolutePath().normalize())) {
+            Files.createDirectories(RECIPE_JSON_MIRROR.getParent());
+            try (Writer writer = Files.newBufferedWriter(RECIPE_JSON_MIRROR)) {
+                GSON.toJson(root, writer);
+            }
+            System.out.println("[RecipeConfigManager] Mirrored recipes to " + RECIPE_JSON_MIRROR.toAbsolutePath());
+        }
     }
 
     /** Custom recipes added via /setrecipe (override defaults). */
@@ -65,17 +82,15 @@ public class RecipeConfigManager {
         invalidateRecipeCache();
         SlayerRecipes.RECIPES.clear();
         loadDisabled();
+        SlayerRecipes.registerRecipes();
     }
 
     private static void ensureRecipeFileExists() {
         try {
             if (!Files.exists(CONFIG_FILE)) {
-                Files.createDirectories(CONFIG_FILE.getParent());
                 JsonObject root = new JsonObject();
                 root.add("recipes", new JsonArray());
-                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                    GSON.toJson(root, writer);
-                }
+                writeRecipeJsonRoot(root);
                 System.out.println("[RecipeConfigManager] Created empty custom_recipes.json at " + CONFIG_FILE.toAbsolutePath());
                 return;
             }
@@ -84,9 +99,7 @@ public class RecipeConfigManager {
             if (jsonString == null || jsonString.isBlank()) {
                 JsonObject root = new JsonObject();
                 root.add("recipes", new JsonArray());
-                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                    GSON.toJson(root, writer);
-                }
+                writeRecipeJsonRoot(root);
                 System.out.println("[RecipeConfigManager] custom_recipes.json was blank; initialized empty recipes at " + CONFIG_FILE.toAbsolutePath());
                 return;
             }
@@ -315,15 +328,13 @@ public class RecipeConfigManager {
             JsonObject root = new JsonObject();
             root.add("recipes", recipesArr);
             
-            Files.createDirectories(CONFIG_FILE.getParent());
-            try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                GSON.toJson(root, writer);
-            }
+            writeRecipeJsonRoot(root);
             
             System.out.println("[RecipeConfigManager] /setrecipe: OK | Wrote '" + recipe.name + "' (" + removed + " replaced)");
             
             // Force cache refresh on next access
             invalidateRecipeCache();
+            SlayerRecipes.registerRecipes();
             
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to save recipe: " + e.getMessage());
@@ -363,9 +374,7 @@ public class RecipeConfigManager {
                 JsonObject root = new JsonObject();
                 root.add("recipes", recipesArr);
                 
-                try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                    GSON.toJson(root, writer);
-                }
+                writeRecipeJsonRoot(root);
                 
                 System.out.println("[RecipeConfigManager] Removed recipe '" + name + "' from JSON");
                 
@@ -389,13 +398,11 @@ public class RecipeConfigManager {
             JsonObject root = new JsonObject();
             root.add("recipes", recipes);
             
-            Files.createDirectories(CONFIG_FILE.getParent());
-            try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-                GSON.toJson(root, writer);
-            }
+            writeRecipeJsonRoot(root);
             
             System.out.println("[RecipeConfigManager] Regenerated " + recipes.size() + " recipes to " + CONFIG_FILE);
             invalidateRecipeCache();
+            SlayerRecipes.registerRecipes();
             
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to regenerate recipes: " + e.getMessage());
@@ -1209,6 +1216,11 @@ public class RecipeConfigManager {
         if ("inferno_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate1();
         if ("storm_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate2();
         if ("void_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplate3();
+        if ("aurora_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateAurora();
+        if ("frost_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateFrost();
+        if ("venom_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateVenom();
+        if ("blood_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateBlood();
+        if ("eclipse_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateEclipse();
         
         // HPEBM Weapons
         for (int mk = 1; mk <= 5; mk++) {

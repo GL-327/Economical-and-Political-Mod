@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.minecraft.server.command.CommandManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
@@ -42,6 +43,13 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
         LOGGER.info("PoliticalServer mod initializing");
+
+        // Scale + name upgraded mobs on spawn (not only on first damage) so tier tags are visible without hitting.
+        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (world instanceof ServerWorld && entity instanceof LivingEntity living) {
+                HealthScalingManager.tryScaleMob(living);
+            }
+        });
 
         // Register custom items
         CustomItemHandler.register();
@@ -235,15 +243,18 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(s -> {
             server = s;
             DataManager.load(s);
+            CryptoMarket.persistLoad(s);
+            StockMarket.persistLoad(s);
             AuctionHouseManager.load(s);
             UndergroundAuctionManager.load(s);
             ScoreboardManager.init(s);
-            RecipeConfigManager.load();  // Load custom recipes
-            SlayerRecipes.registerRecipes();  // Then register hardcoded + merge custom
+            RecipeConfigManager.load();  // Load custom recipes + SlayerRecipes.registerRecipes()
             LOGGER.info("PoliticalServer data loaded");
         });
 
         ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
+            CryptoMarket.persistSave(s);
+            StockMarket.persistSave(s);
             DataManager.save(s);
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
@@ -308,6 +319,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BountyArmorHandler.tick(s);
             StockMarket.tick(s);
             CryptoMarket.tick(s);
+            DupeGuard.tick(s);
 
             // Boss abilities - iterate worlds
             for (ServerWorld world : s.getWorlds()) {

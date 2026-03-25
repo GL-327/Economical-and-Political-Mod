@@ -1,15 +1,24 @@
 package com.political.mixin;
 
+import com.political.ChestAccessHistory;
 import com.political.SpawnProtectionManager;
 import com.political.DanielsPickaxe;
 import com.political.LegendaryToolHandler;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Hand;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,5 +64,21 @@ public class ServerPlayerInteractionManagerMixin {
             cir.setReturnValue(true);
             return;
         }
+    }
+
+    @Inject(method = "interactBlock", at = @At("RETURN"))
+    private void political_recordOpenedContainer(ServerPlayerEntity serverPlayer, World world, ItemStack stack,
+                                                 Hand hand, BlockHitResult hitResult,
+                                                 CallbackInfoReturnable<ActionResult> cir) {
+        if (!(world instanceof ServerWorld sw)) return;
+        ActionResult res = cir.getReturnValue();
+        if (!res.isAccepted()) return;
+        BlockPos pos = hitResult.getBlockPos();
+        BlockEntity be = world.getBlockEntity(pos);
+        if (!(be instanceof Inventory)) return;
+        if (serverPlayer.isSpectator()) return;
+        String blockId = Registries.BLOCK.getId(world.getBlockState(pos).getBlock()).toString();
+        String worldId = sw.getRegistryKey().getValue().toString();
+        ChestAccessHistory.record(serverPlayer, worldId, pos, blockId);
     }
 }
