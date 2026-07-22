@@ -1,0 +1,7 @@
+{
+  "type": "politicalserver:fracture_3_type",
+  "generator": {
+    "type": "politicalserver:fracture_3_generator",
+    "biome": "minecraft:the_void"
+  }
+}

@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "politicalserver",
+	"version": "1.0.0",
+	"name": "Political Server",
+	"description": "Weekly elections with perks system",
+	"authors": ["You"],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/politicalserver/icon.png",
+	"environment": "server",
+	"custom": {
+		"fabric:registry_sync": {
+			"skip": true
+		},
+		"fabric-api:server-side-only": true
+	},
+	"entrypoints": {
+		"server": ["com.political.PoliticalServer"]
+	},
+	"mixins": ["political.mixins.json", "politicalserver.mixins.json"],
+	"depends": {
+		"fabricloader": ">=0.18.0",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

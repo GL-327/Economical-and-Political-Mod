@@ -1,0 +1,156 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://maven.nucleoid.xyz/" }
+}
+
+loom {
+	mods {
+		"politicalserver" {
+			sourceSet sourceSets.main
+		}
+	}
+	// Separate run directory so `runServer` does not fight a world lock when another dev server/client is open.
+	runs {
+		// JDK 25: HotSpot can still AV in C1 (e.g. ListCodec$DecoderState.accept on player join / data load).
+		// TieredStopAtLevel=1 avoids C2; CompileCommand keeps the flaky codec path interpreted; -Xshare:off
+		// avoids CDS + new JVM combos that sometimes contribute to bad codegen on Windows.
+		client {
+			vmArgs "-XX:TieredStopAtLevel=1"
+			vmArgs "-Xshare:off"
+			vmArgs '-XX:CompileCommand=exclude,com/mojang/serialization/codecs/ListCodec$DecoderState.accept'
+		}
+		server {
+			vmArgs "-XX:TieredStopAtLevel=1"
+			vmArgs "-Xshare:off"
+			vmArgs '-XX:CompileCommand=exclude,com/mojang/serialization/codecs/ListCodec$DecoderState.accept'
+		}
+		serverVerify {
+			server()
+			runDir = "run-verify"
+			ideConfigGenerated = false
+		}
+		// If the server still JVM-crashes on JDK 25: ./gradlew runServerInt (slow boot, no JIT).
+		serverInt {
+			inherit server
+			vmArgs "-Xint"
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	def sguiVer = project.sgui_version
+	implementation "eu.pb4:sgui:${sguiVer}"
+	include "eu.pb4:sgui:${sguiVer}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": inputs.properties.version
+	}
+}
+
+def politicalRecipeSource = file('config/political/custom_recipes.json')
+def politicalRecipeRunDir = file('run/config/political')
+
+tasks.register('syncPoliticalRecipeConfig', Copy) {
+	group = 'mod development'
+	description = 'Copies config/political/custom_recipes.json into run/config/political for local runClient/runServer'
+	onlyIf { politicalRecipeSource.exists() }
+	from politicalRecipeSource
+	into politicalRecipeRunDir
+}
+
+tasks.named('runClient').configure { dependsOn tasks.named('syncPoliticalRecipeConfig') }
+tasks.named('runServer').configure { dependsOn tasks.named('syncPoliticalRecipeConfig') }
+
+def ensureServerRunDir = { File base, int gamePort ->
+	base.mkdirs()
+	def serverProps = new File(base, 'server.properties')
+	if (!serverProps.exists()) {
+		serverProps.text = """\
+server-port=${gamePort}
+max-players=20
+view-distance=8
+simulation-distance=4
+spawn-protection=0
+level-name=world
+online-mode=false
+allow-flight=true
+motd=PoliticalServer
+enable-rcon=false
+"""
+	}
+	def eulaFile = new File(base, 'eula.txt')
+	if (!eulaFile.exists()) {
+		eulaFile.text = "eula=true\n"
+	} else if (!eulaFile.text.toLowerCase().contains("eula=true")) {
+		eulaFile.text = "eula=true\n"
+	}
+}
+
+tasks.register('ensureDevServerFiles') {
+	onlyIf { return true }
+	doLast {
+		ensureServerRunDir(file('run'), 25565)
+		// Different port so a quick verify boot can run alongside a dev server on 25565.
+		ensureServerRunDir(file('run-verify'), 25566)
+	}
+}
+
+tasks.named('runServer').configure { dependsOn tasks.named('ensureDevServerFiles') }
+tasks.named('runServerVerify').configure { dependsOn tasks.named('ensureDevServerFiles') }
+
+tasks.register('printCompileClasspath') {
+	doLast {
+		println sourceSets.main.compileClasspath.asPath
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+	it.options.compilerArgs += ['-Xmaxerrs', '10000']
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	inputs.property "archivesName", project.base.archivesName
+
+	from("LICENSE") {
+		rename { "${it}_${inputs.properties.archivesName}"}
+	}
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
+			from components.java
+		}
+	}
+	repositories {
+	}
+}

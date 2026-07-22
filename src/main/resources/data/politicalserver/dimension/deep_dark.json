@@ -1,0 +1,15 @@
+{
+  "type": "politicalserver:caves_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        {"block": "minecraft:bedrock", "height": 1},
+        {"block": "minecraft:deepslate", "height": 60},
+        {"block": "minecraft:sculk", "height": 10}
+      ],
+      "structure_overrides": [],
+      "biome": "minecraft:deep_dark"
+    }
+  }
+}

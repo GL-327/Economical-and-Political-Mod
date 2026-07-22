@@ -1,0 +1,312 @@
+# Ability Catalog (Readable)
+
+This is a grouped, easier-to-read version of `ABILITY_CATALOG.md`.
+
+- Armor sets: **144**
+- Tool materials: **151**
+- Total set entries: **295**
+
+## Armor Full Sets (4/4) by Theme
+
+### air
+
+- `acacia_log`: Momentum Burst: periodic forward surge
+- `acacia_planks`: Umbral Veil: darkness pulse and stealth windows
+- `amethyst`: War Rhythm: timed haste/strength combat windows
+- `amethyst_cluster`: Bastion Pulse: heals and grants absorb shields
+- `amethyst_shard`: War Rhythm: timed haste/strength combat windows
+- `ancient_debris`: Cinder Ward: ignites nearby hostiles
+- `andesite`: War Rhythm: timed haste/strength combat windows
+- `bamboo_block`: Cinder Ward: ignites nearby hostiles
+- `bamboo_planks`: Umbral Veil: darkness pulse and stealth windows
+- `basalt`: War Rhythm: timed haste/strength combat windows
+- `birch_log`: Cinder Ward: ignites nearby hostiles
+- `birch_planks`: Suppression Aura: weakens nearby enemies
+- `blackstone`: Sky Step: controlled jumps and slow-fall bursts
+- `blackstone_bricks`: Tide Snare: slows nearby hostiles
+- `blue_ice`: Sky Step: controlled jumps and slow-fall bursts
+- `bone_block`: Cinder Ward: ignites nearby hostiles
+- `bone_meal`: Momentum Burst: periodic forward surge
+- `brick`: Cinder Ward: ignites nearby hostiles
+- `cactus`: War Rhythm: timed haste/strength combat windows
+- `calcite`: Sky Step: controlled jumps and slow-fall bursts
+- `charcoal`: Umbral Veil: darkness pulse and stealth windows
+- `cherry_log`: Umbral Veil: darkness pulse and stealth windows
+- `cherry_planks`: Suppression Aura: weakens nearby enemies
+- `chiseled_copper`: Suppression Aura: weakens nearby enemies
+- `chiseled_deepslate`: Tide Snare: slows nearby hostiles
+- `chiseled_nether_brick`: Suppression Aura: weakens nearby enemies
+- `chiseled_stone_brick`: Sky Step: controlled jumps and slow-fall bursts
+- `coal`: Sky Step: controlled jumps and slow-fall bursts
+- `cobbled_deepslate`: War Rhythm: timed haste/strength combat windows
+- `cobblestone`: Bastion Pulse: heals and grants absorb shields
+- `copper_block`: War Rhythm: timed haste/strength combat windows
+- `copper_ingot`: Momentum Burst: periodic forward surge
+- `cracked_nether_brick`: War Rhythm: timed haste/strength combat windows
+- `cracked_stone_brick`: Bastion Pulse: heals and grants absorb shields
+- `crimson_planks`: Cinder Ward: ignites nearby hostiles
+- `crimson_stem`: Bastion Pulse: heals and grants absorb shields
+- `crying_obsidian`: Cinder Ward: ignites nearby hostiles
+- `cut_copper`: Tide Snare: slows nearby hostiles
+- `dark_oak_log`: Tide Snare: slows nearby hostiles
+- `dark_oak_planks`: Momentum Burst: periodic forward surge
+- `dark_prismarine`: War Rhythm: timed haste/strength combat windows
+- `deepslate`: War Rhythm: timed haste/strength combat windows
+- `diamond_block`: Cinder Ward: ignites nearby hostiles
+- `diorite`: Tide Snare: slows nearby hostiles
+- `dripstone`: Suppression Aura: weakens nearby enemies
+- `emerald`: Umbral Veil: darkness pulse and stealth windows
+- `emerald_block`: Tide Snare: slows nearby hostiles
+- `end_stone_brick`: Tide Snare: slows nearby hostiles
+- `endstone`: Tide Snare: slows nearby hostiles
+- `exposed_copper`: War Rhythm: timed haste/strength combat windows
+- `flint`: Cinder Ward: ignites nearby hostiles
+- `gilded_blackstone`: War Rhythm: timed haste/strength combat windows
+- `glass`: Momentum Burst: periodic forward surge
+- `glowstone`: Bastion Pulse: heals and grants absorb shields
+- `gold_block`: Tide Snare: slows nearby hostiles
+- `gold_nugget`: Tide Snare: slows nearby hostiles
+- `granite`: Tide Snare: slows nearby hostiles
+- `hay`: Sky Step: controlled jumps and slow-fall bursts
+- `honeycomb`: Bastion Pulse: heals and grants absorb shields
+- `ice`: Umbral Veil: darkness pulse and stealth windows
+- `iron_block`: Tide Snare: slows nearby hostiles
+- `iron_nugget`: Tide Snare: slows nearby hostiles
+- `jungle_log`: Momentum Burst: periodic forward surge
+- `jungle_planks`: Umbral Veil: darkness pulse and stealth windows
+- `lapis_block`: Umbral Veil: darkness pulse and stealth windows
+- `lapis_lazuli`: Suppression Aura: weakens nearby enemies
+- `lily_pad`: Momentum Burst: periodic forward surge
+- `lodestone`: Bastion Pulse: heals and grants absorb shields
+- `magma`: Umbral Veil: darkness pulse and stealth windows
+- `mangrove_log`: Umbral Veil: darkness pulse and stealth windows
+- `mangrove_planks`: Suppression Aura: weakens nearby enemies
+- `mangrove_roots`: Umbral Veil: darkness pulse and stealth windows
+- `melon`: Bastion Pulse: heals and grants absorb shields
+- `moss_block`: Sky Step: controlled jumps and slow-fall bursts
+- `mossy`: War Rhythm: timed haste/strength combat windows
+- `mossy_cobblestone`: Suppression Aura: weakens nearby enemies
+- `mud_bricks`: War Rhythm: timed haste/strength combat windows
+- `muddy_mangrove_roots`: Cinder Ward: ignites nearby hostiles
+- `mycelium`: Suppression Aura: weakens nearby enemies
+- `nether_brick`: Momentum Burst: periodic forward surge
+- `nether_gold_ore`: Sky Step: controlled jumps and slow-fall bursts
+- `nether_wart_block`: War Rhythm: timed haste/strength combat windows
+- `netherite_block`: Umbral Veil: darkness pulse and stealth windows
+- `netherrack`: Tide Snare: slows nearby hostiles
+- `oak_log`: Tide Snare: slows nearby hostiles
+- `oak_planks`: Momentum Burst: periodic forward surge
+- `obsidian`: Umbral Veil: darkness pulse and stealth windows
+- `ochre_froglight`: Tide Snare: slows nearby hostiles
+- `oxidised_copper`: Suppression Aura: weakens nearby enemies
+- `packed_ice`: War Rhythm: timed haste/strength combat windows
+- `pearlescent_froglight`: Momentum Burst: periodic forward surge
+- `polished_andesite`: Umbral Veil: darkness pulse and stealth windows
+- `polished_basalt`: Umbral Veil: darkness pulse and stealth windows
+- `polished_blackstone`: War Rhythm: timed haste/strength combat windows
+- `polished_diorite`: Tide Snare: slows nearby hostiles
+- `polished_granite`: Tide Snare: slows nearby hostiles
+- `polished_tuff`: Bastion Pulse: heals and grants absorb shields
+- `prismarine`: Umbral Veil: darkness pulse and stealth windows
+- `prismarine_bricks`: Bastion Pulse: heals and grants absorb shields
+- `pumpkin`: War Rhythm: timed haste/strength combat windows
+- `purpur`: Suppression Aura: weakens nearby enemies
+- `quartz`: Momentum Burst: periodic forward surge
+- `raw_gold_block`: Cinder Ward: ignites nearby hostiles
+- `raw_iron_block`: Tide Snare: slows nearby hostiles
+- `red_sandstone`: Umbral Veil: darkness pulse and stealth windows
+- `redstone`: Umbral Veil: darkness pulse and stealth windows
+- `reinforced_deepslate`: Momentum Burst: periodic forward surge
+- `sand`: War Rhythm: timed haste/strength combat windows
+- `sandstone`: Cinder Ward: ignites nearby hostiles
+- `sculk`: Tide Snare: slows nearby hostiles
+- `sea_lantern`: Cinder Ward: ignites nearby hostiles
+- `shroomlight`: Sky Step: controlled jumps and slow-fall bursts
+- `slime`: Bastion Pulse: heals and grants absorb shields
+- `smooth_basalt`: Sky Step: controlled jumps and slow-fall bursts
+- `smooth_stone`: War Rhythm: timed haste/strength combat windows
+- `snow`: Umbral Veil: darkness pulse and stealth windows
+- `snow_block`: Bastion Pulse: heals and grants absorb shields
+- `soul_sand`: Sky Step: controlled jumps and slow-fall bursts
+- `soul_soil`: Bastion Pulse: heals and grants absorb shields
+- `sponge`: Momentum Burst: periodic forward surge
+- `spruce_log`: Umbral Veil: darkness pulse and stealth windows
+- `spruce_planks`: Momentum Burst: periodic forward surge
+- `stone_bricks`: Umbral Veil: darkness pulse and stealth windows
+- `stripped_acacia_log`: Sky Step: controlled jumps and slow-fall bursts
+- `stripped_bamboo_block`: Cinder Ward: ignites nearby hostiles
+- `stripped_birch_log`: Cinder Ward: ignites nearby hostiles
+- `stripped_cherry_log`: Umbral Veil: darkness pulse and stealth windows
+- `stripped_crimson_stem`: Bastion Pulse: heals and grants absorb shields
+- `stripped_dark_oak_log`: Tide Snare: slows nearby hostiles
+- `stripped_jungle_log`: Momentum Burst: periodic forward surge
+- `stripped_mangrove_log`: Umbral Veil: darkness pulse and stealth windows
+- `stripped_spruce_log`: War Rhythm: timed haste/strength combat windows
+- `stripped_warped_stem`: Bastion Pulse: heals and grants absorb shields
+- `target`: Bastion Pulse: heals and grants absorb shields
+- `terracotta`: War Rhythm: timed haste/strength combat windows
+- `tnt`: Tide Snare: slows nearby hostiles
+- `tuff`: Cinder Ward: ignites nearby hostiles
+- `verdant_froglight`: Cinder Ward: ignites nearby hostiles
+- `warped`: Momentum Burst: periodic forward surge
+- `warped_planks`: Cinder Ward: ignites nearby hostiles
+- `warped_wart_block`: Cinder Ward: ignites nearby hostiles
+- `waxed_cut_copper`: War Rhythm: timed haste/strength combat windows
+- `weathered_copper`: Tide Snare: slows nearby hostiles
+- `wet_sponge`: Suppression Aura: weakens nearby enemies
+
+## Tool Sets by Theme
+
+### air
+
+- `acacia_log`: Thermal Tap: conversion proc
+- `acacia_planks`: Magnet Pulse: loot/xp pull
+- `amethyst_cluster`: Verdant Mend: sustain pulse
+- `amethyst_shard`: Magnet Pulse: loot/xp pull
+- `ancient_debris`: Arc Shock: burst discharge
+- `andesite`: Resonance Pulse: bonus xp/shards
+- `anvil`: Arc Shock: burst discharge
+- `bamboo_block`: Arc Shock: burst discharge
+- `bamboo_planks`: Cross Cleave: area fracture
+- `barrel`: Thermal Tap: conversion proc
+- `basalt`: Magnet Pulse: loot/xp pull
+- `birch_log`: Vein Link: chained extraction
+- `birch_planks`: Verdant Mend: sustain pulse
+- `blackstone`: Thermal Tap: conversion proc
+- `blackstone_bricks`: Vein Link: chained extraction
+- `blue_ice`: Resonance Pulse: bonus xp/shards
+- `bone_block`: Arc Shock: burst discharge
+- `bone_meal`: Resonance Pulse: bonus xp/shards
+- `bookshelf`: Arc Shock: burst discharge
+- `brewing_stand`: Thermal Tap: conversion proc
+- `brick`: Arc Shock: burst discharge
+- `cactus`: Magnet Pulse: loot/xp pull
+- `calcite`: Resonance Pulse: bonus xp/shards
+- `candle`: Arc Shock: burst discharge
+- `chain`: Thermal Tap: conversion proc
+- `charcoal`: Cross Cleave: area fracture
+- `cherry_log`: Vein Link: chained extraction
+- `cherry_planks`: Thermal Tap: conversion proc
+- `chiseled_copper`: Verdant Mend: sustain pulse
+- `chiseled_deepslate`: Cross Cleave: area fracture
+- `chiseled_nether_brick`: Dusk Pulse: disruption field
+- `chiseled_stone_brick`: Magnet Pulse: loot/xp pull
+- `clay`: Arc Shock: burst discharge
+- `cobbled_deepslate`: Magnet Pulse: loot/xp pull
+- `cobblestone`: Dusk Pulse: disruption field
+- `composter`: Resonance Pulse: bonus xp/shards
+- `concrete`: Magnet Pulse: loot/xp pull
+- `concrete_powder`: Vein Link: chained extraction
+- `copper_block`: Cross Cleave: area fracture
+- `copper_ingot`: Thermal Tap: conversion proc
+- `coral_block`: Magnet Pulse: loot/xp pull
+- `cracked_nether_brick`: Cross Cleave: area fracture
+- `cracked_stone_brick`: Verdant Mend: sustain pulse
+- `crimson_planks`: Verdant Mend: sustain pulse
+- `crimson_stem`: Verdant Mend: sustain pulse
+- `crying_obsidian`: Vein Link: chained extraction
+- `cut_copper`: Cross Cleave: area fracture
+- `dark_oak_log`: Vein Link: chained extraction
+- `dark_oak_planks`: Thermal Tap: conversion proc
+- `dark_prismarine`: Cross Cleave: area fracture
+- `deepslate`: Resonance Pulse: bonus xp/shards
+- `diamond_block`: Arc Shock: burst discharge
+- `diorite`: Arc Shock: burst discharge
+- `dried_kelp`: Verdant Mend: sustain pulse
+- `dripstone`: Verdant Mend: sustain pulse
+- `emerald`: Magnet Pulse: loot/xp pull
+- `emerald_block`: Vein Link: chained extraction
+- `end_stone_brick`: Vein Link: chained extraction
+- `exposed_copper`: Magnet Pulse: loot/xp pull
+- `flint`: Verdant Mend: sustain pulse
+- `furnace`: Magnet Pulse: loot/xp pull
+- `gilded_blackstone`: Magnet Pulse: loot/xp pull
+- `glazed_terracotta`: Dusk Pulse: disruption field
+- `gold_block`: Vein Link: chained extraction
+- `gold_nugget`: Arc Shock: burst discharge
+- `granite`: Arc Shock: burst discharge
+- `grindstone`: Arc Shock: burst discharge
+- `hay`: Magnet Pulse: loot/xp pull
+- `honeycomb`: Arc Shock: burst discharge
+- `iron_block`: Vein Link: chained extraction
+- `iron_nugget`: Vein Link: chained extraction
+- `jungle_log`: Dusk Pulse: disruption field
+- `jungle_planks`: Vein Link: chained extraction
+- `lantern`: Arc Shock: burst discharge
+- `lapis_block`: Cross Cleave: area fracture
+- `lapis_lazuli`: Dusk Pulse: disruption field
+- `lectern`: Dusk Pulse: disruption field
+- `lightning_rod`: Vein Link: chained extraction
+- `lily_pad`: Resonance Pulse: bonus xp/shards
+- `lodestone`: Verdant Mend: sustain pulse
+- `mangrove_log`: Cross Cleave: area fracture
+- `mangrove_planks`: Dusk Pulse: disruption field
+- `mangrove_roots`: Cross Cleave: area fracture
+- `melon`: Dusk Pulse: disruption field
+- `moss_block`: Resonance Pulse: bonus xp/shards
+- `mossy_cobblestone`: Dusk Pulse: disruption field
+- `mud_bricks`: Resonance Pulse: bonus xp/shards
+- `muddy_mangrove_roots`: Verdant Mend: sustain pulse
+- `mycelium`: Verdant Mend: sustain pulse
+- `nether_brick`: Thermal Tap: conversion proc
+- `nether_gold_ore`: Thermal Tap: conversion proc
+- `nether_wart_block`: Magnet Pulse: loot/xp pull
+- `netherite_block`: Cross Cleave: area fracture
+- `oak_log`: Cross Cleave: area fracture
+- `oak_planks`: Dusk Pulse: disruption field
+- `ochre_froglight`: Vein Link: chained extraction
+- `oxidised_copper`: Verdant Mend: sustain pulse
+- `packed_ice`: Magnet Pulse: loot/xp pull
+- `pearlescent_froglight`: Thermal Tap: conversion proc
+- `polished_andesite`: Cross Cleave: area fracture
+- `polished_basalt`: Magnet Pulse: loot/xp pull
+- `polished_blackstone`: Resonance Pulse: bonus xp/shards
+- `polished_diorite`: Vein Link: chained extraction
+- `polished_granite`: Vein Link: chained extraction
+- `polished_tuff`: Dusk Pulse: disruption field
+- `prismarine_bricks`: Verdant Mend: sustain pulse
+- `pumpkin`: Magnet Pulse: loot/xp pull
+- `purpur`: Verdant Mend: sustain pulse
+- `raw_gold_block`: Arc Shock: burst discharge
+- `raw_iron_block`: Arc Shock: burst discharge
+- `raw_prismarine`: Arc Shock: burst discharge
+- `red_sandstone`: Vein Link: chained extraction
+- `reinforced_deepslate`: Dusk Pulse: disruption field
+- `sand`: Magnet Pulse: loot/xp pull
+- `sculk`: Vein Link: chained extraction
+- `sculk_catalyst`: Arc Shock: burst discharge
+- `sculk_sensor`: Cross Cleave: area fracture
+- `sculk_shrieker`: Verdant Mend: sustain pulse
+- `sea_lantern`: Vein Link: chained extraction
+- `shroomlight`: Resonance Pulse: bonus xp/shards
+- `slime`: Verdant Mend: sustain pulse
+- `smithing_table`: Cross Cleave: area fracture
+- `smooth_basalt`: Resonance Pulse: bonus xp/shards
+- `smooth_stone`: Cross Cleave: area fracture
+- `snow`: Vein Link: chained extraction
+- `snow_block`: Verdant Mend: sustain pulse
+- `soul_soil`: Arc Shock: burst discharge
+- `sponge`: Dusk Pulse: disruption field
+- `spruce_log`: Magnet Pulse: loot/xp pull
+- `spruce_planks`: Thermal Tap: conversion proc
+- `stone_bricks`: Cross Cleave: area fracture
+- `stonecutter`: Cross Cleave: area fracture
+- `stripped_acacia_log`: Resonance Pulse: bonus xp/shards
+- `stripped_birch_log`: Arc Shock: burst discharge
+- `stripped_cherry_log`: Cross Cleave: area fracture
+- `stripped_dark_oak_log`: Vein Link: chained extraction
+- `stripped_jungle_log`: Thermal Tap: conversion proc
+- `stripped_mangrove_log`: Cross Cleave: area fracture
+- `stripped_spruce_log`: Cross Cleave: area fracture
+- `target`: Verdant Mend: sustain pulse
+- `tinted_glass`: Arc Shock: burst discharge
+- `tnt`: Vein Link: chained extraction
+- `tuff`: Verdant Mend: sustain pulse
+- `verdant_froglight`: Verdant Mend: sustain pulse
+- `warped`: Thermal Tap: conversion proc
+- `warped_planks`: Arc Shock: burst discharge
+- `warped_stem`: Verdant Mend: sustain pulse
+- `warped_wart_block`: Arc Shock: burst discharge
+- `waxed_cut_copper`: Resonance Pulse: bonus xp/shards
+- `weathered_copper`: Arc Shock: burst discharge
+- `wet_sponge`: Verdant Mend: sustain pulse

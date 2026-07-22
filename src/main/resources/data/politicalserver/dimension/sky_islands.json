@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:the_end",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        {"block": "minecraft:end_stone", "height": 1}
+      ],
+      "structure_overrides": [],
+      "biome": "minecraft:the_end"
+    }
+  }
+}

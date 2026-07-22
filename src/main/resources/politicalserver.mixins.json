@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "com.political.mixin",
+	"compatibilityLevel": "JAVA_22",
+	"mixins": [
+		"MiningSpeedMixin",
+		"PlayerDeathMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

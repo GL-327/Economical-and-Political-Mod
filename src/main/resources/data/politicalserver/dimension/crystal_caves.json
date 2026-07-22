@@ -1,0 +1,15 @@
+{
+  "type": "politicalserver:caves_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        {"block": "minecraft:bedrock", "height": 1},
+        {"block": "minecraft:stone", "height": 40},
+        {"block": "minecraft:amethyst_block", "height": 20}
+      ],
+      "structure_overrides": [],
+      "biome": "minecraft:dripstone_caves"
+    }
+  }
+}

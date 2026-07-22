@@ -1,0 +1,60 @@
+# gradle
+
+.gradle/
+build/
+out/
+classes/
+
+# eclipse
+
+*.launch
+
+# idea
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# vscode
+
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# macos
+
+*.DS_Store
+
+# fabric
+
+run/
+run-verify/
+
+# runtime config
+config/
+!config/political/
+!config/political/custom_recipes.json
+
+# java
+
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+# local compile / scratch logs (repo root)
+compile*.txt
+compile*.log
+err*.txt
+errors-*.txt
+full-compile.log
+c3.txt
+
+# extra local artifacts
+*.class
+build_output*.txt
+boot*.log
+full_boot*.log

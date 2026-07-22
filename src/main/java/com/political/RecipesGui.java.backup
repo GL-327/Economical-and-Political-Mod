@@ -1,0 +1,2574 @@
+package com.political;
+
+import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.gui.SimpleGui;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+public class RecipesGui {
+
+    // Crafting grid slot positions in a 9x6 (54-slot) GUI — matches /setrecipe layout:
+    // Row 0 (0-8):   bg  bg  bg  bg  HEADER bg  bg  bg  bg
+    // Row 1 (9-17):  bg  S0  S1  S2  bg     bg  bg  bg  bg
+    // Row 2 (18-26): bg  S3  S4  S5  bg     bg  ARR RES bg
+    // Row 3 (27-35): bg  S6  S7  S8  bg     bg  bg  bg  bg
+    // Row 4 (36-44): bg  bg  bg  bg  bg     bg  bg  bg  bg
+    // Row 5 (45-53): BAK bg  bg  bg  bg     bg  bg  bg  bg
+    private static final int[] GRID_SLOTS = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+    private static final int SLOT_HEADER = 4;
+    private static final int SLOT_ARROW  = 23;
+    private static final int SLOT_RESULT = 24;
+    private static final int SLOT_BACK   = 45;
+
+    // ============================================================
+    // HELPER: Open a single recipe page (9x5 crafting grid view)
+    // ============================================================
+    private static void openRecipePage(ServerPlayerEntity player,
+                                       String title,
+                                       Text headerName,
+                                       ItemStack[] ingredients, // exactly 9 slots (null = empty)
+                                       ItemStack result,
+                                       Runnable backAction) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(title));
+
+        // Background fill
+        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                .setName(Text.literal(""));
+        for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
+
+        // Header
+        gui.setSlot(SLOT_HEADER, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+                .setName(headerName)
+                .glow()
+                .build());
+
+        // 3x3 crafting grid — clear any background panes first
+        for (int i = 0; i < 9; i++) {
+            ItemStack ing = (ingredients != null && i < ingredients.length) ? ingredients[i] : null;
+            if (ing != null && !ing.isEmpty()) {
+                GuiElementBuilder eb = new GuiElementBuilder(ing.getItem());
+                Text name = ing.get(DataComponentTypes.CUSTOM_NAME);
+                if (name != null) eb.setName(name);
+                if (ing.getCount() > 1) eb.setCount(ing.getCount());
+                gui.setSlot(GRID_SLOTS[i], eb.build());
+            } else {
+                // Empty grid slot: override the background pane with air
+                gui.setSlot(GRID_SLOTS[i], GuiElementBuilder.from(ItemStack.EMPTY).build());
+            }
+        }
+
+        // Arrow pointing right
+        gui.setSlot(SLOT_ARROW, new GuiElementBuilder(Items.SPECTRAL_ARROW)
+                .setName(Text.literal("→").formatted(Formatting.YELLOW))
+                .build());
+
+        // Result item
+        if (result != null && !result.isEmpty()) {
+            GuiElementBuilder rb = new GuiElementBuilder(result.getItem());
+            Text resultName = result.get(DataComponentTypes.CUSTOM_NAME);
+            if (resultName != null) rb.setName(resultName);
+            rb.glow();
+            gui.setSlot(SLOT_RESULT, rb.build());
+        }
+
+        // Back button
+        gui.setSlot(SLOT_BACK, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> backAction.run())
+                .build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // HELPER: Create a display ItemStack with custom name and count
+    // ============================================================
+    private static ItemStack display(net.minecraft.item.Item item, int count, String name, Formatting color) {
+        ItemStack stack = new ItemStack(item, count);
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name).formatted(color));
+        return stack;
+    }
+
+    private static ItemStack display(net.minecraft.item.Item item, int count, String name) {
+        return display(item, count, name, Formatting.WHITE);
+    }
+
+    /**
+     * Item #8 – /setrecipe ↔ /recipe sync.
+     * Checks RecipeConfigManager for a custom admin recipe whose result matches
+     * the custom item ID of {@code resultStack}. If one is found the recipe page
+     * is opened with the admin-configured ingredients instead of the hardcoded
+     * ones. Returns true when the custom recipe was shown, false when the caller
+     * should fall through to its own hardcoded recipe.
+     */
+    private static boolean tryOpenCustomRecipe(ServerPlayerEntity player,
+                                               ItemStack resultStack,
+                                               String title,
+                                               Runnable backAction) {
+        String customId = SlayerItems.getCustomItemId(resultStack);
+        if (customId == null) return false;
+
+        for (SlayerRecipes.Recipe r : RecipeConfigManager.getCustomRecipes()) {
+            String rId = SlayerItems.getCustomItemId(r.result);
+            if (customId.equals(rId)) {
+                Text headerName = r.result.get(DataComponentTypes.CUSTOM_NAME);
+                if (headerName == null) headerName = Text.literal(r.name).formatted(Formatting.WHITE);
+                openRecipePage(player, title, headerName, r.ingredients, r.result, backAction);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // MAIN MENU - Symmetric Layout
+    // ============================================================
+    public static void openMainMenu(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("📖 Recipe Workshop"));
+
+        // Decorative background with symmetric pattern
+        for (int i = 0; i < 54; i++) {
+            if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
+                gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                        .setName(Text.literal("⬛").formatted(Formatting.DARK_BLUE))
+                        .build());
+            } else {
+                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                        .setName(Text.literal("")).build());
+            }
+        }
+
+        // Center header
+        gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
+                .setName(Text.literal("📖 Recipe Workshop").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎨 Master crafting recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚡ Create custom recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🔧 Browse all categories").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Symmetric category layout - Top row
+        gui.setSlot(10, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔️ Bounty Swords (T1)").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🗡️ Tier 1 bounty weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openT1SwordsMenu(player))
+                .build());
+
+        gui.setSlot(11, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("⚔️ Bounty Swords (T2)").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🗡️ Tier 2 bounty weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openT2SwordsMenu(player))
+                .build());
+
+        gui.setSlot(12, new GuiElementBuilder(Items.BLAZE_ROD)
+                .setName(Text.literal("⚡ HPEBM Weapons").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("⚡ High-power energy weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openHPEBMMenu(player))
+                .build());
+
+        gui.setSlot(13, new GuiElementBuilder(Items.COMMAND_BLOCK)
+                .setName(Text.literal("⚙ Create Custom Recipe").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎨 Design your own recipes").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("🔧 Admin only feature").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("✨ Click to create").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCustomRecipeCreator(player))
+                .build());
+
+        gui.setSlot(14, new GuiElementBuilder(Items.NETHERITE_SWORD)
+                .setName(Text.literal("🗡️ Special Weapons").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎁 Unique special weapons").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSpecialWeaponsMenu(player))
+                .build());
+
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("🛡️ Special Armor").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎁 Unique special armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSpecialArmorMenu(player))
+                .build());
+
+        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_APPLE)
+                .setName(Text.literal("🎁 Special Items").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🎁 Unique special items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSpecialItemsMenu(player))
+                .build());
+
+        // Second row - Armor categories
+        gui.setSlot(19, new GuiElementBuilder(Items.IRON_CHESTPLATE)
+                .setName(Text.literal("🛡️ Bounty Armor (T1)").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🛡️ Tier 1 bounty armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openT1ArmorMenu(player))
+                .build());
+
+        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_CHESTPLATE)
+                .setName(Text.literal("🛡️ Bounty Armor (T2)").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🛡️ Tier 2 bounty armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openT2ArmorMenu(player))
+                .build());
+
+        gui.setSlot(21, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+                .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("📈 5 tiers of gold armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openGoldArmorMenu(player))
+                .build());
+
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("👑 Legendary Crowns").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("👑 Premium crowns & helmets").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openLegendaryCrownsMenu(player))
+                .build());
+
+        gui.setSlot(23, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Text.literal("👑 Piglin Collection").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("💰 Premium piglin items").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openPiglinMenu(player))
+                .build());
+
+        gui.setSlot(24, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("🧱 Compacted Materials").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🔨 Dense material blocks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openCompactedMaterialsMenu(player))
+                .build());
+
+        gui.setSlot(25, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("⭐ Super Compacted").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🌟 Ultra-dense materials").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openSuperCompactedMenu(player))
+                .build());
+
+        // Third row - Weapon Attributes (replacing armor attributes)
+        gui.setSlot(31, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Text.literal("⚔️ Weapon Attributes").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("🔥 Apply weapon abilities").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚡ 10 unique attributes").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("✨ Click to explore").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openWeaponAttributesMenu(player))
+                .glow()
+                .build());
+
+        // Bottom navigation
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("❌ Close").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Exit recipe workshop").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> player.closeHandledScreen())
+                .build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // HELPER METHODS - Placeholder implementations
+    // ============================================================
+
+    private static void openT1SwordsMenu(ServerPlayerEntity player) {
+        // TODO: Implement T1 swords menu
+        player.sendMessage(Text.literal("T1 Swords menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openT2SwordsMenu(ServerPlayerEntity player) {
+        // TODO: Implement T2 swords menu
+        player.sendMessage(Text.literal("T2 Swords menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openHPEBMMenu(ServerPlayerEntity player) {
+        // TODO: Implement HPEBM menu
+        player.sendMessage(Text.literal("HPEBM menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openCustomRecipeCreator(ServerPlayerEntity player) {
+        // TODO: Implement custom recipe creator
+        player.sendMessage(Text.literal("Custom recipe creator coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openSpecialWeaponsMenu(ServerPlayerEntity player) {
+        // TODO: Implement special weapons menu
+        player.sendMessage(Text.literal("Special weapons menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openSpecialArmorMenu(ServerPlayerEntity player) {
+        // TODO: Implement special armor menu
+        player.sendMessage(Text.literal("Special armor menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openSpecialItemsMenu(ServerPlayerEntity player) {
+        // TODO: Implement special items menu
+        player.sendMessage(Text.literal("Special items menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openT1ArmorMenu(ServerPlayerEntity player) {
+        // TODO: Implement T1 armor menu
+        player.sendMessage(Text.literal("T1 Armor menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openT2ArmorMenu(ServerPlayerEntity player) {
+        // TODO: Implement T2 armor menu
+        player.sendMessage(Text.literal("T2 Armor menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openGoldArmorMenu(ServerPlayerEntity player) {
+        // TODO: Implement gold armor menu
+        player.sendMessage(Text.literal("Gold armor menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openLegendaryCrownsMenu(ServerPlayerEntity player) {
+        // TODO: Implement legendary crowns menu
+        player.sendMessage(Text.literal("Legendary crowns menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openPiglinMenu(ServerPlayerEntity player) {
+        // TODO: Implement piglin menu
+        player.sendMessage(Text.literal("Piglin menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openCompactedMaterialsMenu(ServerPlayerEntity player) {
+        // TODO: Implement compacted materials menu
+        player.sendMessage(Text.literal("Compacted materials menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openSuperCompactedMenu(ServerPlayerEntity player) {
+        // TODO: Implement super compacted menu
+        player.sendMessage(Text.literal("Super compacted menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+
+    private static void openWeaponAttributesMenu(ServerPlayerEntity player) {
+        // TODO: Implement weapon attributes menu
+        player.sendMessage(Text.literal("Weapon attributes menu coming soon!").formatted(Formatting.YELLOW), false);
+    }
+}
+                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Stack compression for storage efficiency").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft 64 items into 1 compacted block").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedMaterialsRecipes(player)).build());
+
+        gui.setSlot(20, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("⭐ Super Compacted Ores").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Ultimate storage compression").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Crafted from 9 compacted blocks").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedOresRecipes(player)).build());
+
+        gui.setSlot(21, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("All 10 attribute types!").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openAttributeTokensRecipes(player)).build());
+
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Ultra-rare admin items").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openLegendaryItems(player)).build());
+
+        // Row 5: Advanced Armor
+        gui.setSlot(28, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+                .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("5 tiers of progressive gold armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Pure → Polished → Shiny → Glistening → Gilded").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGoldArmorEvolutionRecipes(player)).build());
+
+        gui.setSlot(29, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
+                .setName(Text.literal("⚜ Gilded Netherite Armor").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Ultimate armor tier - Beyond legendary").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Crafted with gilded blackstone").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteArmorRecipes(player)).build());
+
+        // Remove duplicate Auction Items entry (already accessible via HPEBM Weapons)
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // ADMIN CUSTOM RECIPES (from /setrecipe) - kept for backward compat
+    // ============================================================
+
+    public static void openAdminCustomRecipes(ServerPlayerEntity player) {
+        // This method is kept for backward compatibility but functionality
+        // has been moved to the main recipe menu
+        openMainMenu(player);
+    }
+
+    // ============================================================
+    // BOUNTY SWORDS RECIPES
+    // ============================================================
+
+    // ============================================================
+    // ADMIN CUSTOM RECIPES (from /setrecipe) - kept for backward compat
+    // ============================================================
+    public static void openCustomRecipes(ServerPlayerEntity player) {
+        openMainMenu(player); // redirect to main menu
+    }
+
+    // ============================================================
+    // BOUNTY SWORDS T1 - Category list
+    // ============================================================
+    public static void openBountySwordsT1(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ Bounty Swords T1"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_SWORD)
+                .setName(Text.literal("⚔ Bounty Swords (T1)").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipe: 3 Cores + Iron Sword + 2 Sticks").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Requires: Bounty Level 3").formatted(Formatting.RED))
+                .glow().build());
+
+        int[] slots = {19, 20, 21, 22, 23, 24};
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        for (int i = 0; i < Math.min(types.length, slots.length); i++) {
+            final SlayerManager.SlayerType type = types[i];
+            ItemStack sword = SlayerItems.createSlayerSword(type);
+            Text swordName = sword.get(DataComponentTypes.CUSTOM_NAME);
+            GuiElementBuilder eb = new GuiElementBuilder(Items.IRON_SWORD)
+                    .setName(swordName != null ? swordName : Text.literal(type.displayName + " Sword").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                    .addLoreLine(Text.literal("• 3x " + type.displayName + " Core").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("• 1x Iron Sword").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("• 2x Stick").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("⚠ Requires Lvl 3").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT1SwordRecipe(player, type));
+            gui.setSlot(slots[i], eb.build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT1SwordRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        ItemStack result = SlayerItems.createSlayerSword(type);
+        String pageTitle = "⚔ " + type.displayName + " Sword";
+        // Item #8: show admin-configured recipe if one exists for this result
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openBountySwordsT1(player))) return;
+
+        ItemStack core = SlayerItems.createCore(type);
+        // T1 Sword grid: 3 Cores + 1 Iron Sword + 2 Sticks
+        // Layout: [Core, _, Core] / [ISword, Core, _] / [Stick, _, Stick]
+        ItemStack[] grid = {
+                core.copy(),          ItemStack.EMPTY, core.copy(),
+                new ItemStack(Items.IRON_SWORD), core.copy(), ItemStack.EMPTY,
+                new ItemStack(Items.STICK), ItemStack.EMPTY, new ItemStack(Items.STICK)
+        };
+        Text headerName = Text.literal("⚔ " + type.displayName + " Bounty Sword Recipe").formatted(type.color, Formatting.BOLD);
+        openRecipePage(player, pageTitle, headerName, grid, result,
+                () -> openBountySwordsT1(player));
+    }
+
+    // ============================================================
+    // BOUNTY SWORDS T2 - Category list
+    // ============================================================
+    public static void openBountySwordsT2(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚔ Bounty Swords T2"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SWORD)
+                .setName(Text.literal("⚔ Bounty Swords (T2)").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipe: 3 Cores + Diamond Sword + T1 Sword").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Requires: Bounty Level 6").formatted(Formatting.RED))
+                .glow().build());
+
+        int[] slots = {19, 20, 21, 22, 23, 24};
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        for (int i = 0; i < Math.min(types.length, slots.length); i++) {
+            final SlayerManager.SlayerType type = types[i];
+            ItemStack sword = SlayerItems.createUpgradedSlayerSword(type);
+            Text swordName = sword.get(DataComponentTypes.CUSTOM_NAME);
+            GuiElementBuilder eb = new GuiElementBuilder(Items.DIAMOND_SWORD)
+                    .setName(swordName != null ? swordName : Text.literal(type.displayName + " Sword II").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                    .addLoreLine(Text.literal("• 3x " + type.displayName + " Core").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("• 1x Diamond Sword").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("• 1x " + type.displayName + " Bounty Sword").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("⚠ Requires Lvl 6").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT2SwordRecipe(player, type));
+            gui.setSlot(slots[i], eb.build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT2SwordRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        ItemStack result = SlayerItems.createUpgradedSlayerSword(type);
+        String pageTitle = "⚔ T2 " + type.displayName + " Sword";
+        // Item #8: show admin-configured recipe if one exists for this result
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openBountySwordsT2(player))) return;
+
+        ItemStack core = SlayerItems.createCore(type);
+        ItemStack t1Sword = SlayerItems.createSlayerSword(type);
+        // T2 Sword grid: 3 Cores + 1 Diamond Sword + 1 T1 Sword = 5 items
+        // Layout: [Core, Core, Core] / [DSword, T1, _] / [_, _, _]
+        ItemStack[] grid = {
+                core.copy(),                       core.copy(),  core.copy(),
+                new ItemStack(Items.DIAMOND_SWORD), t1Sword,     ItemStack.EMPTY,
+                ItemStack.EMPTY,                   ItemStack.EMPTY,  ItemStack.EMPTY
+        };
+        Text headerName = Text.literal("⚔ " + type.displayName + " Bounty Sword II Recipe").formatted(type.color, Formatting.BOLD);
+        openRecipePage(player, pageTitle, headerName, grid, result,
+                () -> openBountySwordsT2(player));
+    }
+
+    // ============================================================
+    // BOUNTY ARMOR RECIPES - Category list
+    // ============================================================
+    public static void openArmorRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 Bounty Armor Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡 Bounty Armor Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click an item to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Zombie Berserker Helmet
+        gui.setSlot(19, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("💀 Zombie Berserker Helmet").formatted(Formatting.DARK_GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("3 Zombie Cores + 2 Rotten Flesh + Zombie Head").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Zombie Lvl " + SlayerItems.ZOMBIE_BERSERKER_LEVEL_REQ).formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openZombieHelmetRecipe(player)).build());
+
+        // Spider Venomous Leggings
+        gui.setSlot(20, new GuiElementBuilder(Items.LEATHER_LEGGINGS)
+                .setName(Text.literal("🕷 Venomous Crawler Leggings").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("3 Spider Cores + 2 String + 1 Spider Eye").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Spider Lvl " + SlayerItems.SPIDER_LEGGINGS_LEVEL_REQ).formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSpiderLeggingsRecipe(player)).build());
+
+        // Skeleton Bow
+        gui.setSlot(21, new GuiElementBuilder(Items.BOW)
+                .setName(Text.literal("🏹 Bone Desperado's Longbow").formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("3 Skeleton Cores + 1 Bow + 2 Bones").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Skeleton Lvl 10").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSkeletonBowRecipe(player)).build());
+
+        // Slime Boots
+        gui.setSlot(22, new GuiElementBuilder(Items.LEATHER_BOOTS)
+                .setName(Text.literal("🟢 Gelatinous Rustler Boots").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("3 Slime Cores + 2 Slime Ball + 1 Leather Boots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Slime Lvl " + SlayerItems.SLIME_BOOTS_LEVEL_REQ).formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSlimeBootsRecipe(player)).build());
+
+        // Warden Chestplate
+        gui.setSlot(23, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
+                .setName(Text.literal("💀 Sculk Terror Chestplate").formatted(Formatting.DARK_AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("3 Warden Cores + 2 Echo Shards + Neth. Chestplate").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("⚠ Requires: Warden Lvl " + SlayerItems.WARDEN_CHESTPLATE_LEVEL_REQ).formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Click to see recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openWardenChestplateRecipe(player)).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openZombieHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createZombieBerserkerHelmet();
+        String pageTitle = "💀 Zombie Berserker Helmet";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
+        ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.ZOMBIE);
+        // 3 Zombie Cores + 2 Rotten Flesh + 1 Zombie Head = 6 items
+        // Grid: [Core, Core, Core] / [Flesh, Head, Flesh] / [_, _, _]
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.ZOMBIE_HEAD), new ItemStack(Items.ROTTEN_FLESH),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, "💀 Zombie Berserker Helmet",
+                Text.literal("💀 Zombie Berserker Helmet Recipe").formatted(Formatting.DARK_GREEN, Formatting.BOLD),
+                grid, result, () -> openArmorRecipes(player));
+    }
+
+    private static void openSpiderLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSpiderLeggings();
+        String pageTitle = "🕷 Venomous Crawler Leggings";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
+        ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SPIDER);
+        // 3 Spider Cores + 2 String + 1 Spider Eye = 6 items
+        // Grid: [Core, Core, Core] / [String, Eye, String] / [_, _, _]
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.STRING), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.STRING),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, "🕷 Venomous Crawler Leggings",
+                Text.literal("🕷 Venomous Crawler Leggings Recipe").formatted(Formatting.DARK_RED, Formatting.BOLD),
+                grid, result, () -> openArmorRecipes(player));
+    }
+
+    private static void openSkeletonBowRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSkeletonBow();
+        String pageTitle = "🏹 Bone Desperado's Longbow";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
+        ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SKELETON);
+        // 3 Skeleton Cores + 1 Bow + 2 Bones = 6 items
+        // Grid: [Core, Core, Core] / [Bone, Bow, Bone] / [_, _, _]
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.BONE), new ItemStack(Items.BOW), new ItemStack(Items.BONE),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, "🏹 Bone Desperado's Longbow",
+                Text.literal("🏹 Bone Desperado's Longbow Recipe").formatted(Formatting.WHITE, Formatting.BOLD),
+                grid, result, () -> openArmorRecipes(player));
+    }
+
+    private static void openSlimeBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSlimeBoots();
+        String pageTitle = "🟢 Gelatinous Rustler Boots";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
+        ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.SLIME);
+        // 3 Slime Cores + 2 Slime Balls + 1 Leather Boots = 6 items
+        // Grid: [Core, Core, Core] / [SBall, Boots, SBall] / [_, _, _]
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.SLIME_BALL), new ItemStack(Items.LEATHER_BOOTS), new ItemStack(Items.SLIME_BALL),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, "🟢 Gelatinous Rustler Boots",
+                Text.literal("🟢 Gelatinous Rustler Boots Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
+                grid, result, () -> openArmorRecipes(player));
+    }
+
+    private static void openWardenChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createWardenChestplate();
+        String pageTitle = "💀 Sculk Terror Chestplate";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openArmorRecipes(player))) return;
+
+        ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.WARDEN);
+        // 3 Warden Cores + 2 Echo Shards + 1 Netherite Chestplate = 6 items
+        // Grid: [Core, Core, Core] / [EShard, Chest, EShard] / [_, _, _]
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.ECHO_SHARD), new ItemStack(Items.NETHERITE_CHESTPLATE), new ItemStack(Items.ECHO_SHARD),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, "💀 Sculk Terror Chestplate",
+                Text.literal("💀 Sculk Terror Chestplate Recipe").formatted(Formatting.DARK_AQUA, Formatting.BOLD),
+                grid, result, () -> openArmorRecipes(player));
+    }
+
+    // ============================================================
+    // SPECIAL ITEMS RECIPES - Category list
+    // ============================================================
+    public static void openSpecialRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✦ Special Item Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Special Item Recipes").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Click an item to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // The Gavel - Auction Only
+        gui.setSlot(21, new GuiElementBuilder(Items.WOODEN_AXE)
+                .setName(Text.literal("⚖ The Gavel").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚠ UNDERGROUND AUCTION ONLY").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Cannot be crafted!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Obtainable from Underground Auctions at T1.").formatted(Formatting.GRAY))
+                .build());
+
+        // Base HPEBM - Auction Only
+        gui.setSlot(22, new GuiElementBuilder(Items.DIAMOND_SHOVEL)
+                .setName(Text.literal("⚡ HPEBM Mk1 (Base)").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚠ UNDERGROUND AUCTION ONLY").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("Cannot be crafted!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Obtainable from Underground Auctions at T1.").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Upgrades: right-click Smithing Table").formatted(Formatting.GRAY))
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openGavelRecipe(ServerPlayerEntity player) {
+        ItemStack core = SlayerItems.createCore(SlayerManager.SlayerType.WARDEN);
+        // 2 Warden Cores + 2 Netherite Ingots + 1 Wooden Axe
+        // Grid: [_, Core, _] / [Axe, NIngot, Core] / [_, NIngot, _]
+        ItemStack[] grid = {
+                ItemStack.EMPTY, core.copy(), ItemStack.EMPTY,
+                new ItemStack(Items.WOODEN_AXE), new ItemStack(Items.NETHERITE_INGOT), core.copy(),
+                ItemStack.EMPTY, new ItemStack(Items.NETHERITE_INGOT), ItemStack.EMPTY
+        };
+        ItemStack result = CustomItemHandler.createTheGavel();
+        openRecipePage(player, "⚖ The Gavel",
+                Text.literal("⚖ The Gavel Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openSpecialRecipes(player));
+    }
+
+
+    // ============================================================
+    // HPEBM UPGRADE RECIPES
+    // ============================================================
+    public static void openHPEBMRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⚡ HPEBM Upgrade Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.LIGHT_BLUE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SHOVEL)
+                .setName(Text.literal("⚡ HPEBM Upgrade Recipes").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚠ HPEBM T0 (Base) is obtained from").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Underground Auctions ONLY!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Upgrades: Crafting Table or Smithing Table").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Mk1 → Mk2
+        gui.setSlot(19, new GuiElementBuilder(Items.IRON_BLOCK)
+                .setName(Text.literal("⚡ Mk1 → Mk2").formatted(Formatting.WHITE, Formatting.BOLD))
+                .addLoreLine(Text.literal("4x Iron Block + 2x Redstone Block").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+ HPEBM Mk1 in main hand").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click Smithing Table!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMUpgradeRecipe(player, 2,
+                        Items.IRON_BLOCK, 4, Items.REDSTONE_BLOCK, 2)).build());
+
+        // Mk2 → Mk3
+        gui.setSlot(20, new GuiElementBuilder(Items.DIAMOND_BLOCK)
+                .setName(Text.literal("⚡ Mk2 → Mk3").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("4x Diamond Block + 4x Redstone Block").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+ HPEBM Mk2 in main hand").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click Smithing Table!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMUpgradeRecipe(player, 3,
+                        Items.DIAMOND_BLOCK, 4, Items.REDSTONE_BLOCK, 4)).build());
+
+        // Mk3 → Mk4
+        gui.setSlot(21, new GuiElementBuilder(Items.NETHERITE_INGOT)
+                .setName(Text.literal("⚡ Mk3 → Mk4").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("2x Netherite Ingot + 4x Glowstone").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+ HPEBM Mk3 in main hand").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click Smithing Table!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMUpgradeRecipe(player, 4,
+                        Items.NETHERITE_INGOT, 2, Items.GLOWSTONE, 4)).build());
+
+        // Mk4 → Mk5
+        gui.setSlot(22, new GuiElementBuilder(Items.GLOWSTONE)
+                .setName(Text.literal("⚡ Mk4 → Mk5").formatted(Formatting.RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("4x Netherite Ingot + 8x Glowstone").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+ HPEBM Mk4 in main hand").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click Smithing Table!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMUpgradeRecipe(player, 5,
+                        Items.NETHERITE_INGOT, 4, Items.GLOWSTONE, 8)).build());
+
+        // Mk5 → Ultra OC
+        gui.setSlot(23, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Mk5 → Ultra Overclocked").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("2x Warden Core + 2x Nether Star").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("+ HPEBM Mk5 in main hand").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Right-click Smithing Table!").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openHPEBMUltraRecipe(player)).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+
+    private static void openHPEBMUpgradeRecipe(ServerPlayerEntity player, int targetTier,
+                                                net.minecraft.item.Item mat1, int count1,
+                                                net.minecraft.item.Item mat2, int count2) {
+        // Show the ingredients needed for upgrade (displayed in crafting grid for visual purposes)
+        // targetTier is the Mk number of the resulting beam (e.g., 2 = Mk2, 3 = Mk3, etc.)
+        ItemStack mat1Stack = new ItemStack(mat1, count1);
+        ItemStack mat2Stack = new ItemStack(mat2, count2);
+        // Grid: [mat1, mat1, mat2] / [mat1, previousBeam, mat2] / [mat1, mat2, mat2]
+        ItemStack previousBeam = CustomItemHandler.createUltraBeamMk(targetTier - 1);
+        ItemStack[] grid = {
+                mat1Stack.copy(), mat1Stack.copy(), mat2Stack.copy(),
+                mat1Stack.copy(), previousBeam,     mat2Stack.copy(),
+                mat1Stack.copy(), mat2Stack.copy(),  mat2Stack.copy()
+        };
+        // Trim counts to fit (display purposes only)
+        grid[0].setCount(Math.min(count1, 16));
+        grid[1].setCount(Math.min(count1, 16));
+        grid[3].setCount(Math.min(count1, 16));
+        grid[6].setCount(Math.min(count1, 16));
+        grid[2].setCount(Math.min(count2, 16));
+        grid[5].setCount(Math.min(count2, 16));
+        grid[7].setCount(Math.min(count2, 16));
+        grid[8].setCount(Math.min(count2, 16));
+
+        ItemStack result = CustomItemHandler.createUltraBeamMk(targetTier);
+        // targetTier IS the Mk number of the result (e.g., targetTier=2 → "Mk2")
+        String tierName = "Mk" + targetTier;
+        openRecipePage(player, "⚡ HPEBM " + tierName,
+                Text.literal("⚡ HPEBM → " + tierName + " Upgrade (Smithing Table)").formatted(Formatting.AQUA, Formatting.BOLD),
+                grid, result, () -> openHPEBMRecipes(player));
+    }
+
+    private static void openHPEBMUltraRecipe(ServerPlayerEntity player) {
+        ItemStack wardenCore = SlayerItems.createCore(SlayerManager.SlayerType.WARDEN);
+        ItemStack mk5 = CustomItemHandler.createUltraBeamMk(5);
+        // 2 Warden Cores + 2 Nether Stars + Mk5
+        // Grid: [Core, Star, Core] / [Star, Mk5, _] / [_, _, _]
+        ItemStack[] grid = {
+                wardenCore.copy(), new ItemStack(Items.NETHER_STAR), wardenCore.copy(),
+                new ItemStack(Items.NETHER_STAR), mk5, ItemStack.EMPTY,
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        ItemStack result = CustomItemHandler.createUltraOverclockedBeam();
+        openRecipePage(player, "✦ Ultra Overclocked HPEBM",
+                Text.literal("✦ Ultra Overclocked HPEBM (Smithing Table)").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD),
+                grid, result, () -> openHPEBMRecipes(player));
+    }
+
+    // ============================================================
+    // T1 BOUNTY ARMOR RECIPES - Category list
+    // ============================================================
+    public static void openBountyArmorT1(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 T1 Bounty Armor Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GREEN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("🛡 T1 Bounty Armor").formatted(Formatting.GREEN, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipe: 3 Cores + Vanilla Piece + 2 Type Drops").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Requires: Bounty Level " + SlayerItems.T1_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                .glow().build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] listSlots = {19, 20, 21, 22, 23, 24, 28};
+        for (int i = 0; i < Math.min(types.length, listSlots.length); i++) {
+            final SlayerManager.SlayerType type = types[i];
+            gui.setSlot(listSlots[i], new GuiElementBuilder(Items.LEATHER_HELMET)
+                    .setName(Text.literal("🛡 " + type.displayName + " T1 Armor").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("• Helmet, Chestplate, Leggings, Boots").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("⚠ Requires Lvl " + SlayerItems.T1_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view pieces!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT1ArmorTypeMenu(player, type)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT1ArmorTypeMenu(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 " + type.displayName + " T1 Armor"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GREEN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_HELMET)
+                .setName(Text.literal("🛡 " + type.displayName + " T1 Armor").formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal("Select a piece to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        String[] pieces = {"Helmet", "Chestplate", "Leggings", "Boots"};
+        int[] pieceSlots = {20, 21, 22, 23};
+        net.minecraft.item.Item[] icons = {Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS};
+
+        for (int i = 0; i < pieces.length; i++) {
+            final String piece = pieces[i];
+            final net.minecraft.item.Item icon = icons[i];
+            gui.setSlot(pieceSlots[i], new GuiElementBuilder(icon)
+                    .setName(Text.literal("🛡 " + type.displayName + " T1 " + piece).formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT1ArmorRecipe(player, type, piece)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, t, action) -> openBountyArmorT1(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT1ArmorRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type, String piece) {
+        ItemStack result = SlayerItems.createT1Armor(type, piece);
+        String pageTitle = "🛡 T1 " + type.displayName + " " + piece;
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openT1ArmorTypeMenu(player, type))) return;
+
+        ItemStack core = SlayerItems.createCore(type);
+        net.minecraft.item.Item basePiece = switch (piece) {
+            case "Helmet" -> Items.LEATHER_HELMET;
+            case "Chestplate" -> Items.LEATHER_CHESTPLATE;
+            case "Leggings" -> Items.LEATHER_LEGGINGS;
+            default -> Items.LEATHER_BOOTS;
+        };
+        net.minecraft.item.Item typeMat = type.icon;
+
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(typeMat), new ItemStack(basePiece), new ItemStack(typeMat),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        Text headerName = Text.literal("🛡 " + type.displayName + " T1 " + piece).formatted(type.color, Formatting.BOLD);
+        openRecipePage(player, pageTitle, headerName, grid, result, () -> openT1ArmorTypeMenu(player, type));
+    }
+
+    // ============================================================
+    // T2 BOUNTY ARMOR RECIPES - Category list
+    // ============================================================
+    public static void openBountyArmorT2(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 T2 Bounty Armor Recipes"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡 T2 Bounty Armor").formatted(Formatting.AQUA, Formatting.BOLD))
+                .addLoreLine(Text.literal("Recipe: 3 Cores + T1 Piece + 2 Iron Ingots").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("Requires: Bounty Level " + SlayerItems.T2_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                .glow().build());
+
+        SlayerManager.SlayerType[] types = SlayerManager.SlayerType.values();
+        int[] listSlots = {19, 20, 21, 22, 23, 24, 28};
+        for (int i = 0; i < Math.min(types.length, listSlots.length); i++) {
+            final SlayerManager.SlayerType type = types[i];
+            gui.setSlot(listSlots[i], new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                    .setName(Text.literal("🛡 " + type.displayName + " T2 Armor").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("• Helmet II, Chestplate II, Leggings II, Boots II").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("⚠ Requires Lvl " + SlayerItems.T2_ARMOR_LEVEL_REQ).formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view pieces!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT2ArmorTypeMenu(player, type)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT2ArmorTypeMenu(ServerPlayerEntity player, SlayerManager.SlayerType type) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("🛡 " + type.displayName + " T2 Armor"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.LEATHER_CHESTPLATE)
+                .setName(Text.literal("🛡 " + type.displayName + " T2 Armor").formatted(type.color, Formatting.BOLD))
+                .addLoreLine(Text.literal("Select a piece to see its recipe").formatted(Formatting.GRAY))
+                .glow().build());
+
+        String[] pieces = {"Helmet", "Chestplate", "Leggings", "Boots"};
+        int[] pieceSlots = {20, 21, 22, 23};
+        net.minecraft.item.Item[] icons = {Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS};
+
+        for (int i = 0; i < pieces.length; i++) {
+            final String piece = pieces[i];
+            final net.minecraft.item.Item icon = icons[i];
+            gui.setSlot(pieceSlots[i], new GuiElementBuilder(icon)
+                    .setName(Text.literal("🛡 " + type.displayName + " T2 " + piece + " II").formatted(type.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("Click to see crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openT2ArmorRecipe(player, type, piece)).build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, t, action) -> openBountyArmorT2(player)).build());
+
+        gui.open();
+    }
+
+    private static void openT2ArmorRecipe(ServerPlayerEntity player, SlayerManager.SlayerType type, String piece) {
+        ItemStack result = SlayerItems.createT2Armor(type, piece);
+        String pageTitle = "🛡 T2 " + type.displayName + " " + piece + " II";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openT2ArmorTypeMenu(player, type))) return;
+
+        ItemStack core = SlayerItems.createCore(type);
+        ItemStack t1piece = SlayerItems.createT1Armor(type, piece);
+        ItemStack[] grid = {
+                core.copy(), core.copy(), core.copy(),
+                new ItemStack(Items.IRON_INGOT), t1piece, new ItemStack(Items.IRON_INGOT),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        Text headerName = Text.literal("🛡 " + type.displayName + " T2 " + piece + " II").formatted(type.color, Formatting.BOLD);
+        openRecipePage(player, pageTitle, headerName, grid, result, () -> openT2ArmorTypeMenu(player, type));
+    }
+
+    // ============================================================
+    // CROWN OF GREED RECIPE
+    // ============================================================
+    private static void openCrownOfGreedRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCrownOfGreed();
+        String pageTitle = "👑 Crown of Greed";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        ItemStack piglinCore = SlayerItems.createPiglinCore();
+        ItemStack piglinFlesh = SlayerItems.createPiglinFlesh();
+        ItemStack[] grid = {
+                piglinCore.copy(), piglinCore.copy(), piglinCore.copy(),
+                piglinFlesh.copy(), new ItemStack(Items.GOLDEN_HELMET), piglinFlesh.copy(),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, pageTitle,
+                Text.literal("👑 Crown of Greed Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openMainMenu(player));
+    }
+
+    // ============================================================
+    // CROWN OF MIDAS RECIPE
+    // ============================================================
+    private static void openCrownOfMidasRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCrownOfMidas();
+        String pageTitle = "👑 Crown of Midas";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        ItemStack piglinCore = SlayerItems.createPiglinCore();
+        ItemStack piglinFlesh = SlayerItems.createPiglinFlesh();
+        ItemStack[] grid = {
+                piglinCore.copy(), piglinCore.copy(), piglinCore.copy(),
+                piglinFlesh.copy(), new ItemStack(Items.GOLDEN_HELMET), piglinFlesh.copy(),
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+        };
+        openRecipePage(player, pageTitle,
+                Text.literal("👑 Crown of Midas Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openMainMenu(player));
+    }
+
+    // ============================================================
+    // ATTRIBUTE TOKENS RECIPES
+    // ============================================================
+    private static void openAttributeTokensRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✧ Attribute Tokens"));
+
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.literal("✧ Attribute Tokens").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("Apply special abilities to armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click a token to view recipe!").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        // Add all 10 attribute tokens
+        int[] slots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30};
+        com.political.ArmourAttribute[] attributes = com.political.ArmourAttribute.values();
+        
+        for (int i = 0; i < Math.min(attributes.length, slots.length); i++) {
+            final com.political.ArmourAttribute attr = attributes[i];
+            ItemStack token = SlayerItems.createAttributeToken(attr);
+            Text tokenName = token.get(DataComponentTypes.CUSTOM_NAME);
+            
+            GuiElementBuilder eb = new GuiElementBuilder(Items.PAPER)
+                    .setName(tokenName != null ? tokenName : Text.literal(attr.displayName + " Token").formatted(attr.color, Formatting.BOLD))
+                    .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                    .addLoreLine(Text.literal("• 8x " + attr.displayName + " Cores").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("• 1x Paper").formatted(Formatting.GRAY))
+                    .addLoreLine(Text.literal("XP Cost: " + attr.xpCost + " levels").formatted(Formatting.RED))
+                    .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                    .setCallback((idx, clickType, action) -> openAttributeTokenRecipe(player, attr));
+            gui.setSlot(slots[i], eb.build());
+        }
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openAttributeTokenRecipe(ServerPlayerEntity player, com.political.ArmourAttribute attr) {
+        ItemStack result = SlayerItems.createAttributeToken(attr);
+        String pageTitle = "✧ " + attr.displayName + " Attribute Token";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openAttributeTokensRecipes(player))) return;
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(pageTitle));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Recipe grid layout (3x3 crafting grid)
+        // Use attribute cores matching the lore description
+        ItemStack[] grid = {
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.BURNING),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.SIGHTLESS),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.FRENZIED),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.GROUNDED),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.WEBBED),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.FROST),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.PHANTOMSTEP),
+            SlayerItems.createAttributeCore(com.political.ArmourAttribute.CURSED),
+            new ItemStack(Items.PAPER)
+        };
+
+        // Display recipe grid
+        int[] gridSlots = {10, 11, 12, 19, 20, 21, 28, 29, 30};
+        for (int i = 0; i < grid.length; i++) {
+            String itemName = grid[i].getItem().getName().getString();
+            gui.setSlot(gridSlots[i], new GuiElementBuilder(grid[i].getItem())
+                    .setName(Text.literal(itemName))
+                    .addLoreLine(Text.literal("Click to view crafting grid!").formatted(Formatting.GREEN))
+                    .build());
+        }
+
+        // Result item
+        gui.setSlot(24, new GuiElementBuilder(result.getItem())
+                .setName(result.get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("XP Cost: " + attr.xpCost + " levels").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Apply to: " + (attr.slot == null ? "Any Armor" : attr.slot.getName())).formatted(Formatting.AQUA))
+                .addLoreLine(Text.literal("Click to view full info!").formatted(Formatting.GREEN))
+                .build());
+
+        // Info panel
+        gui.setSlot(13, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("📜 Attribute Information").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("◆ LEGENDARY ATTRIBUTE").formatted(attr.color, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Boss Drop Only").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("• Drop Chance: 5-15%").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Use with caution in void").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("environments and end dimensions.").formatted(Formatting.YELLOW))
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openLegendaryItems(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("✦ Legendary Items"));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Text.literal("✦ Legendary Items").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Ultra-rare admin items").formatted(Formatting.YELLOW))
+                .glow().build());
+
+        // Voidwalker Crown
+        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createVoidwalkerCrown().getItem())
+                .setName(SlayerItems.createVoidwalkerCrown().get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("A mysterious crown from the void").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("grants dimensional powers.").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("Click to view full info!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openVoidwalkerCrownRecipe(player)).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openVoidwalkerCrownRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createVoidwalkerCrown();
+        String pageTitle = "🌑 Voidwalker's Crown";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(pageTitle));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Result item
+        gui.setSlot(22, new GuiElementBuilder(result.getItem())
+                .setName(result.get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("A mysterious crown from the void").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("grants dimensional powers.").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("Click to view full info!").formatted(Formatting.GREEN))
+                .build());
+
+        // Info panel
+        gui.setSlot(13, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Text.literal("📜 Voidwalker Information").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("◆ ADMIN ITEM").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("• Admin-only access").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("• Void manipulation powers").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal("• Dimensional traversal").formatted(Formatting.DARK_PURPLE))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("Use with caution in void").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("environments and end dimensions.").formatted(Formatting.YELLOW))
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openMidasSwordRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createMidasSword();
+        String pageTitle = "⚔ Midas's Sword";
+        if (tryOpenCustomRecipe(player, result, pageTitle, () -> openMainMenu(player))) return;
+
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal(pageTitle));
+
+        // Background
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(SlayerItems.createMidasSword().getItem())
+                .setName(SlayerItems.createMidasSword().get(DataComponentTypes.CUSTOM_NAME))
+                .glow()
+                .addLoreLine(Text.literal("Golden sword of immense wealth").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("and devastating power.").formatted(Formatting.YELLOW))
+                .build());
+
+        // Recipe info
+        gui.setSlot(22, new GuiElementBuilder(Items.GOLDEN_SWORD)
+                .setName(Text.literal("⚔ Midas's Sword").formatted(Formatting.YELLOW, Formatting.BOLD))
+                .addLoreLine(Text.literal("━━━ RECIPE ━━━").formatted(Formatting.GOLD))
+                .addLoreLine(Text.literal("• 1x Golden Sword").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• 3x Piglin Core").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("• 2x Piglin Flesh").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("━━━ ABILITIES ━━━").formatted(Formatting.YELLOW))
+                .addLoreLine(Text.literal("• 1 coin per mob kill").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• 4x digit damage multiplier").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• Piglin & all boss defence").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal("• 5000 durability").formatted(Formatting.GREEN))
+                .addLoreLine(Text.literal(""))
+                .addLoreLine(Text.literal("━━━ WARNING ━━━").formatted(Formatting.DARK_RED, Formatting.BOLD))
+                .addLoreLine(Text.literal("💀 Death: Lose ALL coins!").formatted(Formatting.DARK_RED))
+                .glow()
+                .build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    // ============================================================
+    // COMPACTED MATERIALS RECIPES
+    // ============================================================
+
+    private static void openCompactedMaterialsRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⬛ Compacted Materials"));
+
+        // Background fill
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.IRON_BLOCK)
+                .setName(Text.literal("⬛ Compacted Materials").formatted(Formatting.GRAY, Formatting.BOLD))
+                .addLoreLine(Text.literal("Stack compression for storage efficiency").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Craft 64 items into 1 compacted block").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Compacted Iron
+        gui.setSlot(19, new GuiElementBuilder(SlayerItems.createCompactedIron().getItem())
+                .setName(SlayerItems.createCompactedIron().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Iron Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedIronRecipe(player)).build());
+
+        // Compacted Gold
+        gui.setSlot(20, new GuiElementBuilder(SlayerItems.createCompactedGold().getItem())
+                .setName(SlayerItems.createCompactedGold().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Gold Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedGoldRecipe(player)).build());
+
+        // Compacted Diamond
+        gui.setSlot(21, new GuiElementBuilder(SlayerItems.createCompactedDiamond().getItem())
+                .setName(SlayerItems.createCompactedDiamond().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Diamonds").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedDiamondRecipe(player)).build());
+
+        // Compacted Emerald
+        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createCompactedEmerald().getItem())
+                .setName(SlayerItems.createCompactedEmerald().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Emeralds").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedEmeraldRecipe(player)).build());
+
+        // Compacted Netherite
+        gui.setSlot(23, new GuiElementBuilder(SlayerItems.createCompactedNetherite().getItem())
+                .setName(SlayerItems.createCompactedNetherite().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Netherite Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedNetheriteRecipe(player)).build());
+
+        // Compacted Copper
+        gui.setSlot(24, new GuiElementBuilder(SlayerItems.createCompactedCopper().getItem())
+                .setName(SlayerItems.createCompactedCopper().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Copper Ingots").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedCopperRecipe(player)).build());
+
+        // Compacted Coal
+        gui.setSlot(25, new GuiElementBuilder(SlayerItems.createCompactedCoal().getItem())
+                .setName(SlayerItems.createCompactedCoal().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Coal").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedCoalRecipe(player)).build());
+
+        // Compacted Lapis
+        gui.setSlot(28, new GuiElementBuilder(SlayerItems.createCompactedLapis().getItem())
+                .setName(SlayerItems.createCompactedLapis().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Lapis Lazuli").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedLapisRecipe(player)).build());
+
+        // Compacted Redstone
+        gui.setSlot(29, new GuiElementBuilder(SlayerItems.createCompactedRedstone().getItem())
+                .setName(SlayerItems.createCompactedRedstone().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Redstone").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedRedstoneRecipe(player)).build());
+
+        // Compacted Quartz
+        gui.setSlot(30, new GuiElementBuilder(SlayerItems.createCompactedQuartz().getItem())
+                .setName(SlayerItems.createCompactedQuartz().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 64 Quartz").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openCompactedQuartzRecipe(player)).build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Close recipe book").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    // Individual compacted material recipe methods
+    private static void openCompactedIronRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedIron();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[1] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[2] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[3] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[4] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[5] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[6] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[7] = new ItemStack(Items.IRON_INGOT, 64);
+        grid[8] = new ItemStack(Items.IRON_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Iron",
+                Text.literal("⬛ Compacted Iron Recipe").formatted(Formatting.GRAY, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedGoldRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedGold();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[1] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[2] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[3] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[4] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[5] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[6] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[7] = new ItemStack(Items.GOLD_INGOT, 64);
+        grid[8] = new ItemStack(Items.GOLD_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Gold",
+                Text.literal("⬛ Compacted Gold Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedDiamondRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedDiamond();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.DIAMOND, 64);
+        grid[1] = new ItemStack(Items.DIAMOND, 64);
+        grid[2] = new ItemStack(Items.DIAMOND, 64);
+        grid[3] = new ItemStack(Items.DIAMOND, 64);
+        grid[4] = new ItemStack(Items.DIAMOND, 64);
+        grid[5] = new ItemStack(Items.DIAMOND, 64);
+        grid[6] = new ItemStack(Items.DIAMOND, 64);
+        grid[7] = new ItemStack(Items.DIAMOND, 64);
+        grid[8] = new ItemStack(Items.DIAMOND, 64);
+        openRecipePage(player, "⬛ Compacted Diamond",
+                Text.literal("⬛ Compacted Diamond Recipe").formatted(Formatting.AQUA, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedEmeraldRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedEmerald();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.EMERALD, 64);
+        grid[1] = new ItemStack(Items.EMERALD, 64);
+        grid[2] = new ItemStack(Items.EMERALD, 64);
+        grid[3] = new ItemStack(Items.EMERALD, 64);
+        grid[4] = new ItemStack(Items.EMERALD, 64);
+        grid[5] = new ItemStack(Items.EMERALD, 64);
+        grid[6] = new ItemStack(Items.EMERALD, 64);
+        grid[7] = new ItemStack(Items.EMERALD, 64);
+        grid[8] = new ItemStack(Items.EMERALD, 64);
+        openRecipePage(player, "⬛ Compacted Emerald",
+                Text.literal("⬛ Compacted Emerald Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedNetheriteRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedNetherite();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[1] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[2] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[3] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[4] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[5] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[6] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[7] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        grid[8] = new ItemStack(Items.NETHERITE_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Netherite",
+                Text.literal("⬛ Compacted Netherite Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedCopperRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedCopper();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[1] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[2] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[3] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[4] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[5] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[6] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[7] = new ItemStack(Items.COPPER_INGOT, 64);
+        grid[8] = new ItemStack(Items.COPPER_INGOT, 64);
+        openRecipePage(player, "⬛ Compacted Copper",
+                Text.literal("⬛ Compacted Copper Recipe").formatted(Formatting.RED, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedCoalRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedCoal();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.COAL, 64);
+        grid[1] = new ItemStack(Items.COAL, 64);
+        grid[2] = new ItemStack(Items.COAL, 64);
+        grid[3] = new ItemStack(Items.COAL, 64);
+        grid[4] = new ItemStack(Items.COAL, 64);
+        grid[5] = new ItemStack(Items.COAL, 64);
+        grid[6] = new ItemStack(Items.COAL, 64);
+        grid[7] = new ItemStack(Items.COAL, 64);
+        grid[8] = new ItemStack(Items.COAL, 64);
+        openRecipePage(player, "⬛ Compacted Coal",
+                Text.literal("⬛ Compacted Coal Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedLapisRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedLapis();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[1] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[2] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[3] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[4] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[5] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[6] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[7] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        grid[8] = new ItemStack(Items.LAPIS_LAZULI, 64);
+        openRecipePage(player, "⬛ Compacted Lapis Lazuli",
+                Text.literal("⬛ Compacted Lapis Lazuli Recipe").formatted(Formatting.BLUE, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedRedstoneRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedRedstone();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.REDSTONE, 64);
+        grid[1] = new ItemStack(Items.REDSTONE, 64);
+        grid[2] = new ItemStack(Items.REDSTONE, 64);
+        grid[3] = new ItemStack(Items.REDSTONE, 64);
+        grid[4] = new ItemStack(Items.REDSTONE, 64);
+        grid[5] = new ItemStack(Items.REDSTONE, 64);
+        grid[6] = new ItemStack(Items.REDSTONE, 64);
+        grid[7] = new ItemStack(Items.REDSTONE, 64);
+        grid[8] = new ItemStack(Items.REDSTONE, 64);
+        openRecipePage(player, "⬛ Compacted Redstone",
+                Text.literal("⬛ Compacted Redstone Recipe").formatted(Formatting.RED, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    private static void openCompactedQuartzRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createCompactedQuartz();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = new ItemStack(Items.QUARTZ, 64);
+        grid[1] = new ItemStack(Items.QUARTZ, 64);
+        grid[2] = new ItemStack(Items.QUARTZ, 64);
+        grid[3] = new ItemStack(Items.QUARTZ, 64);
+        grid[4] = new ItemStack(Items.QUARTZ, 64);
+        grid[5] = new ItemStack(Items.QUARTZ, 64);
+        grid[6] = new ItemStack(Items.QUARTZ, 64);
+        grid[7] = new ItemStack(Items.QUARTZ, 64);
+        grid[8] = new ItemStack(Items.QUARTZ, 64);
+        openRecipePage(player, "⬛ Compacted Quartz",
+                Text.literal("⬛ Compacted Quartz Recipe").formatted(Formatting.WHITE, Formatting.BOLD),
+                grid, result, () -> openCompactedMaterialsRecipes(player));
+    }
+
+    // ============================================================
+    // SUPER COMPACTED MATERIALS RECIPES
+    // ============================================================
+
+    private static void openSuperCompactedOresRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("⭐ Super Compacted Ores"));
+
+        // Background fill
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLD_BLOCK)
+                .setName(Text.literal("⭐ Super Compacted Ores").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("Ultimate storage compression").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Crafted from 9 enchanted blocks").formatted(Formatting.GRAY))
+                .glow().build());
+
+        // Add all super compacted ores
+        gui.setSlot(19, new GuiElementBuilder(SlayerItems.createSuperCompactedGold().getItem())
+                .setName(SlayerItems.createSuperCompactedGold().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Gold").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedGoldRecipe(player)).build());
+
+        gui.setSlot(20, new GuiElementBuilder(SlayerItems.createSuperCompactedIron().getItem())
+                .setName(SlayerItems.createSuperCompactedIron().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Iron").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedIronRecipe(player)).build());
+
+        gui.setSlot(21, new GuiElementBuilder(SlayerItems.createSuperCompactedDiamond().getItem())
+                .setName(SlayerItems.createSuperCompactedDiamond().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Diamond").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedDiamondRecipe(player)).build());
+
+        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createSuperCompactedEmerald().getItem())
+                .setName(SlayerItems.createSuperCompactedEmerald().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Emerald").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedEmeraldRecipe(player)).build());
+
+        gui.setSlot(23, new GuiElementBuilder(SlayerItems.createSuperCompactedNetherite().getItem())
+                .setName(SlayerItems.createSuperCompactedNetherite().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Craft: 9 Enchanted Netherite").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openSuperCompactedNetheriteRecipe(player)).build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Close recipe book").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    // Individual super compacted ore recipe methods
+    private static void openSuperCompactedGoldRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSuperCompactedGold();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = SlayerItems.createCompactedGold();
+        grid[1] = SlayerItems.createCompactedGold();
+        grid[2] = SlayerItems.createCompactedGold();
+        grid[3] = SlayerItems.createCompactedGold();
+        grid[4] = SlayerItems.createCompactedGold();
+        grid[5] = SlayerItems.createCompactedGold();
+        grid[6] = SlayerItems.createCompactedGold();
+        grid[7] = SlayerItems.createCompactedGold();
+        grid[8] = SlayerItems.createCompactedGold();
+        openRecipePage(player, "⭐ Super Compacted Gold",
+                Text.literal("⭐ Super Compacted Gold Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openSuperCompactedOresRecipes(player));
+    }
+
+    private static void openSuperCompactedIronRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSuperCompactedIron();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = SlayerItems.createCompactedIron();
+        grid[1] = SlayerItems.createCompactedIron();
+        grid[2] = SlayerItems.createCompactedIron();
+        grid[3] = SlayerItems.createCompactedIron();
+        grid[4] = SlayerItems.createCompactedIron();
+        grid[5] = SlayerItems.createCompactedIron();
+        grid[6] = SlayerItems.createCompactedIron();
+        grid[7] = SlayerItems.createCompactedIron();
+        grid[8] = SlayerItems.createCompactedIron();
+        openRecipePage(player, "⭐ Super Compacted Iron",
+                Text.literal("⭐ Super Compacted Iron Recipe").formatted(Formatting.GRAY, Formatting.BOLD),
+                grid, result, () -> openSuperCompactedOresRecipes(player));
+    }
+
+    private static void openSuperCompactedDiamondRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSuperCompactedDiamond();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = SlayerItems.createCompactedDiamond();
+        grid[1] = SlayerItems.createCompactedDiamond();
+        grid[2] = SlayerItems.createCompactedDiamond();
+        grid[3] = SlayerItems.createCompactedDiamond();
+        grid[4] = SlayerItems.createCompactedDiamond();
+        grid[5] = SlayerItems.createCompactedDiamond();
+        grid[6] = SlayerItems.createCompactedDiamond();
+        grid[7] = SlayerItems.createCompactedDiamond();
+        grid[8] = SlayerItems.createCompactedDiamond();
+        openRecipePage(player, "⭐ Super Compacted Diamond",
+                Text.literal("⭐ Super Compacted Diamond Recipe").formatted(Formatting.AQUA, Formatting.BOLD),
+                grid, result, () -> openSuperCompactedOresRecipes(player));
+    }
+
+    private static void openSuperCompactedEmeraldRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSuperCompactedEmerald();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = SlayerItems.createCompactedEmerald();
+        grid[1] = SlayerItems.createCompactedEmerald();
+        grid[2] = SlayerItems.createCompactedEmerald();
+        grid[3] = SlayerItems.createCompactedEmerald();
+        grid[4] = SlayerItems.createCompactedEmerald();
+        grid[5] = SlayerItems.createCompactedEmerald();
+        grid[6] = SlayerItems.createCompactedEmerald();
+        grid[7] = SlayerItems.createCompactedEmerald();
+        grid[8] = SlayerItems.createCompactedEmerald();
+        openRecipePage(player, "⭐ Super Compacted Emerald",
+                Text.literal("⭐ Super Compacted Emerald Recipe").formatted(Formatting.GREEN, Formatting.BOLD),
+                grid, result, () -> openSuperCompactedOresRecipes(player));
+    }
+
+    private static void openSuperCompactedNetheriteRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createSuperCompactedNetherite();
+        ItemStack[] grid = new ItemStack[9];
+        grid[0] = SlayerItems.createCompactedNetherite();
+        grid[1] = SlayerItems.createCompactedNetherite();
+        grid[2] = SlayerItems.createCompactedNetherite();
+        grid[3] = SlayerItems.createCompactedNetherite();
+        grid[4] = SlayerItems.createCompactedNetherite();
+        grid[5] = SlayerItems.createCompactedNetherite();
+        grid[6] = SlayerItems.createCompactedNetherite();
+        grid[7] = SlayerItems.createCompactedNetherite();
+        grid[8] = SlayerItems.createCompactedNetherite();
+        openRecipePage(player, "⭐ Super Compacted Netherite",
+                Text.literal("⭐ Super Compacted Netherite Recipe").formatted(Formatting.DARK_GRAY, Formatting.BOLD),
+                grid, result, () -> openSuperCompactedOresRecipes(player));
+    }
+
+    // ============================================================
+    // GOLD ARMOR EVOLUTION RECIPES
+    // ============================================================
+
+    private static void openGoldArmorEvolutionRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X6, player, false);
+        gui.setTitle(Text.literal("👑 Gold Armor Evolution"));
+
+        // Background fill
+        for (int i = 0; i < 54; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Text.literal("")).build());
+        }
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
+                .setName(Text.literal("👑 Gold Armor Evolution").formatted(Formatting.GOLD, Formatting.BOLD))
+                .addLoreLine(Text.literal("5 tiers of progressive gold armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Pure → Polished → Shiny → Glistening → Gilded").formatted(Formatting.DARK_GRAY))
+                .glow().build());
+
+        // Pure Gold Armor (Tier 1)
+        gui.setSlot(19, new GuiElementBuilder(SlayerItems.createPureGoldHelmet().getItem())
+                .setName(SlayerItems.createPureGoldHelmet().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 1 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPureGoldHelmetRecipe(player)).build());
+
+        gui.setSlot(20, new GuiElementBuilder(SlayerItems.createPureGoldChestplate().getItem())
+                .setName(SlayerItems.createPureGoldChestplate().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 1 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPureGoldChestplateRecipe(player)).build());
+
+        gui.setSlot(21, new GuiElementBuilder(SlayerItems.createPureGoldLeggings().getItem())
+                .setName(SlayerItems.createPureGoldLeggings().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 1 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPureGoldLeggingsRecipe(player)).build());
+
+        gui.setSlot(22, new GuiElementBuilder(SlayerItems.createPureGoldBoots().getItem())
+                .setName(SlayerItems.createPureGoldBoots().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 1 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPureGoldBootsRecipe(player)).build());
+
+        // Polished Gold Armor (Tier 2)
+        gui.setSlot(24, new GuiElementBuilder(SlayerItems.createPolishedGoldHelmet().getItem())
+                .setName(SlayerItems.createPolishedGoldHelmet().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 2 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPolishedGoldHelmetRecipe(player)).build());
+
+        gui.setSlot(25, new GuiElementBuilder(SlayerItems.createPolishedGoldChestplate().getItem())
+                .setName(SlayerItems.createPolishedGoldChestplate().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 2 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPolishedGoldChestplateRecipe(player)).build());
+
+        gui.setSlot(26, new GuiElementBuilder(SlayerItems.createPolishedGoldLeggings().getItem())
+                .setName(SlayerItems.createPolishedGoldLeggings().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 2 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPolishedGoldLeggingsRecipe(player)).build());
+
+        gui.setSlot(27, new GuiElementBuilder(SlayerItems.createPolishedGoldBoots().getItem())
+                .setName(SlayerItems.createPolishedGoldBoots().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 2 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openPolishedGoldBootsRecipe(player)).build());
+
+        // Shiny Gold Armor (Tier 3)
+        gui.setSlot(29, new GuiElementBuilder(SlayerItems.createShinyGoldHelmet().getItem())
+                .setName(SlayerItems.createShinyGoldHelmet().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 3 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openShinyGoldHelmetRecipe(player)).build());
+
+        gui.setSlot(30, new GuiElementBuilder(SlayerItems.createShinyGoldChestplate().getItem())
+                .setName(SlayerItems.createShinyGoldChestplate().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 3 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openShinyGoldChestplateRecipe(player)).build());
+
+        gui.setSlot(31, new GuiElementBuilder(SlayerItems.createShinyGoldLeggings().getItem())
+                .setName(SlayerItems.createShinyGoldLeggings().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 3 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openShinyGoldLeggingsRecipe(player)).build());
+
+        gui.setSlot(32, new GuiElementBuilder(SlayerItems.createShinyGoldBoots().getItem())
+                .setName(SlayerItems.createShinyGoldBoots().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 3 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openShinyGoldBootsRecipe(player)).build());
+
+        // Glistening Gold Armor (Tier 4)
+        gui.setSlot(34, new GuiElementBuilder(SlayerItems.createGlisteningGoldHelmet().getItem())
+                .setName(SlayerItems.createGlisteningGoldHelmet().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 4 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGlisteningGoldHelmetRecipe(player)).build());
+
+        gui.setSlot(35, new GuiElementBuilder(SlayerItems.createGlisteningGoldChestplate().getItem())
+                .setName(SlayerItems.createGlisteningGoldChestplate().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 4 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGlisteningGoldChestplateRecipe(player)).build());
+
+        gui.setSlot(36, new GuiElementBuilder(SlayerItems.createGlisteningGoldLeggings().getItem())
+                .setName(SlayerItems.createGlisteningGoldLeggings().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 4 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGlisteningGoldLeggingsRecipe(player)).build());
+
+        gui.setSlot(37, new GuiElementBuilder(SlayerItems.createGlisteningGoldBoots().getItem())
+                .setName(SlayerItems.createGlisteningGoldBoots().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 4 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGlisteningGoldBootsRecipe(player)).build());
+
+        // Gilded Armor (Tier 5)
+        gui.setSlot(39, new GuiElementBuilder(SlayerItems.createGildedHelmet().getItem())
+                .setName(SlayerItems.createGildedHelmet().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 5 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedHelmetRecipe(player)).build());
+
+        gui.setSlot(40, new GuiElementBuilder(SlayerItems.createGildedChestplate().getItem())
+                .setName(SlayerItems.createGildedChestplate().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 5 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedChestplateRecipe(player)).build());
+
+        gui.setSlot(41, new GuiElementBuilder(SlayerItems.createGildedLeggings().getItem())
+                .setName(SlayerItems.createGildedLeggings().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 5 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedLeggingsRecipe(player)).build());
+
+        gui.setSlot(42, new GuiElementBuilder(SlayerItems.createGildedBoots().getItem())
+                .setName(SlayerItems.createGildedBoots().get(DataComponentTypes.CUSTOM_NAME))
+                .addLoreLine(Text.literal("Tier 5 Gold Armor").formatted(Formatting.GRAY))
+                .addLoreLine(Text.literal("Click to view!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedBootsRecipe(player)).build());
+
+        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
+                .setName(Text.literal("✖ Close").formatted(Formatting.RED))
+                .addLoreLine(Text.literal("Close recipe book").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> player.closeHandledScreen()).build());
+
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.YELLOW))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    // Gold Armor individual recipe methods (Tier 1 - Pure Gold)
+    private static void openPureGoldHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPureGoldHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.GOLDEN_HELMET);
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "☀ Pure Gold Helmet",
+                Text.literal("☀ Pure Gold Helmet Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openPureGoldChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPureGoldChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.GOLDEN_CHESTPLATE);
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "☀ Pure Gold Chestplate",
+                Text.literal("☀ Pure Gold Chestplate Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openPureGoldLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPureGoldLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.GOLDEN_LEGGINGS);
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "☀ Pure Gold Leggings",
+                Text.literal("☀ Pure Gold Leggings Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openPureGoldBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPureGoldBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.GOLDEN_BOOTS);
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "☀ Pure Gold Boots",
+                Text.literal("☀ Pure Gold Boots Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    // Gold Armor individual recipe methods (Tier 2 - Polished Gold)
+    private static void openPolishedGoldHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPolishedGoldHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPureGoldHelmet();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "✨ Polished Gold Helmet",
+                Text.literal("✨ Polished Gold Helmet Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openPolishedGoldChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPolishedGoldChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPureGoldChestplate();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "✨ Polished Gold Chestplate",
+                Text.literal("✨ Polished Gold Chestplate Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openPolishedGoldLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPolishedGoldLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPureGoldLeggings();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "✨ Polished Gold Leggings",
+                Text.literal("✨ Polished Gold Leggings Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openPolishedGoldBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createPolishedGoldBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPureGoldBoots();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "✨ Polished Gold Boots",
+                Text.literal("✨ Polished Gold Boots Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    // Gold Armor individual recipe methods (Tier 3 - Shiny Gold)
+    private static void openShinyGoldHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createShinyGoldHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPolishedGoldHelmet();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "⭐ Shiny Gold Helmet",
+                Text.literal("⭐ Shiny Gold Helmet Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openShinyGoldChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createShinyGoldChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPolishedGoldChestplate();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "⭐ Shiny Gold Chestplate",
+                Text.literal("⭐ Shiny Gold Chestplate Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openShinyGoldLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createShinyGoldLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPolishedGoldLeggings();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "⭐ Shiny Gold Leggings",
+                Text.literal("⭐ Shiny Gold Leggings Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openShinyGoldBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createShinyGoldBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createPolishedGoldBoots();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "⭐ Shiny Gold Boots",
+                Text.literal("⭐ Shiny Gold Boots Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    // Gold Armor individual recipe methods (Tier 4 - Glistening Gold)
+    private static void openGlisteningGoldHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGlisteningGoldHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createShinyGoldHelmet();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "💫 Glistening Gold Helmet",
+                Text.literal("💫 Glistening Gold Helmet Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openGlisteningGoldChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGlisteningGoldChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createShinyGoldChestplate();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "💫 Glistening Gold Chestplate",
+                Text.literal("💫 Glistening Gold Chestplate Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openGlisteningGoldLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGlisteningGoldLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createShinyGoldLeggings();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "💫 Glistening Gold Leggings",
+                Text.literal("💫 Glistening Gold Leggings Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openGlisteningGoldBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGlisteningGoldBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createShinyGoldBoots();
+        grid[0] = SlayerItems.createSuperCompactedGold();
+        grid[1] = SlayerItems.createSuperCompactedGold();
+        grid[2] = SlayerItems.createSuperCompactedGold();
+        grid[3] = SlayerItems.createSuperCompactedGold();
+        grid[5] = SlayerItems.createSuperCompactedGold();
+        grid[6] = SlayerItems.createSuperCompactedGold();
+        grid[7] = SlayerItems.createSuperCompactedGold();
+        grid[8] = SlayerItems.createSuperCompactedGold();
+        openRecipePage(player, "💫 Glistening Gold Boots",
+                Text.literal("💫 Glistening Gold Boots Recipe").formatted(Formatting.YELLOW, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    // Gold Armor individual recipe methods (Tier 5 - Gilded)
+    private static void openGildedHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createGlisteningGoldHelmet();
+        grid[0] = SlayerItems.createEnchantedBlackstone();
+        grid[1] = SlayerItems.createEnchantedBlackstone();
+        grid[2] = SlayerItems.createEnchantedBlackstone();
+        grid[3] = SlayerItems.createEnchantedBlackstone();
+        grid[5] = SlayerItems.createEnchantedBlackstone();
+        grid[6] = SlayerItems.createEnchantedBlackstone();
+        grid[7] = SlayerItems.createEnchantedBlackstone();
+        grid[8] = SlayerItems.createEnchantedBlackstone();
+        openRecipePage(player, "👑 Gilded Helmet",
+                Text.literal("👑 Gilded Helmet Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openGildedChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createGlisteningGoldChestplate();
+        grid[0] = SlayerItems.createEnchantedBlackstone();
+        grid[1] = SlayerItems.createEnchantedBlackstone();
+        grid[2] = SlayerItems.createEnchantedBlackstone();
+        grid[3] = SlayerItems.createEnchantedBlackstone();
+        grid[5] = SlayerItems.createEnchantedBlackstone();
+        grid[6] = SlayerItems.createEnchantedBlackstone();
+        grid[7] = SlayerItems.createEnchantedBlackstone();
+        grid[8] = SlayerItems.createEnchantedBlackstone();
+        openRecipePage(player, "👑 Gilded Chestplate",
+                Text.literal("👑 Gilded Chestplate Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openGildedLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createGlisteningGoldLeggings();
+        grid[0] = SlayerItems.createEnchantedBlackstone();
+        grid[1] = SlayerItems.createEnchantedBlackstone();
+        grid[2] = SlayerItems.createEnchantedBlackstone();
+        grid[3] = SlayerItems.createEnchantedBlackstone();
+        grid[5] = SlayerItems.createEnchantedBlackstone();
+        grid[6] = SlayerItems.createEnchantedBlackstone();
+        grid[7] = SlayerItems.createEnchantedBlackstone();
+        grid[8] = SlayerItems.createEnchantedBlackstone();
+        openRecipePage(player, "👑 Gilded Leggings",
+                Text.literal("👑 Gilded Leggings Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    private static void openGildedBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = SlayerItems.createGlisteningGoldBoots();
+        grid[0] = SlayerItems.createEnchantedBlackstone();
+        grid[1] = SlayerItems.createEnchantedBlackstone();
+        grid[2] = SlayerItems.createEnchantedBlackstone();
+        grid[3] = SlayerItems.createEnchantedBlackstone();
+        grid[5] = SlayerItems.createEnchantedBlackstone();
+        grid[6] = SlayerItems.createEnchantedBlackstone();
+        grid[7] = SlayerItems.createEnchantedBlackstone();
+        grid[8] = SlayerItems.createEnchantedBlackstone();
+        openRecipePage(player, "👑 Gilded Boots",
+                Text.literal("👑 Gilded Boots Recipe").formatted(Formatting.GOLD, Formatting.BOLD),
+                grid, result, () -> openGoldArmorEvolutionRecipes(player));
+    }
+
+    // ============================================================
+    // GILDED NETHERITE ARMOR RECIPES
+    // ============================================================
+
+    private static void openGildedNetheriteArmorRecipes(ServerPlayerEntity player) {
+        SimpleGui gui = new SimpleGui(ScreenHandlerType.GENERIC_9X3, player, false);
+        gui.setTitle(Text.literal("⚜ Gilded Netherite Armor Recipes").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+
+        // Gilded Netherite Helmet
+        gui.setSlot(11, new GuiElementBuilder(Items.NETHERITE_HELMET)
+                .setName(Text.literal("⚜ Gilded Netherite Helmet").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteHelmetRecipe(player)).build());
+
+        // Gilded Netherite Chestplate
+        gui.setSlot(13, new GuiElementBuilder(Items.NETHERITE_CHESTPLATE)
+                .setName(Text.literal("⚜ Gilded Netherite Chestplate").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteChestplateRecipe(player)).build());
+
+        // Gilded Netherite Leggings
+        gui.setSlot(15, new GuiElementBuilder(Items.NETHERITE_LEGGINGS)
+                .setName(Text.literal("⚜ Gilded Netherite Leggings").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteLeggingsRecipe(player)).build());
+
+        // Gilded Netherite Boots
+        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_BOOTS)
+                .setName(Text.literal("⚜ Gilded Netherite Boots").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                .addLoreLine(Text.literal("⚜ Ultimate Armor Tier 6").formatted(Formatting.DARK_GRAY))
+                .addLoreLine(Text.literal("Click to view recipe!").formatted(Formatting.GREEN))
+                .setCallback((idx, type, action) -> openGildedNetheriteBootsRecipe(player)).build());
+
+        // Back button
+        gui.setSlot(18, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.literal("← Back").formatted(Formatting.GRAY))
+                .setCallback((idx, type, action) -> openMainMenu(player)).build());
+
+        gui.open();
+    }
+
+    private static void openGildedNetheriteHelmetRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteHelmet();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_HELMET);
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
+        openRecipePage(player, "⚜ Gilded Netherite Helmet",
+                Text.literal("⚜ Gilded Netherite Helmet Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    private static void openGildedNetheriteChestplateRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteChestplate();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_CHESTPLATE);
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
+        openRecipePage(player, "⚜ Gilded Netherite Chestplate",
+                Text.literal("⚜ Gilded Netherite Chestplate Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    private static void openGildedNetheriteLeggingsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteLeggings();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_LEGGINGS);
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
+        openRecipePage(player, "⚜ Gilded Netherite Leggings",
+                Text.literal("⚜ Gilded Netherite Leggings Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    private static void openGildedNetheriteBootsRecipe(ServerPlayerEntity player) {
+        ItemStack result = SlayerItems.createGildedNetheriteBoots();
+        ItemStack[] grid = new ItemStack[9];
+        grid[4] = new ItemStack(Items.NETHERITE_BOOTS);
+        // Surround with gilded blackstone
+        grid[0] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[1] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[2] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[3] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[5] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[6] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[7] = new ItemStack(Items.GILDED_BLACKSTONE);
+        grid[8] = new ItemStack(Items.GILDED_BLACKSTONE);
+        openRecipePage(player, "⚜ Gilded Netherite Boots",
+                Text.literal("⚜ Gilded Netherite Boots Recipe").formatted(Formatting.DARK_PURPLE, Formatting.BOLD),
+                grid, result, () -> openGildedNetheriteArmorRecipes(player));
+    }
+
+    // ============================================================
+    // SPECIFIC RECIPE LOOKUP
+    // ============================================================
+
+    /**
+     * Opens a specific recipe based on item name.
+     * Returns true if the recipe was found and opened, false otherwise.
+     */
+    public static boolean openSpecificRecipe(ServerPlayerEntity player, String itemName) {
+        // Normalize item name
+        String normalizedName = itemName.toLowerCase().replace(" ", "_");
+        
+        // Super compacted ores
+        switch (normalizedName) {
+            case "super_compacted_gold":
+                openSuperCompactedGoldRecipe(player);
+                return true;
+            case "super_compacted_iron":
+                openSuperCompactedIronRecipe(player);
+                return true;
+            case "super_compacted_diamond":
+                openSuperCompactedDiamondRecipe(player);
+                return true;
+            case "super_compacted_emerald":
+                openSuperCompactedEmeraldRecipe(player);
+                return true;
+            case "super_compacted_netherite":
+                openSuperCompactedNetheriteRecipe(player);
+                return true;
+        }
+        
+        // Gold armor - Pure tier
+        switch (normalizedName) {
+            case "pure_gold_helmet":
+                openPureGoldHelmetRecipe(player);
+                return true;
+            case "pure_gold_chestplate":
+                openPureGoldChestplateRecipe(player);
+                return true;
+            case "pure_gold_leggings":
+                openPureGoldLeggingsRecipe(player);
+                return true;
+            case "pure_gold_boots":
+                openPureGoldBootsRecipe(player);
+                return true;
+        }
+        
+        // Gold armor - Polished tier
+        switch (normalizedName) {
+            case "polished_gold_helmet":
+                openPolishedGoldHelmetRecipe(player);
+                return true;
+            case "polished_gold_chestplate":
+                openPolishedGoldChestplateRecipe(player);
+                return true;
+            case "polished_gold_leggings":
+                openPolishedGoldLeggingsRecipe(player);
+                return true;
+            case "polished_gold_boots":
+                openPolishedGoldBootsRecipe(player);
+                return true;
+        }
+        
+        // Gold armor - Shiny tier
+        switch (normalizedName) {
+            case "shiny_gold_helmet":
+                openShinyGoldHelmetRecipe(player);
+                return true;
+            case "shiny_gold_chestplate":
+                openShinyGoldChestplateRecipe(player);
+                return true;
+            case "shiny_gold_leggings":
+                openShinyGoldLeggingsRecipe(player);
+                return true;
+            case "shiny_gold_boots":
+                openShinyGoldBootsRecipe(player);
+                return true;
+        }
+        
+        // Gold armor - Glistening tier
+        switch (normalizedName) {
+            case "glistening_gold_helmet":
+                openGlisteningGoldHelmetRecipe(player);
+                return true;
+            case "glistening_gold_chestplate":
+                openGlisteningGoldChestplateRecipe(player);
+                return true;
+            case "glistening_gold_leggings":
+                openGlisteningGoldLeggingsRecipe(player);
+                return true;
+            case "glistening_gold_boots":
+                openGlisteningGoldBootsRecipe(player);
+                return true;
+        }
+        
+        // Gold armor - Gilded tier
+        switch (normalizedName) {
+            case "gilded_helmet":
+                openGildedHelmetRecipe(player);
+                return true;
+            case "gilded_chestplate":
+                openGildedChestplateRecipe(player);
+                return true;
+            case "gilded_leggings":
+                openGildedLeggingsRecipe(player);
+                return true;
+            case "gilded_boots":
+                openGildedBootsRecipe(player);
+                return true;
+        }
+        
+        // Gilded Netherite armor - Ultimate tier
+        switch (normalizedName) {
+            case "gilded_netherite_helmet":
+                openGildedNetheriteHelmetRecipe(player);
+                return true;
+            case "gilded_netherite_chestplate":
+                openGildedNetheriteChestplateRecipe(player);
+                return true;
+            case "gilded_netherite_leggings":
+                openGildedNetheriteLeggingsRecipe(player);
+                return true;
+            case "gilded_netherite_boots":
+                openGildedNetheriteBootsRecipe(player);
+                return true;
+        }
+        
+        // Regular compacted materials
+        switch (normalizedName) {
+            case "compacted_iron":
+                openCompactedIronRecipe(player);
+                return true;
+            case "compacted_gold":
+                openCompactedGoldRecipe(player);
+                return true;
+            case "compacted_diamond":
+                openCompactedDiamondRecipe(player);
+                return true;
+            case "compacted_emerald":
+                openCompactedEmeraldRecipe(player);
+                return true;
+            case "compacted_netherite":
+                openCompactedNetheriteRecipe(player);
+                return true;
+            case "compacted_copper":
+                openCompactedCopperRecipe(player);
+                return true;
+            case "compacted_coal":
+                openCompactedCoalRecipe(player);
+                return true;
+            case "compacted_lapis":
+            case "compacted_lapis_lazuli":
+                openCompactedLapisRecipe(player);
+                return true;
+            case "compacted_redstone":
+                openCompactedRedstoneRecipe(player);
+                return true;
+            case "compacted_quartz":
+                openCompactedQuartzRecipe(player);
+                return true;
+        }
+        
+        return false; // Recipe not found
+    }
+}

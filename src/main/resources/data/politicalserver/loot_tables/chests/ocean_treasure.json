@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {"min": 4, "max": 8},
+      "entries": [
+        {"type": "minecraft:item", "name": "minecraft:prismarine", "weight": 10, "functions": [{"function": "set_count", "count": {"min": 32, "max": 64}}]},
+        {"type": "minecraft:item", "name": "minecraft:prismarine_bricks", "weight": 8, "functions": [{"function": "set_count", "count": {"min": 16, "max": 32}}]},
+        {"type": "minecraft:item", "name": "minecraft:dark_prismarine", "weight": 6, "functions": [{"function": "set_count", "count": {"min": 16, "max": 32}}]},
+        {"type": "minecraft:item", "name": "minecraft:sea_lantern", "weight": 5, "functions": [{"function": "set_count", "count": {"min": 4, "max": 12}}]},
+        {"type": "minecraft:item", "name": "minecraft:prismarine_shard", "weight": 5, "functions": [{"function": "set_count", "count": {"min": 16, "max": 48}}]},
+        {"type": "minecraft:item", "name": "minecraft:prismarine_crystals", "weight": 4, "functions": [{"function": "set_count", "count": {"min": 8, "max": 16}}]},
+        {"type": "minecraft:item", "name": "minecraft:diamond", "weight": 3, "functions": [{"function": "set_count", "count": {"min": 5, "max": 15}}]},
+        {"type": "minecraft:item", "name": "minecraft:diamond_trident", "weight": 1},
+        {"type": "minecraft:item", "name": "minecraft:diamond_helmet", "weight": 2, "functions": [{"function": "enchant_with_levels", "levels": {"min": 25, "max": 45}, "treasure": true}]}
+      ]
+    },
+    {
+      "rolls": {"min": 1, "max": 2},
+      "entries": [
+        {"type": "minecraft:item", "name": "minecraft:trident", "weight": 1},
+        {"type": "minecraft:item", "name": "minecraft:heart_of_the_sea", "weight": 1},
+        {"type": "minecraft:item", "name": "minecraft:enchanted_golden_apple", "weight": 2},
+        {"type": "minecraft:item", "name": "minecraft:enchanted_book", "weight": 3, "functions": [{"function": "enchant_with_levels", "levels": {"min": 30, "max": 50}, "treasure": true}]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:overworld",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        {"block": "minecraft:bedrock", "height": 1},
+        {"block": "minecraft:stone", "height": 40},
+        {"block": "minecraft:snow_block", "height": 20}
+      ],
+      "structure_overrides": [],
+      "biome": "minecraft:snowy_plains"
+    }
+  }
+}

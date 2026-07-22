@@ -1,0 +1,13 @@
+{
+  "type": "politicalserver:caves_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [],
+      "structure_overrides": [],
+      "biome": "minecraft:the_void",
+      "lakes": false,
+      "features": false
+    }
+  }
+}
