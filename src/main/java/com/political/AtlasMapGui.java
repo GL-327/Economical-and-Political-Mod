@@ -165,6 +165,19 @@ public final class AtlasMapGui {
                     if (mine != null) SettlementGui.open(player, mine);
                 })
                 .build());
+
+        // Hand out a real filled map that renders the actual terrain and blocks.
+        gui.setSlot(36, new GuiElementBuilder(Items.FILLED_MAP)
+                .setName(Component.literal("Get World Map").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7A real map centred where you stand."))
+                .addLoreLine(Component.literal("§7Carry it and walk to reveal the land."))
+                .addLoreLine(Component.literal("§8Settlements in view are listed on it."))
+                .glow()
+                .setCallback((index, clickType, action, slotGui) -> {
+                    player.closeContainer();
+                    WorldMapItem.give(player);
+                })
+                .build());
     }
 
     private static Item iconFor(SettlementTier tier) {

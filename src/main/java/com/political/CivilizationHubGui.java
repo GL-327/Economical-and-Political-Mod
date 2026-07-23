@@ -170,6 +170,12 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> HuntGui.open(player))
                 .build());
 
+        gui.setSlot(48, new GuiElementBuilder(Items.WRITTEN_BOOK)
+                .setName(Component.literal("Changelog").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Everything added, version by version."))
+                .setCallback((a, b, c, d) -> ChangelogGui.open(player))
+                .build());
+
         // ── Footer: live world state ──
         int settlements = SettlementManager.getAllSettlements().size();
         int activeWars = WarManager.activeWars().size();

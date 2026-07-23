@@ -182,6 +182,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             GuildCommands.register(dispatcher);
             TradeCommands.register(dispatcher);
             LivingWorldCommands.register(dispatcher);
+            ChangelogCommands.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
