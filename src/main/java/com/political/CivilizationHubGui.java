@@ -197,6 +197,27 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> VarietyGui.open(player))
                 .build());
 
+        // ── V7 ──
+        gui.setSlot(42, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Component.literal("Sorcerer Clans").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Found a bloodline with a signature technique,"))
+                .addLoreLine(Component.literal("§7build its prestige and feud with rivals."))
+                .setCallback((a, b, c, d) -> ClanGui.open(player))
+                .build());
+
+        gui.setSlot(43, new GuiElementBuilder(Items.NETHERITE_SWORD)
+                .setName(Component.literal("Cursed Arsenal").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Graded cursed weapons and armor."))
+                .setCallback((a, b, c, d) -> CursedArsenalGui.open(player))
+                .build());
+
+        gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Component.literal("What Is New").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7The featured board of the latest systems,"))
+                .addLoreLine(Component.literal("§7each one click away."))
+                .setCallback((a, b, c, d) -> ModernShowcaseGui.open(player))
+                .build());
+
         gui.setSlot(48, new GuiElementBuilder(Items.WRITTEN_BOOK)
                 .setName(Component.literal("Changelog").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Everything added, version by version."))

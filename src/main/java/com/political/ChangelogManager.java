@@ -191,6 +191,35 @@ public final class ChangelogManager {
         )));
     }
 
+    static {
+        // ── V7.0 - V7.9 ──
+        add(new Version("v7", "V7.0 - V7.9", Items.NETHERITE_SWORD, "Clans and Cursed Steel", List.of(
+                e("Sorcerer Clans, a JJK great-clan layer", "v7_clans",
+                        "Found a sorcerer bloodline with its own signature cursed technique. Recruit members, "
+                        + "rank them, build a shared treasury, raise clan prestige from what your members achieve, "
+                        + "and feud with rival clans."),
+                e("Inherited signature techniques", "v7_inherited",
+                        "Each clan carries a signature cursed technique that members can channel once they meet the "
+                        + "clan and rank requirements. They cost cursed energy and sit on a cooldown, so they read as "
+                        + "a clan's calling card rather than a spam button."),
+                e("The Cursed Arsenal", "v7_arsenal",
+                        "A graded line of cursed weapons and armor from Grade 4 up to Special Grade. Each weapon type "
+                        + "has its own signature effect, and higher grades are forged from the lower ones, so it is a "
+                        + "progression to climb."),
+                e("More cursed spirits", "v7_morespirits",
+                        "New cursed spirit archetypes join the roster, each with its own behaviour, so the world stays "
+                        + "dangerous and varied as you climb the ranks."),
+                e("A modern look and a Featured board", "v7_modern",
+                        "A shared GUI toolkit gives the screens one clean modern style, with borders, headers and stat "
+                        + "pills. A Featured board on the hub, also opened with /whatsnew, summarises the latest systems "
+                        + "and opens each by clicking."),
+                e("Flourishes and item shine", "v7_flair",
+                        "Tasteful particle and sound bursts play on moments like a magic level up or a boss spawn, and "
+                        + "rare and above gear now carries a glint, so older content looks cooler without changing how "
+                        + "it plays.")
+        )));
+    }
+
     /** Registered later by more code so the changelog stays in one place. */
     public static void registerVersion(Version v) {
         add(v);

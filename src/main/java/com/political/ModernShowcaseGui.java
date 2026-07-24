@@ -1,0 +1,106 @@
+package com.political;
+
+import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.gui.SimpleGui;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Items;
+
+/**
+ * V7 Pillar C — a "what is new / featured" board that also showcases {@link ModernGuiTheme}, so
+ * there is at least one screen built entirely on the modern toolkit. It summarises the latest
+ * systems and gives each a button that opens the real screen. Reachable from the Civilization
+ * Hub and from {@code /featured} or {@code /whatsnew}.
+ *
+ * <p>Purely a launcher and a summary. It reads no state that would change and writes nothing.
+ */
+public final class ModernShowcaseGui {
+
+    private ModernShowcaseGui() {}
+
+    public static void open(ServerPlayer player) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("✦ Featured").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+
+        // Modern toolkit dresses the whole screen.
+        ModernGuiTheme.border(gui, 54);
+        ModernGuiTheme.header(gui, "What Is New", "The latest systems, one click away");
+
+        // ── featured systems ──
+        gui.setSlot(20, ModernGuiTheme.button(Items.WITHER_SKELETON_SKULL,
+                "Cursed Spirits", ChatFormatting.DARK_GRAY,
+                "Graded curses stalk the world.",
+                "Hunt them and bank cursed energy.",
+                () -> CursedSpiritGui.open(player)));
+
+        gui.setSlot(21, ModernGuiTheme.button(Items.NETHERITE_SWORD,
+                "Sorcerer Path", ChatFormatting.DARK_PURPLE,
+                "Rank up and swear binding vows.",
+                "Wield reverse cursed technique.",
+                () -> SorcererGui.open(player)));
+
+        gui.setSlot(22, ModernGuiTheme.button(Items.NETHER_STAR,
+                "Special Grade", ChatFormatting.RED,
+                "Summon and fell the named horrors.",
+                "The hardest fights in the world.",
+                () -> SpecialGradeGui.open(player)));
+
+        gui.setSlot(23, ModernGuiTheme.button(Items.ENDER_EYE,
+                "Expeditions", ChatFormatting.LIGHT_PURPLE,
+                "Instanced procedural dungeons.",
+                "Five tiers, bosses and spoils.",
+                () -> ExpeditionGui.open(player)));
+
+        gui.setSlot(24, ModernGuiTheme.button(Items.SHIELD,
+                "Guilds & Orders", ChatFormatting.BLUE,
+                "Cross-settlement brotherhoods.",
+                "Ranks, treasury, perks and halls.",
+                () -> GuildGui.open(player)));
+
+        // ── stat pills across the middle, demonstrating the modern pill element ──
+        String uuid = player.getUUID().toString();
+        long coins = CoinManager.getCoinsLong(player);
+        int magicLevel = safeMagicLevel(uuid);
+        gui.setSlot(29, ModernGuiTheme.pill(Items.SUNFLOWER,
+                "Your Coins", formatCoins(coins), ChatFormatting.GOLD));
+        gui.setSlot(31, ModernGuiTheme.pill(Items.ENCHANTED_BOOK,
+                "Magic Level", magicLevel >= 0 ? String.valueOf(magicLevel) : "-", ChatFormatting.LIGHT_PURPLE));
+        gui.setSlot(33, ModernGuiTheme.pill(Items.NETHER_STAR,
+                "Featured Systems", "5", ChatFormatting.AQUA));
+
+        // ── a short summary card ──
+        gui.setSlot(40, new GuiElementBuilder(Items.WRITTEN_BOOK)
+                .setName(Component.literal("Highlights").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Curses now grade and stalk the world."))
+                .addLoreLine(Component.literal("§7Sorcerers rank up and expand domains."))
+                .addLoreLine(Component.literal("§7Expeditions run five deep dungeon tiers."))
+                .addLoreLine(Component.literal("§7Guilds bind settlements into orders."))
+                .addLoreLine(Component.literal(""))
+                .addLoreLine(Component.literal("§8Everything here opens by clicking above."))
+                .glow().build());
+
+        // Footer note plus a back button into the hub.
+        ModernGuiTheme.footer(gui, 54, "Open the hub for every system");
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Component.literal("← Back to Hub").withStyle(ChatFormatting.YELLOW))
+                .setCallback((a, b, c, d) -> CivilizationHubGui.open(player))
+                .build());
+
+        gui.open();
+    }
+
+    private static String formatCoins(long coins) {
+        return String.format(java.util.Locale.ROOT, "%,d", coins);
+    }
+
+    /** Reads the player's magic level defensively so the showcase never fails to open. */
+    private static int safeMagicLevel(String uuid) {
+        try {
+            return MagicManager.getLevel(uuid);
+        } catch (Throwable t) {
+            return -1;
+        }
+    }
+}

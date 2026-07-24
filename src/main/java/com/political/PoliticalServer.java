@@ -70,6 +70,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         // V6: cursed spirits and the sorcerer path install their own listeners.
         CursedSpiritManager.register();
         SorcererManager.registerEvents();
+        // V7: clans, the cursed arsenal and extra spirits install their own listeners.
+        ClanManager.registerEvents();
+        CursedArsenalHandler.register();
+        MoreCursedSpirits.register();
         
         // Register gold-only restrictions for Crown of Greed/Midas
         CustomItemHandler.registerGoldOnlyRestrictions();
@@ -187,6 +191,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             LivingWorldCommands.register(dispatcher);
             ChangelogCommands.register(dispatcher);
             V6Commands.register(dispatcher);
+            // ── V7 ──
+            ClanCommands.register(dispatcher);
+            CursedArsenalCommands.register(dispatcher);
+            ModernCommands.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
@@ -367,6 +375,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CursedRecipeBootstrap.ensureRecipes();
             CursedToolFactory.ensureRecipes();
             BossRewards.ensureRecipes();
+            // ── V7 recipe bootstrap ──
+            CursedArsenalRecipeBootstrap.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -398,6 +408,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SettlementEvents.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SeasonFestivals.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             WorldModifiers.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            // ── V7 ──
+            ClanManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            ClanWarBridge.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             LOGGER.info("PoliticalServer data loaded");
         });
 
@@ -431,6 +444,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SettlementEvents.save();
             SeasonFestivals.save();
             WorldModifiers.save();
+            // ── V7 ──
+            ClanManager.saveAll();
+            ClanWarBridge.save();
             PartyManager.saveData();
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
@@ -585,6 +601,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     // Voidwalker Void Step/Sight + Ender Phase enter/exit
                     CustomItemHandler.tickFlagshipItems(player);
                     SorcererManager.tickPlayer(player);
+                    ClanManager.tickPlayer(player);
+                    CursedArsenalHandler.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }
@@ -624,6 +642,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SettlementEvents.tick(s);
             SeasonFestivals.tick(s);
             WorldModifiers.tick(s);
+            // ── V7 ──
+            ClanManager.tick(s);
+            MoreCursedSpirits.tick(s);
 
             visibilityTickCounter++;
             if (visibilityTickCounter >= 10) {
