@@ -60,7 +60,28 @@ public final class ItemStatInjector {
         out.add(Component.literal(HEADER));
         out.addAll(stats);
         out.add(Component.literal(flavor(id, cat, seed)));
+        // Hypixel-style rarity footer: one bold coloured line that instantly modernises every item.
+        out.add(Component.literal(rarityLine(cat, tier)));
         return out;
+    }
+
+    /** A bold, coloured rarity + kind line, derived from the item's tier and category. */
+    private static String rarityLine(Category cat, int tier) {
+        String rarity;
+        String colour;
+        if (tier >= 10) { rarity = "MYTHIC"; colour = "§d"; }
+        else if (tier >= 8) { rarity = "LEGENDARY"; colour = "§6"; }
+        else if (tier >= 6) { rarity = "EPIC"; colour = "§5"; }
+        else if (tier >= 4) { rarity = "RARE"; colour = "§9"; }
+        else if (tier >= 2) { rarity = "UNCOMMON"; colour = "§a"; }
+        else { rarity = "COMMON"; colour = "§f"; }
+        String kind = switch (cat) {
+            case WEAPON -> "WEAPON";
+            case ARMOR -> "ARMOR";
+            case TOOL -> "TOOL";
+            default -> "ITEM";
+        };
+        return colour + "§l" + rarity + " " + kind;
     }
 
     // ════════════════════════════════════════════════════════════

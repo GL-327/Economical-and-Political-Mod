@@ -1040,6 +1040,16 @@ public class CustomItemsGui {
                 .setCallback((idx, type, containerInput, slotGui) -> openSearchGui(player))
                 .build());
 
+        // Second page of sections: all V4, V5 and V6 additions.
+        gui.setSlot(7, new GuiElementBuilder(Items.END_CRYSTAL)
+                .setName(Component.literal("✦ New Content (V4-V6)").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal(""))
+                .addLoreLine(Component.literal("Magic, expeditions, guilds, trade,").withStyle(ChatFormatting.GRAY))
+                .addLoreLine(Component.literal("backrooms, curses and the sorcerer path").withStyle(ChatFormatting.GRAY))
+                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
+                .setCallback((idx, type, containerInput, slotGui) -> ExpansionCatalogGui.openMenu(player))
+                .build());
+
         // Row 1: Armor categories - spread across more slots
         gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
                 .setName(Component.literal("💎 Custom Armor").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
