@@ -57,13 +57,20 @@ public final class ItemStatInjector {
             out.add(c);
             kept++;
         }
-        out.add(Component.literal(HEADER));
+        // Layout, top to bottom: description, a breath of space, the stat block, the flavour
+        // line, a thin rule, then the rarity stamp. The spacing is what makes a tooltip read
+        // cleanly rather than as one dense wall of text.
+        out.add(Component.literal(""));
         out.addAll(stats);
+        out.add(Component.literal(""));
         out.add(Component.literal(flavor(id, cat, seed)));
-        // Hypixel-style rarity footer: one bold coloured line that instantly modernises every item.
+        out.add(Component.literal(RULE));
         out.add(Component.literal(rarityLine(cat, tier)));
         return out;
     }
+
+    /** A thin horizontal rule that sits above the rarity stamp. */
+    private static final String RULE = "§8§m                              §r";
 
     /** A bold, coloured rarity + kind line, derived from the item's tier and category. */
     private static String rarityLine(Category cat, int tier) {

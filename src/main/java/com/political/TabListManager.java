@@ -59,7 +59,7 @@ public class TabListManager {
         manaLine = "§b✦ Mana: §f" + (int) mana + "§7/§f" + maxMana;
 
         Component header = Component.literal(
-            "§6§l✦ CivilCraft V4.3 ✦§r\n" +
+            "§6§l✦ CivilCraft V7.0 ✦§r\n" +
             "§8────────────────────────\n" +
             "§7Players: §e" + playerCount + "§7/§e" + maxPlayers + "\n" +
             manaLine

@@ -307,9 +307,19 @@ public final class WarGui {
 
     // ── helpers ──
 
+    /**
+     * Shared backdrop for every screen in the mod. Draws a framed two tone background: a lighter
+     * pane around the outside edge and a dark field inside it, so content placed in the interior
+     * reads as sitting inside a window. Every GUI that calls this picks up the same look.
+     */
     static void fill(SimpleGui gui, int size) {
+        int rows = Math.max(1, size / 9);
         for (int i = 0; i < size; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            int row = i / 9;
+            int col = i % 9;
+            boolean edge = row == 0 || row == rows - 1 || col == 0 || col == 8;
+            gui.setSlot(i, new GuiElementBuilder(
+                    edge ? Items.GRAY_STAINED_GLASS_PANE : Items.BLACK_STAINED_GLASS_PANE)
                     .setName(Component.literal("")).build());
         }
     }

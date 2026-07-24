@@ -114,7 +114,7 @@ public class ScoreboardManager {
         Objective objective = scoreboard.addObjective(
             objName,
             ObjectiveCriteria.DUMMY,
-            Component.literal("§6§l CivilCraft §8v4.3"),
+            Component.literal("§6§l CivilCraft §8v7.0"),
             ObjectiveCriteria.RenderType.INTEGER,
             false,
             BlankFormat.INSTANCE
