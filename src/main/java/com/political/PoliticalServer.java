@@ -196,6 +196,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CursedArsenalCommands.register(dispatcher);
             ModernCommands.register(dispatcher);
             VfxShowcase.register(dispatcher);
+            ReforgeGui.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
@@ -378,6 +379,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BossRewards.ensureRecipes();
             // ── V7 recipe bootstrap ──
             CursedArsenalRecipeBootstrap.ensureRecipes();
+            // ── Version X ──
+            ReforgeManager.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();

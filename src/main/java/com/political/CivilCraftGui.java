@@ -12,7 +12,7 @@ public class CivilCraftGui {
 
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("⚔ CivilCraft V7.0 Commands"));
+        gui.setTitle(Component.literal("⚔ CivilCraft Version X Commands"));
 
         // Decorative border
         for (int i = 0; i < 54; i++) {
@@ -29,7 +29,7 @@ public class CivilCraftGui {
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Component.literal("⚔ CIVILCRAFT").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Version: V7.0").withStyle(ChatFormatting.GREEN))
+                .addLoreLine(Component.literal("Version: X").withStyle(ChatFormatting.GREEN))
                 .addLoreLine(Component.literal("Tip: /modhelp lists every text command").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("Click below to run a command").withStyle(ChatFormatting.YELLOW))
                 .glow().build());

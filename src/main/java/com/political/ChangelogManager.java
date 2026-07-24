@@ -248,6 +248,33 @@ public final class ChangelogManager {
         )));
     }
 
+    static {
+        // ── Version X ── (there is no 9 or 10, this is one large update)
+        add(new Version("vx", "Version X", Items.NETHERITE_INGOT, "The Pinnacle", List.of(
+                e("Reforges, the content multiplier", "vx_reforge",
+                        "Over forty reforges spread across weapons, armour, tools and everything else. Any item in "
+                        + "the mod can carry one, and it renames the item and layers its own stats on top of what the "
+                        + "item already gives. This is what turns one Cursed Blade into dozens of different Cursed "
+                        + "Blades, so it multiplies the whole catalogue rather than adding to the end of it."),
+                e("The reforge anvil", "vx_anvil",
+                        "Hold an item and open the anvil from the hub or with /reforge. You can see what it carries "
+                        + "now, reroll it for coins, strip it back to base, and browse every reforge the item could "
+                        + "roll so you know what you are chasing."),
+                e("Rerolling is a real coin sink", "vx_cost",
+                        "A reroll starts at five thousand coins and climbs by two and a half thousand every time you "
+                        + "reroll that same item, up to a hundred thousand. Chasing a perfect reforge on one weapon "
+                        + "costs real money, which keeps it from being a free upgrade."),
+                e("Reforges never stack", "vx_stack",
+                        "The reforge block in an item's lore is delimited by a marker. Applying a new one strips "
+                        + "everything from that marker down and writes a fresh block, so no amount of rerolling can "
+                        + "pile stats on top of each other. The original name is remembered the first time, so "
+                        + "prefixes never pile up either."),
+                e("Version X is one update", "vx_naming",
+                        "There is no version nine or ten. Everything here landed as a single large update, which is "
+                        + "why the mod jumps from eight straight to Version X.")
+        )));
+    }
+
     /** Registered later by more code so the changelog stays in one place. */
     public static void registerVersion(Version v) {
         add(v);

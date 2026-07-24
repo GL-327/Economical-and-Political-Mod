@@ -218,6 +218,13 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> ModernShowcaseGui.open(player))
                 .build());
 
+        gui.setSlot(45, new GuiElementBuilder(Items.ANVIL)
+                .setName(Component.literal("Reforge Anvil").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Reroll the reforge on any item you hold."))
+                .addLoreLine(Component.literal("§8Over forty reforges across every gear class."))
+                .setCallback((a, b, c, d) -> ReforgeGui.open(player))
+                .build());
+
         gui.setSlot(44, new GuiElementBuilder(Items.END_ROD)
                 .setName(Component.literal("Effects Gallery").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Lances, storms, domains and rifts."))
