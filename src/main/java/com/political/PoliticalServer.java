@@ -67,6 +67,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         BackroomsMobs.registerDrops();
         // V5 Living World: seasons, bestiary and hunts install their own listeners.
         LivingWorldEvents.register();
+        // V6: cursed spirits and the sorcerer path install their own listeners.
+        CursedSpiritManager.register();
+        SorcererManager.registerEvents();
         
         // Register gold-only restrictions for Crown of Greed/Midas
         CustomItemHandler.registerGoldOnlyRestrictions();
@@ -183,6 +186,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TradeCommands.register(dispatcher);
             LivingWorldCommands.register(dispatcher);
             ChangelogCommands.register(dispatcher);
+            V6Commands.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
@@ -359,6 +363,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             GuildRecipeBootstrap.ensureRecipes();
             TradeRecipeBootstrap.ensureRecipes();
             LivingWorldRecipeBootstrap.ensureRecipes();
+            // ── V6 recipe bootstraps ──
+            CursedRecipeBootstrap.ensureRecipes();
+            CursedToolFactory.ensureRecipes();
+            BossRewards.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -381,6 +389,15 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CaravanManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             LivingWorldEvents.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CaravanManager.cleanupOrphans(s);
+            // ── V6 ──
+            CursedEnergyManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            CursedSpiritManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            SpecialGradeBossManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            DomainManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            SorcererManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            SettlementEvents.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            SeasonFestivals.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            WorldModifiers.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             LOGGER.info("PoliticalServer data loaded");
         });
 
@@ -404,6 +421,16 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TradeRouteManager.save();
             CaravanManager.save();
             LivingWorldEvents.save();
+            // ── V6 ──
+            CursedEnergyManager.save();
+            SpecialGradeBossManager.shutdown(s);
+            SpecialGradeBossManager.save();
+            DomainManager.shutdown(s);
+            DomainManager.save();
+            SorcererManager.save();
+            SettlementEvents.save();
+            SeasonFestivals.save();
+            WorldModifiers.save();
             PartyManager.saveData();
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
@@ -557,6 +584,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     LegendaryToolHandler.tickPlayer(player);
                     // Voidwalker Void Step/Sight + Ender Phase enter/exit
                     CustomItemHandler.tickFlagshipItems(player);
+                    SorcererManager.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }
@@ -589,6 +617,13 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TradeRouteManager.tick(s);
             CaravanManager.tick(s);
             LivingWorldEvents.tick(s);
+            // ── V6 ──
+            CursedSpiritManager.tick(s);
+            SpecialGradeBossManager.tick(s);
+            DomainManager.tick(s);
+            SettlementEvents.tick(s);
+            SeasonFestivals.tick(s);
+            WorldModifiers.tick(s);
 
             visibilityTickCounter++;
             if (visibilityTickCounter >= 10) {

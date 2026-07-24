@@ -158,7 +158,40 @@ public final class ChangelogManager {
         )));
     }
 
-    /** Registered later by V6 code so the changelog stays in one place. */
+    static {
+        // ── V6.0 - V6.9 ──
+        add(new Version("v6", "V6.0 - V6.9", Items.WITHER_SKELETON_SKULL, "Cursed Tides", List.of(
+                e("Cursed Spirits graded like curses out of Jujutsu Kaisen", "v6_spirits",
+                        "A new hostile threat layer. Cursed Spirits are graded from Grade 4 up to Special Grade, "
+                        + "with a dozen distinct archetypes. Grade 4 curses are common. A Special Grade is a rare "
+                        + "and dangerous sight. They drop Cursed Energy, a new currency."),
+                e("Cursed Energy and the Curse Hunter rank", "v6_energy",
+                        "Slaying spirits banks Cursed Energy, spent on the sorcerer techniques. Lifetime kills raise "
+                        + "your Curse Hunter rank, which grants a small permanent edge against spirits, capped so it "
+                        + "supplements your gear rather than replacing it."),
+                e("Special Grade bosses with Domain Expansions", "v6_bosses",
+                        "Named multi-phase boss fights summoned by a ritual item. Each boss can expand a Domain, a "
+                        + "temporary arena that hits harder and applies its signature curse. Arenas are fully cleaned "
+                        + "up afterward. Bosses drop strong gear and a trophy."),
+                e("The Sorcerer Path: become a Jujutsu Sorcerer", "v6_sorcerer",
+                        "Player progression that answers the curses. Rank up from Grade 4 to Special Grade, unlock "
+                        + "cursed tools, and fight smarter with Black Flash timed hits and reverse cursed technique "
+                        + "healing that spends energy so it is never free."),
+                e("Binding Vows and your own Domain Expansion", "v6_vows",
+                        "Swear binding vows for opt-in tradeoffs, like giving up ranged attacks for stronger melee. "
+                        + "A Special Grade sorcerer can expand their own Domain as a finisher, on a long cooldown and "
+                        + "a heavy energy cost."),
+                e("A variation pass across the whole mod", "v6_variety",
+                        "Rotating settlement events like festivals, plagues and gold rushes, plus more expedition "
+                        + "rooms, more trade goods, season festivals, and passing world modifiers. The living world "
+                        + "screen shows everything in motion at once."),
+                e("A clickable changelog and a real world map", "v6_qol",
+                        "This changelog, opened from the hub, with dig deeper prompts on every line. The Atlas now "
+                        + "hands you a real filled map that draws the actual terrain as you carry it.")
+        )));
+    }
+
+    /** Registered later by more code so the changelog stays in one place. */
     public static void registerVersion(Version v) {
         add(v);
     }

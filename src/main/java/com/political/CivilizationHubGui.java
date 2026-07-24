@@ -170,6 +170,33 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> HuntGui.open(player))
                 .build());
 
+        // ── Row 4: V6 (curses and the sorcerer path) ──
+        gui.setSlot(37, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
+                .setName(Component.literal("Cursed Spirits").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Graded curses stalk the world. Hunt them,"))
+                .addLoreLine(Component.literal("§7read the codex, and bank cursed energy."))
+                .setCallback((a, b, c, d) -> CursedSpiritGui.open(player))
+                .build());
+
+        gui.setSlot(38, new GuiElementBuilder(Items.NETHERITE_SWORD)
+                .setName(Component.literal("Sorcerer Path").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Rank up, swear binding vows, wield reverse"))
+                .addLoreLine(Component.literal("§7cursed technique and expand your domain."))
+                .setCallback((a, b, c, d) -> SorcererGui.open(player))
+                .build());
+
+        gui.setSlot(39, new GuiElementBuilder(Items.NETHER_STAR)
+                .setName(Component.literal("Special Grade").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Summon and fell the named horrors."))
+                .setCallback((a, b, c, d) -> SpecialGradeGui.open(player))
+                .build());
+
+        gui.setSlot(41, new GuiElementBuilder(Items.CLOCK)
+                .setName(Component.literal("The Living World").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Seasons, festivals, events and world turns."))
+                .setCallback((a, b, c, d) -> VarietyGui.open(player))
+                .build());
+
         gui.setSlot(48, new GuiElementBuilder(Items.WRITTEN_BOOK)
                 .setName(Component.literal("Changelog").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Everything added, version by version."))
