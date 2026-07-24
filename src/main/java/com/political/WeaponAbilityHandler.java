@@ -179,10 +179,10 @@ public class WeaponAbilityHandler {
 
                 // Void burst: portal spiral around the target + teleport audio.
                 world = (ServerLevel) player.level();
-                world.sendParticles(net.minecraft.core.particles.ParticleTypes.PORTAL,
-                        target.getX(), target.getY() + 1.0, target.getZ(), 30, 0.5, 0.7, 0.5, 0.4);
-                world.sendParticles(net.minecraft.core.particles.ParticleTypes.REVERSE_PORTAL,
-                        player.getX(), player.getY() + 1.0, player.getZ(), 12, 0.4, 0.6, 0.4, 0.1);
+                // A void lance tears across the gap between wielder and victim.
+                Vfx.lance(world, player.getEyePosition(), target.position().add(0, target.getBbHeight() * 0.5, 0),
+                        Vfx.VOID);
+                Vfx.voidRift(world, target.position().add(0, 1, 0));
                 world.playSound(null, player.blockPosition(),
                         net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT,
                         net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
@@ -344,11 +344,8 @@ public class WeaponAbilityHandler {
                             net.minecraft.sounds.SoundEvents.LIGHTNING_BOLT_IMPACT,
                             net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
                     target.hurtServer(world, player.damageSources().magic(), finalDamage * 0.3f);
-                    // Visible bolt: spark column above the target.
-                    for (int yStep = 0; yStep < 8; yStep++) {
-                        world.sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK,
-                                target.getX(), target.getY() + 0.4 * yStep, target.getZ(), 2, 0.12, 0.05, 0.12, 0.02);
-                    }
+                    // Full storm strike: a forked bolt from the sky and a ground shockwave.
+                    Vfx.stormStrike(world, target.position());
 
                     // Chain to nearby enemies
                     for (LivingEntity nearby : world.getEntitiesOfClass(LivingEntity.class,

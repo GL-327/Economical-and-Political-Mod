@@ -220,6 +220,34 @@ public final class ChangelogManager {
         )));
     }
 
+    static {
+        // ── V8.0 ──
+        add(new Version("v8", "V8.0", Items.END_ROD, "Spectacle", List.of(
+                e("A cinematic effects engine", "v8_engine",
+                        "Effects are now animated instead of instant. Each one registers with a scheduler and plays "
+                        + "out over many ticks, so a beam can charge, fire, flicker and bloom where it lands. This is "
+                        + "what separates a real set piece from a puff of smoke."),
+                e("Every effect is layered like a film shot", "v8_layers",
+                        "Each set piece is built from a bright dense core that reads as the shape, a sheath spun "
+                        + "around it for thickness, a loose haze to soften the edge, a muzzle flash at the start and "
+                        + "a bloom at the end, with a low sound body under a bright crack."),
+                e("Nine signature set pieces", "v8_setpieces",
+                        "Arcane, Inferno, Void and Cursed lances, a forked Storm Strike from the sky, a Domain "
+                        + "Collapse that slams out and implodes, a falling Meteor, a Void Rift that tears open and "
+                        + "snaps shut, and a soft Bloom for healing."),
+                e("Real abilities were upgraded to use them", "v8_upgrades",
+                        "Thunder strikes now call down a proper forked bolt with a ground shockwave. Void Strike "
+                        + "tears a lance across the gap and opens a rift on the victim. Domain Expansion plays the "
+                        + "full dome cinematic."),
+                e("An effects gallery you can browse", "v8_gallery",
+                        "Open the gallery from the hub, or with /vfx, and click any set piece to watch it play where "
+                        + "you are aiming."),
+                e("Built to stay safe under load", "v8_safety",
+                        "The scheduler caps how many effects can run at once, and a failing effect is dropped rather "
+                        + "than allowed to disturb the server tick.")
+        )));
+    }
+
     /** Registered later by more code so the changelog stays in one place. */
     public static void registerVersion(Version v) {
         add(v);

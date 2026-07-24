@@ -80,8 +80,8 @@ public final class PlayerDomainExpansion {
         player.sendSystemMessage(Component.literal("§5§lDOMAIN EXPANSION")
                 .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
         if (player.level() instanceof ServerLevel sl) {
-            sl.playSound(null, player.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM,
-                    SoundSource.PLAYERS, 1.0f, 0.6f);
+            // The full cinematic: the dome slams out, holds while the domain is up, then implodes.
+            Vfx.domainCollapse(sl, player.position().add(0, 1, 0), RADIUS, Vfx.VOID);
             ring(sl, player, 40);
         }
         return true;

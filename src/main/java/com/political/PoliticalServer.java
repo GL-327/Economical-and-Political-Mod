@@ -195,6 +195,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ClanCommands.register(dispatcher);
             CursedArsenalCommands.register(dispatcher);
             ModernCommands.register(dispatcher);
+            VfxShowcase.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
@@ -645,6 +646,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             // ── V7 ──
             ClanManager.tick(s);
             MoreCursedSpirits.tick(s);
+            // ── V8: cinematic effects scheduler ──
+            Vfx.tick(s);
 
             visibilityTickCounter++;
             if (visibilityTickCounter >= 10) {

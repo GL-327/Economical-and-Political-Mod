@@ -218,6 +218,13 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> ModernShowcaseGui.open(player))
                 .build());
 
+        gui.setSlot(44, new GuiElementBuilder(Items.END_ROD)
+                .setName(Component.literal("Effects Gallery").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Lances, storms, domains and rifts."))
+                .addLoreLine(Component.literal("§8Click any one to watch it play."))
+                .setCallback((a, b, c, d) -> VfxShowcase.open(player))
+                .build());
+
         gui.setSlot(48, new GuiElementBuilder(Items.WRITTEN_BOOK)
                 .setName(Component.literal("Changelog").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Everything added, version by version."))
