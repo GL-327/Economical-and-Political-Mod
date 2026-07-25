@@ -288,6 +288,22 @@ public final class ChangelogManager {
                         + "singularity that drags everything in and detonates, a blade slash, a shock cone, healing "
                         + "rain, a frost nova, a summoning circle, a soul harvest, a comet volley, a shield dome, a "
                         + "ground fissure and an execution finisher."),
+                e("The Aether Arsenal, a hundred new pieces", "vx_aether",
+                        "Ten attunements forged into ten pieces each: blade, greataxe, lance, pickaxe, mattock, "
+                        + "reaper, helm, cuirass, greaves and treads. Every slot has its own role and its own line "
+                        + "of behaviour, so the set is a hundred distinct items rather than ten recoloured ten times."),
+                e("Ten signature effects that exist nowhere else", "vx_signatures",
+                        "Each attunement owns an animation built as a different shape, not a recoloured burst. A "
+                        + "solar disc throwing spokes, shadow tendrils crawling out and snapping back, lightning "
+                        + "arcing between orbiting anchors, a crystal lattice growing in stepped struts, a spiral of "
+                        + "growth opening at the top, a pressure column bursting at the surface, a fire vortex "
+                        + "tightening as it climbs, a starfield with constellation lines traced one by one, rings "
+                        + "pulsing in a heartbeat rhythm, and a seam in the world tearing open then closing."),
+                e("Attunements read at a glance", "vx_auras",
+                        "Worn Aether armour gives off its attunement's aura, and each one moves differently, so you "
+                        + "can tell what someone is wearing across a field. Weapons fire their signature on a strike "
+                        + "and tools fire theirs as you break blocks, both on cooldowns so it cannot be spammed. A "
+                        + "full set of one attunement answers when you are badly hurt."),
                 e("Version X is one update", "vx_naming",
                         "There is no version nine or ten. Everything here landed as a single large update, which is "
                         + "why the mod jumps from eight straight to Version X.")

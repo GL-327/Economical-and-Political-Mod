@@ -387,6 +387,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ReforgeManager.ensureRecipes();
             RelicManager.ensureRecipes();
             CompanionManager.ensureRecipes();
+            AetherGear.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -620,6 +621,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     ClanManager.tickPlayer(player);
                     CursedArsenalHandler.tickPlayer(player);
                     RelicManager.tickPlayer(player);
+                    AetherGearHandler.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }

@@ -27,6 +27,10 @@ public final class ExpansionCatalogGui {
                            Predicate<String> match) {}
 
     private static final List<Section> SECTIONS = List.of(
+            new Section("Aether Arsenal", ChatFormatting.LIGHT_PURPLE, Items.NETHERITE_SWORD,
+                    n -> n.contains("aether")),
+            new Section("Relics & Companions", ChatFormatting.GOLD, Items.BUNDLE,
+                    n -> n.contains("relic:") || n.contains("companion:") || n.contains("reforge stone")),
             new Section("Cursed Spirits & Sorcerer", ChatFormatting.DARK_PURPLE, Items.WITHER_SKELETON_SKULL,
                     n -> n.contains("curse") || n.contains("cursed") || n.contains("sorcerer")
                             || n.contains("domain") || n.contains("binding") || n.contains("special grade")
@@ -56,12 +60,12 @@ public final class ExpansionCatalogGui {
         WarGui.fill(gui, 54);
 
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Component.literal("V4 to V6 Items").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
+                .setName(Component.literal("V4 to Version X Items").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Everything added since the settlements update."))
                 .addLoreLine(Component.literal("§8All of it is also in /recipe and /setrecipe."))
                 .glow().build());
 
-        int[] slots = {19, 20, 21, 22, 23, 24, 25};
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
         List<SlayerRecipes.Recipe> all = safeRecipes();
         for (int i = 0; i < SECTIONS.size() && i < slots.length; i++) {
             Section sec = SECTIONS.get(i);
