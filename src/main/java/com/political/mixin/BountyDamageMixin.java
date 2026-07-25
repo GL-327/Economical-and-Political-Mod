@@ -59,6 +59,8 @@ public abstract class BountyDamageMixin {
             if (CustomItemHandler.tryPhaseDodge(player, source, modifiedAmount)) {
                 return 0.0f;
             }
+            // Relics that react to being hurt.
+            modifiedAmount *= com.political.RelicManager.onHurt(player, modifiedAmount);
             if (source.getEntity() instanceof LivingEntity attacker) {
                 if (SlayerManager.isSlayerBoss(attacker.getUUID())) {
                     SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(attacker.getUUID());
@@ -125,6 +127,9 @@ public abstract class BountyDamageMixin {
 
         modifiedAmount *= (float) FishingEventHandler.getSeaCreatureDamageMultiplier(player, self);
 
+        // Relics that fire when you land a strike.
+        com.political.RelicManager.onHit(player, self);
+
         // Wartime: citizens of polities at war strike harder at one another.
         if (self instanceof ServerPlayer victimPlayer) {
             modifiedAmount *= com.political.WarManager.wartimeDamageMultiplier(player, victimPlayer);
@@ -149,6 +154,9 @@ public abstract class BountyDamageMixin {
         }
 
         ItemStack weapon = player.getMainHandItem();
+
+        // Relics that fire on any kill, mob or player.
+        com.political.RelicManager.onKill(player, self);
 
         if (WorldBossManager.isWorldBoss(self.getUUID())) {
             WorldBossManager.onBossDeath(self, (ServerLevel) self.level(), player);

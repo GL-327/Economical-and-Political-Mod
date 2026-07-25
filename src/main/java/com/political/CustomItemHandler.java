@@ -213,6 +213,10 @@ public class CustomItemHandler {
             }
             
             // Custom Items - skill tomes, coin pouches, etc.
+            if (RelicManager.tryClaim(serverPlayer, held)) {
+                return InteractionResult.SUCCESS;
+            }
+
             if (CustomItemManager.handleItemUse(serverPlayer, held)) {
                 return InteractionResult.SUCCESS;
             }

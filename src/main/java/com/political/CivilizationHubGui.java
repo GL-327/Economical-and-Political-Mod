@@ -218,6 +218,13 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> ModernShowcaseGui.open(player))
                 .build());
 
+        gui.setSlot(46, new GuiElementBuilder(Items.BUNDLE)
+                .setName(Component.literal("Accessory Bag").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Relics you have found, and the few"))
+                .addLoreLine(Component.literal("§7you choose to carry live."))
+                .setCallback((a, b, c, d) -> RelicGui.open(player))
+                .build());
+
         gui.setSlot(45, new GuiElementBuilder(Items.ANVIL)
                 .setName(Component.literal("Reforge Anvil").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Reroll the reforge on any item you hold."))

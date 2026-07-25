@@ -197,6 +197,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ModernCommands.register(dispatcher);
             VfxShowcase.register(dispatcher);
             ReforgeGui.register(dispatcher);
+            RelicGui.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
@@ -381,6 +382,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CursedArsenalRecipeBootstrap.ensureRecipes();
             // ── Version X ──
             ReforgeManager.ensureRecipes();
+            RelicManager.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -415,6 +417,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             // ── V7 ──
             ClanManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ClanWarBridge.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            RelicManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             LOGGER.info("PoliticalServer data loaded");
         });
 
@@ -451,6 +454,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             // ── V7 ──
             ClanManager.saveAll();
             ClanWarBridge.save();
+            RelicManager.save();
             PartyManager.saveData();
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
@@ -607,6 +611,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     SorcererManager.tickPlayer(player);
                     ClanManager.tickPlayer(player);
                     CursedArsenalHandler.tickPlayer(player);
+                    RelicManager.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }
