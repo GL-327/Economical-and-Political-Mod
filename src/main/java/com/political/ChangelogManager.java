@@ -314,6 +314,16 @@ public final class ChangelogManager {
                         + "breaking, rooting, blinding, levitation, pulling enemies in, throwing them out, and "
                         + "self buffs for haste, shielding, healing and speed, plus runes that draw cursed "
                         + "energy, coin or experience out of the moment."),
+                e("Beastcraft and the Instinct meter", "vx_beastcraft",
+                        "Forty five beasts cut into fourteen forms. Beastcraft does not tick and it does not "
+                        + "wait for a lucky proc. Every hit you land feeds one Instinct meter, the clade of the "
+                        + "piece decides how many hits fill it, and filling it hands the fight to the beast for a "
+                        + "moment. Swarm pieces spend often and small, Leviathan pieces spend rarely and huge."),
+                e("Clockwork and Pressure", "vx_clockwork",
+                        "Forty five mechanisms cut into fourteen forms. Clockwork winds itself while carried and "
+                        + "spends what it builds on breaking blocks, so it is the one line you can play without "
+                        + "fighting anything. Duties run from smelting ore as it drops to boring a tunnel with a "
+                        + "beam, and three of a Works lights that Works on top."),
                 e("Starbound gear and the six houses", "vx_starbound",
                         "Thirty six constellations cut into twelve forms. Where a rune waits for an event, a "
                         + "constellation is simply always on, so this is what you wear when you want a standing "

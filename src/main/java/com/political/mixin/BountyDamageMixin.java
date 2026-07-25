@@ -131,6 +131,7 @@ public abstract class BountyDamageMixin {
         com.political.RelicManager.onHit(player, self);
         com.political.AetherGearHandler.onHit(player, self);
         com.political.RuneforgedHandler.onHit(player, self);
+        modifiedAmount += com.political.BeastcraftHandler.onHit(player, self, modifiedAmount);
 
         // Wartime: citizens of polities at war strike harder at one another.
         if (self instanceof ServerPlayer victimPlayer) {

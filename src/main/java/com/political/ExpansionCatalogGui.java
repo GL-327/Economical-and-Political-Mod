@@ -27,6 +27,10 @@ public final class ExpansionCatalogGui {
                            Predicate<String> match) {}
 
     private static final List<Section> SECTIONS = List.of(
+            new Section("Beastcraft", ChatFormatting.RED, Items.BONE,
+                    n -> n.startsWith("vx beast ")),
+            new Section("Clockwork", ChatFormatting.GRAY, Items.CLOCK,
+                    n -> n.startsWith("vx cog ")),
             new Section("Starbound", ChatFormatting.YELLOW, Items.NETHER_STAR,
                     n -> n.startsWith("vx star ")),
             new Section("Runeforge", ChatFormatting.AQUA, Items.AMETHYST_SHARD,
@@ -69,7 +73,8 @@ public final class ExpansionCatalogGui {
                 .addLoreLine(Component.literal("§8All of it is also in /recipe and /setrecipe."))
                 .glow().build());
 
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25,
+                28, 29, 30, 31, 32, 33, 34};
         List<SlayerRecipes.Recipe> all = safeRecipes();
         for (int i = 0; i < SECTIONS.size() && i < slots.length; i++) {
             Section sec = SECTIONS.get(i);

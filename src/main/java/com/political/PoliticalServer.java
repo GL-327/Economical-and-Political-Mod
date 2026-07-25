@@ -390,6 +390,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             AetherGear.ensureRecipes();
             RuneforgedGear.ensureRecipes();
             StarboundGear.ensureRecipes();
+            BeastcraftGear.ensureRecipes();
+            ClockworkGear.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -626,6 +628,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     AetherGearHandler.tickPlayer(player);
                     RuneforgedHandler.tickPlayer(player);
                     StarboundHandler.tickPlayer(player);
+                    BeastcraftHandler.tickPlayer(player);
+                    ClockworkHandler.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }
