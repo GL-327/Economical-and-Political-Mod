@@ -160,6 +160,7 @@ public abstract class BountyDamageMixin {
         // Relics that fire on any kill, mob or player.
         com.political.RelicManager.onKill(player, self);
         com.political.CompanionManager.onKill(player);
+        com.political.StarboundHandler.onKill(player);
         com.political.ContractManager.onKill(player);
 
         if (WorldBossManager.isWorldBoss(self.getUUID())) {

@@ -314,6 +314,11 @@ public final class ChangelogManager {
                         + "breaking, rooting, blinding, levitation, pulling enemies in, throwing them out, and "
                         + "self buffs for haste, shielding, healing and speed, plus runes that draw cursed "
                         + "energy, coin or experience out of the moment."),
+                e("Starbound gear and the six houses", "vx_starbound",
+                        "Thirty six constellations cut into twelve forms. Where a rune waits for an event, a "
+                        + "constellation is simply always on, so this is what you wear when you want a standing "
+                        + "shape to your character rather than a proc. Carry three pieces of one house and that "
+                        + "house lights, adding its own standing bonus on top."),
                 e("Version X is one update", "vx_naming",
                         "There is no version nine or ten. Everything here landed as a single large update, which is "
                         + "why the mod jumps from eight straight to Version X.")
