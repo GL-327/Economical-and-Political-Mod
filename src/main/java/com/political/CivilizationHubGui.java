@@ -218,6 +218,20 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> ModernShowcaseGui.open(player))
                 .build());
 
+        gui.setSlot(50, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Component.literal("Contract Board").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Rotating work across six categories."))
+                .addLoreLine(Component.literal("§8Steady pay, never better than playing."))
+                .setCallback((a, b, c, d) -> ContractGui.open(player))
+                .build());
+
+        gui.setSlot(47, new GuiElementBuilder(Items.BONE)
+                .setName(Component.literal("Companions").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Twenty one companions across five roles."))
+                .addLoreLine(Component.literal("§8One walks with you at a time."))
+                .setCallback((a, b, c, d) -> CompanionGui.open(player))
+                .build());
+
         gui.setSlot(46, new GuiElementBuilder(Items.BUNDLE)
                 .setName(Component.literal("Accessory Bag").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Relics you have found, and the few"))

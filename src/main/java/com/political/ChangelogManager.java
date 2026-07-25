@@ -269,6 +269,25 @@ public final class ChangelogManager {
                         + "everything from that marker down and writes a fresh block, so no amount of rerolling can "
                         + "pile stats on top of each other. The original name is remembered the first time, so "
                         + "prefixes never pile up either."),
+                e("Forty five relics and an accessory bag", "vx_relics",
+                        "Each relic is one hand written effect rather than a stat stick. They fire on a strike, on a "
+                        + "kill, when you are hurt, or simply while carried. Only the ones in your bag are live, and "
+                        + "the bag starts at three slots and grows to nine, so relics are a choice about what kind of "
+                        + "fighter you are."),
+                e("Twenty one companions", "vx_companions",
+                        "Companions across five roles: damage, tank, support, forager and scout. One walks with you "
+                        + "at a time. They level from your kills, with a daily cap so they cannot be grown by leaving "
+                        + "the game running, and they are cleaned up when you log out."),
+                e("A rotating contract board", "vx_contracts",
+                        "Thirty two contract templates across hunt, gather, deliver, explore, craft and civic work. "
+                        + "The board rewrites every two hours, you may hold three at once, and there is a cap on how "
+                        + "many you can finish per rotation, so it pays steadily without ever beating going out and "
+                        + "playing."),
+                e("Fourteen more cinematic set pieces", "vx_vfx",
+                        "An orbital strike, chain lightning that hops between targets, a rising pillar of flame, a "
+                        + "singularity that drags everything in and detonates, a blade slash, a shock cone, healing "
+                        + "rain, a frost nova, a summoning circle, a soul harvest, a comet volley, a shield dome, a "
+                        + "ground fissure and an execution finisher."),
                 e("Version X is one update", "vx_naming",
                         "There is no version nine or ten. Everything here landed as a single large update, which is "
                         + "why the mod jumps from eight straight to Version X.")

@@ -217,6 +217,10 @@ public class CustomItemHandler {
                 return InteractionResult.SUCCESS;
             }
 
+            if (CompanionManager.tryClaim(serverPlayer, held)) {
+                return InteractionResult.SUCCESS;
+            }
+
             if (CustomItemManager.handleItemUse(serverPlayer, held)) {
                 return InteractionResult.SUCCESS;
             }

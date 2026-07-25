@@ -156,6 +156,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SpawnProtectionManager.onPlayerDisconnect(player.getUUID());
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
             PlayerStatsManager.onPlayerDisconnect(player.getUUID());
+            CompanionManager.onLogout(player);
         });
 
         // Reapply perks on respawn (death and other player copy events)
@@ -198,6 +199,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             VfxShowcase.register(dispatcher);
             ReforgeGui.register(dispatcher);
             RelicGui.register(dispatcher);
+            CompanionGui.register(dispatcher);
+            ContractGui.register(dispatcher);
 
             // /placeauctionmaster command
             dispatcher.register(Commands.literal("placeauctionmaster")
@@ -383,6 +386,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             // ── Version X ──
             ReforgeManager.ensureRecipes();
             RelicManager.ensureRecipes();
+            CompanionManager.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -418,6 +422,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ClanManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ClanWarBridge.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             RelicManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            CompanionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            ContractManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             LOGGER.info("PoliticalServer data loaded");
         });
 
@@ -455,6 +461,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ClanManager.saveAll();
             ClanWarBridge.save();
             RelicManager.save();
+            CompanionManager.shutdown(s);
+            ContractManager.save();
             PartyManager.saveData();
             AuctionHouseManager.save(s);
             UndergroundAuctionManager.save(s);
@@ -656,6 +664,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             MoreCursedSpirits.tick(s);
             // ── V8: cinematic effects scheduler ──
             Vfx.tick(s);
+            CompanionManager.tick(s);
+            ContractManager.tick(s);
 
             visibilityTickCounter++;
             if (visibilityTickCounter >= 10) {
