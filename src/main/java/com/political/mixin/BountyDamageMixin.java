@@ -130,6 +130,7 @@ public abstract class BountyDamageMixin {
         // Relics that fire when you land a strike.
         com.political.RelicManager.onHit(player, self);
         com.political.AetherGearHandler.onHit(player, self);
+        com.political.RuneforgedHandler.onHit(player, self);
 
         // Wartime: citizens of polities at war strike harder at one another.
         if (self instanceof ServerPlayer victimPlayer) {

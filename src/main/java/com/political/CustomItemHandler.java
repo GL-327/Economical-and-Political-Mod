@@ -107,6 +107,8 @@ public class CustomItemHandler {
             // Aether Arsenal tool signatures.
             AetherGearHandler.onBreak(sp, new net.minecraft.world.phys.Vec3(
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
+            RuneforgedHandler.onBreak(sp, new net.minecraft.world.phys.Vec3(
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
             if (DanielsPickaxe.isDanielsPickaxe(tool)) {
                 DanielsPickaxe.onBlockBreak(sp, (ServerLevel) world, pos, state);
             }

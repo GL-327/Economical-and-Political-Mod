@@ -27,6 +27,8 @@ public final class ExpansionCatalogGui {
                            Predicate<String> match) {}
 
     private static final List<Section> SECTIONS = List.of(
+            new Section("Runeforge", ChatFormatting.AQUA, Items.AMETHYST_SHARD,
+                    n -> n.startsWith("vx rune ")),
             new Section("Aether Arsenal", ChatFormatting.LIGHT_PURPLE, Items.NETHERITE_SWORD,
                     n -> n.contains("aether")),
             new Section("Relics & Companions", ChatFormatting.GOLD, Items.BUNDLE,

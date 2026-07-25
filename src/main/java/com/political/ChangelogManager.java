@@ -304,6 +304,16 @@ public final class ChangelogManager {
                         + "can tell what someone is wearing across a field. Weapons fire their signature on a strike "
                         + "and tools fire theirs as you break blocks, both on cooldowns so it cannot be spammed. A "
                         + "full set of one attunement answers when you are badly hurt."),
+                e("The Runeforge, six hundred more pieces", "vx_runeforge",
+                        "Forty runes struck into fifteen shapes. The shape decides how it fights and when it "
+                        + "fires, the rune decides what happens when it does, so a Pyre Dagger and a Pyre "
+                        + "Warhammer burn the same way and play nothing alike, while a Pyre Dagger and a "
+                        + "Deepfreeze Dagger swing the same way and do opposite things."),
+                e("Twenty rune effects", "vx_runeeffects",
+                        "Burning, chilling, shock that arcs to neighbours, poison, wither, life stealing, armour "
+                        + "breaking, rooting, blinding, levitation, pulling enemies in, throwing them out, and "
+                        + "self buffs for haste, shielding, healing and speed, plus runes that draw cursed "
+                        + "energy, coin or experience out of the moment."),
                 e("Version X is one update", "vx_naming",
                         "There is no version nine or ten. Everything here landed as a single large update, which is "
                         + "why the mod jumps from eight straight to Version X.")
