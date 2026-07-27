@@ -93,11 +93,17 @@ public final class TempestHandler {
         held.entrySet().removeIf(e -> e.getValue() < now);
 
         // A different charge already sitting on the target reacts instead of stacking.
+        Storm.Charge partner = null;
         for (Storm.Charge other : held.keySet()) {
-            if (other == charge) continue;
-            held.remove(other);
+            if (other != charge) {
+                partner = other;
+                break;
+            }
+        }
+        if (partner != null) {
+            held.remove(partner);
             held.remove(charge);
-            react(level, player, target, other, charge);
+            react(level, player, target, partner, charge);
             return;
         }
 

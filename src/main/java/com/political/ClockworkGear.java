@@ -63,7 +63,7 @@ public final class ClockworkGear {
         String k = GearLine.formKeyOf(ID_PREFIX, stack);
         if (k == null) return null;
         for (GearLine.Form f : FORMS) {
-            if (f.display().toLowerCase(java.util.Locale.ROOT).replace(' ', '_').equals(k)) return f;
+            if (GearLine.formKey(f).equals(k)) return f;
         }
         return null;
     }

@@ -75,8 +75,17 @@ public final class GearLine {
         return s;
     }
 
+    /**
+     * The form half of an id. Spaces are stripped rather than turned into underscores, because the
+     * id is split on its last underscore and a form like "Sword of State" would otherwise eat most
+     * of the motif key on the way back out.
+     */
+    public static String formKey(Form f) {
+        return f.display().toLowerCase(Locale.ROOT).replace(" ", "");
+    }
+
     public static String idFor(String idPrefix, Motif m, Form f) {
-        return idPrefix + "_" + m.key() + "_" + f.display().toLowerCase(Locale.ROOT).replace(' ', '_');
+        return idPrefix + "_" + m.key() + "_" + formKey(f);
     }
 
     /** Pulls the motif key back out of a stack, or null if the stack is not from this line. */

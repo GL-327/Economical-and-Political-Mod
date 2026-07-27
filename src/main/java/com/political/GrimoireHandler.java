@@ -101,17 +101,13 @@ public final class GrimoireHandler {
     public static void onHit(ServerPlayer player, LivingEntity target, float damage) {
         if (!carriesAny(player)) return;
         boolean siphon = false;
-        for (ItemStack st : GearLine.carried(p(player))) {
+        for (ItemStack st : GearLine.carried(player)) {
             Sigil s = GrimoireGear.sigilOf(st);
             if (s != null && s.casting == Sigil.Casting.SIPHON) siphon = true;
         }
         if (!siphon && circleCount(player, Sigil.Circle.HOLLOW) < 3) return;
         UUID id = player.getUUID();
         FOCUS.put(id, Math.min(maxFocus(player), FOCUS.getOrDefault(id, 0) + (int) (damage / 4)));
-    }
-
-    private static ServerPlayer p(ServerPlayer player) {
-        return player;
     }
 
     /** Called on use. Returns true when a cast happened and the use should be swallowed. */
