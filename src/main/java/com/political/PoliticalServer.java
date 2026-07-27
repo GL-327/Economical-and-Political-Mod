@@ -155,6 +155,14 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ScoreboardManager.onPlayerDisconnect(player);
             SpawnProtectionManager.onPlayerDisconnect(player.getUUID());
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
+            // Version X gear lines keep per player meters in memory, so drop them on the way out.
+            StarboundHandler.clear(player.getUUID());
+            BeastcraftHandler.clear(player.getUUID());
+            ClockworkHandler.clear(player.getUUID());
+            GrimoireHandler.clear(player.getUUID());
+            TempestHandler.clear(player.getUUID());
+            VoyagerHandler.clear(player.getUUID());
+            RegaliaHandler.clear(player.getUUID());
             PlayerStatsManager.onPlayerDisconnect(player.getUUID());
             CompanionManager.onLogout(player);
         });
