@@ -88,3 +88,62 @@ Every system here was written to avoid becoming the optimal way to earn.
 - Relic effects are individually modest and the bag caps how many run at once.
 - Companion experience is capped per day, and a companion is help rather than a second player.
 - Contracts are capped per rotation and pay less than active play.
+
+## The seven gear lines
+
+Version X adds seven combinatorial gear lines. Each is a motif set crossed with a form set, and no
+two lines share a mechanic. That was the point: seven families that all played the same way would be
+one family with seven skins.
+
+| Line | Motifs | Forms | Pieces | What drives it |
+| --- | ---: | ---: | ---: | --- |
+| Starbound | 36 constellations | 12 | 432 | Always on. Three of a house lights the house. |
+| Beastcraft | 45 beasts | 14 | 630 | One Instinct meter fed by landing hits. The clade sets the fill rate. |
+| Clockwork | 45 mechanisms | 14 | 630 | Pressure winds on its own and is spent by breaking blocks. |
+| Grimoire | 45 sigils | 14 | 630 | Sneak and use to cast, spending Focus. Focus refills from Intelligence. |
+| Tempest | 45 storms | 14 | 630 | Hits hang a charge. Two different charges on one target react. |
+| Voyager | 45 waypoints | 14 | 630 | Reads your terrain reach and your distance from the nearest settlement. |
+| Regalia | 45 offices | 14 | 630 | Reads your settlement tier and the council seat you hold. |
+
+Voyager and Regalia are deliberate opposites. Voyager is close to worthless at home and strongest
+twelve Leagues out. Regalia is the reverse, and needs a settlement and an election to pay out at all.
+
+Tempest is the only line that reads what other players are doing. Charges sit on the target rather
+than on the wearer, so two players running different fronts reach reactions neither could alone.
+Twenty eight charge pairs, twenty eight distinct results.
+
+## Crafting
+
+Every line is keyed on its own catalyst rather than on raw vanilla loot. There are nine, one per
+line, and each is craftable from a crafting core surrounded by that line's four signature materials.
+
+Every piece of gear then asks for its line catalyst plus a crafting core of the tier that cut
+deserves:
+
+- Tools and charms take a T1 core.
+- Weapons, ranged and the light armour take a T2.
+- Chest and legs take a T3.
+
+The grid reads the same way in every line. The piece being upgraded sits in the middle, the motif's
+own token runs down both sides, the catalyst holds the top corners and the core sits underneath.
+Anybody who has crafted one piece can craft any of them.
+
+The Runeforge and the Aether Arsenal shipped before the catalyst layer existed and were rebuilt onto
+the same footing, so the whole expansion reads one way in `/recipe` and `/setrecipe`.
+
+## Verification
+
+The recipe set is checked by booting the server and reading the self check plus the written JSON:
+
+```bash
+JAVA_TOOL_OPTIONS="-Xint -Xshare:off" ./gradlew runServerVerify
+```
+
+Current state:
+
+- 7216 recipes, 0 failed, 0 duplicate names
+- 4936 of 4936 Version X recipes carry a crafting core
+- 4827 of 4827 gear ids round trip back to a motif and a form
+
+Note that a verification boot takes half an hour or more under `-Xint`, and running any other Gradle
+task while one is in flight corrupts the shared incremental compile state. Run them one at a time.
