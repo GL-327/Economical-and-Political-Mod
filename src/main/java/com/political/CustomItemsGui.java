@@ -1040,12 +1040,15 @@ public class CustomItemsGui {
                 .setCallback((idx, type, containerInput, slotGui) -> openSearchGui(player))
                 .build());
 
-        // Second page of sections: all V4, V5 and V6 additions.
+        // Second page of sections: everything added from V4 through Version X.
         gui.setSlot(7, new GuiElementBuilder(Items.END_CRYSTAL)
-                .setName(Component.literal("✦ New Content (V4-V6)").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
+                .setName(Component.literal("✦ New Content (V4 to Version X)").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Magic, expeditions, guilds, trade,").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("backrooms, curses and the sorcerer path").withStyle(ChatFormatting.GRAY))
+                .addLoreLine(Component.literal("Plus the seven Version X gear lines:").withStyle(ChatFormatting.GRAY))
+                .addLoreLine(Component.literal("Starbound, Beastcraft, Clockwork, Grimoire,").withStyle(ChatFormatting.DARK_GRAY))
+                .addLoreLine(Component.literal("Tempest, Voyager and Regalia").withStyle(ChatFormatting.DARK_GRAY))
                 .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
                 .setCallback((idx, type, containerInput, slotGui) -> ExpansionCatalogGui.openMenu(player))
                 .build());
