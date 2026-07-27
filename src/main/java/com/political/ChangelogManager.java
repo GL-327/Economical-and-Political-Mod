@@ -314,6 +314,33 @@ public final class ChangelogManager {
                         + "breaking, rooting, blinding, levitation, pulling enemies in, throwing them out, and "
                         + "self buffs for haste, shielding, healing and speed, plus runes that draw cursed "
                         + "energy, coin or experience out of the moment."),
+                e("Every line is keyed on its own catalyst", "vx_catalysts",
+                        "Nine crafting catalysts, one per gear line, each craftable from a crafting core. "
+                        + "A piece of gear now wants its line catalyst plus a core of the tier that cut "
+                        + "deserves, so tools and charms sit at T1, weapons and light armour at T2, and the "
+                        + "chest and legs at T3. The Runeforge and the Aether Arsenal were rebuilt onto the "
+                        + "same footing so the whole expansion reads one way."),
+                e("Grimoire and the Focus pool", "vx_grimoire",
+                        "Forty five sigils cut into fourteen forms. Nothing in this line happens on its own. "
+                        + "Sneak and use a sigil and it casts, spending Focus, and Focus caps and refills from "
+                        + "Intelligence, which finally gives that stat a job. Forty three distinct castings, "
+                        + "and the Circle you wear bends the whole pool."),
+                e("Tempest and the charge reactions", "vx_tempest",
+                        "Forty five storms cut into fourteen forms. Hits hang a charge on the target, and two "
+                        + "different charges on one target react into something neither does alone. Twenty "
+                        + "eight pairs, twenty eight results. Charges sit on the target rather than on you, so "
+                        + "two players running different fronts reach results neither could alone."),
+                e("Voyager and Leagues", "vx_voyager",
+                        "Forty five waypoints cut into fourteen forms. This line asks where you are. A piece "
+                        + "is asleep outside its reach and awake inside it, and everything scales with Leagues, "
+                        + "which counts your distance from the nearest settlement. Wearing it at home is the "
+                        + "weakest thing in the mod. Twelve Leagues out it is one of the strongest."),
+                e("Regalia and Standing", "vx_regalia",
+                        "Forty five offices cut into fourteen forms, and the one line that reads the politics. "
+                        + "Standing is built from your settlement tier, the seat you hold and whether you are "
+                        + "inside your own borders. A citizen with no seat gets almost nothing. A Chair at home "
+                        + "in an Elysium gets the strongest numbers in the mod, and loses most of them the "
+                        + "moment they lose an election. It is the exact mirror of Voyager."),
                 e("Beastcraft and the Instinct meter", "vx_beastcraft",
                         "Forty five beasts cut into fourteen forms. Beastcraft does not tick and it does not "
                         + "wait for a lucky proc. Every hit you land feeds one Instinct meter, the clade of the "

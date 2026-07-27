@@ -132,6 +132,9 @@ public abstract class BountyDamageMixin {
         com.political.AetherGearHandler.onHit(player, self);
         com.political.RuneforgedHandler.onHit(player, self);
         modifiedAmount += com.political.BeastcraftHandler.onHit(player, self, modifiedAmount);
+        com.political.TempestHandler.onHit(player, self, modifiedAmount);
+        com.political.GrimoireHandler.onHit(player, self, modifiedAmount);
+        modifiedAmount *= com.political.RegaliaHandler.damageMultiplier(player);
 
         // Wartime: citizens of polities at war strike harder at one another.
         if (self instanceof ServerPlayer victimPlayer) {
@@ -162,6 +165,7 @@ public abstract class BountyDamageMixin {
         com.political.RelicManager.onKill(player, self);
         com.political.CompanionManager.onKill(player);
         com.political.StarboundHandler.onKill(player);
+        com.political.VoyagerHandler.onKill(player);
         com.political.ContractManager.onKill(player);
 
         if (WorldBossManager.isWorldBoss(self.getUUID())) {

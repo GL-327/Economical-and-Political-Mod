@@ -387,11 +387,16 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ReforgeManager.ensureRecipes();
             RelicManager.ensureRecipes();
             CompanionManager.ensureRecipes();
+            LineCatalyst.ensureRecipes();
             AetherGear.ensureRecipes();
             RuneforgedGear.ensureRecipes();
             StarboundGear.ensureRecipes();
             BeastcraftGear.ensureRecipes();
             ClockworkGear.ensureRecipes();
+            GrimoireGear.ensureRecipes();
+            TempestGear.ensureRecipes();
+            VoyagerGear.ensureRecipes();
+            RegaliaGear.ensureRecipes();
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -548,6 +553,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 syncPlaytimeAndBuffChecks(s);
             }
             WorldBossManager.tick(s);
+            TempestHandler.tickServer(s);
             PoliticalPartyManager.tick(s);
             PartyCrisisManager.tick(s);
             LavaFishingHandler.tick(s);
@@ -630,6 +636,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     StarboundHandler.tickPlayer(player);
                     BeastcraftHandler.tickPlayer(player);
                     ClockworkHandler.tickPlayer(player);
+                    GrimoireHandler.tickPlayer(player);
+                    VoyagerHandler.tickPlayer(player);
+                    RegaliaHandler.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }

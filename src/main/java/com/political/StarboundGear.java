@@ -68,6 +68,15 @@ public final class StarboundGear {
         }
     }
 
+    /** Same tier rule the shared lines use, expressed against this line's own cuts. */
+    private static LineCatalyst.Tier tierFor(Form f) {
+        return switch (f.kind) {
+            case TOOL, CHARM -> LineCatalyst.Tier.T1;
+            case CHEST, LEGS -> LineCatalyst.Tier.T3;
+            default -> LineCatalyst.Tier.T2;
+        };
+    }
+
     public static String idFor(Constellation c, Form f) {
         return "star_" + c.key() + "_" + f.name().toLowerCase(Locale.ROOT);
     }
@@ -137,18 +146,21 @@ public final class StarboundGear {
         List<SlayerRecipes.Recipe> out = new ArrayList<>();
         for (Constellation c : Constellation.values()) {
             for (Form f : Form.values()) {
+                LineCatalyst.Tier tier = tierFor(f);
+
                 ItemStack[] grid = new ItemStack[9];
-                for (int i = 0; i < 9; i++) grid[i] = ItemStack.EMPTY;
-                grid[4] = new ItemStack(f.base);
+                grid[0] = LineCatalyst.STAR_SHARD.create(2);
                 grid[1] = new ItemStack(c.token, 8);
-                grid[7] = new ItemStack(c.token, 8);
-                grid[0] = new ItemStack(Items.GOLD_INGOT, 12);
-                grid[2] = new ItemStack(Items.GOLD_INGOT, 12);
-                grid[6] = new ItemStack(Items.AMETHYST_SHARD, 4);
-                grid[8] = new ItemStack(Items.AMETHYST_SHARD, 4);
+                grid[2] = LineCatalyst.STAR_SHARD.create(2);
+                grid[3] = new ItemStack(Items.GOLD_INGOT, 12);
+                grid[4] = new ItemStack(f.base);
+                grid[5] = new ItemStack(Items.GOLD_INGOT, 12);
+                grid[6] = new ItemStack(Items.AMETHYST_SHARD, 6);
+                grid[7] = tier.core();
+                grid[8] = new ItemStack(Items.AMETHYST_SHARD, 6);
 
                 boolean[] locked = new boolean[9];
-                for (int i = 0; i < 9; i++) locked[i] = !grid[i].isEmpty();
+                for (int i = 0; i < 9; i++) locked[i] = true;
 
                 out.add(new SlayerRecipes.Recipe(
                         "VX Star " + c.display + " " + f.display,

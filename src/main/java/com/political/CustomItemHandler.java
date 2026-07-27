@@ -219,6 +219,10 @@ public class CustomItemHandler {
             }
             
             // Custom Items - skill tomes, coin pouches, etc.
+            if (GrimoireHandler.tryCast(serverPlayer, held)) {
+                return InteractionResult.SUCCESS;
+            }
+
             if (RelicManager.tryClaim(serverPlayer, held)) {
                 return InteractionResult.SUCCESS;
             }

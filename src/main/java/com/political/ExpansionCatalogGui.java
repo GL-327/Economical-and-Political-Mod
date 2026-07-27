@@ -27,6 +27,16 @@ public final class ExpansionCatalogGui {
                            Predicate<String> match) {}
 
     private static final List<Section> SECTIONS = List.of(
+            new Section("Regalia", ChatFormatting.GOLD, Items.GOLDEN_HELMET,
+                    n -> n.startsWith("vx regalia ")),
+            new Section("Voyager", ChatFormatting.GREEN, Items.COMPASS,
+                    n -> n.startsWith("vx way ")),
+            new Section("Tempest", ChatFormatting.AQUA, Items.LIGHTNING_ROD,
+                    n -> n.startsWith("vx storm ")),
+            new Section("Grimoire", ChatFormatting.LIGHT_PURPLE, Items.ENCHANTED_BOOK,
+                    n -> n.startsWith("vx sigil ")),
+            new Section("Line Catalysts", ChatFormatting.YELLOW, Items.HEAVY_CORE,
+                    n -> n.startsWith("vx catalyst ")),
             new Section("Beastcraft", ChatFormatting.RED, Items.BONE,
                     n -> n.startsWith("vx beast ")),
             new Section("Clockwork", ChatFormatting.GRAY, Items.CLOCK,

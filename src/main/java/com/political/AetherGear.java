@@ -201,24 +201,35 @@ public final class AetherGear {
         };
     }
 
+    /** The Aether line runs one tier hotter than the others, so nothing here drops below T2. */
+    private static LineCatalyst.Tier tierFor(Piece p) {
+        return switch (p.slot) {
+            case TOOL -> LineCatalyst.Tier.T2;
+            case CHEST, LEGS -> LineCatalyst.Tier.T3;
+            default -> LineCatalyst.Tier.T2;
+        };
+    }
+
     public static void ensureRecipes() {
         List<SlayerRecipes.Recipe> out = new ArrayList<>();
         for (AetherAttunement a : AetherAttunement.values()) {
             Item catalyst = catalystFor(a);
             for (Piece p : Piece.values()) {
+                // The base gear in the middle, the attunement catalyst around it, an Aether Mote
+                // in the corners and the crafting core underneath.
                 ItemStack[] grid = new ItemStack[9];
-                for (int i = 0; i < 9; i++) grid[i] = ItemStack.EMPTY;
-                // The base gear in the middle, the attunement catalyst around it, netherite to bind.
-                grid[4] = new ItemStack(p.base);
+                grid[0] = LineCatalyst.AETHER_MOTE.create(2);
                 grid[1] = new ItemStack(catalyst, 16);
+                grid[2] = LineCatalyst.AETHER_MOTE.create(2);
                 grid[3] = new ItemStack(catalyst, 16);
+                grid[4] = new ItemStack(p.base);
                 grid[5] = new ItemStack(catalyst, 16);
-                grid[7] = new ItemStack(Items.NETHERITE_INGOT, 4);
-                grid[0] = new ItemStack(Items.AMETHYST_SHARD, 8);
-                grid[2] = new ItemStack(Items.AMETHYST_SHARD, 8);
+                grid[6] = new ItemStack(Items.NETHERITE_INGOT, 4);
+                grid[7] = tierFor(p).core();
+                grid[8] = new ItemStack(Items.NETHERITE_INGOT, 4);
 
                 boolean[] locked = new boolean[9];
-                for (int i = 0; i < 9; i++) locked[i] = !grid[i].isEmpty();
+                for (int i = 0; i < 9; i++) locked[i] = true;
 
                 out.add(new SlayerRecipes.Recipe(
                         "VX Aether " + a.display + " " + p.display,

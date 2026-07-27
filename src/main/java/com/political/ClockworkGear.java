@@ -76,7 +76,7 @@ public final class ClockworkGear {
         List<GearLine.Motif> motifs = new ArrayList<>();
         for (Mechanism m : Mechanism.values()) motifs.add(m.motif());
         GearLine.register(ID_PREFIX, RECIPE_PREFIX, "Clockwork", "Works",
-                motifs, FORMS, Items.IRON_INGOT, Items.REDSTONE,
+                motifs, FORMS, Items.IRON_INGOT, Items.REDSTONE, LineCatalyst.CLOCKWORK_ASSEMBLY,
                 mo -> {
                     Mechanism m = Mechanism.byKey(mo.key());
                     return m == null ? null : "§b" + m.powerText;

@@ -1163,6 +1163,10 @@ public class RecipeConfigManager {
     private static ItemStack resolveCustomItem(String customId) {
         customId = SlayerItems.canonicalizeCustomItemId(customId);
         // First try the custom crafter cores
+        // Version X line catalysts. They are plain component items so the SNBT normally round
+        // trips on its own, but naming them here means a hand edited recipe still resolves.
+        LineCatalyst lineCatalyst = LineCatalyst.byId(customId);
+        if (lineCatalyst != null) return lineCatalyst.create();
         if ("custom_crafter_core_t1".equals(customId)) return SlayerItems.createCustomCrafterCoreT1();
         if ("custom_crafter_core_t2".equals(customId)) return SlayerItems.createCustomCrafterCoreT2();
         if ("custom_crafter_core_t3".equals(customId)) return SlayerItems.createCustomCrafterCoreT3();

@@ -118,26 +118,47 @@ public final class GearLine {
         };
     }
 
-    /** Registers the whole cross product under one recipe name prefix. */
+    /**
+     * The crafting core a given cut deserves. Tools and charms are the cheap end of a line, weapons
+     * and the light armour sit in the middle, and the chest and legs are the pieces worth a T3.
+     */
+    public static LineCatalyst.Tier tierFor(Form f) {
+        return switch (f.kind()) {
+            case TOOL, CHARM -> LineCatalyst.Tier.T1;
+            case CHEST, LEGS -> LineCatalyst.Tier.T3;
+            default -> LineCatalyst.Tier.T2;
+        };
+    }
+
+    /**
+     * Registers the whole cross product under one recipe name prefix.
+     *
+     * <p>The grid reads the same way in every line. The piece you are upgrading sits in the middle,
+     * the motif's own token runs down both sides, the line catalyst holds the top corners and the
+     * crafting core sits underneath. Anybody who has crafted one piece can craft any of them.</p>
+     */
     public static void register(String idPrefix, String recipePrefix, String lineLabel, String groupWord,
                                 List<Motif> motifs, List<Form> forms,
-                                Item binder, Item catalyst,
+                                Item binder, Item secondary, LineCatalyst catalyst,
                                 java.util.function.Function<Motif, String> power) {
         List<SlayerRecipes.Recipe> out = new ArrayList<>();
         for (Motif m : motifs) {
             for (Form f : forms) {
+                LineCatalyst.Tier tier = tierFor(f);
+
                 ItemStack[] grid = new ItemStack[9];
-                for (int i = 0; i < 9; i++) grid[i] = ItemStack.EMPTY;
-                grid[4] = new ItemStack(f.base());
+                grid[0] = catalyst.create(2);
                 grid[1] = new ItemStack(m.token(), 8);
-                grid[7] = new ItemStack(m.token(), 8);
+                grid[2] = catalyst.create(2);
                 grid[3] = new ItemStack(binder, 12);
+                grid[4] = new ItemStack(f.base());
                 grid[5] = new ItemStack(binder, 12);
-                grid[0] = new ItemStack(catalyst, 4);
-                grid[8] = new ItemStack(catalyst, 4);
+                grid[6] = new ItemStack(secondary, 6);
+                grid[7] = tier.core();
+                grid[8] = new ItemStack(secondary, 6);
 
                 boolean[] locked = new boolean[9];
-                for (int i = 0; i < 9; i++) locked[i] = !grid[i].isEmpty();
+                for (int i = 0; i < 9; i++) locked[i] = true;
 
                 out.add(new SlayerRecipes.Recipe(
                         recipePrefix + " " + m.display() + " " + f.display(),

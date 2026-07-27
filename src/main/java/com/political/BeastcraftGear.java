@@ -77,7 +77,7 @@ public final class BeastcraftGear {
         List<GearLine.Motif> motifs = new ArrayList<>();
         for (Beast b : Beast.values()) motifs.add(b.motif());
         GearLine.register(ID_PREFIX, RECIPE_PREFIX, "Beastcraft", "Clade",
-                motifs, FORMS, Items.BONE, Items.LEATHER,
+                motifs, FORMS, Items.BONE, Items.LEATHER, LineCatalyst.PRIMAL_HEART,
                 m -> {
                     Beast b = Beast.byKey(m.key());
                     return b == null ? null : "§6" + b.powerText;

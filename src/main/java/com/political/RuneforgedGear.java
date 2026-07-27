@@ -165,21 +165,33 @@ public final class RuneforgedGear {
         };
     }
 
+    /** Tools and charms are the cheap end, chest and legs are worth a T3, the rest sit at T2. */
+    private static LineCatalyst.Tier tierFor(Piece p) {
+        return switch (p.kind) {
+            case TOOL, CHARM -> LineCatalyst.Tier.T1;
+            case CHEST, LEGS -> LineCatalyst.Tier.T3;
+            default -> LineCatalyst.Tier.T2;
+        };
+    }
+
     public static void ensureRecipes() {
         List<SlayerRecipes.Recipe> out = new ArrayList<>();
         for (Rune r : Rune.values()) {
             Item reagent = reagentFor(r);
             for (Piece p : Piece.values()) {
                 ItemStack[] grid = new ItemStack[9];
-                for (int i = 0; i < 9; i++) grid[i] = ItemStack.EMPTY;
-                grid[4] = new ItemStack(p.base);
+                grid[0] = LineCatalyst.RUNE_INGOT.create(2);
                 grid[1] = new ItemStack(reagent, 8);
-                grid[7] = new ItemStack(reagent, 8);
+                grid[2] = LineCatalyst.RUNE_INGOT.create(2);
                 grid[3] = new ItemStack(Items.LAPIS_LAZULI, 16);
+                grid[4] = new ItemStack(p.base);
                 grid[5] = new ItemStack(Items.AMETHYST_SHARD, 6);
+                grid[6] = new ItemStack(reagent, 8);
+                grid[7] = tierFor(p).core();
+                grid[8] = new ItemStack(Items.AMETHYST_SHARD, 6);
 
                 boolean[] locked = new boolean[9];
-                for (int i = 0; i < 9; i++) locked[i] = !grid[i].isEmpty();
+                for (int i = 0; i < 9; i++) locked[i] = true;
 
                 out.add(new SlayerRecipes.Recipe(
                         "VX Rune " + r.display + " " + p.display,
