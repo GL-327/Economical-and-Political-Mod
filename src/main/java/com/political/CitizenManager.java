@@ -95,6 +95,41 @@ public class CitizenManager {
         return v.entityTags().contains(TAG_CITIZEN) || citizens.containsKey(v.getUUID().toString());
     }
 
+    /**
+     * Removes citizens from a settlement for good, discarding the villagers if they are loaded.
+     *
+     * <p>Population is recounted from live records on every pass, so anything that is meant to cost
+     * a settlement people has to take the records rather than the number. A siege that only
+     * decremented the field would be undone by the next count.</p>
+     *
+     * @return how many were actually removed
+     */
+    public static int killCitizens(String settlementId, int count) {
+        if (settlementId == null || count <= 0) return 0;
+        List<Citizen> pool = citizensOf(settlementId);
+        int removed = 0;
+        for (Citizen c : pool) {
+            if (removed >= count) break;
+            citizens.remove(c.uuid);
+            removed++;
+            try {
+                if (PoliticalServer.server == null) continue;
+                for (ServerLevel level : PoliticalServer.server.getAllLevels()) {
+                    net.minecraft.world.entity.Entity e =
+                            level.getEntity(java.util.UUID.fromString(c.uuid));
+                    if (e != null) {
+                        e.discard();
+                        break;
+                    }
+                }
+            } catch (Exception ignored) {
+                // A citizen whose villager is already gone still counts as removed.
+            }
+        }
+        if (removed > 0) save();
+        return removed;
+    }
+
     public static int countCitizens(String settlementId) {
         int n = 0;
         for (Citizen c : citizens.values()) {

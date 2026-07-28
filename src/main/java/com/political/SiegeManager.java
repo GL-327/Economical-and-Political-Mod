@@ -338,7 +338,10 @@ public final class SiegeManager {
         SettlementTier tier = tierOf(s);
         long reward = rewardFor(tier, a.slain);
 
-        // Holding is worth something to the settlement itself, not only to the defenders.
+        // Holding is worth something to the settlement itself, not only to the defenders. This
+        // goes on the modifier because the scanner rebuilds appeal from blocks every pass and
+        // would otherwise erase it within minutes.
+        s.appealModifier += 40;
         s.appeal += 40;
 
         for (String uuid : a.defenders) {
@@ -365,7 +368,11 @@ public final class SiegeManager {
         // The cost is taken out of what the settlement was, which is the only stake that matters.
         int appealLost = Math.min(s.appeal, 120);
         int popLost = Math.max(1, s.population / 5);
-        s.appeal -= appealLost;
+        s.appealModifier -= appealLost;
+        s.appeal = Math.max(0, s.appeal - appealLost);
+        // Population is recounted from live citizens, so the loss has to be real citizens rather
+        // than a number that the next count puts straight back.
+        CitizenManager.killCitizens(s.id, popLost);
         s.population = Math.max(0, s.population - popLost);
 
         for (String uuid : a.defenders) {

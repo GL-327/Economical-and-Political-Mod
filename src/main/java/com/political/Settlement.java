@@ -26,6 +26,12 @@ public class Settlement {
     public int population = 0;              // citizen NPCs currently tracked
     public int beds = 0;
     public int appeal = 0;
+    /**
+     * Lasting damage or credit from events rather than from architecture. The scanner recomputes
+     * appeal wholesale from blocks on every pass, so anything a siege or an event does to a
+     * settlement has to live outside that number or it is silently wiped on the next scan.
+     */
+    public int appealModifier = 0;
     public int jobSites = 0;
     public int wonders = 0;                 // full beacon pyramids etc.
     public long treasury = 0L;             // settlement coin treasury

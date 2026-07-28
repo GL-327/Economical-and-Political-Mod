@@ -318,7 +318,9 @@ public class SettlementManager {
 
     private static void applyScan(Settlement s, SettlementScanner.ScanResult r) {
         s.beds = r.beds;
-        s.appeal = r.appeal;
+        // The scan measures what has been built. The modifier carries what has been done to the
+        // place, which is the half a block count can never see.
+        s.appeal = Math.max(0, r.appeal + s.appealModifier);
         s.jobSites = r.jobSites;
         s.wonders = r.wonders;
         s.rawBeds = r.rawBeds;
