@@ -294,7 +294,7 @@ public final class AdminPanel {
 
         // Economy.
         gui.setSlot(28, GuiKit.stepper(Items.GOLD_INGOT, "Coins", ChatFormatting.GOLD,
-                CoinManager.getCoinsLong(target), 1000L, null,
+                CoinManager.getCoinsLong(target), 1000L,
                 delta -> {
                     if (delta > 0) CoinManager.giveCoins(target, delta);
                     else CoinManager.removeCoins(target, -delta);
@@ -431,7 +431,7 @@ public final class AdminPanel {
                 }, "Charges every registered citizen"));
 
         gui.setSlot(20, GuiKit.stepper(Items.EMERALD, "Daily tax amount", ChatFormatting.GREEN,
-                TaxManager.getDailyTaxAmount(), 10L, null,
+                TaxManager.getDailyTaxAmount(), 10L,
                 delta -> {
                     TaxManager.setDailyTaxAmount(Math.max(0,
                             (int) (TaxManager.getDailyTaxAmount() + delta)));
@@ -455,6 +455,9 @@ public final class AdminPanel {
 
         gui.setSlot(28, GuiKit.tile(Items.CHEST, "Government treasury", ChatFormatting.YELLOW,
                 () -> GovernmentTreasuryGui.open(player), "Public money"));
+
+        gui.setSlot(31, GuiKit.tile(Items.ARMOR_STAND, "Minions", ChatFormatting.GREEN,
+                () -> MinionGui.open(player), "Placed workers and their output"));
 
         gui.setSlot(30, GuiKit.tile(Items.GOLD_INGOT, "Bazaar", ChatFormatting.YELLOW,
                 () -> BazaarGui.open(player), "The material order book"));

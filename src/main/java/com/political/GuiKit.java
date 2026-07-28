@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
-import java.util.function.Supplier;
 
 /**
  * Shared furniture for chest menus.
@@ -158,7 +157,7 @@ public final class GuiKit {
      * by ten, which covers almost every number an operator wants to change without a chat prompt.
      */
     public static GuiElement stepper(Item icon, String label, ChatFormatting colour,
-                                     long current, long step, IntConsumer unusedLegacy,
+                                     long current, long step,
                                      Consumer<Long> onChange, String... lines) {
         GuiElementBuilder b = new GuiElementBuilder(icon)
                 .setName(Component.literal(label).withStyle(colour, ChatFormatting.BOLD))
@@ -350,10 +349,5 @@ public final class GuiKit {
         stack.set(DataComponents.CUSTOM_NAME, name);
         stack.set(DataComponents.LORE, new ItemLore(lore));
         return stack;
-    }
-
-    /** Refreshes whatever screen the supplier opens, used after a toggle or a stepper. */
-    public static void refresh(Supplier<Void> opener) {
-        opener.get();
     }
 }
