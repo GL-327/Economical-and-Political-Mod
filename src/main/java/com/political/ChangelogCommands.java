@@ -13,6 +13,21 @@ public final class ChangelogCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Collections live here rather than in their own file because this class is already the
         // home for the small player facing browsers.
+        for (String alias : new String[]{"crates", "crate", "cases", "gamble"}) {
+            dispatcher.register(Commands.literal(alias)
+                    .executes(ctx -> {
+                        CrateGui.open(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    }));
+        }
+        for (String alias : new String[]{"progress", "tier", "settlementprogress"}) {
+            dispatcher.register(Commands.literal(alias)
+                    .executes(ctx -> {
+                        SettlementProgressGui.openList(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    }));
+        }
+
         dispatcher.register(Commands.literal("sieges")
                 .executes(ctx -> {
                     SiegeGui.open(ctx.getSource().getPlayerOrException());

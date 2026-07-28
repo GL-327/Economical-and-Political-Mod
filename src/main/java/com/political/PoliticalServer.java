@@ -409,6 +409,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             NemesisManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            CrateManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -462,6 +463,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BazaarManager.save();
             MinionManager.save();
             NemesisManager.save();
+            CrateManager.save();
             IncursionManager.shutdown(s);
             SiegeManager.shutdown(s);
             SettlementManager.save();

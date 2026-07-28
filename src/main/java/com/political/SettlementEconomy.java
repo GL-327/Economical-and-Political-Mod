@@ -276,12 +276,35 @@ public final class SettlementEconomy {
      * Whether a new settler may arrive. Growth requires housing, food surplus and morale —
      * this is the main reason a settlement cannot be inflated by dropping blocks.
      */
+    /** Below this a settlement feeds itself from outside and does not need a food surplus. */
+    public static final int SUBSISTENCE_POP = 6;
+
     public static boolean canGrow(Settlement s) {
         int pop = s.population;
         if (pop >= s.beds) return false;             // no free sheltered bed
         if (s.happiness < 45) return false;          // miserable settlements do not attract
-        if (pop > 0 && s.food < pop) return false;   // cannot feed another mouth
+
+        // The food gate used to apply from the first citizen, which deadlocked every new
+        // settlement: one citizen with no workstation produces no food, so food was always below
+        // population and nothing else could ever move in. A hamlet is small enough to live off
+        // what its people forage, so the gate only starts once it is genuinely a town's problem.
+        if (pop >= SUBSISTENCE_POP && s.food < pop) return false;
         return true;
+    }
+
+    /** Why growth is stalled, in the words a player needs, or null when it is not. */
+    public static String growthBlocker(Settlement s) {
+        if (s.population >= s.beds) {
+            return "No free bed. Build and shelter more beds.";
+        }
+        if (s.happiness < 45) {
+            return "Unhappy at " + s.happiness + ". Needs 45.";
+        }
+        if (s.population >= SUBSISTENCE_POP && s.food < s.population) {
+            return "Food " + s.food + " feeds fewer than " + s.population
+                    + ". Staff farms or composters.";
+        }
+        return null;
     }
 
     /** Growth chance per roll, improved by happiness and the Golden Age edict. */

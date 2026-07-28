@@ -266,7 +266,12 @@ public class SettlementManager {
             Settlement s = list.get(rescanCursor);
             rescanCursor++;
             rescan(server, s);
-            wanderInRoll(server, s);
+            // Scanning stays round robin because it walks blocks and is the expensive half.
+            // Growth is cheap, so every settlement gets its roll every window rather than
+            // waiting its turn behind all the others.
+            for (Settlement each : list) {
+                wanderInRoll(server, each);
+            }
         }
 
         if (tickCounter % PERK_INTERVAL_TICKS == 0) {
@@ -381,7 +386,13 @@ public class SettlementManager {
 
         int freeBeds = Math.max(0, s.beds - s.population);
         // Probability scales with appeal × free beds, then by settlement happiness.
-        double chance = Math.min(0.9, (s.appeal / 500.0) * (freeBeds / 10.0));
+        // The old curve multiplied two fractions that are both small early on, so a decent
+        // starter settlement sat near three percent a roll and took the better part of an hour
+        // to reach the five people a village needs. Appeal still matters, it just no longer has
+        // to carry the whole equation on its own.
+        double appealPart = Math.min(1.0, s.appeal / 220.0);
+        double bedPart = Math.min(1.0, freeBeds / 4.0);
+        double chance = Math.min(0.9, 0.10 + 0.55 * appealPart * bedPart);
         chance *= SettlementEconomy.growthChance(s);
         if (RNG.nextDouble() < chance) {
             ServerLevel world = levelFor(server, s);

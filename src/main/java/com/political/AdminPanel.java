@@ -616,6 +616,10 @@ public final class AdminPanel {
                     player.closeContainer();
                 }, "Puts you at its centre"));
 
+        gui.setSlot(25, GuiKit.tile(Items.BEACON, "Tier progress", ChatFormatting.LIGHT_PURPLE,
+                () -> SettlementProgressGui.open(player, s),
+                "Exactly what is blocking the next tier"));
+
         gui.setSlot(24, GuiKit.tile(Items.GOLD_INGOT, "Settlement economy", ChatFormatting.GOLD,
                 () -> SettlementEconomyGui.open(player, s), "Jobs, yield and happiness"));
 
@@ -691,6 +695,10 @@ public final class AdminPanel {
                                 + " §8- " + c.purpose + " §7(" + c.tier.label() + ")"));
                     }
                 }, "What keys each gear line"));
+
+        gui.setSlot(32, GuiKit.tile(Items.ENDER_CHEST, "Crates", ChatFormatting.GOLD,
+                () -> CrateGui.open(player),
+                "Five crates, published odds", "Bought with in game coins only"));
 
         gui.setSlot(30, GuiKit.tile(Items.BOOKSHELF, "Collections", ChatFormatting.GOLD,
                 () -> CollectionGui.open(player),
