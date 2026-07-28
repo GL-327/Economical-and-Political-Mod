@@ -320,6 +320,12 @@ public final class ChangelogManager {
                         + "console covers thirteen areas including a per player card, live server health and a "
                         + "settlement inspector. Everything destructive asks first. The old panel is still one "
                         + "click away under Legacy."),
+                e("Incursions", "vx_incursions",
+                        "A rift opens where you stand and becomes whatever the ground deserves. The biome "
+                        + "under you picks the theme, the roster, the standing hazard and the sovereign that "
+                        + "carries the final wave, so the same rift in a swamp, on a peak and in the nether is "
+                        + "three different fights that nobody had to author per location. Seven waves, each "
+                        + "harder than the last. Leave the ring and it collapses."),
                 e("The Nemesis system", "vx_nemesis",
                         "A mob that kills you does not stay an ordinary mob. It takes a name, rolls two or "
                         + "three traits from a pool of twenty three, and starts hunting you specifically. Kill "

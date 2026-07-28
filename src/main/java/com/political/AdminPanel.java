@@ -730,6 +730,11 @@ public final class AdminPanel {
         gui.setSlot(24, GuiKit.tile(Items.BOOK, "Bestiary", ChatFormatting.GREEN,
                 () -> BestiaryGui.open(player), "What has been discovered"));
 
+        gui.setSlot(30, GuiKit.tile(Items.END_CRYSTAL, "Incursions", ChatFormatting.DARK_PURPLE,
+                () -> IncursionGui.open(player),
+                IncursionManager.count() + " running",
+                "Rifts themed by the biome they open in"));
+
         gui.setSlot(25, GuiKit.tile(Items.WITHER_SKELETON_SKULL, "Nemeses", ChatFormatting.DARK_RED,
                 () -> NemesisGui.open(player),
                 NemesisManager.total() + " grudges on this server",
