@@ -2902,8 +2902,12 @@ public class BlockArmor {
     // ============================================================
     
     private static void applyPlayerHeadTexture(ItemStack stack, String textureValue) {
-        // Create a random UUID for the skull owner
-        java.util.UUID uuid = java.util.UUID.randomUUID();
+        // The id here identifies nothing. The texture itself is carried in the value below, so a
+        // random uuid only served to make the same helmet serialise differently on every boot,
+        // which rewrote several megabytes of the recipe file each startup for no gain. Deriving it
+        // from the texture keeps the same helmet byte identical run to run.
+        java.util.UUID uuid = java.util.UUID.nameUUIDFromBytes(
+                textureValue.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         
         // Build the NBT structure for the player head texture
         CompoundTag nbt = new CompoundTag();
