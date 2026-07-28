@@ -165,8 +165,13 @@ public final class NemesisManager {
         n.lastZ = victim.blockPosition().getZ();
         NEMESES.put(n.id, n);
 
-        // The mob that did it walks away rather than staying an ordinary mob.
-        mob.discard();
+        // The mob that did it walks away rather than staying an ordinary mob, but only if it is
+        // not currently part of a fight that counts bodies. An incursion or a siege treats a
+        // vanished attacker as a dead one, so discarding a sovereign here would let a player
+        // complete the whole encounter, and collect the reward, by deliberately dying to its boss.
+        if (!IncursionManager.isIncursionMob(mob) && !SiegeManager.isAttacker(mob)) {
+            mob.discard();
+        }
 
         victim.sendSystemMessage(Component.literal(""));
         victim.sendSystemMessage(Component.literal("  §8Something took an interest in that."));
@@ -325,6 +330,39 @@ public final class NemesisManager {
         Vfx.domainCollapse(level, Vec3.atCenterOf(at), 5.0, Vfx.CURSED);
         save();
         return true;
+    }
+
+    /**
+     * Places a specific nemesis at a chosen spot rather than near its victim. Used when another
+     * system wants a grudge to show up somewhere on purpose, like a siege handing its command to
+     * whatever has been hunting the defender.
+     */
+    public static Mob spawnAt(ServerLevel level, Nemesis n, BlockPos at) {
+        EntityType<?> type = typeOf(n);
+        if (type == null) return null;
+        Entity raw = type.spawn(level, at, EntitySpawnReason.EVENT);
+        if (!(raw instanceof Mob mob)) {
+            if (raw != null) raw.discard();
+            return null;
+        }
+        apply(mob, n);
+        n.active = true;
+        n.entityUuid = mob.getUUID().toString();
+        n.lastSeen = System.currentTimeMillis();
+        LIVE.put(mob.getUUID().toString(), n.id);
+        USED_UNDYING.remove(n.id);
+        save();
+        return mob;
+    }
+
+    /** The nastiest dormant grudge a player has, or null. Used to pick a siege commander. */
+    public static Nemesis strongestDormantFor(String uuid) {
+        Nemesis best = null;
+        for (Nemesis n : NEMESES.values()) {
+            if (!n.victimUuid.equals(uuid) || n.active) continue;
+            if (best == null || n.rank().ordinal() > best.rank().ordinal()) best = n;
+        }
+        return best;
     }
 
     private static EntityType<?> typeOf(Nemesis n) {

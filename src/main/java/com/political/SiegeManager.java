@@ -68,6 +68,8 @@ public final class SiegeManager {
         public final List<UUID> attackers = new ArrayList<>();
         public ServerBossEvent bar;
         public final List<String> defenders = new ArrayList<>();
+        /** A defender's grudge that has taken command of this siege, if any. */
+        public String commanderNemesisId = "";
     }
 
     private static final Map<String, Active> ACTIVE = new HashMap<>();
@@ -170,12 +172,57 @@ public final class SiegeManager {
         for (int i = 0; i < count; i++) {
             spawnAttacker(level, a, rosterFor(a.wave), false, tier);
         }
-        if (last) spawnAttacker(level, a, EntityType.RAVAGER, true, tier);
+        if (last) {
+            // If anybody defending here is being hunted by something serious, it leads the assault
+            // rather than a nameless ravager. Nothing else in the mod produces a moment like a
+            // player's own nemesis walking up their main street at the head of an army.
+            Nemesis leader = pickCommander(a);
+            if (leader != null && spawnNemesisCommander(level, a, leader, tier)) {
+                broadcast(level, a, "  §4" + leader.fullName() + " §7leads them.");
+            } else {
+                spawnAttacker(level, a, EntityType.RAVAGER, true, tier);
+            }
+        }
 
         a.bar.setProgress(Math.min(1f, (a.wave - 1) / (float) a.totalWaves));
         a.bar.setName(Component.literal("Siege of " + a.settlementName
                 + " §7wave " + a.wave + "/" + a.totalWaves)
                 .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
+    }
+
+    /** The strongest dormant grudge held against anybody defending, if it is worth the job. */
+    private static Nemesis pickCommander(Active a) {
+        if (!a.commanderNemesisId.isEmpty()) return null;
+        Nemesis best = null;
+        for (String uuid : a.defenders) {
+            Nemesis n = NemesisManager.strongestDormantFor(uuid);
+            if (n == null) continue;
+            // Below Slayer it has not earned the right to lead anything.
+            if (n.rank().ordinal() < Nemesis.Rank.SLAYER.ordinal()) continue;
+            if (best == null || n.rank().ordinal() > best.rank().ordinal()) best = n;
+        }
+        return best;
+    }
+
+    private static boolean spawnNemesisCommander(ServerLevel level, Active a, Nemesis n,
+                                                 SettlementTier tier) {
+        BlockPos at = ringPos(level, a);
+        if (at == null) return false;
+        Mob mob = NemesisManager.spawnAt(level, n, at);
+        if (mob == null) return false;
+
+        mob.addTag(ATTACKER_TAG);
+        mob.setPersistenceRequired();
+        // On top of everything the grudge already carries, it is leading an army.
+        var hp = mob.getAttribute(Attributes.MAX_HEALTH);
+        if (hp != null) {
+            hp.setBaseValue(hp.getBaseValue() * (1.0 + tier.ordinal() * 0.15));
+            mob.setHealth(mob.getMaxHealth());
+        }
+        a.attackers.add(mob.getUUID());
+        a.commanderNemesisId = n.id;
+        Vfx.bloom(level, Vec3.atCenterOf(at));
+        return true;
     }
 
     /** The attackers get nastier as the siege runs rather than simply more numerous. */

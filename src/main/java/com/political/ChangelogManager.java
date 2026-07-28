@@ -320,6 +320,12 @@ public final class ChangelogManager {
                         + "console covers thirteen areas including a per player card, live server health and a "
                         + "settlement inspector. Everything destructive asks first. The old panel is still one "
                         + "click away under Legacy."),
+                e("The PVE systems talk to each other", "vx_pve_crossover",
+                        "A siege with nothing better available is led by a nameless ravager. A siege where any "
+                        + "defender is being hunted by a Slayer or worse hands command to that grudge instead, so "
+                        + "the thing that has been killing you turns up at the head of an army in the town you "
+                        + "built. An incursion sovereign that kills you becomes your nemesis the same way any "
+                        + "other mob would, and it stays in the fight while it does it."),
                 e("Sieges", "vx_sieges",
                         "Something walks out of the dark and tries to take a settlement off you. The other PVE "
                         + "happens where a player is standing, a siege happens where a player decided to build, "
