@@ -730,6 +730,11 @@ public final class AdminPanel {
         gui.setSlot(24, GuiKit.tile(Items.BOOK, "Bestiary", ChatFormatting.GREEN,
                 () -> BestiaryGui.open(player), "What has been discovered"));
 
+        gui.setSlot(25, GuiKit.tile(Items.WITHER_SKELETON_SKULL, "Nemeses", ChatFormatting.DARK_RED,
+                () -> NemesisGui.open(player),
+                NemesisManager.total() + " grudges on this server",
+                "Mobs that killed a player and came back"));
+
         gui.setSlot(29, GuiKit.tile(Items.ZOMBIE_SPAWN_EGG, "Slayer admin", ChatFormatting.RED,
                 () -> AdminGui.openSlayerAdminGui(player), "Levels, bosses and resets"));
 

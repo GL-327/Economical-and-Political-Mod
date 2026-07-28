@@ -320,6 +320,13 @@ public final class ChangelogManager {
                         + "console covers thirteen areas including a per player card, live server health and a "
                         + "settlement inspector. Everything destructive asks first. The old panel is still one "
                         + "click away under Legacy."),
+                e("The Nemesis system", "vx_nemesis",
+                        "A mob that kills you does not stay an ordinary mob. It takes a name, rolls two or "
+                        + "three traits from a pool of twenty three, and starts hunting you specifically. Kill "
+                        + "you again and it climbs a rank and gains another trait, up through Stalker, Hunter, "
+                        + "Slayer, Warlord and Nightmare. Put it down and the grudge is settled for good, unless "
+                        + "it rolled Cunning, in which case it runs, comes back scarred and is worse for it. "
+                        + "Every grudge belongs to one player and nobody else can settle it."),
                 e("The Bazaar", "vx_bazaar",
                         "A double sided order book for every collection material. Post a buy order or a sell "
                         + "offer at your own price, or take the other side instantly at the best price posted. "

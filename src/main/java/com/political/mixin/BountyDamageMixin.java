@@ -70,6 +70,11 @@ public abstract class BountyDamageMixin {
                     }
                 }
             }
+            // A nemesis hitting its victim brings all of its traits with it.
+            if (source.getEntity() instanceof LivingEntity nem
+                    && com.political.NemesisManager.isNemesis(nem)) {
+                modifiedAmount *= com.political.NemesisManager.onNemesisHit(nem, player, modifiedAmount);
+            }
             // Grimoire: three of the Ward circle spends Focus as armour before defence applies.
             modifiedAmount = com.political.GrimoireHandler.absorb(player, modifiedAmount);
             // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
@@ -138,6 +143,11 @@ public abstract class BountyDamageMixin {
         com.political.GrimoireHandler.onHit(player, self, modifiedAmount);
         modifiedAmount *= com.political.RegaliaHandler.damageMultiplier(player);
 
+        // A nemesis reacts to being struck, which is where its defensive traits live.
+        if (com.political.NemesisManager.isNemesis(self)) {
+            modifiedAmount *= com.political.NemesisManager.onNemesisHurt(player, self, modifiedAmount);
+        }
+
         // Wartime: citizens of polities at war strike harder at one another.
         if (self instanceof ServerPlayer victimPlayer) {
             modifiedAmount *= com.political.WarManager.wartimeDamageMultiplier(player, victimPlayer);
@@ -169,6 +179,8 @@ public abstract class BountyDamageMixin {
         com.political.StarboundHandler.onKill(player);
         com.political.VoyagerHandler.onKill(player);
         com.political.CollectionManager.onKill(player, self);
+        com.political.NemesisManager.onNemesisDeathEffects(self);
+        com.political.NemesisManager.onNemesisKilled(player, self);
         com.political.ContractManager.onKill(player);
 
         if (WorldBossManager.isWorldBoss(self.getUUID())) {

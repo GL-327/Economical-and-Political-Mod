@@ -13,6 +13,17 @@ public final class ChangelogCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Collections live here rather than in their own file because this class is already the
         // home for the small player facing browsers.
+        dispatcher.register(Commands.literal("grudges")
+                .executes(ctx -> {
+                    NemesisGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }));
+        dispatcher.register(Commands.literal("nemesis")
+                .executes(ctx -> {
+                    NemesisGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }));
+
         dispatcher.register(Commands.literal("minions")
                 .executes(ctx -> {
                     MinionGui.open(ctx.getSource().getPlayerOrException());

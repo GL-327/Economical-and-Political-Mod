@@ -35,6 +35,13 @@ public class DeathPenaltyManager {
         if (!RECENT_DEATHS.add(victim.getUUID())) return;
         String victimUuid = victim.getUUID().toString();
 
+        // Whatever landed the blow takes an interest in this player specifically.
+        try {
+            NemesisManager.onPlayerDeath(victim, source);
+        } catch (Exception ignored) {
+            // A grudge is never worth failing a death handler over.
+        }
+
         boolean totemProtected = CoinTotemManager.isCoinLossProtected(victim);
 
         long purseBefore = CoinManager.getCoinsLong(victimUuid);
