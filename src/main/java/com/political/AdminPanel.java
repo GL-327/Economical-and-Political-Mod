@@ -834,6 +834,10 @@ public final class AdminPanel {
         gui.setSlot(24, GuiKit.tile(Items.FILLED_MAP, "Atlas", ChatFormatting.GREEN,
                 () -> AtlasMapGui.open(player), "The live world map"));
 
+        gui.setSlot(31, GuiKit.tile(Items.CHERRY_SAPLING, "Custom villages", ChatFormatting.GREEN,
+                () -> VillageAtlasGui.open(player),
+                "Cherry and swamp villages", "Locate the nearest one"));
+
         gui.setSlot(25, GuiKit.tile(Items.WHEAT, "Seasons", ChatFormatting.GOLD,
                 () -> SeasonGui.open(player), "The seasonal cycle"));
 

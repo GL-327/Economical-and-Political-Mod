@@ -320,6 +320,23 @@ public final class ChangelogManager {
                         + "console covers thirteen areas including a per player card, live server health and a "
                         + "settlement inspector. Everything destructive asks first. The old panel is still one "
                         + "click away under Legacy."),
+                e("Two custom villages", "vx_villages",
+                        "A cherry village and a swamp village, eighty seven hand built pieces between them, "
+                        + "generating on their own the way vanilla villages do. Both target biomes have no "
+                        + "vanilla village at all, so they fill real gaps rather than competing for space. "
+                        + "Open /villages to locate the nearest one."),
+                e("The tier system actually works now", "vx_tiers_fixed",
+                        "Settlement tiers were unreachable rather than broken. Growth sat near three percent a "
+                        + "roll, only one settlement was rolled every ten seconds, and the food gate applied "
+                        + "from the very first citizen, which deadlocked every new settlement at one resident "
+                        + "since one person with no workstation grows no food. All three are fixed, and a new "
+                        + "progress screen lists every requirement for the next tier and marks the one blocking "
+                        + "you, because none of it was visible before."),
+                e("Crates", "vx_crates",
+                        "Five crates bought with coins you earned. Every crate publishes its full odds per band "
+                        + "before you buy, and a pity counter guarantees a good pull after a stated number of "
+                        + "poor ones, so a losing streak has a known ceiling. Rewards are drawn from the live "
+                        + "recipe catalogue, so they cover content added after the crates were written."),
                 e("The PVE systems talk to each other", "vx_pve_crossover",
                         "A siege with nothing better available is led by a nameless ravager. A siege where any "
                         + "defender is being hunted by a Slayer or worse hands command to that grudge instead, so "
