@@ -2131,7 +2131,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    AdminGui.open(player);
+                    AdminPanel.open(player);
                     return 1;
                 }));
 
