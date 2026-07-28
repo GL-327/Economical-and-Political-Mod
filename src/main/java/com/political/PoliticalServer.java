@@ -463,6 +463,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             MinionManager.save();
             NemesisManager.save();
             IncursionManager.shutdown(s);
+            SiegeManager.shutdown(s);
             SettlementManager.save();
             HighCouncilManager.save();
             SettlementElectionManager.save();
@@ -574,6 +575,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             MinionManager.tick(s);
             NemesisManager.tick(s);
             IncursionManager.tick(s);
+            SiegeManager.tick(s);
             PoliticalPartyManager.tick(s);
             PartyCrisisManager.tick(s);
             LavaFishingHandler.tick(s);

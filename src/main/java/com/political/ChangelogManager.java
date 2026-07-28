@@ -320,6 +320,13 @@ public final class ChangelogManager {
                         + "console covers thirteen areas including a per player card, live server health and a "
                         + "settlement inspector. Everything destructive asks first. The old panel is still one "
                         + "click away under Legacy."),
+                e("Sieges", "vx_sieges",
+                        "Something walks out of the dark and tries to take a settlement off you. The other PVE "
+                        + "happens where a player is standing, a siege happens where a player decided to build, "
+                        + "which is the one location the server knows matters to them. Attackers come in from "
+                        + "outside and head for the cornerstone, and letting them hold it unopposed for thirty "
+                        + "seconds costs the settlement appeal and a fifth of its people. Scale comes from the "
+                        + "tier, so growing a settlement is a decision to invite bigger problems."),
                 e("Incursions", "vx_incursions",
                         "A rift opens where you stand and becomes whatever the ground deserves. The biome "
                         + "under you picks the theme, the roster, the standing hazard and the sovereign that "

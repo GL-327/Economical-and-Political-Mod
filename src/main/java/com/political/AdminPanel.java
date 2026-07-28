@@ -730,6 +730,11 @@ public final class AdminPanel {
         gui.setSlot(24, GuiKit.tile(Items.BOOK, "Bestiary", ChatFormatting.GREEN,
                 () -> BestiaryGui.open(player), "What has been discovered"));
 
+        gui.setSlot(31, GuiKit.tile(Items.RED_BANNER, "Sieges", ChatFormatting.DARK_RED,
+                () -> SiegeGui.openAdmin(player),
+                SiegeManager.count() + " running",
+                "Send an army at a settlement"));
+
         gui.setSlot(30, GuiKit.tile(Items.END_CRYSTAL, "Incursions", ChatFormatting.DARK_PURPLE,
                 () -> IncursionGui.open(player),
                 IncursionManager.count() + " running",
