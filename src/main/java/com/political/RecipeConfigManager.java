@@ -51,7 +51,37 @@ public class RecipeConfigManager {
         System.out.println("[RecipeConfigManager] JSON: " + (fileExists ? "OK" : "MISSING") + " | Path: " + CONFIG_FILE.toAbsolutePath());
     }
 
+    /**
+     * Sorts the recipe array by name before writing.
+     *
+     * <p>Recipes are gathered from maps whose iteration order is not stable between runs, so an
+     * export that simply wrote them out produced a different byte sequence every boot even when
+     * nothing had changed. On a file this size that is tens of thousands of lines of pure noise in
+     * any diff, which buries the changes that actually matter.</p>
+     */
+    private static void sortRecipesByName(JsonObject root) {
+        try {
+            if (root == null || !root.has("recipes") || !root.get("recipes").isJsonArray()) return;
+            JsonArray arr = root.getAsJsonArray("recipes");
+            java.util.List<com.google.gson.JsonElement> items = new java.util.ArrayList<>();
+            arr.forEach(items::add);
+            items.sort(java.util.Comparator.comparing(e -> {
+                try {
+                    return e.getAsJsonObject().get("name").getAsString();
+                } catch (Exception ex) {
+                    return "";
+                }
+            }));
+            JsonArray sorted = new JsonArray();
+            items.forEach(sorted::add);
+            root.add("recipes", sorted);
+        } catch (Exception ignored) {
+            // A malformed root is still worth writing unsorted rather than not at all.
+        }
+    }
+
     private static void writeRecipeJsonRoot(JsonObject root) throws IOException {
+        sortRecipesByName(root);
         Files.createDirectories(CONFIG_FILE.getParent());
         try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
             GSON.toJson(root, writer);

@@ -1786,52 +1786,6 @@
       ]
     },
     {
-      "name": "Spongeboots",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:2.0d,id:\"politicalserver:sponge_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:1.0d,id:\"politicalserver:sponge_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"sponge_boots\",custom_id:\"sponge_boots\",custom_item_id:\"sponge_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"yellow\",text:\"Sponge Boots\"},\"minecraft:dyed_color\":15787660,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"yellow\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: +2\"},{color:\"white\",text:\"💎 Toughness: +1\"},{color:\"light_purple\",text:\"✦ SET BONUS:\"},{color:\"dark_gray\",text:\"4+ block pieces (any mix): Resistance I (renewing)\"},{color:\"green\",text:\"4/4 matching: Sponge Soak — drains 1 HP from hostil…\"},{color:\"dark_gray\",text:\"§8Absorbent protection\"},\"\",\"§7❈ Defense: §a+40\",\"§7❤ Health: §c+35\",\"\",\u0027§8\"Shaped by fire, tempered by will.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ARMOR\"],\"minecraft:max_damage\":200},count:1,id:\"minecraft:leather_boots\"}",
-        "count": 1
-      },
-      "ingredients": [
-        "",
-        "",
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:sponge\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:sponge\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:sponge\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:sponge\"}",
-          "count": 1
-        }
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
       "name": "Weatheredcopperhelmet",
       "requiredSlayer": "",
       "requiredLevel": 0,
@@ -1867,6 +1821,52 @@
         "",
         "",
         ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Spongeboots",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:2.0d,id:\"politicalserver:sponge_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:1.0d,id:\"politicalserver:sponge_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"sponge_boots\",custom_id:\"sponge_boots\",custom_item_id:\"sponge_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"yellow\",text:\"Sponge Boots\"},\"minecraft:dyed_color\":15787660,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"yellow\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: +2\"},{color:\"white\",text:\"💎 Toughness: +1\"},{color:\"light_purple\",text:\"✦ SET BONUS:\"},{color:\"dark_gray\",text:\"4+ block pieces (any mix): Resistance I (renewing)\"},{color:\"green\",text:\"4/4 matching: Sponge Soak — drains 1 HP from hostil…\"},{color:\"dark_gray\",text:\"§8Absorbent protection\"},\"\",\"§7❈ Defense: §a+40\",\"§7❤ Health: §c+35\",\"\",\u0027§8\"Shaped by fire, tempered by will.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ARMOR\"],\"minecraft:max_damage\":200},count:1,id:\"minecraft:leather_boots\"}",
+        "count": 1
+      },
+      "ingredients": [
+        "",
+        "",
+        "",
+        {
+          "nbt": "{count:1,id:\"minecraft:sponge\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{count:1,id:\"minecraft:sponge\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{count:1,id:\"minecraft:sponge\"}",
+          "count": 1
+        },
+        "",
+        {
+          "nbt": "{count:1,id:\"minecraft:sponge\"}",
+          "count": 1
+        }
       ],
       "lockedSlots": [
         true,
@@ -19214,6 +19214,52 @@
       ]
     },
     {
+      "name": "Ochrefroglightboots",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:ochre_froglight_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:ochre_froglight_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"ochre_froglight_boots\",custom_id:\"ochre_froglight_boots\",custom_item_id:\"ochre_froglight_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"gold\",text:\"Ochre Froglight Boots\"},\"minecraft:dyed_color\":16753920,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"gold\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: +3\"},{color:\"white\",text:\"💎 Toughness: +2\"},{color:\"white\",text:\"⚠ Durability: High\"},{color:\"gold\",text:\"✦ SET BONUS:\"},{color:\"dark_gray\",text:\"4+ block pieces (any mix): Resistance I (renewing)\"},{color:\"green\",text:\"4/4 matching: Ochre Beacon — weakens hostiles withi…\"},{color:\"dark_gray\",text:\"§8Ochre froglight\"},\"\",\"§7❈ Defense: §a+45\",\"§7❤ Health: §c+45\",\"§7❁ Strength: §c+10\",\"\",\u0027§8\"Forged for those who dare to wield it.\"\u0027,\"§8§m                              §r\",\"§a§lUNCOMMON ARMOR\"],\"minecraft:max_damage\":300},count:1,id:\"minecraft:leather_boots\"}",
+        "count": 1
+      },
+      "ingredients": [
+        "",
+        "",
+        "",
+        {
+          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
+          "count": 1
+        },
+        "",
+        {
+          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
+          "count": 1
+        }
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
       "name": "Lapisblockhelmet",
       "requiredSlayer": "",
       "requiredLevel": 0,
@@ -19249,52 +19295,6 @@
         "",
         "",
         ""
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true
-      ]
-    },
-    {
-      "name": "Ochrefroglightboots",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:3.0d,id:\"politicalserver:ochre_froglight_boots_armor\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor\"},{amount:2.0d,id:\"politicalserver:ochre_froglight_boots_toughness\",operation:\"add_value\",slot:\"feet\",type:\"minecraft:armor_toughness\"}],\"minecraft:custom_data\":{block_armor_id:\"ochre_froglight_boots\",custom_id:\"ochre_froglight_boots\",custom_item_id:\"ochre_froglight_boots\"},\"minecraft:custom_name\":{bold:1b,color:\"gold\",text:\"Ochre Froglight Boots\"},\"minecraft:dyed_color\":16753920,\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"gold\",text:\"━━━ STATS ━━━\"},{color:\"white\",text:\"🛡 Armor: +3\"},{color:\"white\",text:\"💎 Toughness: +2\"},{color:\"white\",text:\"⚠ Durability: High\"},{color:\"gold\",text:\"✦ SET BONUS:\"},{color:\"dark_gray\",text:\"4+ block pieces (any mix): Resistance I (renewing)\"},{color:\"green\",text:\"4/4 matching: Ochre Beacon — weakens hostiles withi…\"},{color:\"dark_gray\",text:\"§8Ochre froglight\"},\"\",\"§7❈ Defense: §a+45\",\"§7❤ Health: §c+45\",\"§7❁ Strength: §c+10\",\"\",\u0027§8\"Forged for those who dare to wield it.\"\u0027,\"§8§m                              §r\",\"§a§lUNCOMMON ARMOR\"],\"minecraft:max_damage\":300},count:1,id:\"minecraft:leather_boots\"}",
-        "count": 1
-      },
-      "ingredients": [
-        "",
-        "",
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:ochre_froglight\"}",
-          "count": 1
-        }
       ],
       "lockedSlots": [
         true,
@@ -167808,6 +167808,49 @@
       ]
     },
     {
+      "name": "Mangroverootshoe",
+      "requiredSlayer": "",
+      "requiredLevel": 0,
+      "result": {
+        "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"mangrove_roots_hoe\",custom_item_id:\"mangrove_roots_hoe\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_red\",text:\"🌾 Mangrove Roots Hoe\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"dark_red\",text:\"━━━ STATS ━━━\"},{color:\"red\",text:\"🌾 Damage: 3\"},{color:\"yellow\",text:\"🌾 Durability: 220\"},{bold:1b,color:\"light_purple\",text:\"✨ ABILITY:\"},{color:\"green\",text:\"• Root farm\"},{color:\"blue\",text:\"⚒ Cross Cleave (air)\"},{color:\"dark_gray\",text:\"§8mangrove roots edge\"},\"\",\"§7❁ Strength: §c+25\",\"§7❤ Health: §c+15\",\"\",\u0027§8\"Few hands are worthy of its edge.\"\u0027,\"§8§m                              §r\",\"§a§lUNCOMMON TOOL\"],\"minecraft:max_damage\":220},count:1,id:\"minecraft:iron_hoe\"}",
+        "count": 1
+      },
+      "ingredients": [
+        {
+          "nbt": "{count:1,id:\"minecraft:mangrove_roots\"}",
+          "count": 1
+        },
+        {
+          "nbt": "{count:1,id:\"minecraft:mangrove_roots\"}",
+          "count": 1
+        },
+        "",
+        "",
+        {
+          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
+          "count": 1
+        },
+        "",
+        {
+          "nbt": "{count:1,id:\"minecraft:stick\"}",
+          "count": 1
+        },
+        "",
+        ""
+      ],
+      "lockedSlots": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false
+      ]
+    },
+    {
       "name": "Exposedcopperaxe",
       "requiredSlayer": "",
       "requiredLevel": 0,
@@ -167850,49 +167893,6 @@
         false,
         false,
         true,
-        false
-      ]
-    },
-    {
-      "name": "Mangroverootshoe",
-      "requiredSlayer": "",
-      "requiredLevel": 0,
-      "result": {
-        "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"mangrove_roots_hoe\",custom_item_id:\"mangrove_roots_hoe\"},\"minecraft:custom_name\":{bold:1b,color:\"dark_red\",text:\"🌾 Mangrove Roots Hoe\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"dark_red\",text:\"━━━ STATS ━━━\"},{color:\"red\",text:\"🌾 Damage: 3\"},{color:\"yellow\",text:\"🌾 Durability: 220\"},{bold:1b,color:\"light_purple\",text:\"✨ ABILITY:\"},{color:\"green\",text:\"• Root farm\"},{color:\"blue\",text:\"⚒ Cross Cleave (air)\"},{color:\"dark_gray\",text:\"§8mangrove roots edge\"},\"\",\"§7❁ Strength: §c+25\",\"§7❤ Health: §c+15\",\"\",\u0027§8\"Few hands are worthy of its edge.\"\u0027,\"§8§m                              §r\",\"§a§lUNCOMMON TOOL\"],\"minecraft:max_damage\":220},count:1,id:\"minecraft:iron_hoe\"}",
-        "count": 1
-      },
-      "ingredients": [
-        {
-          "nbt": "{count:1,id:\"minecraft:mangrove_roots\"}",
-          "count": 1
-        },
-        {
-          "nbt": "{count:1,id:\"minecraft:mangrove_roots\"}",
-          "count": 1
-        },
-        "",
-        "",
-        {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
-          "count": 1
-        },
-        "",
-        {
-          "nbt": "{count:1,id:\"minecraft:stick\"}",
-          "count": 1
-        },
-        "",
-        ""
-      ],
-      "lockedSlots": [
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
         false
       ]
     },
@@ -178499,24 +178499,24 @@
       ]
     },
     {
-      "name": "Concretesword",
+      "name": "Weatheredcoppersword",
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:6.5d,id:\"political:concrete_sword_damage\",operation:\"add_value\",slot:\"mainhand\",type:\"minecraft:attack_damage\"},{amount:-0.3d,id:\"political:concrete_sword_speed\",operation:\"add_value\",slot:\"mainhand\",type:\"minecraft:attack_speed\"}],\"minecraft:custom_data\":{custom_id:\"concrete_sword\",custom_item_id:\"concrete_sword\"},\"minecraft:custom_name\":{bold:1b,color:\"gray\",text:\"⚔ Concrete Blade\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"gray\",text:\"━━━ STATS ━━━\"},{color:\"red\",text:\"⚔ Damage: 8\"},{color:\"yellow\",text:\"⚔ Durability: 500\"},{color:\"green\",text:\"⚔ Attack Speed: Slow\"},{color:\"light_purple\",text:\"✦ ARMOR SYNERGY:\"},{color:\"dark_gray\",text:\"4+ pieces (any mix): Resistance I\"},{color:\"green\",text:\"4/4 matching: War Rhythm · earth · r4 · ~81/61t\"},{color:\"dark_gray\",text:\"§8Solid concrete edge\"}],\"minecraft:max_damage\":500},count:1,id:\"minecraft:diamond_sword\"}",
+        "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"weathered_copper_sword\",custom_item_id:\"weathered_copper_sword\"},\"minecraft:custom_name\":{bold:1b,color:\"gold\",text:\"⚔ Weathered Copper Blade\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"gold\",text:\"━━━ STATS ━━━\"},{color:\"red\",text:\"⚔ Damage: 6\"},{color:\"yellow\",text:\"⚔ Durability: 180\"},{color:\"green\",text:\"⚔ Attack Speed: Fast\"},{color:\"light_purple\",text:\"✦ ARMOR SYNERGY:\"},{color:\"dark_gray\",text:\"4+ pieces (any mix): Resistance I\"},{color:\"green\",text:\"4/4 matching: Weathered Ward — builds absorption sh…\"},{color:\"dark_gray\",text:\"§8Copper edge\"}],\"minecraft:max_damage\":180},count:1,id:\"minecraft:iron_sword\"}",
         "count": 1
       },
       "ingredients": [
         {
-          "nbt": "{count:1,id:\"minecraft:cobblestone\"}",
+          "nbt": "{count:1,id:\"minecraft:weathered_copper\"}",
           "count": 1
         },
         {
-          "nbt": "{count:1,id:\"minecraft:cobblestone\"}",
+          "nbt": "{count:1,id:\"minecraft:weathered_copper\"}",
           "count": 1
         },
         {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t2\",custom_item_id:\"custom_crafter_core_t2\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"⚙ Custom Crafting Core (T2)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 2 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"aqua\",text:\"• All T2 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss T2+]\"},\"\",\"§7❁ Strength: §c+20\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Not the strongest, but the boldest choose it.\"\u0027,\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
+          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
           "count": 1
         },
         {
@@ -178545,24 +178545,24 @@
       ]
     },
     {
-      "name": "Weatheredcoppersword",
+      "name": "Concretesword",
       "requiredSlayer": "",
       "requiredLevel": 0,
       "result": {
-        "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"weathered_copper_sword\",custom_item_id:\"weathered_copper_sword\"},\"minecraft:custom_name\":{bold:1b,color:\"gold\",text:\"⚔ Weathered Copper Blade\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"gold\",text:\"━━━ STATS ━━━\"},{color:\"red\",text:\"⚔ Damage: 6\"},{color:\"yellow\",text:\"⚔ Durability: 180\"},{color:\"green\",text:\"⚔ Attack Speed: Fast\"},{color:\"light_purple\",text:\"✦ ARMOR SYNERGY:\"},{color:\"dark_gray\",text:\"4+ pieces (any mix): Resistance I\"},{color:\"green\",text:\"4/4 matching: Weathered Ward — builds absorption sh…\"},{color:\"dark_gray\",text:\"§8Copper edge\"}],\"minecraft:max_damage\":180},count:1,id:\"minecraft:iron_sword\"}",
+        "nbt": "{components:{\"minecraft:attribute_modifiers\":[{amount:6.5d,id:\"political:concrete_sword_damage\",operation:\"add_value\",slot:\"mainhand\",type:\"minecraft:attack_damage\"},{amount:-0.3d,id:\"political:concrete_sword_speed\",operation:\"add_value\",slot:\"mainhand\",type:\"minecraft:attack_speed\"}],\"minecraft:custom_data\":{custom_id:\"concrete_sword\",custom_item_id:\"concrete_sword\"},\"minecraft:custom_name\":{bold:1b,color:\"gray\",text:\"⚔ Concrete Blade\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{color:\"gray\",text:\"━━━ STATS ━━━\"},{color:\"red\",text:\"⚔ Damage: 8\"},{color:\"yellow\",text:\"⚔ Durability: 500\"},{color:\"green\",text:\"⚔ Attack Speed: Slow\"},{color:\"light_purple\",text:\"✦ ARMOR SYNERGY:\"},{color:\"dark_gray\",text:\"4+ pieces (any mix): Resistance I\"},{color:\"green\",text:\"4/4 matching: War Rhythm · earth · r4 · ~81/61t\"},{color:\"dark_gray\",text:\"§8Solid concrete edge\"}],\"minecraft:max_damage\":500},count:1,id:\"minecraft:diamond_sword\"}",
         "count": 1
       },
       "ingredients": [
         {
-          "nbt": "{count:1,id:\"minecraft:weathered_copper\"}",
+          "nbt": "{count:1,id:\"minecraft:cobblestone\"}",
           "count": 1
         },
         {
-          "nbt": "{count:1,id:\"minecraft:weathered_copper\"}",
+          "nbt": "{count:1,id:\"minecraft:cobblestone\"}",
           "count": 1
         },
         {
-          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t1\",custom_item_id:\"custom_crafter_core_t1\"},\"minecraft:custom_name\":{bold:1b,color:\"green\",text:\"⚙ Custom Crafting Core (T1)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 1 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"green\",text:\"• All T1 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss]\"},\"\",\"§7❁ Strength: §c+5\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Its power hums beneath the surface.\"\u0027,\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
+          "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"custom_crafter_core_t2\",custom_item_id:\"custom_crafter_core_t2\"},\"minecraft:custom_name\":{bold:1b,color:\"aqua\",text:\"⚙ Custom Crafting Core (T2)\"},\"minecraft:enchantment_glint_override\":1b,\"minecraft:lore\":[{bold:1b,color:\"light_purple\",text:\"✦ Crafting Component\"},{color:\"gray\",text:\"Used to craft Tier 2 custom\"},{color:\"gray\",text:\"armor and weapon pieces.\"},{color:\"yellow\",text:\"Required for:\"},{color:\"aqua\",text:\"• All T2 Custom Armor Sets\"},{color:\"dark_gray\",text:\"§8[Drop from any slayer boss T2+]\"},\"\",\"§7❁ Strength: §c+20\",\"§7❤ Health: §c+5\",\"\",\u0027§8\"Not the strongest, but the boldest choose it.\"\u0027,\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:heavy_core\"}",
           "count": 1
         },
         {
