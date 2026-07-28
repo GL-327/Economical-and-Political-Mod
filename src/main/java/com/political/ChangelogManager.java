@@ -320,6 +320,12 @@ public final class ChangelogManager {
                         + "console covers thirteen areas including a per player card, live server health and a "
                         + "settlement inspector. Everything destructive asks first. The old panel is still one "
                         + "click away under Legacy."),
+                e("The Bazaar", "vx_bazaar",
+                        "A double sided order book for every collection material. Post a buy order or a sell "
+                        + "offer at your own price, or take the other side instantly at the best price posted. "
+                        + "A house book quotes either side at a deliberately poor spread, so the market still "
+                        + "works with nobody else online and trading against real players is always better. "
+                        + "Buy orders that fill while you are offline hold the goods until you collect them."),
                 e("Collections", "vx_collections",
                         "Sixty collections across farming, mining, combat, foraging, fishing and the arcane. "
                         + "Every material you gather counts for the rest of your time on the server, and each "

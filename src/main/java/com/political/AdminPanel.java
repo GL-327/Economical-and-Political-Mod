@@ -456,6 +456,9 @@ public final class AdminPanel {
         gui.setSlot(28, GuiKit.tile(Items.CHEST, "Government treasury", ChatFormatting.YELLOW,
                 () -> GovernmentTreasuryGui.open(player), "Public money"));
 
+        gui.setSlot(30, GuiKit.tile(Items.GOLD_INGOT, "Bazaar", ChatFormatting.YELLOW,
+                () -> BazaarGui.open(player), "The material order book"));
+
         gui.setSlot(29, GuiKit.tile(Items.BARREL, "Shops", ChatFormatting.GOLD,
                 () -> ShopGui.openMainMenu(player), "Server and player shops"));
 
