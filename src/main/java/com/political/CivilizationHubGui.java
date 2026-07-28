@@ -246,6 +246,25 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> ReforgeGui.open(player))
                 .build());
 
+        gui.setSlot(38, new GuiElementBuilder(Items.BOOKSHELF)
+
+                .setName(Component.literal("Collections").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+
+                .addLoreLine(Component.literal(""))
+
+                .addLoreLine(Component.literal("§7Sixty collections across six fields."))
+
+                .addLoreLine(Component.literal("§7Nine tiers each, permanent stats."))
+
+                .addLoreLine(Component.literal(""))
+
+                .addLoreLine(Component.literal("§eClick to open"))
+
+                .setCallback((a, b, c, d) -> CollectionGui.open(player))
+
+                .build());
+
+
         gui.setSlot(44, new GuiElementBuilder(Items.END_ROD)
                 .setName(Component.literal("Effects Gallery").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Lances, storms, domains and rifts."))

@@ -314,6 +314,17 @@ public final class ChangelogManager {
                         + "breaking, rooting, blinding, levitation, pulling enemies in, throwing them out, and "
                         + "self buffs for haste, shielding, healing and speed, plus runes that draw cursed "
                         + "energy, coin or experience out of the moment."),
+                e("The operator console replaces the admin panel", "vx_console",
+                        "The old panel covered seven categories while the mod had grown past three hundred "
+                        + "and eighty classes, so most of what an operator needs had no button at all. The new "
+                        + "console covers thirteen areas including a per player card, live server health and a "
+                        + "settlement inspector. Everything destructive asks first. The old panel is still one "
+                        + "click away under Legacy."),
+                e("Collections", "vx_collections",
+                        "Sixty collections across farming, mining, combat, foraging, fishing and the arcane. "
+                        + "Every material you gather counts for the rest of your time on the server, and each "
+                        + "collection pays out at nine thresholds in coins and a permanent stat bonus. It is the "
+                        + "only progression in the mod that cannot be traded, bought or handed over."),
                 e("Every line is keyed on its own catalyst", "vx_catalysts",
                         "Nine crafting catalysts, one per gear line, each craftable from a crafting core. "
                         + "A piece of gear now wants its line catalyst plus a core of the tier that cut "

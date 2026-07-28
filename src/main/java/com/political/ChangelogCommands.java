@@ -11,6 +11,19 @@ public final class ChangelogCommands {
     private ChangelogCommands() {}
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        // Collections live here rather than in their own file because this class is already the
+        // home for the small player facing browsers.
+        dispatcher.register(Commands.literal("collections")
+                .executes(ctx -> {
+                    CollectionGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }));
+        dispatcher.register(Commands.literal("collection")
+                .executes(ctx -> {
+                    CollectionGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }));
+
         dispatcher.register(Commands.literal("changelog")
                 .executes(ctx -> {
                     ChangelogGui.open(ctx.getSource().getPlayerOrException());

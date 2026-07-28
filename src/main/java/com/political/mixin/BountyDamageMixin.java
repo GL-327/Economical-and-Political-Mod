@@ -168,6 +168,7 @@ public abstract class BountyDamageMixin {
         com.political.CompanionManager.onKill(player);
         com.political.StarboundHandler.onKill(player);
         com.political.VoyagerHandler.onKill(player);
+        com.political.CollectionManager.onKill(player, self);
         com.political.ContractManager.onKill(player);
 
         if (WorldBossManager.isWorldBoss(self.getUUID())) {

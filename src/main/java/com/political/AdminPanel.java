@@ -686,6 +686,10 @@ public final class AdminPanel {
                     }
                 }, "What keys each gear line"));
 
+        gui.setSlot(30, GuiKit.tile(Items.BOOKSHELF, "Collections", ChatFormatting.GOLD,
+                () -> CollectionGui.open(player),
+                "Sixty collections, nine tiers each", "Permanent stat bonuses"));
+
         gui.setSlot(31, GuiKit.tile(Items.VILLAGER_SPAWN_EGG, "Give any item", ChatFormatting.AQUA,
                 () -> AdminGui.openCustomItemsAdminGui(player), "The old item granter"));
 

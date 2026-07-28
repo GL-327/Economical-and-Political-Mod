@@ -96,6 +96,14 @@ public final class PlayerStatsManager {
             return values.getOrDefault(stat, stat.baseValue);
         }
 
+        /**
+         * Adds a bonus that did not come from an item's lore. Collections use this, so a tier bonus
+         * behaves exactly like a bonus rolled on a piece of armour.
+         */
+        public void addExternal(Stat stat, double amount) {
+            values.merge(stat, amount, Double::sum);
+        }
+
         void add(Stat stat, double amount) {
             values.merge(stat, amount, Double::sum);
         }
@@ -150,6 +158,12 @@ public final class PlayerStatsManager {
             parseItemStats(player.getItemBySlot(slot), sheet, true);
         }
         parseItemStats(player.getMainHandItem(), sheet, false);
+        // Progression that is not carried on an item, folded in before the clamp.
+        try {
+            CollectionManager.applyBonuses(player, sheet);
+        } catch (Exception ignored) {
+            // A collection store that has not initialised yet must never break stats.
+        }
         sheet.clamp();
         return sheet;
     }

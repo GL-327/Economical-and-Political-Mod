@@ -405,6 +405,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TempestGear.ensureRecipes();
             VoyagerGear.ensureRecipes();
             RegaliaGear.ensureRecipes();
+            CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
@@ -454,6 +455,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             MagicManager.saveData();
             SchoolTreeManager.save();
             TechniqueManager.save();
+            CollectionManager.save();
             SettlementManager.save();
             HighCouncilManager.save();
             SettlementElectionManager.save();

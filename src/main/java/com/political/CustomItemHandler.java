@@ -110,6 +110,16 @@ public class CustomItemHandler {
             RuneforgedHandler.onBreak(sp, new net.minecraft.world.phys.Vec3(
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
             ClockworkHandler.onBreak(sp, (ServerLevel) world, pos, state);
+            // Collections count what the block actually yields, so fortune and silk touch both
+            // read correctly without a second code path.
+            try {
+                for (ItemStack drop : net.minecraft.world.level.block.Block.getDrops(
+                        state, (ServerLevel) world, pos, blockEntity, sp, tool)) {
+                    CollectionManager.recordStack(sp, drop);
+                }
+            } catch (Exception ignored) {
+                // A block with an awkward loot table must never break mining.
+            }
             if (DanielsPickaxe.isDanielsPickaxe(tool)) {
                 DanielsPickaxe.onBlockBreak(sp, (ServerLevel) world, pos, state);
             }
