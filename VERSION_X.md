@@ -147,3 +147,66 @@ Current state:
 
 Note that a verification boot takes half an hour or more under `-Xint`, and running any other Gradle
 task while one is in flight corrupts the shared incremental compile state. Run them one at a time.
+
+## The operator console
+
+`/admin` opens a rebuilt console. The previous panel covered seven categories while the mod had grown
+past three hundred and eighty classes, so most of what an operator needs had no button at all and
+lived only in commands.
+
+Thirteen areas: server health, players, moderation, economy, politics, settlements, wars, content,
+combat, magic, world, diagnostics, and a link back to the old panel so nothing that worked stopped
+working.
+
+The player card is the part that was most missing. One screen gives heal, feed, clear effects,
+teleport both directions, all four game modes, a coin stepper, live inventory, a stats readout,
+prison, vanish and smite.
+
+Two rules the console follows throughout:
+
+- Anything destructive routes through a confirmation dialog, because a chest menu has no undo.
+- Time, weather and spawn go through the command dispatcher rather than level setters, which have
+  not been stable across mapping changes.
+
+## GuiKit
+
+Every chest menu now draws from one toolkit: frames, headers, footers, pagers, steppers, toggles,
+progress bars and the confirmation dialog. This is a server side mod, so the chest menu is the entire
+interface, and before this every screen invented its own border and its own back arrow.
+
+## Collections
+
+Sixty collections across farming, mining, combat, foraging, fishing and the arcane. Every material a
+player gathers counts for the rest of their time on the server, with nine tiers each paying coins and
+a permanent stat bonus folded straight into the stats engine.
+
+Counting is deliberately honest:
+
+- Block collections read the real loot table, so fortune and silk touch both behave correctly.
+- Combat collections map the victim to its signature drop rather than counting items, so a looting
+  enchant cannot inflate a number that is meant to measure how much you fought.
+- Crafted custom items never count toward anything.
+
+## The Bazaar
+
+A double sided order book for every collection material. Post a buy order or a sell offer at your own
+price, or take the other side instantly at the best price on the book.
+
+A house book quotes both sides at a deliberately wide spread, so a solo server still has a working
+market while trading against real players always pays better. It is a floor, not a competitor.
+
+Buy orders that fill while the owner is offline accrue the goods on the order and hand them over on
+collection. Cancelling returns both the unspent coins and anything already bought, and an order is
+only pruned once it can no longer fill and has nothing left to hand over.
+
+## Minions
+
+Placed workers that gather one material on a timer, eleven tiers each. They close the loop the other
+two systems opened: a minion produces a material, the material feeds a collection, the collection
+pays a permanent stat and the surplus goes to the bazaar.
+
+Two rules stop them becoming the only thing worth doing:
+
+- A minion only runs while its chunk is loaded, so this is not an offline printer.
+- Only a quarter of the output counts toward collections, so hand gathering is always the faster way
+  to a tier.
