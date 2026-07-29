@@ -704,6 +704,11 @@ public final class AdminPanel {
                 () -> CollectionGui.open(player),
                 "Sixty collections, nine tiers each", "Permanent stat bonuses"));
 
+        gui.setSlot(33, GuiKit.tile(Items.ITEM_FRAME, "Item models", ChatFormatting.LIGHT_PURPLE,
+                () -> ItemModelGui.open(player),
+                PolymerBridge.knownModels() + " items have custom art",
+                "Polymer serves the pack that defines them"));
+
         gui.setSlot(31, GuiKit.tile(Items.VILLAGER_SPAWN_EGG, "Give any item", ChatFormatting.AQUA,
                 () -> AdminGui.openCustomItemsAdminGui(player), "The old item granter"));
 

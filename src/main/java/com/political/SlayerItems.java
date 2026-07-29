@@ -42,6 +42,9 @@ public class SlayerItems {
         nbt.putString(LEGACY_CUSTOM_ITEM_ID_KEY, id);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
         CustomItemLore.applySummarizedLore(stack);
+        // Give it a real model if art exists for it. This is a no op for any item without art,
+        // which is currently almost all of them, so it can safely sit on the hot path.
+        PolymerBridge.applyModel(stack, id);
     }
 
     /** Returns the custom_item_id of this item, or null if not set. */

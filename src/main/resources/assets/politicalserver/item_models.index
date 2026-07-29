@@ -1,0 +1,8 @@
+# Item models bundled with the mod.
+#
+# One custom item id per line. An id listed here is treated as having art, and the item_model
+# component is applied to it. An id not listed is left exactly as it is today, because pointing a
+# stack at a model no pack defines renders as the missing texture rather than falling back.
+#
+# Add art by dropping config/political/item_models/<id>.json on the server, which needs no rebuild,
+# or by adding the asset here and listing the id.
