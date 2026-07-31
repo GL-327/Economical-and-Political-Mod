@@ -51,7 +51,15 @@ public final class IncursionGui {
                 "",
                 "Leave the ring and it collapses."));
 
-        if (mine == null) {
+        long cd = IncursionManager.cooldownMinutes(player);
+        if (mine == null && cd > 0) {
+            gui.setSlot(24, GuiKit.info(Items.CLOCK, "The air has not settled",
+                    ChatFormatting.GRAY,
+                    "About " + cd + (cd == 1 ? " minute" : " minutes") + " to go.",
+                    "",
+                    "A rift is an event rather than a job,",
+                    "so there is a wait between them."));
+        } else if (mine == null) {
             gui.setSlot(24, GuiKit.action(Items.NETHER_STAR, "Open a rift", ChatFormatting.LIGHT_PURPLE,
                     () -> GuiKit.confirm(player, "Open " + here.display,
                             "Seven waves, starting immediately, where you are standing.",

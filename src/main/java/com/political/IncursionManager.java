@@ -67,6 +67,16 @@ public final class IncursionManager {
     }
 
     private static final Map<UUID, Active> ACTIVE = new HashMap<>();
+    /**
+     * When each player may open another.
+     *
+     * <p>A completed incursion pays fifteen thousand plus a quarter of a thousand per kill, and the
+     * only thing stopping a player opening the next one the moment the last sealed was that they
+     * could not run two at once. That is an unbounded coin faucet with a twenty minute cycle time.
+     * A cooldown makes it an event rather than a job.</p>
+     */
+    private static final Map<String, Long> NEXT_ALLOWED = new HashMap<>();
+    private static final long COOLDOWN_MS = 20 * 60 * 1000L;
 
     public static java.util.Collection<Active> all() {
         return ACTIVE.values();
@@ -91,6 +101,13 @@ public final class IncursionManager {
         if (!(player.level() instanceof ServerLevel level)) return false;
         if (activeFor(player) != null) {
             player.sendSystemMessage(Component.literal("§cYou already have one open."));
+            return false;
+        }
+        Long next = NEXT_ALLOWED.get(player.getUUID().toString());
+        if (next != null && System.currentTimeMillis() < next) {
+            long mins = Math.max(1, (next - System.currentTimeMillis()) / 60000L);
+            player.sendSystemMessage(Component.literal("§cThe air has not settled. About §f"
+                    + mins + (mins == 1 ? " minute" : " minutes") + "§c to go."));
             return false;
         }
 
@@ -379,6 +396,10 @@ public final class IncursionManager {
 
     private static void cleanUp(MinecraftServer server, Active a) {
         a.finished = true;
+        // Starts on any ending, sealed or collapsed, so walking out of a bad run is not a reset.
+        if (a.ownerUuid != null && !a.ownerUuid.isEmpty()) {
+            NEXT_ALLOWED.put(a.ownerUuid, System.currentTimeMillis() + COOLDOWN_MS);
+        }
         if (a.bar != null) a.bar.removeAllPlayers();
         ServerLevel level = levelOf(server, a);
         if (level != null) sweep(level, a);
@@ -403,6 +424,14 @@ public final class IncursionManager {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /** How long until this player may open another, in minutes, or zero when ready. */
+    public static long cooldownMinutes(ServerPlayer player) {
+        Long next = NEXT_ALLOWED.get(player.getUUID().toString());
+        if (next == null) return 0;
+        long left = next - System.currentTimeMillis();
+        return left <= 0 ? 0 : Math.max(1, left / 60000L);
     }
 
     /** Incursion mobs pay nothing to outside systems, so a rift cannot be farmed for drops. */
