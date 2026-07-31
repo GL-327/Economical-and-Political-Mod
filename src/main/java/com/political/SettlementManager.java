@@ -380,6 +380,13 @@ public class SettlementManager {
     private static final java.util.Random RNG = new java.util.Random();
 
     private static void wanderInRoll(MinecraftServer server, Settlement s) {
+        // Growth rolls for every settlement now rather than one per window, which makes this the
+        // hot path it was not before. Spawning walks the heightmap and adds an entity, and both of
+        // those will drag an unloaded chunk into memory, so a server with fifty settlements would
+        // be force loading fifty areas every ten seconds for villagers nobody is there to see.
+        ServerLevel check = levelFor(server, s);
+        if (check == null || !check.hasChunkAt(s.cornerstonePos())) return;
+
         // Growth is gated by the economy: free sheltered beds, food surplus and morale.
         // This is what stops a settlement being inflated by dropping decorative blocks.
         if (!SettlementEconomy.canGrow(s)) return;

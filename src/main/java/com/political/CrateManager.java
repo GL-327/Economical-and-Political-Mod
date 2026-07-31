@@ -204,17 +204,56 @@ public final class CrateManager {
      */
     private static ItemStack rollReward(Crate.Band band) {
         try {
-            List<ItemStack> pool = new ArrayList<>();
-            for (RecipeManager.CustomRecipe r : RecipeManager.getAllRecipes()) {
-                if (r.result == null || r.result.isEmpty()) continue;
-                if (bandOf(r.name) != band) continue;
-                pool.add(r.result);
-            }
+            List<ItemStack> pool = poolFor(band);
             if (pool.isEmpty()) return ItemStack.EMPTY;
             return pool.get(RNG.nextInt(pool.size())).copy();
         } catch (Exception e) {
             return ItemStack.EMPTY;
         }
+    }
+
+    // ── Reward index ──────────────────────────────────────────────────────
+
+    /**
+     * Bands to the items in them, built once rather than per lookup.
+     *
+     * <p>This existed as a full walk of the recipe catalogue on every single call, which meant one
+     * pull scanned seven thousand recipes and the odds screen did it ten times over just to draw
+     * itself. On the server thread that is a visible stall for something nobody would think to
+     * blame. The catalogue only changes when recipes are registered, so the index is rebuilt when
+     * the recipe count moves and reused otherwise.</p>
+     */
+    private static final java.util.EnumMap<Crate.Band, List<ItemStack>> POOLS =
+            new java.util.EnumMap<>(Crate.Band.class);
+    private static int indexedAtCount = -1;
+
+    private static synchronized void rebuildIndexIfStale() {
+        int count;
+        try {
+            count = RecipeManager.getAllRecipes().size();
+        } catch (Exception e) {
+            return;
+        }
+        if (count == indexedAtCount && !POOLS.isEmpty()) return;
+
+        POOLS.clear();
+        for (Crate.Band b : Crate.Band.values()) POOLS.put(b, new ArrayList<>());
+        try {
+            for (RecipeManager.CustomRecipe r : RecipeManager.getAllRecipes()) {
+                if (r.result == null || r.result.isEmpty()) continue;
+                POOLS.get(bandOf(r.name)).add(r.result);
+            }
+            indexedAtCount = count;
+        } catch (Exception e) {
+            // A catalogue that will not enumerate leaves the pools empty, which pays coins
+            // instead of items rather than failing a pull.
+        }
+    }
+
+    private static List<ItemStack> poolFor(Crate.Band band) {
+        rebuildIndexIfStale();
+        List<ItemStack> pool = POOLS.get(band);
+        return pool == null ? java.util.Collections.emptyList() : pool;
     }
 
     /** Which band a given recipe belongs to, from its name. */
@@ -268,11 +307,9 @@ public final class CrateManager {
     public static List<String> sampleOf(Crate.Band band, int limit) {
         List<String> out = new ArrayList<>();
         try {
-            for (RecipeManager.CustomRecipe r : RecipeManager.getAllRecipes()) {
-                if (out.size() >= limit) break;
-                if (r.result == null || r.result.isEmpty()) continue;
-                if (bandOf(r.name) != band) continue;
-                out.add(r.result.getHoverName().getString());
+            List<ItemStack> pool = poolFor(band);
+            for (int i = 0; i < pool.size() && out.size() < limit; i++) {
+                out.add(pool.get(i).getHoverName().getString());
             }
         } catch (Exception ignored) {
             // An unavailable catalogue simply shows nothing rather than failing the screen.
@@ -282,16 +319,11 @@ public final class CrateManager {
 
     /** How many distinct items sit in a band right now. */
     public static int poolSize(Crate.Band band) {
-        int n = 0;
         try {
-            for (RecipeManager.CustomRecipe r : RecipeManager.getAllRecipes()) {
-                if (r.result == null || r.result.isEmpty()) continue;
-                if (bandOf(r.name) == band) n++;
-            }
-        } catch (Exception ignored) {
-            // Same as above.
+            return poolFor(band).size();
+        } catch (Exception e) {
+            return 0;
         }
-        return n;
     }
 
     public static void clear(UUID uuid) {

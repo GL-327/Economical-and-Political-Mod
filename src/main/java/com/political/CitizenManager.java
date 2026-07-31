@@ -150,6 +150,9 @@ public class CitizenManager {
 
     public static Villager spawnWanderInCitizen(ServerLevel world, Settlement s) {
         BlockPos base = s.cornerstonePos();
+        // Reading the heightmap and adding an entity both load the chunk they touch, so refuse
+        // outright rather than quietly pulling terrain into memory on a caller's behalf.
+        if (!world.hasChunkAt(base)) return null;
         int ox = base.getX() + world.getRandom().nextInt(17) - 8;
         int oz = base.getZ() + world.getRandom().nextInt(17) - 8;
         BlockPos spawn = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(ox, base.getY(), oz));

@@ -101,9 +101,23 @@ public final class SettlementProgressGui {
         gui.setSlot(38, GuiKit.action(Items.SPYGLASS, "Rescan now", ChatFormatting.AQUA,
                 () -> {
                     try {
-                        SettlementManager.rescanNow((ServerLevel) player.level(), s);
-                        player.sendSystemMessage(Component.literal("§aRescanned. " + s.name
-                                + " is " + s.tierEnum().displayName + "."));
+                        // Scan the settlement's own world. Scanning whichever world the player is
+                        // standing in would read the wrong blocks entirely and then write the
+                        // result back as if it were this settlement's.
+                        var server = ((ServerLevel) player.level()).getServer();
+                        ServerLevel home = server == null ? null
+                                : SettlementManager.levelFor(server, s);
+                        if (home == null) {
+                            player.sendSystemMessage(Component.literal(
+                                    "§cCannot reach that settlement's world."));
+                        } else if (!home.hasChunkAt(s.cornerstonePos())) {
+                            player.sendSystemMessage(Component.literal(
+                                    "§cThat area is not loaded, so there is nothing to count."));
+                        } else {
+                            SettlementManager.rescanNow(home, s);
+                            player.sendSystemMessage(Component.literal("§aRescanned. " + s.name
+                                    + " is " + s.tierEnum().displayName + "."));
+                        }
                     } catch (Exception e) {
                         player.sendSystemMessage(Component.literal("§cScan failed: " + e.getMessage()));
                     }
@@ -126,9 +140,24 @@ public final class SettlementProgressGui {
                         return;
                     }
                     try {
-                        CitizenManager.spawnWanderInCitizen((ServerLevel) player.level(), s);
-                        player.sendSystemMessage(Component.literal(
-                                "§aA settler arrives in " + s.name + "."));
+                        // The settlement's own level, not the player's. Someone can open this
+                        // screen for a settlement in another dimension, and spawning into
+                        // whichever world they happen to be standing in would be wrong.
+                        var server = ((ServerLevel) player.level()).getServer();
+                        ServerLevel home = server == null ? null
+                                : SettlementManager.levelFor(server, s);
+                        var spawned = home == null ? null
+                                : CitizenManager.spawnWanderInCitizen(home, s);
+                        if (spawned == null) {
+                            // Refuses when the area is not loaded, so refund rather than charge
+                            // for a settler that never turned up.
+                            CoinManager.giveCoins(player, cost);
+                            player.sendSystemMessage(Component.literal(
+                                    "§cNobody came. That area is not loaded. Coins refunded."));
+                        } else {
+                            player.sendSystemMessage(Component.literal(
+                                    "§aA settler arrives in " + s.name + "."));
+                        }
                     } catch (Exception e) {
                         CoinManager.giveCoins(player, cost);
                         player.sendSystemMessage(Component.literal("§cNobody came. Coins refunded."));
