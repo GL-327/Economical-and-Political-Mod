@@ -409,6 +409,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             NemesisManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            CommissionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             PolymerBridge.initialize();
             CrateManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -465,6 +466,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             MinionManager.save();
             NemesisManager.save();
             CrateManager.save();
+            CommissionManager.save();
             IncursionManager.shutdown(s);
             SiegeManager.shutdown(s);
             SettlementManager.save();
@@ -659,6 +661,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     AetherGearHandler.tickPlayer(player);
                     RuneforgedHandler.tickPlayer(player);
                     StarboundHandler.tickPlayer(player);
+                    WarrantArmour.tickPlayer(player);
                     BeastcraftHandler.tickPlayer(player);
                     ClockworkHandler.tickPlayer(player);
                     GrimoireHandler.tickPlayer(player);

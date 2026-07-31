@@ -332,6 +332,18 @@ public final class ChangelogManager {
                         + "since one person with no workstation grows no food. All three are fixed, and a new "
                         + "progress screen lists every requirement for the next tier and marks the one blocking "
                         + "you, because none of it was visible before."),
+                e("The Requisition Board", "vx_commissions",
+                        "Ten thousand eight hundred and ninety nine postings, generated from a goods table "
+                        + "rather than written by hand, which is the only way a set that size stays consistent. "
+                        + "Hand in what a posting asks for and the goods are taken, not merely counted, so every "
+                        + "commission is a decision about whether the reward is worth the material. Difficulty is "
+                        + "value times count and everything else follows from it, from an Errand paying a couple "
+                        + "of ingots up to an Impossibility asking for sixty four netherite blocks."),
+                e("The Quartermaster's Warrant", "vx_warrant",
+                        "Four pieces, paid out only by Great Works and Impossibilities. It cannot be crafted, "
+                        + "bought, rolled out of a crate or traded. Each piece grants a quarter of one ability "
+                        + "rather than a perk of its own, and worn together they become Levy: charge built from "
+                        + "every hand in can be spent to requisition a posting outright and fill what is owed."),
                 e("Crates", "vx_crates",
                         "Five crates bought with coins you earned. Every crate publishes its full odds per band "
                         + "before you buy, and a pity counter guarantees a good pull after a stated number of "

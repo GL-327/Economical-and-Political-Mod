@@ -696,6 +696,11 @@ public final class AdminPanel {
                     }
                 }, "What keys each gear line"));
 
+        gui.setSlot(34, GuiKit.tile(Items.PAPER, "Requisition board", ChatFormatting.GOLD,
+                () -> CommissionGui.open(player),
+                Commission.total() + " postings exist",
+                "Hand in goods, they are consumed"));
+
         gui.setSlot(32, GuiKit.tile(Items.ENDER_CHEST, "Crates", ChatFormatting.GOLD,
                 () -> CrateGui.open(player),
                 "Five crates, published odds", "Bought with in game coins only"));

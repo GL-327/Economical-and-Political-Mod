@@ -77,6 +77,7 @@ public abstract class BountyDamageMixin {
             }
             // Grimoire: three of the Ward circle spends Focus as armour before defence applies.
             modifiedAmount = com.political.GrimoireHandler.absorb(player, modifiedAmount);
+            modifiedAmount = com.political.WarrantArmour.onHurt(player, modifiedAmount);
             // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
             return com.political.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
         }
