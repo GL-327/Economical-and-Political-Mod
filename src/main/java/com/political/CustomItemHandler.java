@@ -110,15 +110,20 @@ public class CustomItemHandler {
             RuneforgedHandler.onBreak(sp, new net.minecraft.world.phys.Vec3(
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
             ClockworkHandler.onBreak(sp, (ServerLevel) world, pos, state);
-            // Collections count what the block actually yields, so fortune and silk touch both
-            // read correctly without a second code path.
+            // Collections count the block, not its drops.
+            //
+            // Rolling the loot table here ran it a second time, separately from the roll the game
+            // had already done, so the number credited was a different random result than the one
+            // the player actually picked up, and every fortune level inflated it. It also paid for
+            // a full loot table evaluation on every block anybody breaks anywhere.
+            //
+            // One block counts as one, which is both deterministic and the thing a collection is
+            // actually measuring: how much of this did you dig. That matches the choice already
+            // made for combat collections, where looting does not inflate a kill count either.
             try {
-                for (ItemStack drop : net.minecraft.world.level.block.Block.getDrops(
-                        state, (ServerLevel) world, pos, blockEntity, sp, tool)) {
-                    CollectionManager.recordStack(sp, drop);
-                }
+                CollectionManager.recordBlock(sp, state);
             } catch (Exception ignored) {
-                // A block with an awkward loot table must never break mining.
+                // A collection store that is not ready must never break mining.
             }
             if (DanielsPickaxe.isDanielsPickaxe(tool)) {
                 DanielsPickaxe.onBlockBreak(sp, (ServerLevel) world, pos, state);

@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -142,6 +143,72 @@ public final class CollectionManager {
                 return;
             }
         }
+    }
+
+    /**
+     * Counts one broken block toward whichever collection its item form belongs to.
+     *
+     * <p>Deliberately one per block rather than per dropped item. A collection measures how much of
+     * something a player has worked through, and a fortune enchant multiplying that by four would
+     * make the number about the pickaxe instead.</p>
+     */
+    public static void recordBlock(ServerPlayer player,
+                                   net.minecraft.world.level.block.state.BlockState state) {
+        if (state == null) return;
+        CollectionType c = forBlock(state);
+        if (c != null) record(player, c, 1);
+    }
+
+    /**
+     * Which collection a block feeds.
+     *
+     * <p>The block's own item is not enough on its own. An iron collection counts ingots but the
+     * block is iron ore, and a wheat collection counts wheat but the block is a crop whose item is
+     * seeds, so matching the block item straight against the collection material silently misses
+     * every ore and every crop, which is most of mining and all of farming.</p>
+     */
+    private static CollectionType forBlock(net.minecraft.world.level.block.state.BlockState state) {
+        net.minecraft.world.level.block.Block b = state.getBlock();
+
+        // Ores, both stone and deepslate, mapped to what they are worth rather than what they are.
+        if (b == Blocks.IRON_ORE || b == Blocks.DEEPSLATE_IRON_ORE) return CollectionType.IRON;
+        if (b == Blocks.GOLD_ORE || b == Blocks.DEEPSLATE_GOLD_ORE || b == Blocks.NETHER_GOLD_ORE) return CollectionType.GOLD;
+        if (b == Blocks.COAL_ORE || b == Blocks.DEEPSLATE_COAL_ORE) return CollectionType.COAL;
+        if (b == Blocks.DIAMOND_ORE || b == Blocks.DEEPSLATE_DIAMOND_ORE) return CollectionType.DIAMOND;
+        if (b == Blocks.EMERALD_ORE || b == Blocks.DEEPSLATE_EMERALD_ORE) return CollectionType.EMERALD;
+        if (b == Blocks.LAPIS_ORE || b == Blocks.DEEPSLATE_LAPIS_ORE) return CollectionType.LAPIS;
+        if (b == Blocks.REDSTONE_ORE || b == Blocks.DEEPSLATE_REDSTONE_ORE) return CollectionType.REDSTONE;
+        if (b == Blocks.COPPER_ORE || b == Blocks.DEEPSLATE_COPPER_ORE) return CollectionType.COPPER;
+        if (b == Blocks.NETHER_QUARTZ_ORE) return CollectionType.QUARTZ;
+        if (b == Blocks.ANCIENT_DEBRIS) return CollectionType.ANCIENT_DEBRIS;
+        if (b == Blocks.OBSIDIAN || b == Blocks.CRYING_OBSIDIAN) return CollectionType.OBSIDIAN;
+        if (b == Blocks.AMETHYST_CLUSTER || b == Blocks.AMETHYST_BLOCK) return CollectionType.AMETHYST;
+        if (b == Blocks.GLOWSTONE) return CollectionType.GLOWSTONE;
+        if (b == Blocks.SCULK || b == Blocks.SCULK_CATALYST || b == Blocks.SCULK_SENSOR) return CollectionType.SCULK;
+
+        // Crops, which drop produce rather than the block item.
+        if (b == Blocks.WHEAT) return CollectionType.WHEAT;
+        if (b == Blocks.CARROTS) return CollectionType.CARROT;
+        if (b == Blocks.POTATOES) return CollectionType.POTATO;
+        if (b == Blocks.MELON) return CollectionType.MELON;
+        if (b == Blocks.PUMPKIN) return CollectionType.PUMPKIN;
+        if (b == Blocks.SUGAR_CANE) return CollectionType.SUGAR_CANE;
+        if (b == Blocks.COCOA) return CollectionType.COCOA;
+        if (b == Blocks.NETHER_WART) return CollectionType.NETHER_WART;
+        if (b == Blocks.CACTUS) return CollectionType.CACTUS;
+        if (b == Blocks.RED_MUSHROOM || b == Blocks.BROWN_MUSHROOM) return CollectionType.MUSHROOM;
+        if (b == Blocks.KELP || b == Blocks.KELP_PLANT) return CollectionType.KELP;
+        if (b == Blocks.LILY_PAD) return CollectionType.LILY_PAD;
+        if (b == Blocks.SEA_PICKLE) return CollectionType.HEART_OF_THE_SEA;
+
+        // Everything else whose block item is the collection material already, which covers the
+        // logs, the prismarine and the rest of foraging.
+        net.minecraft.world.item.Item asItem = b.asItem();
+        if (asItem == net.minecraft.world.item.Items.AIR) return null;
+        for (CollectionType c : CollectionType.values()) {
+            if (c.material == asItem) return c;
+        }
+        return null;
     }
 
     /**
