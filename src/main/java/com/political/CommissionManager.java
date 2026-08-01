@@ -212,6 +212,10 @@ public final class CommissionManager {
         // through can never leave the player charged twice.
         removeGoods(player, c);
 
+        // Capture the slot count before standing moves. Reading it afterwards compares the new
+        // value against itself, which is what made the milestone announcement unreachable.
+        int slotsBefore = b.slotCount();
+
         b.completed++;
         b.standing += c.standingReward();
 
@@ -239,10 +243,9 @@ public final class CommissionManager {
         // The slot refills immediately, but its reroll timer still runs, so finishing a posting
         // is always better than waiting for a new one.
         b.slots.set(slot, randomIndex());
-        int before = b.slotCount();
         save();
         int after = b.slotCount();
-        if (after > before) {
+        if (after > slotsBefore) {
             player.sendSystemMessage(Component.literal("§6§lThe board trusts you with more."));
             player.sendSystemMessage(Component.literal("§7You now hold §f" + after
                     + "§7 postings at once."));
