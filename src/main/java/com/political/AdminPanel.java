@@ -105,6 +105,34 @@ public final class AdminPanel {
                 () -> ChangelogGui.open(player),
                 "Every version and what landed"));
 
+        // Row 3: the completeness row. The categories above are what an operator reaches for
+        // daily, these two are the guarantee that everything else is still one click away.
+        gui.setSlot(28, GuiKit.tile(Items.BOOKSHELF, "Every menu", ChatFormatting.AQUA,
+                () -> AdminDirectoryGui.open(player),
+                AdminDirectoryGui.totalMenus() + " screens, grouped",
+                "Everything the mod can open"));
+
+        gui.setSlot(29, GuiKit.tile(Items.COMMAND_BLOCK, "Every command", ChatFormatting.RED,
+                () -> AdminCommandsGui.open(player, 0),
+                "Read live from this server",
+                "Searchable, click to run"));
+
+        gui.setSlot(31, GuiKit.info(Items.PAPER, "How to find things", ChatFormatting.WHITE,
+                "The tiles above are the common jobs.",
+                "",
+                "Every menu lists all " + AdminDirectoryGui.totalMenus() + " screens by group.",
+                "Every command reads the live dispatcher,",
+                "so it covers vanilla and other mods too.",
+                "",
+                "Both have search. Neither can go stale."));
+
+        gui.setSlot(33, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
+                () -> TitleGui.open(player), Title.values().length + " titles"));
+
+        gui.setSlot(34, GuiKit.tile(Items.PAPER, "Requisition board", ChatFormatting.GOLD,
+                () -> CommissionGui.open(player),
+                Commission.total() + " postings"));
+
         gui.setSlot(49, GuiKit.close(player));
         gui.open();
     }
