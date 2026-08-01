@@ -325,7 +325,17 @@ public final class CommissionManager {
 
         // Hand over exactly the shortfall, then complete through the normal path so the goods are
         // consumed and the payout follows the same rules as any other completion.
+        // A full inventory would send the topped up goods to the floor, where the hand in cannot
+        // see them, so the completion would fail with the charge already gone. Refuse up front
+        // rather than taking payment for something that cannot work.
         int short_ = c.count - held(player, c);
+        if (!hasRoomFor(player, c, short_)) {
+            WarrantArmour.addCharge(player, WarrantArmour.REQUISITION_COST);
+            player.sendSystemMessage(Component.literal(
+                    "§cNo room for " + short_ + " " + c.good.display() + ". Charge untouched."));
+            return false;
+        }
+
         int left = short_;
         while (left > 0) {
             int stack = Math.min(left, c.good.item().getDefaultMaxStackSize());
@@ -334,7 +344,31 @@ public final class CommissionManager {
             left -= stack;
         }
         player.sendSystemMessage(Component.literal("§6Levy answers. The shortfall is made up."));
-        return complete(player, slot);
+
+        boolean done = complete(player, slot);
+        if (!done) {
+            // Should not happen now, but charge is expensive enough that a silent loss is worse
+            // than an unnecessary refund.
+            WarrantArmour.addCharge(player, WarrantArmour.REQUISITION_COST);
+            player.sendSystemMessage(Component.literal("§cThe hand in did not go through. Charge returned."));
+        }
+        return done;
+    }
+
+    /** Whether the inventory can actually hold this many, counting partial stacks and gaps. */
+    private static boolean hasRoomFor(ServerPlayer player, Commission c, int amount) {
+        if (amount <= 0) return true;
+        int max = c.good.item().getDefaultMaxStackSize();
+        int room = 0;
+        for (ItemStack st : player.getInventory().getNonEquipmentItems()) {
+            if (st.isEmpty()) {
+                room += max;
+            } else if (st.is(c.good.item()) && SlayerItems.getCustomItemId(st) == null) {
+                room += Math.max(0, max - st.getCount());
+            }
+            if (room >= amount) return true;
+        }
+        return room >= amount;
     }
 
     public static void clear(UUID uuid) {
