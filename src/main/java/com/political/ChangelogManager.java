@@ -332,6 +332,13 @@ public final class ChangelogManager {
                         + "since one person with no workstation grows no food. All three are fixed, and a new "
                         + "progress screen lists every requirement for the next tier and marks the one blocking "
                         + "you, because none of it was visible before."),
+                e("Titles", "vx_titles",
+                        "Every other reward is a thing you carry. A title is the one that shows without anybody "
+                        + "asking, which makes it the right home for the milestones that are otherwise invisible: "
+                        + "nobody can see that you maxed a collection or that a Nightmare is hunting you. Each "
+                        + "title checks its own requirement live, so none can be held after the thing that "
+                        + "granted it is gone, and the screen lists the unearned ones too because those are the "
+                        + "half that tells you what is worth doing."),
                 e("The Requisition Board", "vx_commissions",
                         "Ten thousand eight hundred and ninety nine postings, generated from a goods table "
                         + "rather than written by hand, which is the only way a set that size stays consistent. "

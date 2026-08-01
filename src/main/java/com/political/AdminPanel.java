@@ -696,6 +696,11 @@ public final class AdminPanel {
                     }
                 }, "What keys each gear line"));
 
+        gui.setSlot(29, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
+                () -> TitleGui.open(player),
+                Title.values().length + " titles",
+                "Earned from every other system"));
+
         gui.setSlot(34, GuiKit.tile(Items.PAPER, "Requisition board", ChatFormatting.GOLD,
                 () -> CommissionGui.open(player),
                 Commission.total() + " postings exist",
