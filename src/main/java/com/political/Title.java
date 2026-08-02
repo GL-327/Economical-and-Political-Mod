@@ -87,7 +87,55 @@ public enum Title {
             "Belong to a utopia or better.", p -> {
         Settlement s = SettlementManager.getRegisteredSettlement(p.getUUID().toString());
         return s != null && s.tierEnum().isAtLeast(SettlementTier.UTOPIA);
-    });
+    }),
+
+    // ── The older systems ─────────────────────────────────────────────────
+    // Everything below reads a system that predates Version X. Bounties, mastery, the sorcerer
+    // path and the rest were all built before titles existed and had no way to show for anything,
+    // which made them feel like a previous game bolted on. A title costs them nothing and puts
+    // them back on the same progression board as the newest content.
+
+    DEPUTISED("the Deputised", ChatFormatting.YELLOW, Kind.BOUNTY,
+            "Reach bounty level 5 in any type.", p -> {
+        for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+            if (SlayerData.getSlayerLevel(p.getUUID().toString(), t) >= 5) return true;
+        }
+        return false;
+    }),
+    MARSHAL("the Marshal", ChatFormatting.GOLD, Kind.BOUNTY,
+            "Reach bounty level 9 in any type.", p -> {
+        for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+            if (SlayerData.getSlayerLevel(p.getUUID().toString(), t) >= 9) return true;
+        }
+        return false;
+    }),
+    MOST_WANTED("Most Wanted", ChatFormatting.DARK_RED, Kind.BOUNTY,
+            "Reach bounty level 5 in every type.", p -> {
+        for (SlayerManager.SlayerType t : SlayerManager.SlayerType.values()) {
+            if (SlayerData.getSlayerLevel(p.getUUID().toString(), t) < 5) return false;
+        }
+        return true;
+    }),
+
+    APPRENTICE("the Apprentice", ChatFormatting.AQUA, Kind.MASTERY,
+            "Reach 25 total mastery levels.",
+            p -> MasteryManager.getTotalLevel(p.getUUID().toString()) >= 25),
+    JOURNEYMAN("the Journeyman", ChatFormatting.AQUA, Kind.MASTERY,
+            "Reach 100 total mastery levels.",
+            p -> MasteryManager.getTotalLevel(p.getUUID().toString()) >= 100),
+    MASTER_OF_ALL("Master of All", ChatFormatting.GOLD, Kind.MASTERY,
+            "Reach 300 total mastery levels.",
+            p -> MasteryManager.getTotalLevel(p.getUUID().toString()) >= 300),
+
+    ENROLLED("the Enrolled", ChatFormatting.DARK_PURPLE, Kind.SORCERY,
+            "Enrol on the sorcerer path.",
+            p -> SorcererManager.isEnrolled(p.getUUID().toString())),
+    CURSE_TOUCHED("the Curse Touched", ChatFormatting.DARK_PURPLE, Kind.SORCERY,
+            "Bank 50,000 cursed energy.",
+            p -> CursedEnergyManager.getEnergy(p) >= 50_000L),
+    SPECIAL_GRADE("Special Grade", ChatFormatting.LIGHT_PURPLE, Kind.SORCERY,
+            "Bank 1,000,000 cursed energy.",
+            p -> CursedEnergyManager.getEnergy(p) >= 1_000_000L);
 
     /** Where a title comes from, used to group the menu. */
     public enum Kind {
@@ -97,7 +145,10 @@ public enum Title {
         NEMESIS("Grudges", ChatFormatting.DARK_RED),
         WEALTH("Wealth", ChatFormatting.YELLOW),
         INDUSTRY("Industry", ChatFormatting.AQUA),
-        CIVIC("Standing", ChatFormatting.LIGHT_PURPLE);
+        CIVIC("Standing", ChatFormatting.LIGHT_PURPLE),
+        BOUNTY("Bounties", ChatFormatting.YELLOW),
+        MASTERY("Mastery", ChatFormatting.AQUA),
+        SORCERY("Sorcery", ChatFormatting.DARK_PURPLE);
 
         public final String label;
         public final ChatFormatting colour;
