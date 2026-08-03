@@ -80,6 +80,14 @@ public abstract class BountyDamageMixin {
             modifiedAmount = com.political.WarrantArmour.onHurt(player, modifiedAmount);
             // Custom enchantments worn as armour, before defence turns damage into a division.
             modifiedAmount = com.political.CustomEnchantEffects.onHurt(player, source, modifiedAmount);
+            // The dragon hits harder, and harder again once it is enraged.
+            if (source.getEntity() instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon drag) {
+                modifiedAmount *= com.political.DragonFightManager.outgoingScale(drag);
+            } else if (source.getDirectEntity() instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragonPart part
+                    && part.parentMob != null) {
+                // A hitbox part carries the damage, so the scale has to come off its parent.
+                modifiedAmount *= com.political.DragonFightManager.outgoingScale(part.parentMob);
+            }
             // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
             return com.political.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
         }
@@ -147,6 +155,11 @@ public abstract class BountyDamageMixin {
         modifiedAmount *= com.political.RegaliaHandler.damageMultiplier(player);
         // Custom enchantments on the held weapon.
         modifiedAmount = com.political.CustomEnchantEffects.onHit(player, self, modifiedAmount);
+        // Phase gating on the dragon, plus the contribution ledger the payout reads.
+        if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon dragonSelf) {
+            modifiedAmount *= com.political.DragonFightManager.incomingScale(dragonSelf);
+            com.political.DragonFightManager.onDragonHurt(dragonSelf, player, modifiedAmount);
+        }
         // The five meter lines share one handler, keyed off the item id prefix.
         com.political.MeterLineHandler.onHit(player, self, modifiedAmount);
 
@@ -188,6 +201,10 @@ public abstract class BountyDamageMixin {
         com.political.CollectionManager.onKill(player, self);
         com.political.RareDropManager.onKill(player, self);
         com.political.CustomEnchantEffects.onKill(player, self);
+        if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon deadDragon
+                && self.level() instanceof net.minecraft.server.level.ServerLevel endLevel) {
+            com.political.DragonFightManager.onDragonDeath(deadDragon, endLevel);
+        }
         com.political.NemesisManager.onNemesisDeathEffects(self);
         com.political.NemesisManager.onNemesisKilled(player, self);
         com.political.ContractManager.onKill(player);

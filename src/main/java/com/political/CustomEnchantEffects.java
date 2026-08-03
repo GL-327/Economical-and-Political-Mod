@@ -44,7 +44,6 @@ public final class CustomEnchantEffects {
     private static final Map<UUID, Integer> CHAIN_STACKS = new HashMap<>();
     private static final Map<UUID, Long> CHAIN_UNTIL = new HashMap<>();
     private static final Map<UUID, Long> COUNTER_UNTIL = new HashMap<>();
-    private static final Map<UUID, Long> LAST_REGROWTH = new HashMap<>();
 
     public static void forget(ServerPlayer player) {
         UUID id = player.getUUID();
@@ -56,7 +55,6 @@ public final class CustomEnchantEffects {
         CHAIN_STACKS.remove(id);
         CHAIN_UNTIL.remove(id);
         COUNTER_UNTIL.remove(id);
-        LAST_REGROWTH.remove(id);
     }
 
     private static long now() {
@@ -196,6 +194,38 @@ public final class CustomEnchantEffects {
         return dmg;
     }
 
+
+    /**
+     * Every enchantment across worn armour, summed, in a single pass.
+     *
+     * <p>The obvious way to write the incoming damage hook is a {@code wornTotal} call per
+     * enchantment, which is what it was. That meant ten lookups, each walking four armour pieces and
+     * running a full lore parse on every line of each, so roughly forty tooltip parses for every hit
+     * anything landed on any player. This reads the four pieces once.</p>
+     */
+    private static Map<CustomEnchant, Integer> wornAll(ServerPlayer player) {
+        Map<CustomEnchant, Integer> total = new java.util.EnumMap<>(CustomEnchant.class);
+        for (net.minecraft.world.entity.EquipmentSlot slot : WORN) {
+            for (Map.Entry<CustomEnchant, Integer> e
+                    : CustomEnchantManager.read(player.getItemBySlot(slot)).entrySet()) {
+                total.merge(e.getKey(), e.getValue(), Integer::sum);
+            }
+        }
+        return total;
+    }
+
+    private static final net.minecraft.world.entity.EquipmentSlot[] WORN = {
+            net.minecraft.world.entity.EquipmentSlot.HEAD,
+            net.minecraft.world.entity.EquipmentSlot.CHEST,
+            net.minecraft.world.entity.EquipmentSlot.LEGS,
+            net.minecraft.world.entity.EquipmentSlot.FEET
+    };
+
+    private static int lv(Map<CustomEnchant, Integer> worn, CustomEnchant e) {
+        Integer v = worn.get(e);
+        return v == null ? 0 : v;
+    }
+
     // ── Incoming ──────────────────────────────────────────────────────────
 
     /** Everything worn armour does when the player is hit. Returns the adjusted damage. */
@@ -203,50 +233,52 @@ public final class CustomEnchantEffects {
         float dmg = damage;
         UUID id = player.getUUID();
         ServerLevel level = player.level() instanceof ServerLevel sl ? sl : null;
+        Map<CustomEnchant, Integer> worn = wornAll(player);
+        if (worn.isEmpty()) return dmg;
 
-        int bulwark = CustomEnchantManager.wornTotal(player, CustomEnchant.BULWARK);
+        int bulwark = lv(worn, CustomEnchant.BULWARK);
         if (bulwark > 0) dmg = Math.max(dmg * 0.2f, dmg - bulwark * 0.4f);
 
-        int stoicism = CustomEnchantManager.wornTotal(player, CustomEnchant.STOICISM);
+        int stoicism = lv(worn, CustomEnchant.STOICISM);
         if (stoicism > 0) {
             float missing = 1f - (player.getHealth() / Math.max(1f, player.getMaxHealth()));
             dmg *= 1f - Math.min(missing * 0.03f * stoicism, 0.40f);
         }
 
-        int ironclad = CustomEnchantManager.wornTotal(player, CustomEnchant.IRONCLAD);
+        int ironclad = lv(worn, CustomEnchant.IRONCLAD);
         if (ironclad > 0 && source.is(net.minecraft.tags.DamageTypeTags.IS_PROJECTILE)) {
             dmg *= 1f - Math.min(0.03f * ironclad, 0.45f);
         }
 
-        int firewalk = CustomEnchantManager.wornTotal(player, CustomEnchant.FIREWALK);
+        int firewalk = lv(worn, CustomEnchant.FIREWALK);
         if (firewalk > 0 && source.is(net.minecraft.tags.DamageTypeTags.IS_FIRE)) {
             dmg *= 1f - Math.min(0.20f * firewalk, 0.90f);
         }
 
-        int warding = CustomEnchantManager.wornTotal(player, CustomEnchant.WARDING);
+        int warding = lv(worn, CustomEnchant.WARDING);
         if (warding > 0 && (source.is(net.minecraft.tags.DamageTypeTags.WITCH_RESISTANT_TO)
                 || source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR))) {
             dmg *= 1f - Math.min(0.04f * warding, 0.50f);
         }
 
-        int surefooted = CustomEnchantManager.wornTotal(player, CustomEnchant.SUREFOOTED);
+        int surefooted = lv(worn, CustomEnchant.SUREFOOTED);
         if (surefooted > 0 && source.is(net.minecraft.tags.DamageTypeTags.IS_FALL)) {
             dmg *= 1f - Math.min(0.34f * surefooted, 1.0f);
         }
 
         // Thornmail returns a share to whoever swung, melee only.
-        int thorn = CustomEnchantManager.wornTotal(player, CustomEnchant.THORNMAIL);
+        int thorn = lv(worn, CustomEnchant.THORNMAIL);
         if (thorn > 0 && level != null && source.getEntity() instanceof LivingEntity attacker
                 && !source.is(net.minecraft.tags.DamageTypeTags.IS_PROJECTILE)) {
             attacker.hurtServer(level, player.damageSources().thorns(player), dmg * 0.05f * thorn);
         }
 
         // Counterpoise banks a short window of extra damage.
-        int counter = CustomEnchantManager.wornTotal(player, CustomEnchant.COUNTERPOISE);
+        int counter = lv(worn, CustomEnchant.COUNTERPOISE);
         if (counter > 0) COUNTER_UNTIL.put(id, now() + 100);
 
         // Lifeline, on a long cooldown, heals when the hit takes the player low.
-        int lifeline = CustomEnchantManager.wornTotal(player, CustomEnchant.LIFELINE);
+        int lifeline = lv(worn, CustomEnchant.LIFELINE);
         if (lifeline > 0 && player.getHealth() - dmg <= player.getMaxHealth() / 3f) {
             long ready = LIFELINE_READY.getOrDefault(id, 0L);
             if (now() >= ready) {
@@ -261,7 +293,7 @@ public final class CustomEnchantEffects {
         }
 
         // Second Wind turns one killing blow a fight into a sliver of health.
-        int wind = CustomEnchantManager.wornTotal(player, CustomEnchant.SECOND_WIND);
+        int wind = lv(worn, CustomEnchant.SECOND_WIND);
         if (wind > 0 && player.getHealth() - dmg <= 0f) {
             long ready = SECOND_WIND_READY.getOrDefault(id, 0L);
             if (now() >= ready) {
@@ -342,18 +374,21 @@ public final class CustomEnchantEffects {
         if (PoliticalServer.server.getTickCount() % 40 != 0) return;
 
         for (ServerPlayer player : PoliticalServer.server.getPlayerList().getPlayers()) {
-            int regrowth = CustomEnchantManager.wornTotal(player, CustomEnchant.REGROWTH);
+            Map<CustomEnchant, Integer> worn = wornAll(player);
+            if (worn.isEmpty()) continue;
+
+            int regrowth = lv(worn, CustomEnchant.REGROWTH);
             if (regrowth > 0 && player.getHealth() < player.getMaxHealth()
                     && player.getLastHurtByMobTimestamp() + 100 < player.tickCount) {
                 player.heal(0.3f * regrowth);
             }
 
-            int night = CustomEnchantManager.wornTotal(player, CustomEnchant.NIGHT_SIGHT);
+            int night = lv(worn, CustomEnchant.NIGHT_SIGHT);
             if (night > 0) {
                 player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false));
             }
 
-            int deep = CustomEnchantManager.wornTotal(player, CustomEnchant.DEEP_BREATH);
+            int deep = lv(worn, CustomEnchant.DEEP_BREATH);
             if (deep > 0) {
                 player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0, true, false));
                 if (deep >= 2) {
@@ -361,12 +396,12 @@ public final class CustomEnchantEffects {
                 }
             }
 
-            int fire = CustomEnchantManager.wornTotal(player, CustomEnchant.FIREWALK);
+            int fire = lv(worn, CustomEnchant.FIREWALK);
             if (fire >= 3) {
                 player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0, true, false));
             }
 
-            int resil = CustomEnchantManager.wornTotal(player, CustomEnchant.RESILIENCE);
+            int resil = lv(worn, CustomEnchant.RESILIENCE);
             if (resil >= 4 && player.getRandom().nextFloat() < 0.25f) {
                 // Shave one harmful effect rather than clearing the lot, so this helps without
                 // making status effects stop mattering entirely.
@@ -378,7 +413,7 @@ public final class CustomEnchantEffects {
                 }
             }
 
-            int hands = CustomEnchantManager.wornTotal(player, CustomEnchant.QUICK_HANDS);
+            int hands = lv(worn, CustomEnchant.QUICK_HANDS);
             if (hands > 0 && player.level() instanceof ServerLevel level) {
                 double r = 2.0 + hands;
                 BlockPos p = player.blockPosition();
@@ -402,19 +437,21 @@ public final class CustomEnchantEffects {
      * free.</p>
      */
     public static void contributeStats(ServerPlayer player, PlayerStatsManager.StatSheet sheet) {
-        int vitality = CustomEnchantManager.wornTotal(player, CustomEnchant.VITALITY);
+        Map<CustomEnchant, Integer> worn = wornAll(player);
+
+        int vitality = lv(worn, CustomEnchant.VITALITY);
         if (vitality > 0) sheet.addExternal(PlayerStatsManager.Stat.HEALTH, vitality * 15.0);
 
-        int fleet = CustomEnchantManager.wornTotal(player, CustomEnchant.FLEETFOOT);
+        int fleet = lv(worn, CustomEnchant.FLEETFOOT);
         if (fleet > 0) sheet.addExternal(PlayerStatsManager.Stat.SPEED, fleet * 2.0);
 
-        int scholar = CustomEnchantManager.wornTotal(player, CustomEnchant.SCHOLAR);
+        int scholar = lv(worn, CustomEnchant.SCHOLAR);
         if (scholar > 0) sheet.addExternal(PlayerStatsManager.Stat.INTELLIGENCE, scholar * 15.0);
 
-        int prospector = CustomEnchantManager.wornTotal(player, CustomEnchant.PROSPECTOR);
+        int prospector = lv(worn, CustomEnchant.PROSPECTOR);
         if (prospector > 0) sheet.addExternal(PlayerStatsManager.Stat.MAGIC_FIND, prospector * 2.0);
 
-        int skin = CustomEnchantManager.wornTotal(player, CustomEnchant.SECOND_SKIN);
+        int skin = lv(worn, CustomEnchant.SECOND_SKIN);
         if (skin > 0) sheet.addExternal(PlayerStatsManager.Stat.DEFENSE, skin * 8.0);
 
         // Weapon side. Held only, since a crit bonus on a sword in the backpack would be nonsense.
@@ -428,7 +465,7 @@ public final class CustomEnchantEffects {
         int trophy = CustomEnchantManager.levelOf(weapon, CustomEnchant.TROPHY_HUNTER);
         if (trophy > 0) sheet.addExternal(PlayerStatsManager.Stat.MAGIC_FIND, trophy * 3.0);
 
-        int unshake = CustomEnchantManager.wornTotal(player, CustomEnchant.UNSHAKEABLE);
+        int unshake = lv(worn, CustomEnchant.UNSHAKEABLE);
         if (unshake > 0) sheet.addExternal(PlayerStatsManager.Stat.DEFENSE, unshake * 3.0);
     }
 

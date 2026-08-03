@@ -271,11 +271,18 @@ public final class ItemOverrideManager {
     public static int bulkEdit(String pattern, java.util.function.Consumer<Override> edit) {
         if (pattern == null || pattern.isBlank()) return 0;
         int n = 0;
-        for (String id : matching(pattern)) {
-            Override o = getOrCreate(id);
-            edit.accept(o);
-            commit(o);
-            n++;
+        beginBatch();
+        try {
+            for (String id : matching(pattern)) {
+                Override o = getOrCreate(id);
+                edit.accept(o);
+                commit(o);
+                n++;
+            }
+        } finally {
+            // In a finally block so a throw part way through still leaves the file written and
+            // the flag cleared, rather than silently disabling every save from then on.
+            endBatch();
         }
         return n;
     }
@@ -626,7 +633,27 @@ public final class ItemOverrideManager {
         }
     }
 
+    /**
+     * Set while a batch is running, so a bulk change writes the file once rather than once per item.
+     *
+     * <p>Without this, editing a 630 piece gear line serialised and wrote the whole override file
+     * 630 times. The edit was correct and the server stopped responding while it happened.</p>
+     */
+    private static boolean batching = false;
+
+    /** Starts a batch. Every save is deferred until the matching endBatch. */
+    public static void beginBatch() {
+        batching = true;
+    }
+
+    /** Ends a batch and writes once, whatever happened in between. */
+    public static void endBatch() {
+        batching = false;
+        save();
+    }
+
     public static void save() {
+        if (batching) return;
         if (!dirty) return;
         try {
             Files.createDirectories(CONFIG_DIR);

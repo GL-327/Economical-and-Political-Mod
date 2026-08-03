@@ -1292,11 +1292,16 @@ public final class ItemEditorGui {
                             "They all go back to how they were built. Nothing is deleted.",
                             () -> {
                                 int done = 0;
-                                for (String id : ItemOverrideManager.matching(pattern)) {
-                                    if (ItemOverrideManager.has(id)) {
-                                        ItemOverrideManager.clear(id);
-                                        done++;
+                                ItemOverrideManager.beginBatch();
+                                try {
+                                    for (String id : ItemOverrideManager.matching(pattern)) {
+                                        if (ItemOverrideManager.has(id)) {
+                                            ItemOverrideManager.clear(id);
+                                            done++;
+                                        }
                                     }
+                                } finally {
+                                    ItemOverrideManager.endBatch();
                                 }
                                 say(player, "Cleared " + done + " items.");
                                 openBulk(player, pattern);

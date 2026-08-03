@@ -191,6 +191,39 @@ public final class RareDropManager {
     }
 
     /** Every drop item, for the catalogue screens. */
+    /**
+     * One roll on the rare table for beating a boss, weighted by the player's Magic Find.
+     *
+     * <p>Separate from the kill hook because a boss reward is not the same question as "did this
+     * zombie drop something". Here the roll is guaranteed to produce an item; what Magic Find moves
+     * is how far up the table it lands.</p>
+     */
+    public static ItemStack rollBossReward(ServerPlayer player) {
+        double mf = magicFindOf(player);
+        double roll = player.getRandom().nextDouble() * 100.0 * (1.0 + mf / 200.0);
+
+        RareDrop.Tier want;
+        if (roll > 99.5) want = RareDrop.Tier.PRIMAL;
+        else if (roll > 97) want = RareDrop.Tier.MYTHIC;
+        else if (roll > 90) want = RareDrop.Tier.INSANE;
+        else if (roll > 72) want = RareDrop.Tier.CRAZY;
+        else if (roll > 40) want = RareDrop.Tier.RARE;
+        else want = RareDrop.Tier.UNCOMMON;
+
+        List<RareDrop> pool = new ArrayList<>();
+        for (RareDrop d : RareDrop.values()) {
+            if (d.tier == want) pool.add(d);
+        }
+        // A tier with nothing in it should hand back something rather than nothing at all.
+        if (pool.isEmpty()) {
+            for (RareDrop d : RareDrop.values()) pool.add(d);
+        }
+        if (pool.isEmpty()) return ItemStack.EMPTY;
+
+        RareDrop picked = pool.get(player.getRandom().nextInt(pool.size()));
+        return create(picked);
+    }
+
     public static List<ItemStack> allStacks() {
         List<ItemStack> out = new ArrayList<>();
         for (RareDrop d : RareDrop.values()) out.add(create(d));

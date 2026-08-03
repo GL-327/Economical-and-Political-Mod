@@ -42,10 +42,6 @@ public final class MeterLineHandler {
         LAST_SPEND.remove(player.getUUID());
     }
 
-    public static int chargeOf(ServerPlayer player) {
-        return CHARGE.getOrDefault(player.getUUID(), 0);
-    }
-
     /**
      * Which of the five lines this stack belongs to, or null.
      *

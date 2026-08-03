@@ -64,17 +64,24 @@ public final class BazaarProduct {
         BY_KEY.clear();
         BY_CATEGORY.clear();
 
+        // Tracked by item rather than by key. A collection keys off its enum name while the shop
+        // keys off the registry path, so MELON and MELON_SLICE would have produced two independent
+        // order books for one physical item. Twenty seven items were in that position, and two
+        // books for the same thing is riskless arbitrage that never closes.
+        java.util.Set<Item> claimed = new java.util.HashSet<>();
+
         for (CollectionType c : CollectionType.values()) {
             BazaarProduct p = new BazaarProduct(c.key(), c.display, c.material, c.colour,
                     c.field.label, BazaarManager.baseValue(c), c);
             BY_KEY.put(p.key, p);
+            claimed.add(c.material);
             BY_CATEGORY.computeIfAbsent(p.category, k -> new ArrayList<>()).add(p);
         }
 
         for (Map.Entry<String, List<Item>> e : ShopManager.CATEGORIES.entrySet()) {
             for (Item item : e.getValue()) {
                 String key = keyOf(item);
-                if (BY_KEY.containsKey(key)) continue;
+                if (BY_KEY.containsKey(key) || !claimed.add(item)) continue;
 
                 // The old shop price is the anchor, so nothing suddenly changes value the day the
                 // shop closes. A player who knew what stone was worth still knows.
