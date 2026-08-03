@@ -61,6 +61,11 @@ public final class GearLine {
         if (f.damage() > 0) lore.add(Component.literal("§7⚔ Damage: §c+" + f.damage()));
         if (f.defense() > 0) lore.add(Component.literal("§7❈ Defense: §a+" + f.defense()));
         if (f.health() > 0) lore.add(Component.literal("§7❤ Health: §c+" + f.health()));
+        // Magic Find is carried by the charms and the headgear across every line. Putting it on the
+        // shared builder rather than on one new set means the six lines that already existed all
+        // gained it at once, which is the point: a stat nothing can roll is a stat nobody chases.
+        int mf = magicFindFor(f);
+        if (mf > 0) lore.add(Component.literal("§7✯ Magic Find: §b+" + mf));
         for (String line : m.statLines()) lore.add(Component.literal(line));
 
         lore.add(Component.literal(""));
@@ -82,6 +87,21 @@ public final class GearLine {
      */
     public static String formKey(Form f) {
         return f.display().toLowerCase(Locale.ROOT).replace(" ", "");
+    }
+
+    /**
+     * How much Magic Find a cut carries.
+     *
+     * <p>Charms and headgear only. Spreading it across every slot would make it free, and putting
+     * it on weapons would mean the stat competed with damage on the same item, which is the one
+     * place a player should not have to choose.</p>
+     */
+    public static int magicFindFor(Form f) {
+        return switch (f.kind()) {
+            case CHARM -> 15;
+            case HEAD -> 10;
+            default -> 0;
+        };
     }
 
     public static String idFor(String idPrefix, Motif m, Form f) {

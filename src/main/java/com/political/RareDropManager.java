@@ -97,20 +97,43 @@ public final class RareDropManager {
      * <p>Kept small on purpose. A drop that can be pushed from one in a thousand to one in fifty
      * stops being a rare drop and becomes a grind, so this tops out a little under double.</p>
      */
-    private static double luckOf(ServerPlayer player) {
-        double luck = 1.0;
-        try {
-            // Collections are the long game, so they are the main source.
-            luck += Math.min(0.5, CollectionManager.totalTiers(player) / 1000.0);
-            // A maxed collection is worth a real nudge.
-            luck += Math.min(0.25, CollectionManager.maxedCount(player) * 0.025);
-            // Wearing the warrant says you have done the work.
-            if (WarrantArmour.fullSet(player)) luck += 0.2;
-        } catch (Exception ignored) {
-            // Any system not ready simply contributes nothing.
-        }
-        return Math.min(1.95, luck);
+    public static double luckOf(ServerPlayer player) {
+        return 1.0 + magicFindOf(player) / 100.0;
     }
+
+    /**
+     * A player's total Magic Find.
+     *
+     * <p>Read from the stat sheet, which means it comes off item lore like any other stat and any
+     * piece of gear in the mod can carry it by writing one line into its tooltip. Progression adds
+     * a little on top so somebody with no magic find gear is not stuck at zero.</p>
+     */
+    public static double magicFindOf(ServerPlayer player) {
+        double mf = 0;
+        try {
+            mf += PlayerStatsManager.getStats(player).get(PlayerStatsManager.Stat.MAGIC_FIND);
+        } catch (Exception ignored) {
+            // Stats not ready simply means no gear contribution yet.
+        }
+        try {
+            // The long game contributes without any gear at all.
+            mf += Math.min(30, CollectionManager.totalTiers(player) / 20.0);
+            mf += Math.min(20, CollectionManager.maxedCount(player) * 2.0);
+            if (WarrantArmour.fullSet(player)) mf += 25;
+        } catch (Exception ignored) {
+            // Same guard.
+        }
+        return Math.max(0, Math.min(MAX_MAGIC_FIND, mf));
+    }
+
+    /**
+     * The ceiling.
+     *
+     * <p>Four hundred means a one in a thousand drop becomes one in two hundred at the very top of
+     * the game, which is a real reward for building for it and still leaves the rarest things rare.
+     * Uncapped magic find would turn every drop table into a shopping list.</p>
+     */
+    public static final double MAX_MAGIC_FIND = 400.0;
 
     private static void award(ServerPlayer player, RareDrop d) {
         ItemStack stack = create(d);

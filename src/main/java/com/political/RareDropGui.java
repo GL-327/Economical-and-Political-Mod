@@ -35,7 +35,8 @@ public final class RareDropGui {
         GuiKit.header(gui, Items.NETHER_STAR, "Rare Drops", ChatFormatting.GOLD,
                 RareDrop.values().length + " things that only fall off something",
                 "None of these can be crafted",
-                "Your luck: +" + String.format("%.0f", luck) + "%");
+                "Magic Find: " + String.format("%.0f", luck) + " of "
+                        + (int) RareDropManager.MAX_MAGIC_FIND);
 
         List<GuiElement> entries = new ArrayList<>();
         for (RareDrop d : RareDrop.values()) {
@@ -65,27 +66,19 @@ public final class RareDropGui {
                 p -> open(player, p));
 
         gui.setSlot(SIZE - 5, GuiKit.info(Items.EXPERIENCE_BOTTLE, "Luck", ChatFormatting.AQUA,
-                "+" + String.format("%.0f", luck) + "% to every chance here",
+                String.format("%.0f", luck) + " Magic Find, applied to every chance here",
                 "",
-                "Collection tiers, maxed collections and",
-                "wearing the full warrant all add a little.",
+                "Comes off gear lore like any other stat,",
+                "plus collections and the full warrant.",
                 "",
-                "It tops out under double on purpose. A drop",
-                "you can grind to one in fifty is not rare."));
+                "Capped at " + (int) RareDropManager.MAX_MAGIC_FIND + ". At the cap a one in a",
+                "thousand drop becomes one in two hundred."));
 
         GuiKit.footer(gui, SIZE, player, null);
         gui.open();
     }
 
     private static double luckPercent(ServerPlayer player) {
-        double luck = 1.0;
-        try {
-            luck += Math.min(0.5, CollectionManager.totalTiers(player) / 1000.0);
-            luck += Math.min(0.25, CollectionManager.maxedCount(player) * 0.025);
-            if (WarrantArmour.fullSet(player)) luck += 0.2;
-        } catch (Exception ignored) {
-            // Same guard as the roll itself.
-        }
-        return (Math.min(1.95, luck) - 1.0) * 100;
+        return RareDropManager.magicFindOf(player);
     }
 }

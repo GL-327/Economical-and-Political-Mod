@@ -67,7 +67,15 @@ public final class PlayerStatsManager {
         HEALTH("Health", "❤", ChatFormatting.RED, 0, false),
         SPEED("Speed", "✦", ChatFormatting.WHITE, 100, false),
         INTELLIGENCE("Intelligence", "✎", ChatFormatting.AQUA, 100, false),
-        FEROCITY("Ferocity", "⫽", ChatFormatting.RED, 0, false);
+        FEROCITY("Ferocity", "⫽", ChatFormatting.RED, 0, false),
+        /**
+         * Magic Find raises the chance of a rare drop.
+         *
+         * <p>It lives in the stat engine rather than in the drop code so it is parsed off item lore
+         * like every other stat, shows in the stat sheet without special casing, and can be put on
+         * any piece of gear old or new by writing one line into its tooltip.</p>
+         */
+        MAGIC_FIND("Magic Find", "✯", ChatFormatting.AQUA, 0, false);
 
         public final String displayName;
         public final String symbol;

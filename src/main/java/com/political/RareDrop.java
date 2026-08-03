@@ -49,7 +49,7 @@ public enum RareDrop {
             EntityType.WITHER_SKELETON, 0.003, Tier.CRAZY,
             "It ruled a corridor, briefly.", "One of the rarer things in the fortress."),
     SOULBOUND_ASH("Soulbound Ash", ChatFormatting.DARK_PURPLE, Items.BLACK_DYE,
-            EntityType.WITHER_SKELETON, 0.0012, Tier.INSANE,
+            EntityType.WITHER_SKELETON, 0.0012, Tier.PRIMAL,
             "It refuses to scatter.", "The board treats this as a Great Work in a bottle."),
 
     // ── Arthropods ────────────────────────────────────────────────────────
@@ -73,7 +73,7 @@ public enum RareDrop {
             "It did not go off. It has not stopped intending to.",
             "Miners pay a premium and handle it carefully."),
     CREEPER_HEARTSTONE("Creeper Heartstone", ChatFormatting.GREEN, Items.EMERALD,
-            EntityType.CREEPER, 0.0015, Tier.INSANE,
+            EntityType.CREEPER, 0.0015, Tier.MYTHIC,
             "The quiet centre of a very loud animal.", "Almost nobody has seen one."),
     PRIME_SLIME("Prime Slime", ChatFormatting.GREEN, Items.SLIME_BLOCK,
             EntityType.SLIME, 0.01, Tier.RARE,
@@ -142,13 +142,13 @@ public enum RareDrop {
             EntityType.VINDICATOR, 0.008, Tier.CRAZY,
             "Kept sharper than anything in a raid needs.", "Smiths recognise the work."),
     WARDEN_ECHO("Warden's Echo", ChatFormatting.DARK_AQUA, Items.ECHO_SHARD,
-            EntityType.WARDEN, 0.35, Tier.INSANE,
+            EntityType.WARDEN, 0.35, Tier.MYTHIC,
             "It heard you. It is still hearing you.",
             "Almost nobody survives long enough to collect one."),
 
     // ── Animals, for the people who farm them ─────────────────────────────
     GOLDEN_FLEECE("Golden Fleece", ChatFormatting.GOLD, Items.GOLD_BLOCK,
-            EntityType.SHEEP, 0.001, Tier.INSANE,
+            EntityType.SHEEP, 0.001, Tier.PRIMAL,
             "One sheep in a thousand, and nobody knows which.",
             "A story people will not believe."),
     PRIZE_HIDE("Prize Hide", ChatFormatting.GOLD, Items.LEATHER,
@@ -175,26 +175,39 @@ public enum RareDrop {
             "Regret, from something that regrows everything else.",
             "Alchemists consider it close to priceless."),
     ALLAY_CHIME("Allay Chime", ChatFormatting.AQUA, Items.AMETHYST_SHARD,
-            EntityType.ALLAY, 0.02, Tier.INSANE,
+            EntityType.ALLAY, 0.02, Tier.MYTHIC,
             "It hums the note it was listening for.",
             "Nobody has worked out how to make another.");
 
     /** How loudly a find is announced. */
     public enum Tier {
-        RARE("RARE DROP!", ChatFormatting.YELLOW, Reach.FINDER),
-        CRAZY("CRAZY RARE DROP!", ChatFormatting.GOLD, Reach.NEARBY),
-        INSANE("INSANE DROP!", ChatFormatting.LIGHT_PURPLE, Reach.SERVER);
+        UNCOMMON("UNCOMMON DROP!", ChatFormatting.GREEN, Reach.FINDER, false),
+        RARE("RARE DROP!", ChatFormatting.YELLOW, Reach.FINDER, false),
+        CRAZY("CRAZY RARE DROP!", ChatFormatting.GOLD, Reach.NEARBY, false),
+        INSANE("INSANE DROP!", ChatFormatting.LIGHT_PURPLE, Reach.SERVER, false),
+        /**
+         * The two tiers above insane are the ones a market cannot price.
+         *
+         * <p>Anything at mythic or primal is rare enough that a bazaar order book would never have
+         * a counterparty, so these are the drops the collector NPCs exist for. Selling one is an
+         * event in itself rather than a transaction.</p>
+         */
+        MYTHIC("MYTHIC DROP!", ChatFormatting.RED, Reach.SERVER, true),
+        PRIMAL("PRIMAL DROP!", ChatFormatting.DARK_RED, Reach.SERVER, true);
 
         public enum Reach { FINDER, NEARBY, SERVER }
 
         public final String shout;
         public final ChatFormatting colour;
         public final Reach reach;
+        /** Whether a collector will buy this, since no order book ever will. */
+        public final boolean collectorOnly;
 
-        Tier(String shout, ChatFormatting colour, Reach reach) {
+        Tier(String shout, ChatFormatting colour, Reach reach, boolean collectorOnly) {
             this.shout = shout;
             this.colour = colour;
             this.reach = reach;
+            this.collectorOnly = collectorOnly;
         }
     }
 
