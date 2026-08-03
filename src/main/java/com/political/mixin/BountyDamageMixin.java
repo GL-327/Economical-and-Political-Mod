@@ -147,6 +147,8 @@ public abstract class BountyDamageMixin {
         modifiedAmount *= com.political.RegaliaHandler.damageMultiplier(player);
         // Custom enchantments on the held weapon.
         modifiedAmount = com.political.CustomEnchantEffects.onHit(player, self, modifiedAmount);
+        // The five meter lines share one handler, keyed off the item id prefix.
+        com.political.MeterLineHandler.onHit(player, self, modifiedAmount);
 
         // A nemesis reacts to being struck, which is where its defensive traits live.
         if (com.political.NemesisManager.isNemesis(self)) {

@@ -68,7 +68,27 @@ public enum LineCatalyst {
     SEAL_OF_OFFICE("vx_seal_of_office", "Seal of Office", ChatFormatting.GOLD, Items.HONEYCOMB,
             "Pressed once, and the argument was over.",
             "Keys the Regalia line.", Tier.T3,
-            new Item[]{Items.GOLD_BLOCK, Items.EMERALD_BLOCK, Items.WRITABLE_BOOK, Items.NETHERITE_INGOT});
+            new Item[]{Items.GOLD_BLOCK, Items.EMERALD_BLOCK, Items.WRITABLE_BOOK, Items.NETHERITE_INGOT}),
+
+    ABYSSAL_PEARL("vx_abyssal_pearl", "Abyssal Pearl", ChatFormatting.DARK_BLUE, Items.HEART_OF_THE_SEA,
+            "It was under enough water to have an opinion.",
+            "Keys the Tidecaller line.", Tier.T2,
+            new Item[]{Items.PRISMARINE_SHARD, Items.NAUTILUS_SHELL, Items.INK_SAC, Items.GOLD_INGOT}),
+
+    VERDANT_SEED("vx_verdant_seed", "Verdant Seed", ChatFormatting.GREEN, Items.WHEAT_SEEDS,
+            "It has been waiting for a better year.",
+            "Keys the Thornwood line.", Tier.T2,
+            new Item[]{Items.MOSS_BLOCK, Items.OAK_LOG, Items.HONEYCOMB, Items.AMETHYST_SHARD}),
+
+    GRAVE_SIGIL("vx_grave_sigil", "Grave Sigil", ChatFormatting.DARK_GRAY, Items.BONE_BLOCK,
+            "Cut into the lid rather than the stone.",
+            "Keys the Ashen Crown line.", Tier.T3,
+            new Item[]{Items.BONE_BLOCK, Items.SOUL_SAND, Items.GOLD_INGOT, Items.WITHER_SKELETON_SKULL}),
+
+    PRISM_CORE("vx_prism_core", "Prism Core", ChatFormatting.LIGHT_PURPLE, Items.AMETHYST_BLOCK,
+            "One light went in and it has not stopped since.",
+            "Keys the Prismatic line.", Tier.T3,
+            new Item[]{Items.AMETHYST_SHARD, Items.GLASS, Items.GLOWSTONE, Items.ECHO_SHARD});
 
     /** Which crafting core a recipe reaches for. */
     public enum Tier {

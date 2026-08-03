@@ -811,6 +811,11 @@ public final class AdminPanel {
                 RareDrop.values().length + " drop only items",
                 "Published odds, per mob"));
 
+        gui.setSlot(34, GuiKit.tile(Items.ANVIL, "Item editor", ChatFormatting.GOLD,
+                () -> ItemEditorGui.open(player),
+                ItemOverrideManager.count() + " items carry an edit",
+                "Edits reach every copy in the world"));
+
         gui.setSlot(35, GuiKit.tile(Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
                 () -> CustomEnchantGui.open(player),
                 CustomEnchant.values().length + " custom enchantments",

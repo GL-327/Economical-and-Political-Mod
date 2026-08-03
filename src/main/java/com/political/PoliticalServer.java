@@ -164,6 +164,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SpawnProtectionManager.onPlayerDisconnect(player.getUUID());
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
             CustomEnchantEffects.forget(player);
+            MeterLineHandler.forget(player);
             // Version X gear lines keep per player meters in memory, so drop them on the way out.
             StarboundHandler.clear(player.getUUID());
             BeastcraftHandler.clear(player.getUUID());
@@ -410,6 +411,11 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             RefinedMaterialItems.ensureRecipes();
             StarboundGear.ensureRecipes();
             BeastcraftGear.ensureRecipes();
+            TidecallerGear.ensureRecipes();
+            EmberforgeGear.ensureRecipes();
+            ThornwoodGear.ensureRecipes();
+            AshencrownGear.ensureRecipes();
+            PrismaticGear.ensureRecipes();
             ClockworkGear.ensureRecipes();
             GrimoireGear.ensureRecipes();
             TempestGear.ensureRecipes();
@@ -417,6 +423,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             RegaliaGear.ensureRecipes();
             CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            ItemOverrideManager.load();
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             NemesisManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CommissionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -474,6 +481,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TechniqueManager.save();
             CollectionManager.save();
             BazaarManager.save();
+            ItemOverrideManager.save();
             MinionManager.save();
             NemesisManager.save();
             CrateManager.save();
@@ -594,6 +602,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             IncursionManager.tick(s);
             SiegeManager.tick(s);
             CustomEnchantEffects.tick();
+            ItemOverrideManager.tick();
             PoliticalPartyManager.tick(s);
             PartyCrisisManager.tick(s);
             LavaFishingHandler.tick(s);
