@@ -811,6 +811,11 @@ public final class AdminPanel {
                 RareDrop.values().length + " drop only items",
                 "Published odds, per mob"));
 
+        gui.setSlot(35, GuiKit.tile(Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
+                () -> CustomEnchantGui.open(player),
+                CustomEnchant.values().length + " custom enchantments",
+                "Applies to the item in your hand"));
+
         gui.setSlot(29, GuiKit.tile(Items.ZOMBIE_SPAWN_EGG, "Slayer admin", ChatFormatting.RED,
                 () -> AdminGui.openSlayerAdminGui(player), "Levels, bosses and resets"));
 

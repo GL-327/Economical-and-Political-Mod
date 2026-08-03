@@ -13,6 +13,14 @@ public final class ChangelogCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Collections live here rather than in their own file because this class is already the
         // home for the small player facing browsers.
+        for (String alias : new String[]{"enchants", "enchanting", "customenchants"}) {
+            dispatcher.register(Commands.literal(alias)
+                    .executes(ctx -> {
+                        CustomEnchantGui.open(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    }));
+        }
+
         for (String alias : new String[]{"raredrops", "drops"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {

@@ -134,6 +134,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     if (AuctionMasterManager.isAuctionMaster(villager)) {
                         return AuctionMasterManager.handleInteraction(player, villager);
                     }
+                    // Check Bazaar Broker
+                    if (CollectorManager.isBroker(villager)) {
+                        return CollectorManager.handleBrokerInteraction(player, villager);
+                    }
                     // Check Collector, the only buyer for the top of the drop table
                     if (CollectorManager.isCollector(villager)) {
                         return CollectorManager.handleInteraction(player, villager);
@@ -159,6 +163,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ScoreboardManager.onPlayerDisconnect(player);
             SpawnProtectionManager.onPlayerDisconnect(player.getUUID());
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
+            CustomEnchantEffects.forget(player);
             // Version X gear lines keep per player meters in memory, so drop them on the way out.
             StarboundHandler.clear(player.getUUID());
             BeastcraftHandler.clear(player.getUUID());
@@ -588,6 +593,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             NemesisManager.tick(s);
             IncursionManager.tick(s);
             SiegeManager.tick(s);
+            CustomEnchantEffects.tick();
             PoliticalPartyManager.tick(s);
             PartyCrisisManager.tick(s);
             LavaFishingHandler.tick(s);

@@ -1299,6 +1299,36 @@ public class CommandRegistry {
     }
 
     private static void registerPlaceAuctionMaster(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("placebazaar")
+                .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    CollectorManager.spawnBroker(context.getSource().getLevel(),
+                            player.getX(), player.getY(), player.getZ(), player.getYRot());
+                    context.getSource().sendSuccess(() -> Component.literal(
+                            "✓ Spawned a Bazaar Broker.").withStyle(ChatFormatting.GOLD), true);
+                    return 1;
+                })
+                .then(Commands.literal("remove")
+                        .executes(context -> {
+                            boolean gone = CollectorManager.removeNearestBroker(
+                                    context.getSource().getLevel(),
+                                    context.getSource().getPlayerOrException(), 6.0);
+                            context.getSource().sendSuccess(() -> Component.literal(gone
+                                    ? "✓ Removed the nearest Bazaar Broker."
+                                    : "✖ No Broker within reach.").withStyle(
+                                            gone ? ChatFormatting.GREEN : ChatFormatting.RED), true);
+                            return 1;
+                        }))
+                .then(Commands.literal("removeall")
+                        .executes(context -> {
+                            int n = CollectorManager.removeAllBrokers(context.getSource().getLevel());
+                            context.getSource().sendSuccess(() -> Component.literal(
+                                    "✓ Removed " + n + " Brokers.")
+                                    .withStyle(ChatFormatting.GREEN), true);
+                            return 1;
+                        })));
+
         dispatcher.register(Commands.literal("placecollector")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {

@@ -101,6 +101,76 @@ public final class CollectorManager {
         return found.size();
     }
 
+    // ── The bazaar broker ─────────────────────────────────────────────────
+    //
+    // Same villager plumbing, different counter. Kept here rather than in its own manager because
+    // the only thing that differs is the name and which screen the right click opens, and two
+    // near identical files would drift apart the first time one of them was fixed.
+
+    public static final String BAZAAR_TAG = "political_bazaar_broker";
+    private static final Set<UUID> BROKERS = new HashSet<>();
+
+    public static Villager spawnBroker(ServerLevel world, double x, double y, double z, float yaw) {
+        Villager v = new Villager(EntityType.VILLAGER, world);
+        v.setPos(x, y, z);
+        v.setYRot(yaw);
+        v.setXRot(0f);
+        v.setCustomName(Component.literal("Bazaar Broker")
+                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        v.setCustomNameVisible(true);
+        v.setInvulnerable(true);
+        v.setNoAi(true);
+        v.setSilent(true);
+        v.setPersistenceRequired();
+        v.setHealth(v.getMaxHealth());
+        v.removeAllEffects();
+        try {
+            v.setVillagerData(v.getVillagerData()
+                    .withProfession(BuiltInRegistries.VILLAGER_PROFESSION
+                            .getOrThrow(VillagerProfession.FARMER))
+                    .withLevel(5));
+        } catch (Exception ignored) {
+            // Cosmetic only.
+        }
+        v.addTag(BAZAAR_TAG);
+        world.addFreshEntity(v);
+        BROKERS.add(v.getUUID());
+        return v;
+    }
+
+    public static boolean isBroker(Villager v) {
+        return v != null && (v.entityTags().contains(BAZAAR_TAG) || BROKERS.contains(v.getUUID()));
+    }
+
+    public static InteractionResult handleBrokerInteraction(Player player, Villager villager) {
+        if (!isBroker(villager)) return InteractionResult.PASS;
+        if (!(player instanceof ServerPlayer sp)) return InteractionResult.PASS;
+        BazaarGui.open(sp);
+        return InteractionResult.SUCCESS;
+    }
+
+    public static boolean removeNearestBroker(ServerLevel world, ServerPlayer player, double radius) {
+        java.util.List<Villager> found = world.getEntitiesOfClass(Villager.class,
+                player.getBoundingBox().inflate(radius), CollectorManager::isBroker);
+        if (found.isEmpty()) return false;
+        Villager v = found.get(0);
+        BROKERS.remove(v.getUUID());
+        v.discard();
+        return true;
+    }
+
+    public static int removeAllBrokers(ServerLevel world) {
+        net.minecraft.world.phys.AABB global = new net.minecraft.world.phys.AABB(
+                -30000000, -2048, -30000000, 30000000, 2048, 30000000);
+        java.util.List<Villager> found = world.getEntitiesOfClass(
+                Villager.class, global, CollectorManager::isBroker);
+        for (Villager v : found) {
+            BROKERS.remove(v.getUUID());
+            v.discard();
+        }
+        return found.size();
+    }
+
     // ── Buying ────────────────────────────────────────────────────────────
 
     public static InteractionResult handleInteraction(Player player, Villager villager) {

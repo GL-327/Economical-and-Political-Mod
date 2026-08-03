@@ -169,6 +169,7 @@ public final class PlayerStatsManager {
         // Progression that is not carried on an item, folded in before the clamp.
         try {
             CollectionManager.applyBonuses(player, sheet);
+            CustomEnchantEffects.contributeStats(player, sheet);
         } catch (Exception ignored) {
             // A collection store that has not initialised yet must never break stats.
         }

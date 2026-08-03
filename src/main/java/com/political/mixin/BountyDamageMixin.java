@@ -78,6 +78,8 @@ public abstract class BountyDamageMixin {
             // Grimoire: three of the Ward circle spends Focus as armour before defence applies.
             modifiedAmount = com.political.GrimoireHandler.absorb(player, modifiedAmount);
             modifiedAmount = com.political.WarrantArmour.onHurt(player, modifiedAmount);
+            // Custom enchantments worn as armour, before defence turns damage into a division.
+            modifiedAmount = com.political.CustomEnchantEffects.onHurt(player, source, modifiedAmount);
             // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
             return com.political.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
         }
@@ -143,6 +145,8 @@ public abstract class BountyDamageMixin {
         com.political.TempestHandler.onHit(player, self, modifiedAmount);
         com.political.GrimoireHandler.onHit(player, self, modifiedAmount);
         modifiedAmount *= com.political.RegaliaHandler.damageMultiplier(player);
+        // Custom enchantments on the held weapon.
+        modifiedAmount = com.political.CustomEnchantEffects.onHit(player, self, modifiedAmount);
 
         // A nemesis reacts to being struck, which is where its defensive traits live.
         if (com.political.NemesisManager.isNemesis(self)) {
@@ -181,6 +185,7 @@ public abstract class BountyDamageMixin {
         com.political.VoyagerHandler.onKill(player);
         com.political.CollectionManager.onKill(player, self);
         com.political.RareDropManager.onKill(player, self);
+        com.political.CustomEnchantEffects.onKill(player, self);
         com.political.NemesisManager.onNemesisDeathEffects(self);
         com.political.NemesisManager.onNemesisKilled(player, self);
         com.political.ContractManager.onKill(player);
