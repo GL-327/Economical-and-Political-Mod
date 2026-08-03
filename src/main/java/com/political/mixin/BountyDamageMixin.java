@@ -180,6 +180,7 @@ public abstract class BountyDamageMixin {
         com.political.StarboundHandler.onKill(player);
         com.political.VoyagerHandler.onKill(player);
         com.political.CollectionManager.onKill(player, self);
+        com.political.RareDropManager.onKill(player, self);
         com.political.NemesisManager.onNemesisDeathEffects(self);
         com.political.NemesisManager.onNemesisKilled(player, self);
         com.political.ContractManager.onKill(player);

@@ -801,6 +801,11 @@ public final class AdminPanel {
                 NemesisManager.total() + " grudges on this server",
                 "Mobs that killed a player and came back"));
 
+        gui.setSlot(31, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
+                () -> RareDropGui.open(player, 0),
+                RareDrop.values().length + " drop only items",
+                "Published odds, per mob"));
+
         gui.setSlot(29, GuiKit.tile(Items.ZOMBIE_SPAWN_EGG, "Slayer admin", ChatFormatting.RED,
                 () -> AdminGui.openSlayerAdminGui(player), "Levels, bosses and resets"));
 

@@ -332,6 +332,12 @@ public final class ChangelogManager {
                         + "since one person with no workstation grows no food. All three are fixed, and a new "
                         + "progress screen lists every requirement for the next tier and marks the one blocking "
                         + "you, because none of it was visible before."),
+                e("Rare drops", "vx_raredrops",
+                        "Forty four items that cannot be crafted and only fall off something. Every other reward "
+                        + "in the mod can be planned for, and a server needs a few things that cannot. The odds "
+                        + "are printed on the item and in the browser rather than hidden, so it is a known long "
+                        + "shot instead of a rumour. A rare find tells you, a crazy one tells anybody close "
+                        + "enough to have seen it, and an insane one tells the whole server."),
                 e("Refined materials", "vx_materials",
                         "Twenty four materials that do not exist in vanilla, from mithril and titanium to "
                         + "tungsten, umber and soul string. Each runs a five step chain from a raw lump up to a "
