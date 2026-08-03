@@ -134,6 +134,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     if (AuctionMasterManager.isAuctionMaster(villager)) {
                         return AuctionMasterManager.handleInteraction(player, villager);
                     }
+                    // Check Collector, the only buyer for the top of the drop table
+                    if (CollectorManager.isCollector(villager)) {
+                        return CollectorManager.handleInteraction(player, villager);
+                    }
                     // Check Crypto Broker
                     if (CryptoBrokerManager.isCryptoBroker(villager)) {
                         return CryptoBrokerManager.handleInteraction(serverPlayer, villager);

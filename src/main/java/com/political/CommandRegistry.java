@@ -1299,6 +1299,43 @@ public class CommandRegistry {
     }
 
     private static void registerPlaceAuctionMaster(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("placecollector")
+                .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    ServerLevel world = context.getSource().getLevel();
+                    CollectorManager.spawn(world, player.getX(), player.getY(), player.getZ(),
+                            player.getYRot());
+                    context.getSource().sendSuccess(() -> Component.literal(
+                            "✓ Spawned a Collector.").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    return 1;
+                })
+                .then(Commands.literal("remove")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            boolean gone = CollectorManager.removeNearest(
+                                    context.getSource().getLevel(), player, 6.0);
+                            context.getSource().sendSuccess(() -> Component.literal(gone
+                                    ? "✓ Removed the nearest Collector."
+                                    : "✖ No Collector within reach.").withStyle(
+                                            gone ? ChatFormatting.GREEN : ChatFormatting.RED), true);
+                            return 1;
+                        }))
+                .then(Commands.literal("removeall")
+                        .executes(context -> {
+                            int n = CollectorManager.removeAll(context.getSource().getLevel());
+                            context.getSource().sendSuccess(() -> Component.literal(
+                                    "✓ Removed " + n + " Collectors.")
+                                    .withStyle(ChatFormatting.GREEN), true);
+                            return 1;
+                        })));
+
+        dispatcher.register(Commands.literal("collector")
+                .executes(context -> {
+                    CollectorGui.open(context.getSource().getPlayerOrException());
+                    return 1;
+                }));
+
         dispatcher.register(Commands.literal("placeauctionmaster")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {

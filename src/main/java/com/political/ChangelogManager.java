@@ -332,6 +332,13 @@ public final class ChangelogManager {
                         + "since one person with no workstation grows no food. All three are fixed, and a new "
                         + "progress screen lists every requirement for the next tier and marks the one blocking "
                         + "you, because none of it was visible before."),
+                e("Collectors", "vx_collectors",
+                        "A bazaar works by matching two people who both want the trade, and that breaks down "
+                        + "completely at the top of the drop table. A primal drop turns up once in a thousand, so "
+                        + "listing one is an advert nobody answers rather than a sale. Collectors buy those at a "
+                        + "fixed published price derived from the drop's own odds, so the rarest things are still "
+                        + "worth something on a quiet server. Place one with /placecollector, or open the counter "
+                        + "with /collector."),
                 e("Rare drops", "vx_raredrops",
                         "Forty four items that cannot be crafted and only fall off something. Every other reward "
                         + "in the mod can be planned for, and a server needs a few things that cannot. The odds "

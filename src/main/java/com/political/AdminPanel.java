@@ -801,6 +801,11 @@ public final class AdminPanel {
                 NemesisManager.total() + " grudges on this server",
                 "Mobs that killed a player and came back"));
 
+        gui.setSlot(33, GuiKit.tile(Items.EMERALD, "Collectors", ChatFormatting.LIGHT_PURPLE,
+                () -> CollectorGui.open(player),
+                "Buys what the market cannot price",
+                "Place one with /placecollector"));
+
         gui.setSlot(31, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
                 () -> RareDropGui.open(player, 0),
                 RareDrop.values().length + " drop only items",
