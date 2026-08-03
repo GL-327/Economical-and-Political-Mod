@@ -131,7 +131,7 @@ public class T2CraftingGui {
 
         // Back button
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     open(player);
                 })
@@ -209,7 +209,7 @@ public class T2CraftingGui {
 
         // Back button
         gui.setSlot(36, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     openTypeMenu(player, recipe.type);
                 })

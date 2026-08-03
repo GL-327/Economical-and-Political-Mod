@@ -272,7 +272,7 @@ public final class ExpeditionGui {
                 .build());
 
         gui.setSlot(22, new GuiElementBuilder(Items.OAK_DOOR)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, c, d) -> open(player))
                 .build());
 
@@ -304,11 +304,8 @@ public final class ExpeditionGui {
     }
 
     /** Neutral filler so empty slots are not clickable voids. */
+    /** A flat grey wall became a framed screen, matching everything built since. */
     private static void fill(SimpleGui gui, int size) {
-        for (int i = 0; i < size; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
-                    .setName(Component.literal(" "))
-                    .build());
-        }
+        GuiKit.frame(gui, size);
     }
 }

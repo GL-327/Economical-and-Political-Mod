@@ -313,15 +313,7 @@ public final class WarGui {
      * reads as sitting inside a window. Every GUI that calls this picks up the same look.
      */
     static void fill(SimpleGui gui, int size) {
-        int rows = Math.max(1, size / 9);
-        for (int i = 0; i < size; i++) {
-            int row = i / 9;
-            int col = i % 9;
-            boolean edge = row == 0 || row == rows - 1 || col == 0 || col == 8;
-            gui.setSlot(i, new GuiElementBuilder(
-                    edge ? Items.GRAY_STAINED_GLASS_PANE : Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Component.literal("")).build());
-        }
+        GuiKit.frame(gui, size);
     }
 
     static eu.pb4.sgui.api.elements.GuiElement back(Runnable r) {

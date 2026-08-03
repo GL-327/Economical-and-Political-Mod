@@ -364,12 +364,9 @@ public class ProgressionTreeGui {
     // SHARED UI HELPERS
     // ════════════════════════════════════════════════════════════
 
+    /** Keeps the caller's colour as the edge, but gains the two tone frame. */
     private static void fillBackground(SimpleGui gui, net.minecraft.world.item.Item pane) {
-        for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(pane)
-                .setName(Component.literal(""))
-                .build());
-        }
+        GuiKit.frame(gui, 54, pane);
     }
 
     private static Component buildProgressBar(int current, int max) {

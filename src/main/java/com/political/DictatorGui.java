@@ -165,7 +165,7 @@ public class DictatorGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> {
                     open(player);
                 })

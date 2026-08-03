@@ -960,7 +960,7 @@ public class AuctionHouseGui {
 
         // Navigation
         gui.setSlot(27, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((index, type, containerInput, slotGui) -> openMainMenu(player))
                 .build());
 

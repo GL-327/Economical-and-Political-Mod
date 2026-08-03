@@ -125,7 +125,7 @@ public class MenuGui {
                 .build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, c, d) -> openMainMenu(player))
                 .build());
 
@@ -171,7 +171,7 @@ public class MenuGui {
                 .build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, c, d) -> openMainMenu(player))
                 .build());
 
@@ -223,7 +223,7 @@ public class MenuGui {
                 .build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, c, d) -> openMainMenu(player))
                 .build());
 
@@ -268,7 +268,7 @@ public class MenuGui {
                 .build());
 
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, c, d) -> openMainMenu(player))
                 .build());
 
@@ -301,7 +301,7 @@ public class MenuGui {
                 .build());
 
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, c, d) -> openMainMenu(player))
                 .build());
 

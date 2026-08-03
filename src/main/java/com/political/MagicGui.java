@@ -191,7 +191,7 @@ public class MagicGui {
         }
 
         gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((i, t, c, s) -> openMainMenu(player))
                 .build());
 
@@ -328,7 +328,7 @@ public class MagicGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((i, t, c, s) -> openSkillTree(player))
                 .build());
 
@@ -394,7 +394,7 @@ public class MagicGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((i, t, c, s) -> openMainMenu(player))
                 .build());
 
@@ -478,7 +478,7 @@ public class MagicGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((i, t, c, s) -> openMainMenu(player))
                 .build());
 
@@ -516,7 +516,7 @@ public class MagicGui {
         }
 
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((i, t, c, s) -> openMainMenu(player))
                 .build());
 
@@ -600,7 +600,7 @@ public class MagicGui {
         }
 
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED))
                 .setCallback((i, t, c, s) -> openMainMenu(player))
                 .build());
 

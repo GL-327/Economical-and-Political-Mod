@@ -320,11 +320,7 @@ public class FletchingTableGui {
      * Fill background with brown stained glass panes.
      */
     private static void fillBackground(SimpleGui gui) {
-        for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BROWN_STAINED_GLASS_PANE)
-                    .setName(Component.literal(""))
-                    .build());
-        }
+        GuiKit.frame(gui, 27);
     }
 
     /**

@@ -282,7 +282,7 @@ public final class PartyJoinGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -406,7 +406,7 @@ public final class PartyJoinGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -445,7 +445,7 @@ public final class PartyJoinGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -506,7 +506,7 @@ public final class PartyJoinGui {
                 .build());
 
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -542,7 +542,7 @@ public final class PartyJoinGui {
                 .build());
 
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -608,7 +608,7 @@ public final class PartyJoinGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -670,7 +670,7 @@ public final class PartyJoinGui {
         }
 
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> openMemberList(player, partyId))
                 .build());
 
@@ -806,7 +806,7 @@ public final class PartyJoinGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 

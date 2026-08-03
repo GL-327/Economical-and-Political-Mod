@@ -130,10 +130,7 @@ public final class LivingWorldGui {
 
     /** Fills every slot with a blank pane so unused slots are not click-through. */
     static void fill(SimpleGui gui, int size) {
-        for (int i = 0; i < size; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
-                    .setName(Component.literal("")).build());
-        }
+        GuiKit.frame(gui, size);
     }
 
     /** Standard back arrow. */

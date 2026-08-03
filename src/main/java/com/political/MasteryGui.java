@@ -240,7 +240,7 @@ public class MasteryGui {
                 .build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((index, type, containerInput, slotGui) -> openMainMenu(player))
                 .build());
 

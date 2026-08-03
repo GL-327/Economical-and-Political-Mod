@@ -109,7 +109,7 @@ public final class AdminInvseeGui {
                 .build());
 
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((a, b, containerInput, slotGui) -> openOfflineMainMenu(admin, java.util.UUID.fromString(uuid), name))
                 .build());
 
@@ -156,7 +156,7 @@ public final class AdminInvseeGui {
             slot++;
             if ((slot + 1) % 9 == 0) slot += 2;
         }
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("Back"))
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("← Back"))
                 .setCallback((a, b, containerInput, slotGui) -> openOfflineMainMenu(admin, java.util.UUID.fromString(uuid), name)).build());
         gui.open();
     }
@@ -202,7 +202,7 @@ public final class AdminInvseeGui {
             slot++;
             if ((slot + 1) % 9 == 0) slot += 2;
         }
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("Back"))
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("← Back"))
                 .setCallback((a, b, containerInput, slotGui) -> openOfflineMainMenu(admin, java.util.UUID.fromString(uuid), name)).build());
         gui.open();
     }
@@ -295,7 +295,7 @@ public final class AdminInvseeGui {
         gui.setTitle(Component.literal("Inventory — ").withStyle(ChatFormatting.GOLD).append(target.getDisplayName()));
         Runnable redraw = () -> drawPlayerInventory(gui, admin, target);
         gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((i, t, containerInput, slotGui) -> openMainMenu(admin, target))
                 .build());
         redraw.run();
@@ -390,7 +390,7 @@ public final class AdminInvseeGui {
             }
         }
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((i, t, containerInput, slotGui) -> openMainMenu(admin, target))
                 .build());
     }
@@ -434,7 +434,7 @@ public final class AdminInvseeGui {
             slot++;
             if ((slot + 1) % 9 == 0) slot += 2;
         }
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("Back"))
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("← Back"))
                 .setCallback((a, b, containerInput, slotGui) -> openMainMenu(admin, target)).build());
         gui.open();
     }
@@ -479,7 +479,7 @@ public final class AdminInvseeGui {
             slot++;
             if ((slot + 1) % 9 == 0) slot += 2;
         }
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("Back"))
+        gui.setSlot(49, new GuiElementBuilder(Items.ARROW).setName(Component.literal("← Back"))
                 .setCallback((a, b, containerInput, slotGui) -> openMainMenu(admin, target)).build());
         gui.open();
     }

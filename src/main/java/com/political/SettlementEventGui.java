@@ -107,7 +107,7 @@ public final class SettlementEventGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((a, c, d, g) -> VarietyGui.open(player))
                 .build());
 

@@ -401,7 +401,7 @@ public final class TradeGui {
                 })
                 .build());
         gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .setCallback((a, b, c, d) -> openGoodPicker(player, home, partner))
                 .build());
         gui.open();

@@ -442,7 +442,7 @@ public class AdminGui {
 
         // Back button
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {
                     undergroundAuctionItemPage = 0; // Reset page
                     openPage(player, AdminPage.MAIN);
@@ -1498,22 +1498,9 @@ public class AdminGui {
      * Fills the GUI background with a cyan stained glass pane border (top row, bottom row,
      * left column, right column) and a gray stained glass pane interior.
      */
+    /** Delegates to the shared frame so the legacy panel matches the console behind it. */
     private static void fillBackground(SimpleGui gui) {
-        int size = gui.getSize();
-        int cols = 9;
-        int rows = size / cols;
-
-        for (int i = 0; i < size; i++) {
-            int row = i / cols;
-            int col = i % cols;
-            boolean isBorder = (row == 0 || row == rows - 1 || col == 0 || col == cols - 1);
-            net.minecraft.world.item.Item pane = isBorder
-                    ? Items.CYAN_STAINED_GLASS_PANE
-                    : Items.GRAY_STAINED_GLASS_PANE;
-            gui.setSlot(i, new GuiElementBuilder(pane)
-                    .setName(Component.literal(""))
-                    .build());
-        }
+        GuiKit.frame(gui, gui.getSize());
     }
 
     private static void addBackButton(SimpleGui gui, ServerPlayer player) {
@@ -1566,7 +1553,7 @@ public class AdminGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((index, type, containerInput, slotGui) -> open(admin))
                 .build());
 
@@ -1774,7 +1761,7 @@ public class AdminGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(admin, AdminPage.PLAYERS))
                 .build());
 
@@ -2465,7 +2452,7 @@ public class AdminGui {
 
         // Back button
         gui.setSlot(26, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((int idx, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openSlayerAdminGui(admin))
                 .build());
 
@@ -3842,7 +3829,7 @@ public class AdminGui {
 
         // Back button
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((idx, clickType, containerInput, slotGui) -> {
                     openSlayerAdminGui(admin);
                 })
@@ -3913,7 +3900,7 @@ public class AdminGui {
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(admin, AdminPage.PLAYERS))
                 .build());
 
@@ -3962,7 +3949,7 @@ public class AdminGui {
         }
 
         gui.setSlot(22, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.GRAY))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {
                     openPrisonGui(admin);
                 })

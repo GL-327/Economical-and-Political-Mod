@@ -205,7 +205,7 @@ public final class PartyLeaderGui {
         }
 
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 
@@ -255,7 +255,7 @@ public final class PartyLeaderGui {
         }
 
         gui.setSlot(31, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
 

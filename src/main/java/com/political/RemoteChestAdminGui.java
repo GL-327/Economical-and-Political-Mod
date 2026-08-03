@@ -92,7 +92,7 @@ public final class RemoteChestAdminGui {
 
         int backSlot = Math.max(0, gui.getSize() - 5);
         gui.setSlot(backSlot, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back").withStyle(ChatFormatting.YELLOW))
+                .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
                 .setCallback((a, b, c, __slotGui) -> {
                     if (watchedPlayer != null) {
                         PrevChestsAdminGui.open(admin, watchedPlayer);
