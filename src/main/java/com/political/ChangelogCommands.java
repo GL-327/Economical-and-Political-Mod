@@ -13,6 +13,23 @@ public final class ChangelogCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Collections live here rather than in their own file because this class is already the
         // home for the small player facing browsers.
+        for (String alias : new String[]{"hotreload", "livereload"}) {
+            dispatcher.register(Commands.literal(alias)
+                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                    .executes(ctx -> {
+                        HotReloadGui.open(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    })
+                    .then(Commands.literal("data").executes(ctx -> {
+                        HotReloadGui.runData(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    }))
+                    .then(Commands.literal("code").executes(ctx -> {
+                        HotReloadGui.runCode(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    })));
+        }
+
         for (String alias : new String[]{"itemeditor", "edititem"}) {
             dispatcher.register(Commands.literal(alias)
                     .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))

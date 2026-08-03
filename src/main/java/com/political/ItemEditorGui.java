@@ -52,19 +52,46 @@ public final class ItemEditorGui {
                     "Hold the item you want to edit",
                     ItemOverrideManager.count() + " items have been edited so far",
                     "Or build a new one from nothing");
-            gui.setSlot(21, GuiKit.action(Items.BARRIER, "Nothing in hand", ChatFormatting.RED,
-                    () -> open(player),
-                    "Hold something and open this again."));
-            gui.setSlot(23, GuiKit.action(Items.NETHER_STAR, "Make a new item",
+            gui.setSlot(20, GuiKit.action(Items.SPYGLASS, "Browse every item",
+                    ChatFormatting.AQUA,
+                    () -> openBrowser(player, "", 0),
+                    ItemOverrideManager.knownIds().size() + " items exist on this server",
+                    "Search by name and edit any of them",
+                    "without holding a single one."));
+            gui.setSlot(22, GuiKit.action(Items.NETHER_STAR, "Make a new item",
                     ChatFormatting.LIGHT_PURPLE,
                     () -> openCreate(player),
                     "Build one from nothing, name it,",
                     "colour it, give it stats and a recipe."));
-            gui.setSlot(31, GuiKit.action(Items.WRITABLE_BOOK, "Everything edited so far",
+            gui.setSlot(24, GuiKit.action(Items.COMMAND_BLOCK, "Bulk edit",
+                    ChatFormatting.RED,
+                    () -> openBulk(player, ""),
+                    "Change hundreds of items at once",
+                    "by matching part of their id.",
+                    "",
+                    "This is the one that saves the afternoon."));
+            gui.setSlot(30, GuiKit.action(Items.WRITABLE_BOOK, "Everything edited so far",
                     ChatFormatting.AQUA,
                     () -> openLedger(player, 0),
                     ItemOverrideManager.count() + " ids carry an edit",
                     "Review or undo any of them."));
+            gui.setSlot(32, GuiKit.action(Items.PAPER, "Paste an item code",
+                    ChatFormatting.GREEN,
+                    () -> GuiKit.prompt(player, "Item id to paste onto", raw -> {
+                        String target = slug(raw);
+                        if (target.isEmpty()) {
+                            open(player);
+                            return;
+                        }
+                        GuiKit.prompt(player, "Paste the code", code -> {
+                            String bad = ItemOverrideManager.importInto(target, code);
+                            say(player, bad != null ? bad
+                                    : "Read onto " + target + ", live on every copy.");
+                            open(player);
+                        }, () -> open(player));
+                    }, () -> open(player)),
+                    "Take a configuration somebody else",
+                    "exported and apply it here."));
             GuiKit.footer(gui, SIZE, player, () -> AdminPanel.open(player));
             gui.open();
             return;
@@ -241,6 +268,85 @@ public final class ItemEditorGui {
                     open(player);
                 },
                 "A fresh copy with every edit applied."));
+
+        gui.setSlot(19, GuiKit.action(Items.CLOCK, "Step back", ChatFormatting.YELLOW,
+                () -> {
+                    if (ItemOverrideManager.undo(id)) {
+                        say(player, "Stepped back one edit. Copies follow within two seconds.");
+                    } else {
+                        say(player, "There is nothing further back to go.");
+                    }
+                    open(player);
+                },
+                ItemOverrideManager.historyDepth(id) + " edits to step back through",
+                "",
+                "Undoes the last change to this item,",
+                "everywhere, including copies in chests."));
+
+        gui.setSlot(20, GuiKit.action(Items.PAPER, "Share code", ChatFormatting.GREEN,
+                () -> {
+                    String code = ItemOverrideManager.export(id);
+                    if (code == null) {
+                        say(player, "There is nothing on this item to share yet.");
+                        open(player);
+                        return;
+                    }
+                    player.sendSystemMessage(Component.literal("§a✎ Item code for §f" + id));
+                    player.sendSystemMessage(Component.literal("§7" + code));
+                    say(player, "Copy the line above out of chat.");
+                },
+                "Prints a code you can paste elsewhere",
+                "to recreate this item exactly."));
+
+        gui.setSlot(21, GuiKit.action(Items.BUDDING_AMETHYST, "Duplicate", ChatFormatting.AQUA,
+                () -> GuiKit.prompt(player, "New item id", raw -> {
+                    String made = slug(raw);
+                    if (made.isEmpty()) {
+                        say(player, "That is not a usable id.");
+                        open(player);
+                        return;
+                    }
+                    if (ItemOverrideManager.duplicate(id, made)) {
+                        say(player, "Duplicated as " + made + ".");
+                    } else {
+                        say(player, "Could not duplicate. Is that id already taken?");
+                    }
+                    open(player);
+                }, () -> open(player)),
+                "Makes a second item with everything",
+                "this one has, under a new id."));
+
+        gui.setSlot(22, GuiKit.action(Items.COMPARATOR, "Scale stats", ChatFormatting.LIGHT_PURPLE,
+                () -> GuiKit.prompt(player, "Multiply by, eg 1.5", raw -> {
+                    try {
+                        double f = Double.parseDouble(raw.trim());
+                        ItemOverrideManager.Override ov = ItemOverrideManager.getOrCreate(id);
+                        // Rounded to a whole number, since a stat reading 37.5 on a tooltip looks
+                        // like a bug even when it is exactly what was asked for.
+                        ov.stats.replaceAll((k, v) -> (double) Math.round(v * f));
+                        ItemOverrideManager.commit(ov);
+                        say(player, "Every stat on this item scaled by " + f + ".");
+                    } catch (NumberFormatException ex) {
+                        say(player, "That is not a number.");
+                    }
+                    open(player);
+                }, () -> open(player)),
+                "Multiplies every stat at once,",
+                "for when the whole item is off."));
+
+        gui.setSlot(23, GuiKit.action(Items.HOPPER, "Copy onto another",
+                ChatFormatting.YELLOW,
+                () -> GuiKit.prompt(player, "Item id to copy onto", raw -> {
+                    String target = slug(raw);
+                    if (ItemOverrideManager.copyConfig(id, target)) {
+                        say(player, "Everything on this item is now on " + target + " too.");
+                    } else {
+                        say(player, "Could not copy onto " + target + ".");
+                    }
+                    open(player);
+                }, () -> open(player)),
+                "Puts this configuration onto a",
+                "different item, keeping its own base."));
 
         gui.setSlot(34, GuiKit.action(Items.BARRIER, "Undo every edit", ChatFormatting.RED,
                 () -> GuiKit.confirm(player, "Undo every edit to " + id,
@@ -955,5 +1061,397 @@ public final class ItemEditorGui {
 
     private static String fmt(double v) {
         return v == Math.floor(v) ? String.valueOf((long) v) : String.valueOf(v);
+    }
+
+    // ── Browsing every item ───────────────────────────────────────────────
+
+    /**
+     * Every item on the server, searchable, editable without holding one.
+     *
+     * <p>The reason an in game item editor has never really replaced editing code is that editors
+     * only ever work on the thing in your hand. With ten thousand items that is not an editor, it is
+     * a scavenger hunt. This screen is the answer: type part of a name and edit whatever comes
+     * back.</p>
+     */
+    public static void openBrowser(ServerPlayer player, String query, int page) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("Browse items")
+                .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
+        GuiKit.frame(gui, SIZE);
+
+        List<String> hits = ItemOverrideManager.matching(query);
+        GuiKit.header(gui, Items.SPYGLASS, "Browse items", ChatFormatting.AQUA,
+                query.isEmpty() ? "Everything on this server" : "Matching \"" + query + "\"",
+                hits.size() + " of " + ItemOverrideManager.knownIds().size() + " items",
+                "Click any of them to edit it");
+
+        gui.setSlot(SIZE - 6, GuiKit.action(Items.NAME_TAG, "Search", ChatFormatting.YELLOW,
+                () -> GuiKit.prompt(player, "Part of an item id", raw ->
+                        openBrowser(player, raw == null ? "" : raw.trim().toLowerCase(Locale.ROOT), 0),
+                        () -> openBrowser(player, query, page)),
+                query.isEmpty() ? "Showing everything" : "Now: " + query,
+                "",
+                "Try a line prefix like tide_ or ember_,",
+                "or any part of a name."));
+
+        if (!query.isEmpty()) {
+            gui.setSlot(SIZE - 4, GuiKit.action(Items.BARRIER, "Clear search",
+                    ChatFormatting.GRAY, () -> openBrowser(player, "", 0)));
+        }
+
+        List<GuiElement> entries = new ArrayList<>();
+        // Only the visible page is turned into stacks. Building ten thousand of them to show
+        // twenty eight would stall the server for a noticeable moment every time.
+        int from = page * GuiKit.LIST_SLOTS.length;
+        int to = Math.min(hits.size(), from + GuiKit.LIST_SLOTS.length);
+        for (int i = from; i < to; i++) {
+            final String id = hits.get(i);
+            ItemOverrideManager.Override o = ItemOverrideManager.get(id);
+            ItemStack shown = ItemOverrideManager.build(id);
+            Item icon = shown.isEmpty() ? Items.PAPER : shown.getItem();
+
+            GuiElementBuilder b = new GuiElementBuilder(icon)
+                    .setName(Component.literal(o != null && o.name != null ? o.name : pretty(id))
+                            .withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD))
+                    .addLoreLine(Component.literal("§8" + id))
+                    .addLoreLine(Component.literal(""));
+            if (o == null) {
+                b.addLoreLine(Component.literal("§8No edits yet."));
+            } else {
+                b.addLoreLine(Component.literal("§7Revision §f" + o.revision));
+                if (!o.stats.isEmpty()) {
+                    b.addLoreLine(Component.literal("§7Stats §f" + o.stats.size()));
+                }
+                if (!o.abilities.isEmpty()) {
+                    b.addLoreLine(Component.literal("§7Abilities §f" + o.abilities.size()));
+                }
+                b.glow();
+            }
+            b.addLoreLine(Component.literal(""));
+            b.addLoreLine(Component.literal("§eLeft click to edit it."));
+            b.addLoreLine(Component.literal("§eRight click for a copy in hand."));
+
+            entries.add(b.setCallback((sl, t, ci, sg) -> {
+                if (t.isRight) {
+                    ItemStack copy = ItemOverrideManager.build(id);
+                    if (copy.isEmpty()) {
+                        say(player, "That item has no stored base to build from. Edit it first.");
+                        return;
+                    }
+                    if (!player.getInventory().add(copy)) player.drop(copy, false);
+                    say(player, "There you go.");
+                    return;
+                }
+                openFor(player, id);
+            }).build());
+        }
+
+        // Painted straight in, since the slice above is already one page long.
+        for (int i = 0; i < entries.size() && i < GuiKit.LIST_SLOTS.length; i++) {
+            gui.setSlot(GuiKit.LIST_SLOTS[i], entries.get(i));
+        }
+        GuiKit.pager(gui, SIZE, page, hits.size(), GuiKit.LIST_SLOTS.length,
+                pg -> openBrowser(player, query, pg));
+
+        GuiKit.footer(gui, SIZE, player, () -> open(player));
+        gui.open();
+    }
+
+    /**
+     * Opens the editor on an id rather than on whatever is in hand.
+     *
+     * <p>Works by handing the player a copy and editing that. The alternative was a second editor
+     * that took an id, and two editors drift apart the first time one of them gains a feature.</p>
+     */
+    public static void openFor(ServerPlayer player, String id) {
+        ItemStack held = player.getMainHandItem();
+        if (id.equals(SlayerItems.getCustomItemId(held))) {
+            open(player);
+            return;
+        }
+        ItemStack copy = ItemOverrideManager.build(id);
+        if (copy.isEmpty()) {
+            // No stored base, so give it one and try again. An item known only from a recipe has
+            // never been edited, so this is the first time anybody has asked.
+            ItemOverrideManager.Override o = ItemOverrideManager.getOrCreate(id);
+            if (o.baseItem == null) o.baseItem = baseFromRecipe(id);
+            ItemOverrideManager.commit(o);
+            copy = ItemOverrideManager.build(id);
+        }
+        if (copy.isEmpty()) {
+            say(player, "That item could not be built. It may only exist as a recipe result.");
+            return;
+        }
+        if (!player.getInventory().add(copy)) player.drop(copy, false);
+        say(player, "Holding a copy of " + id + ". Every edit reaches all of them.");
+        open(player);
+    }
+
+    /** The vanilla item a known id is built on, read back off its recipe. */
+    private static String baseFromRecipe(String id) {
+        for (SlayerRecipes.Recipe r : SlayerRecipes.RECIPES) {
+            if (!id.equals(SlayerItems.getCustomItemId(r.result))) continue;
+            try {
+                return BuiltInRegistries.ITEM.getKey(r.result.getItem()).getPath();
+            } catch (Exception ignored) {
+                // Falls through to paper, which at least renders.
+            }
+        }
+        return "paper";
+    }
+
+    // ── Bulk editing ──────────────────────────────────────────────────────
+
+    /**
+     * Changes hundreds of items at once.
+     *
+     * <p>Every action here shows how many items it will touch before it touches them, because the
+     * difference between typing tide_ and typing tid is four hundred and twenty items, and nobody
+     * should find that out afterwards.</p>
+     */
+    public static void openBulk(ServerPlayer player, String pattern) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("Bulk edit")
+                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+        GuiKit.frame(gui, SIZE);
+
+        List<String> hits = pattern.isEmpty() ? List.of() : ItemOverrideManager.matching(pattern);
+        int n = hits.size();
+
+        GuiKit.header(gui, Items.COMMAND_BLOCK, "Bulk edit", ChatFormatting.RED,
+                pattern.isEmpty() ? "No pattern set yet" : "Pattern \"" + pattern + "\"",
+                n + " items would be changed",
+                "Every change here reaches all of them at once");
+
+        gui.setSlot(10, GuiKit.action(Items.NAME_TAG, "Set the pattern", ChatFormatting.YELLOW,
+                () -> GuiKit.prompt(player, "Part of an item id", raw ->
+                        openBulk(player, raw == null ? "" : raw.trim().toLowerCase(Locale.ROOT)),
+                        () -> openBulk(player, pattern)),
+                pattern.isEmpty() ? "Not set" : "Now: " + pattern,
+                "",
+                "tide_ catches the whole Tidecaller line.",
+                "_sword catches every sword in the game."));
+
+        if (n > 0) {
+            gui.setSlot(12, GuiKit.action(Items.SPYGLASS, "See what matches",
+                    ChatFormatting.AQUA,
+                    () -> openBrowser(player, pattern, 0),
+                    "Look at the " + n + " items first",
+                    "before changing any of them."));
+
+            gui.setSlot(14, GuiKit.action(Items.DIAMOND, "Set a stat on all " + n,
+                    ChatFormatting.GREEN,
+                    () -> openBulkStat(player, pattern),
+                    "Pick a stat and type a number.",
+                    "",
+                    "Type 50 to set it to 50.",
+                    "Type +10 or -10 to shift what is",
+                    "already there, per item."));
+
+            gui.setSlot(16, GuiKit.action(Items.COMPARATOR, "Scale every stat",
+                    ChatFormatting.LIGHT_PURPLE,
+                    () -> GuiKit.prompt(player, "Multiply by, eg 1.5", raw -> {
+                        try {
+                            double f = Double.parseDouble(raw.trim());
+                            int done = ItemOverrideManager.bulkEdit(pattern,
+                                    o -> o.stats.replaceAll((k, v) -> (double) Math.round(v * f)));
+                            say(player, "Scaled every stat on " + done + " items by " + f + ".");
+                        } catch (NumberFormatException ex) {
+                            say(player, "That is not a number.");
+                        }
+                        openBulk(player, pattern);
+                    }, () -> openBulk(player, pattern)),
+                    "Only touches stats already set.",
+                    "An item with none is left alone."));
+
+            gui.setSlot(28, GuiKit.action(Items.NETHER_STAR, "Set rarity on all " + n,
+                    ChatFormatting.LIGHT_PURPLE,
+                    () -> openBulkRarity(player, pattern),
+                    "One band across the whole match."));
+
+            gui.setSlot(30, GuiKit.action(Items.RED_DYE, "Recolour all " + n,
+                    ChatFormatting.RED,
+                    () -> GuiKit.prompt(player, "Colour code or #hex", raw -> {
+                        String c = raw == null ? "" : raw.trim();
+                        int done = ItemOverrideManager.bulkEdit(pattern,
+                                o -> o.colour = c.isEmpty() ? null : c);
+                        say(player, "Recoloured " + done + " items.");
+                        openBulk(player, pattern);
+                    }, () -> openBulk(player, pattern)),
+                    "A single letter like c, or #ffaa00."));
+
+            gui.setSlot(32, GuiKit.action(Items.ENCHANTED_BOOK, "Bake an enchantment in",
+                    ChatFormatting.DARK_PURPLE,
+                    () -> openBulkEnchant(player, pattern, 0),
+                    "Puts one enchantment on every match",
+                    "that it legally fits."));
+
+            gui.setSlot(34, GuiKit.action(Items.BARRIER, "Undo every edit on all " + n,
+                    ChatFormatting.RED,
+                    () -> GuiKit.confirm(player, "Clear every edit on " + n + " items",
+                            "They all go back to how they were built. Nothing is deleted.",
+                            () -> {
+                                int done = 0;
+                                for (String id : ItemOverrideManager.matching(pattern)) {
+                                    if (ItemOverrideManager.has(id)) {
+                                        ItemOverrideManager.clear(id);
+                                        done++;
+                                    }
+                                }
+                                say(player, "Cleared " + done + " items.");
+                                openBulk(player, pattern);
+                            },
+                            () -> openBulk(player, pattern)),
+                    "The big red one. It asks first."));
+        }
+
+        gui.setSlot(SIZE - 5, GuiKit.info(Items.WRITABLE_BOOK, "Why this exists",
+                ChatFormatting.WHITE,
+                "There are " + ItemOverrideManager.knownIds().size() + " items on this server.",
+                "",
+                "An editor that only works on the thing in",
+                "your hand cannot retune a gear line, so",
+                "people go and edit the code instead.",
+                "",
+                "This is the part that means you do not",
+                "have to."));
+
+        GuiKit.footer(gui, SIZE, player, () -> open(player));
+        gui.open();
+    }
+
+    private static void openBulkStat(ServerPlayer player, String pattern) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("Bulk stat")
+                .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
+        GuiKit.frame(gui, SIZE);
+        int n = ItemOverrideManager.matching(pattern).size();
+        GuiKit.header(gui, Items.DIAMOND, "Bulk stat", ChatFormatting.GREEN,
+                "Pattern \"" + pattern + "\"",
+                n + " items would be changed",
+                "A plain number sets it, +10 shifts it");
+
+        int i = 0;
+        for (PlayerStatsManager.Stat stat : PlayerStatsManager.Stat.values()) {
+            gui.setSlot(GuiKit.LIST_SLOTS[i++], new GuiElementBuilder(iconFor(stat))
+                    .setName(Component.literal(stat.symbol + " " + stat.displayName)
+                            .withStyle(stat.color, ChatFormatting.BOLD))
+                    .addLoreLine(Component.literal(""))
+                    .addLoreLine(Component.literal("§eLeft click to set a value."))
+                    .addLoreLine(Component.literal("§eRight click to clear it everywhere."))
+                    .setCallback((sl, t, ci, sg) -> {
+                        if (t.isRight) {
+                            int done = ItemOverrideManager.bulkEdit(pattern,
+                                    o -> o.stats.remove(stat.name()));
+                            say(player, "Cleared " + stat.displayName + " on " + done + " items.");
+                            openBulkStat(player, pattern);
+                            return;
+                        }
+                        GuiKit.prompt(player, stat.displayName + ", or +10 to shift", raw -> {
+                            String typed = raw == null ? "" : raw.trim();
+                            // A leading sign means shift what is already there, which is what you
+                            // want when buffing a whole line whose pieces differ from each other.
+                            boolean delta = typed.startsWith("+") || typed.startsWith("-");
+                            try {
+                                double v = Double.parseDouble(typed);
+                                int done = ItemOverrideManager.bulkEdit(pattern, o -> {
+                                    if (delta) {
+                                        double now = o.stats.getOrDefault(stat.name(), 0.0);
+                                        o.stats.put(stat.name(), now + v);
+                                    } else {
+                                        o.stats.put(stat.name(), v);
+                                    }
+                                });
+                                say(player, stat.displayName + (delta ? " shifted by " : " set to ")
+                                        + fmt(v) + " on " + done + " items.");
+                            } catch (NumberFormatException ex) {
+                                say(player, "That is not a number.");
+                            }
+                            openBulkStat(player, pattern);
+                        }, () -> openBulkStat(player, pattern));
+                    }).build());
+        }
+
+        GuiKit.footer(gui, SIZE, player, () -> openBulk(player, pattern));
+        gui.open();
+    }
+
+    private static void openBulkRarity(ServerPlayer player, String pattern) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("Bulk rarity")
+                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
+        GuiKit.frame(gui, SIZE);
+        int n = ItemOverrideManager.matching(pattern).size();
+        GuiKit.header(gui, Items.NETHER_STAR, "Bulk rarity", ChatFormatting.LIGHT_PURPLE,
+                "Pattern \"" + pattern + "\"",
+                n + " items would be changed",
+                "One band across the whole match");
+
+        for (int i = 0; i < RARITIES.length; i++) {
+            final String r = RARITIES[i];
+            gui.setSlot(GuiKit.LIST_SLOTS[i], new GuiElementBuilder(Items.NETHER_STAR)
+                    .setName(Component.literal(ItemOverrideManager.rarityColour(r) + "§l" + r))
+                    .addLoreLine(Component.literal("§eClick to set this on all " + n + "."))
+                    .setCallback((sl, t, ci, sg) -> {
+                        int done = ItemOverrideManager.bulkEdit(pattern, o -> o.rarity = r);
+                        say(player, "Set " + r + " on " + done + " items.");
+                        openBulk(player, pattern);
+                    }).build());
+        }
+
+        GuiKit.footer(gui, SIZE, player, () -> openBulk(player, pattern));
+        gui.open();
+    }
+
+    private static void openBulkEnchant(ServerPlayer player, String pattern, int page) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("Bulk enchant")
+                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
+        GuiKit.frame(gui, SIZE);
+        int n = ItemOverrideManager.matching(pattern).size();
+        GuiKit.header(gui, Items.ENCHANTED_BOOK, "Bulk enchant", ChatFormatting.DARK_PURPLE,
+                "Pattern \"" + pattern + "\"",
+                n + " items would be changed",
+                "Baked in, not bought at the table");
+
+        List<GuiElement> entries = new ArrayList<>();
+        for (CustomEnchant e : CustomEnchant.values()) {
+            entries.add(new GuiElementBuilder(e.icon())
+                    .setName(Component.literal(e.display).withStyle(e.colour, ChatFormatting.BOLD))
+                    .addLoreLine(Component.literal(""))
+                    .addLoreLine(Component.literal("§7" + e.effect))
+                    .addLoreLine(Component.literal("§7Goes on §f" + e.slot.label))
+                    .addLoreLine(Component.literal(""))
+                    .addLoreLine(Component.literal("§eLeft click to pick a level."))
+                    .addLoreLine(Component.literal("§eRight click to strip it off all " + n + "."))
+                    .setCallback((sl, t, ci, sg) -> {
+                        if (t.isRight) {
+                            int done = ItemOverrideManager.bulkEdit(pattern,
+                                    o -> o.enchants.remove(e.key()));
+                            say(player, "Stripped " + e.display + " off " + done + " items.");
+                            openBulkEnchant(player, pattern, page);
+                            return;
+                        }
+                        GuiKit.prompt(player, "Level 1 to " + e.maxLevel, raw -> {
+                            try {
+                                int lv = Math.max(1, Math.min(e.maxLevel,
+                                        Integer.parseInt(raw.trim())));
+                                int done = ItemOverrideManager.bulkEdit(pattern,
+                                        o -> o.enchants.put(e.key(), lv));
+                                say(player, e.display + " " + CustomEnchant.roman(lv)
+                                        + " baked into " + done + " items.");
+                            } catch (NumberFormatException ex) {
+                                say(player, "That is not a number.");
+                            }
+                            openBulkEnchant(player, pattern, page);
+                        }, () -> openBulkEnchant(player, pattern, page));
+                    }).build());
+        }
+
+        GuiKit.paint(gui, entries, page, GuiKit.LIST_SLOTS.length);
+        GuiKit.pager(gui, SIZE, page, entries.size(), GuiKit.LIST_SLOTS.length,
+                pg -> openBulkEnchant(player, pattern, pg));
+        GuiKit.footer(gui, SIZE, player, () -> openBulk(player, pattern));
+        gui.open();
     }
 }

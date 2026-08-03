@@ -247,18 +247,35 @@ public enum CustomEnchant {
 
     /** The exact lore line this enchantment writes, which is also what the parser reads back. */
     public String loreLine(int level) {
-        return "§9" + display + " " + roman(Math.max(1, Math.min(maxLevel, level)));
+        int lv = Math.max(1, Math.min(maxLevel, level));
+        // Blue for a normal level, bold once it is finished, which is the convention players
+        // already read without being told.
+        String prefix = lv >= maxLevel ? "§9§l" : "§9";
+        return prefix + display + " " + roman(lv);
     }
 
-    /** What applying one costs, which rises steeply with level. */
-    public long costFor(int level) {
+    /**
+     * Experience levels to apply one, which is what an enchanting table charges.
+     *
+     * <p>Levels rather than coins, because this goes on a real enchanting table and a table that
+     * asked for money would feel like a shop wearing a table's hat. The curve is steeper than
+     * vanilla's because vanilla tops out at thirty levels for its whole tree and this has eighty
+     * five enchantments going to five.</p>
+     */
+    public int xpFor(int level) {
         int lv = Math.max(1, Math.min(maxLevel, level));
-        long base = switch (slot) {
-            case ANY -> 40_000L;
-            case WEAPON, ARMOUR -> 25_000L;
-            case TOOL, BOW -> 18_000L;
+        int base = switch (slot) {
+            case ANY -> 12;
+            case WEAPON, ARMOUR -> 8;
+            case TOOL, BOW -> 6;
         };
-        return base * lv * lv;
+        return base + (lv - 1) * base;
+    }
+
+    /** Lapis to apply one, the same currency vanilla asks for. */
+    public int lapisFor(int level) {
+        int lv = Math.max(1, Math.min(maxLevel, level));
+        return Math.min(64, lv * 3);
     }
 
     /**

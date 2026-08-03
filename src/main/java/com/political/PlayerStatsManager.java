@@ -134,6 +134,11 @@ public final class PlayerStatsManager {
     private static final Identifier STATS_HEALTH_ID = Identifier.fromNamespaceAndPath("political", "stats_health");
     private static final Identifier STATS_SPEED_ID = Identifier.fromNamespaceAndPath("political", "stats_speed");
 
+    /** Drops a cached sheet so the next read recomputes it. Used by the live reload. */
+    public static void invalidate(ServerPlayer player) {
+        statCache.remove(player.getUUID());
+    }
+
     public static StatSheet getStats(ServerPlayer player) {
         StatSheet sheet = statCache.get(player.getUUID());
         if (sheet == null) {

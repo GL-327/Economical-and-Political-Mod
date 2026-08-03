@@ -133,6 +133,7 @@ public final class ItemOverrideManager {
      */
     public static void commit(Override o) {
         if (o == null) return;
+        snapshot(o);
         if (o.isEmpty()) {
             OVERRIDES.remove(o.id);
         } else {
@@ -148,6 +149,212 @@ public final class ItemOverrideManager {
         if (OVERRIDES.remove(id) != null) {
             dirty = true;
             save();
+        }
+    }
+
+
+    // ── History ───────────────────────────────────────────────────────────
+
+    /**
+     * Past versions of each edit, so a mistake is one click from being undone.
+     *
+     * <p>Bounded, because an admin who spends an afternoon tuning a sword should not slowly turn
+     * the server memory into a changelog. Twenty deep is more than anybody backs out through.</p>
+     */
+    private static final int HISTORY_DEPTH = 20;
+    private static final Map<String, List<Override>> HISTORY = new ConcurrentHashMap<>();
+
+    private static Override copyOf(Override o) {
+        Override c = new Override(o.id);
+        c.revision = o.revision;
+        c.name = o.name;
+        c.colour = o.colour;
+        c.texture = o.texture;
+        c.rarity = o.rarity;
+        c.baseItem = o.baseItem;
+        c.kind = o.kind;
+        c.wearable = o.wearable;
+        c.glint = o.glint;
+        c.stats.putAll(o.stats);
+        c.abilities.addAll(o.abilities);
+        c.lore.addAll(o.lore);
+        c.enchants.putAll(o.enchants);
+        return c;
+    }
+
+    /** Takes a snapshot before an edit lands. Called by commit, so nothing has to remember to. */
+    private static void snapshot(Override o) {
+        List<Override> past = HISTORY.computeIfAbsent(o.id, k -> new ArrayList<>());
+        past.add(copyOf(o));
+        while (past.size() > HISTORY_DEPTH) past.remove(0);
+    }
+
+    public static int historyDepth(String id) {
+        List<Override> past = HISTORY.get(id);
+        return past == null ? 0 : past.size();
+    }
+
+    /**
+     * Steps one edit back.
+     *
+     * <p>The revision still counts forward, never back. Rolling the number backwards would leave
+     * every copy in the world stamped ahead of the stored edit and therefore convinced it was
+     * already up to date, which would make an undo look like it did nothing at all.</p>
+     */
+    public static boolean undo(String id) {
+        List<Override> past = HISTORY.get(id);
+        if (past == null || past.isEmpty()) return false;
+        Override prior = past.remove(past.size() - 1);
+        Override live = OVERRIDES.get(id);
+        prior.revision = (live == null ? prior.revision : live.revision) + 1;
+        OVERRIDES.put(id, prior);
+        dirty = true;
+        save();
+        return true;
+    }
+
+    // ── Copying between items ─────────────────────────────────────────────
+
+    /**
+     * Copies one item whole configuration onto another.
+     *
+     * <p>The id and the base item are deliberately left out. Copying the id would overwrite the
+     * target with the source, and copying the base would turn a sword into a chestplate the moment
+     * somebody wanted to share a stat line.</p>
+     */
+    public static boolean copyConfig(String fromId, String toId) {
+        Override src = OVERRIDES.get(fromId);
+        if (src == null || fromId.equals(toId)) return false;
+        Override dst = getOrCreate(toId);
+        dst.name = src.name;
+        dst.colour = src.colour;
+        dst.texture = src.texture;
+        dst.rarity = src.rarity;
+        dst.kind = src.kind;
+        dst.wearable = src.wearable;
+        dst.glint = src.glint;
+        dst.stats.clear();
+        dst.stats.putAll(src.stats);
+        dst.abilities.clear();
+        dst.abilities.addAll(src.abilities);
+        dst.lore.clear();
+        dst.lore.addAll(src.lore);
+        dst.enchants.clear();
+        dst.enchants.putAll(src.enchants);
+        commit(dst);
+        return true;
+    }
+
+    /** Makes a new item that duplicates an existing one under a new id. */
+    public static boolean duplicate(String fromId, String newId) {
+        if (OVERRIDES.containsKey(newId)) return false;
+        Override src = OVERRIDES.get(fromId);
+        if (src == null) return false;
+        Override dst = getOrCreate(newId);
+        dst.baseItem = src.baseItem != null ? src.baseItem : "paper";
+        commit(dst);
+        return copyConfig(fromId, newId);
+    }
+
+    // ── Bulk ──────────────────────────────────────────────────────────────
+
+    /**
+     * Applies an edit to every item whose id matches a pattern.
+     *
+     * <p>This is the one that matters at this scale. There are ten thousand items, and retuning a
+     * whole gear line by hand is not a task anybody finishes. It is the reason people edit code
+     * instead of using an in game editor.</p>
+     *
+     * <p>Matching is a plain substring rather than a regular expression, because the person using it
+     * is standing in a Minecraft world typing into a sign.</p>
+     */
+    public static int bulkEdit(String pattern, java.util.function.Consumer<Override> edit) {
+        if (pattern == null || pattern.isBlank()) return 0;
+        int n = 0;
+        for (String id : matching(pattern)) {
+            Override o = getOrCreate(id);
+            edit.accept(o);
+            commit(o);
+            n++;
+        }
+        return n;
+    }
+
+    /** Every known id matching a pattern, whether it carries an edit yet or not. */
+    public static List<String> matching(String pattern) {
+        String p = pattern == null ? "" : pattern.trim().toLowerCase(java.util.Locale.ROOT);
+        List<String> out = new ArrayList<>();
+        for (String id : knownIds()) {
+            if (p.isEmpty() || id.contains(p)) out.add(id);
+        }
+        return out;
+    }
+
+    /**
+     * Every custom item id the server knows about.
+     *
+     * <p>Harvested from the recipe catalogue rather than kept as a second list, so it is correct by
+     * construction and covers all ten thousand items without anybody maintaining a registry. Cached
+     * against the recipe count, because parsing ten thousand result stacks per menu open would be
+     * felt immediately.</p>
+     */
+    public static List<String> knownIds() {
+        int now = SlayerRecipes.RECIPES.size();
+        if (knownCache != null && knownCacheSize == now) return knownCache;
+
+        java.util.Set<String> ids = new java.util.TreeSet<>(OVERRIDES.keySet());
+        for (SlayerRecipes.Recipe r : SlayerRecipes.RECIPES) {
+            String id = SlayerItems.getCustomItemId(r.result);
+            if (id != null && !id.isBlank()) ids.add(id);
+        }
+        knownCache = new ArrayList<>(ids);
+        knownCacheSize = now;
+        return knownCache;
+    }
+
+    private static List<String> knownCache;
+    private static int knownCacheSize = -1;
+
+    /** Drops the cache, for when recipes were reloaded underneath us. */
+    public static void invalidateKnown() {
+        knownCache = null;
+        knownCacheSize = -1;
+    }
+
+    // ── Sharing ───────────────────────────────────────────────────────────
+
+    /**
+     * An item configuration as a single line of text.
+     *
+     * <p>Base64 of the JSON, so it survives a chat box, a Discord message and a sign without
+     * anything mangling it. This is how one server owner hands a tuned item to another.</p>
+     */
+    public static String export(String id) {
+        Override o = OVERRIDES.get(id);
+        if (o == null) return null;
+        String json = GSON.toJson(toJson(o));
+        return java.util.Base64.getEncoder()
+                .encodeToString(json.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /** Reads an exported configuration onto an id. Returns a reason on failure, null on success. */
+    public static String importInto(String id, String code) {
+        if (code == null || code.isBlank()) return "There was nothing to read.";
+        try {
+            String json = new String(java.util.Base64.getDecoder().decode(code.trim()),
+                    StandardCharsets.UTF_8);
+            JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+            Override incoming = fromJson(id, obj);
+            // A revision from another server means nothing here, so it is not carried over.
+            Override live = OVERRIDES.get(id);
+            incoming.revision = live == null ? 1 : live.revision;
+            OVERRIDES.put(id, incoming);
+            commit(incoming);
+            return null;
+        } catch (IllegalArgumentException e) {
+            return "That is not a valid item code.";
+        } catch (Exception e) {
+            return "That code could not be read: " + e.getMessage();
         }
     }
 
@@ -223,6 +430,9 @@ public final class ItemOverrideManager {
             for (Component line : existing.lines()) {
                 String plain = line.getString();
                 if (plain.contains(MARK)) break;
+                // An enchantment this override bakes in is dropped from the kept lines, otherwise
+                // an item that was also enchanted at a table shows the same name twice.
+                if (!o.enchants.isEmpty() && bakedHere(o, plain)) continue;
                 lines.add(line);
             }
         }
@@ -260,6 +470,15 @@ public final class ItemOverrideManager {
             }
         }
         stack.set(DataComponents.LORE, new ItemLore(lines));
+    }
+
+    /** Whether a tooltip line names an enchantment this override is about to write itself. */
+    private static boolean bakedHere(Override o, String line) {
+        String plain = line.replaceAll("§.", "").trim();
+        int lastSpace = plain.lastIndexOf(' ');
+        if (lastSpace <= 0) return false;
+        CustomEnchant e = CustomEnchant.byDisplay(plain.substring(0, lastSpace).trim());
+        return e != null && o.enchants.containsKey(e.key());
     }
 
     /**

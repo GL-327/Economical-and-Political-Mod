@@ -724,7 +724,7 @@ public final class AdminPanel {
                     }
                 }, "What keys each gear line"));
 
-        gui.setSlot(29, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
+        gui.setSlot(37, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
                 () -> TitleGui.open(player),
                 Title.values().length + " titles",
                 "Earned from every other system"));
@@ -806,23 +806,28 @@ public final class AdminPanel {
                 "Buys what the market cannot price",
                 "Place one with /placecollector"));
 
-        gui.setSlot(31, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
+        gui.setSlot(37, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
                 () -> RareDropGui.open(player, 0),
                 RareDrop.values().length + " drop only items",
                 "Published odds, per mob"));
 
-        gui.setSlot(30, GuiKit.tile(Items.EMERALD_BLOCK, "Legacy shop", ChatFormatting.DARK_GRAY,
+        gui.setSlot(39, GuiKit.tile(Items.EMERALD_BLOCK, "Legacy shop", ChatFormatting.DARK_GRAY,
                 () -> ShopGui.openMainMenu(player),
                 "The old fixed price shop",
                 "Players go to the bazaar now, but this",
                 "still grants anything it alone carried"));
+
+        gui.setSlot(32, GuiKit.tile(Items.CLOCK, "Live reload", ChatFormatting.AQUA,
+                () -> HotReloadGui.open(player),
+                "Change the server without stopping it",
+                HotReloadAgent.available() ? "Code and data" : "Data only"));
 
         gui.setSlot(34, GuiKit.tile(Items.ANVIL, "Item editor", ChatFormatting.GOLD,
                 () -> ItemEditorGui.open(player),
                 ItemOverrideManager.count() + " items carry an edit",
                 "Edits reach every copy in the world"));
 
-        gui.setSlot(35, GuiKit.tile(Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
+        gui.setSlot(41, GuiKit.tile(Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
                 () -> CustomEnchantGui.open(player),
                 CustomEnchant.values().length + " custom enchantments",
                 "Applies to the item in your hand"));

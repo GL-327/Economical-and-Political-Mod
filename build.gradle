@@ -160,6 +160,17 @@ java {
 jar {
 	inputs.property "archivesName", project.base.archivesName
 
+	// The jar doubles as a java agent so the running server can redefine its own classes.
+	// Harmless when nobody uses it: these are three manifest lines that the game ignores.
+	manifest {
+		attributes(
+				"Premain-Class": "com.political.HotReloadAgent",
+				"Agent-Class": "com.political.HotReloadAgent",
+				"Can-Redefine-Classes": "true",
+				"Can-Retransform-Classes": "true"
+		)
+	}
+
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
 	}

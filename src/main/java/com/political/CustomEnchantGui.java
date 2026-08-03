@@ -50,11 +50,11 @@ public final class CustomEnchantGui {
         if (held.isEmpty()) {
             GuiKit.header(gui, Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
                     "Hold the item you want to enchant",
-                    "Then reopen this bench",
+                    "Then right click the table again",
                     CustomEnchant.values().length + " enchantments exist");
             gui.setSlot(22, GuiKit.info(Items.BARRIER, "Nothing in hand", ChatFormatting.RED,
                     "Close this, hold a weapon, tool, bow or",
-                    "piece of armour, and open it again.",
+                    "piece of armour, and use the table again.",
                     "",
                     "The item never leaves your hand, so there",
                     "is nothing here that can eat it."));
@@ -71,8 +71,10 @@ public final class CustomEnchantGui {
 
         GuiKit.header(gui, Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
                 "Working on " + held.getHoverName().getString(),
-                current.size() + " of " + CustomEnchantManager.MAX_PER_ITEM + " slots used",
-                applicable.size() + " enchantments fit this item");
+                current.size() + " of " + CustomEnchantManager.MAX_PER_ITEM
+                        + " slots used, " + applicable.size() + " fit this item",
+                "You have §a" + player.experienceLevel + " levels §7and §9"
+                        + EnchantTableHandler.lapisHeld(player) + " lapis");
 
         // The item itself, so the player can see what they are about to change.
         GuiElementBuilder preview = new GuiElementBuilder(held.getItem())
@@ -104,9 +106,11 @@ public final class CustomEnchantGui {
         for (CustomEnchant e : applicable) {
             int have = current.getOrDefault(e, 0);
             int next = Math.min(e.maxLevel, have + 1);
-            long cost = e.costFor(next);
+            int xp = e.xpFor(next);
+            int lapis = e.lapisFor(next);
             boolean maxed = have >= e.maxLevel;
-            boolean afford = CoinManager.hasCoins(player, cost);
+            boolean afford = player.experienceLevel >= xp
+                    && EnchantTableHandler.lapisHeld(player) >= lapis;
 
             GuiElementBuilder b = new GuiElementBuilder(e.icon())
                     .setName(Component.literal(e.display).withStyle(e.colour, ChatFormatting.BOLD))
@@ -127,10 +131,12 @@ public final class CustomEnchantGui {
                 b.addLoreLine(Component.literal("§aAlready at maximum."));
                 b.addLoreLine(Component.literal("§8Right click to strip it off."));
             } else {
-                b.addLoreLine(Component.literal((afford ? "§a" : "§c") + "Costs §6"
-                        + GuiKit.num(cost) + " §7for " + CustomEnchant.roman(next)));
+                b.addLoreLine(Component.literal("§7" + CustomEnchant.roman(next) + " costs §a"
+                        + xp + " levels §7and §9" + lapis + " lapis"));
                 if (!afford) {
-                    b.addLoreLine(Component.literal("§cYou cannot afford that."));
+                    b.addLoreLine(Component.literal(player.experienceLevel < xp
+                            ? "§cYou need " + (xp - player.experienceLevel) + " more levels."
+                            : "§cYou need more lapis."));
                 } else {
                     b.addLoreLine(Component.literal("§eClick to apply."));
                 }
@@ -154,22 +160,23 @@ public final class CustomEnchantGui {
                 }
                 if (CustomEnchantManager.levelOf(live, e) >= e.maxLevel) return;
                 int lv = Math.min(e.maxLevel, CustomEnchantManager.levelOf(live, e) + 1);
-                long price = e.costFor(lv);
-                if (!CoinManager.removeCoins(player, price)) {
-                    player.sendSystemMessage(Component.literal("§cThat costs "
-                            + GuiKit.num(price) + " coins."));
+                int needXp = e.xpFor(lv);
+                int needLapis = e.lapisFor(lv);
+                if (!EnchantTableHandler.charge(player, needXp, needLapis)) {
+                    player.sendSystemMessage(Component.literal("§cThat costs " + needXp
+                            + " levels and " + needLapis + " lapis."));
                     return;
                 }
                 String refusal = CustomEnchantManager.apply(live, e, lv);
                 if (refusal != null) {
-                    // Take nothing for a job that did not happen.
-                    CoinManager.giveCoinsQuiet(player, price);
+                    // Give both back for a job that did not happen.
+                    EnchantTableHandler.refund(player, needXp, needLapis);
                     player.sendSystemMessage(Component.literal("§c" + refusal));
                     return;
                 }
                 player.sendSystemMessage(Component.literal("§d✦ §f" + e.display + " "
-                        + CustomEnchant.roman(lv) + " §7applied for §6"
-                        + GuiKit.num(price) + " coins"));
+                        + CustomEnchant.roman(lv) + " §7applied for §a" + needXp
+                        + " levels §7and §9" + needLapis + " lapis"));
                 if (player.level() instanceof ServerLevel level) {
                     level.playSound(null, player.blockPosition(),
                             SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8f, 1.0f);
@@ -200,7 +207,11 @@ public final class CustomEnchantGui {
                 "One item carries " + CustomEnchantManager.MAX_PER_ITEM + " at once.",
                 "Right click any of them to strip it back off.",
                 "",
-                "§8Levels cost more the higher they go."));
+                "Paid in experience levels and lapis, the",
+                "same two things vanilla always asked for.",
+                "",
+                "§8Sneak and right click the table for the",
+                "§8vanilla screen instead."));
 
         GuiKit.footer(gui, SIZE, player, null);
         gui.open();

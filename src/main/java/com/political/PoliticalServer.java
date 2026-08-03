@@ -60,6 +60,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
         // Register custom items
         CustomItemHandler.register();
+        EnchantTableHandler.register();
 
         // Backrooms consumables (Almond Water etc.) right-click handling
         BackroomsItems.registerEvents();
@@ -424,6 +425,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ItemOverrideManager.load();
+            HotReloadManager.initialize();
             BazaarProduct.build();
             BazaarTraders.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));

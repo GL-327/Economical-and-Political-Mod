@@ -92,6 +92,12 @@ public final class BazaarProduct {
                 + BY_CATEGORY.size() + " categories");
     }
 
+    /** Throws the catalogue away and builds it again, for the live reload. */
+    public static void rebuild() {
+        built = false;
+        build();
+    }
+
     private static String keyOf(Item item) {
         try {
             return net.minecraft.core.registries.BuiltInRegistries.ITEM
