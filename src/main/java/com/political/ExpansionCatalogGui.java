@@ -37,6 +37,8 @@ public final class ExpansionCatalogGui {
                     n -> n.startsWith("vx sigil ")),
             new Section("Line Catalysts", ChatFormatting.YELLOW, Items.HEAVY_CORE,
                     n -> n.startsWith("vx catalyst ")),
+            new Section("Refined Materials", ChatFormatting.AQUA, Items.RAW_IRON,
+                    n -> n.startsWith("vx material ")),
             new Section("Beastcraft", ChatFormatting.RED, Items.BONE,
                     n -> n.startsWith("vx beast ")),
             new Section("Clockwork", ChatFormatting.GRAY, Items.CLOCK,

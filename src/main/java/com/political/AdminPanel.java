@@ -738,6 +738,11 @@ public final class AdminPanel {
                 () -> CrateGui.open(player),
                 "Five crates, published odds", "Bought with in game coins only"));
 
+        gui.setSlot(28, GuiKit.tile(Items.RAW_IRON, "Refined materials", ChatFormatting.AQUA,
+                () -> MaterialGui.open(player),
+                RefinedMaterial.values().length + " materials, five steps each",
+                RefinedMaterial.totalItems() + " items with full recipe chains"));
+
         gui.setSlot(30, GuiKit.tile(Items.BOOKSHELF, "Collections", ChatFormatting.GOLD,
                 () -> CollectionGui.open(player),
                 "Sixty collections, nine tiers each", "Permanent stat bonuses"));

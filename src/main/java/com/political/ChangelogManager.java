@@ -332,6 +332,15 @@ public final class ChangelogManager {
                         + "since one person with no workstation grows no food. All three are fixed, and a new "
                         + "progress screen lists every requirement for the next tier and marks the one blocking "
                         + "you, because none of it was visible before."),
+                e("Refined materials", "vx_materials",
+                        "Twenty four materials that do not exist in vanilla, from mithril and titanium to "
+                        + "tungsten, umber and soul string. Each runs a five step chain from a raw lump up to a "
+                        + "super compacted block, nine of one making one of the next, so a super compacted block "
+                        + "is six and a half thousand raw. Every step is a real recipe in the same store as "
+                        + "everything else, so the whole chain shows in the recipe browser and can be edited "
+                        + "like anything else rather than hidden behind a command. A raw lump is smelted out of "
+                        + "vanilla goods, which ties the new economy to the existing one instead of running "
+                        + "beside it."),
                 e("Titles", "vx_titles",
                         "Every other reward is a thing you carry. A title is the one that shows without anybody "
                         + "asking, which makes it the right home for the milestones that are otherwise invisible: "

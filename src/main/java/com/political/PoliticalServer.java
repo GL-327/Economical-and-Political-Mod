@@ -398,6 +398,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             LineCatalyst.ensureRecipes();
             AetherGear.ensureRecipes();
             RuneforgedGear.ensureRecipes();
+            RefinedMaterialItems.ensureRecipes();
             StarboundGear.ensureRecipes();
             BeastcraftGear.ensureRecipes();
             ClockworkGear.ensureRecipes();
