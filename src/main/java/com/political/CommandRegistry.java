@@ -1146,11 +1146,13 @@ public class CommandRegistry {
     }
 
     private static void registerShop(CommandDispatcher<CommandSourceStack> dispatcher) {
+        // One marketplace. /shop is kept as a door onto the bazaar rather than removed, because
+        // everybody already has the word in their fingers.
         dispatcher.register(Commands.literal("shop")
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    ShopGui.openMainMenu(player);
+                    BazaarGui.open(player);
                     return 1;
                 }));
 
@@ -1158,7 +1160,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    ShopGui.openSellInventory(player);
+                    BazaarGui.open(player);
                     return 1;
                 }));
     }

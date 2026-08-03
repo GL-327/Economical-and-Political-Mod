@@ -322,6 +322,41 @@ public final class ItemOverrideManager {
         };
     }
 
+    /**
+     * Builds a fresh copy of an item from its stored edits alone.
+     *
+     * <p>This is what makes an admin created item a real item rather than the one copy that happened
+     * to be in somebody's hand at the time. It only works for items whose override records a base,
+     * which is every item the editor minted.</p>
+     */
+    public static ItemStack build(String id) {
+        Override o = OVERRIDES.get(id);
+        if (o == null) return ItemStack.EMPTY;
+
+        net.minecraft.world.item.Item base = net.minecraft.world.item.Items.PAPER;
+        if (o.baseItem != null) {
+            var found = net.minecraft.core.registries.BuiltInRegistries.ITEM.getOptional(
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath("minecraft", o.baseItem));
+            if (found.isPresent()) base = found.get();
+        }
+
+        ItemStack stack = new ItemStack(base);
+        SlayerItems.setCustomItemId(stack, id);
+        rebuild(stack, o);
+        stamp(stack, o.revision);
+        return stack;
+    }
+
+    /** Every id that can be rebuilt from its override, sorted. */
+    public static List<String> buildableIds() {
+        List<String> out = new ArrayList<>();
+        for (Map.Entry<String, Override> e : OVERRIDES.entrySet()) {
+            if (e.getValue().baseItem != null) out.add(e.getKey());
+        }
+        java.util.Collections.sort(out);
+        return out;
+    }
+
     // ── The sweep ─────────────────────────────────────────────────────────
 
     /**

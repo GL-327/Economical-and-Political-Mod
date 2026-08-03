@@ -105,6 +105,16 @@ public final class BazaarManager {
     // ── Pricing ───────────────────────────────────────────────────────────
 
     /** What one unit is nominally worth, from how hard the material is to get. */
+    public static long baseValue(BazaarProduct c) {
+        return c == null ? 8L : Math.max(1L, c.anchor);
+    }
+
+    /**
+     * What a collection material is nominally worth, from its band.
+     *
+     * <p>Kept separate because the product catalogue calls it while it is being built, at which
+     * point asking a product for its own anchor would be circular.</p>
+     */
     public static long baseValue(CollectionType c) {
         return switch (c.band) {
             case COMMON -> 8L;
@@ -115,34 +125,34 @@ public final class BazaarManager {
     }
 
     /** The best price a seller can get right now, house book included. */
-    public static long instantSellPrice(CollectionType c) {
+    public static long instantSellPrice(BazaarProduct c) {
         Order best = bestBuyOrder(c);
         long house = Math.max(1L, Math.round(baseValue(c) * HOUSE_BUY_FACTOR));
         return best == null ? house : Math.max(house, best.unitPrice);
     }
 
     /** The best price a buyer must pay right now, house book included. */
-    public static long instantBuyPrice(CollectionType c) {
+    public static long instantBuyPrice(BazaarProduct c) {
         Order best = bestSellOrder(c);
         long house = Math.max(2L, Math.round(baseValue(c) * HOUSE_SELL_FACTOR));
         return best == null ? house : Math.min(house, best.unitPrice);
     }
 
-    public static Order bestBuyOrder(CollectionType c) {
+    public static Order bestBuyOrder(BazaarProduct c) {
         return ORDERS.stream()
                 .filter(o -> o.buy && o.product.equals(c.key()) && o.remaining() > 0)
                 .max(Comparator.comparingLong(o -> o.unitPrice))
                 .orElse(null);
     }
 
-    public static Order bestSellOrder(CollectionType c) {
+    public static Order bestSellOrder(BazaarProduct c) {
         return ORDERS.stream()
                 .filter(o -> !o.buy && o.product.equals(c.key()) && o.remaining() > 0)
                 .min(Comparator.comparingLong(o -> o.unitPrice))
                 .orElse(null);
     }
 
-    public static List<Order> book(CollectionType c, boolean buySide) {
+    public static List<Order> book(BazaarProduct c, boolean buySide) {
         List<Order> out = new ArrayList<>();
         for (Order o : ORDERS) {
             if (o.buy == buySide && o.product.equals(c.key()) && o.remaining() > 0) out.add(o);
@@ -170,7 +180,7 @@ public final class BazaarManager {
      * Sells from the player's inventory at the best price available, filling real buy orders first
      * and falling back to the house. Returns how many units actually moved.
      */
-    public static int sellInstantly(ServerPlayer player, CollectionType c, int wanted) {
+    public static int sellInstantly(ServerPlayer player, BazaarProduct c, int wanted) {
         int have = countInInventory(player, c);
         int toSell = Math.min(wanted, have);
         if (toSell <= 0) {
@@ -204,6 +214,9 @@ public final class BazaarManager {
         long net = gross - tax;
         CoinManager.giveCoins(player, net);
 
+        // A sale that size moves the price, which is the point of having a market at all.
+        BazaarTraders.onPlayerFlow(c, sold, false);
+
         player.sendSystemMessage(Component.literal("§aSold §f" + sold + " §a"
                 + c.display + " §7for §6" + GuiKit.num(net) + " coins §8(after "
                 + TAX_PERCENT + "% fee)"));
@@ -216,7 +229,7 @@ public final class BazaarManager {
      * Buys at the best price available, filling real sell offers first. Returns how many units the
      * player actually received.
      */
-    public static int buyInstantly(ServerPlayer player, CollectionType c, int wanted) {
+    public static int buyInstantly(ServerPlayer player, BazaarProduct c, int wanted) {
         if (wanted <= 0) return 0;
 
         int bought = 0;
@@ -256,6 +269,8 @@ public final class BazaarManager {
 
         CoinManager.removeCoins(player, cost);
         giveToPlayer(player, c, bought);
+        BazaarTraders.onPlayerFlow(c, bought, true);
+
         player.sendSystemMessage(Component.literal("§aBought §f" + bought + " §a"
                 + c.display + " §7for §6" + GuiKit.num(cost) + " coins"));
         prune();
@@ -264,7 +279,7 @@ public final class BazaarManager {
     }
 
     /** Posts an order onto the book. Buy orders escrow the coins, sell offers escrow the items. */
-    public static boolean postOrder(ServerPlayer player, CollectionType c, long unitPrice,
+    public static boolean postOrder(ServerPlayer player, BazaarProduct c, long unitPrice,
                                     int amount, boolean buy) {
         if (unitPrice <= 0 || amount <= 0) return false;
 
@@ -306,7 +321,7 @@ public final class BazaarManager {
             if (!o.id.equals(orderId)) continue;
             if (!o.ownerUuid.equals(player.getUUID().toString())) return false;
 
-            CollectionType c = CollectionType.byKey(o.product);
+            BazaarProduct c = BazaarProduct.byKey(o.product);
             int left = o.remaining();
             if (o.buy) {
                 CoinManager.giveCoins(player, (long) left * o.unitPrice);
@@ -325,17 +340,34 @@ public final class BazaarManager {
     }
 
     private static void payOwner(Order o, long coins) {
+        // A synthetic trader has no coin account, so the money simply leaves the economy here. That
+        // is the correct outcome: the point of them is liquidity, not a second wallet to drain.
+        if (isSynthetic(o)) return;
         long tax = coins * TAX_PERCENT / 100L;
         CoinManager.giveCoins(o.ownerUuid, coins - tax);
     }
+
+    /** Whether this order belongs to one of the synthetic traders rather than a person. */
+    public static boolean isSynthetic(Order o) {
+        return o != null && o.ownerUuid.startsWith(SYNTHETIC_PREFIX);
+    }
+
+    /** The marker that separates a synthetic trader's id from a real player uuid. */
+    public static final String SYNTHETIC_PREFIX = "npc:";
 
     /**
      * Hands the goods to the buy order owner if they happen to be online, and otherwise leaves them
      * accruing on the order for them to claim later. Either way the units are never lost, which is
      * the part that matters when somebody has already paid for them.
      */
-    private static void deliverToOwner(Order o, CollectionType c, int count) {
+    private static void deliverToOwner(Order o, BazaarProduct c, int count) {
         o.filled = Math.min(o.amount, o.filled);
+        // A synthetic buyer takes delivery immediately, otherwise its order would never finish and
+        // the book would fill up with orders nobody can ever clear.
+        if (isSynthetic(o)) {
+            o.claimed = o.filled;
+            return;
+        }
         ServerPlayer owner = onlinePlayer(o.ownerUuid);
         if (owner == null) return;
         giveToPlayer(owner, c, count);
@@ -360,7 +392,7 @@ public final class BazaarManager {
             if (!o.ownerUuid.equals(player.getUUID().toString())) return 0;
             int owed = o.claimable();
             if (owed <= 0) return 0;
-            CollectionType c = CollectionType.byKey(o.product);
+            BazaarProduct c = BazaarProduct.byKey(o.product);
             if (c == null) return 0;
             giveToPlayer(player, c, owed);
             o.claimed = o.filled;
@@ -379,7 +411,7 @@ public final class BazaarManager {
 
     // ── Inventory helpers ─────────────────────────────────────────────────
 
-    public static int countInInventory(ServerPlayer player, CollectionType c) {
+    public static int countInInventory(ServerPlayer player, BazaarProduct c) {
         int n = 0;
         for (ItemStack st : player.getInventory().getNonEquipmentItems()) {
             if (st.isEmpty() || !st.is(c.material)) continue;
@@ -389,7 +421,7 @@ public final class BazaarManager {
         return n;
     }
 
-    private static void removeFromInventory(ServerPlayer player, CollectionType c, int count) {
+    private static void removeFromInventory(ServerPlayer player, BazaarProduct c, int count) {
         int left = count;
         for (ItemStack st : player.getInventory().getNonEquipmentItems()) {
             if (left <= 0) break;
@@ -401,7 +433,7 @@ public final class BazaarManager {
         }
     }
 
-    private static void giveToPlayer(ServerPlayer player, CollectionType c, int count) {
+    private static void giveToPlayer(ServerPlayer player, BazaarProduct c, int count) {
         int left = count;
         while (left > 0) {
             int stack = Math.min(left, c.material.getDefaultMaxStackSize());
@@ -414,7 +446,72 @@ public final class BazaarManager {
     }
 
     /** Every product the bazaar trades, which is every collection material. */
-    public static List<CollectionType> productsIn(CollectionType.Field field) {
-        return CollectionType.inField(field);
+    public static List<BazaarProduct> productsIn(String category) {
+        return BazaarProduct.inCategory(category);
+    }
+
+    // ── Hooks for the synthetic traders ───────────────────────────────────
+
+    /**
+     * Puts an order on the book directly.
+     *
+     * <p>Only the trader engine uses this. It skips the escrow that {@link #postOrder} performs,
+     * which is safe for a synthetic order and would be a duplication bug for a real one, so nothing
+     * player facing is allowed near it.</p>
+     */
+    public static void addSyntheticOrder(Order o) {
+        if (o == null || !isSynthetic(o)) return;
+        ORDERS.add(o);
+    }
+
+    /** Every live order, for the engine to match against. */
+    public static List<Order> liveOrders() {
+        return new ArrayList<>(ORDERS);
+    }
+
+    /** How many orders are on the book right now. */
+    public static int orderCount() {
+        return ORDERS.size();
+    }
+
+    public static int syntheticOrderCount() {
+        int n = 0;
+        for (Order o : ORDERS) {
+            if (isSynthetic(o)) n++;
+        }
+        return n;
+    }
+
+    /**
+     * Fills part of an existing order on behalf of a synthetic trader.
+     *
+     * <p>Goes through the same payout and delivery paths a player fill would, so a person on the
+     * other side is paid and delivered to identically whether the counterparty was real or not.</p>
+     */
+    public static int fillAsSynthetic(Order o, int units) {
+        if (o == null || units <= 0) return 0;
+        int take = Math.min(units, o.remaining());
+        if (take <= 0) return 0;
+        BazaarProduct c = BazaarProduct.byKey(o.product);
+        if (c == null) return 0;
+
+        o.filled += take;
+        if (o.buy) {
+            deliverToOwner(o, c, take);
+        } else {
+            payOwner(o, (long) take * o.unitPrice);
+        }
+        return take;
+    }
+
+    /** Drops a synthetic order off the book, used when a trader changes its mind. */
+    public static boolean removeSynthetic(String orderId) {
+        return ORDERS.removeIf(o -> isSynthetic(o) && o.id.equals(orderId));
+    }
+
+    /** Clears finished orders and writes to disk. Called by the engine after a round. */
+    public static void settle() {
+        prune();
+        save();
     }
 }

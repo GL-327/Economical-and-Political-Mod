@@ -1053,6 +1053,18 @@ public class CustomItemsGui {
                 .setCallback((idx, type, containerInput, slotGui) -> ExpansionCatalogGui.openMenu(player))
                 .build());
 
+        // Items an admin built in the editor, so the loop from "make one" to "hand one out" to
+        // "give it a recipe" closes without anybody leaving the game.
+        gui.setSlot(3, new GuiElementBuilder(Items.ANVIL)
+                .setName(Component.literal("✎ Admin Made").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal(""))
+                .addLoreLine(Component.literal("Items built in the item editor").withStyle(ChatFormatting.GRAY))
+                .addLoreLine(Component.literal(ItemOverrideManager.buildableIds().size()
+                        + " so far").withStyle(ChatFormatting.DARK_GRAY))
+                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
+                .setCallback((idx, type, containerInput, slotGui) -> openAdminMade(player, 0))
+                .build());
+
         // Row 1: Armor categories - spread across more slots
         gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
                 .setName(Component.literal("💎 Custom Armor").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
@@ -2757,5 +2769,76 @@ public class CustomItemsGui {
             }
         }
         return false;
+    }
+
+    // ── Admin made items ──────────────────────────────────────────────────
+
+    /**
+     * Everything an admin built in the item editor.
+     *
+     * <p>Rebuilt from the stored override rather than from a copy kept somewhere, so an item edited
+     * after it was made is handed out in its current form rather than the form it had on the day
+     * somebody pressed create.</p>
+     */
+    public static void openAdminMade(ServerPlayer player, int page) {
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Component.literal("Admin Made")
+                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        GuiKit.frame(gui, 54);
+
+        java.util.List<String> ids = ItemOverrideManager.buildableIds();
+        GuiKit.header(gui, Items.ANVIL, "Admin Made", ChatFormatting.GOLD,
+                ids.size() + " items built in the editor",
+                "Left click for one, right click to edit",
+                "They carry every edit made since");
+
+        java.util.List<eu.pb4.sgui.api.elements.GuiElement> entries = new java.util.ArrayList<>();
+        for (String id : ids) {
+            ItemStack made = ItemOverrideManager.build(id);
+            if (made.isEmpty()) continue;
+            ItemOverrideManager.Override o = ItemOverrideManager.get(id);
+
+            GuiElementBuilder b = new GuiElementBuilder(made.getItem())
+                    .setName(made.getHoverName().copy())
+                    .addLoreLine(Component.literal("§8" + id))
+                    .addLoreLine(Component.literal("§7Revision §f" + (o == null ? 1 : o.revision)))
+                    .addLoreLine(Component.literal(""))
+                    .addLoreLine(Component.literal("§eLeft click for one."))
+                    .addLoreLine(Component.literal("§eRight click to open the editor on it."));
+
+            entries.add(b.setCallback((idx, type, ci, sg) -> {
+                ItemStack copy = ItemOverrideManager.build(id);
+                if (copy.isEmpty()) return;
+                if (!player.getInventory().add(copy)) player.drop(copy, false);
+                if (type.isRight) {
+                    ItemEditorGui.open(player);
+                } else {
+                    player.sendSystemMessage(Component.literal("§aGave you §f"
+                            + copy.getHoverName().getString()));
+                    openAdminMade(player, page);
+                }
+            }).build());
+        }
+
+        if (entries.isEmpty()) {
+            gui.setSlot(22, GuiKit.info(Items.BARRIER, "Nothing built yet", ChatFormatting.RED,
+                    "Open the item editor and choose",
+                    "\"Make a new item\" to start one.",
+                    "",
+                    "It will appear here, and can be given",
+                    "a recipe from /setrecipe."));
+        }
+
+        GuiKit.paint(gui, entries, page, GuiKit.LIST_SLOTS.length);
+        GuiKit.pager(gui, 54, page, entries.size(), GuiKit.LIST_SLOTS.length,
+                p -> openAdminMade(player, p));
+
+        gui.setSlot(49, GuiKit.action(Items.NETHER_STAR, "Make a new one",
+                ChatFormatting.LIGHT_PURPLE,
+                () -> ItemEditorGui.open(player),
+                "Opens the item editor."));
+
+        GuiKit.footer(gui, 54, player, () -> open(player));
+        gui.open();
     }
 }

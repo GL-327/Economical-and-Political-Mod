@@ -424,6 +424,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ItemOverrideManager.load();
+            BazaarProduct.build();
+            BazaarTraders.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             NemesisManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CommissionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -482,6 +484,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CollectionManager.save();
             BazaarManager.save();
             ItemOverrideManager.save();
+            BazaarTraders.save();
             MinionManager.save();
             NemesisManager.save();
             CrateManager.save();
@@ -603,6 +606,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SiegeManager.tick(s);
             CustomEnchantEffects.tick();
             ItemOverrideManager.tick();
+            BazaarTraders.tick();
             PoliticalPartyManager.tick(s);
             PartyCrisisManager.tick(s);
             LavaFishingHandler.tick(s);

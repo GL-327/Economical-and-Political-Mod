@@ -811,6 +811,12 @@ public final class AdminPanel {
                 RareDrop.values().length + " drop only items",
                 "Published odds, per mob"));
 
+        gui.setSlot(30, GuiKit.tile(Items.EMERALD_BLOCK, "Legacy shop", ChatFormatting.DARK_GRAY,
+                () -> ShopGui.openMainMenu(player),
+                "The old fixed price shop",
+                "Players go to the bazaar now, but this",
+                "still grants anything it alone carried"));
+
         gui.setSlot(34, GuiKit.tile(Items.ANVIL, "Item editor", ChatFormatting.GOLD,
                 () -> ItemEditorGui.open(player),
                 ItemOverrideManager.count() + " items carry an edit",

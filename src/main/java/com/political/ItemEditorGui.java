@@ -863,6 +863,9 @@ public final class ItemEditorGui {
             ItemOverrideManager.Override o = ItemOverrideManager.getOrCreate(id);
             o.name = pretty(id);
             o.rarity = "COMMON";
+            // Recorded so the item can be rebuilt from the override alone, which is what lets it
+            // appear in /customitems without the admin having to keep a copy in a chest somewhere.
+            o.baseItem = "paper";
             ItemOverrideManager.commit(o);
 
             if (!player.getInventory().add(made)) player.drop(made, false);

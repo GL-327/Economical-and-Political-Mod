@@ -38,13 +38,18 @@ public final class BazaarGui {
                 "Buy and sell raw materials",
                 "Your balance: " + GuiKit.num(CoinManager.getCoinsLong(player)) + " coins");
 
-        int[] slots = {20, 21, 22, 23, 24, 31};
-        CollectionType.Field[] fields = CollectionType.Field.values();
-        for (int i = 0; i < fields.length && i < slots.length; i++) {
-            CollectionType.Field f = fields[i];
-            gui.setSlot(slots[i], GuiKit.tile(f.icon, f.label, f.colour,
-                    () -> openField(player, f, 0),
-                    BazaarManager.productsIn(f).size() + " products",
+        // Categories come from the merged catalogue, so the six collection fields and the old shop
+        // sections sit side by side and a player has one place to look rather than two.
+        List<String> cats = BazaarProduct.categories();
+        // Stops short of the last row, which already holds My orders and the explainer. Eighteen
+        // categories fit comfortably; the cap is here so adding more never quietly eats a button.
+        int room = Math.min(GuiKit.LIST_SLOTS.length - 7, cats.size());
+        for (int i = 0; i < room; i++) {
+            final String cat = cats.get(i);
+            gui.setSlot(GuiKit.LIST_SLOTS[i], GuiKit.tile(BazaarProduct.iconFor(cat), cat,
+                    ChatFormatting.YELLOW,
+                    () -> openField(player, cat, 0),
+                    BazaarManager.productsIn(cat).size() + " products",
                     "Live buy and sell quotes"));
         }
 
@@ -66,15 +71,16 @@ public final class BazaarGui {
 
     // ── One field ─────────────────────────────────────────────────────────
 
-    private static void openField(ServerPlayer player, CollectionType.Field field, int page) {
+    private static void openField(ServerPlayer player, String field, int page) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Bazaar: " + field.label)
-                .withStyle(field.colour, ChatFormatting.BOLD));
+        gui.setTitle(Component.literal("Bazaar: " + field)
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
         GuiKit.frame(gui, SIZE);
-        GuiKit.header(gui, field.icon, field.label, field.colour, "Live quotes");
+        GuiKit.header(gui, BazaarProduct.iconFor(field), field, ChatFormatting.YELLOW,
+                "Live quotes", BazaarProduct.inCategory(field).size() + " products", "");
 
         List<GuiElement> entries = new ArrayList<>();
-        for (CollectionType c : BazaarManager.productsIn(field)) {
+        for (BazaarProduct c : BazaarManager.productsIn(field)) {
             long buyAt = BazaarManager.instantBuyPrice(c);
             long sellAt = BazaarManager.instantSellPrice(c);
             int held = BazaarManager.countInInventory(player, c);
@@ -86,6 +92,10 @@ public final class BazaarGui {
                     .addLoreLine(Component.literal("§7Sell at §6" + GuiKit.num(sellAt) + " §7each"))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("§7You hold §f" + held))
+                    .addLoreLine(Component.literal("§7Market §6"
+                            + GuiKit.num(BazaarTraders.midOf(c)) + " "
+                            + (BazaarTraders.momentumOf(c) > 0.05 ? "§a▲"
+                               : BazaarTraders.momentumOf(c) < -0.05 ? "§c▼" : "§7▬")))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("§eClick to trade"))
                     .setCallback((a, t, ci, sg) -> openProduct(player, c))
@@ -101,7 +111,7 @@ public final class BazaarGui {
 
     // ── One product ───────────────────────────────────────────────────────
 
-    private static void openProduct(ServerPlayer player, CollectionType c) {
+    private static void openProduct(ServerPlayer player, BazaarProduct c) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal(c.display).withStyle(c.colour, ChatFormatting.BOLD));
         GuiKit.frame(gui, SIZE);
@@ -110,10 +120,14 @@ public final class BazaarGui {
         long sellAt = BazaarManager.instantSellPrice(c);
         int held = BazaarManager.countInInventory(player, c);
 
+        double mom = BazaarTraders.momentumOf(c);
+        String arrow = mom > 0.05 ? "§a▲" : mom < -0.05 ? "§c▼" : "§7▬";
+
         GuiKit.header(gui, c.material, c.display, c.colour,
-                c.flavor,
-                "You hold " + held,
-                "Balance " + GuiKit.num(CoinManager.getCoinsLong(player)) + " coins");
+                c.collection != null ? c.collection.flavor : "Traded on the open book",
+                "You hold " + held + ", balance "
+                        + GuiKit.num(CoinManager.getCoinsLong(player)) + " coins",
+                "Market " + GuiKit.num(BazaarTraders.midOf(c)) + " " + arrow);
 
         // Sell row.
         gui.setSlot(19, GuiKit.info(Items.HOPPER, "Instant sell", ChatFormatting.GREEN,
@@ -186,11 +200,11 @@ public final class BazaarGui {
         // The book itself, so the price is not a black box.
         gui.setSlot(40, bookElement(c));
 
-        GuiKit.footer(gui, SIZE, player, () -> openField(player, c.field, 0));
+        GuiKit.footer(gui, SIZE, player, () -> openField(player, c.category, 0));
         gui.open();
     }
 
-    private static GuiElement bookElement(CollectionType c) {
+    private static GuiElement bookElement(BazaarProduct c) {
         List<BazaarManager.Order> buys = BazaarManager.book(c, true);
         List<BazaarManager.Order> sells = BazaarManager.book(c, false);
 
@@ -203,7 +217,8 @@ public final class BazaarGui {
         } else {
             for (int i = 0; i < Math.min(4, buys.size()); i++) {
                 BazaarManager.Order o = buys.get(i);
-                b.addLoreLine(Component.literal("  §7" + o.remaining() + " at §6" + o.unitPrice));
+                b.addLoreLine(Component.literal("  §7" + o.remaining() + " at §6" + o.unitPrice
+                        + " §8" + o.ownerName));
             }
         }
         b.addLoreLine(Component.literal(""));
@@ -213,7 +228,8 @@ public final class BazaarGui {
         } else {
             for (int i = 0; i < Math.min(4, sells.size()); i++) {
                 BazaarManager.Order o = sells.get(i);
-                b.addLoreLine(Component.literal("  §7" + o.remaining() + " at §6" + o.unitPrice));
+                b.addLoreLine(Component.literal("  §7" + o.remaining() + " at §6" + o.unitPrice
+                        + " §8" + o.ownerName));
             }
         }
         return b.build();
@@ -233,7 +249,7 @@ public final class BazaarGui {
 
         List<GuiElement> entries = new ArrayList<>();
         for (BazaarManager.Order o : mine) {
-            CollectionType c = CollectionType.byKey(o.product);
+            BazaarProduct c = BazaarProduct.byKey(o.product);
             if (c == null) continue;
             int owed = o.claimable();
             if (owed > 0) {
