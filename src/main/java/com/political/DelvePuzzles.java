@@ -76,10 +76,13 @@ public final class DelvePuzzles {
     public static void build(ServerLevel level, DelveRun run, DelveBuilder.Placed room, Random rng) {
         Puzzle puzzle = new Puzzle();
 
-        // A short wall two blocks in from the room's own edge, running along X.
-        int baseX = room.origin.getX() + 3;
+        // Anchored to the middle of the room rather than to a fixed offset from its corner. The
+        // first version assumed every room reached at least ten blocks in from its own edge, which
+        // is true of most of them and false of exactly the small ones a puzzle would be buried in.
+        int span = (LEVERS - 1) * 2;
+        int baseX = room.origin.getX() + Math.max(1, (room.size.getX() - span) / 2);
         int y = room.floorY + 1;
-        int z = room.origin.getZ() + 2;
+        int z = room.origin.getZ() + Math.max(2, room.size.getZ() / 2);
 
         // Backing, so the levers have something to sit on whatever the room's floor is doing.
         for (int i = 0; i < LEVERS; i++) {
@@ -107,7 +110,7 @@ public final class DelvePuzzles {
         }
 
         puzzle.room = room;
-        puzzle.rewardAt = new BlockPos(baseX + 2, y, z - 2);
+        puzzle.rewardAt = new BlockPos(baseX + span / 2, y, z - 2);
         set(level, puzzle.rewardAt, Blocks.AIR);
 
         PUZZLES.computeIfAbsent(run.id, k -> new ArrayList<>()).add(puzzle);

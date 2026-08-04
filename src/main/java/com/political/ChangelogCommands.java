@@ -21,6 +21,16 @@ public final class ChangelogCommands {
                     }));
         }
 
+        // The front door. Short aliases on purpose: this is the screen a new player should find
+        // first and the one an old one should be able to reach without thinking.
+        for (String alias : new String[]{"politics", "gov", "government"}) {
+            dispatcher.register(Commands.literal(alias)
+                    .executes(ctx -> {
+                        PoliticsHub.open(ctx.getSource().getPlayerOrException());
+                        return 1;
+                    }));
+        }
+
         for (String alias : new String[]{"delve", "delves"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {

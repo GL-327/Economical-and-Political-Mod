@@ -148,10 +148,50 @@ public final class SettlementCommands {
                             return 1;
                         })));
 
-        dispatcher.register(Commands.literal("atlas").executes(ctx -> {
-            AtlasMapGui.open(ctx.getSource().getPlayerOrException());
-            return 1;
-        }));
+        // /atlas hands over the map itself. The table is there for choosing a different sheet or
+        // finding a settlement by name, but nobody should have to open a screen to get a map.
+        dispatcher.register(Commands.literal("atlas")
+                .executes(ctx -> {
+                    AtlasMap.give(ctx.getSource().getPlayerOrException(),
+                            AtlasCartographer.Zoom.REGION);
+                    return 1;
+                })
+                .then(Commands.literal("table").executes(ctx -> {
+                    AtlasMapGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }))
+                .then(Commands.literal("local").executes(ctx -> {
+                    AtlasMap.give(ctx.getSource().getPlayerOrException(),
+                            AtlasCartographer.Zoom.LOCAL);
+                    return 1;
+                }))
+                .then(Commands.literal("region").executes(ctx -> {
+                    AtlasMap.give(ctx.getSource().getPlayerOrException(),
+                            AtlasCartographer.Zoom.REGION);
+                    return 1;
+                }))
+                .then(Commands.literal("realm").executes(ctx -> {
+                    AtlasMap.give(ctx.getSource().getPlayerOrException(),
+                            AtlasCartographer.Zoom.REALM);
+                    return 1;
+                }))
+                .then(Commands.literal("redraw").executes(ctx -> {
+                    ServerPlayer p = ctx.getSource().getPlayerOrException();
+                    int n = AtlasMap.refreshHeld(p);
+                    p.sendSystemMessage(Component.literal(n == 0
+                            ? "§7You are not carrying an atlas. §8Try /atlas"
+                            : "§a" + n + " sheet" + (n == 1 ? "" : "s") + " redrawn."));
+                    return 1;
+                }))
+                .then(Commands.literal("resurvey")
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(ctx -> {
+                            AtlasCartographer.forget();
+                            ctx.getSource().sendSuccess(() -> Component.literal(
+                                    "§aSurveyed land forgotten. The next atlas re-reads the world."),
+                                    true);
+                            return 1;
+                        })));
 
         dispatcher.register(Commands.literal("council")
                 .executes(ctx -> {

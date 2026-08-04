@@ -27,9 +27,115 @@ public class ElectionManager {
     private static int impeachNo = 0;
     private static List<String> impeachVoted = new ArrayList<>();
 
-    private static boolean electionSystemEnabled = false;
+    /**
+     * On by default.
+     *
+     * <p>This is the spine of the mod: people stand for office, people vote, the winner sets policy
+     * for a term. Shipping it switched off meant a fresh server had no politics in it at all until
+     * somebody found the admin panel, which is how the whole loop quietly went missing.</p>
+     */
+    private static boolean electionSystemEnabled = true;
     private static boolean electionSystemPaused = false;
     private static final long ELECTION_DURATION_MS = 24 * 60 * 60 * 1000L;  // 24 hours (adjust as needed)
+
+    /** Which reminders have already gone out this election, so nobody is told twice. */
+    private static final Set<Integer> remindersSent = new HashSet<>();
+
+    /**
+     * Where the republic currently is, in one value.
+     *
+     * <p>Every screen that wants to say "here is what you can do right now" was previously working
+     * that out from five booleans and getting it subtly wrong in at least three places.</p>
+     */
+    public enum Phase {
+        /** Nobody has switched elections on. */
+        OFF,
+        /** Switched on, deliberately halted. */
+        PAUSED,
+        /** Somebody took the whole thing by force. No votes happen. */
+        DICTATORSHIP,
+        /** A term is running. The office is held and policy is set. */
+        TERM,
+        /** Nominations and voting are open. */
+        ELECTION,
+        /** The votes are counted and the winners have not chosen their policies yet. */
+        AWAITING_POLICY
+    }
+
+    public static Phase phase() {
+        if (DictatorManager.isDictatorActive()) return Phase.DICTATORSHIP;
+        if (!electionSystemEnabled) return Phase.OFF;
+        if (electionSystemPaused) return Phase.PAUSED;
+        if (electionActive) return Phase.ELECTION;
+        String chair = DataManager.getChair();
+        if (chair != null && !PerkManager.isChairPerksSetThisTerm()) return Phase.AWAITING_POLICY;
+        return Phase.TERM;
+    }
+
+    /** A short sentence naming what is happening, for the top of a screen or a chat line. */
+    public static String phaseText() {
+        return switch (phase()) {
+            case OFF -> "Elections are switched off on this server.";
+            case PAUSED -> "Elections are paused.";
+            case DICTATORSHIP -> "A dictator holds power. There are no elections.";
+            case ELECTION -> "An election is open. Stand, or vote.";
+            case AWAITING_POLICY -> "The election is decided. The Chair is choosing policy.";
+            case TERM -> "A term is running.";
+        };
+    }
+
+    // ── Standing for office ───────────────────────────────────────────────
+
+    /**
+     * Puts a player's name on the ballot.
+     *
+     * <p>The old system drew five names at random out of everybody who had ever logged in, which
+     * meant nobody could run for office and half the ballot was people who were not online and had
+     * never asked. Standing is now something you do.</p>
+     *
+     * @return a reason for refusal, or null if they are now a candidate
+     */
+    public static String stand(ServerPlayer player) {
+        if (!electionActive) return "No election is open. Wait for the term to end.";
+        if (DictatorManager.isDictatorActive()) return "Elections are suspended.";
+        String uuid = player.getUUID().toString();
+        if (candidates.contains(uuid)) return "You are already standing.";
+        if (candidates.size() >= MAX_CANDIDATES) {
+            return "The ballot is full at " + MAX_CANDIDATES + " candidates.";
+        }
+        if (votedPlayers.containsKey(uuid)) {
+            return "You have already voted this election. You cannot then stand in it.";
+        }
+
+        candidates.add(uuid);
+        votes.putIfAbsent(uuid, 0);
+        DataManager.save(PoliticalServer.server);
+
+        if (PoliticalServer.server != null) {
+            broadcast(PoliticalServer.server, Component.literal("§e⚑ §f"
+                    + player.getName().getString() + "§7 is standing for Chair. §8/politics"));
+        }
+        return null;
+    }
+
+    /** Takes a name back off the ballot, and any votes already cast for it with it. */
+    public static String withdraw(ServerPlayer player) {
+        String uuid = player.getUUID().toString();
+        if (!candidates.remove(uuid)) return "You are not standing.";
+        votes.remove(uuid);
+        // Anybody who backed them gets their vote back rather than having it vanish into a name
+        // that is no longer on the paper.
+        votedPlayers.entrySet().removeIf(e -> uuid.equals(e.getValue()));
+        DataManager.save(PoliticalServer.server);
+        return null;
+    }
+
+    public static boolean isCandidate(String uuid) {
+        return candidates.contains(uuid);
+    }
+
+    /** How many names the ballot holds. */
+    public static final int MAX_CANDIDATES = 8;
 
     public static void loadFromData(DataManager.SaveData data) {
         termEndTime = data.termEndTime;
