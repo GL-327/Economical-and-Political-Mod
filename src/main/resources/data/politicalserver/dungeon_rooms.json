@@ -1,0 +1,6327 @@
+{
+ "catacombs": [
+  {
+   "blocks": 22657,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_arena",
+   "name": "dnt_catacomb_arena",
+   "source": "dnt",
+   "x": 31,
+   "y": 21,
+   "z": 35
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_hallway_room_1",
+   "name": "dnt_catacomb_hallway_room_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_hallway_room_2",
+   "name": "dnt_catacomb_hallway_room_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_hallway_room_3",
+   "name": "dnt_catacomb_hallway_room_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_hallway_room_4",
+   "name": "dnt_catacomb_hallway_room_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_hallway_room_5",
+   "name": "dnt_catacomb_hallway_room_5",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 1051,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_jail_1",
+   "name": "dnt_catacomb_jail_1",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1507,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_jail_2",
+   "name": "dnt_catacomb_jail_2",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1957,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_jail_3",
+   "name": "dnt_catacomb_jail_3",
+   "source": "dnt",
+   "x": 27,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_1",
+   "name": "dnt_catacomb_room_1",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_2",
+   "name": "dnt_catacomb_room_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_3",
+   "name": "dnt_catacomb_room_3",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_4",
+   "name": "dnt_catacomb_room_4",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_5",
+   "name": "dnt_catacomb_room_5",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_6",
+   "name": "dnt_catacomb_room_6",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_7",
+   "name": "dnt_catacomb_room_7",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1519,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_room_8",
+   "name": "dnt_catacomb_room_8",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1107,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_skull_room_1",
+   "name": "dnt_catacomb_skull_room_1",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 1107,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_skull_room_2",
+   "name": "dnt_catacomb_skull_room_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 1107,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_skull_room_3",
+   "name": "dnt_catacomb_skull_room_3",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 1107,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_skull_room_4",
+   "name": "dnt_catacomb_skull_room_4",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_spawner_room_1",
+   "name": "dnt_catacomb_spawner_room_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_spawner_room_2",
+   "name": "dnt_catacomb_spawner_room_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_spawner_room_3",
+   "name": "dnt_catacomb_spawner_room_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_spawner_room_4",
+   "name": "dnt_catacomb_spawner_room_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 1257,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_special_room_1",
+   "name": "dnt_catacomb_special_room_1",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 1482,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_special_room_2",
+   "name": "dnt_catacomb_special_room_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 20
+  },
+  {
+   "blocks": 957,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_special_room_3",
+   "name": "dnt_catacomb_special_room_3",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 2125,
+   "id": "politicalserver:dungeon/catacombs/dnt_catacomb_special_room_4",
+   "name": "dnt_catacomb_special_room_4",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_enterance_room_1",
+   "name": "dnt_donjon_enterance_room_1",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_enterance_room_2",
+   "name": "dnt_donjon_enterance_room_2",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_1",
+   "name": "dnt_donjon_frame_3x3_bottom_1",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_2",
+   "name": "dnt_donjon_frame_3x3_bottom_2",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_3",
+   "name": "dnt_donjon_frame_3x3_bottom_3",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_4",
+   "name": "dnt_donjon_frame_3x3_bottom_4",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_5",
+   "name": "dnt_donjon_frame_3x3_bottom_5",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 14466,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_backdoor",
+   "name": "dnt_donjon_frame_3x3_bottom_backdoor",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 16
+  },
+  {
+   "blocks": 11722,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_bridge",
+   "name": "dnt_donjon_frame_3x3_bottom_bridge",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 16
+  },
+  {
+   "blocks": 11996,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_bottom_rails",
+   "name": "dnt_donjon_frame_3x3_bottom_rails",
+   "source": "dnt",
+   "x": 16,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 5376,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_center_1",
+   "name": "dnt_donjon_frame_3x3_center_1",
+   "source": "dnt",
+   "x": 16,
+   "y": 21,
+   "z": 16
+  },
+  {
+   "blocks": 5376,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_center_2",
+   "name": "dnt_donjon_frame_3x3_center_2",
+   "source": "dnt",
+   "x": 16,
+   "y": 21,
+   "z": 16
+  },
+  {
+   "blocks": 7456,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_center_3",
+   "name": "dnt_donjon_frame_3x3_center_3",
+   "source": "dnt",
+   "x": 16,
+   "y": 31,
+   "z": 16
+  },
+  {
+   "blocks": 2888,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_center_4",
+   "name": "dnt_donjon_frame_3x3_center_4",
+   "source": "dnt",
+   "x": 18,
+   "y": 13,
+   "z": 18
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_1",
+   "name": "dnt_donjon_frame_3x3_middle_1",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_2",
+   "name": "dnt_donjon_frame_3x3_middle_2",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_3",
+   "name": "dnt_donjon_frame_3x3_middle_3",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_4",
+   "name": "dnt_donjon_frame_3x3_middle_4",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_5",
+   "name": "dnt_donjon_frame_3x3_middle_5",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 11214,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_backdoor",
+   "name": "dnt_donjon_frame_3x3_middle_backdoor",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 16
+  },
+  {
+   "blocks": 13434,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_bridge",
+   "name": "dnt_donjon_frame_3x3_middle_bridge",
+   "source": "dnt",
+   "x": 48,
+   "y": 21,
+   "z": 16
+  },
+  {
+   "blocks": 11214,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_middle_rails",
+   "name": "dnt_donjon_frame_3x3_middle_rails",
+   "source": "dnt",
+   "x": 16,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 60294,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_1",
+   "name": "dnt_donjon_frame_3x3_top_1",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 48
+  },
+  {
+   "blocks": 60294,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_2",
+   "name": "dnt_donjon_frame_3x3_top_2",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 48
+  },
+  {
+   "blocks": 60294,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_3",
+   "name": "dnt_donjon_frame_3x3_top_3",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 48
+  },
+  {
+   "blocks": 60294,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_4",
+   "name": "dnt_donjon_frame_3x3_top_4",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 48
+  },
+  {
+   "blocks": 60294,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_5",
+   "name": "dnt_donjon_frame_3x3_top_5",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 48
+  },
+  {
+   "blocks": 19672,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_backdoor",
+   "name": "dnt_donjon_frame_3x3_top_backdoor",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 16
+  },
+  {
+   "blocks": 19672,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_bridge",
+   "name": "dnt_donjon_frame_3x3_top_bridge",
+   "source": "dnt",
+   "x": 48,
+   "y": 31,
+   "z": 16
+  },
+  {
+   "blocks": 19672,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_frame_3x3_top_rails",
+   "name": "dnt_donjon_frame_3x3_top_rails",
+   "source": "dnt",
+   "x": 16,
+   "y": 31,
+   "z": 48
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_1",
+   "name": "dnt_donjon_room_1x1x1_1",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_2",
+   "name": "dnt_donjon_room_1x1x1_2",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_3",
+   "name": "dnt_donjon_room_1x1x1_3",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_4",
+   "name": "dnt_donjon_room_1x1x1_4",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_5",
+   "name": "dnt_donjon_room_1x1x1_5",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_6",
+   "name": "dnt_donjon_room_1x1x1_6",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_7",
+   "name": "dnt_donjon_room_1x1x1_7",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_8",
+   "name": "dnt_donjon_room_1x1x1_8",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 1372,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x1x1_9",
+   "name": "dnt_donjon_room_1x1x1_9",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x2x1_1",
+   "name": "dnt_donjon_room_1x2x1_1",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x2x1_2",
+   "name": "dnt_donjon_room_1x2x1_2",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x2x1_3",
+   "name": "dnt_donjon_room_1x2x1_3",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x2x1_4",
+   "name": "dnt_donjon_room_1x2x1_4",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 2744,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x2x1_5",
+   "name": "dnt_donjon_room_1x2x1_5",
+   "source": "dnt",
+   "x": 14,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 4116,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x3x1_1",
+   "name": "dnt_donjon_room_1x3x1_1",
+   "source": "dnt",
+   "x": 14,
+   "y": 21,
+   "z": 14
+  },
+  {
+   "blocks": 4116,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_1x3x1_2",
+   "name": "dnt_donjon_room_1x3x1_2",
+   "source": "dnt",
+   "x": 14,
+   "y": 21,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_1",
+   "name": "dnt_donjon_room_2x1x1_1",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_10",
+   "name": "dnt_donjon_room_2x1x1_10",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_2",
+   "name": "dnt_donjon_room_2x1x1_2",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_3",
+   "name": "dnt_donjon_room_2x1x1_3",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_4",
+   "name": "dnt_donjon_room_2x1x1_4",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_5",
+   "name": "dnt_donjon_room_2x1x1_5",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_6",
+   "name": "dnt_donjon_room_2x1x1_6",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_7",
+   "name": "dnt_donjon_room_2x1x1_7",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_8",
+   "name": "dnt_donjon_room_2x1x1_8",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 2940,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x1_9",
+   "name": "dnt_donjon_room_2x1x1_9",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 6300,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x1x2_1",
+   "name": "dnt_donjon_room_2x1x2_1",
+   "source": "dnt",
+   "x": 30,
+   "y": 7,
+   "z": 30
+  },
+  {
+   "blocks": 5880,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x2x1_1",
+   "name": "dnt_donjon_room_2x2x1_1",
+   "source": "dnt",
+   "x": 30,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 5880,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x2x1_2",
+   "name": "dnt_donjon_room_2x2x1_2",
+   "source": "dnt",
+   "x": 30,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 5880,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x2x1_3",
+   "name": "dnt_donjon_room_2x2x1_3",
+   "source": "dnt",
+   "x": 30,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 5880,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x2x1_4",
+   "name": "dnt_donjon_room_2x2x1_4",
+   "source": "dnt",
+   "x": 30,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 12600,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x2x2_1",
+   "name": "dnt_donjon_room_2x2x2_1",
+   "source": "dnt",
+   "x": 30,
+   "y": 14,
+   "z": 30
+  },
+  {
+   "blocks": 12600,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x2x2_2",
+   "name": "dnt_donjon_room_2x2x2_2",
+   "source": "dnt",
+   "x": 30,
+   "y": 14,
+   "z": 30
+  },
+  {
+   "blocks": 8820,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x3x1_1",
+   "name": "dnt_donjon_room_2x3x1_1",
+   "source": "dnt",
+   "x": 30,
+   "y": 21,
+   "z": 14
+  },
+  {
+   "blocks": 18900,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_2x3x2_1",
+   "name": "dnt_donjon_room_2x3x2_1",
+   "source": "dnt",
+   "x": 30,
+   "y": 21,
+   "z": 30
+  },
+  {
+   "blocks": 4508,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x1x1_1",
+   "name": "dnt_donjon_room_3x1x1_1",
+   "source": "dnt",
+   "x": 46,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 4508,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x1x1_2",
+   "name": "dnt_donjon_room_3x1x1_2",
+   "source": "dnt",
+   "x": 46,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 4508,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x1x1_3",
+   "name": "dnt_donjon_room_3x1x1_3",
+   "source": "dnt",
+   "x": 46,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 4508,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x1x1_4",
+   "name": "dnt_donjon_room_3x1x1_4",
+   "source": "dnt",
+   "x": 46,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 4508,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x1x1_5",
+   "name": "dnt_donjon_room_3x1x1_5",
+   "source": "dnt",
+   "x": 46,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 9660,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x1x2_1",
+   "name": "dnt_donjon_room_3x1x2_1",
+   "source": "dnt",
+   "x": 46,
+   "y": 7,
+   "z": 30
+  },
+  {
+   "blocks": 9016,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x2x1_1",
+   "name": "dnt_donjon_room_3x2x1_1",
+   "source": "dnt",
+   "x": 46,
+   "y": 14,
+   "z": 14
+  },
+  {
+   "blocks": 19320,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x2x2_1",
+   "name": "dnt_donjon_room_3x2x2_1",
+   "source": "dnt",
+   "x": 46,
+   "y": 14,
+   "z": 30
+  },
+  {
+   "blocks": 13524,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x3x1_1",
+   "name": "dnt_donjon_room_3x3x1_1",
+   "source": "dnt",
+   "x": 46,
+   "y": 21,
+   "z": 14
+  },
+  {
+   "blocks": 28980,
+   "id": "politicalserver:dungeon/catacombs/dnt_donjon_room_3x3x2_1",
+   "name": "dnt_donjon_room_3x3x2_1",
+   "source": "dnt",
+   "x": 46,
+   "y": 21,
+   "z": 30
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_1",
+   "name": "dnt_undead_crypt_room_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_2",
+   "name": "dnt_undead_crypt_room_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_3",
+   "name": "dnt_undead_crypt_room_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_4",
+   "name": "dnt_undead_crypt_room_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_5",
+   "name": "dnt_undead_crypt_room_5",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_6",
+   "name": "dnt_undead_crypt_room_6",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_cross",
+   "name": "dnt_undead_crypt_room_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1309,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_l_1",
+   "name": "dnt_undead_crypt_room_l_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1785,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_l_2",
+   "name": "dnt_undead_crypt_room_l_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_monster_1",
+   "name": "dnt_undead_crypt_room_monster_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_monster_2",
+   "name": "dnt_undead_crypt_room_monster_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_monster_3",
+   "name": "dnt_undead_crypt_room_monster_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_monster_4",
+   "name": "dnt_undead_crypt_room_monster_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_monster_5",
+   "name": "dnt_undead_crypt_room_monster_5",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_r",
+   "name": "dnt_undead_crypt_room_r",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 8547,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_statue_room",
+   "name": "dnt_undead_crypt_room_statue_room",
+   "source": "dnt",
+   "x": 37,
+   "y": 11,
+   "z": 21
+  },
+  {
+   "blocks": 1001,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_room_t",
+   "name": "dnt_undead_crypt_room_t",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 3971,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_spawner_room_1",
+   "name": "dnt_undead_crypt_spawner_room_1",
+   "source": "dnt",
+   "x": 19,
+   "y": 11,
+   "z": 19
+  },
+  {
+   "blocks": 3971,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_spawner_room_2",
+   "name": "dnt_undead_crypt_spawner_room_2",
+   "source": "dnt",
+   "x": 19,
+   "y": 11,
+   "z": 19
+  },
+  {
+   "blocks": 3971,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_spawner_room_3",
+   "name": "dnt_undead_crypt_spawner_room_3",
+   "source": "dnt",
+   "x": 19,
+   "y": 11,
+   "z": 19
+  },
+  {
+   "blocks": 2783,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_stairs_high",
+   "name": "dnt_undead_crypt_stairs_high",
+   "source": "dnt",
+   "x": 11,
+   "y": 23,
+   "z": 11
+  },
+  {
+   "blocks": 1574,
+   "id": "politicalserver:dungeon/catacombs/dnt_undead_crypt_stairs_t",
+   "name": "dnt_undead_crypt_stairs_t",
+   "source": "dnt",
+   "x": 13,
+   "y": 15,
+   "z": 14
+  }
+ ],
+ "citadel": [
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_1",
+   "name": "dnt_big_tower_room_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_2",
+   "name": "dnt_big_tower_room_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_3",
+   "name": "dnt_big_tower_room_3",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_4",
+   "name": "dnt_big_tower_room_4",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_5",
+   "name": "dnt_big_tower_room_5",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_6",
+   "name": "dnt_big_tower_room_6",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_7",
+   "name": "dnt_big_tower_room_7",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_8",
+   "name": "dnt_big_tower_room_8",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/citadel/dnt_big_tower_room_9",
+   "name": "dnt_big_tower_room_9",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 955,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_enterance_room_2",
+   "name": "dnt_bunker_enterance_room_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 9,
+   "z": 13
+  },
+  {
+   "blocks": 4621,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_start",
+   "name": "dnt_bunker_start",
+   "source": "dnt",
+   "x": 19,
+   "y": 13,
+   "z": 19
+  },
+  {
+   "blocks": 3693,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_10",
+   "name": "dnt_bunker_underground_hallway_10",
+   "source": "dnt",
+   "x": 17,
+   "y": 13,
+   "z": 17
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_11",
+   "name": "dnt_bunker_underground_hallway_11",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 3302,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_12",
+   "name": "dnt_bunker_underground_hallway_12",
+   "source": "dnt",
+   "x": 21,
+   "y": 13,
+   "z": 21
+  },
+  {
+   "blocks": 4621,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_13",
+   "name": "dnt_bunker_underground_hallway_13",
+   "source": "dnt",
+   "x": 19,
+   "y": 13,
+   "z": 19
+  },
+  {
+   "blocks": 692,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_14",
+   "name": "dnt_bunker_underground_hallway_14",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 1454,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_15",
+   "name": "dnt_bunker_underground_hallway_15",
+   "source": "dnt",
+   "x": 23,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 4413,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_16",
+   "name": "dnt_bunker_underground_hallway_16",
+   "source": "dnt",
+   "x": 15,
+   "y": 13,
+   "z": 23
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_17",
+   "name": "dnt_bunker_underground_hallway_17",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_18",
+   "name": "dnt_bunker_underground_hallway_18",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_19",
+   "name": "dnt_bunker_underground_hallway_19",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 807,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_20",
+   "name": "dnt_bunker_underground_hallway_20",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 3434,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_22",
+   "name": "dnt_bunker_underground_hallway_22",
+   "source": "dnt",
+   "x": 13,
+   "y": 10,
+   "z": 27
+  },
+  {
+   "blocks": 558,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_23",
+   "name": "dnt_bunker_underground_hallway_23",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 952,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_24",
+   "name": "dnt_bunker_underground_hallway_24",
+   "source": "dnt",
+   "x": 11,
+   "y": 9,
+   "z": 10
+  },
+  {
+   "blocks": 961,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_25",
+   "name": "dnt_bunker_underground_hallway_25",
+   "source": "dnt",
+   "x": 11,
+   "y": 9,
+   "z": 10
+  },
+  {
+   "blocks": 955,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_26",
+   "name": "dnt_bunker_underground_hallway_26",
+   "source": "dnt",
+   "x": 11,
+   "y": 9,
+   "z": 10
+  },
+  {
+   "blocks": 952,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_27",
+   "name": "dnt_bunker_underground_hallway_27",
+   "source": "dnt",
+   "x": 11,
+   "y": 9,
+   "z": 10
+  },
+  {
+   "blocks": 961,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_28",
+   "name": "dnt_bunker_underground_hallway_28",
+   "source": "dnt",
+   "x": 11,
+   "y": 9,
+   "z": 10
+  },
+  {
+   "blocks": 970,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_29",
+   "name": "dnt_bunker_underground_hallway_29",
+   "source": "dnt",
+   "x": 11,
+   "y": 9,
+   "z": 10
+  },
+  {
+   "blocks": 4127,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_30",
+   "name": "dnt_bunker_underground_hallway_30",
+   "source": "dnt",
+   "x": 24,
+   "y": 13,
+   "z": 19
+  },
+  {
+   "blocks": 3319,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_31",
+   "name": "dnt_bunker_underground_hallway_31",
+   "source": "dnt",
+   "x": 17,
+   "y": 13,
+   "z": 29
+  },
+  {
+   "blocks": 952,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_32",
+   "name": "dnt_bunker_underground_hallway_32",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 19
+  },
+  {
+   "blocks": 818,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_33",
+   "name": "dnt_bunker_underground_hallway_33",
+   "source": "dnt",
+   "x": 15,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 5160,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_34",
+   "name": "dnt_bunker_underground_hallway_34",
+   "source": "dnt",
+   "x": 30,
+   "y": 15,
+   "z": 19
+  },
+  {
+   "blocks": 3094,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_6",
+   "name": "dnt_bunker_underground_hallway_6",
+   "source": "dnt",
+   "x": 15,
+   "y": 14,
+   "z": 15
+  },
+  {
+   "blocks": 474,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_hallway_8",
+   "name": "dnt_bunker_underground_hallway_8",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 1206,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_library",
+   "name": "dnt_bunker_underground_library",
+   "source": "dnt",
+   "x": 14,
+   "y": 6,
+   "z": 15
+  },
+  {
+   "blocks": 2256,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_library_big",
+   "name": "dnt_bunker_underground_library_big",
+   "source": "dnt",
+   "x": 14,
+   "y": 11,
+   "z": 15
+  },
+  {
+   "blocks": 1288,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_room_cylinder_1",
+   "name": "dnt_bunker_underground_room_cylinder_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 13,
+   "z": 11
+  },
+  {
+   "blocks": 945,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_room_largest_1",
+   "name": "dnt_bunker_underground_room_largest_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 15
+  },
+  {
+   "blocks": 945,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_room_largest_2",
+   "name": "dnt_bunker_underground_room_largest_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 15
+  },
+  {
+   "blocks": 945,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_room_largest_3",
+   "name": "dnt_bunker_underground_room_largest_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 15
+  },
+  {
+   "blocks": 945,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_room_largest_4",
+   "name": "dnt_bunker_underground_room_largest_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 15
+  },
+  {
+   "blocks": 945,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_room_largest_5",
+   "name": "dnt_bunker_underground_room_largest_5",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 15
+  },
+  {
+   "blocks": 967,
+   "id": "politicalserver:dungeon/citadel/dnt_bunker_underground_stairs_4",
+   "name": "dnt_bunker_underground_stairs_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 15
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x3_1",
+   "name": "dnt_illager_hideout_3x3_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x3_2",
+   "name": "dnt_illager_hideout_3x3_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x3_3",
+   "name": "dnt_illager_hideout_3x3_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x3_4",
+   "name": "dnt_illager_hideout_3x3_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 2420,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x3_5",
+   "name": "dnt_illager_hideout_3x3_5",
+   "source": "dnt",
+   "x": 11,
+   "y": 20,
+   "z": 11
+  },
+  {
+   "blocks": 1694,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x3_6",
+   "name": "dnt_illager_hideout_3x3_6",
+   "source": "dnt",
+   "x": 11,
+   "y": 14,
+   "z": 11
+  },
+  {
+   "blocks": 2310,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x4_1",
+   "name": "dnt_illager_hideout_3x4_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 14,
+   "z": 15
+  },
+  {
+   "blocks": 1155,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x4_2",
+   "name": "dnt_illager_hideout_3x4_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1155,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x4_3",
+   "name": "dnt_illager_hideout_3x4_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1155,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x4_4",
+   "name": "dnt_illager_hideout_3x4_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1155,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_3x4_5",
+   "name": "dnt_illager_hideout_3x4_5",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1575,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_4x4_1",
+   "name": "dnt_illager_hideout_4x4_1",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 3150,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_4x4_2",
+   "name": "dnt_illager_hideout_4x4_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 14,
+   "z": 15
+  },
+  {
+   "blocks": 3150,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_4x4_3",
+   "name": "dnt_illager_hideout_4x4_3",
+   "source": "dnt",
+   "x": 15,
+   "y": 14,
+   "z": 15
+  },
+  {
+   "blocks": 1575,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_4x4_4",
+   "name": "dnt_illager_hideout_4x4_4",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 6118,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_5x6_1",
+   "name": "dnt_illager_hideout_5x6_1",
+   "source": "dnt",
+   "x": 23,
+   "y": 14,
+   "z": 19
+  },
+  {
+   "blocks": 3059,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_5x6_2",
+   "name": "dnt_illager_hideout_5x6_2",
+   "source": "dnt",
+   "x": 23,
+   "y": 7,
+   "z": 19
+  },
+  {
+   "blocks": 6118,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_5x6_3",
+   "name": "dnt_illager_hideout_5x6_3",
+   "source": "dnt",
+   "x": 23,
+   "y": 14,
+   "z": 19
+  },
+  {
+   "blocks": 7406,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_heart",
+   "name": "dnt_illager_hideout_heart",
+   "source": "dnt",
+   "x": 23,
+   "y": 14,
+   "z": 23
+  },
+  {
+   "blocks": 2922,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_crossroad_a",
+   "name": "dnt_illager_hideout_path_crossroad_a",
+   "source": "dnt",
+   "x": 27,
+   "y": 6,
+   "z": 27
+  },
+  {
+   "blocks": 2922,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_crossroad_b",
+   "name": "dnt_illager_hideout_path_crossroad_b",
+   "source": "dnt",
+   "x": 27,
+   "y": 6,
+   "z": 27
+  },
+  {
+   "blocks": 2922,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_crossroad_c",
+   "name": "dnt_illager_hideout_path_crossroad_c",
+   "source": "dnt",
+   "x": 27,
+   "y": 6,
+   "z": 27
+  },
+  {
+   "blocks": 1536,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_la",
+   "name": "dnt_illager_hideout_path_la",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 16
+  },
+  {
+   "blocks": 1536,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_lb",
+   "name": "dnt_illager_hideout_path_lb",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 16
+  },
+  {
+   "blocks": 1536,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_lc",
+   "name": "dnt_illager_hideout_path_lc",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 16
+  },
+  {
+   "blocks": 1866,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_t-crossroad_a",
+   "name": "dnt_illager_hideout_path_t-crossroad_a",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 27
+  },
+  {
+   "blocks": 1866,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_t-crossroad_b",
+   "name": "dnt_illager_hideout_path_t-crossroad_b",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 27
+  },
+  {
+   "blocks": 1866,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_path_t-crossroad_c",
+   "name": "dnt_illager_hideout_path_t-crossroad_c",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 27
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_side_room_1",
+   "name": "dnt_illager_hideout_side_room_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_side_room_2",
+   "name": "dnt_illager_hideout_side_room_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_side_room_3",
+   "name": "dnt_illager_hideout_side_room_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_side_room_4",
+   "name": "dnt_illager_hideout_side_room_4",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_side_room_5",
+   "name": "dnt_illager_hideout_side_room_5",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 3267,
+   "id": "politicalserver:dungeon/citadel/dnt_illager_hideout_very_tall_room",
+   "name": "dnt_illager_hideout_very_tall_room",
+   "source": "dnt",
+   "x": 11,
+   "y": 27,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_1_1",
+   "name": "dnt_room_1_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_1_2",
+   "name": "dnt_room_1_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_1_3",
+   "name": "dnt_room_1_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_2_1",
+   "name": "dnt_room_2_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_2_2",
+   "name": "dnt_room_2_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_2_3",
+   "name": "dnt_room_2_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_3_1",
+   "name": "dnt_room_3_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_3_2",
+   "name": "dnt_room_3_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_3_3",
+   "name": "dnt_room_3_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_4_1",
+   "name": "dnt_room_4_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_4_2",
+   "name": "dnt_room_4_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_4_3",
+   "name": "dnt_room_4_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_5_1",
+   "name": "dnt_room_5_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_5_2",
+   "name": "dnt_room_5_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_5_3",
+   "name": "dnt_room_5_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_6_1",
+   "name": "dnt_room_6_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_6_2",
+   "name": "dnt_room_6_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 534,
+   "id": "politicalserver:dungeon/citadel/dnt_room_6_3",
+   "name": "dnt_room_6_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 891,
+   "id": "politicalserver:dungeon/citadel/dnt_statue_1",
+   "name": "dnt_statue_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 11,
+   "z": 9
+  },
+  {
+   "blocks": 891,
+   "id": "politicalserver:dungeon/citadel/dnt_statue_2",
+   "name": "dnt_statue_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 11,
+   "z": 9
+  },
+  {
+   "blocks": 891,
+   "id": "politicalserver:dungeon/citadel/dnt_statue_3",
+   "name": "dnt_statue_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 11,
+   "z": 9
+  },
+  {
+   "blocks": 891,
+   "id": "politicalserver:dungeon/citadel/dnt_statue_4",
+   "name": "dnt_statue_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 11,
+   "z": 9
+  }
+ ],
+ "endcastle": [
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_cross",
+   "name": "dnt_big_tower_part_cross",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_curve_1",
+   "name": "dnt_big_tower_part_curve_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_curve_2",
+   "name": "dnt_big_tower_part_curve_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_curve_3",
+   "name": "dnt_big_tower_part_curve_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_curve_4",
+   "name": "dnt_big_tower_part_curve_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_none",
+   "name": "dnt_big_tower_part_none",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_one_1",
+   "name": "dnt_big_tower_part_one_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_one_2",
+   "name": "dnt_big_tower_part_one_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_one_3",
+   "name": "dnt_big_tower_part_one_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_one_4",
+   "name": "dnt_big_tower_part_one_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_straight_1",
+   "name": "dnt_big_tower_part_straight_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_straight_2",
+   "name": "dnt_big_tower_part_straight_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_t-curve_1",
+   "name": "dnt_big_tower_part_t-curve_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_t-curve_2",
+   "name": "dnt_big_tower_part_t-curve_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_t-curve_3",
+   "name": "dnt_big_tower_part_t-curve_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 972,
+   "id": "politicalserver:dungeon/endcastle/dnt_big_tower_part_t-curve_4",
+   "name": "dnt_big_tower_part_t-curve_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_1_cross",
+   "name": "dnt_bridge_a_1_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_1_curve",
+   "name": "dnt_bridge_a_1_curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_1_straight",
+   "name": "dnt_bridge_a_1_straight",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_1_t-curve",
+   "name": "dnt_bridge_a_1_t-curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_2_cross",
+   "name": "dnt_bridge_a_2_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_2_curve",
+   "name": "dnt_bridge_a_2_curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_2_straight",
+   "name": "dnt_bridge_a_2_straight",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_2_t-curve",
+   "name": "dnt_bridge_a_2_t-curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_3_cross",
+   "name": "dnt_bridge_a_3_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_3_curve",
+   "name": "dnt_bridge_a_3_curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_3_straight",
+   "name": "dnt_bridge_a_3_straight",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_3_t-curve",
+   "name": "dnt_bridge_a_3_t-curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_4_cross",
+   "name": "dnt_bridge_a_4_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_4_curve",
+   "name": "dnt_bridge_a_4_curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_4_straight",
+   "name": "dnt_bridge_a_4_straight",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1014,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_a_4_t-curve",
+   "name": "dnt_bridge_a_4_t-curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_1_cross",
+   "name": "dnt_bridge_b_1_cross",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_1_curve",
+   "name": "dnt_bridge_b_1_curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_1_straight",
+   "name": "dnt_bridge_b_1_straight",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_1_t-curve",
+   "name": "dnt_bridge_b_1_t-curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_2_cross",
+   "name": "dnt_bridge_b_2_cross",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_2_curve",
+   "name": "dnt_bridge_b_2_curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_2_straight",
+   "name": "dnt_bridge_b_2_straight",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_2_t-curve",
+   "name": "dnt_bridge_b_2_t-curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_3_cross",
+   "name": "dnt_bridge_b_3_cross",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_3_curve",
+   "name": "dnt_bridge_b_3_curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_3_straight",
+   "name": "dnt_bridge_b_3_straight",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_3_t-curve",
+   "name": "dnt_bridge_b_3_t-curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_4_cross",
+   "name": "dnt_bridge_b_4_cross",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_4_curve",
+   "name": "dnt_bridge_b_4_curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_4_straight",
+   "name": "dnt_bridge_b_4_straight",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 726,
+   "id": "politicalserver:dungeon/endcastle/dnt_bridge_b_4_t-curve",
+   "name": "dnt_bridge_b_4_t-curve",
+   "source": "dnt",
+   "x": 11,
+   "y": 6,
+   "z": 11
+  },
+  {
+   "blocks": 10140,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-1_corner_1",
+   "name": "dnt_end_castle_core_layer_-1_corner_1",
+   "source": "dnt",
+   "x": 26,
+   "y": 15,
+   "z": 26
+  },
+  {
+   "blocks": 10140,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-1_corner_2",
+   "name": "dnt_end_castle_core_layer_-1_corner_2",
+   "source": "dnt",
+   "x": 26,
+   "y": 15,
+   "z": 26
+  },
+  {
+   "blocks": 10140,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-1_corner_3",
+   "name": "dnt_end_castle_core_layer_-1_corner_3",
+   "source": "dnt",
+   "x": 26,
+   "y": 15,
+   "z": 26
+  },
+  {
+   "blocks": 10140,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-1_corner_4",
+   "name": "dnt_end_castle_core_layer_-1_corner_4",
+   "source": "dnt",
+   "x": 26,
+   "y": 15,
+   "z": 26
+  },
+  {
+   "blocks": 4375,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-2_corner_1",
+   "name": "dnt_end_castle_core_layer_-2_corner_1",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 4375,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-2_corner_2",
+   "name": "dnt_end_castle_core_layer_-2_corner_2",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 4375,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-2_corner_3",
+   "name": "dnt_end_castle_core_layer_-2_corner_3",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 4375,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-2_corner_4",
+   "name": "dnt_end_castle_core_layer_-2_corner_4",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 5408,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-3_corner_1",
+   "name": "dnt_end_castle_core_layer_-3_corner_1",
+   "source": "dnt",
+   "x": 26,
+   "y": 8,
+   "z": 26
+  },
+  {
+   "blocks": 5408,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-3_corner_2",
+   "name": "dnt_end_castle_core_layer_-3_corner_2",
+   "source": "dnt",
+   "x": 26,
+   "y": 8,
+   "z": 26
+  },
+  {
+   "blocks": 5408,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-3_corner_3",
+   "name": "dnt_end_castle_core_layer_-3_corner_3",
+   "source": "dnt",
+   "x": 26,
+   "y": 8,
+   "z": 26
+  },
+  {
+   "blocks": 5408,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-3_corner_4",
+   "name": "dnt_end_castle_core_layer_-3_corner_4",
+   "source": "dnt",
+   "x": 26,
+   "y": 8,
+   "z": 26
+  },
+  {
+   "blocks": 5625,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-4_corner_1",
+   "name": "dnt_end_castle_core_layer_-4_corner_1",
+   "source": "dnt",
+   "x": 25,
+   "y": 9,
+   "z": 25
+  },
+  {
+   "blocks": 5625,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-4_corner_2",
+   "name": "dnt_end_castle_core_layer_-4_corner_2",
+   "source": "dnt",
+   "x": 25,
+   "y": 9,
+   "z": 25
+  },
+  {
+   "blocks": 5625,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-4_corner_3",
+   "name": "dnt_end_castle_core_layer_-4_corner_3",
+   "source": "dnt",
+   "x": 25,
+   "y": 9,
+   "z": 25
+  },
+  {
+   "blocks": 5625,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-4_corner_4",
+   "name": "dnt_end_castle_core_layer_-4_corner_4",
+   "source": "dnt",
+   "x": 25,
+   "y": 9,
+   "z": 25
+  },
+  {
+   "blocks": 5832,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-5",
+   "name": "dnt_end_castle_core_layer_-5",
+   "source": "dnt",
+   "x": 27,
+   "y": 8,
+   "z": 27
+  },
+  {
+   "blocks": 5175,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-6",
+   "name": "dnt_end_castle_core_layer_-6",
+   "source": "dnt",
+   "x": 15,
+   "y": 23,
+   "z": 15
+  },
+  {
+   "blocks": 6647,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_-7",
+   "name": "dnt_end_castle_core_layer_-7",
+   "source": "dnt",
+   "x": 17,
+   "y": 23,
+   "z": 17
+  },
+  {
+   "blocks": 729,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_1",
+   "name": "dnt_end_castle_core_layer_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 9,
+   "z": 9
+  },
+  {
+   "blocks": 4761,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_1_corner",
+   "name": "dnt_end_castle_core_layer_1_corner",
+   "source": "dnt",
+   "x": 23,
+   "y": 9,
+   "z": 23
+  },
+  {
+   "blocks": 1863,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_1_slice",
+   "name": "dnt_end_castle_core_layer_1_slice",
+   "source": "dnt",
+   "x": 9,
+   "y": 9,
+   "z": 23
+  },
+  {
+   "blocks": 5760,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_2_corner",
+   "name": "dnt_end_castle_core_layer_2_corner",
+   "source": "dnt",
+   "x": 24,
+   "y": 10,
+   "z": 24
+  },
+  {
+   "blocks": 7500,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_3_corner",
+   "name": "dnt_end_castle_core_layer_3_corner",
+   "source": "dnt",
+   "x": 25,
+   "y": 12,
+   "z": 25
+  },
+  {
+   "blocks": 1215,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_4",
+   "name": "dnt_end_castle_core_layer_4",
+   "source": "dnt",
+   "x": 9,
+   "y": 15,
+   "z": 9
+  },
+  {
+   "blocks": 7935,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_4_corner",
+   "name": "dnt_end_castle_core_layer_4_corner",
+   "source": "dnt",
+   "x": 23,
+   "y": 15,
+   "z": 23
+  },
+  {
+   "blocks": 3105,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_4_slice",
+   "name": "dnt_end_castle_core_layer_4_slice",
+   "source": "dnt",
+   "x": 23,
+   "y": 15,
+   "z": 9
+  },
+  {
+   "blocks": 3105,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_layer_4_slice_fixed",
+   "name": "dnt_end_castle_core_layer_4_slice_fixed",
+   "source": "dnt",
+   "x": 9,
+   "y": 15,
+   "z": 23
+  },
+  {
+   "blocks": 5290,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_start",
+   "name": "dnt_end_castle_core_start",
+   "source": "dnt",
+   "x": 23,
+   "y": 10,
+   "z": 23
+  },
+  {
+   "blocks": 3840,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_core_start_corner_1",
+   "name": "dnt_end_castle_core_start_corner_1",
+   "source": "dnt",
+   "x": 16,
+   "y": 10,
+   "z": 24
+  },
+  {
+   "blocks": 23166,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_galleon_dock_1",
+   "name": "dnt_end_castle_galleon_dock_1",
+   "source": "dnt",
+   "x": 39,
+   "y": 33,
+   "z": 18
+  },
+  {
+   "blocks": 15600,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_galleon_dock_2",
+   "name": "dnt_end_castle_galleon_dock_2",
+   "source": "dnt",
+   "x": 24,
+   "y": 25,
+   "z": 26
+  },
+  {
+   "blocks": 20631,
+   "id": "politicalserver:dungeon/endcastle/dnt_end_castle_galleon_dock_3",
+   "name": "dnt_end_castle_galleon_dock_3",
+   "source": "dnt",
+   "x": 23,
+   "y": 23,
+   "z": 39
+  },
+  {
+   "blocks": 2366,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_cross",
+   "name": "dnt_house_1_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 13
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_cross_basement_1",
+   "name": "dnt_house_1_cross_basement_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_cross_basement_2",
+   "name": "dnt_house_1_cross_basement_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 1815,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_cross_tower",
+   "name": "dnt_house_1_cross_tower",
+   "source": "dnt",
+   "x": 11,
+   "y": 15,
+   "z": 11
+  },
+  {
+   "blocks": 2366,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_curve",
+   "name": "dnt_house_1_curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 13
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_curve_basement_1",
+   "name": "dnt_house_1_curve_basement_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_curve_basement_2",
+   "name": "dnt_house_1_curve_basement_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 1815,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_curve_tower",
+   "name": "dnt_house_1_curve_tower",
+   "source": "dnt",
+   "x": 11,
+   "y": 15,
+   "z": 11
+  },
+  {
+   "blocks": 2366,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_end",
+   "name": "dnt_house_1_end",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 13
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_end_basement_1",
+   "name": "dnt_house_1_end_basement_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_end_basement_2",
+   "name": "dnt_house_1_end_basement_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 1815,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_end_tower",
+   "name": "dnt_house_1_end_tower",
+   "source": "dnt",
+   "x": 11,
+   "y": 15,
+   "z": 11
+  },
+  {
+   "blocks": 2366,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_straight",
+   "name": "dnt_house_1_straight",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 13
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_straight_basement_1",
+   "name": "dnt_house_1_straight_basement_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_straight_basement_2",
+   "name": "dnt_house_1_straight_basement_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 1815,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_straight_tower",
+   "name": "dnt_house_1_straight_tower",
+   "source": "dnt",
+   "x": 11,
+   "y": 15,
+   "z": 11
+  },
+  {
+   "blocks": 2366,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_t-curve",
+   "name": "dnt_house_1_t-curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 13
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_t-curve_basement_1",
+   "name": "dnt_house_1_t-curve_basement_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 486,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_t-curve_basement_2",
+   "name": "dnt_house_1_t-curve_basement_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 1815,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_1_t-curve_tower",
+   "name": "dnt_house_1_t-curve_tower",
+   "source": "dnt",
+   "x": 11,
+   "y": 15,
+   "z": 11
+  },
+  {
+   "blocks": 2873,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_cross",
+   "name": "dnt_house_2_cross",
+   "source": "dnt",
+   "x": 13,
+   "y": 17,
+   "z": 13
+  },
+  {
+   "blocks": 3211,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_cross_tower",
+   "name": "dnt_house_2_cross_tower",
+   "source": "dnt",
+   "x": 13,
+   "y": 19,
+   "z": 13
+  },
+  {
+   "blocks": 2873,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_curve",
+   "name": "dnt_house_2_curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 17,
+   "z": 13
+  },
+  {
+   "blocks": 3211,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_curve_tower",
+   "name": "dnt_house_2_curve_tower",
+   "source": "dnt",
+   "x": 13,
+   "y": 19,
+   "z": 13
+  },
+  {
+   "blocks": 2873,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_end",
+   "name": "dnt_house_2_end",
+   "source": "dnt",
+   "x": 13,
+   "y": 17,
+   "z": 13
+  },
+  {
+   "blocks": 3211,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_end_tower",
+   "name": "dnt_house_2_end_tower",
+   "source": "dnt",
+   "x": 13,
+   "y": 19,
+   "z": 13
+  },
+  {
+   "blocks": 2873,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_straight",
+   "name": "dnt_house_2_straight",
+   "source": "dnt",
+   "x": 13,
+   "y": 17,
+   "z": 13
+  },
+  {
+   "blocks": 3211,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_straight_tower",
+   "name": "dnt_house_2_straight_tower",
+   "source": "dnt",
+   "x": 13,
+   "y": 19,
+   "z": 13
+  },
+  {
+   "blocks": 2873,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_t-curve",
+   "name": "dnt_house_2_t-curve",
+   "source": "dnt",
+   "x": 13,
+   "y": 17,
+   "z": 13
+  },
+  {
+   "blocks": 3211,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_2_t-curve_tower",
+   "name": "dnt_house_2_t-curve_tower",
+   "source": "dnt",
+   "x": 13,
+   "y": 19,
+   "z": 13
+  },
+  {
+   "blocks": 4725,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_cross",
+   "name": "dnt_house_3_cross",
+   "source": "dnt",
+   "x": 15,
+   "y": 21,
+   "z": 15
+  },
+  {
+   "blocks": 5175,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_cross_tower",
+   "name": "dnt_house_3_cross_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 23,
+   "z": 15
+  },
+  {
+   "blocks": 4725,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_curve",
+   "name": "dnt_house_3_curve",
+   "source": "dnt",
+   "x": 15,
+   "y": 21,
+   "z": 15
+  },
+  {
+   "blocks": 5175,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_curve_tower",
+   "name": "dnt_house_3_curve_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 23,
+   "z": 15
+  },
+  {
+   "blocks": 4725,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_end",
+   "name": "dnt_house_3_end",
+   "source": "dnt",
+   "x": 15,
+   "y": 21,
+   "z": 15
+  },
+  {
+   "blocks": 5175,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_end_tower",
+   "name": "dnt_house_3_end_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 23,
+   "z": 15
+  },
+  {
+   "blocks": 4725,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_straight",
+   "name": "dnt_house_3_straight",
+   "source": "dnt",
+   "x": 15,
+   "y": 21,
+   "z": 15
+  },
+  {
+   "blocks": 5175,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_straight_tower",
+   "name": "dnt_house_3_straight_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 23,
+   "z": 15
+  },
+  {
+   "blocks": 4725,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_t-curve",
+   "name": "dnt_house_3_t-curve",
+   "source": "dnt",
+   "x": 15,
+   "y": 21,
+   "z": 15
+  },
+  {
+   "blocks": 5175,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_3_t-curve_tower",
+   "name": "dnt_house_3_t-curve_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 23,
+   "z": 15
+  },
+  {
+   "blocks": 6525,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_5",
+   "name": "dnt_house_5",
+   "source": "dnt",
+   "x": 15,
+   "y": 29,
+   "z": 15
+  },
+  {
+   "blocks": 6525,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_6",
+   "name": "dnt_house_6",
+   "source": "dnt",
+   "x": 15,
+   "y": 29,
+   "z": 15
+  },
+  {
+   "blocks": 5746,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_7",
+   "name": "dnt_house_7",
+   "source": "dnt",
+   "x": 13,
+   "y": 34,
+   "z": 13
+  },
+  {
+   "blocks": 6480,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_9",
+   "name": "dnt_house_9",
+   "source": "dnt",
+   "x": 18,
+   "y": 24,
+   "z": 15
+  },
+  {
+   "blocks": 6480,
+   "id": "politicalserver:dungeon/endcastle/dnt_house_9_tower",
+   "name": "dnt_house_9_tower",
+   "source": "dnt",
+   "x": 18,
+   "y": 24,
+   "z": 15
+  },
+  {
+   "blocks": 567,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_1_1",
+   "name": "dnt_tower_top_1_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 9
+  },
+  {
+   "blocks": 567,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_1_2",
+   "name": "dnt_tower_top_1_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 9
+  },
+  {
+   "blocks": 567,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_1_3",
+   "name": "dnt_tower_top_1_3",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 9
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_2",
+   "name": "dnt_tower_top_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_2_1",
+   "name": "dnt_tower_top_2_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_2_2",
+   "name": "dnt_tower_top_2_2",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 847,
+   "id": "politicalserver:dungeon/endcastle/dnt_tower_top_2_3",
+   "name": "dnt_tower_top_2_3",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  }
+ ],
+ "ice": [
+  {
+   "blocks": 3712,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room1",
+   "name": "epic_large_ice_room1",
+   "source": "epic",
+   "x": 17,
+   "y": 8,
+   "z": 28
+  },
+  {
+   "blocks": 7799,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room13",
+   "name": "epic_large_ice_room13",
+   "source": "epic",
+   "x": 15,
+   "y": 26,
+   "z": 23
+  },
+  {
+   "blocks": 20865,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room14",
+   "name": "epic_large_ice_room14",
+   "source": "epic",
+   "x": 23,
+   "y": 23,
+   "z": 45
+  },
+  {
+   "blocks": 8013,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room15",
+   "name": "epic_large_ice_room15",
+   "source": "epic",
+   "x": 14,
+   "y": 23,
+   "z": 25
+  },
+  {
+   "blocks": 11317,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room16",
+   "name": "epic_large_ice_room16",
+   "source": "epic",
+   "x": 48,
+   "y": 19,
+   "z": 13
+  },
+  {
+   "blocks": 46624,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room17",
+   "name": "epic_large_ice_room17",
+   "source": "epic",
+   "x": 46,
+   "y": 34,
+   "z": 46
+  },
+  {
+   "blocks": 2977,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room18",
+   "name": "epic_large_ice_room18",
+   "source": "epic",
+   "x": 15,
+   "y": 10,
+   "z": 21
+  },
+  {
+   "blocks": 2459,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room2",
+   "name": "epic_large_ice_room2",
+   "source": "epic",
+   "x": 22,
+   "y": 25,
+   "z": 15
+  },
+  {
+   "blocks": 8959,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room20",
+   "name": "epic_large_ice_room20",
+   "source": "epic",
+   "x": 37,
+   "y": 7,
+   "z": 48
+  },
+  {
+   "blocks": 15594,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room21",
+   "name": "epic_large_ice_room21",
+   "source": "epic",
+   "x": 32,
+   "y": 29,
+   "z": 19
+  },
+  {
+   "blocks": 2568,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room22",
+   "name": "epic_large_ice_room22",
+   "source": "epic",
+   "x": 18,
+   "y": 17,
+   "z": 15
+  },
+  {
+   "blocks": 1906,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room24",
+   "name": "epic_large_ice_room24",
+   "source": "epic",
+   "x": 13,
+   "y": 17,
+   "z": 10
+  },
+  {
+   "blocks": 2830,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room25",
+   "name": "epic_large_ice_room25",
+   "source": "epic",
+   "x": 15,
+   "y": 10,
+   "z": 25
+  },
+  {
+   "blocks": 48384,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room26",
+   "name": "epic_large_ice_room26",
+   "source": "epic",
+   "x": 48,
+   "y": 21,
+   "z": 48
+  },
+  {
+   "blocks": 4236,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room27",
+   "name": "epic_large_ice_room27",
+   "source": "epic",
+   "x": 18,
+   "y": 22,
+   "z": 13
+  },
+  {
+   "blocks": 3376,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room28",
+   "name": "epic_large_ice_room28",
+   "source": "epic",
+   "x": 15,
+   "y": 13,
+   "z": 25
+  },
+  {
+   "blocks": 3946,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room29",
+   "name": "epic_large_ice_room29",
+   "source": "epic",
+   "x": 15,
+   "y": 13,
+   "z": 25
+  },
+  {
+   "blocks": 2464,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room3",
+   "name": "epic_large_ice_room3",
+   "source": "epic",
+   "x": 14,
+   "y": 8,
+   "z": 22
+  },
+  {
+   "blocks": 70704,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room30",
+   "name": "epic_large_ice_room30",
+   "source": "epic",
+   "x": 48,
+   "y": 38,
+   "z": 48
+  },
+  {
+   "blocks": 3778,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room4",
+   "name": "epic_large_ice_room4",
+   "source": "epic",
+   "x": 16,
+   "y": 10,
+   "z": 32
+  },
+  {
+   "blocks": 5407,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room5",
+   "name": "epic_large_ice_room5",
+   "source": "epic",
+   "x": 23,
+   "y": 20,
+   "z": 31
+  },
+  {
+   "blocks": 73846,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room6",
+   "name": "epic_large_ice_room6",
+   "source": "epic",
+   "x": 48,
+   "y": 43,
+   "z": 48
+  },
+  {
+   "blocks": 4044,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room8",
+   "name": "epic_large_ice_room8",
+   "source": "epic",
+   "x": 20,
+   "y": 9,
+   "z": 25
+  },
+  {
+   "blocks": 8990,
+   "id": "politicalserver:dungeon/ice/epic_large_ice_room9",
+   "name": "epic_large_ice_room9",
+   "source": "epic",
+   "x": 17,
+   "y": 23,
+   "z": 23
+  },
+  {
+   "blocks": 4312,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room1",
+   "name": "epic_medium_ice_room1",
+   "source": "epic",
+   "x": 14,
+   "y": 14,
+   "z": 22
+  },
+  {
+   "blocks": 1774,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room10",
+   "name": "epic_medium_ice_room10",
+   "source": "epic",
+   "x": 11,
+   "y": 8,
+   "z": 26
+  },
+  {
+   "blocks": 1683,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room11",
+   "name": "epic_medium_ice_room11",
+   "source": "epic",
+   "x": 11,
+   "y": 9,
+   "z": 17
+  },
+  {
+   "blocks": 14812,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room13",
+   "name": "epic_medium_ice_room13",
+   "source": "epic",
+   "x": 46,
+   "y": 7,
+   "z": 46
+  },
+  {
+   "blocks": 18370,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room2",
+   "name": "epic_medium_ice_room2",
+   "source": "epic",
+   "x": 30,
+   "y": 23,
+   "z": 30
+  },
+  {
+   "blocks": 4095,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room3",
+   "name": "epic_medium_ice_room3",
+   "source": "epic",
+   "x": 13,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 7700,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room4",
+   "name": "epic_medium_ice_room4",
+   "source": "epic",
+   "x": 14,
+   "y": 22,
+   "z": 25
+  },
+  {
+   "blocks": 9074,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room5",
+   "name": "epic_medium_ice_room5",
+   "source": "epic",
+   "x": 27,
+   "y": 22,
+   "z": 17
+  },
+  {
+   "blocks": 9775,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room6",
+   "name": "epic_medium_ice_room6",
+   "source": "epic",
+   "x": 17,
+   "y": 23,
+   "z": 25
+  },
+  {
+   "blocks": 21674,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room7",
+   "name": "epic_medium_ice_room7",
+   "source": "epic",
+   "x": 25,
+   "y": 43,
+   "z": 25
+  },
+  {
+   "blocks": 18078,
+   "id": "politicalserver:dungeon/ice/epic_medium_ice_room8",
+   "name": "epic_medium_ice_room8",
+   "source": "epic",
+   "x": 31,
+   "y": 23,
+   "z": 26
+  },
+  {
+   "blocks": 729,
+   "id": "politicalserver:dungeon/ice/uw_ice_room",
+   "name": "uw_ice_room",
+   "source": "uw",
+   "x": 9,
+   "y": 9,
+   "z": 9
+  },
+  {
+   "blocks": 1296,
+   "id": "politicalserver:dungeon/ice/uw_ice_room_stairs",
+   "name": "uw_ice_room_stairs",
+   "source": "uw",
+   "x": 9,
+   "y": 16,
+   "z": 9
+  },
+  {
+   "blocks": 729,
+   "id": "politicalserver:dungeon/ice/uw_stone_room",
+   "name": "uw_stone_room",
+   "source": "uw",
+   "x": 9,
+   "y": 9,
+   "z": 9
+  },
+  {
+   "blocks": 1296,
+   "id": "politicalserver:dungeon/ice/uw_stone_room_stairs",
+   "name": "uw_stone_room_stairs",
+   "source": "uw",
+   "x": 9,
+   "y": 16,
+   "z": 9
+  }
+ ],
+ "sands": [
+  {
+   "blocks": 393,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_12",
+   "name": "dnt_desert_ruins_house_12",
+   "source": "dnt",
+   "x": 10,
+   "y": 7,
+   "z": 12
+  },
+  {
+   "blocks": 317,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_12_1",
+   "name": "dnt_desert_ruins_house_12_1",
+   "source": "dnt",
+   "x": 10,
+   "y": 7,
+   "z": 12
+  },
+  {
+   "blocks": 405,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_14",
+   "name": "dnt_desert_ruins_house_14",
+   "source": "dnt",
+   "x": 9,
+   "y": 8,
+   "z": 11
+  },
+  {
+   "blocks": 1154,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_15",
+   "name": "dnt_desert_ruins_house_15",
+   "source": "dnt",
+   "x": 15,
+   "y": 14,
+   "z": 15
+  },
+  {
+   "blocks": 855,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_16",
+   "name": "dnt_desert_ruins_house_16",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 13
+  },
+  {
+   "blocks": 1489,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_17",
+   "name": "dnt_desert_ruins_house_17",
+   "source": "dnt",
+   "x": 17,
+   "y": 14,
+   "z": 17
+  },
+  {
+   "blocks": 464,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_2",
+   "name": "dnt_desert_ruins_house_2",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 389,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_2_1",
+   "name": "dnt_desert_ruins_house_2_1",
+   "source": "dnt",
+   "x": 9,
+   "y": 12,
+   "z": 9
+  },
+  {
+   "blocks": 324,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_3",
+   "name": "dnt_desert_ruins_house_3",
+   "source": "dnt",
+   "x": 10,
+   "y": 8,
+   "z": 9
+  },
+  {
+   "blocks": 802,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_4",
+   "name": "dnt_desert_ruins_house_4",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 12
+  },
+  {
+   "blocks": 603,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_4_1",
+   "name": "dnt_desert_ruins_house_4_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 12
+  },
+  {
+   "blocks": 393,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_4_2",
+   "name": "dnt_desert_ruins_house_4_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 12
+  },
+  {
+   "blocks": 1276,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_5",
+   "name": "dnt_desert_ruins_house_5",
+   "source": "dnt",
+   "x": 15,
+   "y": 10,
+   "z": 15
+  },
+  {
+   "blocks": 1035,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_5_1",
+   "name": "dnt_desert_ruins_house_5_1",
+   "source": "dnt",
+   "x": 15,
+   "y": 10,
+   "z": 15
+  },
+  {
+   "blocks": 644,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_5_2",
+   "name": "dnt_desert_ruins_house_5_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 10,
+   "z": 15
+  },
+  {
+   "blocks": 905,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_6",
+   "name": "dnt_desert_ruins_house_6",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 15
+  },
+  {
+   "blocks": 694,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_6_1",
+   "name": "dnt_desert_ruins_house_6_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 15
+  },
+  {
+   "blocks": 492,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_6_2",
+   "name": "dnt_desert_ruins_house_6_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 15
+  },
+  {
+   "blocks": 406,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_8",
+   "name": "dnt_desert_ruins_house_8",
+   "source": "dnt",
+   "x": 9,
+   "y": 11,
+   "z": 9
+  },
+  {
+   "blocks": 328,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_9",
+   "name": "dnt_desert_ruins_house_9",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 302,
+   "id": "politicalserver:dungeon/sands/dnt_desert_ruins_house_9_1",
+   "name": "dnt_desert_ruins_house_9_1",
+   "source": "dnt",
+   "x": 11,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 2911,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room10",
+   "name": "epic_large_sand_room10",
+   "source": "epic",
+   "x": 13,
+   "y": 27,
+   "z": 17
+  },
+  {
+   "blocks": 693,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room11",
+   "name": "epic_large_sand_room11",
+   "source": "epic",
+   "x": 11,
+   "y": 7,
+   "z": 9
+  },
+  {
+   "blocks": 2023,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room13",
+   "name": "epic_large_sand_room13",
+   "source": "epic",
+   "x": 25,
+   "y": 9,
+   "z": 23
+  },
+  {
+   "blocks": 2011,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room14",
+   "name": "epic_large_sand_room14",
+   "source": "epic",
+   "x": 12,
+   "y": 15,
+   "z": 30
+  },
+  {
+   "blocks": 2176,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room15",
+   "name": "epic_large_sand_room15",
+   "source": "epic",
+   "x": 16,
+   "y": 6,
+   "z": 25
+  },
+  {
+   "blocks": 3519,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room16",
+   "name": "epic_large_sand_room16",
+   "source": "epic",
+   "x": 17,
+   "y": 9,
+   "z": 23
+  },
+  {
+   "blocks": 719,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room17",
+   "name": "epic_large_sand_room17",
+   "source": "epic",
+   "x": 9,
+   "y": 9,
+   "z": 18
+  },
+  {
+   "blocks": 2422,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room18",
+   "name": "epic_large_sand_room18",
+   "source": "epic",
+   "x": 17,
+   "y": 16,
+   "z": 17
+  },
+  {
+   "blocks": 3290,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room19",
+   "name": "epic_large_sand_room19",
+   "source": "epic",
+   "x": 27,
+   "y": 10,
+   "z": 27
+  },
+  {
+   "blocks": 30926,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room2",
+   "name": "epic_large_sand_room2",
+   "source": "epic",
+   "x": 47,
+   "y": 14,
+   "z": 47
+  },
+  {
+   "blocks": 21366,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room20",
+   "name": "epic_large_sand_room20",
+   "source": "epic",
+   "x": 31,
+   "y": 30,
+   "z": 31
+  },
+  {
+   "blocks": 4734,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room21",
+   "name": "epic_large_sand_room21",
+   "source": "epic",
+   "x": 23,
+   "y": 18,
+   "z": 22
+  },
+  {
+   "blocks": 1320,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room23",
+   "name": "epic_large_sand_room23",
+   "source": "epic",
+   "x": 11,
+   "y": 8,
+   "z": 15
+  },
+  {
+   "blocks": 25552,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room24",
+   "name": "epic_large_sand_room24",
+   "source": "epic",
+   "x": 48,
+   "y": 28,
+   "z": 35
+  },
+  {
+   "blocks": 3979,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room26",
+   "name": "epic_large_sand_room26",
+   "source": "epic",
+   "x": 44,
+   "y": 11,
+   "z": 15
+  },
+  {
+   "blocks": 3994,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room27",
+   "name": "epic_large_sand_room27",
+   "source": "epic",
+   "x": 44,
+   "y": 11,
+   "z": 15
+  },
+  {
+   "blocks": 43378,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room6",
+   "name": "epic_large_sand_room6",
+   "source": "epic",
+   "x": 46,
+   "y": 41,
+   "z": 23
+  },
+  {
+   "blocks": 1440,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room7",
+   "name": "epic_large_sand_room7",
+   "source": "epic",
+   "x": 12,
+   "y": 10,
+   "z": 12
+  },
+  {
+   "blocks": 1170,
+   "id": "politicalserver:dungeon/sands/epic_large_sand_room9",
+   "name": "epic_large_sand_room9",
+   "source": "epic",
+   "x": 9,
+   "y": 13,
+   "z": 10
+  },
+  {
+   "blocks": 6545,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room1",
+   "name": "epic_medium_sand_room1",
+   "source": "epic",
+   "x": 17,
+   "y": 11,
+   "z": 35
+  },
+  {
+   "blocks": 4140,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room2",
+   "name": "epic_medium_sand_room2",
+   "source": "epic",
+   "x": 15,
+   "y": 12,
+   "z": 23
+  },
+  {
+   "blocks": 605,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room3",
+   "name": "epic_medium_sand_room3",
+   "source": "epic",
+   "x": 13,
+   "y": 5,
+   "z": 13
+  },
+  {
+   "blocks": 846,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room4",
+   "name": "epic_medium_sand_room4",
+   "source": "epic",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 4334,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room5",
+   "name": "epic_medium_sand_room5",
+   "source": "epic",
+   "x": 17,
+   "y": 15,
+   "z": 17
+  },
+  {
+   "blocks": 11532,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room6",
+   "name": "epic_medium_sand_room6",
+   "source": "epic",
+   "x": 31,
+   "y": 12,
+   "z": 31
+  },
+  {
+   "blocks": 2176,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room7",
+   "name": "epic_medium_sand_room7",
+   "source": "epic",
+   "x": 16,
+   "y": 6,
+   "z": 25
+  },
+  {
+   "blocks": 720,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room8",
+   "name": "epic_medium_sand_room8",
+   "source": "epic",
+   "x": 9,
+   "y": 9,
+   "z": 18
+  },
+  {
+   "blocks": 30752,
+   "id": "politicalserver:dungeon/sands/epic_medium_sand_room9",
+   "name": "epic_medium_sand_room9",
+   "source": "epic",
+   "x": 31,
+   "y": 32,
+   "z": 31
+  }
+ ],
+ "shared": [
+  {
+   "blocks": 453,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_2",
+   "name": "dnt_cave_chamber_2",
+   "source": "dnt",
+   "x": 16,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 560,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_abandoned_mineshaft",
+   "name": "dnt_cave_chamber_abandoned_mineshaft",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 20
+  },
+  {
+   "blocks": 506,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_ancien_glaced_ruins",
+   "name": "dnt_cave_chamber_ancien_glaced_ruins",
+   "source": "dnt",
+   "x": 16,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 459,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_ancient_city_dungeon",
+   "name": "dnt_cave_chamber_ancient_city_dungeon",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 16
+  },
+  {
+   "blocks": 360,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_ancient_gateway_ruins",
+   "name": "dnt_cave_chamber_ancient_gateway_ruins",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 16
+  },
+  {
+   "blocks": 733,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_ancient_hallway_ruins",
+   "name": "dnt_cave_chamber_ancient_hallway_ruins",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 22
+  },
+  {
+   "blocks": 446,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_beetroot_grove",
+   "name": "dnt_cave_chamber_beetroot_grove",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 844,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_carrot_cave",
+   "name": "dnt_cave_chamber_carrot_cave",
+   "source": "dnt",
+   "x": 18,
+   "y": 8,
+   "z": 21
+  },
+  {
+   "blocks": 964,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_cave_farm_house_2",
+   "name": "dnt_cave_chamber_cave_farm_house_2",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 23
+  },
+  {
+   "blocks": 469,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_cave_hut",
+   "name": "dnt_cave_chamber_cave_hut",
+   "source": "dnt",
+   "x": 18,
+   "y": 6,
+   "z": 20
+  },
+  {
+   "blocks": 967,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_chapel",
+   "name": "dnt_cave_chamber_chapel",
+   "source": "dnt",
+   "x": 24,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 777,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_cherry_hut",
+   "name": "dnt_cave_chamber_cherry_hut",
+   "source": "dnt",
+   "x": 22,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 367,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_cherry_tree",
+   "name": "dnt_cave_chamber_cherry_tree",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 3021,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_copper_deposit",
+   "name": "dnt_cave_chamber_copper_deposit",
+   "source": "dnt",
+   "x": 44,
+   "y": 7,
+   "z": 33
+  },
+  {
+   "blocks": 1298,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_copper_farm",
+   "name": "dnt_cave_chamber_copper_farm",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 24
+  },
+  {
+   "blocks": 877,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_crop_farm_4",
+   "name": "dnt_cave_chamber_crop_farm_4",
+   "source": "dnt",
+   "x": 20,
+   "y": 7,
+   "z": 24
+  },
+  {
+   "blocks": 344,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_crops_farm_1",
+   "name": "dnt_cave_chamber_crops_farm_1",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 16
+  },
+  {
+   "blocks": 372,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_crops_farm_2",
+   "name": "dnt_cave_chamber_crops_farm_2",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 16
+  },
+  {
+   "blocks": 461,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_crops_farm_3",
+   "name": "dnt_cave_chamber_crops_farm_3",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 1371,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_deepslate_labyrinth_small",
+   "name": "dnt_cave_chamber_deepslate_labyrinth_small",
+   "source": "dnt",
+   "x": 24,
+   "y": 8,
+   "z": 22
+  },
+  {
+   "blocks": 917,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_desert_oasis",
+   "name": "dnt_cave_chamber_desert_oasis",
+   "source": "dnt",
+   "x": 22,
+   "y": 7,
+   "z": 19
+  },
+  {
+   "blocks": 321,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dirt_camp",
+   "name": "dnt_cave_chamber_dirt_camp",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 516,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dripstone_camp_1",
+   "name": "dnt_cave_chamber_dripstone_camp_1",
+   "source": "dnt",
+   "x": 17,
+   "y": 6,
+   "z": 18
+  },
+  {
+   "blocks": 937,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dripstone_camp_2",
+   "name": "dnt_cave_chamber_dripstone_camp_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 811,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dripstone_camp_3",
+   "name": "dnt_cave_chamber_dripstone_camp_3",
+   "source": "dnt",
+   "x": 18,
+   "y": 7,
+   "z": 22
+  },
+  {
+   "blocks": 352,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dungeon_1",
+   "name": "dnt_cave_chamber_dungeon_1",
+   "source": "dnt",
+   "x": 14,
+   "y": 6,
+   "z": 18
+  },
+  {
+   "blocks": 586,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dungeon_3",
+   "name": "dnt_cave_chamber_dungeon_3",
+   "source": "dnt",
+   "x": 26,
+   "y": 6,
+   "z": 24
+  },
+  {
+   "blocks": 1765,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dungeon_4",
+   "name": "dnt_cave_chamber_dungeon_4",
+   "source": "dnt",
+   "x": 31,
+   "y": 7,
+   "z": 37
+  },
+  {
+   "blocks": 884,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dungeon_5",
+   "name": "dnt_cave_chamber_dungeon_5",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 596,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_dungeon_6",
+   "name": "dnt_cave_chamber_dungeon_6",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 19
+  },
+  {
+   "blocks": 1061,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_farm_house",
+   "name": "dnt_cave_chamber_farm_house",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 26
+  },
+  {
+   "blocks": 1201,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_fishing_hut",
+   "name": "dnt_cave_chamber_fishing_hut",
+   "source": "dnt",
+   "x": 24,
+   "y": 9,
+   "z": 18
+  },
+  {
+   "blocks": 1761,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_fishing_hut_roof",
+   "name": "dnt_cave_chamber_fishing_hut_roof",
+   "source": "dnt",
+   "x": 24,
+   "y": 5,
+   "z": 18
+  },
+  {
+   "blocks": 912,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_gold_ore_deposit",
+   "name": "dnt_cave_chamber_gold_ore_deposit",
+   "source": "dnt",
+   "x": 20,
+   "y": 7,
+   "z": 24
+  },
+  {
+   "blocks": 397,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_golden_apple_altar",
+   "name": "dnt_cave_chamber_golden_apple_altar",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 664,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_grave",
+   "name": "dnt_cave_chamber_grave",
+   "source": "dnt",
+   "x": 16,
+   "y": 9,
+   "z": 17
+  },
+  {
+   "blocks": 1054,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_grave_roof",
+   "name": "dnt_cave_chamber_grave_roof",
+   "source": "dnt",
+   "x": 16,
+   "y": 5,
+   "z": 17
+  },
+  {
+   "blocks": 692,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_greenhouse",
+   "name": "dnt_cave_chamber_greenhouse",
+   "source": "dnt",
+   "x": 18,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 401,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_iron_deposit_hut",
+   "name": "dnt_cave_chamber_iron_deposit_hut",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 19
+  },
+  {
+   "blocks": 963,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_jungle_dungeon",
+   "name": "dnt_cave_chamber_jungle_dungeon",
+   "source": "dnt",
+   "x": 19,
+   "y": 8,
+   "z": 21
+  },
+  {
+   "blocks": 1514,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_jungle_dungeon_roof",
+   "name": "dnt_cave_chamber_jungle_dungeon_roof",
+   "source": "dnt",
+   "x": 19,
+   "y": 5,
+   "z": 21
+  },
+  {
+   "blocks": 1570,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_lake_hut",
+   "name": "dnt_cave_chamber_lake_hut",
+   "source": "dnt",
+   "x": 21,
+   "y": 9,
+   "z": 27
+  },
+  {
+   "blocks": 2190,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_lake_hut_roof",
+   "name": "dnt_cave_chamber_lake_hut_roof",
+   "source": "dnt",
+   "x": 21,
+   "y": 5,
+   "z": 27
+  },
+  {
+   "blocks": 812,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_lapis_square",
+   "name": "dnt_cave_chamber_lapis_square",
+   "source": "dnt",
+   "x": 20,
+   "y": 7,
+   "z": 20
+  },
+  {
+   "blocks": 415,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_lush_oasis",
+   "name": "dnt_cave_chamber_lush_oasis",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 874,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_mooshroom",
+   "name": "dnt_cave_chamber_mooshroom",
+   "source": "dnt",
+   "x": 20,
+   "y": 7,
+   "z": 20
+  },
+  {
+   "blocks": 814,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_mooshroom_farm",
+   "name": "dnt_cave_chamber_mooshroom_farm",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 23
+  },
+  {
+   "blocks": 688,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_mushroom_farm",
+   "name": "dnt_cave_chamber_mushroom_farm",
+   "source": "dnt",
+   "x": 16,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 428,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_mushroom_lake",
+   "name": "dnt_cave_chamber_mushroom_lake",
+   "source": "dnt",
+   "x": 16,
+   "y": 8,
+   "z": 16
+  },
+  {
+   "blocks": 915,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_mushroom_lake_roof",
+   "name": "dnt_cave_chamber_mushroom_lake_roof",
+   "source": "dnt",
+   "x": 16,
+   "y": 5,
+   "z": 16
+  },
+  {
+   "blocks": 660,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_music_room",
+   "name": "dnt_cave_chamber_music_room",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 374,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_nether_portal",
+   "name": "dnt_cave_chamber_nether_portal",
+   "source": "dnt",
+   "x": 18,
+   "y": 10,
+   "z": 16
+  },
+  {
+   "blocks": 1497,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_nether_portal_roof",
+   "name": "dnt_cave_chamber_nether_portal_roof",
+   "source": "dnt",
+   "x": 18,
+   "y": 8,
+   "z": 16
+  },
+  {
+   "blocks": 1324,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_ocean_dungeon",
+   "name": "dnt_cave_chamber_ocean_dungeon",
+   "source": "dnt",
+   "x": 26,
+   "y": 8,
+   "z": 30
+  },
+  {
+   "blocks": 2607,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_ocean_dungeon_roof",
+   "name": "dnt_cave_chamber_ocean_dungeon_roof",
+   "source": "dnt",
+   "x": 26,
+   "y": 5,
+   "z": 30
+  },
+  {
+   "blocks": 790,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_pale_shrine",
+   "name": "dnt_cave_chamber_pale_shrine",
+   "source": "dnt",
+   "x": 18,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 641,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_pathway_hut",
+   "name": "dnt_cave_chamber_pathway_hut",
+   "source": "dnt",
+   "x": 20,
+   "y": 7,
+   "z": 16
+  },
+  {
+   "blocks": 336,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_pillar_ruins",
+   "name": "dnt_cave_chamber_pillar_ruins",
+   "source": "dnt",
+   "x": 16,
+   "y": 6,
+   "z": 17
+  },
+  {
+   "blocks": 550,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_sheep_camp",
+   "name": "dnt_cave_chamber_sheep_camp",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 449,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_shrine_dungeon",
+   "name": "dnt_cave_chamber_shrine_dungeon",
+   "source": "dnt",
+   "x": 15,
+   "y": 8,
+   "z": 12
+  },
+  {
+   "blocks": 767,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_shrine_dungeon_roof",
+   "name": "dnt_cave_chamber_shrine_dungeon_roof",
+   "source": "dnt",
+   "x": 15,
+   "y": 5,
+   "z": 12
+  },
+  {
+   "blocks": 532,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_solitary_tree",
+   "name": "dnt_cave_chamber_solitary_tree",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 389,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_stone_camp",
+   "name": "dnt_cave_chamber_stone_camp",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 362,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_stone_oasis",
+   "name": "dnt_cave_chamber_stone_oasis",
+   "source": "dnt",
+   "x": 14,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 664,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_throne_room",
+   "name": "dnt_cave_chamber_throne_room",
+   "source": "dnt",
+   "x": 18,
+   "y": 7,
+   "z": 18
+  },
+  {
+   "blocks": 445,
+   "id": "politicalserver:dungeon/shared/dnt_cave_chamber_well",
+   "name": "dnt_cave_chamber_well",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 14
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_cross_a",
+   "name": "dnt_shrine_combat_room_size1_cross_a",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_cross_b",
+   "name": "dnt_shrine_combat_room_size1_cross_b",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_cross_c",
+   "name": "dnt_shrine_combat_room_size1_cross_c",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_cross_d",
+   "name": "dnt_shrine_combat_room_size1_cross_d",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_cross_e",
+   "name": "dnt_shrine_combat_room_size1_cross_e",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_cross_f",
+   "name": "dnt_shrine_combat_room_size1_cross_f",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_curve",
+   "name": "dnt_shrine_combat_room_size1_curve",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_straight",
+   "name": "dnt_shrine_combat_room_size1_straight",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_t_cross_a",
+   "name": "dnt_shrine_combat_room_size1_t_cross_a",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_t_cross_b",
+   "name": "dnt_shrine_combat_room_size1_t_cross_b",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 4913,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size1_t_cross_c",
+   "name": "dnt_shrine_combat_room_size1_t_cross_c",
+   "source": "dnt",
+   "x": 17,
+   "y": 17,
+   "z": 17
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_cross_a",
+   "name": "dnt_shrine_combat_room_size2_cross_a",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_cross_b",
+   "name": "dnt_shrine_combat_room_size2_cross_b",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_cross_c",
+   "name": "dnt_shrine_combat_room_size2_cross_c",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_cross_d",
+   "name": "dnt_shrine_combat_room_size2_cross_d",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_cross_e",
+   "name": "dnt_shrine_combat_room_size2_cross_e",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_cross_f",
+   "name": "dnt_shrine_combat_room_size2_cross_f",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_curve",
+   "name": "dnt_shrine_combat_room_size2_curve",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_straight",
+   "name": "dnt_shrine_combat_room_size2_straight",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_t_curve",
+   "name": "dnt_shrine_combat_room_size2_t_curve",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_t_curve_a",
+   "name": "dnt_shrine_combat_room_size2_t_curve_a",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_t_curve_b",
+   "name": "dnt_shrine_combat_room_size2_t_curve_b",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 7497,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size2_t_curve_c",
+   "name": "dnt_shrine_combat_room_size2_t_curve_c",
+   "source": "dnt",
+   "x": 21,
+   "y": 17,
+   "z": 21
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_cross_a",
+   "name": "dnt_shrine_combat_room_size3_cross_a",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_cross_b",
+   "name": "dnt_shrine_combat_room_size3_cross_b",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_cross_c",
+   "name": "dnt_shrine_combat_room_size3_cross_c",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_cross_d",
+   "name": "dnt_shrine_combat_room_size3_cross_d",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_cross_e",
+   "name": "dnt_shrine_combat_room_size3_cross_e",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_cross_f",
+   "name": "dnt_shrine_combat_room_size3_cross_f",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_curve",
+   "name": "dnt_shrine_combat_room_size3_curve",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_straight",
+   "name": "dnt_shrine_combat_room_size3_straight",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_t_cross_a",
+   "name": "dnt_shrine_combat_room_size3_t_cross_a",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_t_cross_b",
+   "name": "dnt_shrine_combat_room_size3_t_cross_b",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 10625,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size3_t_cross_c",
+   "name": "dnt_shrine_combat_room_size3_t_cross_c",
+   "source": "dnt",
+   "x": 25,
+   "y": 17,
+   "z": 25
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_cross_a",
+   "name": "dnt_shrine_combat_room_size4_cross_a",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_cross_b",
+   "name": "dnt_shrine_combat_room_size4_cross_b",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_cross_c",
+   "name": "dnt_shrine_combat_room_size4_cross_c",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_cross_d",
+   "name": "dnt_shrine_combat_room_size4_cross_d",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_cross_e",
+   "name": "dnt_shrine_combat_room_size4_cross_e",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_cross_f",
+   "name": "dnt_shrine_combat_room_size4_cross_f",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_curve",
+   "name": "dnt_shrine_combat_room_size4_curve",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_straight",
+   "name": "dnt_shrine_combat_room_size4_straight",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_t_cross_a",
+   "name": "dnt_shrine_combat_room_size4_t_cross_a",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_t_cross_b",
+   "name": "dnt_shrine_combat_room_size4_t_cross_b",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 14297,
+   "id": "politicalserver:dungeon/shared/dnt_shrine_combat_room_size4_t_cross_c",
+   "name": "dnt_shrine_combat_room_size4_t_cross_c",
+   "source": "dnt",
+   "x": 29,
+   "y": 17,
+   "z": 29
+  },
+  {
+   "blocks": 3632,
+   "id": "politicalserver:dungeon/shared/dnt_spawner_labyrinth",
+   "name": "dnt_spawner_labyrinth",
+   "source": "dnt",
+   "x": 39,
+   "y": 8,
+   "z": 39
+  },
+  {
+   "blocks": 27528,
+   "id": "politicalserver:dungeon/shared/epic_room1",
+   "name": "epic_room1",
+   "source": "epic",
+   "x": 33,
+   "y": 31,
+   "z": 33
+  },
+  {
+   "blocks": 2652,
+   "id": "politicalserver:dungeon/shared/epic_room10",
+   "name": "epic_room10",
+   "source": "epic",
+   "x": 15,
+   "y": 9,
+   "z": 21
+  },
+  {
+   "blocks": 11697,
+   "id": "politicalserver:dungeon/shared/epic_room11",
+   "name": "epic_room11",
+   "source": "epic",
+   "x": 27,
+   "y": 21,
+   "z": 27
+  },
+  {
+   "blocks": 8400,
+   "id": "politicalserver:dungeon/shared/epic_room12",
+   "name": "epic_room12",
+   "source": "epic",
+   "x": 21,
+   "y": 16,
+   "z": 25
+  },
+  {
+   "blocks": 918,
+   "id": "politicalserver:dungeon/shared/epic_room13",
+   "name": "epic_room13",
+   "source": "epic",
+   "x": 17,
+   "y": 6,
+   "z": 9
+  },
+  {
+   "blocks": 2058,
+   "id": "politicalserver:dungeon/shared/epic_room14",
+   "name": "epic_room14",
+   "source": "epic",
+   "x": 15,
+   "y": 11,
+   "z": 25
+  },
+  {
+   "blocks": 15741,
+   "id": "politicalserver:dungeon/shared/epic_room17",
+   "name": "epic_room17",
+   "source": "epic",
+   "x": 35,
+   "y": 25,
+   "z": 35
+  },
+  {
+   "blocks": 5145,
+   "id": "politicalserver:dungeon/shared/epic_room18",
+   "name": "epic_room18",
+   "source": "epic",
+   "x": 25,
+   "y": 14,
+   "z": 25
+  },
+  {
+   "blocks": 38232,
+   "id": "politicalserver:dungeon/shared/epic_room19",
+   "name": "epic_room19",
+   "source": "epic",
+   "x": 39,
+   "y": 25,
+   "z": 48
+  },
+  {
+   "blocks": 3017,
+   "id": "politicalserver:dungeon/shared/epic_room2",
+   "name": "epic_room2",
+   "source": "epic",
+   "x": 17,
+   "y": 7,
+   "z": 33
+  },
+  {
+   "blocks": 1575,
+   "id": "politicalserver:dungeon/shared/epic_room3",
+   "name": "epic_room3",
+   "source": "epic",
+   "x": 15,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1109,
+   "id": "politicalserver:dungeon/shared/epic_room4",
+   "name": "epic_room4",
+   "source": "epic",
+   "x": 11,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 455,
+   "id": "politicalserver:dungeon/shared/epic_room6",
+   "name": "epic_room6",
+   "source": "epic",
+   "x": 9,
+   "y": 7,
+   "z": 9
+  }
+ ],
+ "sunken": [
+  {
+   "blocks": 9104,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_house",
+   "name": "dnt_bridge_house",
+   "source": "dnt",
+   "x": 24,
+   "y": 20,
+   "z": 29
+  },
+  {
+   "blocks": 9104,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_house_fixed",
+   "name": "dnt_bridge_house_fixed",
+   "source": "dnt",
+   "x": 24,
+   "y": 20,
+   "z": 29
+  },
+  {
+   "blocks": 3140,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_house_tower",
+   "name": "dnt_bridge_house_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 16,
+   "z": 25
+  },
+  {
+   "blocks": 3140,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_house_tower_fixed",
+   "name": "dnt_bridge_house_tower_fixed",
+   "source": "dnt",
+   "x": 15,
+   "y": 16,
+   "z": 25
+  },
+  {
+   "blocks": 3140,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_house_tower_fixed_mirror",
+   "name": "dnt_bridge_house_tower_fixed_mirror",
+   "source": "dnt",
+   "x": 15,
+   "y": 16,
+   "z": 25
+  },
+  {
+   "blocks": 1235,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_mini_tower",
+   "name": "dnt_bridge_mini_tower",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 21
+  },
+  {
+   "blocks": 1235,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_mini_tower_fixed",
+   "name": "dnt_bridge_mini_tower_fixed",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 21
+  },
+  {
+   "blocks": 1235,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_mini_tower_fixed_mirror",
+   "name": "dnt_bridge_mini_tower_fixed_mirror",
+   "source": "dnt",
+   "x": 13,
+   "y": 11,
+   "z": 21
+  },
+  {
+   "blocks": 3373,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_spawner_arena",
+   "name": "dnt_bridge_spawner_arena",
+   "source": "dnt",
+   "x": 21,
+   "y": 11,
+   "z": 29
+  },
+  {
+   "blocks": 3373,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_spawner_arena_fixed",
+   "name": "dnt_bridge_spawner_arena_fixed",
+   "source": "dnt",
+   "x": 21,
+   "y": 11,
+   "z": 29
+  },
+  {
+   "blocks": 3373,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_spawner_arena_fixed_mirror",
+   "name": "dnt_bridge_spawner_arena_fixed_mirror",
+   "source": "dnt",
+   "x": 21,
+   "y": 11,
+   "z": 29
+  },
+  {
+   "blocks": 3270,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_spawner_outpost",
+   "name": "dnt_bridge_spawner_outpost",
+   "source": "dnt",
+   "x": 21,
+   "y": 13,
+   "z": 29
+  },
+  {
+   "blocks": 3270,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_spawner_outpost_fixed",
+   "name": "dnt_bridge_spawner_outpost_fixed",
+   "source": "dnt",
+   "x": 21,
+   "y": 13,
+   "z": 29
+  },
+  {
+   "blocks": 3270,
+   "id": "politicalserver:dungeon/sunken/dnt_bridge_spawner_outpost_fixed_mirror",
+   "name": "dnt_bridge_spawner_outpost_fixed_mirror",
+   "source": "dnt",
+   "x": 21,
+   "y": 13,
+   "z": 29
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_1",
+   "name": "dnt_room_2x2_1",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_10",
+   "name": "dnt_room_2x2_10",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_11",
+   "name": "dnt_room_2x2_11",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_12",
+   "name": "dnt_room_2x2_12",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_13",
+   "name": "dnt_room_2x2_13",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_14",
+   "name": "dnt_room_2x2_14",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_15",
+   "name": "dnt_room_2x2_15",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_16",
+   "name": "dnt_room_2x2_16",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_17",
+   "name": "dnt_room_2x2_17",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_18",
+   "name": "dnt_room_2x2_18",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_19",
+   "name": "dnt_room_2x2_19",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_2",
+   "name": "dnt_room_2x2_2",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_20",
+   "name": "dnt_room_2x2_20",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_21",
+   "name": "dnt_room_2x2_21",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_22",
+   "name": "dnt_room_2x2_22",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_23",
+   "name": "dnt_room_2x2_23",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_24",
+   "name": "dnt_room_2x2_24",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_25",
+   "name": "dnt_room_2x2_25",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_26",
+   "name": "dnt_room_2x2_26",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_3",
+   "name": "dnt_room_2x2_3",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_4",
+   "name": "dnt_room_2x2_4",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_5",
+   "name": "dnt_room_2x2_5",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_6",
+   "name": "dnt_room_2x2_6",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_7",
+   "name": "dnt_room_2x2_7",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_8",
+   "name": "dnt_room_2x2_8",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1564,
+   "id": "politicalserver:dungeon/sunken/dnt_room_2x2_9",
+   "name": "dnt_room_2x2_9",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 1442,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_cross",
+   "name": "dnt_sh_bridge_cross",
+   "source": "dnt",
+   "x": 21,
+   "y": 10,
+   "z": 21
+  },
+  {
+   "blocks": 1442,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_cross_fixed",
+   "name": "dnt_sh_bridge_cross_fixed",
+   "source": "dnt",
+   "x": 21,
+   "y": 10,
+   "z": 21
+  },
+  {
+   "blocks": 1180,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_spawner",
+   "name": "dnt_sh_bridge_straight_spawner",
+   "source": "dnt",
+   "x": 14,
+   "y": 12,
+   "z": 21
+  },
+  {
+   "blocks": 1180,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_spawner_fixed",
+   "name": "dnt_sh_bridge_straight_spawner_fixed",
+   "source": "dnt",
+   "x": 14,
+   "y": 12,
+   "z": 21
+  },
+  {
+   "blocks": 1180,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_spawner_fixed_mirror",
+   "name": "dnt_sh_bridge_straight_spawner_fixed_mirror",
+   "source": "dnt",
+   "x": 14,
+   "y": 12,
+   "z": 21
+  },
+  {
+   "blocks": 1852,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_tower",
+   "name": "dnt_sh_bridge_straight_tower",
+   "source": "dnt",
+   "x": 15,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 2830,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_tower_2",
+   "name": "dnt_sh_bridge_straight_tower_2",
+   "source": "dnt",
+   "x": 23,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 2830,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_tower_2_fixed",
+   "name": "dnt_sh_bridge_straight_tower_2_fixed",
+   "source": "dnt",
+   "x": 23,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 1852,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_tower_fixed",
+   "name": "dnt_sh_bridge_straight_tower_fixed",
+   "source": "dnt",
+   "x": 15,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 1852,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_straight_tower_fixed_mirror",
+   "name": "dnt_sh_bridge_straight_tower_fixed_mirror",
+   "source": "dnt",
+   "x": 15,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 1153,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_t-cross",
+   "name": "dnt_sh_bridge_t-cross",
+   "source": "dnt",
+   "x": 14,
+   "y": 10,
+   "z": 21
+  },
+  {
+   "blocks": 1153,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_t-cross_fixed",
+   "name": "dnt_sh_bridge_t-cross_fixed",
+   "source": "dnt",
+   "x": 14,
+   "y": 10,
+   "z": 21
+  },
+  {
+   "blocks": 1469,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_t-cross_spawner",
+   "name": "dnt_sh_bridge_t-cross_spawner",
+   "source": "dnt",
+   "x": 21,
+   "y": 12,
+   "z": 21
+  },
+  {
+   "blocks": 2141,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_t-cross_tower",
+   "name": "dnt_sh_bridge_t-cross_tower",
+   "source": "dnt",
+   "x": 22,
+   "y": 15,
+   "z": 21
+  },
+  {
+   "blocks": 7062,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_big",
+   "name": "dnt_sh_bridge_tower_big",
+   "source": "dnt",
+   "x": 27,
+   "y": 10,
+   "z": 35
+  },
+  {
+   "blocks": 7062,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_big_fixed",
+   "name": "dnt_sh_bridge_tower_big_fixed",
+   "source": "dnt",
+   "x": 27,
+   "y": 10,
+   "z": 35
+  },
+  {
+   "blocks": 7062,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_big_fixed_mirror",
+   "name": "dnt_sh_bridge_tower_big_fixed_mirror",
+   "source": "dnt",
+   "x": 27,
+   "y": 10,
+   "z": 35
+  },
+  {
+   "blocks": 4586,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_roof_1",
+   "name": "dnt_sh_bridge_tower_roof_1",
+   "source": "dnt",
+   "x": 29,
+   "y": 7,
+   "z": 29
+  },
+  {
+   "blocks": 4683,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_stage_1",
+   "name": "dnt_sh_bridge_tower_stage_1",
+   "source": "dnt",
+   "x": 27,
+   "y": 7,
+   "z": 27
+  },
+  {
+   "blocks": 4683,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_stage_2",
+   "name": "dnt_sh_bridge_tower_stage_2",
+   "source": "dnt",
+   "x": 27,
+   "y": 7,
+   "z": 27
+  },
+  {
+   "blocks": 4683,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_stage_3",
+   "name": "dnt_sh_bridge_tower_stage_3",
+   "source": "dnt",
+   "x": 27,
+   "y": 7,
+   "z": 27
+  },
+  {
+   "blocks": 4683,
+   "id": "politicalserver:dungeon/sunken/dnt_sh_bridge_tower_stage_4",
+   "name": "dnt_sh_bridge_tower_stage_4",
+   "source": "dnt",
+   "x": 27,
+   "y": 7,
+   "z": 27
+  }
+ ],
+ "toxic": [
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_big_room_1",
+   "name": "dnt_big_room_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_big_room_2",
+   "name": "dnt_big_room_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_big_room_3",
+   "name": "dnt_big_room_3",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_big_room_4",
+   "name": "dnt_big_room_4",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_big_room_5",
+   "name": "dnt_big_room_5",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_medium_room_1",
+   "name": "dnt_medium_room_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_medium_room_2",
+   "name": "dnt_medium_room_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_medium_room_3",
+   "name": "dnt_medium_room_3",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_medium_room_4",
+   "name": "dnt_medium_room_4",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_medium_room_5",
+   "name": "dnt_medium_room_5",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 4998,
+   "id": "politicalserver:dungeon/toxic/dnt_room_1",
+   "name": "dnt_room_1",
+   "source": "dnt",
+   "x": 21,
+   "y": 14,
+   "z": 17
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_room_14",
+   "name": "dnt_room_14",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 3003,
+   "id": "politicalserver:dungeon/toxic/dnt_room_15",
+   "name": "dnt_room_15",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 33
+  },
+  {
+   "blocks": 2611,
+   "id": "politicalserver:dungeon/toxic/dnt_room_16",
+   "name": "dnt_room_16",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 29
+  },
+  {
+   "blocks": 3255,
+   "id": "politicalserver:dungeon/toxic/dnt_room_17",
+   "name": "dnt_room_17",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_room_18",
+   "name": "dnt_room_18",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 2527,
+   "id": "politicalserver:dungeon/toxic/dnt_room_19",
+   "name": "dnt_room_19",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 19
+  },
+  {
+   "blocks": 5887,
+   "id": "politicalserver:dungeon/toxic/dnt_room_2",
+   "name": "dnt_room_2",
+   "source": "dnt",
+   "x": 29,
+   "y": 7,
+   "z": 29
+  },
+  {
+   "blocks": 1729,
+   "id": "politicalserver:dungeon/toxic/dnt_room_20",
+   "name": "dnt_room_20",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 6895,
+   "id": "politicalserver:dungeon/toxic/dnt_room_21",
+   "name": "dnt_room_21",
+   "source": "dnt",
+   "x": 37,
+   "y": 7,
+   "z": 37
+  },
+  {
+   "blocks": 819,
+   "id": "politicalserver:dungeon/toxic/dnt_room_22",
+   "name": "dnt_room_22",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 9
+  },
+  {
+   "blocks": 2205,
+   "id": "politicalserver:dungeon/toxic/dnt_room_23",
+   "name": "dnt_room_23",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 3857,
+   "id": "politicalserver:dungeon/toxic/dnt_room_24",
+   "name": "dnt_room_24",
+   "source": "dnt",
+   "x": 19,
+   "y": 7,
+   "z": 29
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_room_25",
+   "name": "dnt_room_25",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 2023,
+   "id": "politicalserver:dungeon/toxic/dnt_room_26",
+   "name": "dnt_room_26",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_room_27",
+   "name": "dnt_room_27",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 2499,
+   "id": "politicalserver:dungeon/toxic/dnt_room_28",
+   "name": "dnt_room_28",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 4375,
+   "id": "politicalserver:dungeon/toxic/dnt_room_29",
+   "name": "dnt_room_29",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 2499,
+   "id": "politicalserver:dungeon/toxic/dnt_room_30",
+   "name": "dnt_room_30",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1547,
+   "id": "politicalserver:dungeon/toxic/dnt_room_31",
+   "name": "dnt_room_31",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 3087,
+   "id": "politicalserver:dungeon/toxic/dnt_room_32",
+   "name": "dnt_room_32",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1155,
+   "id": "politicalserver:dungeon/toxic/dnt_room_33",
+   "name": "dnt_room_33",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 3675,
+   "id": "politicalserver:dungeon/toxic/dnt_room_34",
+   "name": "dnt_room_34",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 2478,
+   "id": "politicalserver:dungeon/toxic/dnt_room_35",
+   "name": "dnt_room_35",
+   "source": "dnt",
+   "x": 24,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_room_36",
+   "name": "dnt_room_36",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_room_37",
+   "name": "dnt_room_37",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_room_38",
+   "name": "dnt_room_38",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1575,
+   "id": "politicalserver:dungeon/toxic/dnt_room_39",
+   "name": "dnt_room_39",
+   "source": "dnt",
+   "x": 9,
+   "y": 7,
+   "z": 25
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_room_40",
+   "name": "dnt_room_40",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1463,
+   "id": "politicalserver:dungeon/toxic/dnt_room_41",
+   "name": "dnt_room_41",
+   "source": "dnt",
+   "x": 15,
+   "y": 7,
+   "z": 15
+  },
+  {
+   "blocks": 2688,
+   "id": "politicalserver:dungeon/toxic/dnt_room_43",
+   "name": "dnt_room_43",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 2023,
+   "id": "politicalserver:dungeon/toxic/dnt_room_44",
+   "name": "dnt_room_44",
+   "source": "dnt",
+   "x": 17,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_room_45",
+   "name": "dnt_room_45",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_room_46",
+   "name": "dnt_room_46",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 3969,
+   "id": "politicalserver:dungeon/toxic/dnt_room_47",
+   "name": "dnt_room_47",
+   "source": "dnt",
+   "x": 21,
+   "y": 7,
+   "z": 27
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_room_48",
+   "name": "dnt_room_48",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 2093,
+   "id": "politicalserver:dungeon/toxic/dnt_room_49",
+   "name": "dnt_room_49",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 23
+  },
+  {
+   "blocks": 1001,
+   "id": "politicalserver:dungeon/toxic/dnt_room_50",
+   "name": "dnt_room_50",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 2618,
+   "id": "politicalserver:dungeon/toxic/dnt_room_51",
+   "name": "dnt_room_51",
+   "source": "dnt",
+   "x": 34,
+   "y": 7,
+   "z": 11
+  },
+  {
+   "blocks": 2975,
+   "id": "politicalserver:dungeon/toxic/dnt_room_52",
+   "name": "dnt_room_52",
+   "source": "dnt",
+   "x": 25,
+   "y": 7,
+   "z": 17
+  },
+  {
+   "blocks": 2639,
+   "id": "politicalserver:dungeon/toxic/dnt_room_53",
+   "name": "dnt_room_53",
+   "source": "dnt",
+   "x": 29,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1911,
+   "id": "politicalserver:dungeon/toxic/dnt_room_54",
+   "name": "dnt_room_54",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 21
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_1",
+   "name": "dnt_small_room_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 630,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_10",
+   "name": "dnt_small_room_10",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_2",
+   "name": "dnt_small_room_2",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_3",
+   "name": "dnt_small_room_3",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_4",
+   "name": "dnt_small_room_4",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 1183,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_5",
+   "name": "dnt_small_room_5",
+   "source": "dnt",
+   "x": 13,
+   "y": 7,
+   "z": 13
+  },
+  {
+   "blocks": 390,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_7",
+   "name": "dnt_small_room_7",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 390,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_8",
+   "name": "dnt_small_room_8",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 510,
+   "id": "politicalserver:dungeon/toxic/dnt_small_room_9",
+   "name": "dnt_small_room_9",
+   "source": "dnt",
+   "x": 13,
+   "y": 6,
+   "z": 13
+  },
+  {
+   "blocks": 2366,
+   "id": "politicalserver:dungeon/toxic/dnt_tall_room_1",
+   "name": "dnt_tall_room_1",
+   "source": "dnt",
+   "x": 13,
+   "y": 14,
+   "z": 21
+  },
+  {
+   "blocks": 5054,
+   "id": "politicalserver:dungeon/toxic/dnt_tall_room_2",
+   "name": "dnt_tall_room_2",
+   "source": "dnt",
+   "x": 19,
+   "y": 14,
+   "z": 19
+  },
+  {
+   "blocks": 8750,
+   "id": "politicalserver:dungeon/toxic/dnt_tall_room_3",
+   "name": "dnt_tall_room_3",
+   "source": "dnt",
+   "x": 25,
+   "y": 14,
+   "z": 25
+  },
+  {
+   "blocks": 17150,
+   "id": "politicalserver:dungeon/toxic/dnt_tall_room_4",
+   "name": "dnt_tall_room_4",
+   "source": "dnt",
+   "x": 35,
+   "y": 14,
+   "z": 35
+  }
+ ]
+}

@@ -61,6 +61,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         // Register custom items
         CustomItemHandler.register();
         EnchantTableHandler.register();
+        DungeonProtection.register();
 
         // Backrooms consumables (Almond Water etc.) right-click handling
         BackroomsItems.registerEvents();
@@ -166,6 +167,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
             CustomEnchantEffects.forget(player);
             MeterLineHandler.forget(player);
+            DungeonManager.onDisconnect(player);
+            DungeonProtection.forget(player);
             // Version X gear lines keep per player meters in memory, so drop them on the way out.
             StarboundHandler.clear(player.getUUID());
             BeastcraftHandler.clear(player.getUUID());
@@ -181,6 +184,25 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         // Reapply perks on respawn (death and other player copy events)
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
             PerkManager.applyActivePerks(newPlayer);
+            // Somebody who died mid run goes back to the dungeon entrance rather than to their bed
+            // on the other side of the world, which would silently end the run for everybody else.
+            // Deferred a tick for the same reason the scoreboard below is: the player is still
+            // being rebuilt at this point and moving them now upsets the connection.
+            if (!alive) {
+                final UUID diedIn = newPlayer.getUUID();
+                server.execute(() -> {
+                    ServerPlayer back = server.getPlayerList().getPlayer(diedIn);
+                    if (back == null) return;
+                    net.minecraft.core.BlockPos at = DungeonManager.respawnFor(back);
+                    if (at == null) return;
+                    net.minecraft.server.level.ServerLevel realm = DungeonManager.realm(server);
+                    if (realm == null) return;
+                    PlayerTeleportHelper.teleport(back, realm, at.getX() + 0.5, at.getY(),
+                            at.getZ() + 0.5, back.getYRot(), back.getXRot());
+                    back.sendSystemMessage(net.minecraft.network.chat.Component.literal(
+                            "§7You wake at the entrance. The dungeon kept everything else."));
+                });
+            }
             // Defer scoreboard setup to next tick to avoid network protocol errors during respawn
             // The COPY_FROM event fires during player reconstruction which can cause packet issues
             final UUID playerUuid = newPlayer.getUUID();
@@ -425,7 +447,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ItemOverrideManager.load();
+            DungeonManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HotReloadManager.initialize();
+            DungeonSelfTest.runIfAsked(s);
             BazaarProduct.build();
             BazaarTraders.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -487,6 +511,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BazaarManager.save();
             ItemOverrideManager.save();
             BazaarTraders.save();
+            DungeonManager.save();
             MinionManager.save();
             NemesisManager.save();
             CrateManager.save();
@@ -608,6 +633,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SiegeManager.tick(s);
             DragonFightManager.tick(s);
             WitherFightManager.tick(s);
+            DungeonManager.tick(s);
             CustomEnchantEffects.tick();
             ItemOverrideManager.tick();
             BazaarTraders.tick();
