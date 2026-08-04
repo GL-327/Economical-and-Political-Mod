@@ -45,6 +45,14 @@ public final class DelveForge {
     public static final int MAX_SIGILS = 5;
 
     /** The mark glyph, and the sigil that replaces it once the scale runs out. */
+    /** The steps the whole system is tuned on. Public so the menu quotes these rather than
+     *  hardcoding a copy that goes stale the next time they move. */
+    public static final double FORGE_STEP = 0.15;
+    public static final double MARK_STEP = 0.06;
+    public static final double SIGIL_STEP = 0.12;
+    public static final double DEPTH_STEP = 0.02;
+    public static final double HOME_STEP = 0.01;
+
     public static final String MARK_GLYPH = "✦";
     public static final String SIGIL_GLYPH = "❖";
 
@@ -210,12 +218,12 @@ public final class DelveForge {
      */
     public static double statMultiplier(ItemStack stack, int depthTier) {
         if (!isForged(stack)) return 1.0;
-        double mult = 1.15;                        // forged at all
-        mult += marks(stack) * 0.06;               // each of five marks
-        mult += sigils(stack) * 0.12;              // each of five sigils, worth twice a mark
+        double mult = 1.0 + FORGE_STEP;
+        mult += marks(stack) * MARK_STEP;
+        mult += sigils(stack) * SIGIL_STEP;        // worth twice a mark
         if (depthTier > 0) {
             // Inside a delve, and deeper is better. Outside, this term is simply absent.
-            mult += depthTier * 0.02;
+            mult += depthTier * DEPTH_STEP;
         }
         // Fully marked, fully sigilled, on the deepest floor: 1.15 + 0.30 + 0.60 + 0.14 = 2.19.
         return mult;
@@ -239,7 +247,7 @@ public final class DelveForge {
         DelveRun run = DelveManager.runOf(player);
         if (run == null) return 1.0;
         // Marks make the home bonus better too, which is what ties the two systems together.
-        return 1.10 + totalUpgrades(stack) * 0.01;
+        return 1.10 + totalUpgrades(stack) * HOME_STEP;
     }
 
     /** A one line summary for a tooltip or a menu. */

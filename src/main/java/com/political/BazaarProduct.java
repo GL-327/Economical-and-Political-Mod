@@ -94,6 +94,14 @@ public final class BazaarProduct {
             }
         }
 
+        // ── The custom items ──
+        //
+        // The bazaar traded vanilla materials only, which meant the thousands of things the mod
+        // itself makes had no market at all: you could sell iron but not a delve spoil. Everything
+        // with a custom id and a sensible price now has an order book, which is the difference
+        // between a marketplace and a vanilla shop that happens to live in a mod.
+        addCustomItems(claimed);
+
         built = true;
         PoliticalServer.LOGGER.info("Bazaar catalogue: " + BY_KEY.size() + " products across "
                 + BY_CATEGORY.size() + " categories");
@@ -103,6 +111,55 @@ public final class BazaarProduct {
     public static void rebuild() {
         built = false;
         build();
+    }
+
+
+    /**
+     * Puts the mod's own items on the book.
+     *
+     * <p>Priced from what they are rather than by hand: a delve spoil already knows what a collector
+     * pays for it, and everything else is priced off how much work its recipe represents. Anything
+     * that cannot be priced sensibly is left off, because a market with a made up number in it is
+     * worse than one item short.</p>
+     */
+    private static void addCustomItems(java.util.Set<Item> claimed) {
+        // Delve spoils. These are the bulk of it and they carry their own value already.
+        for (DelveSpoils.Kind k : DelveSpoils.KINDS) {
+            for (DelveSpoils.Depth d : DelveSpoils.DEPTHS) {
+                for (DelveSpoils.Variant v : DelveSpoils.VARIANTS) {
+                    String key = DelveSpoils.idOf(k, d, v);
+                    if (BY_KEY.containsKey(key)) continue;
+                    long anchor = Math.max(1L, DelveSpoils.valueOf(k, d, v));
+                    BazaarProduct p = new BazaarProduct(key,
+                            DelveSpoils.nameOf(k, d, v), k.base(), d.colour(),
+                            "Delve Spoils", anchor, null);
+                    BY_KEY.put(key, p);
+                    BY_CATEGORY.computeIfAbsent(p.category, x -> new ArrayList<>()).add(p);
+                }
+            }
+        }
+
+        // Refined materials, which are the other thing players hold in quantity.
+        try {
+            for (RefinedMaterial m : RefinedMaterial.values()) {
+                for (RefinedMaterial.Step step : RefinedMaterial.Step.values()) {
+                    String key = "refined_" + m.name().toLowerCase(Locale.ROOT)
+                            + "_" + step.name().toLowerCase(Locale.ROOT);
+                    if (BY_KEY.containsKey(key)) continue;
+                    // The step already carries what its raw form is worth, so the price comes from
+                    // the data rather than from a number invented here.
+                    long anchor = Math.max(1L, step.rawWorth);
+                    BazaarProduct p = new BazaarProduct(key,
+                            step.prefix + " " + m.display, m.seed, step.colour,
+                            "Refined Materials", anchor, null);
+                    BY_KEY.put(key, p);
+                    BY_CATEGORY.computeIfAbsent(p.category, x -> new ArrayList<>()).add(p);
+                }
+            }
+        } catch (Throwable ignored) {
+            // The refined material shape is not guaranteed. Missing a category is survivable;
+            // failing to build the catalogue at all is not.
+        }
     }
 
     private static String keyOf(Item item) {

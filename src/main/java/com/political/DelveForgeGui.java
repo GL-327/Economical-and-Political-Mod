@@ -59,9 +59,11 @@ public final class DelveForgeGui {
 
         // What it is now, and what it would be.
         double now = DelveForge.statMultiplier(held, depth);
+        // Read from the same constants the maths uses, so this preview cannot drift away from
+        // what the button actually does the next time the numbers are tuned.
         double next = forged
-                ? DelveForge.statMultiplier(held, depth) + (marks < DelveForge.MAX_MARKS ? 0.10 : 0.25)
-                : 1.15 + depth * 0.04;
+                ? now + (marks < DelveForge.MAX_MARKS ? DelveForge.MARK_STEP : DelveForge.SIGIL_STEP)
+                : 1.0 + DelveForge.FORGE_STEP + depth * DelveForge.DEPTH_STEP;
 
         gui.setSlot(4, GuiKit.info(held.getItem(), held.getHoverName().getString(),
                 ChatFormatting.WHITE,
@@ -117,8 +119,19 @@ public final class DelveForgeGui {
                         ItemStack live = player.getMainHandItem();
                         if (!DelveForge.isForged(live)) return;
                         long price = DelveForge.markCost(live);
+                        long keys = DelveForge.markKeys(live) * 20L;
+                        if (DelveDrops.keyWeight(player) < keys) {
+                            say(player, "That also wants " + keys
+                                    + " of key shard weight. Secrets pay those.");
+                            return;
+                        }
                         if (!CoinManager.removeCoins(player, price)) {
                             say(player, "That costs " + GuiKit.num(price) + " coins.");
+                            return;
+                        }
+                        if (!DelveDrops.takeKeys(player, keys)) {
+                            CoinManager.giveCoinsQuiet(player, price);
+                            say(player, "The key shards would not come out of your bag.");
                             return;
                         }
                         if (!DelveForge.addMark(live)) {
@@ -132,9 +145,12 @@ public final class DelveForgeGui {
                     },
                     maxed ? "There is nothing left to add"
                             : (afford ? "§a" : "§c") + "Costs §6" + GuiKit.num(cost) + " coins",
+                    maxed ? "" : "§7and §b" + (DelveForge.markKeys(held) * 20L)
+                            + " §7key shard weight §8(you have "
+                            + DelveDrops.keyWeight(player) + ")",
                     "",
-                    sigil ? "A sigil is worth two and a half marks"
-                          : "Each mark is worth a tenth of the item",
+                    sigil ? "A sigil is worth two marks"
+                          : "Each mark is worth " + pctOf(DelveForge.MARK_STEP) + " of the item",
                     "",
                     "§8Five marks, then five sigils."));
         }
@@ -143,12 +159,12 @@ public final class DelveForgeGui {
                 ChatFormatting.WHITE,
                 "Three things multiply, and they stack.",
                 "",
-                "  Forged at all      +15%",
-                "  Each mark          +10%",
-                "  Each sigil         +25%",
-                "  Per depth, inside   +4%",
+                "  Forged at all      +" + pctOf(DelveForge.FORGE_STEP),
+                "  Each mark          +" + pctOf(DelveForge.MARK_STEP),
+                "  Each sigil         +" + pctOf(DelveForge.SIGIL_STEP),
+                "  Per depth, inside  +" + pctOf(DelveForge.DEPTH_STEP),
                 "",
-                "Delve made gear gets a further fifth",
+                "Delve made gear gets a further tenth",
                 "again while it is underground, and that",
                 "bonus grows with every mark.",
                 "",
@@ -169,6 +185,10 @@ public final class DelveForgeGui {
 
         GuiKit.footer(gui, SIZE, player, () -> DelveGui.open(player));
         gui.open();
+    }
+
+    private static String pctOf(double step) {
+        return Math.round(step * 100) + "%";
     }
 
     private static String pct(double mult) {

@@ -5,7 +5,7 @@ import net.minecraft.ChatFormatting;
 import java.util.Locale;
 
 /**
- * The custom enchantments: eighty of them, none registered.
+ * The custom enchantments: 135 of them, none registered.
  *
  * <p>Vanilla enchantments live in a registry, which on a server side mod means a datapack and a
  * second file for a server owner to lose. These do not. An enchantment here is a line of lore plus
@@ -18,6 +18,126 @@ import java.util.Locale;
  * without touching a single one of them.</p>
  */
 public enum CustomEnchant {
+
+    // ── Delve: what only works underground ────────────────────────────────
+    DELVER("Delver", Slot.ANY, 5, ChatFormatting.DARK_PURPLE,
+            "Everything about this is better inside a delve."),
+    SECRETSENSE("Secretsense", Slot.ARMOUR, 5, ChatFormatting.AQUA,
+            "Secrets glow faintly when you are close to one."),
+    KEYWARDEN("Keywarden", Slot.ARMOUR, 4, ChatFormatting.GOLD,
+            "Secrets pay more key shards."),
+    ROOMCLEAVER("Roomcleaver", Slot.WEAPON, 5, ChatFormatting.RED,
+            "Far stronger against anything that spawned in a delve."),
+    DEPTHBORN("Depthborn", Slot.ARMOUR, 5, ChatFormatting.DARK_AQUA,
+            "The deeper you are, the more defence you have."),
+    GRAVELIGHT("Gravelight", Slot.ARMOUR, 3, ChatFormatting.WHITE,
+            "You are never in the dark down there."),
+    SPOILHUNTER("Spoilhunter", Slot.ANY, 5, ChatFormatting.YELLOW,
+            "Delve mobs drop better grades."),
+    WARDBREAKER("Wardbreaker", Slot.WEAPON, 4, ChatFormatting.LIGHT_PURPLE,
+            "Boss guards and courts fall much faster."),
+    LASTLIGHT("Lastlight", Slot.ARMOUR, 3, ChatFormatting.GOLD,
+            "Dying in a delve costs the party less."),
+    PATHFINDER("Pathfinder", Slot.ARMOUR, 4, ChatFormatting.GREEN,
+            "You move quicker along delve corridors."),
+    TOMBROBBER("Tombrobber", Slot.ANY, 5, ChatFormatting.GOLD,
+            "Delve chests hold more."),
+    ECHOSTEP("Echostep", Slot.ARMOUR, 3, ChatFormatting.DARK_GRAY,
+            "Delve mobs notice you later."),
+    MARKBOUND("Markbound", Slot.ANY, 5, ChatFormatting.LIGHT_PURPLE,
+            "Marks and sigils on this item are worth more."),
+    GRAVEBOUND("Gravebound", Slot.WEAPON, 4, ChatFormatting.DARK_GRAY,
+            "Kills in a delve heal you."),
+    DEEPSEEKER("Deepseeker", Slot.ARMOUR, 5, ChatFormatting.BLUE,
+            "Magic Find rises with the depth you are on."),
+
+    // ── Weapon: more ways to hit things ───────────────────────────────────
+    RIPOSTE("Riposte", Slot.WEAPON, 4, ChatFormatting.WHITE,
+            "Striking straight after being hit lands much harder."),
+    SUNDERING("Sundering", Slot.WEAPON, 5, ChatFormatting.GRAY,
+            "Each hit strips a little more of the target armour."),
+    BLOODLETTER("Bloodletter", Slot.WEAPON, 4, ChatFormatting.DARK_RED,
+            "Targets keep bleeding after you stop."),
+    TRUESTRIKE("Truestrike", Slot.WEAPON, 5, ChatFormatting.RED,
+            "Crits against anything near full health hit far harder."),
+    LINGERING("Lingering", Slot.WEAPON, 3, ChatFormatting.DARK_GREEN,
+            "Whatever you hit keeps taking damage where it stands."),
+    SHATTERBLOW("Shatterblow", Slot.WEAPON, 4, ChatFormatting.YELLOW,
+            "Every fourth hit ignores armour entirely."),
+    RECKONING("Reckoning", Slot.WEAPON, 5, ChatFormatting.GOLD,
+            "Damage builds the longer a fight goes on."),
+    CULLING("Culling", Slot.WEAPON, 4, ChatFormatting.DARK_RED,
+            "Instantly finishes anything under a tenth."),
+    STORMCALLER("Stormcaller", Slot.WEAPON, 3, ChatFormatting.AQUA,
+            "Hits chain to a second target."),
+    VOIDTOUCH("Voidtouch", Slot.WEAPON, 4, ChatFormatting.DARK_PURPLE,
+            "A share of the hit cannot be reduced by anything."),
+    HUNGERING("Hungering", Slot.WEAPON, 5, ChatFormatting.DARK_GREEN,
+            "The weapon grows stronger the longer you hold it."),
+    RETRIBUTION("Retribution", Slot.WEAPON, 4, ChatFormatting.RED,
+            "Missing health is turned into damage."),
+
+    // ── Armour: more ways to survive ──────────────────────────────────────
+    AEGIS("Aegis", Slot.ARMOUR, 5, ChatFormatting.BLUE,
+            "A shield that regrows between fights."),
+    ENDURANCE("Endurance", Slot.ARMOUR, 5, ChatFormatting.GREEN,
+            "Long fights hurt less as they go on."),
+    REFLECTIVE("Reflective", Slot.ARMOUR, 4, ChatFormatting.WHITE,
+            "Projectiles sometimes come straight back."),
+    ROOTED("Rooted", Slot.ARMOUR, 3, ChatFormatting.DARK_GREEN,
+            "Standing still makes you much harder to hurt."),
+    SECOND_BREATH("Second Breath", Slot.ARMOUR, 3, ChatFormatting.AQUA,
+            "Healing works on you at double rate under half health."),
+    GUARDIAN("Guardian", Slot.ARMOUR, 4, ChatFormatting.GOLD,
+            "Party members near you take less."),
+    UNBOWED("Unbowed", Slot.ARMOUR, 4, ChatFormatting.GRAY,
+            "Effects that would slow or weaken you are halved."),
+    LAST_STAND("Last Stand", Slot.ARMOUR, 3, ChatFormatting.DARK_RED,
+            "Under a quarter health you take a third less."),
+    SOULANCHOR("Soulanchor", Slot.ARMOUR, 3, ChatFormatting.LIGHT_PURPLE,
+            "You keep your things when you die."),
+    THORNGUARD("Thornguard", Slot.ARMOUR, 5, ChatFormatting.DARK_GREEN,
+            "Melee attackers take a share back, ignoring their armour."),
+    STONESKIN("Stoneskin", Slot.ARMOUR, 5, ChatFormatting.GRAY,
+            "Flat reduction that works against everything."),
+
+    // ── Tools and ranged ──────────────────────────────────────────────────
+    SEAMWALKER("Seamwalker", Slot.TOOL, 5, ChatFormatting.YELLOW,
+            "Mining speeds up the longer you keep going."),
+    SICKLEHAND("Sicklehand", Slot.TOOL, 4, ChatFormatting.GREEN,
+            "Crops come up fully grown and replant themselves."),
+    TIMBERFALL("Timberfall", Slot.TOOL, 3, ChatFormatting.DARK_GREEN,
+            "A whole tree at once."),
+    REFINER("Refiner", Slot.TOOL, 5, ChatFormatting.GOLD,
+            "What you mine arrives already refined."),
+    PANHANDLER("Panhandler", Slot.TOOL, 4, ChatFormatting.WHITE,
+            "Gravel and sand give up their secrets more often."),
+    SCATTERSHOT("Scattershot", Slot.BOW, 4, ChatFormatting.GREEN,
+            "Fires more arrows the longer you draw."),
+    PINPOINT("Pinpoint", Slot.BOW, 5, ChatFormatting.BLUE,
+            "Far targets take far more."),
+    QUICKNOCK("Quicknock", Slot.BOW, 4, ChatFormatting.YELLOW,
+            "Draws much faster."),
+    HEARTPIERCE("Heartpierce", Slot.BOW, 5, ChatFormatting.RED,
+            "Arrows that land at range always crit."),
+    ENDLESS("Endless", Slot.BOW, 2, ChatFormatting.LIGHT_PURPLE,
+            "Never spends an arrow."),
+
+    // ── Universal ─────────────────────────────────────────────────────────
+    FORTUNES_FAVOUR("Fortunes Favour", Slot.ANY, 5, ChatFormatting.GOLD,
+            "Raises Magic Find on everything you do."),
+    SCHOLARS_MARK("Scholars Mark", Slot.ANY, 4, ChatFormatting.AQUA,
+            "Every source of experience gives more."),
+    MERCHANT("Merchant", Slot.ANY, 4, ChatFormatting.GOLD,
+            "The bazaar takes a smaller cut from you."),
+    EVERLAST("Everlast", Slot.ANY, 3, ChatFormatting.WHITE,
+            "This item never wears out."),
+    RESONANCE("Resonance", Slot.ANY, 5, ChatFormatting.LIGHT_PURPLE,
+            "Every other enchantment on this item is slightly stronger."),
+    WAYFARER("Wayfarer", Slot.ANY, 4, ChatFormatting.GREEN,
+            "You move quicker with this in hand or worn."),
+    COLLECTOR("Collector", Slot.ANY, 4, ChatFormatting.YELLOW,
+            "Collections fill faster."),
 
     // ── Weapon: damage ────────────────────────────────────────────────────
     BLOODTHIRST("Bloodthirst", Slot.WEAPON, 5, ChatFormatting.DARK_RED,
@@ -281,8 +401,8 @@ public enum CustomEnchant {
     /**
      * The icon the menu draws this with.
      *
-     * <p>Derived from the slot rather than set per enchantment, because eighty hand picked
-     * icons would be eighty things to get wrong and the colour on the name already carries
+     * <p>Derived from the slot rather than set per enchantment, because 135 hand picked
+     * icons would be 135 things to get wrong and the colour on the name already carries
      * which one it is.</p>
      */
     public net.minecraft.world.item.Item icon() {

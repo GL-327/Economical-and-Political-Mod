@@ -46,6 +46,8 @@ public final class DelvePopulator {
 
     /** Tag on everything this class spawns, so cleanup never has to guess. */
     public static final String MOB_TAG = "political_delve_mob";
+    /** On the elites, so the drop table can pay them properly. */
+    public static final String ELITE_TAG = "political_delve_elite";
 
     /** Where each run's secrets are, keyed by packed position. */
     private static final Map<UUID, Map<Long, BlockPos>> SECRETS = new HashMap<>();
@@ -142,6 +144,7 @@ public final class DelvePopulator {
         m.setPos(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5);
         m.setPersistenceRequired();
         m.addTag(MOB_TAG);
+        if (elite) m.addTag(ELITE_TAG);
         m.addTag(run.id.toString());
 
         float scale = run.floor.mobScale();
@@ -240,6 +243,7 @@ public final class DelvePopulator {
                     + " found a secret. §f" + run.secretsFound + "/" + run.secretsTotal));
         }
         CoinManager.giveCoins(by, 2_500L * run.floor.tier);
+        DelveDrops.onSecret(by, run);
         return true;
     }
 

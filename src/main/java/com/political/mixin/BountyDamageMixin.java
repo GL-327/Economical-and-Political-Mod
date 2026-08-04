@@ -218,12 +218,16 @@ public abstract class BountyDamageMixin {
         com.political.RareDropManager.onKill(player, self);
         com.political.CustomEnchantEffects.onKill(player, self);
         com.political.DelvePopulator.onKill(player, self);
+        com.political.DelveDrops.onMobKill(player, self);
         if (self instanceof ServerPlayer deadInDungeon) {
             com.political.DelveManager.onDeath(deadInDungeon);
         }
         if (com.political.DelveBossFight.isBoss(self)) {
             com.political.DelveRun dRun = com.political.DelveManager.runOf(player);
-            if (dRun != null) com.political.DelveBossFight.onBossDeath(dRun);
+            if (dRun != null) {
+                com.political.DelveDrops.onBossKill(dRun);
+                com.political.DelveBossFight.onBossDeath(dRun);
+            }
         }
         if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon deadDragon
                 && self.level() instanceof net.minecraft.server.level.ServerLevel endLevel) {
