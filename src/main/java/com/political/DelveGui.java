@@ -61,6 +61,7 @@ public final class DelveGui {
                             + " §7at a time"))
                     .addLoreLine(Component.literal("§7Secrets §f" + floor.secretCount()))
                     .addLoreLine(Component.literal("§7Boss §f" + floor.bossName))
+                    .addLoreLine(Component.literal("§c" + DelveMechanics.hazardOf(floor)))
                     .addLoreLine(Component.literal(""));
 
             if (best != null) {

@@ -148,6 +148,7 @@ public final class DelveManager {
         }
 
         DelvePopulator.populate(level, run);
+        DelveMechanics.raiseGate(level, run);
 
         for (ServerPlayer p : party) {
             if (runOf(p) != null) continue;
@@ -255,6 +256,7 @@ public final class DelveManager {
         for (UUID u : run.party) PLAYER_RUN.remove(u);
 
         DelveBossFight.forget(run);
+        DelveMechanics.forget(run);
         DelvePopulator.despawn(run);
         USED_SLOTS.remove(run.slot);
         RUNS.remove(run.id);
@@ -298,10 +300,13 @@ public final class DelveManager {
 
             DelvePopulator.tick(server, run);
             DelveBossFight.tick(server, run);
+            DelveMechanics.tickHazards(server, run);
 
             // The boss is sealed until the floor is cleared, which is what makes the rooms matter.
             if (!run.bossSpawned && run.roomsDone() && run.layout.bossRoom != null) {
                 run.bossSpawned = true;
+                ServerLevel realm = realm(server);
+                if (realm != null) DelveMechanics.openGate(realm, run);
                 DelveBossFight.spawn(server, run);
             }
 
