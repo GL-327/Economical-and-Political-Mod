@@ -120,7 +120,17 @@ public final class PlayerStatsManager {
             values.compute(Stat.CRIT_CHANCE, (k, v) -> Math.max(0, Math.min(100, v == null ? k.baseValue : v)));
             values.compute(Stat.SPEED, (k, v) -> Math.max(20, Math.min(400, v == null ? k.baseValue : v)));
             values.compute(Stat.FEROCITY, (k, v) -> Math.max(0, Math.min(200, v == null ? k.baseValue : v)));
-            values.compute(Stat.DEFENSE, (k, v) -> Math.max(0, v == null ? k.baseValue : v));
+            // Bounded. The incoming formula is dmg * 100 / (100 + defense), so unbounded defense
+            // asymptotes to taking nothing at all. A thousand still lets nine percent through and
+            // means no future item combination can quietly reach invulnerability.
+            values.compute(Stat.DEFENSE, (k, v) ->
+                    Math.max(0, Math.min(1000, v == null ? k.baseValue : v)));
+            values.compute(Stat.STRENGTH, (k, v) ->
+                    Math.max(0, Math.min(2000, v == null ? k.baseValue : v)));
+            values.compute(Stat.CRIT_DAMAGE, (k, v) ->
+                    Math.max(0, Math.min(800, v == null ? k.baseValue : v)));
+            values.compute(Stat.MAGIC_FIND, (k, v) ->
+                    Math.max(0, Math.min(400, v == null ? k.baseValue : v)));
         }
     }
 

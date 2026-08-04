@@ -35,26 +35,26 @@ public final class DelveArmour {
 
     public static final List<Family> FAMILIES = List.of(
             new Family("bulwark", "Bulwark", ChatFormatting.GRAY, "IRON",
-                    "Made for standing in a doorway and staying there.", List.of("defense", "health"), List.of(60, 45)),
+                    "Made for standing in a doorway and staying there.", List.of("defense", "health"), List.of(45, 34)),
             new Family("shade", "Shade", ChatFormatting.DARK_GRAY, "LEATHER",
-                    "Nobody has ever heard it arrive.", List.of("speed", "crit_chance"), List.of(6, 12)),
+                    "Nobody has ever heard it arrive.", List.of("speed", "crit_chance"), List.of(5, 9)),
             new Family("emberguard", "Emberguard", ChatFormatting.RED, "GOLDEN",
-                    "Still warm from whatever it was quenched in.", List.of("strength", "defense"), List.of(55, 30)),
+                    "Still warm from whatever it was quenched in.", List.of("strength", "defense"), List.of(41, 22)),
             new Family("tidebound", "Tidebound", ChatFormatting.AQUA, "CHAINMAIL",
-                    "It has been underwater longer than it was above it.", List.of("health", "intelligence"), List.of(55, 60)),
+                    "It has been underwater longer than it was above it.", List.of("health", "intelligence"), List.of(41, 45)),
             new Family("gravecall", "Gravecall", ChatFormatting.DARK_PURPLE, "IRON",
-                    "Worn by somebody who did not come back up.", List.of("ferocity", "crit_damage"), List.of(14, 50)),
+                    "Worn by somebody who did not come back up.", List.of("ferocity", "crit_damage"), List.of(10, 38)),
             new Family("lodestar", "Lodestar", ChatFormatting.GOLD, "DIAMOND",
-                    "It points at whatever is worth having.", List.of("magic_find", "intelligence"), List.of(20, 45))
+                    "It points at whatever is worth having.", List.of("magic_find", "intelligence"), List.of(15, 34))
     );
 
     public static final List<Grade> GRADES = List.of(
             new Grade("worn", "Worn", ChatFormatting.GRAY, 1.00),
-            new Grade("kept", "Kept", ChatFormatting.WHITE, 1.35),
-            new Grade("proven", "Proven", ChatFormatting.GREEN, 1.75),
-            new Grade("storied", "Storied", ChatFormatting.BLUE, 2.20),
-            new Grade("hallowed", "Hallowed", ChatFormatting.LIGHT_PURPLE, 2.75),
-            new Grade("undying", "Undying", ChatFormatting.GOLD, 3.40)
+            new Grade("kept", "Kept", ChatFormatting.WHITE, 1.25),
+            new Grade("proven", "Proven", ChatFormatting.GREEN, 1.50),
+            new Grade("storied", "Storied", ChatFormatting.BLUE, 1.80),
+            new Grade("hallowed", "Hallowed", ChatFormatting.LIGHT_PURPLE, 2.10),
+            new Grade("undying", "Undying", ChatFormatting.GOLD, 2.40)
     );
 
     public static final List<Piece> PIECES = List.of(

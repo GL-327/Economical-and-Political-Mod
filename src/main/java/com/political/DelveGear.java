@@ -31,13 +31,13 @@ public final class DelveGear {
             new Line("tidepiercer", "Tidepiercer", ChatFormatting.AQUA,
                     "Thin enough to find a gap.", "crit_chance", 18),
             new Line("gravemaul", "Gravemaul", ChatFormatting.DARK_PURPLE,
-                    "Heavy, and it only needs to land once.", "crit_damage", 90),
+                    "Heavy, and it only needs to land once.", "crit_damage", 80),
             new Line("lodefinder", "Lodefinder", ChatFormatting.GOLD,
                     "It knows where the good rooms are.", "magic_find", 25),
             new Line("wardenspike", "Wardenspike", ChatFormatting.GREEN,
                     "Made for the things that guard doors.", "strength", 78),
             new Line("hollowedge", "Hollowedge", ChatFormatting.LIGHT_PURPLE,
-                    "There is very little of it left.", "crit_damage", 100)
+                    "There is very little of it left.", "crit_damage", 85)
     );
 
     public static final List<Form> FORMS = List.of(

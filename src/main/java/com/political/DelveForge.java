@@ -185,11 +185,9 @@ public final class DelveForge {
             // Sigils replace marks rather than sitting beside them, so a fully upgraded item reads
             // as five sigils and not as ten glyphs of two kinds.
             if (s > 0) {
-                suffix.append("§d");
-                suffix.append(SIGIL_GLYPH.repeat(s));
-                if (m > 0 && s < MAX_SIGILS) {
-                    suffix.append("§6").append(MARK_GLYPH.repeat(MAX_MARKS - 0));
-                }
+                // Sigils stand alone. Showing five marks beside them made a nearly finished item
+                // read as six glyphs and a finished one as ten, which is noise rather than status.
+                suffix.append("§d").append(SIGIL_GLYPH.repeat(s));
             } else {
                 suffix.append("§6").append(MARK_GLYPH.repeat(m));
             }
@@ -213,12 +211,13 @@ public final class DelveForge {
     public static double statMultiplier(ItemStack stack, int depthTier) {
         if (!isForged(stack)) return 1.0;
         double mult = 1.15;                        // forged at all
-        mult += marks(stack) * 0.10;               // each mark
-        mult += sigils(stack) * 0.25;              // each sigil, worth far more
+        mult += marks(stack) * 0.06;               // each of five marks
+        mult += sigils(stack) * 0.12;              // each of five sigils, worth twice a mark
         if (depthTier > 0) {
             // Inside a delve, and deeper is better. Outside, this term is simply absent.
-            mult += depthTier * 0.04;
+            mult += depthTier * 0.02;
         }
+        // Fully marked, fully sigilled, on the deepest floor: 1.15 + 0.30 + 0.60 + 0.14 = 2.19.
         return mult;
     }
 
@@ -240,7 +239,7 @@ public final class DelveForge {
         DelveRun run = DelveManager.runOf(player);
         if (run == null) return 1.0;
         // Marks make the home bonus better too, which is what ties the two systems together.
-        return 1.20 + totalUpgrades(stack) * 0.03;
+        return 1.10 + totalUpgrades(stack) * 0.01;
     }
 
     /** A one line summary for a tooltip or a menu. */

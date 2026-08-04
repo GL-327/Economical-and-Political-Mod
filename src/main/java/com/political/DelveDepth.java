@@ -25,43 +25,43 @@ public enum DelveDepth {
             "Somebody was buried here properly. Most of the others were not.",
             Blocks.POLISHED_DEEPSLATE, Blocks.DEEPSLATE_BRICKS, Blocks.SOUL_LANTERN,
             EntityType.SKELETON, EntityType.ZOMBIE,
-            "The Gravewright", Items.BONE, 900f, 30_000L),
+            "The Gravewright", Items.BONE, 1_600f, 30_000L),
 
     SUNKEN(2, "The Sunken Halls", "sunken", ChatFormatting.DARK_AQUA,
             "The water came in a long time ago and never left.",
             Blocks.PRISMARINE_BRICKS, Blocks.DARK_PRISMARINE, Blocks.SEA_LANTERN,
             EntityType.DROWNED, EntityType.GUARDIAN,
-            "The Tidewarden", Items.HEART_OF_THE_SEA, 1_400f, 55_000L),
+            "The Tidewarden", Items.HEART_OF_THE_SEA, 2_800f, 55_000L),
 
     ICE(3, "The Ice Vault", "ice", ChatFormatting.AQUA,
             "Everything in here was put away for keeping.",
             Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.SEA_LANTERN,
             EntityType.STRAY, EntityType.POLAR_BEAR,
-            "The Hoarfrost Keeper", Items.BLUE_ICE, 2_100f, 90_000L),
+            "The Hoarfrost Keeper", Items.BLUE_ICE, 4_500f, 90_000L),
 
     SANDS(4, "The Buried Sands", "sands", ChatFormatting.YELLOW,
             "A city that lost an argument with the desert.",
             Blocks.CUT_SANDSTONE, Blocks.SMOOTH_SANDSTONE, Blocks.SHROOMLIGHT,
             EntityType.HUSK, EntityType.SILVERFISH,
-            "The Sand Vizier", Items.GOLD_BLOCK, 3_000f, 140_000L),
+            "The Sand Vizier", Items.GOLD_BLOCK, 7_000f, 140_000L),
 
     TOXIC(5, "The Toxic Lair", "toxic", ChatFormatting.DARK_GREEN,
             "Something has been living down here, and it has been eating.",
             Blocks.MOSS_BLOCK, Blocks.MUDDY_MANGROVE_ROOTS, Blocks.OCHRE_FROGLIGHT,
             EntityType.CAVE_SPIDER, EntityType.WITCH,
-            "The Blight Mother", Items.SLIME_BLOCK, 4_200f, 210_000L),
+            "The Blight Mother", Items.SLIME_BLOCK, 10_500f, 210_000L),
 
     CITADEL(6, "The Lone Citadel", "citadel", ChatFormatting.GOLD,
             "Held by somebody, against somebody, for a very long time.",
             Blocks.STONE_BRICKS, Blocks.CHISELED_STONE_BRICKS, Blocks.LANTERN,
             EntityType.PILLAGER, EntityType.VINDICATOR,
-            "The Warden of the Keep", Items.NETHERITE_INGOT, 5_800f, 320_000L),
+            "The Warden of the Keep", Items.NETHERITE_INGOT, 15_000f, 320_000L),
 
     END_CASTLE(7, "The End Castle", "endcastle", ChatFormatting.DARK_PURPLE,
             "It was not built here. It arrived.",
             Blocks.END_STONE_BRICKS, Blocks.PURPUR_BLOCK, Blocks.END_ROD,
             EntityType.ENDERMAN, EntityType.SHULKER,
-            "The Hollow Sovereign", Items.DRAGON_EGG, 8_000f, 500_000L);
+            "The Hollow Sovereign", Items.DRAGON_EGG, 22_000f, 500_000L);
 
     /** Where this floor sits on the ladder, counting from one. */
     public final int tier;
@@ -136,6 +136,9 @@ public enum DelveDepth {
 
     /** How hard the ordinary mobs hit, relative to their vanilla selves. */
     public float mobScale() {
-        return 1.0f + tier * 0.35f;
+        // Raised alongside the boss health. A player in marked delve gear takes roughly a fifth of
+        // what they used to, so the old curve made the lower depths a walk by the time anybody had
+        // the gear to reach the upper ones.
+        return 1.0f + tier * 0.60f;
     }
 }
