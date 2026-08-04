@@ -223,16 +223,84 @@ public final class DelveBossFight {
         }
     }
 
+    /**
+     * The heavy attack, which is different on every depth.
+     *
+     * <p>All seven used to do the same thing with a different number in front of it, so beating one
+     * taught a player nothing about the next. Each one now asks something of its own: the Catacombs
+     * boss raises what you already killed, the Ice Vault pins you where you stand, the End Castle
+     * takes the floor away. The damage is the same shape underneath so none of them is a wall.</p>
+     */
     private static void resolve(ServerLevel level, DelveRun run, Fight f, Mob boss) {
         float dmg = (f.phase == Phase.FINAL ? 11f : 6f) + run.floor.tier * 1.5f;
+        List<ServerPlayer> hit = new ArrayList<>();
         for (ServerPlayer p : run.online()) {
-            if (p.distanceToSqr(boss) > 40 * 40) continue;
+            if (p.distanceToSqr(boss) <= 40 * 40) hit.add(p);
+        }
+
+        for (ServerPlayer p : hit) {
             p.hurtServer(level, p.damageSources().mobAttack(boss), dmg);
-            p.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 1));
-            p.sendSystemMessage(Component.literal("§c✦ It lands."), true);
+            signature(level, run, boss, p);
         }
         level.playSound(null, boss.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(),
                 SoundSource.HOSTILE, 1.4f, 0.8f);
+    }
+
+    /** What this depth's boss does that no other one does. */
+    private static void signature(ServerLevel level, DelveRun run, Mob boss, ServerPlayer p) {
+        switch (run.floor) {
+            case CATACOMBS -> {
+                // Raises what the floor already lost, so a cleared room is not a safe one.
+                p.sendSystemMessage(Component.literal("§7✦ The dead get up again."), true);
+                for (int i = 0; i < 2; i++) {
+                    try {
+                        var made = net.minecraft.world.entity.EntityType.SKELETON
+                                .create(level, EntitySpawnReason.EVENT);
+                        if (made instanceof Mob m) {
+                            m.setPos(p.getX() + (i == 0 ? 2 : -2), p.getY(), p.getZ());
+                            m.setPersistenceRequired();
+                            m.addTag(DelvePopulator.MOB_TAG);
+                            m.addTag(run.id.toString());
+                            level.addFreshEntity(m);
+                        }
+                    } catch (Exception ignored) {
+                        // One fewer skeleton is not worth failing the attack over.
+                    }
+                }
+            }
+            case SUNKEN -> {
+                p.sendSystemMessage(Component.literal("§3✦ The water closes over you."), true);
+                p.setAirSupply(Math.max(0, p.getAirSupply() - 120));
+                p.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 120, 2));
+            }
+            case ICE -> {
+                p.sendSystemMessage(Component.literal("§b✦ You are held where you stand."), true);
+                p.setTicksFrozen(Math.min(p.getTicksFrozen() + 200, 400));
+                p.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 4));
+                p.setDeltaMovement(0, p.getDeltaMovement().y, 0);
+            }
+            case SANDS -> {
+                p.sendSystemMessage(Component.literal("§e✦ The sand takes your eyes."), true);
+                p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0));
+                p.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 2));
+            }
+            case TOXIC -> {
+                p.sendSystemMessage(Component.literal("§2✦ It is in your lungs."), true);
+                p.addEffect(new MobEffectInstance(MobEffects.POISON, 140, 2));
+                p.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 120, 0));
+            }
+            case CITADEL -> {
+                p.sendSystemMessage(Component.literal("§6✦ Your arm goes heavy."), true);
+                p.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 160, 1));
+                p.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 160, 1));
+            }
+            case END_CASTLE -> {
+                // Takes the floor away, which on a raised arena is the whole problem.
+                p.sendSystemMessage(Component.literal("§5✦ The floor stops mattering."), true);
+                p.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 50, 1));
+                p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 120, 0));
+            }
+        }
     }
 
     /** How much of a hit the boss takes. Its court shields it, so the court is the answer. */

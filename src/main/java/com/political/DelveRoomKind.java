@@ -57,4 +57,14 @@ public enum DelveRoomKind {
     public boolean countsForClear() {
         return this != ENTRANCE && this != BOSS;
     }
+
+    /**
+     * Whether an empty room is a finished one.
+     *
+     * <p>False for puzzles: killing everything in a puzzle room does not solve it, and counting it
+     * as cleared would let a party walk past the only part of the floor that asks them to think.</p>
+     */
+    public boolean clearedByEmptying() {
+        return this != PUZZLE;
+    }
 }

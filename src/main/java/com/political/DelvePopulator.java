@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
@@ -99,6 +100,9 @@ public final class DelvePopulator {
             }
             if (p.kind == DelveRoomKind.TREASURE) {
                 placeChest(level, p, run.floor, rng);
+            }
+            if (p.kind == DelveRoomKind.PUZZLE) {
+                DelvePuzzles.build(level, run, p, rng);
             }
         }
 
@@ -209,16 +213,66 @@ public final class DelvePopulator {
      * not obvious. A secret you can see from the doorway is not a secret, and one you could never
      * find is a waste of a room.</p>
      */
+    /**
+     * The kinds of secret a room can hide.
+     *
+     * <p>One kind meant every secret on every floor was the same block in the same sort of corner,
+     * which is a checklist rather than a search. Four kinds at four heights means a player has to
+     * actually look, and the block itself tells them what they found.</p>
+     */
+    private enum SecretKind {
+        SHRIEKER(Blocks.SCULK_SHRIEKER, 1, "underfoot"),
+        LEVER(Blocks.LEVER, 2, "on a wall"),
+        CHEST(Blocks.TRAPPED_CHEST, 1, "tucked away"),
+        SENSOR(Blocks.SCULK_SENSOR, 3, "above head height");
+
+        final Block block;
+        final int heightOffset;
+        final String where;
+
+        SecretKind(Block block, int heightOffset, String where) {
+            this.block = block;
+            this.heightOffset = heightOffset;
+            this.where = where;
+        }
+    }
+
     private static BlockPos hideSecret(ServerLevel level, DelveBuilder.Placed room, Random rng) {
-        int[][] corners = {
+        SecretKind kind = SecretKind.values()[rng.nextInt(SecretKind.values().length)];
+
+        // Corners and edge midpoints, so a secret is not always in one of four predictable spots.
+        int mx = Math.max(3, room.size.getX() / 2);
+        int mz = Math.max(3, room.size.getZ() / 2);
+        int[][] spots = {
                 {2, 2}, {room.size.getX() - 3, 2},
-                {2, room.size.getZ() - 3}, {room.size.getX() - 3, room.size.getZ() - 3}
+                {2, room.size.getZ() - 3}, {room.size.getX() - 3, room.size.getZ() - 3},
+                {mx, 2}, {mx, room.size.getZ() - 3},
+                {2, mz}, {room.size.getX() - 3, mz}
         };
-        int[] c = corners[rng.nextInt(corners.length)];
-        BlockPos at = new BlockPos(room.origin.getX() + c[0], room.floorY + 1,
-                room.origin.getZ() + c[1]);
+        int[] c = spots[rng.nextInt(spots.length)];
+
+        BlockPos at = new BlockPos(room.origin.getX() + c[0],
+                room.floorY + kind.heightOffset, room.origin.getZ() + c[1]);
         try {
-            level.setBlock(at, Blocks.SCULK_SHRIEKER.defaultBlockState(), 3);
+            // Only into air. Replacing part of somebody's build with a lever is how a secret ends
+            // up embedded in a wall where nobody can reach it.
+            if (!level.getBlockState(at).isAir()) {
+                at = at.above();
+                if (!level.getBlockState(at).isAir()) return null;
+            }
+            if (kind == SecretKind.LEVER) {
+                // A lever needs something behind it, so one is put there.
+                level.setBlock(at.north(), Blocks.POLISHED_DEEPSLATE.defaultBlockState(), 3);
+                level.setBlock(at, Blocks.LEVER.defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.state.properties
+                                .BlockStateProperties.ATTACH_FACE,
+                                net.minecraft.world.level.block.state.properties.AttachFace.WALL)
+                        .setValue(net.minecraft.world.level.block.state.properties
+                                .BlockStateProperties.HORIZONTAL_FACING,
+                                net.minecraft.core.Direction.SOUTH), 3);
+            } else {
+                level.setBlock(at, kind.block.defaultBlockState(), 3);
+            }
         } catch (Exception e) {
             return null;
         }
@@ -261,6 +315,7 @@ public final class DelvePopulator {
 
         for (DelveBuilder.Placed p : run.layout.rooms) {
             if (!p.kind.countsForClear() || p.cleared) continue;
+            if (!p.kind.clearedByEmptying()) continue;
             AABB box = new AABB(
                     p.origin.getX(), p.floorY - 2, p.origin.getZ(),
                     p.origin.getX() + p.size.getX(), p.floorY + p.size.getY(),

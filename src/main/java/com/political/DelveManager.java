@@ -257,6 +257,7 @@ public final class DelveManager {
 
         DelveBossFight.forget(run);
         DelveMechanics.forget(run);
+        DelvePuzzles.forget(run);
         DelvePopulator.despawn(run);
         USED_SLOTS.remove(run.slot);
         RUNS.remove(run.id);
@@ -303,7 +304,8 @@ public final class DelveManager {
             DelveMechanics.tickHazards(server, run);
 
             // The boss is sealed until the floor is cleared, which is what makes the rooms matter.
-            if (!run.bossSpawned && run.roomsDone() && run.layout.bossRoom != null) {
+            if (!run.bossSpawned && run.roomsDone() && DelvePuzzles.allSolved(run)
+                    && run.layout.bossRoom != null) {
                 run.bossSpawned = true;
                 ServerLevel realm = realm(server);
                 if (realm != null) DelveMechanics.openGate(realm, run);
@@ -314,7 +316,9 @@ public final class DelveManager {
                 p.sendSystemMessage(Component.literal(
                         run.floor.colour + "✦ §7" + run.roomsCleared + "/" + run.roomsTotal
                                 + " rooms  §b" + run.secretsFound + "/" + run.secretsTotal
-                                + " secrets  §f" + run.elapsedText(server.getTickCount())), true);
+                                + " secrets" + (DelvePuzzles.remaining(run) > 0
+                                        ? "  §e" + DelvePuzzles.remaining(run) + " puzzles" : "")
+                                + "  §f" + run.elapsedText(server.getTickCount())), true);
             }
         }
     }

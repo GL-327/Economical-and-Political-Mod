@@ -86,6 +86,9 @@ public final class DelveProtection {
             BlockPos pos = hit.getBlockPos();
             BlockState state = world.getBlockState(pos);
             DelveRun run = DelveManager.runOf(sp);
+            if (run != null && DelvePuzzles.onLever(run, pos, sp)) {
+                return InteractionResult.SUCCESS;
+            }
             if (run != null && DelvePopulator.claimSecret(run, pos, sp)) {
                 return InteractionResult.SUCCESS;
             }
