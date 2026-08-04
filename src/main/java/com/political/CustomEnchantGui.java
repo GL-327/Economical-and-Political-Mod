@@ -89,7 +89,7 @@ public final class CustomEnchantGui {
         }
         gui.setSlot(4, preview.build());
 
-        // Slot filters, so the eighty five are browsable rather than one long scroll.
+        // Slot filters, so the eighty are browsable rather than one long scroll.
         int f = 45;
         gui.setSlot(f, tab(player, page, null, filter, Items.NETHER_STAR, "Everything"));
         gui.setSlot(f + 1, tab(player, page, CustomEnchant.Slot.WEAPON, filter,

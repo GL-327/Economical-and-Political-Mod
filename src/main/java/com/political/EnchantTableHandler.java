@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Blocks;
  * find a special block, and the thing that has meant "enchant this" since 2011 keeps meaning it.</p>
  *
  * <p>The vanilla screen is not lost so much as made redundant. Everything it offered has a custom
- * equivalent in the eighty five, priced in the same two currencies vanilla used, so there is nothing
+ * equivalent in the eighty, priced in the same two currencies vanilla used, so there is nothing
  * you could have done at the old screen that you cannot do at this one.</p>
  */
 public final class EnchantTableHandler {

@@ -88,6 +88,9 @@ public abstract class BountyDamageMixin {
                 // A hitbox part carries the damage, so the scale has to come off its parent.
                 modifiedAmount *= com.political.DragonFightManager.outgoingScale(part.parentMob);
             }
+            if (source.getEntity() instanceof net.minecraft.world.entity.boss.wither.WitherBoss wb) {
+                modifiedAmount *= com.political.WitherFightManager.outgoingScale(wb);
+            }
             // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
             return com.political.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
         }
@@ -160,6 +163,10 @@ public abstract class BountyDamageMixin {
             modifiedAmount *= com.political.DragonFightManager.incomingScale(dragonSelf);
             com.political.DragonFightManager.onDragonHurt(dragonSelf, player, modifiedAmount);
         }
+        if (self instanceof net.minecraft.world.entity.boss.wither.WitherBoss witherSelf) {
+            modifiedAmount *= com.political.WitherFightManager.incomingScale(witherSelf);
+            com.political.WitherFightManager.onHurt(witherSelf, player, modifiedAmount);
+        }
         // The five meter lines share one handler, keyed off the item id prefix.
         com.political.MeterLineHandler.onHit(player, self, modifiedAmount);
 
@@ -204,6 +211,10 @@ public abstract class BountyDamageMixin {
         if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon deadDragon
                 && self.level() instanceof net.minecraft.server.level.ServerLevel endLevel) {
             com.political.DragonFightManager.onDragonDeath(deadDragon, endLevel);
+        }
+        if (self instanceof net.minecraft.world.entity.boss.wither.WitherBoss deadWither
+                && self.level() instanceof net.minecraft.server.level.ServerLevel wLevel) {
+            com.political.WitherFightManager.onDeath(deadWither, wLevel);
         }
         com.political.NemesisManager.onNemesisDeathEffects(self);
         com.political.NemesisManager.onNemesisKilled(player, self);

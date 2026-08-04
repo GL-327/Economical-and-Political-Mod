@@ -5,7 +5,7 @@ import net.minecraft.ChatFormatting;
 import java.util.Locale;
 
 /**
- * The custom enchantments: eighty five of them, none registered.
+ * The custom enchantments: eighty of them, none registered.
  *
  * <p>Vanilla enchantments live in a registry, which on a server side mod means a datapack and a
  * second file for a server owner to lose. These do not. An enchantment here is a line of lore plus
@@ -281,8 +281,8 @@ public enum CustomEnchant {
     /**
      * The icon the menu draws this with.
      *
-     * <p>Derived from the slot rather than set per enchantment, because eighty five hand picked
-     * icons would be eighty five things to get wrong and the colour on the name already carries
+     * <p>Derived from the slot rather than set per enchantment, because eighty hand picked
+     * icons would be eighty things to get wrong and the colour on the name already carries
      * which one it is.</p>
      */
     public net.minecraft.world.item.Item icon() {
