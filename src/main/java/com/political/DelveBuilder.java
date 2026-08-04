@@ -22,11 +22,11 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Lays out one dungeon floor and builds it.
+ * Lays out one delve floor and builds it.
  *
  * <p>The rooms in these packs are not a jigsaw set. They run from nine blocks square to forty
  * eight, they were authored for different generators, and none of them agree on where a doorway
- * belongs. Assuming a tidy grid and hoping is the thing that produces a dungeon full of rooms you
+ * belongs. Assuming a tidy grid and hoping is the thing that produces a delve full of rooms you
  * cannot walk between, so this does not assume one.</p>
  *
  * <p>Instead each room is dropped into a cell large enough for the biggest of them, the floor level
@@ -35,9 +35,9 @@ import java.util.Set;
  * are carved through whatever wall the corridor happens to meet. Nothing here needs the rooms to
  * cooperate, which is the only way this works across three packs that have never met.</p>
  */
-public final class DungeonBuilder {
+public final class DelveBuilder {
 
-    private DungeonBuilder() {}
+    private DelveBuilder() {}
 
     /** Cell pitch. The largest room is 48 across, so this leaves eight blocks of corridor space. */
     public static final int CELL = 56;
@@ -59,7 +59,7 @@ public final class DungeonBuilder {
 
     /** One room, once it is in the world. */
     public static final class Placed {
-        public DungeonCatalog.Room room;
+        public DelveCatalog.Room room;
         public int gx;
         public int gz;
         public BlockPos origin;
@@ -68,7 +68,7 @@ public final class DungeonBuilder {
         public int floorY;
         /** False when no surface was found anywhere and floorY is the structure's own base. */
         public boolean floorMeasured;
-        public DungeonRoomKind kind = DungeonRoomKind.NORMAL;
+        public DelveRoomKind kind = DelveRoomKind.NORMAL;
         public boolean cleared;
 
         /** The middle of the room, standing on its floor. */
@@ -100,14 +100,14 @@ public final class DungeonBuilder {
      * because a dimension per run is a folder per run on disk and a server that has been up a month
      * would be carrying hundreds of them.</p>
      */
-    public static Layout build(MinecraftServer server, ServerLevel level, DungeonFloor floor,
+    public static Layout build(MinecraftServer server, ServerLevel level, DelveDepth floor,
                                BlockPos worldOffset, long seed) {
         Random rng = new Random(seed);
         Layout layout = new Layout();
 
-        List<DungeonCatalog.Room> drawn = DungeonCatalog.draw(floor, floor.roomCount(), rng);
+        List<DelveCatalog.Room> drawn = DelveCatalog.draw(floor, floor.roomCount(), rng);
         if (drawn.isEmpty()) {
-            PoliticalServer.LOGGER.error("Dungeon floor " + floor.name() + " has no rooms to place");
+            PoliticalServer.LOGGER.error("Delve floor " + floor.name() + " has no rooms to place");
             return layout;
         }
 
@@ -115,8 +115,8 @@ public final class DungeonBuilder {
 
         // ── Place ──
         for (int i = 0; i < cells.size() && i < drawn.size(); i++) {
-            DungeonCatalog.Room room = drawn.get(i);
-            StructureTemplate template = DungeonCatalog.template(server, room);
+            DelveCatalog.Room room = drawn.get(i);
+            StructureTemplate template = DelveCatalog.template(server, room);
             if (template == null) continue;
 
             int gx = cells.get(i)[0];
@@ -135,7 +135,7 @@ public final class DungeonBuilder {
                 template.placeInWorld(level, origin, origin, settings,
                         RandomSource.create(seed + i), Block.UPDATE_CLIENTS);
             } catch (Exception e) {
-                PoliticalServer.LOGGER.warn("Dungeon room failed to place: " + room.id()
+                PoliticalServer.LOGGER.warn("Delve room failed to place: " + room.id()
                         + " (" + e.getMessage() + ")");
                 continue;
             }
@@ -168,7 +168,7 @@ public final class DungeonBuilder {
     /**
      * Picks which cells get rooms, by walking rather than by scattering.
      *
-     * <p>A random scatter leaves islands, and an island in a dungeon is a room nobody can reach. A
+     * <p>A random scatter leaves islands, and an island in a delve is a room nobody can reach. A
      * walk that only ever steps to a neighbour cannot produce one, so connectivity is a property of
      * how the cells were chosen rather than something to verify afterwards.</p>
      */
@@ -250,9 +250,9 @@ public final class DungeonBuilder {
      * boss is the room furthest from it in grid terms so the walk to it is the longest available.
      * Everything between is dealt out.</p>
      */
-    private static void assignKinds(Layout layout, DungeonFloor floor, Random rng) {
+    private static void assignKinds(Layout layout, DelveDepth floor, Random rng) {
         Placed entrance = layout.rooms.get(0);
-        entrance.kind = DungeonRoomKind.ENTRANCE;
+        entrance.kind = DelveRoomKind.ENTRANCE;
 
         Placed boss = entrance;
         int best = -1;
@@ -263,12 +263,12 @@ public final class DungeonBuilder {
                 boss = p;
             }
         }
-        if (boss != entrance) boss.kind = DungeonRoomKind.BOSS;
+        if (boss != entrance) boss.kind = DelveRoomKind.BOSS;
         layout.bossRoom = boss;
 
         List<Placed> rest = new ArrayList<>();
         for (Placed p : layout.rooms) {
-            if (p.kind == DungeonRoomKind.NORMAL) rest.add(p);
+            if (p.kind == DelveRoomKind.NORMAL) rest.add(p);
         }
         Collections.shuffle(rest, rng);
 
@@ -280,10 +280,10 @@ public final class DungeonBuilder {
         int treasure = Math.max(1, rest.size() / 7);
         int miniboss = rest.size() >= 8 ? 1 : 0;
 
-        for (int n = 0; n < puzzles && i < rest.size(); n++) rest.get(i++).kind = DungeonRoomKind.PUZZLE;
-        for (int n = 0; n < traps && i < rest.size(); n++) rest.get(i++).kind = DungeonRoomKind.TRAP;
-        for (int n = 0; n < treasure && i < rest.size(); n++) rest.get(i++).kind = DungeonRoomKind.TREASURE;
-        for (int n = 0; n < miniboss && i < rest.size(); n++) rest.get(i++).kind = DungeonRoomKind.MINIBOSS;
+        for (int n = 0; n < puzzles && i < rest.size(); n++) rest.get(i++).kind = DelveRoomKind.PUZZLE;
+        for (int n = 0; n < traps && i < rest.size(); n++) rest.get(i++).kind = DelveRoomKind.TRAP;
+        for (int n = 0; n < treasure && i < rest.size(); n++) rest.get(i++).kind = DelveRoomKind.TREASURE;
+        for (int n = 0; n < miniboss && i < rest.size(); n++) rest.get(i++).kind = DelveRoomKind.MINIBOSS;
     }
 
     // ── Corridors ─────────────────────────────────────────────────────────
@@ -291,11 +291,11 @@ public final class DungeonBuilder {
     /**
      * Cuts corridors between every pair of rooms in neighbouring cells.
      *
-     * <p>Every neighbouring pair, not a spanning tree. A dungeon whose rooms form a single thread is
+     * <p>Every neighbouring pair, not a spanning tree. A delve whose rooms form a single thread is
      * a corridor with rooms attached; the loops are what make it feel like a building and what make
      * a wrong turn possible.</p>
      */
-    private static void connect(ServerLevel level, Layout layout, DungeonFloor floor, Random rng) {
+    private static void connect(ServerLevel level, Layout layout, DelveDepth floor, Random rng) {
         Set<Long> done = new HashSet<>();
         for (Placed a : layout.rooms) {
             for (int[] d : new int[][]{{1, 0}, {0, 1}}) {
@@ -316,7 +316,7 @@ public final class DungeonBuilder {
      * turns the last few blocks of the walk into a doorway through that room's wall; where it is
      * between rooms it lays a floor, walls and a ceiling.</p>
      */
-    private static void carve(ServerLevel level, Placed a, Placed b, DungeonFloor floor) {
+    private static void carve(ServerLevel level, Placed a, Placed b, DelveDepth floor) {
         BlockPos from = a.centre();
         BlockPos to = b.centre();
 
@@ -362,7 +362,7 @@ public final class DungeonBuilder {
      * would look exactly like what it is.</p>
      */
     private static void cutSlice(ServerLevel level, int x, int y, int z,
-                                 boolean alongX, boolean insideRoom, DungeonFloor floor) {
+                                 boolean alongX, boolean insideRoom, DelveDepth floor) {
         for (int off = -HALL_HALF; off <= HALL_HALF; off++) {
             int px = alongX ? x : x + off;
             int pz = alongX ? z + off : z;

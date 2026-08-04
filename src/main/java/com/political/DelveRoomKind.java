@@ -11,7 +11,7 @@ import net.minecraft.world.item.Items;
  * you, a few that ask something else, one that is worth finding, and a boss at the far end. The
  * proportions are what make a floor feel like a place instead of a corridor with mobs in it.</p>
  */
-public enum DungeonRoomKind {
+public enum DelveRoomKind {
 
     ENTRANCE("Entrance", ChatFormatting.GREEN, Items.OAK_DOOR,
             "Where you came in. Nothing lives here.", 0, 0),
@@ -43,7 +43,7 @@ public enum DungeonRoomKind {
     /** How many secrets this kind of room can hide. */
     public final int secretSlots;
 
-    DungeonRoomKind(String display, ChatFormatting colour, Item icon, String blurb,
+    DelveRoomKind(String display, ChatFormatting colour, Item icon, String blurb,
                     int mobs, int secretSlots) {
         this.display = display;
         this.colour = colour;

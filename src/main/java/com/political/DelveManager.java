@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Starting, running and ending dungeon runs.
+ * Starting, running and ending delve runs.
  *
  * <p>Runs are instanced but share one dimension, spaced far enough apart that two parties never see
  * each other. A dimension per run would be a folder per run on disk, and a server up for a month
@@ -40,13 +40,13 @@ import java.util.UUID;
  * <p>Which floors a player has cleared is the one thing that survives a run, so it is the one thing
  * that gets saved.</p>
  */
-public final class DungeonManager {
+public final class DelveManager {
 
-    private DungeonManager() {}
+    private DelveManager() {}
 
     /** The dimension every instance is built in. */
     public static final ResourceKey<Level> REALM = ResourceKey.create(Registries.DIMENSION,
-            Identifier.fromNamespaceAndPath("politicalserver", "dungeon_realm"));
+            Identifier.fromNamespaceAndPath("politicalserver", "delve_realm"));
 
     /** How far apart two instances sit. Comfortably past any render distance. */
     private static final int SLOT_PITCH = 4096;
@@ -57,7 +57,7 @@ public final class DungeonManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static Path savePath;
 
-    private static final Map<UUID, DungeonRun> RUNS = new HashMap<>();
+    private static final Map<UUID, DelveRun> RUNS = new HashMap<>();
     /** Player to run, so a lookup during combat is one map hit rather than a scan. */
     private static final Map<UUID, UUID> PLAYER_RUN = new HashMap<>();
     private static final Set<Integer> USED_SLOTS = new HashSet<>();
@@ -70,8 +70,8 @@ public final class DungeonManager {
     // ── Lifecycle ─────────────────────────────────────────────────────────
 
     public static void initialize(Path worldRoot) {
-        savePath = worldRoot.resolve("political").resolve("dungeons.json");
-        DungeonCatalog.load();
+        savePath = worldRoot.resolve("political").resolve("delves.json");
+        DelveCatalog.load();
         load();
     }
 
@@ -84,20 +84,20 @@ public final class DungeonManager {
         return PROGRESS.getOrDefault(p.getUUID(), 0);
     }
 
-    public static boolean canEnter(ServerPlayer p, DungeonFloor floor) {
+    public static boolean canEnter(ServerPlayer p, DelveDepth floor) {
         return floor.tier <= progressOf(p) + 1;
     }
 
-    public static String bestScore(ServerPlayer p, DungeonFloor floor) {
+    public static String bestScore(ServerPlayer p, DelveDepth floor) {
         return BEST.get(p.getUUID() + ":" + floor.name());
     }
 
-    public static DungeonRun runOf(ServerPlayer p) {
+    public static DelveRun runOf(ServerPlayer p) {
         UUID r = PLAYER_RUN.get(p.getUUID());
         return r == null ? null : RUNS.get(r);
     }
 
-    public static boolean inDungeon(ServerPlayer p) {
+    public static boolean inDelve(ServerPlayer p) {
         return p.level().dimension().equals(REALM);
     }
 
@@ -113,29 +113,29 @@ public final class DungeonManager {
      * <p>Returns a reason on refusal rather than a boolean, so the caller can say why instead of
      * silently doing nothing, which is the failure mode people report as "the button is broken".</p>
      */
-    public static String start(ServerPlayer leader, DungeonFloor floor, List<ServerPlayer> party) {
+    public static String start(ServerPlayer leader, DelveDepth floor, List<ServerPlayer> party) {
         MinecraftServer server = PoliticalServer.server;
         if (server == null) return "The server is not ready.";
 
         ServerLevel level = realm(server);
         if (level == null) {
-            return "The dungeon dimension is missing. It needs a restart after installing.";
+            return "The delve dimension is missing. It needs a restart after installing.";
         }
         if (!canEnter(leader, floor)) {
-            DungeonFloor prev = floor.previous();
+            DelveDepth prev = floor.previous();
             return "Clear " + (prev == null ? "the first floor" : prev.display) + " first.";
         }
         if (runOf(leader) != null) return "You are already in a run.";
-        if (DungeonCatalog.countFor(floor) < 4) {
+        if (DelveCatalog.countFor(floor) < 4) {
             return "That floor has no rooms installed.";
         }
 
         int slot = claimSlot();
         long seed = leader.getUUID().getLeastSignificantBits() ^ server.getTickCount() ^ floor.tier;
-        DungeonRun run = new DungeonRun(floor, slot, seed);
+        DelveRun run = new DelveRun(floor, slot, seed);
 
         BlockPos offset = new BlockPos(slot * SLOT_PITCH, 0, 0);
-        run.layout = DungeonBuilder.build(server, level, floor, offset, seed);
+        run.layout = DelveBuilder.build(server, level, floor, offset, seed);
         if (run.layout.rooms.isEmpty()) {
             USED_SLOTS.remove(slot);
             return "The floor would not build. Nothing was changed.";
@@ -143,16 +143,16 @@ public final class DungeonManager {
 
         run.entrance = run.layout.entrance;
         run.startedTick = server.getTickCount();
-        for (DungeonBuilder.Placed p : run.layout.rooms) {
+        for (DelveBuilder.Placed p : run.layout.rooms) {
             if (p.kind.countsForClear()) run.roomsTotal++;
         }
 
-        DungeonPopulator.populate(level, run);
+        DelvePopulator.populate(level, run);
 
         for (ServerPlayer p : party) {
             if (runOf(p) != null) continue;
             run.party.add(p.getUUID());
-            run.returns.put(p.getUUID(), DungeonRun.ReturnPoint.of(p));
+            run.returns.put(p.getUUID(), DelveRun.ReturnPoint.of(p));
             PLAYER_RUN.put(p.getUUID(), run.id);
             send(p, level, run.entrance);
         }
@@ -191,11 +191,11 @@ public final class DungeonManager {
 
     /** Puts one player back where they came from and drops them from the run. */
     public static void leave(ServerPlayer p, boolean quiet) {
-        DungeonRun run = runOf(p);
+        DelveRun run = runOf(p);
         if (run == null) return;
         PLAYER_RUN.remove(p.getUUID());
 
-        DungeonRun.ReturnPoint rp = run.returns.get(p.getUUID());
+        DelveRun.ReturnPoint rp = run.returns.get(p.getUUID());
         if (rp != null && PoliticalServer.server != null) {
             try {
                 ResourceKey<Level> key = ResourceKey.create(Registries.DIMENSION,
@@ -207,11 +207,11 @@ public final class DungeonManager {
                 }
             } catch (Exception ignored) {
                 // A dimension that has gone since they entered. Better left where they are than
-                // thrown at world spawn from inside a dungeon.
+                // thrown at world spawn from inside a delve.
             }
         }
         if (!quiet) {
-            p.sendSystemMessage(Component.literal("§7You leave the dungeon."));
+            p.sendSystemMessage(Component.literal("§7You leave the delve."));
         }
 
         // The last one out closes it.
@@ -221,14 +221,14 @@ public final class DungeonManager {
     }
 
     /** Finishes a run: scores it, pays it, and sends everybody home. */
-    public static void end(DungeonRun run, boolean completed) {
+    public static void end(DelveRun run, boolean completed) {
         if (run.finished) return;
         run.finished = true;
         run.endedTick = PoliticalServer.server == null ? run.startedTick
                 : PoliticalServer.server.getTickCount();
 
         if (completed) {
-            DungeonScore.award(run);
+            DelveScore.award(run);
             for (UUID u : run.party) {
                 int had = PROGRESS.getOrDefault(u, 0);
                 if (run.floor.tier > had) PROGRESS.put(u, run.floor.tier);
@@ -238,7 +238,7 @@ public final class DungeonManager {
 
         for (ServerPlayer p : run.online()) {
             PLAYER_RUN.remove(p.getUUID());
-            DungeonRun.ReturnPoint rp = run.returns.get(p.getUUID());
+            DelveRun.ReturnPoint rp = run.returns.get(p.getUUID());
             if (rp != null && PoliticalServer.server != null) {
                 try {
                     ServerLevel back = PoliticalServer.server.getLevel(ResourceKey.create(
@@ -254,17 +254,17 @@ public final class DungeonManager {
         }
         for (UUID u : run.party) PLAYER_RUN.remove(u);
 
-        DungeonBossFight.forget(run);
-        DungeonPopulator.despawn(run);
+        DelveBossFight.forget(run);
+        DelvePopulator.despawn(run);
         USED_SLOTS.remove(run.slot);
         RUNS.remove(run.id);
     }
 
     /** Records a best score, keeping the better of the two. */
-    public static void recordScore(UUID player, DungeonFloor floor, String grade) {
+    public static void recordScore(UUID player, DelveDepth floor, String grade) {
         String k = player + ":" + floor.name();
         String had = BEST.get(k);
-        if (had == null || DungeonScore.betterThan(grade, had)) {
+        if (had == null || DelveScore.betterThan(grade, had)) {
             BEST.put(k, grade);
         }
     }
@@ -275,7 +275,7 @@ public final class DungeonManager {
         if (RUNS.isEmpty()) return;
         if (server.getTickCount() % 20 != 0) return;
 
-        for (DungeonRun run : new ArrayList<>(RUNS.values())) {
+        for (DelveRun run : new ArrayList<>(RUNS.values())) {
             List<ServerPlayer> here = run.online();
             if (here.isEmpty()) {
                 end(run, false);
@@ -283,7 +283,7 @@ public final class DungeonManager {
             }
             if (server.getTickCount() - run.startedTick > RUN_TIMEOUT_TICKS) {
                 for (ServerPlayer p : here) {
-                    p.sendSystemMessage(Component.literal("§cThe dungeon closes behind you."));
+                    p.sendSystemMessage(Component.literal("§cThe delve closes behind you."));
                 }
                 end(run, false);
                 continue;
@@ -291,18 +291,18 @@ public final class DungeonManager {
 
             // Anybody who wandered out of the realm has effectively left.
             for (ServerPlayer p : here) {
-                if (!inDungeon(p)) {
+                if (!inDelve(p)) {
                     leave(p, true);
                 }
             }
 
-            DungeonPopulator.tick(server, run);
-            DungeonBossFight.tick(server, run);
+            DelvePopulator.tick(server, run);
+            DelveBossFight.tick(server, run);
 
             // The boss is sealed until the floor is cleared, which is what makes the rooms matter.
             if (!run.bossSpawned && run.roomsDone() && run.layout.bossRoom != null) {
                 run.bossSpawned = true;
-                DungeonBossFight.spawn(server, run);
+                DelveBossFight.spawn(server, run);
             }
 
             for (ServerPlayer p : run.online()) {
@@ -316,7 +316,7 @@ public final class DungeonManager {
 
     /** A death inside a run costs score and respawns the player at the entrance. */
     public static void onDeath(ServerPlayer p) {
-        DungeonRun run = runOf(p);
+        DelveRun run = runOf(p);
         if (run == null) return;
         run.deaths++;
         for (ServerPlayer m : run.online()) {
@@ -327,12 +327,12 @@ public final class DungeonManager {
 
     /** Where a player who died inside a run should come back. */
     public static BlockPos respawnFor(ServerPlayer p) {
-        DungeonRun run = runOf(p);
+        DelveRun run = runOf(p);
         return run == null ? null : run.entrance;
     }
 
     public static void onDisconnect(ServerPlayer p) {
-        DungeonRun run = runOf(p);
+        DelveRun run = runOf(p);
         if (run == null) return;
         PLAYER_RUN.remove(p.getUUID());
         if (run.online().isEmpty()) end(run, false);
@@ -361,7 +361,7 @@ public final class DungeonManager {
                 GSON.toJson(root, w);
             }
         } catch (Exception e) {
-            PoliticalServer.LOGGER.error("Could not save dungeon progress: " + e.getMessage());
+            PoliticalServer.LOGGER.error("Could not save delve progress: " + e.getMessage());
         }
     }
 
@@ -387,9 +387,9 @@ public final class DungeonManager {
                     BEST.put(e.getKey(), e.getValue().getAsString());
                 }
             }
-            PoliticalServer.LOGGER.info("Dungeon progress loaded for " + PROGRESS.size() + " players");
+            PoliticalServer.LOGGER.info("Delve progress loaded for " + PROGRESS.size() + " players");
         } catch (Exception e) {
-            PoliticalServer.LOGGER.error("Could not read dungeon progress: " + e.getMessage());
+            PoliticalServer.LOGGER.error("Could not read delve progress: " + e.getMessage());
         }
     }
 }

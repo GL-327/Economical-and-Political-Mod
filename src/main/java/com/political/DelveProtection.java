@@ -13,10 +13,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Set;
 
 /**
- * What you may and may not touch inside a dungeon.
+ * What you may and may not touch inside a delve.
  *
- * <p>Almost nothing is breakable, which is the rule Skyblock runs on and the reason its dungeons
- * hold their shape. A dungeon you can mine through is a dungeon where the intended route is a
+ * <p>Almost nothing is breakable, which is the rule Skyblock runs on and the reason its delves
+ * hold their shape. A delve you can mine through is a delve where the intended route is a
  * suggestion, every secret is findable with a pickaxe, and the boss room is reachable in a straight
  * line from the entrance.</p>
  *
@@ -24,12 +24,12 @@ import java.util.Set;
  * behind, the things you open, and the crops and pots that are scenery. Everything else refuses,
  * and says so once rather than every swing.</p>
  */
-public final class DungeonProtection {
+public final class DelveProtection {
 
-    private DungeonProtection() {}
+    private DelveProtection() {}
 
     /**
-     * The short list of blocks a player may break inside a dungeon.
+     * The short list of blocks a player may break inside a delve.
      *
      * <p>Deliberately short. Every entry here is something a room might legitimately ask you to
      * clear, and the list is checked rather than a block tag so nothing gets added to it by a
@@ -49,7 +49,7 @@ public final class DungeonProtection {
             Blocks.BARREL
     );
 
-    /** Blocks that may be used but never broken, so the dungeon still works as a building. */
+    /** Blocks that may be used but never broken, so the delve still works as a building. */
     private static final Set<Block> USABLE = Set.of(
             Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.BARREL, Blocks.ENDER_CHEST,
             Blocks.LEVER, Blocks.STONE_BUTTON, Blocks.OAK_BUTTON, Blocks.SPRUCE_BUTTON,
@@ -63,14 +63,14 @@ public final class DungeonProtection {
         PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, entity) -> {
             if (world.isClientSide()) return true;
             if (!(player instanceof ServerPlayer sp)) return true;
-            if (!DungeonManager.inDungeon(sp)) return true;
+            if (!DelveManager.inDelve(sp)) return true;
 
             // An operator in creative is presumably fixing something.
             if (sp.isCreative()) return true;
 
             if (BREAKABLE.contains(state.getBlock())) {
-                DungeonRun run = DungeonManager.runOf(sp);
-                if (run != null) DungeonPopulator.claimSecret(run, pos, sp);
+                DelveRun run = DelveManager.runOf(sp);
+                if (run != null) DelvePopulator.claimSecret(run, pos, sp);
                 return true;
             }
             warn(sp);
@@ -81,12 +81,12 @@ public final class DungeonProtection {
         UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
             if (world.isClientSide()) return InteractionResult.PASS;
             if (!(player instanceof ServerPlayer sp)) return InteractionResult.PASS;
-            if (!DungeonManager.inDungeon(sp)) return InteractionResult.PASS;
+            if (!DelveManager.inDelve(sp)) return InteractionResult.PASS;
 
             BlockPos pos = hit.getBlockPos();
             BlockState state = world.getBlockState(pos);
-            DungeonRun run = DungeonManager.runOf(sp);
-            if (run != null && DungeonPopulator.claimSecret(run, pos, sp)) {
+            DelveRun run = DelveManager.runOf(sp);
+            if (run != null && DelvePopulator.claimSecret(run, pos, sp)) {
                 return InteractionResult.SUCCESS;
             }
             if (USABLE.contains(state.getBlock())) return InteractionResult.PASS;
@@ -113,7 +113,7 @@ public final class DungeonProtection {
         Long last = LAST_WARNED.get(sp.getUUID());
         if (last != null && now - last < 20) return;
         LAST_WARNED.put(sp.getUUID(), now);
-        sp.sendSystemMessage(Component.literal("§8The dungeon does not give."), true);
+        sp.sendSystemMessage(Component.literal("§8The delve does not give."), true);
     }
 
     private static final java.util.Map<java.util.UUID, Long> LAST_WARNED =

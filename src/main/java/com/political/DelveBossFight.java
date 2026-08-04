@@ -35,11 +35,11 @@ import java.util.UUID;
  * <p>The boss is sealed until the floor is cleared, which is what makes the rooms worth doing
  * rather than something to run past on the way to the fight.</p>
  */
-public final class DungeonBossFight {
+public final class DelveBossFight {
 
-    private DungeonBossFight() {}
+    private DelveBossFight() {}
 
-    public static final String BOSS_TAG = "political_dungeon_boss";
+    public static final String BOSS_TAG = "political_delve_boss";
 
     /** What a boss is currently doing. */
     public enum Phase {
@@ -71,11 +71,11 @@ public final class DungeonBossFight {
     // ── Spawning ──────────────────────────────────────────────────────────
 
     /** Puts the floor boss in its room and opens its bar. */
-    public static void spawn(MinecraftServer server, DungeonRun run) {
-        ServerLevel level = DungeonManager.realm(server);
+    public static void spawn(MinecraftServer server, DelveRun run) {
+        ServerLevel level = DelveManager.realm(server);
         if (level == null || run.layout.bossRoom == null) return;
 
-        DungeonBuilder.Placed room = run.layout.bossRoom;
+        DelveBuilder.Placed room = run.layout.bossRoom;
         BlockPos at = room.centre();
 
         Mob boss;
@@ -108,7 +108,7 @@ public final class DungeonBossFight {
         } catch (Exception ignored) {
             // Stock attributes are survivable, the fight is just shorter.
         }
-        boss.setItemSlot(EquipmentSlot.HEAD, DungeonPopulator.head(BOSS_HEAD));
+        boss.setItemSlot(EquipmentSlot.HEAD, DelvePopulator.head(BOSS_HEAD));
         try {
             boss.setDropChance(EquipmentSlot.HEAD, 0f);
         } catch (Exception ignored) {
@@ -141,10 +141,10 @@ public final class DungeonBossFight {
 
     // ── Running ───────────────────────────────────────────────────────────
 
-    public static void tick(MinecraftServer server, DungeonRun run) {
+    public static void tick(MinecraftServer server, DelveRun run) {
         Fight f = FIGHTS.get(run.id);
         if (f == null) return;
-        ServerLevel level = DungeonManager.realm(server);
+        ServerLevel level = DelveManager.realm(server);
         if (level == null) return;
 
         var e = level.getEntity(f.bossId);
@@ -183,7 +183,7 @@ public final class DungeonBossFight {
         }
     }
 
-    private static void enterPhase(ServerLevel level, DungeonRun run, Fight f, Mob boss, Phase phase) {
+    private static void enterPhase(ServerLevel level, DelveRun run, Fight f, Mob boss, Phase phase) {
         f.phase = phase;
         f.bar.setName(Component.literal(run.floor.bossName + " — " + phase.display)
                 .withStyle(run.floor.colour, ChatFormatting.BOLD));
@@ -205,7 +205,7 @@ public final class DungeonBossFight {
                     court.setPos(boss.getX() + Math.cos(a) * 4, boss.getY(),
                             boss.getZ() + Math.sin(a) * 4);
                     court.setPersistenceRequired();
-                    court.addTag(DungeonPopulator.MOB_TAG);
+                    court.addTag(DelvePopulator.MOB_TAG);
                     court.addTag(run.id.toString());
                     court.setCustomName(Component.literal("Court of " + run.floor.bossName)
                             .withStyle(run.floor.colour));
@@ -223,7 +223,7 @@ public final class DungeonBossFight {
         }
     }
 
-    private static void resolve(ServerLevel level, DungeonRun run, Fight f, Mob boss) {
+    private static void resolve(ServerLevel level, DelveRun run, Fight f, Mob boss) {
         float dmg = (f.phase == Phase.FINAL ? 11f : 6f) + run.floor.tier * 1.5f;
         for (ServerPlayer p : run.online()) {
             if (p.distanceToSqr(boss) > 40 * 40) continue;
@@ -236,7 +236,7 @@ public final class DungeonBossFight {
     }
 
     /** How much of a hit the boss takes. Its court shields it, so the court is the answer. */
-    public static float incomingScale(DungeonRun run) {
+    public static float incomingScale(DelveRun run) {
         Fight f = FIGHTS.get(run.id);
         if (f == null) return 1f;
         return f.phase == Phase.CALLING && !f.court.isEmpty() ? 0.2f : 1f;
@@ -246,12 +246,12 @@ public final class DungeonBossFight {
         return e.entityTags().contains(BOSS_TAG);
     }
 
-    public static void onBossDeath(DungeonRun run) {
+    public static void onBossDeath(DelveRun run) {
         Fight f = FIGHTS.remove(run.id);
         if (f != null) {
             f.bar.removeAllPlayers();
             if (PoliticalServer.server != null) {
-                ServerLevel level = DungeonManager.realm(PoliticalServer.server);
+                ServerLevel level = DelveManager.realm(PoliticalServer.server);
                 if (level != null) {
                     for (UUID id : f.court) {
                         var c = level.getEntity(id);
@@ -261,11 +261,11 @@ public final class DungeonBossFight {
             }
         }
         run.bossDead = true;
-        DungeonManager.end(run, true);
+        DelveManager.end(run, true);
     }
 
     /** Drops the fight without finishing the run, for when a run is abandoned. */
-    public static void forget(DungeonRun run) {
+    public static void forget(DelveRun run) {
         Fight f = FIGHTS.remove(run.id);
         if (f != null) f.bar.removeAllPlayers();
     }

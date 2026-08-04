@@ -12,14 +12,14 @@ import net.minecraft.world.level.block.Blocks;
  *
  * <p>Linear on purpose. Floor one is open to anybody and every floor after it wants the one before
  * it cleared, so the progression is a ladder rather than a menu. That is the part of the Skyblock
- * design worth taking: the dungeon is not a place you visit, it is a thing you climb.</p>
+ * design worth taking: the delve is not a place you visit, it is a thing you climb.</p>
  *
  * <p>Each floor draws its rooms from sources that share a look, so a run reads as one building
  * rather than a shuffle of everything on disk. The room lists themselves live in
- * {@code dungeon_rooms.json} beside the structures, because seven hundred filenames are data and
+ * {@code delve_rooms.json} beside the structures, because seven hundred filenames are data and
  * have no business being typed into a class file.</p>
  */
-public enum DungeonFloor {
+public enum DelveDepth {
 
     CATACOMBS(1, "The Catacombs", "catacombs", ChatFormatting.GRAY,
             "Somebody was buried here properly. Most of the others were not.",
@@ -87,7 +87,7 @@ public enum DungeonFloor {
     /** Coins for a clear at par. Score moves it a long way either side of this. */
     public final long baseReward;
 
-    DungeonFloor(int tier, String display, String pool, ChatFormatting colour, String flavour,
+    DelveDepth(int tier, String display, String pool, ChatFormatting colour, String flavour,
                  Block corridorFloor, Block corridorWall, Block corridorLight,
                  EntityType<?> commonMob, EntityType<?> eliteMob,
                  String bossName, Item icon, float bossHealth, long baseReward) {
@@ -108,12 +108,12 @@ public enum DungeonFloor {
     }
 
     /** The floor before this one, or null for the first. */
-    public DungeonFloor previous() {
+    public DelveDepth previous() {
         return tier <= 1 ? null : values()[tier - 2];
     }
 
-    public static DungeonFloor byTier(int tier) {
-        for (DungeonFloor f : values()) {
+    public static DelveDepth byTier(int tier) {
+        for (DelveDepth f : values()) {
             if (f.tier == tier) return f;
         }
         return null;

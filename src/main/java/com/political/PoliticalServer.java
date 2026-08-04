@@ -61,7 +61,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         // Register custom items
         CustomItemHandler.register();
         EnchantTableHandler.register();
-        DungeonProtection.register();
+        DelveProtection.register();
 
         // Backrooms consumables (Almond Water etc.) right-click handling
         BackroomsItems.registerEvents();
@@ -167,8 +167,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
             CustomEnchantEffects.forget(player);
             MeterLineHandler.forget(player);
-            DungeonManager.onDisconnect(player);
-            DungeonProtection.forget(player);
+            DelveManager.onDisconnect(player);
+            DelveProtection.forget(player);
             // Version X gear lines keep per player meters in memory, so drop them on the way out.
             StarboundHandler.clear(player.getUUID());
             BeastcraftHandler.clear(player.getUUID());
@@ -193,9 +193,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 server.execute(() -> {
                     ServerPlayer back = server.getPlayerList().getPlayer(diedIn);
                     if (back == null) return;
-                    net.minecraft.core.BlockPos at = DungeonManager.respawnFor(back);
+                    net.minecraft.core.BlockPos at = DelveManager.respawnFor(back);
                     if (at == null) return;
-                    net.minecraft.server.level.ServerLevel realm = DungeonManager.realm(server);
+                    net.minecraft.server.level.ServerLevel realm = DelveManager.realm(server);
                     if (realm == null) return;
                     PlayerTeleportHelper.teleport(back, realm, at.getX() + 0.5, at.getY(),
                             at.getZ() + 0.5, back.getYRot(), back.getXRot());
@@ -439,6 +439,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ThornwoodGear.ensureRecipes();
             AshencrownGear.ensureRecipes();
             PrismaticGear.ensureRecipes();
+            DelveItems.ensureRecipes();
             ClockworkGear.ensureRecipes();
             GrimoireGear.ensureRecipes();
             TempestGear.ensureRecipes();
@@ -447,9 +448,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ItemOverrideManager.load();
-            DungeonManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            DelveManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HotReloadManager.initialize();
-            DungeonSelfTest.runIfAsked(s);
+            DelveSelfTest.runIfAsked(s);
             BazaarProduct.build();
             BazaarTraders.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -511,7 +512,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BazaarManager.save();
             ItemOverrideManager.save();
             BazaarTraders.save();
-            DungeonManager.save();
+            DelveManager.save();
             MinionManager.save();
             NemesisManager.save();
             CrateManager.save();
@@ -633,7 +634,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SiegeManager.tick(s);
             DragonFightManager.tick(s);
             WitherFightManager.tick(s);
-            DungeonManager.tick(s);
+            DelveManager.tick(s);
             CustomEnchantEffects.tick();
             ItemOverrideManager.tick();
             BazaarTraders.tick();

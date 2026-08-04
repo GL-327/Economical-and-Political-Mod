@@ -18,36 +18,36 @@ import java.util.List;
  * locked rather than hidden. Seeing the floor above the one you are on is most of the reason to
  * clear the one you are on.</p>
  */
-public final class DungeonGui {
+public final class DelveGui {
 
-    private DungeonGui() {}
+    private DelveGui() {}
 
     private static final int SIZE = 54;
 
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Dungeons")
+        gui.setTitle(Component.literal("Delves")
                 .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
         GuiKit.frame(gui, SIZE);
 
-        int cleared = DungeonManager.progressOf(player);
-        DungeonRun active = DungeonManager.runOf(player);
+        int cleared = DelveManager.progressOf(player);
+        DelveRun active = DelveManager.runOf(player);
 
-        GuiKit.header(gui, Items.SKELETON_SKULL, "Dungeons", ChatFormatting.DARK_PURPLE,
+        GuiKit.header(gui, Items.SKELETON_SKULL, "Delves", ChatFormatting.DARK_PURPLE,
                 cleared == 0 ? "You have cleared nothing yet"
                         : "Cleared up to floor " + cleared,
-                DungeonCatalog.count() + " rooms across " + DungeonFloor.values().length + " floors",
-                DungeonManager.activeRuns() + " parties inside right now");
+                DelveCatalog.count() + " rooms, " + DelveItems.total() + " delve items",
+                DelveManager.activeRuns() + " parties inside right now");
 
         // The seven floors, in order, along the middle two rows.
         int[] slots = {19, 20, 21, 22, 23, 24, 25};
-        DungeonFloor[] floors = DungeonFloor.values();
+        DelveDepth[] floors = DelveDepth.values();
         for (int i = 0; i < floors.length && i < slots.length; i++) {
-            final DungeonFloor floor = floors[i];
-            boolean open = DungeonManager.canEnter(player, floor);
+            final DelveDepth floor = floors[i];
+            boolean open = DelveManager.canEnter(player, floor);
             boolean done = cleared >= floor.tier;
-            String best = DungeonManager.bestScore(player, floor);
-            int rooms = DungeonCatalog.countFor(floor);
+            String best = DelveManager.bestScore(player, floor);
+            int rooms = DelveCatalog.countFor(floor);
 
             GuiElementBuilder b = new GuiElementBuilder(open ? floor.icon : Items.IRON_BARS)
                     .setName(Component.literal(floor.tier + ". " + floor.display)
@@ -72,7 +72,7 @@ public final class DungeonGui {
             }
 
             if (!open) {
-                DungeonFloor prev = floor.previous();
+                DelveDepth prev = floor.previous();
                 b.addLoreLine(Component.literal("§cLocked. Clear "
                         + (prev == null ? "the floor below" : prev.display) + " first."));
             } else if (active != null) {
@@ -84,10 +84,10 @@ public final class DungeonGui {
             }
 
             gui.setSlot(slots[i], b.setCallback((s, t, ci, sg) -> {
-                if (!DungeonManager.canEnter(player, floor)) return;
+                if (!DelveManager.canEnter(player, floor)) return;
                 List<ServerPlayer> party = new ArrayList<>();
                 party.add(player);
-                String refusal = DungeonManager.start(player, floor, party);
+                String refusal = DelveManager.start(player, floor, party);
                 if (refusal != null) {
                     player.sendSystemMessage(Component.literal("§c" + refusal));
                 }
@@ -97,7 +97,7 @@ public final class DungeonGui {
         if (active != null) {
             gui.setSlot(40, GuiKit.action(Items.BARRIER, "Leave the run", ChatFormatting.RED,
                     () -> {
-                        DungeonManager.leave(player, false);
+                        DelveManager.leave(player, false);
                         open(player);
                     },
                     "You are in " + active.floor.display,
@@ -105,6 +105,14 @@ public final class DungeonGui {
                     "",
                     "Leaving abandons the run. Nothing is kept."));
         }
+
+        gui.setSlot(37, GuiKit.action(Items.SMITHING_TABLE, "Delveforge", ChatFormatting.LIGHT_PURPLE,
+                () -> DelveForgeGui.open(player),
+                "Admit a piece of gear to the delves,",
+                "then mark it up.",
+                "",
+                "Five marks, then five sigils. Both show",
+                "on the item's own name."));
 
         gui.setSlot(SIZE - 5, GuiKit.info(Items.WRITABLE_BOOK, "How a run is scored",
                 ChatFormatting.WHITE,
@@ -129,8 +137,8 @@ public final class DungeonGui {
                 "the route, and a secret has to be found",
                 "rather than mined through.",
                 "",
-                "§8Builds from Custom Dungeons, Underground",
-                "§8Worlds and Dungeons and Taverns."));
+                "§8Builds from Custom Delves, Underground",
+                "§8Worlds and Delves and Taverns."));
 
         GuiKit.footer(gui, SIZE, player, null);
         gui.open();

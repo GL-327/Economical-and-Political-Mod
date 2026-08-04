@@ -15,9 +15,9 @@ import java.util.UUID;
  * than the point. A player who explores every room and finds every secret should beat one who ran
  * straight to the boss, and this is the only place that opinion is expressed.</p>
  */
-public final class DungeonScore {
+public final class DelveScore {
 
-    private DungeonScore() {}
+    private DelveScore() {}
 
     /** Best to worst. Used for both display and for comparing a new run against a stored best. */
     private static final String[] ORDER = {"S+", "S", "A", "B", "C", "D"};
@@ -43,7 +43,7 @@ public final class DungeonScore {
      * about not dying. Speed exists so two identical clears are not identical, and it is capped low
      * enough that rushing never beats exploring.</p>
      */
-    public static Breakdown grade(DungeonRun run) {
+    public static Breakdown grade(DelveRun run) {
         // Skill, out of 100. Clearing rooms earns it, dying spends it.
         int cleared = run.roomsTotal <= 0 ? 100
                 : Math.round(100f * run.roomsCleared / run.roomsTotal);
@@ -106,7 +106,7 @@ public final class DungeonScore {
      * the fight opening secrets is not paid nothing, and somebody who did all the damage is not
      * paid the same as somebody who stood still.</p>
      */
-    public static void award(DungeonRun run) {
+    public static void award(DelveRun run) {
         Breakdown b = grade(run);
         double mult = multiplier(b.grade());
 
@@ -124,7 +124,7 @@ public final class DungeonScore {
 
             long coins = Math.round(run.floor.baseReward * mult * share);
             CoinManager.giveCoins(p, coins);
-            DungeonManager.recordScore(p.getUUID(), run.floor, b.grade());
+            DelveManager.recordScore(p.getUUID(), run.floor, b.grade());
 
             p.sendSystemMessage(Component.literal(""));
             p.sendSystemMessage(Component.literal("  " + run.floor.colour + "§l"

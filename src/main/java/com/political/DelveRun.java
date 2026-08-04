@@ -18,10 +18,10 @@ import java.util.UUID;
  * rather than remembering nine separate maps. The only thing that outlives it is the record of
  * which floors a player has cleared, which belongs to the player and not to the attempt.</p>
  */
-public final class DungeonRun {
+public final class DelveRun {
 
     public final UUID id = UUID.randomUUID();
-    public final DungeonFloor floor;
+    public final DelveDepth floor;
     public final int slot;
     public final long seed;
 
@@ -30,7 +30,7 @@ public final class DungeonRun {
     /** Where each of them was before, so leaving puts them back rather than at spawn. */
     public final Map<UUID, ReturnPoint> returns = new HashMap<>();
 
-    public DungeonBuilder.Layout layout;
+    public DelveBuilder.Layout layout;
     public BlockPos entrance;
 
     public long startedTick;
@@ -54,7 +54,7 @@ public final class DungeonRun {
     /** Rooms already reported cleared. */
     public final Set<Long> clearedRooms = new HashSet<>();
 
-    public DungeonRun(DungeonFloor floor, int slot, long seed) {
+    public DelveRun(DelveDepth floor, int slot, long seed) {
         this.floor = floor;
         this.slot = slot;
         this.seed = seed;

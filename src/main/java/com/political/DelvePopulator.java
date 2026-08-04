@@ -33,19 +33,19 @@ import java.util.UUID;
  * Fills a built floor: what lives in it, and what is hidden in it.
  *
  * <p>Mobs are placed per room rather than left to natural spawning, because the realm has no
- * skylight and no spawn rules and a dungeon that populates itself is a dungeon that populates
+ * skylight and no spawn rules and a delve that populates itself is a delve that populates
  * itself unevenly. Placing them means a room holds what its role says it holds.</p>
  *
  * <p>Secrets are the part worth getting right. In Skyblock a secret is a thing you had to look for,
  * not a thing you walked past, so these go in corners, behind the room's own geometry, and never in
  * the middle of the floor. Finding them is most of the score.</p>
  */
-public final class DungeonPopulator {
+public final class DelvePopulator {
 
-    private DungeonPopulator() {}
+    private DelvePopulator() {}
 
     /** Tag on everything this class spawns, so cleanup never has to guess. */
-    public static final String MOB_TAG = "political_dungeon_mob";
+    public static final String MOB_TAG = "political_delve_mob";
 
     /** Where each run's secrets are, keyed by packed position. */
     private static final Map<UUID, Map<Long, BlockPos>> SECRETS = new HashMap<>();
@@ -54,7 +54,7 @@ public final class DungeonPopulator {
 
     // ── Heads ─────────────────────────────────────────────────────────────
     //
-    // Dungeon mobs wear a head so they read as dungeon mobs at a glance rather than as the same
+    // Delve mobs wear a head so they read as delve mobs at a glance rather than as the same
     // zombie you meet on the surface. A head renders on a vanilla client with nothing installed,
     // which is the only custom look a server side mod can actually deliver.
 
@@ -81,29 +81,29 @@ public final class DungeonPopulator {
 
     // ── Populating ────────────────────────────────────────────────────────
 
-    public static void populate(ServerLevel level, DungeonRun run) {
+    public static void populate(ServerLevel level, DelveRun run) {
         Random rng = new Random(run.seed ^ 0x5EC2E7L);
         Map<Long, BlockPos> secrets = new HashMap<>();
         List<UUID> mobs = new ArrayList<>();
 
-        for (DungeonBuilder.Placed p : run.layout.rooms) {
+        for (DelveBuilder.Placed p : run.layout.rooms) {
             for (int i = 0; i < p.kind.mobs; i++) {
                 Mob m = spawnMob(level, run, p, rng, false);
                 if (m != null) mobs.add(m.getUUID());
             }
-            if (p.kind == DungeonRoomKind.MINIBOSS) {
+            if (p.kind == DelveRoomKind.MINIBOSS) {
                 Mob m = spawnMob(level, run, p, rng, true);
                 if (m != null) mobs.add(m.getUUID());
             }
-            if (p.kind == DungeonRoomKind.TREASURE) {
+            if (p.kind == DelveRoomKind.TREASURE) {
                 placeChest(level, p, run.floor, rng);
             }
         }
 
         // Secrets are spread across the floor rather than piled into whichever rooms happened to
         // allow them, so a run always has them somewhere worth walking to.
-        List<DungeonBuilder.Placed> candidates = new ArrayList<>();
-        for (DungeonBuilder.Placed p : run.layout.rooms) {
+        List<DelveBuilder.Placed> candidates = new ArrayList<>();
+        for (DelveBuilder.Placed p : run.layout.rooms) {
             for (int i = 0; i < p.kind.secretSlots; i++) candidates.add(p);
         }
         java.util.Collections.shuffle(candidates, rng);
@@ -124,7 +124,7 @@ public final class DungeonPopulator {
      * <p>Scaled by floor depth so the seventh floor is not the first floor with more walking, and
      * tagged so cleanup can find it later without scanning for anything that looks hostile.</p>
      */
-    private static Mob spawnMob(ServerLevel level, DungeonRun run, DungeonBuilder.Placed room,
+    private static Mob spawnMob(ServerLevel level, DelveRun run, DelveBuilder.Placed room,
                                 Random rng, boolean elite) {
         BlockPos spot = scatter(room, rng);
         if (spot == null) return null;
@@ -176,7 +176,7 @@ public final class DungeonPopulator {
     }
 
     /** A random standable spot inside a room, or null when the room has no floor to stand on. */
-    private static BlockPos scatter(DungeonBuilder.Placed room, Random rng) {
+    private static BlockPos scatter(DelveBuilder.Placed room, Random rng) {
         for (int tries = 0; tries < 12; tries++) {
             int x = room.origin.getX() + 2 + rng.nextInt(Math.max(1, room.size.getX() - 4));
             int z = room.origin.getZ() + 2 + rng.nextInt(Math.max(1, room.size.getZ() - 4));
@@ -186,8 +186,8 @@ public final class DungeonPopulator {
     }
 
     /** A chest of floor appropriate loot, standing in the middle of a treasure room. */
-    private static void placeChest(ServerLevel level, DungeonBuilder.Placed room,
-                                   DungeonFloor floor, Random rng) {
+    private static void placeChest(ServerLevel level, DelveBuilder.Placed room,
+                                   DelveDepth floor, Random rng) {
         BlockPos at = new BlockPos(room.origin.getX() + room.size.getX() / 2,
                 room.floorY + 1, room.origin.getZ() + room.size.getZ() / 2);
         level.setBlock(at, Blocks.CHEST.defaultBlockState(), 3);
@@ -206,7 +206,7 @@ public final class DungeonPopulator {
      * not obvious. A secret you can see from the doorway is not a secret, and one you could never
      * find is a waste of a room.</p>
      */
-    private static BlockPos hideSecret(ServerLevel level, DungeonBuilder.Placed room, Random rng) {
+    private static BlockPos hideSecret(ServerLevel level, DelveBuilder.Placed room, Random rng) {
         int[][] corners = {
                 {2, 2}, {room.size.getX() - 3, 2},
                 {2, room.size.getZ() - 3}, {room.size.getX() - 3, room.size.getZ() - 3}
@@ -225,7 +225,7 @@ public final class DungeonPopulator {
     // ── During the run ────────────────────────────────────────────────────
 
     /** Whether this block is one of the run's secrets, and claims it if so. */
-    public static boolean claimSecret(DungeonRun run, BlockPos at, ServerPlayer by) {
+    public static boolean claimSecret(DelveRun run, BlockPos at, ServerPlayer by) {
         Map<Long, BlockPos> secrets = SECRETS.get(run.id);
         if (secrets == null || !secrets.containsKey(at.asLong())) return false;
         if (!run.takenSecrets.add(at.asLong())) return false;
@@ -250,12 +250,12 @@ public final class DungeonPopulator {
      * damage or another mob, and hooking every one of those is more surface than counting is
      * worth.</p>
      */
-    public static void tick(MinecraftServer server, DungeonRun run) {
+    public static void tick(MinecraftServer server, DelveRun run) {
         if (server.getTickCount() % 40 != 0) return;
-        ServerLevel level = DungeonManager.realm(server);
+        ServerLevel level = DelveManager.realm(server);
         if (level == null) return;
 
-        for (DungeonBuilder.Placed p : run.layout.rooms) {
+        for (DelveBuilder.Placed p : run.layout.rooms) {
             if (!p.kind.countsForClear() || p.cleared) continue;
             AABB box = new AABB(
                     p.origin.getX(), p.floorY - 2, p.origin.getZ(),
@@ -285,11 +285,11 @@ public final class DungeonPopulator {
     }
 
     /** Removes everything this run put in the world. */
-    public static void despawn(DungeonRun run) {
+    public static void despawn(DelveRun run) {
         List<UUID> mobs = SPAWNED.remove(run.id);
         SECRETS.remove(run.id);
         if (mobs == null || PoliticalServer.server == null) return;
-        ServerLevel level = DungeonManager.realm(PoliticalServer.server);
+        ServerLevel level = DelveManager.realm(PoliticalServer.server);
         if (level == null) return;
         for (UUID u : mobs) {
             var e = level.getEntity(u);
@@ -299,7 +299,7 @@ public final class DungeonPopulator {
 
     /** Counts a kill toward the run's tally. */
     public static void onKill(ServerPlayer by, LivingEntity victim) {
-        DungeonRun run = DungeonManager.runOf(by);
+        DelveRun run = DelveManager.runOf(by);
         if (run == null) return;
         if (!victim.entityTags().contains(MOB_TAG)) return;
         run.mobsKilled++;

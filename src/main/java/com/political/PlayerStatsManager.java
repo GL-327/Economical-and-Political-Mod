@@ -168,9 +168,11 @@ public final class PlayerStatsManager {
         StatSheet sheet = new StatSheet();
         for (EquipmentSlot slot : new EquipmentSlot[]{
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
-            parseItemStats(player.getItemBySlot(slot), sheet, true);
+            ItemStack worn = player.getItemBySlot(slot);
+            parseItemStats(worn, sheet, true, delveScale(worn, player));
         }
-        parseItemStats(player.getMainHandItem(), sheet, false);
+        ItemStack held = player.getMainHandItem();
+        parseItemStats(held, sheet, false, delveScale(held, player));
         // Progression that is not carried on an item, folded in before the clamp.
         try {
             CollectionManager.applyBonuses(player, sheet);
@@ -187,6 +189,11 @@ public final class PlayerStatsManager {
      * held items contribute offensive stats only (no Defense/Health from holding armor).
      */
     private static void parseItemStats(ItemStack stack, StatSheet sheet, boolean isArmorSlot) {
+        parseItemStats(stack, sheet, isArmorSlot, 1.0);
+    }
+
+    private static void parseItemStats(ItemStack stack, StatSheet sheet, boolean isArmorSlot,
+                                       double scale) {
         if (stack == null || stack.isEmpty()) return;
         ItemLore lore = stack.get(DataComponents.LORE);
         if (lore == null || lore.lines().isEmpty()) return;
@@ -210,10 +217,27 @@ public final class PlayerStatsManager {
                 }
                 Double value = parseFirstNumber(s.substring(idx + name.length() + 1));
                 if (value != null) {
-                    sheet.add(stat, value);
+                    sheet.add(stat, value * scale);
                 }
                 break;
             }
+        }
+    }
+
+    /**
+     * How much one item's printed stats are worth right now.
+     *
+     * <p>Forging, marks and sigils all multiply, and standing in a delve multiplies again. A piece
+     * made in the delves gets a further bonus for being used where it belongs, which is what makes
+     * delve gear feel like delve gear without making it dead weight on the surface.</p>
+     */
+    private static double delveScale(ItemStack stack, ServerPlayer player) {
+        if (stack == null || stack.isEmpty()) return 1.0;
+        try {
+            return DelveForge.statMultiplier(stack, player) * DelveForge.homeBonus(stack, player);
+        } catch (Exception e) {
+            // Stats must never fail to compute because an upgrade system had an opinion.
+            return 1.0;
         }
     }
 

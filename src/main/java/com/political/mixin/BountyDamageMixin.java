@@ -160,10 +160,10 @@ public abstract class BountyDamageMixin {
         modifiedAmount = com.political.CustomEnchantEffects.onHit(player, self, modifiedAmount);
         // The floor boss shields itself while its court stands, and every hit on it is banked for
         // the payout split at the end of the run.
-        if (com.political.DungeonBossFight.isBoss(self)) {
-            com.political.DungeonRun dr = com.political.DungeonManager.runOf(player);
+        if (com.political.DelveBossFight.isBoss(self)) {
+            com.political.DelveRun dr = com.political.DelveManager.runOf(player);
             if (dr != null) {
-                modifiedAmount *= com.political.DungeonBossFight.incomingScale(dr);
+                modifiedAmount *= com.political.DelveBossFight.incomingScale(dr);
                 dr.bossDamage.merge(player.getUUID(), modifiedAmount, Float::sum);
             }
         }
@@ -217,13 +217,13 @@ public abstract class BountyDamageMixin {
         com.political.CollectionManager.onKill(player, self);
         com.political.RareDropManager.onKill(player, self);
         com.political.CustomEnchantEffects.onKill(player, self);
-        com.political.DungeonPopulator.onKill(player, self);
+        com.political.DelvePopulator.onKill(player, self);
         if (self instanceof ServerPlayer deadInDungeon) {
-            com.political.DungeonManager.onDeath(deadInDungeon);
+            com.political.DelveManager.onDeath(deadInDungeon);
         }
-        if (com.political.DungeonBossFight.isBoss(self)) {
-            com.political.DungeonRun dRun = com.political.DungeonManager.runOf(player);
-            if (dRun != null) com.political.DungeonBossFight.onBossDeath(dRun);
+        if (com.political.DelveBossFight.isBoss(self)) {
+            com.political.DelveRun dRun = com.political.DelveManager.runOf(player);
+            if (dRun != null) com.political.DelveBossFight.onBossDeath(dRun);
         }
         if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon deadDragon
                 && self.level() instanceof net.minecraft.server.level.ServerLevel endLevel) {
