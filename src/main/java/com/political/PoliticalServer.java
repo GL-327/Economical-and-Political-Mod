@@ -635,6 +635,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             DragonFightManager.tick(s);
             WitherFightManager.tick(s);
             DelveManager.tick(s);
+            WardenKeeper.tick(s);
+            WardenKeeper.prune(s);
             CustomEnchantEffects.tick();
             ItemOverrideManager.tick();
             BazaarTraders.tick();

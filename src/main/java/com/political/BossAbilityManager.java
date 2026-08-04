@@ -133,6 +133,15 @@ public class BossAbilityManager {
             case ENDERMAN -> useEndermanAbility(boss, target, tier);
             case IRON_GOLEM -> useWardenAbility(boss, target, tier);
             case PIGLIN -> usePiglinAbility(boss, target, tier, world);
+            case HUSK -> useHuskAbility(boss, target, tier, world);
+            case CAVE_SPIDER -> useCaveSpiderAbility(boss, target, tier, world);
+            case STRAY -> useStrayAbility(boss, target, tier, world);
+            case MAGMA_CUBE -> useMagmaAbility(boss, target, tier, world);
+            case BLAZE -> useBlazeAbility(boss, target, tier, world);
+            case HOGLIN -> useHoglinAbility(boss, target, tier, world);
+            case WITHER_SKELETON -> useWitherSkeletonAbility(boss, target, tier, world);
+            case RAVAGER -> useRavagerAbility(boss, target, tier, world);
+            case NANITE -> useNaniteAbility(boss, target, tier, world);
         };
 
         if (used) {
@@ -1886,4 +1895,145 @@ public class BossAbilityManager {
         // Remove all parent references for this tree
         slimeSplitParent.entrySet().removeIf(e -> getRootBoss(e.getKey()).equals(rootId));
     }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // THE NEWER BOSSES
+    // ══════════════════════════════════════════════════════════════════════
+    //
+    // Each one does something the boss below it does not, so climbing the ladder means learning
+    // rather than bringing bigger numbers. All of them announce themselves before they land, the
+    // same as the delve and dragon fights, because a hit you could not have seen coming teaches
+    // nothing.
+
+    /** Husk: a sandstorm that blinds and starves. */
+    private static boolean useHuskAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                          ServerLevel world) {
+        warn(target, "§e⚠ It kicks up the sand.");
+        target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60 + tier * 10, 0));
+        target.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 1));
+        world.sendParticles(ParticleTypes.ASH, target.getX(), target.getY() + 1,
+                target.getZ(), 40, 1.2, 1.0, 1.2, 0.0);
+        return true;
+    }
+
+    /** Cave spider: webs that hold, and venom that stacks while you are in them. */
+    private static boolean useCaveSpiderAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                                ServerLevel world) {
+        warn(target, "§2⚠ The brood spits.");
+        BlockPos at = target.blockPosition();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                BlockPos p = at.offset(dx, 0, dz);
+                if (world.getBlockState(p).isAir()) {
+                    world.setBlock(p, net.minecraft.world.level.block.Blocks.COBWEB.defaultBlockState(), 3);
+                }
+            }
+        }
+        target.addEffect(new MobEffectInstance(MobEffects.POISON, 100 + tier * 20,
+                Math.min(2, tier / 3)));
+        return true;
+    }
+
+    /** Stray: the ground freezes where you are standing. */
+    private static boolean useStrayAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                           ServerLevel world) {
+        warn(target, "§b⚠ The air goes still and cold.");
+        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 120, 2));
+        target.setTicksFrozen(Math.min(target.getTicksFrozen() + 140, 300));
+        world.sendParticles(ParticleTypes.SNOWFLAKE, target.getX(), target.getY() + 1,
+                target.getZ(), 30, 0.8, 1.0, 0.8, 0.02);
+        return true;
+    }
+
+    /** Magma cube: a pool underfoot that follows you for a moment. */
+    private static boolean useMagmaAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                           ServerLevel world) {
+        warn(target, "§6⚠ It splits and spills.");
+        target.igniteForSeconds(4 + tier);
+        target.hurtServer(world, target.damageSources().onFire(), 4.0f + tier);
+        world.sendParticles(ParticleTypes.LAVA, target.getX(), target.getY(),
+                target.getZ(), 25, 1.0, 0.3, 1.0, 0.0);
+        return true;
+    }
+
+    /** Blaze: a volley rather than a single shot, so cover matters. */
+    private static boolean useBlazeAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                           ServerLevel world) {
+        warn(target, "§c⚠ It is lining up a volley.");
+        for (int i = 0; i < 3 + tier / 2; i++) {
+            target.hurtServer(world, target.damageSources().magic(), 3.0f + tier * 0.5f);
+        }
+        target.igniteForSeconds(3);
+        return true;
+    }
+
+    /** Hoglin: a charge that throws you, which is the only one that moves the player. */
+    private static boolean useHoglinAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                            ServerLevel world) {
+        warn(target, "§4⚠ It drops its head and comes at you.");
+        target.hurtServer(world, target.damageSources().mobAttack(boss), 8.0f + tier * 1.5f);
+        target.setDeltaMovement(target.position().subtract(boss.position())
+                .normalize().scale(1.6).add(0, 0.5, 0));
+        world.playSound(null, boss.blockPosition(), SoundEvents.HOGLIN_ANGRY,
+                SoundSource.HOSTILE, 1.2f, 0.8f);
+        return true;
+    }
+
+    /** Wither skeleton: wither that cannot be outrun, plus company. */
+    private static boolean useWitherSkeletonAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                                    ServerLevel world) {
+        warn(target, "§8⚠ The gallows calls.");
+        target.addEffect(new MobEffectInstance(MobEffects.WITHER, 120 + tier * 20,
+                Math.min(2, tier / 4)));
+        for (int i = 0; i < 2; i++) {
+            try {
+                var made = net.minecraft.world.entity.EntityType.WITHER_SKELETON.create(world, net.minecraft.world.entity.EntitySpawnReason.MOB_SUMMONED);
+                if (made instanceof net.minecraft.world.entity.Mob m) {
+                    m.setPos(boss.getX() + (i == 0 ? 2 : -2), boss.getY(), boss.getZ());
+                    m.setPersistenceRequired();
+                    world.addFreshEntity(m);
+                }
+            } catch (Exception ignored) {
+                // One fewer skeleton is not worth failing the ability over.
+            }
+        }
+        return true;
+    }
+
+    /** Ravager: a roar that clears the space around it. */
+    private static boolean useRavagerAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                             ServerLevel world) {
+        warn(target, "§4⚠ It rears up to roar.");
+        for (ServerPlayer p : world.players()) {
+            if (p.distanceToSqr(boss) > 12 * 12) continue;
+            p.hurtServer(world, p.damageSources().mobAttack(boss), 6.0f + tier);
+            p.setDeltaMovement(p.position().subtract(boss.position())
+                    .normalize().scale(1.8).add(0, 0.6, 0));
+            p.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0));
+        }
+        world.playSound(null, boss.blockPosition(), SoundEvents.RAVAGER_ROAR,
+                SoundSource.HOSTILE, 1.5f, 0.7f);
+        return true;
+    }
+
+    /**
+     * Nanite: it comes apart.
+     *
+     * <p>The whole boss is a conglomerate, so its ability is to shed part of itself. Each use
+     * throws off a smaller nanite that fights on its own and shrinks the parent, which means the
+     * fight gets faster and more crowded at the same time and the player has to decide whether to
+     * chase the pieces or stay on the core.</p>
+     */
+    private static boolean useNaniteAbility(LivingEntity boss, ServerPlayer target, int tier,
+                                            ServerLevel world) {
+        warn(target, "§d⚠ It is coming apart.");
+        NaniteSlayer.shed(world, boss, tier, 2 + tier / 3);
+        return true;
+    }
+
+    /** One warning line, on the action bar, a beat before the thing lands. */
+    private static void warn(ServerPlayer target, String message) {
+        target.sendSystemMessage(Component.literal(message), true);
+    }
+
 }

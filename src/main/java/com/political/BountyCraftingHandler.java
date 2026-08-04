@@ -265,6 +265,15 @@ public class BountyCraftingHandler {
             case IRON_GOLEM -> Items.SCULK;
             case PIGLIN   -> Items.GOLD_NUGGET;
             case ENDERMAN -> Items.ENDER_PEARL;
+            case HUSK -> Items.SAND;
+            case CAVE_SPIDER -> Items.COBWEB;
+            case STRAY -> Items.SNOWBALL;
+            case MAGMA_CUBE -> Items.MAGMA_CREAM;
+            case BLAZE -> Items.BLAZE_POWDER;
+            case HOGLIN -> Items.LEATHER;
+            case WITHER_SKELETON -> Items.COAL;
+            case RAVAGER -> Items.IRON_INGOT;
+            case NANITE -> Items.ECHO_SHARD;
         };
     }
 

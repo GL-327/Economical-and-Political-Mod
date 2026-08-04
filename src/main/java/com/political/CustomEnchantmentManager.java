@@ -213,6 +213,17 @@ public class CustomEnchantmentManager {
                 case ENDERMAN -> name.contains("Enderman");
                 case IRON_GOLEM   -> name.contains("Warden");
                 case PIGLIN   -> name.contains("Piglin") || name.contains("Gilded") || name.contains("Ravager");
+                case HUSK -> name.contains("Husk") || name.contains("Marauder");
+                case CAVE_SPIDER -> name.contains("Cave Spider") || name.contains("Outrider");
+                case STRAY -> name.contains("Stray") || name.contains("Gunslinger");
+                case MAGMA_CUBE -> name.contains("Magma") || name.contains("Rustler");
+                case BLAZE -> name.contains("Blaze") || name.contains("Marksman");
+                case HOGLIN -> name.contains("Hoglin") || name.contains("Warlord");
+                case WITHER_SKELETON -> name.contains("Wither Skeleton") || name.contains("Gallows");
+                // Not "Ravager": the Piglin branch above already claims that word for the Gilded
+                // Ravager, so this one has to be recognised by its own title instead.
+                case RAVAGER -> name.contains("Siege Beast");
+                case NANITE -> name.contains("Nanite");
             };
         }
         return false;

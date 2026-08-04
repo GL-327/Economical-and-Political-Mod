@@ -125,6 +125,15 @@ public class SlayerItems {
             case ENDERMAN -> "Phantom's Edge";
             case IRON_GOLEM   -> "Terror's Grasp";
             case PIGLIN   -> "Gilded Ravager's Blade";
+            case HUSK -> "Marauder's Sabre";
+            case CAVE_SPIDER -> "Outrider's Sting";
+            case STRAY -> "Gunslinger's Icepick";
+            case MAGMA_CUBE -> "Rustler's Emberlash";
+            case BLAZE -> "Marksman's Firebrand";
+            case HOGLIN -> "Warlord's Tusk";
+            case WITHER_SKELETON -> "Gallows Warden's Halberd";
+            case RAVAGER -> "Siege Beast's Ruin";
+            case NANITE -> "Nanite Slayer's Swarmblade";
         };
     }
 
@@ -729,6 +738,15 @@ public class SlayerItems {
                     || entity instanceof net.minecraft.world.entity.monster.MagmaCube;
             case ENDERMAN -> entity instanceof net.minecraft.world.entity.monster.EnderMan;
             case IRON_GOLEM -> entity instanceof net.minecraft.world.entity.monster.warden.Warden;
+            case HUSK -> entity instanceof net.minecraft.world.entity.monster.zombie.Husk;
+            case CAVE_SPIDER -> entity instanceof net.minecraft.world.entity.monster.spider.CaveSpider;
+            case STRAY -> entity instanceof net.minecraft.world.entity.monster.skeleton.Stray;
+            case MAGMA_CUBE -> entity instanceof net.minecraft.world.entity.monster.MagmaCube;
+            case BLAZE -> entity instanceof net.minecraft.world.entity.monster.Blaze;
+            case HOGLIN -> entity instanceof net.minecraft.world.entity.monster.hoglin.Hoglin;
+            case WITHER_SKELETON -> entity instanceof net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+            case RAVAGER -> entity instanceof net.minecraft.world.entity.monster.Ravager;
+            case NANITE -> entity instanceof net.minecraft.world.entity.monster.Silverfish;
             case PIGLIN -> entity instanceof net.minecraft.world.entity.monster.piglin.PiglinBrute || entity instanceof net.minecraft.world.entity.monster.piglin.Piglin;
         };
     }
@@ -767,6 +785,15 @@ public class SlayerItems {
             case ENDERMAN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.ENDERMAN);
             case IRON_GOLEM -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.IRON_GOLEM);
             case PIGLIN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.PIGLIN);
+            case HUSK -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.HUSK);
+            case CAVE_SPIDER -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.CAVE_SPIDER);
+            case STRAY -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.STRAY);
+            case MAGMA_CUBE -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.MAGMA_CUBE);
+            case BLAZE -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.BLAZE);
+            case HOGLIN -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.HOGLIN);
+            case WITHER_SKELETON -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.WITHER_SKELETON);
+            case RAVAGER -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.RAVAGER);
+            case NANITE -> "Crafts: " + getSwordDisplayName(SlayerManager.SlayerType.NANITE);
         };
         lore.add(Component.literal(craftHint).withStyle(ChatFormatting.DARK_PURPLE));
 
@@ -793,6 +820,15 @@ public class SlayerItems {
             case ENDERMAN -> "Void Fragment";
             case IRON_GOLEM -> "Sculk Heart";
             case PIGLIN -> "Gilded Shard";
+            case HUSK -> "Sunbleached Husk";
+            case CAVE_SPIDER -> "Brood Sac";
+            case STRAY -> "Frozen Marrow";
+            case MAGMA_CUBE -> "Molten Core";
+            case BLAZE -> "Ashen Rod";
+            case HOGLIN -> "Tusk Fragment";
+            case WITHER_SKELETON -> "Gallows Ash";
+            case RAVAGER -> "Siege Plate";
+            case NANITE -> "Nanite Cluster";
         };
 
         chunk.set(DataComponents.CUSTOM_NAME,
@@ -876,6 +912,15 @@ public class SlayerItems {
             case ENDERMAN -> "Void Fragment";
             case IRON_GOLEM -> "Sculk Heart";
             case PIGLIN -> "Gilded Shard";
+            case HUSK -> "Sunbleached Husk";
+            case CAVE_SPIDER -> "Brood Sac";
+            case STRAY -> "Frozen Marrow";
+            case MAGMA_CUBE -> "Molten Core";
+            case BLAZE -> "Ashen Rod";
+            case HOGLIN -> "Tusk Fragment";
+            case WITHER_SKELETON -> "Gallows Ash";
+            case RAVAGER -> "Siege Plate";
+            case NANITE -> "Nanite Cluster";
         };
     }
 
@@ -1332,6 +1377,15 @@ public class SlayerItems {
             case ENDERMAN -> tier == 1 ? new ArmorStats(10, 3, 0.24, 0.06) : new ArmorStats(14, 5, 0.32, 0.12);
             case IRON_GOLEM -> tier == 1 ? new ArmorStats(12, 4, 0.28, 0.08) : new ArmorStats(16, 6, 0.36, 0.14);
             case PIGLIN -> tier == 1 ? new ArmorStats(10, 3, 0.24, 0.06) : new ArmorStats(14, 5, 0.32, 0.12);
+            case HUSK -> tier == 1 ? new ArmorStats(7, 1, 0.20, 0.05) : new ArmorStats(11, 3, 0.29, 0.09);
+            case CAVE_SPIDER -> tier == 1 ? new ArmorStats(7, 2, 0.21, 0.05) : new ArmorStats(11, 4, 0.29, 0.09);
+            case STRAY -> tier == 1 ? new ArmorStats(9, 2, 0.22, 0.05) : new ArmorStats(13, 4, 0.30, 0.11);
+            case MAGMA_CUBE -> tier == 1 ? new ArmorStats(11, 3, 0.25, 0.07) : new ArmorStats(15, 5, 0.33, 0.13);
+            case BLAZE -> tier == 1 ? new ArmorStats(11, 4, 0.26, 0.07) : new ArmorStats(15, 6, 0.34, 0.13);
+            case HOGLIN -> tier == 1 ? new ArmorStats(12, 4, 0.27, 0.08) : new ArmorStats(16, 6, 0.35, 0.14);
+            case WITHER_SKELETON -> tier == 1 ? new ArmorStats(13, 5, 0.29, 0.09) : new ArmorStats(18, 7, 0.38, 0.15);
+            case RAVAGER -> tier == 1 ? new ArmorStats(14, 5, 0.30, 0.10) : new ArmorStats(19, 7, 0.39, 0.16);
+            case NANITE -> tier == 1 ? new ArmorStats(15, 6, 0.32, 0.11) : new ArmorStats(21, 8, 0.42, 0.18);
         };
     }
 
@@ -1382,6 +1436,15 @@ public class SlayerItems {
             case ENDERMAN -> "CRD-005";
             case IRON_GOLEM   -> "CRD-006";
             case PIGLIN   -> "CRD-007";
+            case HUSK -> "CRD-008";
+            case CAVE_SPIDER -> "CRD-009";
+            case STRAY -> "CRD-010";
+            case MAGMA_CUBE -> "CRD-011";
+            case BLAZE -> "CRD-012";
+            case HOGLIN -> "CRD-013";
+            case WITHER_SKELETON -> "CRD-014";
+            case RAVAGER -> "CRD-015";
+            case NANITE -> "CRD-016";
         };
         String mfluxLabel = tier == 1
                 ? "§8[MFLUX: Field-tested containment gear | " + mfluxCrd + "]"
@@ -2078,6 +2141,15 @@ public class SlayerItems {
             case ENDERMAN -> "Void Phantom " + piece;
             case IRON_GOLEM -> "Sculk Terror " + piece;
             case PIGLIN -> "Gilded Ravager " + piece;
+            case HUSK -> "Sunbleached Marauder " + piece;
+            case CAVE_SPIDER -> "Brood Outrider " + piece;
+            case STRAY -> "Frostbitten Gunslinger " + piece;
+            case MAGMA_CUBE -> "Molten Rustler " + piece;
+            case BLAZE -> "Ashen Marksman " + piece;
+            case HOGLIN -> "Tusked Warlord " + piece;
+            case WITHER_SKELETON -> "Gallows Warden " + piece;
+            case RAVAGER -> "Siege Beast " + piece;
+            case NANITE -> "Nanite Slayer " + piece;
         };
     }
     // ============================================================
@@ -2092,6 +2164,15 @@ public class SlayerItems {
             case ENDERMAN -> 0x1A0033;     // Dark purple
             case IRON_GOLEM -> 0x0D4D4D;       // Dark teal/cyan
             case PIGLIN -> 0xFFD700;       // Gold
+            case HUSK -> 0xC2B280;         // Dry sand
+            case CAVE_SPIDER -> 0x1F4F4F;  // Deep cave teal
+            case STRAY -> 0xBFE9FF;        // Frost
+            case MAGMA_CUBE -> 0xB22222;   // Cooling magma
+            case BLAZE -> 0xFF8C00;        // Flame
+            case HOGLIN -> 0x8B4513;       // Hide
+            case WITHER_SKELETON -> 0x2F2F2F; // Charcoal
+            case RAVAGER -> 0x4A3728;      // Old iron and leather
+            case NANITE -> 0xB57EDC;       // Nanite violet
         };
     }
 
@@ -2141,6 +2222,15 @@ public class SlayerItems {
             case ENDERMAN -> "Void Phantom";
             case IRON_GOLEM -> "Sculk Hunter";
             case PIGLIN -> "Gilded Ravager";
+            case HUSK -> "Sunbleached Marauder";
+            case CAVE_SPIDER -> "Brood Outrider";
+            case STRAY -> "Frostbitten Gunslinger";
+            case MAGMA_CUBE -> "Molten Rustler";
+            case BLAZE -> "Ashen Marksman";
+            case HOGLIN -> "Tusked Warlord";
+            case WITHER_SKELETON -> "Gallows Warden";
+            case RAVAGER -> "Siege Beast";
+            case NANITE -> "Nanite Slayer";
         };
     }
 
@@ -2186,6 +2276,15 @@ public class SlayerItems {
             case ENDERMAN -> "Void Phantom";
             case IRON_GOLEM -> "Sculk Hunter";
             case PIGLIN -> "Gilded Ravager";
+            case HUSK -> "Sunbleached Marauder";
+            case CAVE_SPIDER -> "Brood Outrider";
+            case STRAY -> "Frostbitten Gunslinger";
+            case MAGMA_CUBE -> "Molten Rustler";
+            case BLAZE -> "Ashen Marksman";
+            case HOGLIN -> "Tusked Warlord";
+            case WITHER_SKELETON -> "Gallows Warden";
+            case RAVAGER -> "Siege Beast";
+            case NANITE -> "Nanite Slayer";
         };
     }
 
@@ -2433,6 +2532,15 @@ public class SlayerItems {
                 case "Boots"      -> "Fire Resistance";
                 default           -> null;
             };
+            case HUSK -> getT1PieceBuff(SlayerManager.SlayerType.ZOMBIE, piece);
+            case CAVE_SPIDER -> getT1PieceBuff(SlayerManager.SlayerType.SPIDER, piece);
+            case STRAY -> getT1PieceBuff(SlayerManager.SlayerType.SKELETON, piece);
+            case MAGMA_CUBE -> getT1PieceBuff(SlayerManager.SlayerType.SLIME, piece);
+            case BLAZE -> getT1PieceBuff(SlayerManager.SlayerType.ENDERMAN, piece);
+            case HOGLIN -> getT1PieceBuff(SlayerManager.SlayerType.PIGLIN, piece);
+            case WITHER_SKELETON -> getT1PieceBuff(SlayerManager.SlayerType.SKELETON, piece);
+            case RAVAGER -> getT1PieceBuff(SlayerManager.SlayerType.IRON_GOLEM, piece);
+            case NANITE -> getT1PieceBuff(SlayerManager.SlayerType.ENDERMAN, piece);
         };
     }
 
@@ -2581,6 +2689,15 @@ public class SlayerItems {
                 case "Boots"      -> "Fire Resistance + +10% Movement Speed";
                 default           -> null;
             };
+            case HUSK -> getT2PieceBuff(SlayerManager.SlayerType.ZOMBIE, piece);
+            case CAVE_SPIDER -> getT2PieceBuff(SlayerManager.SlayerType.SPIDER, piece);
+            case STRAY -> getT2PieceBuff(SlayerManager.SlayerType.SKELETON, piece);
+            case MAGMA_CUBE -> getT2PieceBuff(SlayerManager.SlayerType.SLIME, piece);
+            case BLAZE -> getT2PieceBuff(SlayerManager.SlayerType.ENDERMAN, piece);
+            case HOGLIN -> getT2PieceBuff(SlayerManager.SlayerType.PIGLIN, piece);
+            case WITHER_SKELETON -> getT2PieceBuff(SlayerManager.SlayerType.SKELETON, piece);
+            case RAVAGER -> getT2PieceBuff(SlayerManager.SlayerType.IRON_GOLEM, piece);
+            case NANITE -> getT2PieceBuff(SlayerManager.SlayerType.ENDERMAN, piece);
         };
     }
 

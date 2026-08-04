@@ -133,6 +133,17 @@ public class SlayerArmorHandler {
             case IRON_GOLEM -> name.contains("Sculk") || name.contains("Warden") || name.contains("Terror");
             // "Crown of Greed" is NOT piglin set armor either
             case PIGLIN -> name.contains("Gilded") || name.contains("Ravager");
+            // Each matched on the words unique to its own set. "Rustler" belongs to Slime and
+            // "Ravager" to Piglin already, so Molten and Siege Beast are matched on theirs.
+            case HUSK -> name.contains("Sunbleached") || name.contains("Marauder");
+            case CAVE_SPIDER -> name.contains("Brood") || name.contains("Outrider");
+            case STRAY -> name.contains("Frostbitten") || name.contains("Gunslinger");
+            case MAGMA_CUBE -> name.contains("Molten");
+            case BLAZE -> name.contains("Ashen") || name.contains("Marksman");
+            case HOGLIN -> name.contains("Tusked") || name.contains("Warlord");
+            case WITHER_SKELETON -> name.contains("Gallows");
+            case RAVAGER -> name.contains("Siege Beast");
+            case NANITE -> name.contains("Nanite");
         };
     }
 

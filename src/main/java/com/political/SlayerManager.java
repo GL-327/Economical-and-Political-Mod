@@ -49,7 +49,32 @@ public class SlayerManager {
         SLIME("Slime", "The Gelatinous Rustler", ChatFormatting.GREEN, Items.SLIME_BALL, 5.0),
         ENDERMAN("Enderman", "The Void Phantom", ChatFormatting.DARK_PURPLE, Items.ENDER_PEARL, 10.0),
         PIGLIN("Piglin", "The Gilded Ravager", ChatFormatting.GOLD, Items.GOLD_NUGGET, 15.0),
-        IRON_GOLEM("Warden", "The Deep Dark Sentinel", ChatFormatting.DARK_PURPLE, Items.SCULK_CATALYST, 25.0);
+        IRON_GOLEM("Warden", "The Deep Dark Sentinel", ChatFormatting.DARK_PURPLE, Items.SCULK_CATALYST, 25.0),
+
+        // ── The ones between ──
+        //
+        // The old ladder went 1, 1.8, 3, 5, 10, 15, 25, which is a wall at every other rung. These
+        // sit in the gaps so a player always has a next target rather than a cliff.
+        HUSK("Husk", "The Sunbleached Marauder", ChatFormatting.YELLOW, Items.SAND, 1.4),
+        CAVE_SPIDER("Cave Spider", "The Brood Outrider", ChatFormatting.DARK_AQUA, Items.COBWEB, 2.4),
+        STRAY("Stray", "The Frostbitten Gunslinger", ChatFormatting.AQUA, Items.BLUE_ICE, 4.0),
+        MAGMA_CUBE("Magma Cube", "The Molten Rustler", ChatFormatting.GOLD, Items.MAGMA_CREAM, 7.0),
+        BLAZE("Blaze", "The Ashen Marksman", ChatFormatting.RED, Items.BLAZE_POWDER, 12.0),
+        HOGLIN("Hoglin", "The Tusked Warlord", ChatFormatting.DARK_RED, Items.PORKCHOP, 20.0),
+
+        // ── The ones above ──
+        WITHER_SKELETON("Wither Skeleton", "The Gallows Warden", ChatFormatting.DARK_GRAY,
+                Items.WITHER_SKELETON_SKULL, 32.0),
+        RAVAGER("Ravager", "The Siege Beast", ChatFormatting.DARK_RED, Items.SADDLE, 38.0),
+
+        /**
+         * The top of the ladder, and the only one that is not simply a bigger version of something.
+         *
+         * <p>A silverfish scaled up to the size of a player, which is a conglomerate rather than a
+         * creature: hit it and part of it comes away as a smaller one that fights on its own. The
+         * boss shrinks as it sheds, so the fight gets faster and more crowded at the same time.</p>
+         */
+        NANITE("Nanite", "The Nanite Slayer", ChatFormatting.LIGHT_PURPLE, Items.ECHO_SHARD, 45.0);
 
 
         public final String displayName;
@@ -545,6 +570,17 @@ public class SlayerManager {
             case ENDERMAN -> entity instanceof EnderMan;
             case IRON_GOLEM -> entity instanceof Warden;
             case PIGLIN -> entity instanceof PiglinBrute || entity instanceof Piglin;
+            case HUSK -> entity instanceof net.minecraft.world.entity.monster.zombie.Husk;
+            case CAVE_SPIDER -> entity instanceof net.minecraft.world.entity.monster.spider.CaveSpider;
+            case STRAY -> entity instanceof Stray;
+            case MAGMA_CUBE -> entity instanceof MagmaCube;
+            case BLAZE -> entity instanceof net.minecraft.world.entity.monster.Blaze;
+            case HOGLIN -> entity instanceof net.minecraft.world.entity.monster.hoglin.Hoglin;
+            case WITHER_SKELETON -> entity instanceof WitherSkeleton;
+            case RAVAGER -> entity instanceof net.minecraft.world.entity.monster.Ravager;
+            // A nanite is a silverfish that happens to be the size of a player, so the type check
+            // is the same one. What makes it a nanite is the tag the spawner puts on it.
+            case NANITE -> entity instanceof net.minecraft.world.entity.monster.Silverfish;
         };
     }
 
@@ -575,25 +611,27 @@ public class SlayerManager {
 
         Mob boss;
 
-        // Spawn actual Warden entity
+        // A real Warden this time. The previous version claimed to spawn one, created an iron
+        // golem instead, and then tested for a Warden that could never be there, so the burrow
+        // handling underneath it had never once run.
         if (type == SlayerType.IRON_GOLEM) {
-            boss = (Mob) EntityType.IRON_GOLEM.create(world, EntitySpawnReason.MOB_SUMMONED);
+            boss = (Mob) EntityType.WARDEN.create(world, EntitySpawnReason.MOB_SUMMONED);
             if (boss == null) {
                 player.sendSystemMessage(Component.literal("✖ Failed to spawn boss!")
                         .withStyle(ChatFormatting.RED), false);
                 return;
             }
-            spawnPos = player.blockPosition().above(2); // Spawn 2 blocks above
-            // Fix: Prevent Warden from going underground
+            spawnPos = player.blockPosition().above(2);
             if (boss instanceof Warden warden) {
                 warden.setPersistenceRequired();
-                // Force surface-only behavior
-                warden.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 0, false, false));
-                warden.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 1, 0, false, false));
+                WardenKeeper.hold(warden, player);
             }
         } else {
             // Create boss entity for other types
             boss = createBossEntity(world, type, config);
+            if (boss != null && type == SlayerType.NANITE) {
+                NaniteSlayer.makeCore(world, boss, quest.tier);
+            }
             if (boss == null) {
                 player.sendSystemMessage(Component.literal("✖ Failed to spawn boss!")
                         .withStyle(ChatFormatting.RED), false);
@@ -737,6 +775,15 @@ public class SlayerManager {
             case ENDERMAN -> EntityType.ENDERMAN;
             case IRON_GOLEM -> EntityType.IRON_GOLEM;
             case PIGLIN -> EntityType.PIGLIN_BRUTE;
+            case HUSK -> EntityType.HUSK;
+            case CAVE_SPIDER -> EntityType.CAVE_SPIDER;
+            case STRAY -> EntityType.STRAY;
+            case MAGMA_CUBE -> EntityType.MAGMA_CUBE;
+            case BLAZE -> EntityType.BLAZE;
+            case HOGLIN -> EntityType.HOGLIN;
+            case WITHER_SKELETON -> EntityType.WITHER_SKELETON;
+            case RAVAGER -> EntityType.RAVAGER;
+            case NANITE -> EntityType.SILVERFISH;
         };
 
         Mob mob = (Mob) entityType.create(world, EntitySpawnReason.MOB_SUMMONED);
@@ -782,6 +829,15 @@ public class SlayerManager {
             case ENDERMAN -> BossEvent.BossBarColor.PURPLE;
             case IRON_GOLEM -> BossEvent.BossBarColor.BLUE;
             case PIGLIN -> BossEvent.BossBarColor.YELLOW;
+            case HUSK -> BossEvent.BossBarColor.YELLOW;
+            case CAVE_SPIDER -> BossEvent.BossBarColor.BLUE;
+            case STRAY -> BossEvent.BossBarColor.BLUE;
+            case MAGMA_CUBE -> BossEvent.BossBarColor.RED;
+            case BLAZE -> BossEvent.BossBarColor.RED;
+            case HOGLIN -> BossEvent.BossBarColor.RED;
+            case WITHER_SKELETON -> BossEvent.BossBarColor.PURPLE;
+            case RAVAGER -> BossEvent.BossBarColor.RED;
+            case NANITE -> BossEvent.BossBarColor.PURPLE;
         };
     }
 
@@ -987,6 +1043,14 @@ public class SlayerManager {
             case ENDERMAN -> 0.00005 + (tier * 0.00005);
             case PIGLIN -> 0.002 + (tier * 0.001);
             case IRON_GOLEM -> 0.0001 + (tier * 0.0001);
+            case HUSK, CAVE_SPIDER, STRAY -> 0.0009 + (tier * 0.0018);
+            case MAGMA_CUBE -> 0.0007 + (tier * 0.0013);
+            case BLAZE -> 0.0004 + (tier * 0.0006);
+            case HOGLIN -> 0.0015 + (tier * 0.0009);
+            case WITHER_SKELETON -> 0.00008 + (tier * 0.00008);
+            case RAVAGER -> 0.00006 + (tier * 0.00006);
+            // The top of the ladder pays the worst odds and the best item, which is the trade.
+            case NANITE -> 0.00004 + (tier * 0.00004);
         };
         coreChance *= RARE_BOUNTY_DROP_SCALE;
         coreChance *= PerkManager.getBountyDropMultiplier();
@@ -1109,6 +1173,18 @@ public class SlayerManager {
                 };
                 yield attrs[rand.nextInt(attrs.length)];
             }
+            // The newer bosses draw on the pool of whichever original they stand closest to.
+            // Nine more hand written pools would be nine more things to keep in balance and the
+            // player would not be able to tell them apart anyway.
+            case HUSK -> getRandomAttributeForSlayerType(SlayerType.ZOMBIE, rand);
+            case CAVE_SPIDER -> getRandomAttributeForSlayerType(SlayerType.SPIDER, rand);
+            case STRAY -> getRandomAttributeForSlayerType(SlayerType.SKELETON, rand);
+            case MAGMA_CUBE -> getRandomAttributeForSlayerType(SlayerType.SLIME, rand);
+            case BLAZE -> getRandomAttributeForSlayerType(SlayerType.ENDERMAN, rand);
+            case HOGLIN -> getRandomAttributeForSlayerType(SlayerType.PIGLIN, rand);
+            case WITHER_SKELETON -> getRandomAttributeForSlayerType(SlayerType.SKELETON, rand);
+            case RAVAGER -> getRandomAttributeForSlayerType(SlayerType.IRON_GOLEM, rand);
+            case NANITE -> getRandomAttributeForSlayerType(SlayerType.ENDERMAN, rand);
         };
     }
 
@@ -1293,6 +1369,15 @@ public class SlayerManager {
             case ENDERMAN -> EntityType.ENDERMAN.create(world, EntitySpawnReason.COMMAND);
             case IRON_GOLEM -> EntityType.IRON_GOLEM.create(world, EntitySpawnReason.COMMAND);
             case PIGLIN -> EntityType.PIGLIN_BRUTE.create(world, EntitySpawnReason.COMMAND);
+            case HUSK -> EntityType.HUSK.create(world, EntitySpawnReason.COMMAND);
+            case CAVE_SPIDER -> EntityType.CAVE_SPIDER.create(world, EntitySpawnReason.COMMAND);
+            case STRAY -> EntityType.STRAY.create(world, EntitySpawnReason.COMMAND);
+            case MAGMA_CUBE -> EntityType.MAGMA_CUBE.create(world, EntitySpawnReason.COMMAND);
+            case BLAZE -> EntityType.BLAZE.create(world, EntitySpawnReason.COMMAND);
+            case HOGLIN -> EntityType.HOGLIN.create(world, EntitySpawnReason.COMMAND);
+            case WITHER_SKELETON -> EntityType.WITHER_SKELETON.create(world, EntitySpawnReason.COMMAND);
+            case RAVAGER -> EntityType.RAVAGER.create(world, EntitySpawnReason.COMMAND);
+            case NANITE -> EntityType.SILVERFISH.create(world, EntitySpawnReason.COMMAND);
         };
 
         if (mob != null) {
@@ -1371,7 +1456,18 @@ public class SlayerManager {
             case SPIDER -> 70.0f;
             case SLIME -> 120.0f;
             case ENDERMAN -> 90.0f;
-            case IRON_GOLEM -> 250.0f;  // Nerfed from 400
+            case IRON_GOLEM -> 900.0f;
+            case HUSK -> 130.0f;
+            case CAVE_SPIDER -> 150.0f;
+            case STRAY -> 190.0f;
+            case MAGMA_CUBE -> 260.0f;
+            case BLAZE -> 380.0f;
+            case HOGLIN -> 620.0f;
+            case WITHER_SKELETON -> 1_200.0f;
+            case RAVAGER -> 1_500.0f;
+            // The nanite sheds most of its health as minions rather than losing it, so the pool
+            // has to cover the whole conglomerate rather than just what is left at the end.
+            case NANITE -> 2_200.0f;
             case PIGLIN -> 100.0f;  // Nerfed from 150
         };
 
@@ -1382,6 +1478,15 @@ public class SlayerManager {
             case SLIME -> 8.0f;
             case ENDERMAN -> 12.0f;
             case IRON_GOLEM -> 25.0f;
+            case HUSK -> 11.0f;
+            case CAVE_SPIDER -> 9.0f;
+            case STRAY -> 12.0f;
+            case MAGMA_CUBE -> 14.0f;
+            case BLAZE -> 17.0f;
+            case HOGLIN -> 21.0f;
+            case WITHER_SKELETON -> 29.0f;
+            case RAVAGER -> 33.0f;
+            case NANITE -> 26.0f;
             case PIGLIN -> 15.0f;
         };
 
@@ -1465,6 +1570,13 @@ public class SlayerManager {
             case ENDERMAN -> 0.00005 + (tier * 0.00005);
             case PIGLIN -> 0.002 + (tier * 0.001);
             case IRON_GOLEM -> 0.0001 + (tier * 0.0001);
+            case HUSK, CAVE_SPIDER, STRAY -> 0.0009 + (tier * 0.0018);
+            case MAGMA_CUBE -> 0.0007 + (tier * 0.0013);
+            case BLAZE -> 0.0004 + (tier * 0.0006);
+            case HOGLIN -> 0.0015 + (tier * 0.0009);
+            case WITHER_SKELETON -> 0.00008 + (tier * 0.00008);
+            case RAVAGER -> 0.00006 + (tier * 0.00006);
+            case NANITE -> 0.00004 + (tier * 0.00004);
         };
         return 100.0 * c * RARE_BOUNTY_DROP_SCALE;
     }

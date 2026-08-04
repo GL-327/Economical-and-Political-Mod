@@ -145,6 +145,17 @@ public class BountySpawnManager {
             case ENDERMAN -> new EnderMan(EntityType.ENDERMAN, world);
             case IRON_GOLEM -> null; // Never spawn wardens [1]
             case PIGLIN -> new PiglinBrute(EntityType.PIGLIN_BRUTE, world);
+            case HUSK -> (Mob) EntityType.HUSK.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            case CAVE_SPIDER -> (Mob) EntityType.CAVE_SPIDER.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            case STRAY -> (Mob) EntityType.STRAY.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            case MAGMA_CUBE -> (Mob) EntityType.MAGMA_CUBE.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            case BLAZE -> (Mob) EntityType.BLAZE.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            case HOGLIN -> (Mob) EntityType.HOGLIN.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            case WITHER_SKELETON -> (Mob) EntityType.WITHER_SKELETON.create(world, net.minecraft.world.entity.EntitySpawnReason.NATURAL);
+            // Ravagers and nanites are boss only, the same as the warden. Letting the ambient
+            // spawner place one would put a bounty boss in somebody's field.
+            case RAVAGER -> null;
+            case NANITE -> null;
         };
     }
 

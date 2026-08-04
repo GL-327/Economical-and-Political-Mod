@@ -544,6 +544,15 @@ public class BountyGui {
             case ENDERMAN -> new ItemStack(Items.NETHERITE_HELMET);
             case IRON_GOLEM -> new ItemStack(Items.NETHERITE_CHESTPLATE);
             case PIGLIN -> new ItemStack(Items.GOLDEN_HELMET);
+            case HUSK -> new ItemStack(Items.LEATHER_HELMET);
+            case CAVE_SPIDER -> new ItemStack(Items.LEATHER_CHESTPLATE);
+            case STRAY -> new ItemStack(Items.CROSSBOW);
+            case MAGMA_CUBE -> new ItemStack(Items.MAGMA_CREAM);
+            case BLAZE -> new ItemStack(Items.BLAZE_ROD);
+            case HOGLIN -> new ItemStack(Items.NETHERITE_BOOTS);
+            case WITHER_SKELETON -> new ItemStack(Items.WITHER_SKELETON_SKULL);
+            case RAVAGER -> new ItemStack(Items.NETHERITE_LEGGINGS);
+            case NANITE -> new ItemStack(Items.ECHO_SHARD);
         };
     }
 
@@ -556,6 +565,15 @@ public class BountyGui {
             case ENDERMAN -> "Voidwalker's Crown";
             case IRON_GOLEM -> "Sculk Terror Chestplate";
             case PIGLIN -> "Crown of Greed";
+            case HUSK -> "Sunbleached Marauder Helm";
+            case CAVE_SPIDER -> "Brood Outrider Carapace";
+            case STRAY -> "Frostbitten Gunslinger Crossbow";
+            case MAGMA_CUBE -> "Molten Rustler Core";
+            case BLAZE -> "Ashen Marksman Rod";
+            case HOGLIN -> "Tusked Warlord Treads";
+            case WITHER_SKELETON -> "Gallows Warden Crown";
+            case RAVAGER -> "Siege Beast Plating";
+            case NANITE -> "Nanite Slayer Cluster";
         };
     }
     // ============================================================
@@ -640,6 +658,9 @@ public class BountyGui {
         return bar.toString();
     }
 
+    /** How wide the danger scale runs. The ladder outgrew five when the new bosses landed. */
+    private static final int MAX_DANGER = 8;
+
     private static String getDangerStars(SlayerManager.SlayerType type) {
         int stars = switch (type) {
             case ZOMBIE -> 1;
@@ -649,8 +670,21 @@ public class BountyGui {
             case ENDERMAN -> 4;
             case IRON_GOLEM -> 5;
             case PIGLIN -> 4;
+            case HUSK -> 1;
+            case CAVE_SPIDER -> 2;
+            case STRAY -> 2;
+            case MAGMA_CUBE -> 3;
+            case BLAZE -> 4;
+            case HOGLIN -> 4;
+            case WITHER_SKELETON -> 6;
+            case RAVAGER -> 6;
+            case NANITE -> 7;
         };
-        return "§c" + "★".repeat(stars) + "§7" + "☆".repeat(5 - stars);
+        // Eight wide now, and clamped at both ends. The old version filled the remainder with
+        // hollow stars, which meant anything above five asked String.repeat for a negative count
+        // and took the whole menu down with it.
+        int shown = Math.max(0, Math.min(MAX_DANGER, stars));
+        return "§c" + "★".repeat(shown) + "§7" + "☆".repeat(MAX_DANGER - shown);
     }
 
     private static String getBountyRank(int totalLevel) {
@@ -671,6 +705,15 @@ public class BountyGui {
             case ENDERMAN -> Items.ENDER_PEARL;
             case IRON_GOLEM -> Items.SCULK;
             case PIGLIN -> Items.GOLD_NUGGET;
+            case HUSK -> Items.SAND;
+            case CAVE_SPIDER -> Items.COBWEB;
+            case STRAY -> Items.BLUE_ICE;
+            case MAGMA_CUBE -> Items.MAGMA_CREAM;
+            case BLAZE -> Items.BLAZE_POWDER;
+            case HOGLIN -> Items.PORKCHOP;
+            case WITHER_SKELETON -> Items.WITHER_SKELETON_SKULL;
+            case RAVAGER -> Items.SADDLE;
+            case NANITE -> Items.ECHO_SHARD;
         };
     }
 

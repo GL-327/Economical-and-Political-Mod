@@ -183,6 +183,15 @@ public class T2CraftingHandler {
             case ENDERMAN -> n.contains("Void") || n.contains("Phantom");
             case IRON_GOLEM -> n.contains("Sculk") || n.contains("Terror");
             case PIGLIN -> n.contains("Gilded") || n.contains("Ravager");
+            case HUSK -> n.contains("Undying") || n.contains("Outlaw");
+            case CAVE_SPIDER -> n.contains("Venomous") || n.contains("Bandit");
+            case STRAY -> n.contains("Bone") || n.contains("Desperado");
+            case MAGMA_CUBE -> n.contains("Gelatinous") || n.contains("Rustler");
+            case BLAZE -> n.contains("Void") || n.contains("Phantom");
+            case HOGLIN -> n.contains("Gilded") || n.contains("Ravager");
+            case WITHER_SKELETON -> n.contains("Bone") || n.contains("Desperado");
+            case RAVAGER -> n.contains("Sculk") || n.contains("Terror");
+            case NANITE -> n.contains("Void") || n.contains("Phantom");
         };
     }
 
