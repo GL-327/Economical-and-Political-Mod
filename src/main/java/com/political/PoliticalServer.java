@@ -453,6 +453,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TutorialManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HotReloadManager.initialize();
             DelveSelfTest.runIfAsked(s);
+            StatSelfTest.runIfAsked(s);
             BazaarProduct.build();
             BazaarTraders.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));

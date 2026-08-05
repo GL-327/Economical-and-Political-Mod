@@ -695,6 +695,7 @@ public final class ItemEditorGui {
             case CRIT_DAMAGE -> Items.BLAZE_POWDER;
             case FEROCITY -> Items.PRISMARINE_SHARD;
             case MAGIC_FIND -> Items.NETHER_STAR;
+            case ATTACK_SPEED -> Items.GOLDEN_SWORD;
         };
     }
 

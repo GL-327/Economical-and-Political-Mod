@@ -75,7 +75,16 @@ public final class PlayerStatsManager {
          * like every other stat, shows in the stat sheet without special casing, and can be put on
          * any piece of gear old or new by writing one line into its tooltip.</p>
          */
-        MAGIC_FIND("Magic Find", "✯", ChatFormatting.AQUA, 0, false);
+        MAGIC_FIND("Magic Find", "✯", ChatFormatting.AQUA, 0, false),
+
+        /**
+         * How fast the weapon swings back, as a percentage of the vanilla rate.
+         *
+         * <p>Was never a stat despite being written on tooltips and promised by an armour
+         * attribute, so every item that claimed to give it gave nothing. A hundred is the vanilla
+         * speed and the number moves the real attribute, like Speed does.</p>
+         */
+        ATTACK_SPEED("Attack Speed", "⚔", ChatFormatting.YELLOW, 100, false);
 
         public final String displayName;
         public final String symbol;
@@ -131,6 +140,8 @@ public final class PlayerStatsManager {
                     Math.max(0, Math.min(800, v == null ? k.baseValue : v)));
             values.compute(Stat.MAGIC_FIND, (k, v) ->
                     Math.max(0, Math.min(400, v == null ? k.baseValue : v)));
+            values.compute(Stat.ATTACK_SPEED, (k, v) ->
+                    Math.max(20, Math.min(400, v == null ? k.baseValue : v)));
         }
     }
 
@@ -143,6 +154,8 @@ public final class PlayerStatsManager {
 
     private static final Identifier STATS_HEALTH_ID = Identifier.fromNamespaceAndPath("political", "stats_health");
     private static final Identifier STATS_SPEED_ID = Identifier.fromNamespaceAndPath("political", "stats_speed");
+    private static final Identifier STATS_ATTACK_SPEED_ID =
+            Identifier.fromNamespaceAndPath("political", "stats_attack_speed");
 
     /** Drops a cached sheet so the next read recomputes it. Used by the live reload. */
     public static void invalidate(ServerPlayer player) {
@@ -251,6 +264,23 @@ public final class PlayerStatsManager {
         }
     }
 
+    /**
+     * Reads one stat off one tooltip line, for the self test.
+     *
+     * <p>Runs the same matching the real parser uses rather than a copy of it, so a check passing
+     * here means the real path works and not that two implementations agree with each other.</p>
+     */
+    static double parseStatLineForTest(String line, Stat stat) {
+        StatSheet sheet = new StatSheet();
+        String plain = line.replaceAll("§.", "").trim();
+        String lower = plain.toLowerCase(Locale.ROOT);
+        String name = stat.displayName.toLowerCase(Locale.ROOT);
+        int idx = lower.indexOf(name + ":");
+        if (idx < 0) return 0;
+        Double value = parseFirstNumber(plain.substring(idx + name.length() + 1));
+        return value == null ? 0 : value;
+    }
+
     private static Double parseFirstNumber(String s) {
         int i = 0;
         while (i < s.length() && (s.charAt(i) == ' ' || s.charAt(i) == '+')) i++;
@@ -288,6 +318,9 @@ public final class PlayerStatsManager {
         double speedFraction = (sheet.get(Stat.SPEED) - 100.0) / 100.0;
         applyModifier(player, Attributes.MOVEMENT_SPEED, STATS_SPEED_ID,
                 speedFraction, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        double swingFraction = (sheet.get(Stat.ATTACK_SPEED) - 100.0) / 100.0;
+        applyModifier(player, Attributes.ATTACK_SPEED, STATS_ATTACK_SPEED_ID,
+                swingFraction, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
     private static void applyModifier(ServerPlayer player, Holder<Attribute> attribute,
@@ -491,7 +524,7 @@ public final class PlayerStatsManager {
         player.sendSystemMessage(statLine(Stat.HEALTH,
                 Math.round(player.getMaxHealth()) + " §7(base 20 " + withSign(sheet.get(Stat.HEALTH)) + " gear + other bonuses)"));
         for (Stat stat : new Stat[]{Stat.DEFENSE, Stat.STRENGTH, Stat.CRIT_CHANCE, Stat.CRIT_DAMAGE,
-                Stat.SPEED, Stat.INTELLIGENCE, Stat.FEROCITY}) {
+                Stat.SPEED, Stat.ATTACK_SPEED, Stat.INTELLIGENCE, Stat.FEROCITY, Stat.MAGIC_FIND}) {
             String value = trimNumber(sheet.get(stat)) + (stat.percent ? "%" : "");
             player.sendSystemMessage(statLine(stat, value));
         }
