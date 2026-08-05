@@ -85,12 +85,10 @@ public final class PoliticsHub {
                 "build the standing that wins seats."));
 
         // ── The rest, one row down and clearly secondary ──
-        gui.setSlot(37, GuiKit.tile(Items.OAK_DOOR, "Settlements", ChatFormatting.GREEN,
-                () -> runCommand(player, "settlement"),
-                "Towns, cities and who owns them"));
-        gui.setSlot(39, GuiKit.tile(Items.SHIELD, "Guilds and clans", ChatFormatting.BLUE,
-                () -> runCommand(player, "guild"),
-                "The groups you can belong to"));
+        gui.setSlot(37, route(player, Items.OAK_DOOR, "Settlements", ChatFormatting.GREEN,
+                "settlement", "Towns, cities and who owns them"));
+        gui.setSlot(39, route(player, Items.SHIELD, "Guilds and clans", ChatFormatting.BLUE,
+                "guild", "The groups you can belong to"));
         gui.setSlot(41, GuiKit.tile(Items.FILLED_MAP, "Atlas", ChatFormatting.YELLOW,
                 () -> {
                     AtlasMap.give(player, AtlasCartographer.Zoom.REGION);
@@ -99,9 +97,11 @@ public final class PoliticsHub {
                 },
                 "A real map, drawn on paper",
                 "§8Not a screen. Carry it."));
-        gui.setSlot(43, GuiKit.tile(Items.NETHERITE_SWORD, "Wars and sieges", ChatFormatting.RED,
-                () -> runCommand(player, "wars"),
-                "What the polities are doing to each other"));
+        // "wars" was never a command. The real ones are "war" and "sieges".
+        gui.setSlot(43, route(player, Items.NETHERITE_SWORD, "Wars", ChatFormatting.RED,
+                "war", "What the polities are doing to each other"));
+        gui.setSlot(34, route(player, Items.IRON_BARS, "Sieges", ChatFormatting.DARK_RED,
+                "sieges", "Who is being besieged right now"));
 
         gui.setSlot(SIZE - 5, GuiKit.info(Items.WRITABLE_BOOK, "How this works",
                 ChatFormatting.WHITE,
@@ -168,6 +168,43 @@ public final class PoliticsHub {
         } catch (Exception e) {
             return List.of();
         }
+    }
+
+    /**
+     * Whether a command is actually registered.
+     *
+     * <p>The hub routes by name, so a name that does not exist fails at click time with nothing to
+     * show for it. Two of the first six were wrong and nothing caught them, because routing by
+     * string has no compiler behind it. Checking the dispatcher is the only honest substitute.</p>
+     */
+    private static boolean exists(String command) {
+        try {
+            if (PoliticalServer.server == null) return false;
+            String root = command.split(" ")[0];
+            return PoliticalServer.server.getCommands().getDispatcher()
+                    .getRoot().getChild(root) != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * A tile that routes to a command, or says plainly that it cannot.
+     *
+     * <p>Greyed out rather than hidden. A missing screen is a thing worth reporting, and silently
+     * dropping it would leave the hub looking complete while being wrong.</p>
+     */
+    private static eu.pb4.sgui.api.elements.GuiElement route(ServerPlayer player,
+            net.minecraft.world.item.Item icon, String label, ChatFormatting colour,
+            String command, String... lore) {
+        if (exists(command)) {
+            return GuiKit.tile(icon, label, colour, () -> runCommand(player, command), lore);
+        }
+        String[] why = new String[lore.length + 2];
+        System.arraycopy(lore, 0, why, 0, lore.length);
+        why[lore.length] = "";
+        why[lore.length + 1] = "§cNot available on this server.";
+        return GuiKit.info(Items.BARRIER, label, ChatFormatting.DARK_GRAY, why);
     }
 
     /**

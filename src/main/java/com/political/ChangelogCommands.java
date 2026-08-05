@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.level.ServerPlayer;
 
 /** /changelog opens the version picker. The subcommands back the clickable chat prompts. */
 public final class ChangelogCommands {
@@ -23,6 +25,33 @@ public final class ChangelogCommands {
 
         // The front door. Short aliases on purpose: this is the screen a new player should find
         // first and the one an old one should be able to reach without thinking.
+        dispatcher.register(Commands.literal("tutorial")
+                .executes(ctx -> {
+                    ServerPlayer p = ctx.getSource().getPlayerOrException();
+                    TutorialManager.start(p, true);
+                    return 1;
+                })
+                .then(Commands.literal("stop").executes(ctx -> {
+                    ServerPlayer p = ctx.getSource().getPlayerOrException();
+                    TutorialManager.stop(p);
+                    p.sendSystemMessage(net.minecraft.network.chat.Component.literal(
+                            "§7Walk through stopped. §8/tutorial to start it again."));
+                    return 1;
+                }))
+                // The admin form. Gated, because starting a walk through on somebody else is a
+                // thing that happens to them rather than something they asked for.
+                .then(Commands.argument("player", EntityArgument.player())
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(ctx -> {
+                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                            TutorialManager.start(target, true);
+                            ctx.getSource().sendSuccess(() ->
+                                    net.minecraft.network.chat.Component.literal(
+                                            "§aStarted the walk through for "
+                                                    + target.getName().getString() + "."), true);
+                            return 1;
+                        })));
+
         for (String alias : new String[]{"politics", "gov", "government"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {

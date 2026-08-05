@@ -817,6 +817,13 @@ public final class AdminPanel {
                 "Players go to the bazaar now, but this",
                 "still grants anything it alone carried"));
 
+        gui.setSlot(28, GuiKit.tile(Items.KNOWLEDGE_BOOK, "Tutorial", ChatFormatting.YELLOW,
+                () -> TutorialGui.open(player),
+                TutorialManager.stepCount() + " steps, "
+                        + TutorialManager.seenCount() + " players have seen it",
+                "Run it on somebody, or turn it on for",
+                "everybody who joins"));
+
         gui.setSlot(32, GuiKit.tile(Items.CLOCK, "Live reload", ChatFormatting.AQUA,
                 () -> HotReloadGui.open(player),
                 "Change the server without stopping it",

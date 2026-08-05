@@ -60,6 +60,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
         // Register custom items
         CustomItemHandler.register();
+        TutorialManager.registerGameRule();
         EnchantTableHandler.register();
         DelveProtection.register();
 
@@ -449,6 +450,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ItemOverrideManager.load();
             DelveManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            TutorialManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HotReloadManager.initialize();
             DelveSelfTest.runIfAsked(s);
             BazaarProduct.build();
@@ -567,6 +569,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             final java.util.UUID joinId = player.getUUID();
             s.execute(() -> {
                 ServerPlayer pl = s.getPlayerList().getPlayer(joinId);
+                // Deferred a tick with the rest of the join work, because the player is still being
+                // set up at this point and chat sent now can arrive before they can read it.
+                if (pl != null) TutorialManager.onJoin(pl);
                 if (pl != null && !PoliticalPartyManager.hasCompletedOnboarding(pl.getUUID().toString())) {
                     PartyJoinGui.open(pl);
                 }
@@ -637,6 +642,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             DelveManager.tick(s);
             WardenKeeper.tick(s);
             WardenKeeper.prune(s);
+            TutorialManager.tick(s);
             CustomEnchantEffects.tick();
             ItemOverrideManager.tick();
             BazaarTraders.tick();
