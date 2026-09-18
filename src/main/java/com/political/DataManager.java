@@ -60,6 +60,10 @@ public class DataManager {
                 PerkManager.setViceChairPerksSetThisTerm(data.viceChairPerksSetThisTerm);
                 PerkManager.setPreviousTermPerks(data.previousTermPerks);
                 PerkManager.loadTemporaryPerks(data.temporaryPerkExpirations);
+                if (!data.electionDeslopMigrated) {
+                    data.electionSystemEnabled = true;
+                    data.electionDeslopMigrated = true;
+                }
                 ElectionManager.loadFromData(data);
                 PrisonManager.loadFromData(data);
                 TaxManager.loadFromData(data);
@@ -97,6 +101,10 @@ public class DataManager {
             } catch (IOException e) {
                 PoliticalServer.LOGGER.error("Failed to load data", e);
             }
+        } else {
+            data.electionSystemEnabled = true;
+            data.electionDeslopMigrated = true;
+            ElectionManager.loadFromData(data);
         }
     }
 
@@ -114,6 +122,7 @@ public class DataManager {
         data.previousTermPerks = PerkManager.getPreviousTermPerks();
         data.temporaryPerkExpirations = PerkManager.getTemporaryPerkExpirations();
         ElectionManager.saveToData(data);
+        data.electionDeslopMigrated = true;
         PrisonManager.saveToData(data);
         TaxManager.saveToData(data);
         DictatorManager.saveToData(data);
@@ -1053,8 +1062,9 @@ public class DataManager {
         public long termEndTime = 0;
         public long electionEndTime = 0;
         public boolean electionActive = false;
-        public boolean electionSystemEnabled = false;
+        public boolean electionSystemEnabled = true;
         public boolean electionSystemPaused = false;
+        public boolean electionDeslopMigrated = false;
         public Map<String, Integer> votes = new HashMap<>();
         public Map<String, String> votedPlayers = new HashMap<>();
         public List<String> candidates = null;

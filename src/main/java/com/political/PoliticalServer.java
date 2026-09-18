@@ -334,9 +334,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             UndergroundAuctionManager.load(s);
             ScoreboardManager.init(s);
             RecipeConfigManager.load();
-            DragonGearRecipeBootstrap.ensureRecipes();
-            com.political.recipe.DefaultRecipeBootstrap.ensureRecipes();
-            SlayerRecipes.registerRecipes();
+            DefaultRecipeBootstrap.ensureRecipes();
             ProgressionTreeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HuntsManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             WorldBossManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));

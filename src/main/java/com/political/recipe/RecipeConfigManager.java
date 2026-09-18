@@ -1,12 +1,12 @@
 package com.political.recipe;
+import com.political.DanielsPickaxe;
 import com.political.PoliticalServer;
 import com.political.RecipeIngredientHydrator;
 import com.political.SlayerItemFamilyResolver;
-
-
-
 import com.political.bounty.SlayerItems;
 import com.political.bounty.SlayerManager;
+import com.political.items.CustomItemHandler;
+import com.political.items.CustomItemManager;
 import com.political.items.DragonChestplateRegistry;
 import com.political.items.DragonChestplates;
 import com.political.items.LegendaryTools;
@@ -43,18 +43,16 @@ import java.util.Map;
 public class RecipeConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path REPO_CONFIG_DIR = FabricLoader.getInstance().getGameDir().getParent().resolve("config").resolve("political");
-    private static final Path RUN_CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
-    private static final Path SERVER_CONFIG_DIR = FabricLoader.getInstance().getGameDir().resolve("config").resolve("political");
-
-    private static final Path CONFIG_DIR = FabricLoader.getInstance().isDevelopmentEnvironment() ? REPO_CONFIG_DIR : SERVER_CONFIG_DIR;
+    /** Live recipe JSON is the game config dir so loom boots do not rewrite the git stub. */
+    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("custom_recipes.json");
+    private static final Path REPO_RECIPE_STUB = FabricLoader.getInstance().getGameDir().getParent()
+            .resolve("config").resolve("political").resolve("custom_recipes.json");
     // Modular recipe file path (unused but kept for potential future use)
     private static final java.nio.file.Path MODULAR_FILE = CONFIG_DIR.resolve("modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
-    private static final Path RECIPE_JSON_MIRROR = FabricLoader.getInstance().isDevelopmentEnvironment()
-            ? RUN_CONFIG_DIR.resolve("custom_recipes.json")
-            : null;
+    /** Anything bigger than this is leftover combinatorial slop, not a hand-authored list. */
+    private static final long SLOP_RECIPE_FILE_BYTES = 400L * 1024L;
 
     static {
         boolean fileExists = java.nio.file.Files.exists(CONFIG_FILE);
@@ -66,8 +64,7 @@ public class RecipeConfigManager {
      *
      * <p>Recipes are gathered from maps whose iteration order is not stable between runs, so an
      * export that simply wrote them out produced a different byte sequence every boot even when
-     * nothing had changed. On a file this size that is tens of thousands of lines of pure noise in
-     * any diff, which buries the changes that actually matter.</p>
+     * nothing had changed.</p>
      */
     private static void sortRecipesByName(JsonObject root) {
         try {
@@ -96,12 +93,33 @@ public class RecipeConfigManager {
         try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
             GSON.toJson(root, writer);
         }
-        // Mirror to the "other" location so dev + dedicated server stay consistent.
-        if (RECIPE_JSON_MIRROR != null) {
-            Files.createDirectories(RECIPE_JSON_MIRROR.getParent());
-            try (Writer writer = Files.newBufferedWriter(RECIPE_JSON_MIRROR)) {
+    }
+
+    /**
+     * Drops leftover combinatorial recipe dumps without parsing them. A 26MB file of thousands
+     * of deleted-item recipes was costing ~36s on boot and logging failed crafts for extra dragons.
+     */
+    public static void pruneSlopRecipeFile() {
+        pruneIfHuge(CONFIG_FILE);
+        pruneIfHuge(REPO_RECIPE_STUB);
+    }
+
+    private static void pruneIfHuge(Path path) {
+        try {
+            if (path == null || !Files.exists(path)) return;
+            long bytes = Files.size(path);
+            if (bytes <= SLOP_RECIPE_FILE_BYTES) return;
+            JsonObject root = new JsonObject();
+            root.add("recipes", new JsonArray());
+            Files.createDirectories(path.getParent());
+            try (Writer writer = Files.newBufferedWriter(path)) {
                 GSON.toJson(root, writer);
             }
+            System.out.println("[RecipeConfigManager] Pruned slop recipe file (" + bytes
+                    + " bytes → empty) at " + path.toAbsolutePath());
+            invalidateRecipeCache();
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] Failed to prune " + path + ": " + e.getMessage());
         }
     }
 
@@ -129,7 +147,7 @@ public class RecipeConfigManager {
 
     /** Load persisted recipes from disk. Call on server start. */
     public static void load() {
-        // JSON-only source of truth: never auto-regenerate on startup.
+        pruneSlopRecipeFile();
         ensureRecipeFileExists();
         logRecipeJsonSummary();
         invalidateRecipeCache();
@@ -421,6 +439,26 @@ public class RecipeConfigManager {
         }
     }
 
+    /** Overwrites the recipe file with exactly this list (no merge with leftover JSON). */
+    public static void replaceAllCustomRecipes(List<SlayerRecipes.Recipe> recipes) {
+        try {
+            JsonArray recipesArr = new JsonArray();
+            if (recipes != null) {
+                for (SlayerRecipes.Recipe r : recipes) {
+                    if (r == null || r.name == null || r.name.isBlank()) continue;
+                    recipesArr.add(serialize(r));
+                }
+            }
+            JsonObject root = new JsonObject();
+            root.add("recipes", recipesArr);
+            writeRecipeJsonRoot(root);
+            invalidateRecipeCache();
+            System.out.println("[RecipeConfigManager] Replaced recipe file with " + recipesArr.size() + " recipes");
+        } catch (Exception e) {
+            System.err.println("[RecipeConfigManager] replaceAllCustomRecipes failed: " + e.getMessage());
+        }
+    }
+
     private static void addCustomRecipeInternal(SlayerRecipes.Recipe recipe, boolean silent, boolean registerNow) {
         try {
             // Load existing recipes from disk
@@ -522,20 +560,14 @@ public class RecipeConfigManager {
         }
     }
 
-    /** Regenerates all recipes from code and saves to JSON file */
+    /** Regenerates the small default recipe list. Extra bootstraps re-apply on the next server start. */
     public static void regenerateRecipes() {
         try {
-            JsonArray recipes = RecipeGenerator.generateAllDefaultRecipes();
-            
-            JsonObject root = new JsonObject();
-            root.add("recipes", recipes);
-            
-            writeRecipeJsonRoot(root);
-            
-            System.out.println("[RecipeConfigManager] Regenerated " + recipes.size() + " recipes to " + CONFIG_FILE);
+            pruneSlopRecipeFile();
+            DefaultRecipeBootstrap.ensureRecipes();
             invalidateRecipeCache();
             SlayerRecipes.registerRecipes();
-            
+            System.out.println("[RecipeConfigManager] Regenerated default recipes to " + CONFIG_FILE);
         } catch (Exception e) {
             System.err.println("[RecipeConfigManager] Failed to regenerate recipes: " + e.getMessage());
             e.printStackTrace();
@@ -1102,6 +1134,21 @@ public class RecipeConfigManager {
         if ("blood_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateBlood();
         if ("eclipse_dragon_chestplate".equals(customId)) return DragonChestplates.createDragonChestplateEclipse();
 
+        if ("daniels_pickaxe".equals(customId)) return DanielsPickaxe.create();
+        if ("harveys_stick".equals(customId)) return CustomItemHandler.createHarveysStick();
+        if ("hermes_shoes".equals(customId)) return CustomItemHandler.createHermesShoes();
+        if ("rift_mirror".equals(customId)) return CustomItemHandler.createRiftMirror();
+        if ("ember_signet".equals(customId)) return CustomItemHandler.createEmberSignet();
+        if ("frostbound_talisman".equals(customId)) return CustomItemHandler.createFrostboundTalisman();
+        if ("echo_chime".equals(customId)) return CustomItemHandler.createEchoChime();
+        if ("terra_relay".equals(customId)) return CustomItemHandler.createTerraRelay();
+        if ("crown_of_greed".equals(customId)) return SlayerItems.createCrownOfGreed();
+        if ("crown_of_midas".equals(customId)) return SlayerItems.createCrownOfMidas();
+        if ("midas_sword".equals(customId)) return SlayerItems.createMidasSword();
+        if ("voidwalker_crown".equals(customId)) return SlayerItems.createVoidwalkerCrown();
+        if ("ender_phase_helmet".equals(customId)) return SlayerItems.createEnderPhaseHelmet();
+        if ("venomous_dagger".equals(customId)) return SlayerItems.createVenomousDagger();
+
         // Map custom IDs to item creation methods
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             String typeLower = type.name().toLowerCase();
@@ -1149,6 +1196,16 @@ public class RecipeConfigManager {
         // whose "political:<id>" results had no explicit switch entry above.
         ItemStack slayerFamilyAttempt = SlayerItemFamilyResolver.resolve(customId);
         if (slayerFamilyAttempt != null && !slayerFamilyAttempt.isEmpty()) return slayerFamilyAttempt;
+
+        try {
+            CustomItemManager.CustomItem def = CustomItemManager.getItem(customId);
+            if (def != null) {
+                ItemStack fromDef = def.createStack(1);
+                if (fromDef != null && !fromDef.isEmpty()) return fromDef;
+            }
+        } catch (Exception ignored) {
+            // Custom items may not be initialized yet during early recipe load.
+        }
 
         // Unknown custom ids: try the mod item registry, then give up.
         try {

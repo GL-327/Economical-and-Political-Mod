@@ -20,12 +20,14 @@ import java.util.Locale;
 public final class DragonGearRecipeBootstrap {
     private DragonGearRecipeBootstrap() {}
 
+    public static List<SlayerRecipes.Recipe> buildRecipes() {
+        List<SlayerRecipes.Recipe> out = new ArrayList<>();
+        ensureFixedChestplateRecipes(out);
+        return out;
+    }
+
     public static void ensureRecipes() {
-        // We upsert (replace) everything relevant once, so "all dragon items have good recipes"
-        // and the dedicated server never sees partial/old versions.
-        List<SlayerRecipes.Recipe> toUpsert = new ArrayList<>();
-        ensureFixedChestplateRecipes(toUpsert);
-        RecipeConfigManager.upsertCustomRecipesSilent(toUpsert);
+        RecipeConfigManager.upsertCustomRecipesSilent(buildRecipes());
     }
 
     private static void ensureFixedChestplateRecipes(List<SlayerRecipes.Recipe> out) {

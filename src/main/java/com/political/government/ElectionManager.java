@@ -36,7 +36,7 @@ public class ElectionManager {
     private static int impeachNo = 0;
     private static List<String> impeachVoted = new ArrayList<>();
 
-    private static boolean electionSystemEnabled = false;
+    private static boolean electionSystemEnabled = true;
     private static boolean electionSystemPaused = false;
     private static final long ELECTION_DURATION_MS = 24 * 60 * 60 * 1000L;  // 24 hours (adjust as needed)
 
@@ -194,8 +194,18 @@ public class ElectionManager {
     }
 
     public static boolean nominateSelf(ServerPlayer player) {
+        if (!electionSystemEnabled) {
+            player.sendSystemMessage(Component.literal("Elections are currently disabled.").withStyle(ChatFormatting.RED));
+            return false;
+        }
+        if (electionSystemPaused) {
+            player.sendSystemMessage(Component.literal("Elections are currently paused.").withStyle(ChatFormatting.YELLOW));
+            return false;
+        }
         if (!electionActive) {
-            player.sendSystemMessage(Component.literal("No election is running. Wait for the campaign window.").withStyle(ChatFormatting.RED));
+            String time = PoliticalServer.formatTime(getTimeUntilNextElection());
+            player.sendSystemMessage(Component.literal("No election is running. Next campaign in " + time + ".")
+                    .withStyle(ChatFormatting.RED));
             return false;
         }
         String uuid = player.getUUID().toString();
