@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.items.ItemStatInjector;
+import com.political.stats.PlayerStatsManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.monster.Silverfish;

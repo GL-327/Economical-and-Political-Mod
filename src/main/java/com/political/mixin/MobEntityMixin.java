@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.PerkManager;
+import com.political.government.PerkManager;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntitySpawnReason;

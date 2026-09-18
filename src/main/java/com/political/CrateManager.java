@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -228,18 +232,19 @@ public final class CrateManager {
     private static int indexedAtCount = -1;
 
     private static synchronized void rebuildIndexIfStale() {
-        int count;
+        List<SlayerRecipes.Recipe> recipes;
         try {
-            count = RecipeManager.getAllRecipes().size();
+            recipes = RecipeConfigManager.getRecipes();
         } catch (Exception e) {
             return;
         }
+        int count = recipes.size();
         if (count == indexedAtCount && !POOLS.isEmpty()) return;
 
         POOLS.clear();
         for (Crate.Band b : Crate.Band.values()) POOLS.put(b, new ArrayList<>());
         try {
-            for (RecipeManager.CustomRecipe r : RecipeManager.getAllRecipes()) {
+            for (SlayerRecipes.Recipe r : recipes) {
                 if (r.result == null || r.result.isEmpty()) continue;
                 POOLS.get(bandOf(r.name)).add(r.result);
             }

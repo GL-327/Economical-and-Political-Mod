@@ -1,5 +1,11 @@
 package com.political;
 
+
+import com.political.government.ChairGui;
+import com.political.government.DictatorManager;
+import com.political.government.Perk;
+import com.political.government.PerkManager;
+import com.political.government.PerksGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.item.Items;

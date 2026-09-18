@@ -1,7 +1,7 @@
 package com.political.mixin;
 
 import com.political.BossAbilityManager;
-import com.political.SlayerManager;
+import com.political.bounty.SlayerManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Slime;
 import org.spongepowered.asm.mixin.Mixin;

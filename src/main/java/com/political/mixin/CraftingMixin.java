@@ -1,8 +1,10 @@
 package com.political.mixin;
 
+
+import com.political.recipe.SlayerRecipes;
 import com.political.BeamCraftingHandler;
-import com.political.BountyCraftingHandler;
-import com.political.CustomItemHandler;
+import com.political.recipe.BountyCraftingHandler;
+import com.political.items.CustomItemHandler;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +43,7 @@ public class CraftingMixin {
             return;
         }
 
-        com.political.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
+        com.political.recipe.SlayerRecipes.Recipe matchedRecipe = BountyCraftingHandler.getMatchedCustomRecipe(grid, player);
         if (matchedRecipe != null) {
             resultInventory.setItem(0, matchedRecipe.result.copy());
             ci.cancel();

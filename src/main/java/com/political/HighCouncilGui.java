@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.WarGui;
+import com.political.settlement.WarManager;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;

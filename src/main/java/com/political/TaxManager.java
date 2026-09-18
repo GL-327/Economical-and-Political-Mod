@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.government.DictatorManager;
+import com.political.government.Treasury;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
@@ -91,7 +95,7 @@ public class TaxManager {
 
         if (toPay > 0 && CreditItem.removeCredits(player, toPay)) {
             setTaxOwed(uuid, owed - toPay);
-            PoliticalPartyManager.distributeTaxToParties(toPay);
+            Treasury.deposit(toPay, "player tax");
             BuffProgressManager.onTaxPaid(player, toPay);
 
             if (getTaxOwed(uuid) < 50 && player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) {
@@ -113,7 +117,7 @@ public class TaxManager {
 
         if (toPay > 0 && CoinManager.removeCoins(player, toPay)) {
             setTaxOwed(uuid, owed - toPay);
-            PoliticalPartyManager.distributeTaxToParties(toPay);
+            Treasury.deposit(toPay, "player tax");
             BuffProgressManager.onTaxPaid(player, toPay);
 
             if (getTaxOwed(uuid) < 50 && player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) {
@@ -166,13 +170,14 @@ public class TaxManager {
                 continue;
             }
 
-            // Calculate tax based on their coin balance
-            int coins = CoinManager.getCoins(uuid);
-            int taxAmount = (int) Math.ceil(coins * dailyTaxPercentage);
+            long coins = CoinManager.getCoinsLong(uuid);
+            long taxAmount = (long) Math.ceil(coins * dailyTaxPercentage);
+            if (taxAmount <= 0) {
+                continue;
+            }
 
-            // Remove coins directly
             if (CoinManager.removeCoins(uuid, taxAmount)) {
-                PoliticalPartyManager.distributeTaxToParties(taxAmount);
+                Treasury.deposit(taxAmount, "player tax");
                 ServerPlayer player = server.getPlayerList().getPlayer(java.util.UUID.fromString(uuid));
                 if (player != null) {
                     player.sendSystemMessage(Component.literal("Daily tax deducted: " + taxAmount + " coins (" +
@@ -189,7 +194,7 @@ public class TaxManager {
                 }
 
                 // Add new tax amount to debt
-                setTaxOwed(uuid, currentOwed + taxAmount);
+                setTaxOwed(uuid, currentOwed + (int) Math.min(Integer.MAX_VALUE, taxAmount));
 
                 ServerPlayer player = server.getPlayerList().getPlayer(java.util.UUID.fromString(uuid));
                 if (player != null) {

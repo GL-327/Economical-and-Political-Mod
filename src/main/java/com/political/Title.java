@@ -1,5 +1,12 @@
 package com.political;
 
+
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerManager;
+import com.political.economy.CoinManager;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.SettlementTier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -125,17 +132,7 @@ public enum Title {
             p -> MasteryManager.getTotalLevel(p.getUUID().toString()) >= 100),
     MASTER_OF_ALL("Master of All", ChatFormatting.GOLD, Kind.MASTERY,
             "Reach 300 total mastery levels.",
-            p -> MasteryManager.getTotalLevel(p.getUUID().toString()) >= 300),
-
-    ENROLLED("the Enrolled", ChatFormatting.DARK_PURPLE, Kind.SORCERY,
-            "Enrol on the sorcerer path.",
-            p -> SorcererManager.isEnrolled(p.getUUID().toString())),
-    CURSE_TOUCHED("the Curse Touched", ChatFormatting.DARK_PURPLE, Kind.SORCERY,
-            "Bank 50,000 cursed energy.",
-            p -> CursedEnergyManager.getEnergy(p) >= 50_000L),
-    SPECIAL_GRADE("Special Grade", ChatFormatting.LIGHT_PURPLE, Kind.SORCERY,
-            "Bank 1,000,000 cursed energy.",
-            p -> CursedEnergyManager.getEnergy(p) >= 1_000_000L);
+            p -> MasteryManager.getTotalLevel(p.getUUID().toString()) >= 300);
 
     /** Where a title comes from, used to group the menu. */
     public enum Kind {
@@ -147,8 +144,7 @@ public enum Title {
         INDUSTRY("Industry", ChatFormatting.AQUA),
         CIVIC("Standing", ChatFormatting.LIGHT_PURPLE),
         BOUNTY("Bounties", ChatFormatting.YELLOW),
-        MASTERY("Mastery", ChatFormatting.AQUA),
-        SORCERY("Sorcery", ChatFormatting.DARK_PURPLE);
+        MASTERY("Mastery", ChatFormatting.AQUA);
 
         public final String label;
         public final ChatFormatting colour;

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -223,13 +225,11 @@ public final class ContractManager {
         save();
 
         CoinManager.giveCoinsQuiet(player, c.reward);
-        CursedEnergyManager.earn(player, c.energyReward());
         CompanionManager.awardXp(player, 20);
 
         player.sendSystemMessage(Component.literal("§aContract complete: ")
                 .append(Component.literal(c.display).withStyle(c.colour, ChatFormatting.BOLD)));
-        player.sendSystemMessage(Component.literal("§7Paid §6" + c.reward
-                + " §7coins and §b" + c.energyReward() + " §7cursed energy."));
+        player.sendSystemMessage(Component.literal("§7Paid §6" + c.reward + " §7coins."));
         if (player.level() instanceof ServerLevel level) {
             Vfx.bloom(level, player.position().add(0, 1, 0));
         }

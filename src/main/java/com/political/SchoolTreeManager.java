@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.magic.MagicManager;
+import com.political.magic.MagicSchool;
+import com.political.magic.MagicSkillTree;
+import com.political.magic.MagicSpellHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -174,7 +179,6 @@ public final class SchoolTreeManager {
      * unlocked-node count plus equipped robe set bonus.
      */
     public static int getAffinity(ServerPlayer player, MagicSchool school) {
-        int base = unlockedCount(player.getUUID().toString(), school);
-        return base + MagicGearFactory.getEquippedRobeAffinity(player, school);
+        return unlockedCount(player.getUUID().toString(), school);
     }
 }

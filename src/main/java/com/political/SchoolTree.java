@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.magic.MagicSchool;
+import com.political.magic.MagicSkillTree;
 import java.util.*;
 
 /**

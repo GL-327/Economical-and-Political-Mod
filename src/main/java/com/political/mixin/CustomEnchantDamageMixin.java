@@ -1,7 +1,7 @@
 package com.political.mixin;
 
 import com.political.CustomEnchantmentManager;
-import com.political.SlayerManager;
+import com.political.bounty.SlayerManager;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;

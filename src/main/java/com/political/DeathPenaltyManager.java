@@ -1,4 +1,6 @@
 package com.political;
+
+import com.political.economy.CoinManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
@@ -118,13 +120,13 @@ public class DeathPenaltyManager {
         long actualFromBank = Math.min(fromBank, bankBefore);
         if (actualFromBank > 0) {
             long currentBank = DataManager.getBankMain(victimUuid);
-            DataManager.setBankMain(victimUuid, (int) Math.max(0, currentBank - actualFromBank));
+            DataManager.setBankMain(victimUuid, Math.max(0, currentBank - actualFromBank));
         }
 
         long actualFromSavings = Math.min(fromSavings, savingsBefore);
         if (actualFromSavings > 0) {
             long currentSavings = DataManager.getBankSavings(victimUuid);
-            DataManager.setBankSavings(victimUuid, (int) Math.max(0, currentSavings - actualFromSavings));
+            DataManager.setBankSavings(victimUuid, Math.max(0, currentSavings - actualFromSavings));
         }
 
         long actualSyphon = actualFromPurse + actualFromBank + actualFromSavings;

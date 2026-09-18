@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.economy.CoinManager;
+import com.political.economy.ShopManager;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.core.component.DataComponents;

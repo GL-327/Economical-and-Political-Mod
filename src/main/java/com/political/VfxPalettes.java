@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.magic.MagicSchool;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.Item;
@@ -32,7 +34,7 @@ public final class VfxPalettes {
 
     private static final Map<String, Named> BY_KEY = new LinkedHashMap<>();
     private static final Map<MagicSchool, Named> BY_SCHOOL = new LinkedHashMap<>();
-    private static final Map<CursedGrade, Named> BY_GRADE = new LinkedHashMap<>();
+    private static final Map<String, Named> BY_GRADE = new LinkedHashMap<>();
 
     private static Named reg(String key, String label, ChatFormatting colour, Item icon, Vfx.Palette p) {
         Named n = new Named(key.toLowerCase(Locale.ROOT), label, colour, icon, p);
@@ -130,11 +132,11 @@ public final class VfxPalettes {
         BY_SCHOOL.put(MagicSchool.SPOREWEAVING, SPOREWEAVING);
         BY_SCHOOL.put(MagicSchool.ASTRALISM, ASTRALISM);
 
-        BY_GRADE.put(CursedGrade.GRADE_4, GRADE_4);
-        BY_GRADE.put(CursedGrade.GRADE_3, GRADE_3);
-        BY_GRADE.put(CursedGrade.GRADE_2, GRADE_2);
-        BY_GRADE.put(CursedGrade.GRADE_1, GRADE_1);
-        BY_GRADE.put(CursedGrade.SPECIAL_GRADE, SPECIAL_GRADE);
+        BY_GRADE.put("grade_4", GRADE_4);
+        BY_GRADE.put("grade_3", GRADE_3);
+        BY_GRADE.put("grade_2", GRADE_2);
+        BY_GRADE.put("grade_1", GRADE_1);
+        BY_GRADE.put("special_grade", SPECIAL_GRADE);
     }
 
     // ════════════════════════════════════════════════════════════════════
@@ -182,13 +184,6 @@ public final class VfxPalettes {
         return n != null ? n : ARCANE;
     }
 
-    /** The look for a curse grade. Never null. */
-    public static Vfx.Palette forGrade(CursedGrade grade) {
-        if (grade == null) return CURSED.palette();
-        Named n = BY_GRADE.get(grade);
-        return n != null ? n.palette() : CURSED.palette();
-    }
-
     /**
      * The look for a curse grade named as a string. Accepts the enum name, the display label and
      * the loose forms a command or a tag might carry, for example "grade 2", "GRADE_2" or "special".
@@ -203,10 +198,8 @@ public final class VfxPalettes {
         String k = name.trim().toLowerCase(Locale.ROOT).replace(' ', '_').replace('-', '_');
         if (k.startsWith("political_grade_")) k = k.substring("political_grade_".length());
         if (k.startsWith("special")) return SPECIAL_GRADE;
-        for (CursedGrade g : CursedGrade.values()) {
-            if (g.name().toLowerCase(Locale.ROOT).equals(k)) return BY_GRADE.get(g);
-            if (g.label.toLowerCase(Locale.ROOT).replace(' ', '_').equals(k)) return BY_GRADE.get(g);
-        }
+        Named mapped = BY_GRADE.get(k);
+        if (mapped != null) return mapped;
         switch (k) {
             case "4", "g4" -> { return GRADE_4; }
             case "3", "g3" -> { return GRADE_3; }
@@ -222,11 +215,6 @@ public final class VfxPalettes {
      * knowing anything about grades.
      */
     public static Vfx.Palette forEntity(net.minecraft.world.entity.Entity entity) {
-        if (entity == null) return CURSED.palette();
-        for (String tag : entity.entityTags()) {
-            CursedGrade g = CursedGrade.fromTag(tag);
-            if (g != null) return forGrade(g);
-        }
         return CURSED.palette();
     }
 }

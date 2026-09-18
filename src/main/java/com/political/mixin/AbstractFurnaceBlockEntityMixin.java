@@ -1,7 +1,7 @@
 package com.political.mixin;
 
-import com.political.CustomItemHandler;
-import com.political.PerkManager;
+import com.political.items.CustomItemHandler;
+import com.political.government.PerkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;

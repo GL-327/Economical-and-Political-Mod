@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.recipe.BountyCraftingHandler;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -62,7 +66,6 @@ public final class GoldArmorRecipes {
     }
 
     /**
-     * Call after {@link HardcodedRecipes} batches so these replace any broken placeholders
      * with the same display names (removeBrokenGoldArmorRecipes runs first).
      */
     public static void register() {

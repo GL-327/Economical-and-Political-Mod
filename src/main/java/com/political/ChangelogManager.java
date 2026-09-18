@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.settlement.Settlement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;

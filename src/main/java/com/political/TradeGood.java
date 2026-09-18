@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementEconomy;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 

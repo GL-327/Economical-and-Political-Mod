@@ -1,5 +1,16 @@
 package com.political;
 
+
+import com.political.government.GovernmentGui;
+import com.political.recipe.RecipesGui;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementEconomyGui;
+import com.political.settlement.SettlementGui;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.WarGui;
+import com.political.settlement.WarManager;
+import com.political.technique.Technique;
+import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -90,29 +101,23 @@ public final class CivilizationHubGui {
 
         // ── Row 2: magic ──
         gui.setSlot(19, new GuiElementBuilder(Items.ENCHANTED_BOOK)
-                .setName(Component.literal("Magic Technique").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Your awakened technique, abilities"))
-                .addLoreLine(Component.literal("§7and mastery rank."))
+                .setName(Component.literal("Techniques").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("Learn from a Technique Manual."))
+                .addLoreLine(Component.literal("Equip one. Rank up by using it."))
                 .setCallback((a, b, c, d) -> TechniqueGui.open(player))
                 .build());
 
-        gui.setSlot(20, new GuiElementBuilder(Items.AMETHYST_CLUSTER)
-                .setName(Component.literal("Schools of Magic").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§712 schools, each with a node tree."))
-                .setCallback((a, b, c, d) -> SchoolTreeGui.openSchoolList(player))
-                .build());
-
-        gui.setSlot(21, new GuiElementBuilder(Items.BLAZE_ROD)
-                .setName(Component.literal("Spells & Staff").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Spellbook, staff workshop, bestiary."))
-                .setCallback((a, b, c, d) -> MagicGui.openMainMenu(player))
+        gui.setSlot(21, new GuiElementBuilder(Items.WRITABLE_BOOK)
+                .setName(Component.literal("Technique ranks").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("/technique ranks"))
+                .setCallback((a, b, c, d) -> TechniqueGui.open(player))
                 .build());
 
         // ── Row 2b: content ──
-        gui.setSlot(23, new GuiElementBuilder(Items.YELLOW_CONCRETE)
-                .setName(Component.literal("The Backrooms").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Status, entry and escape."))
-                .setCallback((a, b, c, d) -> BackroomsGui.open(player))
+        gui.setSlot(23, new GuiElementBuilder(Items.WRITTEN_BOOK)
+                .setName(Component.literal("Technique manuals").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("Craft a Technique Manual, then right-click it."))
+                .setCallback((a, b, c, d) -> TechniqueGui.open(player))
                 .build());
 
         gui.setSlot(24, new GuiElementBuilder(Items.CRAFTING_TABLE)
@@ -175,20 +180,17 @@ public final class CivilizationHubGui {
                 .setName(Component.literal("Cursed Spirits").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Graded curses stalk the world. Hunt them,"))
                 .addLoreLine(Component.literal("§7read the codex, and bank cursed energy."))
-                .setCallback((a, b, c, d) -> CursedSpiritGui.open(player))
                 .build());
 
         gui.setSlot(38, new GuiElementBuilder(Items.NETHERITE_SWORD)
                 .setName(Component.literal("Sorcerer Path").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Rank up, swear binding vows, wield reverse"))
                 .addLoreLine(Component.literal("§7cursed technique and expand your domain."))
-                .setCallback((a, b, c, d) -> SorcererGui.open(player))
                 .build());
 
         gui.setSlot(39, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Component.literal("Special Grade").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Summon and fell the named horrors."))
-                .setCallback((a, b, c, d) -> SpecialGradeGui.open(player))
                 .build());
 
         gui.setSlot(41, new GuiElementBuilder(Items.CLOCK)
@@ -202,13 +204,11 @@ public final class CivilizationHubGui {
                 .setName(Component.literal("Sorcerer Clans").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Found a bloodline with a signature technique,"))
                 .addLoreLine(Component.literal("§7build its prestige and feud with rivals."))
-                .setCallback((a, b, c, d) -> ClanGui.open(player))
                 .build());
 
         gui.setSlot(43, new GuiElementBuilder(Items.NETHERITE_SWORD)
                 .setName(Component.literal("Cursed Arsenal").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Graded cursed weapons and armor."))
-                .setCallback((a, b, c, d) -> CursedArsenalGui.open(player))
                 .build());
 
         gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
@@ -294,7 +294,7 @@ public final class CivilizationHubGui {
     }
 
     /** The settlement the player is standing in, else the one they are registered to. */
-    static Settlement currentOrHome(ServerPlayer player) {
+    public static Settlement currentOrHome(ServerPlayer player) {
         Settlement here = SettlementManager.getContaining(
                 ((net.minecraft.server.level.ServerLevel) player.level())
                         .dimension().identifier().toString(),

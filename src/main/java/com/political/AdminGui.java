@@ -1,5 +1,12 @@
 package com.political;
 
+
+import com.political.economy.UndergroundAuctionManager;
+import com.political.government.DictatorManager;
+import com.political.government.ElectionManager;
+import com.political.government.Perk;
+import com.political.government.PerkManager;
+import com.political.stats.HealthScalingManager;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SignGui;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -24,9 +31,9 @@ import java.util.List;
 import eu.pb4.sgui.api.ClickType;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;import com.political.SlayerManager;
-import com.political.SlayerData;
-import com.political.SlayerItems;import net.minecraft.world.item.ItemStack;import net.minecraft.world.phys.Vec3;import eu.pb4.sgui.api.ClickType;import eu.pb4.sgui.api.ClickType;
+import java.util.Set;import com.political.bounty.SlayerManager;
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerItems;import net.minecraft.world.item.ItemStack;import net.minecraft.world.phys.Vec3;import eu.pb4.sgui.api.ClickType;import eu.pb4.sgui.api.ClickType;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.item.ItemStack;
@@ -39,11 +46,11 @@ import net.minecraft.ChatFormatting;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.political.SlayerManager;
-import com.political.SlayerData;
-import com.political.SlayerItems;
-import com.political.CoinManager;
-import com.political.CustomItemHandler;
+import com.political.bounty.SlayerManager;
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerItems;
+import com.political.economy.CoinManager;
+import com.political.items.CustomItemHandler;
 import com.political.PoliticalServer;import eu.pb4.sgui.api.elements.GuiElement;
 
 public class AdminGui {

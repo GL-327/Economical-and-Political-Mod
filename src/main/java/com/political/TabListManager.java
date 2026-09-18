@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.economy.UndergroundAuctionManager;
+import com.political.government.Perk;
+import com.political.government.PerkManager;
+import com.political.magic.MagicManager;
 import net.minecraft.network.protocol.game.ClientboundTabListPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

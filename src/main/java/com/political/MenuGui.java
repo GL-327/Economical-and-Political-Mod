@@ -1,5 +1,16 @@
 package com.political;
 
+
+import com.political.bounty.BountyGui;
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerManager;
+import com.political.economy.BankGui;
+import com.political.economy.CoinManager;
+import com.political.party.PartyJoinGui;
+import com.political.party.PoliticalPartyManager;
+import com.political.recipe.RecipesGui;
+import com.political.technique.Technique;
+import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.inventory.MenuType;
@@ -186,11 +197,11 @@ public class MenuGui {
         }
         String uuid = player.getUUID().toString();
 
-        gui.setSlot(10, new GuiElementBuilder(Items.BLAZE_POWDER)
-                .setName(Component.literal("Magic Lv." + MagicManager.getLevel(uuid)).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("Mana: " + (int) MagicManager.getMana(uuid) + "/" + MagicManager.getMaxMana(uuid)).withStyle(ChatFormatting.AQUA))
-                .addLoreLine(Component.literal("Spells: " + MagicManager.getUnlockedSpells(uuid).size() + "/" + MagicManager.Spell.values().length).withStyle(ChatFormatting.YELLOW))
-                .setCallback((a, b, c, d) -> MagicGui.openMainMenu(player))
+        gui.setSlot(10, new GuiElementBuilder(Items.ENCHANTED_BOOK)
+                .setName(Component.literal("Techniques").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("Learn from a Technique Manual.").withStyle(ChatFormatting.GRAY))
+                .addLoreLine(Component.literal("Equip one and rank it by use.").withStyle(ChatFormatting.GRAY))
+                .setCallback((a, b, c, d) -> TechniqueGui.open(player))
                 .build());
 
         FishingManager.PlayerFishingData fish = FishingManager.getData(uuid);
@@ -218,8 +229,8 @@ public class MenuGui {
                 .build());
 
         gui.setSlot(22, new GuiElementBuilder(Items.WRITABLE_BOOK)
-                .setName(Component.literal("Magic commissions").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
-                .setCallback((a, b, c, d) -> MagicGui.openCommissionsGui(player))
+                .setName(Component.literal("Technique ranks").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                .setCallback((a, b, c, d) -> TechniqueGui.open(player))
                 .build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)

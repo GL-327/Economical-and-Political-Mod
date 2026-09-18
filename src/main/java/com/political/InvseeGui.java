@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.economy.BankGui;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;

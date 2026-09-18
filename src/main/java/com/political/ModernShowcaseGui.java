@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.magic.MagicManager;
+import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -29,24 +33,23 @@ public final class ModernShowcaseGui {
         ModernGuiTheme.header(gui, "What Is New", "The latest systems, one click away");
 
         // ── featured systems ──
-        gui.setSlot(20, ModernGuiTheme.button(Items.WITHER_SKELETON_SKULL,
-                "Cursed Spirits", ChatFormatting.DARK_GRAY,
-                "Graded curses stalk the world.",
-                "Hunt them and bank cursed energy.",
-                () -> CursedSpiritGui.open(player)));
+        gui.setSlot(20, ModernGuiTheme.button(Items.GOLD_INGOT,
+                "Shop", ChatFormatting.GOLD,
+                "Buy and sell with VAT going to the treasury.",
+                "Chair sets the rate.",
+                () -> ShopGui.openMainMenu(player)));
 
-        gui.setSlot(21, ModernGuiTheme.button(Items.NETHERITE_SWORD,
-                "Sorcerer Path", ChatFormatting.DARK_PURPLE,
-                "Rank up and swear binding vows.",
-                "Wield reverse cursed technique.",
-                () -> SorcererGui.open(player)));
+        gui.setSlot(21, ModernGuiTheme.button(Items.ENCHANTED_BOOK,
+                "Techniques", ChatFormatting.LIGHT_PURPLE,
+                "Learn combat techniques from manuals.",
+                "Equip one and rank it up by using it.",
+                () -> TechniqueGui.open(player)));
 
         gui.setSlot(22, ModernGuiTheme.button(Items.NETHER_STAR,
-                "Special Grade", ChatFormatting.RED,
-                "Summon and fell the named horrors.",
-                "The hardest fights in the world.",
-                () -> SpecialGradeGui.open(player)));
-
+                "World Bosses", ChatFormatting.RED,
+                "Schedule and fight world bosses.",
+                "The hardest fights left in the world.",
+                () -> WorldBossGui.openMainMenu(player)));
         gui.setSlot(23, ModernGuiTheme.button(Items.ENDER_EYE,
                 "Expeditions", ChatFormatting.LIGHT_PURPLE,
                 "Instanced procedural dungeons.",

@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.ArmorAbilityHandler;
+import com.political.items.ArmorAbilityHandler;
 import com.political.CoinTotemManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;

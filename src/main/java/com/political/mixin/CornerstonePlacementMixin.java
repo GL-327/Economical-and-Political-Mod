@@ -1,7 +1,7 @@
 package com.political.mixin;
 
 import com.political.CornerstoneItem;
-import com.political.SettlementManager;
+import com.political.settlement.SettlementManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

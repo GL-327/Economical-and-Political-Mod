@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.items.CustomItemManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;

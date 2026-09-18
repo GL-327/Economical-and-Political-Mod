@@ -1,8 +1,6 @@
 package com.political.mixin;
 
-import com.political.BlockArmor;
-import com.political.GemArmor;
-import com.political.SlayerItems;
+import com.political.bounty.SlayerItems;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -69,14 +67,7 @@ public class ItemDyeMixin {
             stack.is(Items.LEATHER_LEGGINGS) ||
             stack.is(Items.LEATHER_BOOTS)) {
 
-            String customId = SlayerItems.getCustomItemId(stack);
-            if (customId != null) return true;
-
-            String gemArmorId = GemArmor.getGemArmorId(stack);
-            if (gemArmorId != null) return true;
-
-            String blockArmorId = BlockArmor.getBlockArmorId(stack);
-            if (blockArmorId != null) return true;
+            if (SlayerItems.getCustomItemId(stack) != null) return true;
         }
 
         return false;

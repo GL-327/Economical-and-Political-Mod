@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.settlement.Settlement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;

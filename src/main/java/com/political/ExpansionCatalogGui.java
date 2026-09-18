@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
+import com.political.settlement.WarGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -27,38 +31,8 @@ public final class ExpansionCatalogGui {
                            Predicate<String> match) {}
 
     private static final List<Section> SECTIONS = List.of(
-            new Section("Regalia", ChatFormatting.GOLD, Items.GOLDEN_HELMET,
-                    n -> n.startsWith("vx regalia ")),
-            new Section("Voyager", ChatFormatting.GREEN, Items.COMPASS,
-                    n -> n.startsWith("vx way ")),
-            new Section("Tempest", ChatFormatting.AQUA, Items.LIGHTNING_ROD,
-                    n -> n.startsWith("vx storm ")),
-            new Section("Grimoire", ChatFormatting.LIGHT_PURPLE, Items.ENCHANTED_BOOK,
-                    n -> n.startsWith("vx sigil ")),
-            new Section("Line Catalysts", ChatFormatting.YELLOW, Items.HEAVY_CORE,
-                    n -> n.startsWith("vx catalyst ")),
-            new Section("Refined Materials", ChatFormatting.AQUA, Items.RAW_IRON,
-                    n -> n.startsWith("vx material ")),
-            new Section("Beastcraft", ChatFormatting.RED, Items.BONE,
-                    n -> n.startsWith("vx beast ")),
-            new Section("Clockwork", ChatFormatting.GRAY, Items.CLOCK,
-                    n -> n.startsWith("vx cog ")),
-            new Section("Starbound", ChatFormatting.YELLOW, Items.NETHER_STAR,
-                    n -> n.startsWith("vx star ")),
-            new Section("Runeforge", ChatFormatting.AQUA, Items.AMETHYST_SHARD,
-                    n -> n.startsWith("vx rune ")),
-            new Section("Aether Arsenal", ChatFormatting.LIGHT_PURPLE, Items.NETHERITE_SWORD,
-                    n -> n.contains("aether")),
             new Section("Relics & Companions", ChatFormatting.GOLD, Items.BUNDLE,
                     n -> n.contains("relic:") || n.contains("companion:") || n.contains("reforge stone")),
-            new Section("Cursed Spirits & Sorcerer", ChatFormatting.DARK_PURPLE, Items.WITHER_SKELETON_SKULL,
-                    n -> n.contains("curse") || n.contains("cursed") || n.contains("sorcerer")
-                            || n.contains("domain") || n.contains("binding") || n.contains("special grade")
-                            || n.contains("womb") || n.contains("grade ")),
-            new Section("Magic Gear", ChatFormatting.LIGHT_PURPLE, Items.ENCHANTED_BOOK,
-                    n -> n.startsWith("magic:") || n.contains("grimoire") || n.contains("catalyst")
-                            || n.contains("robe") || n.contains("archmage") || n.contains("awakening")
-                            || n.contains("relic of")),
             new Section("Expeditions", ChatFormatting.DARK_AQUA, Items.ENDER_EYE,
                     n -> n.contains("expedition") || n.contains("sigil") || n.contains("delver")
                             || n.contains("vaultwarden") || n.contains("abyssal circlet")),
@@ -66,12 +40,11 @@ public final class ExpansionCatalogGui {
                     n -> n.contains("guild") || n.contains("caravan") || n.contains("trade")
                             || n.contains("merchant") || n.contains("bestiary") || n.contains("season")
                             || n.contains("hunter's horn") || n.contains("trophy") || n.contains("almanac")),
-            new Section("Backrooms", ChatFormatting.YELLOW, Items.YELLOW_CONCRETE,
-                    n -> n.contains("backrooms") || n.contains("almond") || n.contains("reality shard")
-                            || n.contains("fluorescent") || n.contains("escape beacon")),
             new Section("Flagship & Trinkets", ChatFormatting.AQUA, Items.NETHER_STAR,
                     n -> n.startsWith("flagship:") || n.startsWith("sb trinket:")
-                            || n.contains("crown of") || n.contains("voidwalker") || n.contains("ender phase"))
+                            || n.contains("crown of") || n.contains("voidwalker") || n.contains("ender phase")),
+            new Section("Techniques", ChatFormatting.LIGHT_PURPLE, Items.ENCHANTED_BOOK,
+                    n -> n.contains("technique manual") || n.contains("emberheart") || n.contains("glacier soul"))
     );
 
     public static void openMenu(ServerPlayer player) {

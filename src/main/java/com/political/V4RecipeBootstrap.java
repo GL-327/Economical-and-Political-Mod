@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -18,7 +21,6 @@ import java.util.List;
  * {@code /recipe} and {@code /setrecipe}.
  *
  * <h3>Why this class exists</h3>
- * The previous implementation of {@code BackroomsItems.registerRecipes()} pushed straight into
  * the in-memory {@code SlayerRecipes.RECIPES} list. That list is {@code clear()}ed by
  * {@code SlayerRecipes.registerRecipes()}, which the server calls AFTER the backrooms
  * registration ran — so the four Backrooms recipes were silently wiped every boot and never
@@ -42,7 +44,6 @@ public final class V4RecipeBootstrap {
         List<SlayerRecipes.Recipe> out = new ArrayList<>();
 
         addSettlementRecipes(out);
-        addBackroomsRecipes(out);
 
         if (!out.isEmpty()) {
             try {
@@ -68,58 +69,6 @@ public final class V4RecipeBootstrap {
                 new ItemStack(Items.EMERALD_BLOCK), new ItemStack(Items.GOLD_BLOCK),  new ItemStack(Items.EMERALD_BLOCK)
         };
         out.add(shaped("The Cornerstone", CornerstoneItem.create(), grid));
-    }
-
-    // ── Backrooms ─────────────────────────────────────────────────────────────
-
-    private static void addBackroomsRecipes(List<SlayerRecipes.Recipe> out) {
-        // Almond Water x3 — gated behind Fluorescent Fragments (Backrooms-only loot).
-        //   [F] [b] [F]
-        //   [S] [b] [S]
-        //   [F] [b] [F]
-        ItemStack[] almond = new ItemStack[]{
-                BackroomsItems.createFluorescentFragment(1), new ItemStack(Items.GLASS_BOTTLE), BackroomsItems.createFluorescentFragment(1),
-                new ItemStack(Items.SUGAR),                  new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.SUGAR),
-                BackroomsItems.createFluorescentFragment(1), new ItemStack(Items.GLASS_BOTTLE), BackroomsItems.createFluorescentFragment(1)
-        };
-        out.add(shaped("Almond Water", BackroomsItems.createAlmondWater(3), almond));
-
-        // Reality Shard — 8 Fluorescent Fragments compressed around an ender pearl.
-        //   [F] [F] [F]
-        //   [F] [P] [F]
-        //   [F] [F] [F]
-        ItemStack[] shard = new ItemStack[]{
-                BackroomsItems.createFluorescentFragment(1), BackroomsItems.createFluorescentFragment(1), BackroomsItems.createFluorescentFragment(1),
-                BackroomsItems.createFluorescentFragment(1), new ItemStack(Items.ENDER_PEARL),            BackroomsItems.createFluorescentFragment(1),
-                BackroomsItems.createFluorescentFragment(1), BackroomsItems.createFluorescentFragment(1), BackroomsItems.createFluorescentFragment(1)
-        };
-        out.add(shaped("Reality Shard", BackroomsItems.createRealityShard(1), shard));
-
-        // Escape Beacon — a Reality Shard bound with ender eyes and glowstone.
-        //   [G] [E] [G]
-        //   [E] [R] [E]
-        //   [G] [E] [G]
-        ItemStack[] beacon = new ItemStack[]{
-                new ItemStack(Items.GLOWSTONE),  new ItemStack(Items.ENDER_EYE),      new ItemStack(Items.GLOWSTONE),
-                new ItemStack(Items.ENDER_EYE),  BackroomsItems.createRealityShard(1), new ItemStack(Items.ENDER_EYE),
-                new ItemStack(Items.GLOWSTONE),  new ItemStack(Items.ENDER_EYE),      new ItemStack(Items.GLOWSTONE)
-        };
-        out.add(shaped("Escape Beacon", BackroomsItems.createEscapeBeacon(1), beacon));
-
-        // Fluorescent Fragment is FOUND-ONLY (stash chests + Wanderer drops) — there is no
-        // recipe that creates it from vanilla materials, otherwise the two recipes above would
-        // stop being gated behind actually entering the Backrooms.
-        //
-        // It still needs a /recipe entry, so the only path is destructive: shatter a Reality
-        // Shard back into its fragments. This never creates fragments out of nothing (a shard
-        // costs 8 fragments + an ender pearl) so the gate holds.
-        // Shapeless: Reality Shard + Glowstone block.
-        ItemStack[] shatter = new ItemStack[9];
-        for (int i = 0; i < 9; i++) shatter[i] = ItemStack.EMPTY;
-        shatter[0] = BackroomsItems.createRealityShard(1);
-        shatter[1] = new ItemStack(Items.GLOWSTONE);
-        out.add(shapeless("Fluorescent Fragment (Shattered Shard)",
-                BackroomsItems.createFluorescentFragment(8), shatter));
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

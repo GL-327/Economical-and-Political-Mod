@@ -1,9 +1,9 @@
 package com.political.mixin;
 
-import com.political.ArmorAbilityHandler;
+import com.political.items.ArmorAbilityHandler;
 import com.political.BossAbilityManager;
 import com.political.MasteryManager;
-import com.political.SlayerManager;
+import com.political.bounty.SlayerManager;
 import com.political.WorldBossManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;

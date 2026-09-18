@@ -5,7 +5,7 @@ import com.political.CivilCraftAchievements;
 import com.political.GardenHeartEvents;
 import com.political.SpawnProtectionManager;
 import com.political.DanielsPickaxe;
-import com.political.LegendaryToolHandler;
+import com.political.items.LegendaryToolHandler;
 import com.political.MasteryManager;
 import com.political.ProgressionTreeManager;
 import net.minecraft.world.level.block.Block;

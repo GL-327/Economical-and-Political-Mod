@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -505,14 +508,6 @@ public class MasteryManager {
     public static MasteryFamily getItemFamily(ItemStack stack) {
         if (stack.isEmpty()) return null;
 
-        if (BlockArmor.isBlockArmor(stack)) {
-            return MasteryFamily.ARMOR;
-        }
-
-        if (GemArmor.getGemArmorId(stack) != null) {
-            return MasteryFamily.ARMOR;
-        }
-        
         // Check for custom items first (order matters: "pickaxe" contains "axe" as substring)
         String customId = SlayerItems.getCustomItemId(stack);
         if (customId != null) {
@@ -869,12 +864,6 @@ public class MasteryManager {
     private static MasteryFamily resolveCraftingMasteryFamily(ItemStack result) {
         if (result.isEmpty()) {
             return MasteryFamily.CRAFTING;
-        }
-        if (GemArmor.getGemArmorId(result) != null) {
-            return MasteryFamily.ARMOR;
-        }
-        if (BlockArmor.isBlockArmor(result)) {
-            return MasteryFamily.ARMOR;
         }
         MasteryFamily f = getItemFamily(result);
         if (f != null) {

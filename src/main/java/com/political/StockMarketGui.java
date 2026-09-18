@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.economy.StockMarket;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import eu.pb4.sgui.api.gui.SignGui;

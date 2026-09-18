@@ -1,11 +1,11 @@
 package com.political.mixin;
 
 import com.political.BountyArmorHandler;
-import com.political.CustomItemHandler;
-import com.political.SlayerItems;
-import com.political.SlayerManager;
+import com.political.items.CustomItemHandler;
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
 import com.political.SpawnProtectionManager;
-import com.political.T2ArmorAbilityHandler;
+import com.political.bounty.T2ArmorAbilityHandler;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

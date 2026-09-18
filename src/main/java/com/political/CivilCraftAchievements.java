@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.item.Items;
@@ -39,12 +41,6 @@ public class CivilCraftAchievements {
         ELECTED("Elected Official", "Win an election", 500_000, Items.GOLD_BLOCK, "elected"),
         PRESIDENT("President", "Become President", 2_500_000, Items.NETHER_STAR, "president"),
         JUDGE_SERVED("Judge Dredd", "Serve as Judge for 1 week", 750_000, Items.STRUCTURE_BLOCK, "judge_served"),
-
-        // Dimension (Medium-Hard)
-        DIMENSION_EXPLORER("Explorer", "Visit 5 custom dimensions", 125_000, Items.END_PORTAL_FRAME, "dimension_explorer"),
-        DIMENSION_MASTER("Dimension Master", "Visit all custom dimensions", 500_000, Items.END_PORTAL_FRAME, "dimension_master"),
-        BACKROOMS_SURVIVOR("Backrooms Survivor", "Escape the Backrooms", 250_000, Items.SPAWNER, "backrooms_survivor"),
-        BACKROOMS_MASTER("Backrooms Master", "Escape the Backrooms 10 times", 1_000_000, Items.SPAWNER, "backrooms_master"),
 
         // Stock Market (Medium)
         STOCK_TRADER("Stock Trader", "Make your first stock trade", 75_000, Items.EMERALD, "stock_trader"),
@@ -259,29 +255,11 @@ public class CivilCraftAchievements {
     }
 
     public static void trackDimensionVisit(ServerPlayer player, int totalDimensionsVisited) {
-        String uuid = player.getUUID().toString();
-        dimensionsVisited.put(uuid, totalDimensionsVisited);
-
-        if (totalDimensionsVisited >= 5 && !hasAchievement(uuid, "dimension_explorer")) {
-            grantAchievement(player, Achievement.DIMENSION_EXPLORER);
-        }
-        // Check if visited all dimensions (18 custom dimensions)
-        if (totalDimensionsVisited >= 18 && !hasAchievement(uuid, "dimension_master")) {
-            grantAchievement(player, Achievement.DIMENSION_MASTER);
-        }
+        // Custom dimensions were removed.
     }
 
     public static void trackBackroomsEscape(ServerPlayer player) {
-        String uuid = player.getUUID().toString();
-        int count = backroomsEscapes.getOrDefault(uuid, 0) + 1;
-        backroomsEscapes.put(uuid, count);
-
-        if (count == 1 && !hasAchievement(uuid, "backrooms_survivor")) {
-            grantAchievement(player, Achievement.BACKROOMS_SURVIVOR);
-        }
-        if (count >= 10 && !hasAchievement(uuid, "backrooms_master")) {
-            grantAchievement(player, Achievement.BACKROOMS_MASTER);
-        }
+        // Backrooms were removed.
     }
 
     public static void trackStockTrade(ServerPlayer player) {

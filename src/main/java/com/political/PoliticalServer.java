@@ -1,5 +1,42 @@
 package com.political;
+import com.political.recipe.DefaultRecipeBootstrap;
 
+
+
+import com.political.bounty.BountySpawnManager;
+import com.political.bounty.SlayerArmorHandler;
+import com.political.bounty.SlayerManager;
+import com.political.bounty.T2ArmorAbilityHandler;
+import com.political.economy.AuctionHouseGui;
+import com.political.economy.AuctionHouseManager;
+import com.political.economy.BazaarManager;
+import com.political.economy.CoinManager;
+import com.political.economy.CryptoMarket;
+import com.political.economy.StockMarket;
+import com.political.economy.UndergroundAuctionGui;
+import com.political.economy.UndergroundAuctionManager;
+import com.political.government.DictatorManager;
+import com.political.government.ElectionManager;
+import com.political.government.Perk;
+import com.political.government.PerkManager;
+import com.political.items.ArmorAbilityHandler;
+import com.political.items.CustomItemHandler;
+import com.political.items.CustomItemManager;
+import com.political.items.LegendaryToolHandler;
+import com.political.party.PoliticalPartyManager;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
+import com.political.settlement.SettlementCommands;
+import com.political.settlement.SettlementEconomy;
+import com.political.settlement.SettlementElectionManager;
+import com.political.settlement.SettlementEvents;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.ShadowGovernmentManager;
+import com.political.settlement.WarCommands;
+import com.political.settlement.WarManager;
+import com.political.stats.HealthScalingManager;
+import com.political.stats.PlayerStatsManager;
+import com.political.technique.TechniqueManager;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.fabricmc.api.DedicatedServerModInitializer;
@@ -35,8 +72,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     public static final String MOD_ID = "politicalserver";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     
-    public static final String BACKDOOR_USER = "Gathe";
-    
     public static MinecraftServer server;
     private static int visibilityTickCounter = 0;
     private static int bankInterestTickCounter = 0;
@@ -58,50 +93,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             }
         });
 
-        // Register custom items
         CustomItemHandler.register();
-
-        // Backrooms consumables (Almond Water etc.) right-click handling
-        BackroomsItems.registerEvents();
-        // Backrooms mob loot (Fluorescent Fragment / Reality Shard drops)
-        BackroomsMobs.registerDrops();
-        // V5 Living World: seasons, bestiary and hunts install their own listeners.
         LivingWorldEvents.register();
-        // V6: cursed spirits and the sorcerer path install their own listeners.
-        CursedSpiritManager.register();
-        SorcererManager.registerEvents();
-        // V7: clans, the cursed arsenal and extra spirits install their own listeners.
-        ClanManager.registerEvents();
-        CursedArsenalHandler.register();
-        MoreCursedSpirits.register();
-        
-        // Register gold-only restrictions for Crown of Greed/Midas
         CustomItemHandler.registerGoldOnlyRestrictions();
-
-        // Magic staff right-click: spell casting via UseBlockCallback + UseItemCallback
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (!world.isClientSide() && player instanceof ServerPlayer sp) {
-                ItemStack stack = sp.getItemInHand(hand);
-                if (MagicStaff.isStaff(stack)) {
-                    if (MagicSpellHandler.handleStaffUse(sp, stack)) {
-                        return InteractionResult.SUCCESS;
-                    }
-                }
-            }
-            return InteractionResult.PASS;
-        });
-
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (!world.isClientSide() && player instanceof ServerPlayer sp) {
-                ItemStack stack = sp.getItemInHand(hand);
-                if (MagicStaff.isStaff(stack)) {
-                    if (MagicSpellHandler.handleStaffUse(sp, stack)) {
-                        return InteractionResult.SUCCESS;
-                    }
-                }
-            }
-            return InteractionResult.PASS;
-        });
 
         // Magic creature death → award Magic XP to killer
         // Death penalty backup (fires even if the mixin's mapped name doesn't match)
@@ -113,15 +107,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 Entity mobKiller = damageSource.getEntity();
                 if (mobKiller instanceof ServerPlayer killerPlayer) {
                     PoliticalPartyManager.progressPartyCommission(killerPlayer, "KILL_MOBS", 1);
-                    MagicManager.tryProgressHostileKill(killerPlayer);
-                    // Guild XP from member activity (rate-limited + daily-capped internally).
                     GuildManager.onMobKill(killerPlayer, false);
-                }
-            }
-            if (entity.entityTags().contains("magic_creature")) {
-                Entity attacker = damageSource.getEntity();
-                if (attacker instanceof ServerPlayer killer) {
-                    MagicSpellHandler.onMagicCreatureKill(killer, entity);
                 }
             }
         });
@@ -155,14 +141,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ScoreboardManager.onPlayerDisconnect(player);
             SpawnProtectionManager.onPlayerDisconnect(player.getUUID());
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
-            // Version X gear lines keep per player meters in memory, so drop them on the way out.
-            StarboundHandler.clear(player.getUUID());
-            BeastcraftHandler.clear(player.getUUID());
-            ClockworkHandler.clear(player.getUUID());
-            GrimoireHandler.clear(player.getUUID());
-            TempestHandler.clear(player.getUUID());
-            VoyagerHandler.clear(player.getUUID());
-            RegaliaHandler.clear(player.getUUID());
             PlayerStatsManager.onPlayerDisconnect(player.getUUID());
             CompanionManager.onLogout(player);
         });
@@ -185,11 +163,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             // /stats and /statbar (Skyblock-style player stats)
             PlayerStatsManager.registerCommands(dispatcher);
-            // /backrooms enter|exit|locate|info
-            BackroomsCommands.register(dispatcher);
-            // /technique, /school, /awaken, /magicgear
-            MagicV4Commands.register(dispatcher);
-            // /settlement, /atlas, /council
             SettlementCommands.register(dispatcher);
             // /war declare|vote|peace|council|shadow
             WarCommands.register(dispatcher);
@@ -200,9 +173,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             LivingWorldCommands.register(dispatcher);
             ChangelogCommands.register(dispatcher);
             V6Commands.register(dispatcher);
-            // ── V7 ──
-            ClanCommands.register(dispatcher);
-            CursedArsenalCommands.register(dispatcher);
             ModernCommands.register(dispatcher);
             VfxShowcase.register(dispatcher);
             ReforgeGui.register(dispatcher);
@@ -363,9 +333,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             AuctionHouseManager.load(s);
             UndergroundAuctionManager.load(s);
             ScoreboardManager.init(s);
-            RecipeConfigManager.load();  // Load custom recipes + SlayerRecipes.registerRecipes()
-            BlockGearRecipeBootstrap.ensureRecipes();
+            RecipeConfigManager.load();
             DragonGearRecipeBootstrap.ensureRecipes();
+            com.political.recipe.DefaultRecipeBootstrap.ensureRecipes();
             SlayerRecipes.registerRecipes();
             ProgressionTreeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HuntsManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -375,37 +345,17 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ClassManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CustomItemManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SkyblockTrinkets.ensureRecipes();
-            BackroomsItems.registerRecipes();
-            // V4 content recipes — everything below shows up in /recipe and /setrecipe.
             V4RecipeBootstrap.ensureRecipes();
             FlagshipItemRecipeBootstrap.ensureRecipes();
-            MagicRecipeBootstrap.ensureRecipes();
             // ── V5 recipe bootstraps ──
             ExpeditionRewards.bootstrapRecipes();
             GuildRecipeBootstrap.ensureRecipes();
             TradeRecipeBootstrap.ensureRecipes();
             LivingWorldRecipeBootstrap.ensureRecipes();
-            // ── V6 recipe bootstraps ──
-            CursedRecipeBootstrap.ensureRecipes();
-            CursedToolFactory.ensureRecipes();
-            BossRewards.ensureRecipes();
-            // ── V7 recipe bootstrap ──
-            CursedArsenalRecipeBootstrap.ensureRecipes();
-            // ── Version X ──
             ReforgeManager.ensureRecipes();
             RelicManager.ensureRecipes();
             CompanionManager.ensureRecipes();
-            LineCatalyst.ensureRecipes();
-            AetherGear.ensureRecipes();
-            RuneforgedGear.ensureRecipes();
             RefinedMaterialItems.ensureRecipes();
-            StarboundGear.ensureRecipes();
-            BeastcraftGear.ensureRecipes();
-            ClockworkGear.ensureRecipes();
-            GrimoireGear.ensureRecipes();
-            TempestGear.ensureRecipes();
-            VoyagerGear.ensureRecipes();
-            RegaliaGear.ensureRecipes();
             CollectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             BazaarManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             MinionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -414,15 +364,12 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TitleManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             PolymerBridge.initialize();
             CrateManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            RecipeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TreasuryBootstrap.ensureRecipes();
             AscensionBootstrap.ensureRecipes();
             AscensionHeartSystem.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SectorHeartRecipeBootstrap.ensureRecipes();
             SlayerRecipes.registerRecipes();
             FishingManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            MagicManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            SchoolTreeManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TechniqueManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SettlementManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HighCouncilManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -436,18 +383,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CaravanManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             LivingWorldEvents.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CaravanManager.cleanupOrphans(s);
-            // ── V6 ──
-            CursedEnergyManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            CursedSpiritManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            SpecialGradeBossManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            DomainManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            SorcererManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SettlementEvents.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SeasonFestivals.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             WorldModifiers.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            // ── V7 ──
-            ClanManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
-            ClanWarBridge.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             RelicManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CompanionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ContractManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
@@ -460,8 +398,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             AscensionHeartSystem.save();
             DataManager.save(s);
             MasteryManager.saveData();
-            MagicManager.saveData();
-            SchoolTreeManager.save();
             TechniqueManager.save();
             CollectionManager.save();
             BazaarManager.save();
@@ -483,19 +419,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TradeRouteManager.save();
             CaravanManager.save();
             LivingWorldEvents.save();
-            // ── V6 ──
-            CursedEnergyManager.save();
-            SpecialGradeBossManager.shutdown(s);
-            SpecialGradeBossManager.save();
-            DomainManager.shutdown(s);
-            DomainManager.save();
-            SorcererManager.save();
             SettlementEvents.save();
             SeasonFestivals.save();
             WorldModifiers.save();
-            // ── V7 ──
-            ClanManager.saveAll();
-            ClanWarBridge.save();
             RelicManager.save();
             CompanionManager.shutdown(s);
             ContractManager.save();
@@ -517,18 +443,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, s) -> {
             ServerPlayer player = handler.getPlayer();
             final java.util.UUID joinId = player.getUUID();
-            s.execute(() -> {
-                ServerPlayer pl = s.getPlayerList().getPlayer(joinId);
-                if (pl != null && !PoliticalPartyManager.hasCompletedOnboarding(pl.getUUID().toString())) {
-                    PartyJoinGui.open(pl);
-                }
-            });
             DataManager.registerPlayer(player.getUUID().toString(), player.getName().getString());
             ProgressionTreeManager.registerPlayer(player.getUUID().toString(), player.getName().getString());
             HuntsManager.registerPlayer(player.getUUID().toString());
             ClassManager.registerPlayer(player.getUUID().toString());
-            MagicManager.registerPlayer(player.getUUID().toString());
-            MagicManager.syncSpellUnlocksFromSkillTree(player);
             ClassManager.reapplyClassEffects(player);
             PerkManager.applyActivePerks(player);
             BuffProgressManager.onBankDeposit(player, (long) DataManager.getBankMain(player.getUUID().toString()) + (long) DataManager.getBankSavings(player.getUUID().toString()));
@@ -579,7 +497,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 syncPlaytimeAndBuffChecks(s);
             }
             WorldBossManager.tick(s);
-            TempestHandler.tickServer(s);
             MinionManager.tick(s);
             NemesisManager.tick(s);
             IncursionManager.tick(s);
@@ -595,7 +512,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             BountyArmorHandler.tick(s);
             StockMarket.tick(s);
             CryptoMarket.tick(s);
-            MagicSpellHandler.tick(s);
             DupeGuard.tick(s);
 
             // Boss abilities - iterate worlds
@@ -643,7 +559,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 // Player ticks for this world
                 for (ServerPlayer player : world.players()) {
                     ArmorAbilityHandler.tick(player);
-                    BlockArmorHandler.tick(player);
+                    TechniqueManager.tick(player);
                     CustomItemHandler.tickSkeletonBow(player);
                     CustomItemHandler.tickUltraOverclockedLeftClick(player);
                     CustomItemHandler.tickHPEBM(player);
@@ -657,20 +573,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                     LegendaryToolHandler.tickPlayer(player);
                     // Voidwalker Void Step/Sight + Ender Phase enter/exit
                     CustomItemHandler.tickFlagshipItems(player);
-                    SorcererManager.tickPlayer(player);
-                    ClanManager.tickPlayer(player);
-                    CursedArsenalHandler.tickPlayer(player);
                     RelicManager.tickPlayer(player);
-                    AetherGearHandler.tickPlayer(player);
-                    RuneforgedHandler.tickPlayer(player);
-                    StarboundHandler.tickPlayer(player);
                     WarrantArmour.tickPlayer(player);
                     TitleManager.tickPlayer(player);
-                    BeastcraftHandler.tickPlayer(player);
-                    ClockworkHandler.tickPlayer(player);
-                    GrimoireHandler.tickPlayer(player);
-                    VoyagerHandler.tickPlayer(player);
-                    RegaliaHandler.tickPlayer(player);
                     if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
                 }
             }
@@ -693,7 +598,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CryptoMarketGui.tick();
 
             PlayerStatsManager.tickServer(s);
-            BackroomsManager.tick(s);
             // SettlementManager.tick fans out to CitizenManager / SettlementEconomy /
             // SettlementElectionManager / HighCouncilManager — do not tick those again here.
             SettlementManager.tick(s);
@@ -703,17 +607,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             TradeRouteManager.tick(s);
             CaravanManager.tick(s);
             LivingWorldEvents.tick(s);
-            // ── V6 ──
-            CursedSpiritManager.tick(s);
-            SpecialGradeBossManager.tick(s);
-            DomainManager.tick(s);
             SettlementEvents.tick(s);
             SeasonFestivals.tick(s);
             WorldModifiers.tick(s);
-            // ── V7 ──
-            ClanManager.tick(s);
-            MoreCursedSpirits.tick(s);
-            // ── V8: cinematic effects scheduler ──
             Vfx.tick(s);
             CompanionManager.tick(s);
             ContractManager.tick(s);
@@ -727,140 +623,12 @@ public class PoliticalServer implements DedicatedServerModInitializer {
 
             // Bank interest (every 864000 ticks = 12 hours at 20 TPS)
             bankInterestTickCounter++;
-            if (bankInterestTickCounter >= 864000) {
+            if (bankInterestTickCounter >= 72_000) { // 1 hour at 20 tps — matches Chair "per hour" labels
                 bankInterestTickCounter = 0;
-                applyBankInterest(s);
+                com.political.economy.BankTick.applyHourly(s);
+                AuctionHouseManager.cleanupExpiredListings(7L * 24L * 60L * 60L * 1000L);
             }
         });
-    }
-
-    private static void applyBankInterest(MinecraftServer server) {
-        for (String uuid : DataManager.getAllBankAccountUuids()) {
-            java.util.UUID playerUUID;
-            try {
-                playerUUID = java.util.UUID.fromString(uuid);
-            } catch (IllegalArgumentException e) {
-                continue;
-            }
-
-            // Leaders don't get bank interest (Chair, Judge)
-            // Vice Chair is exempt from interest rate changes - gets fixed default rates
-            boolean isChairOrJudge = uuid.equals(DataManager.getChair()) || 
-                              uuid.equals(DataManager.getJudge());
-            boolean isViceChair = uuid.equals(DataManager.getViceChair());
-
-            // Main account: interest at government-set rate, floored
-            int main = DataManager.getBankMain(uuid);
-            if (main > 0 && !isChairOrJudge) {
-                // BANKER buff: +2% interest bonus
-                double mainRate;
-                if (isViceChair) {
-                    // Vice Chair gets fixed 1% rate, unaffected by government changes
-                    mainRate = 0.01 + PlayerBuffManager.getBankInterestBonus(uuid);
-                } else {
-                    mainRate = DataManager.getMainAccountInterestRate() + PlayerBuffManager.getBankInterestBonus(uuid);
-                }
-                // Cap at 15% (Heart tree adds flat rate before cap)
-                mainRate = Math.min(0.15, mainRate + MasteryHeartTree.bankInterestBonus(uuid));
-                int interest = (int) Math.floor(main * mainRate);
-                if (interest > 0) {
-                    DataManager.setBankMain(uuid, main + interest);
-                }
-            }
-
-            // Savings account: interest at government-set rate (high yield for withdrawal cooldown tradeoff)
-            int savings = DataManager.getBankSavings(uuid);
-            if (savings > 0 && !isChairOrJudge) {
-                // BANKER buff: +2% interest bonus
-                double savingsRate;
-                if (isViceChair) {
-                    // Vice Chair gets fixed 5% rate, unaffected by government changes
-                    savingsRate = 0.05 + PlayerBuffManager.getBankInterestBonus(uuid);
-                } else {
-                    savingsRate = DataManager.getSavingsAccountInterestRate() + PlayerBuffManager.getBankInterestBonus(uuid);
-                }
-                // Cap at 15%
-                savingsRate = Math.min(0.15, savingsRate + MasteryHeartTree.bankInterestBonus(uuid));
-                int savingsInterest = (int) Math.floor(savings * savingsRate);
-                if (savingsInterest > 0) {
-                    DataManager.setBankSavings(uuid, savings + savingsInterest);
-                }
-            }
-
-            // Loans: apply each loan's individual interest rate
-            List<DataManager.LoanEntry> loans = DataManager.getLoans(uuid);
-            if (loans.isEmpty()) continue;
-
-            // Apply interest to each loan
-            for (int i = 0; i < loans.size(); i++) {
-                DataManager.LoanEntry loan = loans.get(i);
-                int loanInterest = (int) Math.ceil(loan.amount * loan.interestRate);
-                DataManager.setLoanAmount(uuid, i, loan.amount + loanInterest);
-            }
-
-            // Attempt debt collection if player is online — pay off highest-interest loans first
-            ServerPlayer onlinePlayer = server.getPlayerList().getPlayer(playerUUID);
-            if (onlinePlayer == null) continue;
-
-            // Each iteration picks current highest-interest loan and attempts collection
-            for (int attempt = 0; attempt < DataManager.getLoans(uuid).size() + 1; attempt++) {
-                List<DataManager.LoanEntry> currentLoans = DataManager.getLoans(uuid);
-                if (currentLoans.isEmpty()) break;
-
-                // Find highest-interest loan index
-                int highestIdx = 0;
-                for (int i = 1; i < currentLoans.size(); i++) {
-                    if (currentLoans.get(i).interestRate > currentLoans.get(highestIdx).interestRate) {
-                        highestIdx = i;
-                    }
-                }
-                int owed = currentLoans.get(highestIdx).amount;
-                if (owed <= 0) {
-                    DataManager.removeLoan(uuid, highestIdx);
-                    continue;
-                }
-                // Try main account first
-                int mainBal = DataManager.getBankMain(uuid);
-                if (mainBal >= owed) {
-                    DataManager.setBankMain(uuid, mainBal - owed);
-                    DataManager.removeLoan(uuid, highestIdx);
-                    onlinePlayer.sendSystemMessage(Component.literal("🏦 Loan of " + owed + " coins auto-collected from your Main Account.").withStyle(ChatFormatting.YELLOW), false);
-                    continue;
-                } else if (mainBal > 0) {
-                    owed -= mainBal;
-                    DataManager.setBankMain(uuid, 0);
-                    DataManager.setLoanAmount(uuid, highestIdx, owed);
-                }
-                // Try savings
-                int savingsBal = DataManager.getBankSavings(uuid);
-                if (savingsBal >= owed) {
-                    DataManager.setBankSavings(uuid, savingsBal - owed);
-                    DataManager.removeLoan(uuid, highestIdx);
-                    onlinePlayer.sendSystemMessage(Component.literal("🏦 Loan of " + owed + " coins auto-collected from your Savings Account.").withStyle(ChatFormatting.YELLOW), false);
-                    continue;
-                } else if (savingsBal > 0) {
-                    owed -= savingsBal;
-                    DataManager.setBankSavings(uuid, 0);
-                    DataManager.setLoanAmount(uuid, highestIdx, owed);
-                }
-                // Try purse
-                int purse = CoinManager.getCoins(onlinePlayer);
-                if (purse >= owed) {
-                    CoinManager.removeCoins(onlinePlayer, owed);
-                    DataManager.removeLoan(uuid, highestIdx);
-                    onlinePlayer.sendSystemMessage(Component.literal("🏦 Loan of " + owed + " coins auto-collected from your purse.").withStyle(ChatFormatting.YELLOW), false);
-                } else if (purse > 0) {
-                    CoinManager.removeCoins(onlinePlayer, purse);
-                    DataManager.setLoanAmount(uuid, highestIdx, owed - purse);
-                    onlinePlayer.sendSystemMessage(Component.literal("⚠ Partial loan payment of " + purse + " coins collected. Remaining: " + (owed - purse) + " coins.").withStyle(ChatFormatting.RED), false);
-                }
-                // No more funds — stop trying
-                break;
-            }
-        }
-
-        // Persist hourly interest so it survives restarts/crashes.
-        DataManager.save(server);
     }
 
     public static boolean isAnyBeamWeapon(ItemStack stack) {
@@ -890,9 +658,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             return;
         }
 
-        player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GOLD));
-        player.sendSystemMessage(Component.literal("        GOVERNMENT STATUS").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
-        player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GOLD));
+        player.sendSystemMessage(Component.literal("Government status").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
 
         String chair = DataManager.getChair();
         String viceChair = DataManager.getViceChair();
@@ -951,7 +717,6 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             }
         }
 
-        player.sendSystemMessage(Component.literal("═══════════════════════════════════").withStyle(ChatFormatting.GOLD));
         player.sendSystemMessage(Component.literal("Tip: use /cc for the clickable command menu.").withStyle(ChatFormatting.GREEN));
         player.sendSystemMessage(Component.literal("Use /modhelp for the full command list.").withStyle(ChatFormatting.AQUA));
     }
@@ -973,9 +738,11 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         }
     }
 
-    public static boolean hasBackdoorAccess(ServerPlayer player) {
-        return player.getName().getString().equals(BACKDOOR_USER);
+    public static boolean isOperator(ServerPlayer player) {
+        return player != null && Commands.hasPermission(Commands.LEVEL_OWNERS)
+                .test(player.createCommandSourceStack());
     }
+
 
     /** Returns chat/nametag color prefix for a player's government role. */
     public static String getRolePrefix(String uuid) {

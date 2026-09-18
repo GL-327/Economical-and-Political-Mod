@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 

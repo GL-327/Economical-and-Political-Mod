@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.economy.BazaarGui;
+import com.political.settlement.SettlementProgressGui;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
@@ -113,6 +116,11 @@ public final class ChangelogCommands {
                 }));
 
         dispatcher.register(Commands.literal("minions")
+                .executes(ctx -> {
+                    MinionGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }));
+        dispatcher.register(Commands.literal("minion")
                 .executes(ctx -> {
                     MinionGui.open(ctx.getSource().getPlayerOrException());
                     return 1;

@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.economy.CoinManager;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
