@@ -51,8 +51,11 @@ public class RecipeConfigManager {
     // Modular recipe file path (unused but kept for potential future use)
     private static final java.nio.file.Path MODULAR_FILE = CONFIG_DIR.resolve("modular_recipes.json");
     private static final Path DISABLED_FILE = CONFIG_DIR.resolve("disabled_recipes.json");
-    /** Anything bigger than this is leftover combinatorial slop, not a hand-authored list. */
-    private static final long SLOP_RECIPE_FILE_BYTES = 400L * 1024L;
+    /**
+     * Combinatorial leftover dumps were ~26MB. A healthy generated list (core + extras)
+     * pretty-prints to about 1MB, so only treat multi-megabyte files as slop.
+     */
+    private static final long SLOP_RECIPE_FILE_BYTES = 8L * 1024L * 1024L;
 
     static {
         boolean fileExists = java.nio.file.Files.exists(CONFIG_FILE);
