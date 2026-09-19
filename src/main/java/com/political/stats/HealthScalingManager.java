@@ -234,7 +234,6 @@ public class HealthScalingManager {
             EntityType.BLAZE,
             EntityType.GHAST,
             EntityType.MAGMA_CUBE,
-            EntityType.PIGLIN,
             EntityType.PIGLIN_BRUTE,
             EntityType.HOGLIN,
             EntityType.ZOGLIN,

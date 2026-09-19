@@ -42,6 +42,7 @@ public class PerkManager {
     private static List<String> lastChairPerks = new ArrayList<>();
     private static List<String> chairSelectedPerks = new ArrayList<>();
     private static String viceChairPerk = null;
+    private static List<String> viceChairPerks = new ArrayList<>();
     private static final Identifier VOID_TOUCHED_MODIFIER_ID = Identifier.fromNamespaceAndPath("political", "void_touched");
     // CHANGED: Split into two separate flags
     private static boolean chairPerksSetThisTerm = false;
@@ -301,8 +302,21 @@ public class PerkManager {
         return viceChairPerk;
     }
 
+    public static List<String> getViceChairPerks() {
+        if (!viceChairPerks.isEmpty()) return new ArrayList<>(viceChairPerks);
+        if (viceChairPerk != null) return new ArrayList<>(List.of(viceChairPerk));
+        return new ArrayList<>();
+    }
+
     public static void setViceChairPerk(String perk) {
         viceChairPerk = perk;
+        viceChairPerks.clear();
+        if (perk != null) viceChairPerks.add(perk);
+    }
+
+    public static void setViceChairPerks(List<String> perks) {
+        viceChairPerks = perks != null ? new ArrayList<>(perks) : new ArrayList<>();
+        viceChairPerk = viceChairPerks.isEmpty() ? null : viceChairPerks.get(0);
     }
 
     /** True if this perk was used last term by the Chair or Vice Chair (cannot pick again until the term after next). */
@@ -350,13 +364,19 @@ public class PerkManager {
 
     // Chair activating perks
     public static void activatePerks(List<String> chairPerks, String vcPerk) {
+        activatePerks(chairPerks, vcPerk == null ? List.of() : List.of(vcPerk));
+    }
+
+    public static void activatePerks(List<String> chairPerks, List<String> vcPerks) {
         chairSelectedPerks = new ArrayList<>(chairPerks);
-        viceChairPerk = vcPerk;
+        setViceChairPerks(vcPerks);
 
         activePerks.clear();
         activePerks.addAll(chairPerks);
-        if (vcPerk != null && !activePerks.contains(vcPerk)) {
-            activePerks.add(vcPerk);
+        for (String vcPerk : getViceChairPerks()) {
+            if (vcPerk != null && !activePerks.contains(vcPerk)) {
+                activePerks.add(vcPerk);
+            }
         }
 
         // Lock CHAIR perks for this term
@@ -380,7 +400,7 @@ public class PerkManager {
         activePerks.addAll(allPerks);
 
         if (viceChairPerks != null && !viceChairPerks.isEmpty()) {
-            viceChairPerk = viceChairPerks.get(0);
+            setViceChairPerks(viceChairPerks);
         }
 
         // Lock VICE CHAIR perks for this term
@@ -404,7 +424,8 @@ public class PerkManager {
         }
         activePerks.clear();
         chairSelectedPerks.clear();  // ADD THIS
-        viceChairPerk = null;        // ADD THIS
+        viceChairPerk = null;
+        viceChairPerks.clear();
         DataManager.save(PoliticalServer.server);
     }
 

@@ -55,7 +55,11 @@ public class DataManager {
                 PerkManager.setActivePerks(data.activePerks);
                 PerkManager.setLastChairPerks(data.lastChairPerks);
                 PerkManager.setChairSelectedPerks(data.chairSelectedPerks);
-                PerkManager.setViceChairPerk(data.viceChairPerk);
+                if (data.viceChairPerks != null && !data.viceChairPerks.isEmpty()) {
+                    PerkManager.setViceChairPerks(data.viceChairPerks);
+                } else {
+                    PerkManager.setViceChairPerk(data.viceChairPerk);
+                }
                 PerkManager.setChairPerksSetThisTerm(data.chairPerksSetThisTerm);
                 PerkManager.setViceChairPerksSetThisTerm(data.viceChairPerksSetThisTerm);
                 PerkManager.setPreviousTermPerks(data.previousTermPerks);
@@ -117,6 +121,7 @@ public class DataManager {
         data.lastChairPerks = PerkManager.getLastChairPerks();
         data.chairSelectedPerks = PerkManager.getChairSelectedPerks();
         data.viceChairPerk = PerkManager.getViceChairPerk();
+        data.viceChairPerks = PerkManager.getViceChairPerks();
         data.chairPerksSetThisTerm = PerkManager.isChairPerksSetThisTerm();
         data.viceChairPerksSetThisTerm = PerkManager.isViceChairPerksSetThisTerm();
         data.previousTermPerks = PerkManager.getPreviousTermPerks();
@@ -458,13 +463,13 @@ public class DataManager {
         // If vice chair is changing to a different person, clear VC perks
         if (oldViceChair != null && !oldViceChair.equals(uuid)) {
             // Remove vice chair's perk from active perks
-            String vcPerk = PerkManager.getViceChairPerk();
-            if (vcPerk != null) {
+            List<String> vcPerks = PerkManager.getViceChairPerks();
+            if (!vcPerks.isEmpty()) {
                 List<String> activePerks = PerkManager.getActivePerks();
-                activePerks.remove(vcPerk);
+                activePerks.removeAll(vcPerks);
                 PerkManager.setActivePerks(activePerks);
             }
-            PerkManager.setViceChairPerk(null);
+            PerkManager.setViceChairPerks(List.of());
 
             // Unlock vice chair perk selection for new VC
             PerkManager.setViceChairPerksSetThisTerm(false);
@@ -1077,6 +1082,7 @@ public class DataManager {
         public List<String> lastChairPerks = null;
         public List<String> chairSelectedPerks = null;
         public String viceChairPerk = null;
+        public List<String> viceChairPerks = new ArrayList<>();
         public boolean chairPerksSetThisTerm = false;
         public boolean viceChairPerksSetThisTerm = false;
         public List<String> previousTermPerks = null;

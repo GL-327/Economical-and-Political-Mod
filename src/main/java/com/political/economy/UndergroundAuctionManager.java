@@ -94,7 +94,10 @@ public class UndergroundAuctionManager {
     static class SavedAuctionData {
         long nextAuctionTime;
         List<String> auctioneerIds = new ArrayList<>();
+        Map<String, List<String>> pendingWins = new HashMap<>();
     }
+
+    private static final Map<String, List<String>> pendingWins = new HashMap<>();
 
     // ═══════════════════════════════════════════════════════════════
     // PROXIMITY BROADCAST - Only within 25 blocks of auctioneer
@@ -120,6 +123,61 @@ public class UndergroundAuctionManager {
                     player.sendSystemMessage(message);
                 }
             }
+        }
+    }
+
+    private static void giveWonItem(ServerPlayer winner, ItemStack stack, String name) {
+        if (!winner.addItem(stack)) {
+            winner.drop(stack, false);
+        }
+        winner.sendSystemMessage(Component.literal("You won " + name + "!").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
+    }
+
+    private static void queuePendingWin(String uuid, ItemStack stack) {
+        if (uuid == null || uuid.isBlank() || stack == null || stack.isEmpty()) return;
+        String encoded = encodeStack(stack);
+        if (encoded == null) return;
+        pendingWins.computeIfAbsent(uuid, k -> new ArrayList<>()).add(encoded);
+        save(PoliticalServer.server);
+    }
+
+    public static void deliverPendingWins(ServerPlayer player) {
+        if (player == null) return;
+        List<String> encoded = pendingWins.remove(player.getUUID().toString());
+        if (encoded == null || encoded.isEmpty()) return;
+        for (String data : encoded) {
+            ItemStack stack = decodeStack(data);
+            if (stack == null || stack.isEmpty()) continue;
+            if (!player.addItem(stack)) {
+                player.drop(stack, false);
+            }
+        }
+        player.sendSystemMessage(Component.literal("Delivered " + encoded.size() + " underground auction win(s).")
+                .withStyle(ChatFormatting.GREEN));
+        save(PoliticalServer.server);
+    }
+
+    private static String encodeStack(ItemStack stack) {
+        if (PoliticalServer.server == null || stack == null || stack.isEmpty()) return null;
+        try {
+            var ops = net.minecraft.resources.RegistryOps.create(net.minecraft.nbt.NbtOps.INSTANCE, PoliticalServer.server.registryAccess());
+            var result = ItemStack.CODEC.encodeStart(ops, stack);
+            return result.result().map(net.minecraft.nbt.Tag::toString).orElse(null);
+        } catch (Exception e) {
+            PoliticalServer.LOGGER.error("Failed to store underground auction win", e);
+            return null;
+        }
+    }
+
+    private static ItemStack decodeStack(String data) {
+        if (data == null || PoliticalServer.server == null) return ItemStack.EMPTY;
+        try {
+            net.minecraft.nbt.CompoundTag parsed = net.minecraft.nbt.TagParser.parseCompoundFully(data);
+            var ops = net.minecraft.resources.RegistryOps.create(net.minecraft.nbt.NbtOps.INSTANCE, PoliticalServer.server.registryAccess());
+            return ItemStack.CODEC.parse(ops, parsed).result().orElse(ItemStack.EMPTY);
+        } catch (Exception e) {
+            PoliticalServer.LOGGER.error("Failed to load underground auction win", e);
+            return ItemStack.EMPTY;
         }
     }
 
@@ -157,6 +215,10 @@ public class UndergroundAuctionManager {
                             }
                         }
                     }
+                    pendingWins.clear();
+                    if (data.pendingWins != null) {
+                        pendingWins.putAll(data.pendingWins);
+                    }
                 }
             } catch (Exception e) {
                 PoliticalServer.LOGGER.error("Failed to load underground auction data", e);
@@ -181,6 +243,7 @@ public class UndergroundAuctionManager {
             for (UUID id : auctioneerIds) {
                 data.auctioneerIds.add(id.toString());
             }
+            data.pendingWins = new HashMap<>(pendingWins);
             try (Writer writer = Files.newBufferedWriter(path)) {
                 GSON.toJson(data, writer);
             }
@@ -380,16 +443,16 @@ public class UndergroundAuctionManager {
                         Component.literal("   Winner: " + item.highestBidderName + " for " + item.currentBid + " coins").withStyle(ChatFormatting.YELLOW)
                 );
 
-                if (winner != null && item.itemStack != null && !item.itemStack.isEmpty()) {
-                    long vat = com.political.government.Treasury.vatOn(item.currentBid);
-                    if (vat > 0 && CoinManager.removeCoins(winner, vat)) {
-                        com.political.government.Treasury.deposit(vat, "uah vat");
+                long vat = Treasury.vatOn(item.currentBid);
+                if (vat > 0) {
+                    Treasury.deposit(vat, "uah vat");
+                }
+                if (item.itemStack != null && !item.itemStack.isEmpty()) {
+                    if (winner != null) {
+                        giveWonItem(winner, item.itemStack.copy(), item.name);
+                    } else {
+                        queuePendingWin(item.highestBidderUuid, item.itemStack.copy());
                     }
-                    ItemStack itemToGive = item.itemStack.copy();
-                    if (!winner.addItem(itemToGive)) {
-                        winner.drop(itemToGive, false);
-                    }
-                    winner.sendSystemMessage(Component.literal("✓ You won " + item.name + "!").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
                 }
             } catch (Exception e) {
                 PoliticalServer.LOGGER.error("Error giving item to winner", e);
@@ -482,17 +545,19 @@ public class UndergroundAuctionManager {
             return false;
         }
 
+        long vat = Treasury.vatOn(amount);
+        long due = amount + vat;
         long playerCoins = CoinManager.getCoinsLong(player);
-        if (playerCoins < amount) {
-            player.sendSystemMessage(Component.literal("❌ Not enough coins! You have: " + playerCoins + ", Need: " + amount).withStyle(ChatFormatting.RED));
+        if (playerCoins < due) {
+            player.sendSystemMessage(Component.literal("❌ Not enough coins! You have: " + playerCoins + ", Need: " + due + " (bid + VAT)").withStyle(ChatFormatting.RED));
             return false;
         }
 
         // Refund previous bidder
         if (item.highestBidderUuid != null && !item.highestBidderUuid.isEmpty()) {
             try {
-                // Refund via DataManager since previous bidder may be offline
-                DataManager.addCoins(item.highestBidderUuid, item.currentBid);
+                long previousDue = item.currentBid + Treasury.vatOn(item.currentBid);
+                DataManager.addCoins(item.highestBidderUuid, previousDue);
                 ServerPlayer previousBidder = PoliticalServer.server.getPlayerList().getPlayer(UUID.fromString(item.highestBidderUuid));
                 if (previousBidder != null) {
                     previousBidder.sendSystemMessage(Component.literal("⚠ You were outbid! Your " + item.currentBid + " coins have been refunded.").withStyle(ChatFormatting.YELLOW));
@@ -502,7 +567,7 @@ public class UndergroundAuctionManager {
             }
         }
 
-        if (!CoinManager.removeCoins(player, amount)) {
+        if (!CoinManager.removeCoins(player, due)) {
             player.sendSystemMessage(Component.literal("❌ Failed to process bid!").withStyle(ChatFormatting.RED));
             return false;
         }

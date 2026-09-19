@@ -453,6 +453,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             PrisonManager.checkPlayerJoin(player);
             TaxManager.checkPlayerJoin(player);
             DictatorManager.checkPlayerJoin(player);
+            UndergroundAuctionManager.deliverPendingWins(player);
             ScoreboardManager.onPlayerJoin(player);
             TabListManager.onPlayerJoin(player);
             VanishManager.onPlayerJoin(player);

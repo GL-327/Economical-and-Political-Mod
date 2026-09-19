@@ -331,11 +331,14 @@ public class ElectionManager {
             }
         }
 
-        // Check for dictator offer
-        int totalVotesCast = votedPlayers.size();
-        if (newChair != null && totalVotesCast > 0) {
-            int winnerVotes = sorted.get(0).getValue();
-            double percentage = (double) winnerVotes / totalVotesCast;
+        int totalVoteWeight = 0;
+        for (int weight : votes.values()) {
+            totalVoteWeight += weight;
+        }
+        if (newChair != null && totalVoteWeight > 0) {
+            int winnerVotes = votes.getOrDefault(newChair, 0);
+            double percentage = (double) winnerVotes / totalVoteWeight;
+            int totalVotesCast = totalVoteWeight;
             boolean qualifies = (totalVotesCast > 15 && percentage > 0.97)
                     || (totalVotesCast <= 15 && percentage >= 1.0);
             if (qualifies) {

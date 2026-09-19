@@ -511,8 +511,15 @@ public class AuctionHouseGui {
         long creditPrice = priceInCoins ? Math.max(1, (totalPrice + COINS_PER_CREDIT - 1) / COINS_PER_CREDIT) : totalPrice;
         long coinPrice = priceInCoins ? totalPrice : (totalPrice * COINS_PER_CREDIT);
 
+        ItemStack item = listing.getItemStack();
+        if (item.isEmpty()) {
+            PoliticalServer.LOGGER.error("Auction purchase failed: could not deserialize item for listing " + listingId);
+            buyer.sendSystemMessage(Component.literal("Purchase failed: item could not be loaded.").withStyle(ChatFormatting.RED));
+            return;
+        }
+
         if (payWithCoins) {
-            if (!CoinManager.hasCoins(buyer, (int) Math.min(coinPrice, Integer.MAX_VALUE))) {
+            if (!CoinManager.hasCoins(buyer, coinPrice)) {
                 buyer.sendSystemMessage(Component.literal("Not enough coins!").withStyle(ChatFormatting.RED));
                 return;
             }
@@ -522,9 +529,6 @@ public class AuctionHouseGui {
             } else {
                 CreditItem.giveCredits(listing.sellerUuid, (int) Math.min(price, Integer.MAX_VALUE));
             }
-            if (tax > 0) {
-                com.political.government.Treasury.deposit(tax, "auction vat");
-            }
         } else {
             if (!CreditItem.hasCredits(buyer, (int) Math.min(creditPrice, Integer.MAX_VALUE))) {
                 buyer.sendSystemMessage(Component.literal("Not enough credits!").withStyle(ChatFormatting.RED));
@@ -532,26 +536,13 @@ public class AuctionHouseGui {
             }
             CreditItem.removeCredits(buyer, (int) Math.min(creditPrice, Integer.MAX_VALUE));
             if (priceInCoins) {
-                CoinManager.giveCoins(listing.sellerUuid, (int) Math.min(price, Integer.MAX_VALUE));
+                CoinManager.giveCoins(listing.sellerUuid, price);
             } else {
                 CreditItem.giveCredits(listing.sellerUuid, (int) Math.min(price, Integer.MAX_VALUE));
             }
         }
-
-        ItemStack item = listing.getItemStack();
-
-        // Guard: if the item failed to deserialize (e.g., corrupt NBT), refund the
-        // buyer and leave the listing intact rather than silently eating their currency.
-        if (item.isEmpty()) {
-            PoliticalServer.LOGGER.error("Auction purchase failed: could not deserialize item for listing " + listingId);
-            // Refund exactly what was charged — same capping as the charge above
-            if (payWithCoins) {
-                CoinManager.giveCoins(buyer, (int) Math.min(coinPrice, Integer.MAX_VALUE));
-            } else {
-                CreditItem.giveCredits(buyer, (int) Math.min(creditPrice, Integer.MAX_VALUE));
-            }
-            buyer.sendSystemMessage(Component.literal("✗ Purchase failed: item could not be loaded. Your payment was refunded.").withStyle(ChatFormatting.RED));
-            return;
+        if (tax > 0) {
+            com.political.government.Treasury.deposit(tax, "auction vat");
         }
 
         AuctionHouseManager.removeListing(listingId);
@@ -865,17 +856,19 @@ public class AuctionHouseGui {
 
         if (listingTax > 0) {
             if (inCoins) {
-                if (!CoinManager.hasCoins(player, (int) Math.min(listingTax, Integer.MAX_VALUE))) {
+                if (!CoinManager.hasCoins(player, listingTax)) {
                     player.sendSystemMessage(Component.literal("✗ Not enough coins for tax (" + formatNumber(listingTax) + ")!").withStyle(ChatFormatting.RED));
                     return;
                 }
-                CoinManager.removeCoins(player, (int) Math.min(listingTax, Integer.MAX_VALUE));
+                CoinManager.removeCoins(player, listingTax);
+                com.political.government.Treasury.deposit(listingTax, "auction listing fee");
             } else {
                 if (!CreditItem.hasCredits(player, (int) Math.min(listingTax, Integer.MAX_VALUE))) {
                     player.sendSystemMessage(Component.literal("✗ Not enough credits for tax (" + formatNumber(listingTax) + ")!").withStyle(ChatFormatting.RED));
                     return;
                 }
                 CreditItem.removeCredits(player, (int) Math.min(listingTax, Integer.MAX_VALUE));
+                com.political.government.Treasury.deposit(listingTax * COINS_PER_CREDIT, "auction listing fee");
             }
         }
 

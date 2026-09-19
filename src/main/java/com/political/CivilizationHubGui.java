@@ -175,22 +175,22 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> HuntGui.open(player))
                 .build());
 
-        // ── Row 4: V6 (curses and the sorcerer path) ──
-        gui.setSlot(37, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
-                .setName(Component.literal("Cursed Spirits").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Graded curses stalk the world. Hunt them,"))
-                .addLoreLine(Component.literal("§7read the codex, and bank cursed energy."))
+        gui.setSlot(37, new GuiElementBuilder(Items.EMERALD)
+                .setName(Component.literal("Vote").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7National Chair and Vice Chair ballot."))
+                .setCallback((a, b, c, d) -> com.political.government.VoteGui.open(player))
                 .build());
 
-        gui.setSlot(38, new GuiElementBuilder(Items.NETHERITE_SWORD)
-                .setName(Component.literal("Sorcerer Path").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Rank up, swear binding vows, wield reverse"))
-                .addLoreLine(Component.literal("§7cursed technique and expand your domain."))
+        gui.setSlot(38, new GuiElementBuilder(Items.GOLD_INGOT)
+                .setName(Component.literal("Bank").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Deposit, withdraw, and loans."))
+                .setCallback((a, b, c, d) -> com.political.economy.BankGui.open(player))
                 .build());
 
-        gui.setSlot(39, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Component.literal("Special Grade").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Summon and fell the named horrors."))
+        gui.setSlot(39, new GuiElementBuilder(Items.CHEST)
+                .setName(Component.literal("Bazaar").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Instant buy and sell orders."))
+                .setCallback((a, b, c, d) -> com.political.economy.BazaarGui.open(player))
                 .build());
 
         gui.setSlot(41, new GuiElementBuilder(Items.CLOCK)
@@ -199,16 +199,16 @@ public final class CivilizationHubGui {
                 .setCallback((a, b, c, d) -> VarietyGui.open(player))
                 .build());
 
-        // ── V7 ──
-        gui.setSlot(42, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
-                .setName(Component.literal("Sorcerer Clans").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Found a bloodline with a signature technique,"))
-                .addLoreLine(Component.literal("§7build its prestige and feud with rivals."))
+        gui.setSlot(42, new GuiElementBuilder(Items.IRON_HELMET)
+                .setName(Component.literal("Government").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Chair, treasury, VAT, and perks."))
+                .setCallback((a, b, c, d) -> GovernmentGui.open(player))
                 .build());
 
-        gui.setSlot(43, new GuiElementBuilder(Items.NETHERITE_SWORD)
-                .setName(Component.literal("Cursed Arsenal").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Graded cursed weapons and armor."))
+        gui.setSlot(43, new GuiElementBuilder(Items.GOLD_NUGGET)
+                .setName(Component.literal("Shop").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7Buy and sell. VAT goes to the treasury."))
+                .setCallback((a, b, c, d) -> ShopGui.openMainMenu(player))
                 .build());
 
         gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)

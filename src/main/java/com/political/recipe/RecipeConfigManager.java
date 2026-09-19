@@ -146,6 +146,20 @@ public class RecipeConfigManager {
         return new ArrayList<>(LAST_FAILED_RECIPE_NAMES);
     }
 
+    /** Recipe count from JSON structure only — does not deserialize item stacks. */
+    public static int countRecipesOnDisk() {
+        try {
+            if (!Files.exists(CONFIG_FILE) || Files.size(CONFIG_FILE) == 0) return 0;
+            String jsonString = Files.readString(CONFIG_FILE);
+            if (jsonString == null || jsonString.isBlank()) return 0;
+            JsonObject root = GSON.fromJson(jsonString, JsonObject.class);
+            if (root == null || !root.has("recipes") || !root.get("recipes").isJsonArray()) return 0;
+            return root.getAsJsonArray("recipes").size();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     // ── Lifecycle ──────────────────────────────────────────────
 
     /** Load persisted recipes from disk. Call on server start. */

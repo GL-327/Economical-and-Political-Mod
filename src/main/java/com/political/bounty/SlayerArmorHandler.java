@@ -157,6 +157,10 @@ public class SlayerArmorHandler {
         List<ItemStack> armorPieces = List.of(helmet, chestplate, leggings, boots);
 
         for (ItemStack stack : armorPieces) {
+            String dragonId = SlayerItems.getCustomItemId(stack);
+            if (com.political.items.DragonChestplateRegistry.isRegistered(dragonId)) {
+                continue;
+            }
             Component customName = stack.get(DataComponents.CUSTOM_NAME);
             String name = customName != null ? customName.getString() : "";
             boolean isT2 = name.contains(" II");
@@ -334,26 +338,6 @@ public class SlayerArmorHandler {
                 bonusArmor += isT2 ? 8.0 : 7.0;
                 bonusToughness += isT2 ? 3.0 : 2.5;
                 bonusSpeed += isT2 ? 0.1 : 0.05;
-            }
-            if (name.contains("Inferno Dragon Chestplate")) {
-                bonusArmor += 20.0;
-                bonusToughness += 15.0;
-                bonusHealth += 20.0;
-                bonusKnockbackResist += 0.3;
-            }
-            if (name.contains("Storm Dragon Chestplate")) {
-                bonusArmor += 18.0;
-                bonusToughness += 12.0;
-                bonusHealth += 24.0;
-                bonusSpeed += 0.25;
-                bonusKnockbackResist += 0.2;
-            }
-            if (name.contains("Void Dragon Chestplate")) {
-                bonusArmor += 25.0;
-                bonusToughness += 20.0;
-                bonusHealth += 30.0;
-                bonusSpeed += 0.15;
-                bonusKnockbackResist += 0.4;
             }
         }
 

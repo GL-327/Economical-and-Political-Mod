@@ -31,7 +31,11 @@ public final class DefaultRecipeBootstrap {
         addTechniqueManuals(out);
         addCores(out);
         addKeptUniques(out);
-        RecipeConfigManager.replaceAllCustomRecipes(out);
+        if (RecipeConfigManager.countRecipesOnDisk() == 0) {
+            RecipeConfigManager.replaceAllCustomRecipes(out);
+        } else {
+            RecipeConfigManager.upsertCustomRecipesSilent(out);
+        }
     }
 
     private static void addSlayerGear(List<SlayerRecipes.Recipe> out) {
@@ -96,6 +100,38 @@ public final class DefaultRecipeBootstrap {
         out.add(shaped("Frost Shovel", LegendaryTools.createFrostShovel(), grid(
                 Items.PACKED_ICE, Items.NETHER_STAR, Items.PACKED_ICE,
                 Items.BLUE_ICE, Items.DIAMOND_SHOVEL, Items.BLUE_ICE,
+                Items.SNOW_BLOCK, Items.POWDER_SNOW_BUCKET, Items.SNOW_BLOCK)));
+        out.add(shaped("Dragon Shovel", LegendaryTools.createDragonShovel(), grid(
+                Items.MAGMA_BLOCK, Items.NETHER_STAR, Items.MAGMA_BLOCK,
+                Items.BLAZE_ROD, Items.NETHERITE_SHOVEL, Items.BLAZE_ROD,
+                Items.OBSIDIAN, Items.LAVA_BUCKET, Items.OBSIDIAN)));
+        out.add(shaped("Dragon Hoe", LegendaryTools.createDragonHoe(), grid(
+                Items.MAGMA_BLOCK, Items.NETHER_STAR, Items.MAGMA_BLOCK,
+                Items.BLAZE_ROD, Items.NETHERITE_HOE, Items.BLAZE_ROD,
+                Items.OBSIDIAN, Items.LAVA_BUCKET, Items.OBSIDIAN)));
+        out.add(shaped("Void Shovel", LegendaryTools.createVoidShovel(), grid(
+                Items.ENDER_PEARL, Items.NETHER_STAR, Items.ENDER_PEARL,
+                Items.OBSIDIAN, Items.NETHERITE_SHOVEL, Items.OBSIDIAN,
+                Items.ENDER_EYE, Items.CHORUS_FRUIT, Items.ENDER_EYE)));
+        out.add(shaped("Void Hoe", LegendaryTools.createVoidHoe(), grid(
+                Items.ENDER_PEARL, Items.NETHER_STAR, Items.ENDER_PEARL,
+                Items.OBSIDIAN, Items.NETHERITE_HOE, Items.OBSIDIAN,
+                Items.ENDER_EYE, Items.CHORUS_FRUIT, Items.ENDER_EYE)));
+        out.add(shaped("Nature Shovel", LegendaryTools.createNatureShovel(), grid(
+                Items.OAK_SAPLING, Items.NETHER_STAR, Items.OAK_SAPLING,
+                Items.BONE_MEAL, Items.DIAMOND_SHOVEL, Items.BONE_MEAL,
+                Items.MOSS_BLOCK, Items.GOLDEN_APPLE, Items.MOSS_BLOCK)));
+        out.add(shaped("Nature Hoe", LegendaryTools.createNatureHoe(), grid(
+                Items.OAK_SAPLING, Items.NETHER_STAR, Items.OAK_SAPLING,
+                Items.BONE_MEAL, Items.DIAMOND_HOE, Items.BONE_MEAL,
+                Items.MOSS_BLOCK, Items.GOLDEN_APPLE, Items.MOSS_BLOCK)));
+        out.add(shaped("Frost Axe", LegendaryTools.createFrostAxe(), grid(
+                Items.PACKED_ICE, Items.NETHER_STAR, Items.PACKED_ICE,
+                Items.BLUE_ICE, Items.DIAMOND_AXE, Items.BLUE_ICE,
+                Items.SNOW_BLOCK, Items.POWDER_SNOW_BUCKET, Items.SNOW_BLOCK)));
+        out.add(shaped("Frost Hoe", LegendaryTools.createFrostHoe(), grid(
+                Items.PACKED_ICE, Items.NETHER_STAR, Items.PACKED_ICE,
+                Items.BLUE_ICE, Items.DIAMOND_HOE, Items.BLUE_ICE,
                 Items.SNOW_BLOCK, Items.POWDER_SNOW_BUCKET, Items.SNOW_BLOCK)));
     }
 

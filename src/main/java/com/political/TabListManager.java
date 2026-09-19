@@ -4,7 +4,6 @@ package com.political;
 import com.political.economy.UndergroundAuctionManager;
 import com.political.government.Perk;
 import com.political.government.PerkManager;
-import com.political.magic.MagicManager;
 import net.minecraft.network.protocol.game.ClientboundTabListPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -58,16 +57,10 @@ public class TabListManager {
             auctionLine = "§6🏪 Underground Auction: §f" + formatDuration(ms);
         }
 
-        String manaLine = "";
-        float mana = MagicManager.getMana(player.getUUID().toString());
-        int maxMana = MagicManager.getMaxMana(player.getUUID().toString());
-        manaLine = "§b✦ Mana: §f" + (int) mana + "§7/§f" + maxMana;
-
         Component header = Component.literal(
-            "§6§l✦ CivilCraft Version X ✦§r\n" +
+            "§6§lCivilCraft§r\n" +
             "§8────────────────────────\n" +
-            "§7Players: §e" + playerCount + "§7/§e" + maxPlayers + "\n" +
-            manaLine
+            "§7Players: §e" + playerCount + "§7/§e" + maxPlayers
         );
 
         // Build perks section

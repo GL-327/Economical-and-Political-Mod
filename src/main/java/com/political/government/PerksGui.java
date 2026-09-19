@@ -181,7 +181,7 @@ public class PerksGui {
         List<String> chairPerks = PerkManager.getChairSelectedPerks();
 
 // ADDED: Get Vice Chair's perk (for Chair to see as blocked)
-        String vcPerk = PerkManager.getViceChairPerk();
+        List<String> vcPerks = PerkManager.getViceChairPerks();
 
         int slot = 10;
         for (Perk perk : perksToShow) {
@@ -195,17 +195,19 @@ public class PerksGui {
             boolean isOnCooldown = PerkManager.isPerkOnCooldown(perk.id);
             // ADDED: Vice Chair can't pick perks the Chair already selected
             boolean isChairPerk = !isChair && chairPerks.contains(perk.id);
+            boolean isVicePerk = isChair && vcPerks.contains(perk.id);
             boolean canSelect = selectedPerks.size() < maxPerks || isSelected;
 
             GuiElementBuilder builder;
 
             // ADDED: Show Chair's perks as blocked for Vice Chair
-            if (isChairPerk) {
+            if (isChairPerk || isVicePerk) {
                 builder = new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
                         .setName(Component.literal(perk.name).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.STRIKETHROUGH))
                         .addLoreLine(Component.literal(perk.description).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal(""))
-                        .addLoreLine(Component.literal("SELECTED BY CHAIR").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
+                        .addLoreLine(Component.literal(isVicePerk ? "SELECTED BY VICE CHAIR" : "SELECTED BY CHAIR")
+                                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                         .addLoreLine(Component.literal("You cannot select this perk").withStyle(ChatFormatting.DARK_PURPLE));
             } else if (isOnCooldown) {
                 builder = new GuiElementBuilder(Items.BARRIER)
@@ -338,13 +340,13 @@ public class PerksGui {
                     .setCallback((index, type, containerInput, slotGui) -> {
                         if (isChair) {
                             // Chair activates their perks
-                            PerkManager.activatePerks(new ArrayList<>(selectedPerks), PerkManager.getViceChairPerk());
+                            PerkManager.activatePerks(new ArrayList<>(selectedPerks), PerkManager.getViceChairPerks());
                             player.sendSystemMessage(Component.literal("Chair perks activated!").withStyle(ChatFormatting.GREEN));
                         } else {
                             // Vice Chair: activate with Chair's perks + VC's perks
                             List<String> currentChairPerks = PerkManager.getChairSelectedPerks();
                             // Store first VC perk (for backwards compatibility)
-                            PerkManager.setViceChairPerk(selectedPerks.get(0));
+                            PerkManager.setViceChairPerks(selectedPerks);
                             // Add all VC perks to active perks
                             List<String> allPerks = new ArrayList<>(currentChairPerks);
                             for (String vcPerkId : selectedPerks) {

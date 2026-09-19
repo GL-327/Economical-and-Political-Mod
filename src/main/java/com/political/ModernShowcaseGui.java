@@ -2,7 +2,6 @@ package com.political;
 
 
 import com.political.economy.CoinManager;
-import com.political.magic.MagicManager;
 import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -63,22 +62,20 @@ public final class ModernShowcaseGui {
                 () -> GuildGui.open(player)));
 
         // ── stat pills across the middle, demonstrating the modern pill element ──
-        String uuid = player.getUUID().toString();
         long coins = CoinManager.getCoinsLong(player);
-        int magicLevel = safeMagicLevel(uuid);
         gui.setSlot(29, ModernGuiTheme.pill(Items.SUNFLOWER,
                 "Your Coins", formatCoins(coins), ChatFormatting.GOLD));
-        gui.setSlot(31, ModernGuiTheme.pill(Items.ENCHANTED_BOOK,
-                "Magic Level", magicLevel >= 0 ? String.valueOf(magicLevel) : "-", ChatFormatting.LIGHT_PURPLE));
+        gui.setSlot(31, ModernGuiTheme.pill(Items.EMERALD,
+                "Treasury", formatCoins(com.political.government.Treasury.balance()), ChatFormatting.GREEN));
         gui.setSlot(33, ModernGuiTheme.pill(Items.NETHER_STAR,
                 "Featured Systems", "5", ChatFormatting.AQUA));
 
         // ── a short summary card ──
         gui.setSlot(40, new GuiElementBuilder(Items.WRITTEN_BOOK)
                 .setName(Component.literal("Highlights").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Curses now grade and stalk the world."))
-                .addLoreLine(Component.literal("§7Sorcerers rank up and expand domains."))
-                .addLoreLine(Component.literal("§7Expeditions run five deep dungeon tiers."))
+                .addLoreLine(Component.literal("§7National elections fill Chair and Vice."))
+                .addLoreLine(Component.literal("§7Shop and auction VAT funds the treasury."))
+                .addLoreLine(Component.literal("§7Learn techniques from crafted manuals."))
                 .addLoreLine(Component.literal("§7Guilds bind settlements into orders."))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§8Everything here opens by clicking above."))
@@ -96,14 +93,5 @@ public final class ModernShowcaseGui {
 
     private static String formatCoins(long coins) {
         return String.format(java.util.Locale.ROOT, "%,d", coins);
-    }
-
-    /** Reads the player's magic level defensively so the showcase never fails to open. */
-    private static int safeMagicLevel(String uuid) {
-        try {
-            return MagicManager.getLevel(uuid);
-        } catch (Throwable t) {
-            return -1;
-        }
     }
 }

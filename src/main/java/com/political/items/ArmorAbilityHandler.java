@@ -1407,12 +1407,6 @@ public class ArmorAbilityHandler {
         // Check if player had a dragon chestplate and unequipped it
         if (previousId != null && previousId.contains("dragon_chestplate") && 
             (currentId == null || !currentId.contains("dragon_chestplate"))) {
-            // Reset health to normal (20 HP = 10 hearts)
-            player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20.0);
-            if (player.getHealth() > player.getMaxHealth()) {
-                player.setHealth(player.getMaxHealth());
-            }
-            // Disable flight abilities
             var abilities = player.getAbilities();
             abilities.mayfly = false;
             abilities.flying = false;
