@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
+import com.political.bounty.T2CraftingHandler;
 import eu.pb4.sgui.api.ClickType;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -241,15 +246,6 @@ public class T2CraftingGui {
                         case ENDERMAN -> n.contains("Void") || n.contains("Phantom");
                         case IRON_GOLEM -> n.contains("Sculk") || n.contains("Terror");
                         case PIGLIN -> n.contains("Gilded") || n.contains("Ravager");
-                        case HUSK -> n.contains("Sunbleached") || n.contains("Marauder");
-                        case CAVE_SPIDER -> n.contains("Brood") || n.contains("Outrider");
-                        case STRAY -> n.contains("Frostbitten") || n.contains("Gunslinger");
-                        case MAGMA_CUBE -> n.contains("Molten");
-                        case BLAZE -> n.contains("Ashen") || n.contains("Marksman");
-                        case HOGLIN -> n.contains("Tusked") || n.contains("Warlord");
-                        case WITHER_SKELETON -> n.contains("Gallows");
-                        case RAVAGER -> n.contains("Siege Beast");
-                        case NANITE -> n.contains("Nanite");
                     };
                     if (typeMatch) hasT1 = true;
                 }
@@ -288,15 +284,6 @@ public class T2CraftingGui {
                         case ENDERMAN -> n.contains("Void") || n.contains("Phantom");
                         case IRON_GOLEM -> n.contains("Sculk") || n.contains("Terror");
                         case PIGLIN -> n.contains("Gilded") || n.contains("Ravager");
-                        case HUSK -> n.contains("Sunbleached") || n.contains("Marauder");
-                        case CAVE_SPIDER -> n.contains("Brood") || n.contains("Outrider");
-                        case STRAY -> n.contains("Frostbitten") || n.contains("Gunslinger");
-                        case MAGMA_CUBE -> n.contains("Molten");
-                        case BLAZE -> n.contains("Ashen") || n.contains("Marksman");
-                        case HOGLIN -> n.contains("Tusked") || n.contains("Warlord");
-                        case WITHER_SKELETON -> n.contains("Gallows");
-                        case RAVAGER -> n.contains("Siege Beast");
-                        case NANITE -> n.contains("Nanite");
                     };
                     if (typeMatch) {
                         player.getInventory().getItem(i).shrink(1);
@@ -354,15 +341,6 @@ public class T2CraftingGui {
             case ENDERMAN -> new ItemStack(Items.ENDER_PEARL);
             case IRON_GOLEM -> new ItemStack(Items.SCULK);
             case PIGLIN -> new ItemStack(Items.GOLD_NUGGET);
-            case HUSK -> new ItemStack(Items.SAND);
-            case CAVE_SPIDER -> new ItemStack(Items.COBWEB);
-            case STRAY -> new ItemStack(Items.BLUE_ICE);
-            case MAGMA_CUBE -> new ItemStack(Items.MAGMA_CREAM);
-            case BLAZE -> new ItemStack(Items.BLAZE_POWDER);
-            case HOGLIN -> new ItemStack(Items.PORKCHOP);
-            case WITHER_SKELETON -> new ItemStack(Items.WITHER_SKELETON_SKULL);
-            case RAVAGER -> new ItemStack(Items.SADDLE);
-            case NANITE -> new ItemStack(Items.ECHO_SHARD);
         };
     }
 }

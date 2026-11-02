@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.recipe.RecipeEditorGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.network.chat.Component;

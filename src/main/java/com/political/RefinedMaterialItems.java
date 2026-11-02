@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -101,8 +105,8 @@ public final class RefinedMaterialItems {
             raw[2] = new ItemStack(m.seed, Math.min(64, m.seedCost));
             raw[4] = new ItemStack(m.reagent, 4);
             raw[6] = new ItemStack(m.seed, Math.min(64, m.seedCost));
+            raw[7] = SlayerItems.createCustomCrafterCoreT1();
             raw[8] = new ItemStack(m.seed, Math.min(64, m.seedCost));
-            raw[7] = LineCatalyst.Tier.T1.core();
 
             boolean[] rawLock = new boolean[9];
             for (int i = 0; i < 9; i++) rawLock[i] = !raw[i].isEmpty();

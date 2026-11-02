@@ -1,7 +1,7 @@
 package com.political.mixin;
 
 import com.political.BeamCraftingHandler;
-import com.political.BountyCraftingHandler;
+import com.political.recipe.BountyCraftingHandler;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;

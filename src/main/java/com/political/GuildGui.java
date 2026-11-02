@@ -1,5 +1,15 @@
 package com.political;
+import com.political.government.Treasury;
 
+
+
+import com.political.economy.CoinManager;
+import com.political.government.Perk;
+import com.political.recipe.RecipesGui;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.SettlementTier;
+import com.political.settlement.WarGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SignGui;
 import eu.pb4.sgui.api.gui.SimpleGui;

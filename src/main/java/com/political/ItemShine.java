@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.items.ItemStatInjector;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;

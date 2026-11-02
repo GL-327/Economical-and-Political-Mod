@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.party.PartyPerkEffects;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;

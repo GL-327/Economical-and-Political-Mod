@@ -1,9 +1,9 @@
 package com.political.mixin;
 
 import com.political.CustomEnchantmentManager;
-import com.political.CustomItemHandler;
-import com.political.PerkManager;
-import com.political.SlayerItems;
+import com.political.items.CustomItemHandler;
+import com.political.government.PerkManager;
+import com.political.bounty.SlayerItems;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;

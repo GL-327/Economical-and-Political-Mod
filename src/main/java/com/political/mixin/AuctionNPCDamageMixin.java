@@ -1,7 +1,7 @@
 package com.political.mixin;
 
 import com.political.AuctionMasterManager;
-import com.political.UndergroundAuctionManager;
+import com.political.economy.UndergroundAuctionManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.npc.villager.Villager;

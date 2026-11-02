@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.items.DragonChestplates;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
@@ -15,16 +20,14 @@ import java.util.Locale;
 public final class DragonGearRecipeBootstrap {
     private DragonGearRecipeBootstrap() {}
 
-    public static void ensureRecipes() {
-        // We upsert (replace) everything relevant once, so "all dragon items have good recipes"
-        // and the dedicated server never sees partial/old versions.
-        List<SlayerRecipes.Recipe> toUpsert = new ArrayList<>();
-        ensureFixedChestplateRecipes(toUpsert);
-        ensureNewChestplateRecipes(toUpsert);
-        ensureOmegaChestplateRecipes(toUpsert);
-        ensureSwordRecipes(toUpsert);
+    public static List<SlayerRecipes.Recipe> buildRecipes() {
+        List<SlayerRecipes.Recipe> out = new ArrayList<>();
+        ensureFixedChestplateRecipes(out);
+        return out;
+    }
 
-        RecipeConfigManager.upsertCustomRecipesSilent(toUpsert);
+    public static void ensureRecipes() {
+        RecipeConfigManager.upsertCustomRecipesSilent(buildRecipes());
     }
 
     private static void ensureFixedChestplateRecipes(List<SlayerRecipes.Recipe> out) {
@@ -68,93 +71,6 @@ public final class DragonGearRecipeBootstrap {
                 null,
                 0
         ));
-    }
-
-    private static void ensureNewChestplateRecipes(List<SlayerRecipes.Recipe> out) {
-        for (int i = 1; i <= 95; i++) {
-            ItemStack result = MoreDragonChestplates.createNewDragonChestplate(i);
-            ItemStack core = (i <= 20) ? SlayerItems.createDragonCrafterCoreT1()
-                    : (i <= 50) ? SlayerItems.createDragonCrafterCoreT2()
-                    : SlayerItems.createDragonCrafterCoreT3();
-
-            String themePrefix = MoreDragonChestplates.themePrefixForNewChestplateIndex(i);
-            Block themeBlock = themeBlockForThemePrefix(themePrefix);
-            boolean[] locked = lockedAll();
-
-            ItemStack[] ing = new ItemStack[] {
-                    s(themeBlock), s(Items.NETHER_STAR), s(themeBlock),
-                    s(Items.DIAMOND), core, s(Items.DIAMOND),
-                    s(themeBlock), s(Items.NETHERITE_CHESTPLATE), s(themeBlock)
-            };
-
-            out.add(new SlayerRecipes.Recipe(
-                    "Dragon Chestplate " + String.format("%02d", i) + " (Hard Core+Star)",
-                    result,
-                    ing,
-                    locked,
-                    null,
-                    0
-            ));
-        }
-    }
-
-    private static void ensureOmegaChestplateRecipes(List<SlayerRecipes.Recipe> out) {
-        for (int i = 1; i <= 3; i++) {
-            ItemStack result = MoreDragonChestplates.createOmegaDragonChestplate(i);
-            ItemStack omegaCore = SlayerItems.createDragonCrafterCoreOmega();
-
-            Block themeBlock = switch (i) {
-                case 1 -> Blocks.OBSIDIAN;       // Bulwark
-                case 2 -> Blocks.PACKED_ICE;    // Aegisweave
-                case 3 -> Blocks.AMETHYST_BLOCK;// Prism
-                default -> Blocks.DEEPSLATE;
-            };
-
-            boolean[] locked = lockedAll();
-            ItemStack[] ing = new ItemStack[] {
-                    s(themeBlock), s(Items.NETHER_STAR), s(themeBlock),
-                    s(Items.DIAMOND), omegaCore, s(Items.DIAMOND),
-                    s(themeBlock), s(Items.NETHERITE_CHESTPLATE), s(themeBlock)
-            };
-
-            out.add(new SlayerRecipes.Recipe(
-                    "Omega Dragon Chestplate " + i + " (Hard Core+Star)",
-                    result,
-                    ing,
-                    locked,
-                    null,
-                    0
-            ));
-        }
-    }
-
-    private static void ensureSwordRecipes(List<SlayerRecipes.Recipe> out) {
-        for (int i = 1; i <= 55; i++) {
-            ItemStack result = DragonSwords.createDragonSword(i);
-
-            ItemStack core = (i <= 20) ? SlayerItems.createDragonCrafterCoreT1()
-                    : (i <= 40) ? SlayerItems.createDragonCrafterCoreT2()
-                    : SlayerItems.createDragonCrafterCoreT3();
-
-            String theme = DragonSwords.themeForSwordIndex(i);
-            Block themeBlock = themeBlockForThemePrefix(theme);
-            boolean[] locked = lockedAll();
-
-            ItemStack[] ing = new ItemStack[] {
-                    s(themeBlock), s(Items.NETHER_STAR), s(themeBlock),
-                    s(Items.DIAMOND), core, s(Items.DIAMOND),
-                    s(themeBlock), s(Items.NETHERITE_SWORD), s(themeBlock)
-            };
-
-            out.add(new SlayerRecipes.Recipe(
-                    "Dragon Sword " + String.format("%02d", i) + " (Hard Core+Star)",
-                    result,
-                    ing,
-                    locked,
-                    null,
-                    0
-            ));
-        }
     }
 
     private static boolean[] lockedAll() {

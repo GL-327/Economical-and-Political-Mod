@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.HealthScalingManager;
+import com.political.stats.HealthScalingManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.damagesource.DamageSource;

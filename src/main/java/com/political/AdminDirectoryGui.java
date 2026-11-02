@@ -1,5 +1,30 @@
 package com.political;
+import com.political.government.Treasury;
 
+
+
+import com.political.bounty.BountyGui;
+import com.political.economy.AuctionHouseGui;
+import com.political.economy.BankGui;
+import com.political.economy.BazaarGui;
+import com.political.economy.ShopItemGui;
+import com.political.economy.UndergroundAuctionGui;
+import com.political.government.ChairGui;
+import com.political.government.GovernmentGui;
+import com.political.government.GovernmentTreasuryGui;
+import com.political.government.JudgeGui;
+import com.political.government.ViceChairGui;
+import com.political.government.VoteGui;
+import com.political.party.PartyJoinGui;
+import com.political.party.PartyLeaderGui;
+import com.political.recipe.RecipeEditorGui;
+import com.political.recipe.RecipesGui;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementEventGui;
+import com.political.settlement.SettlementProgressGui;
+import com.political.settlement.WarGui;
+import com.political.technique.Technique;
+import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -60,7 +85,6 @@ public final class AdminDirectoryGui {
 
         // Settlement
         add("Settlement", "Civilization Hub", p -> CivilizationHubGui.open(p));
-        add("Settlement", "Clan", p -> ClanGui.open(p));
         add("Settlement", "Guild", p -> GuildGui.open(p));
         add("Settlement", "Incursion", p -> IncursionGui.open(p));
         add("Settlement", "Settlement Event", p -> SettlementEventGui.open(p));
@@ -85,11 +109,9 @@ public final class AdminDirectoryGui {
         add("Politics", "War", p -> WarGui.open(p));
 
         // Economy
-        add("Economy", "Auction", p -> AuctionGui.open(p));
         add("Economy", "Auction House", p -> AuctionHouseGui.open(p));
         add("Economy", "Bank", p -> BankGui.open(p));
         add("Economy", "Bazaar", p -> BazaarGui.open(p));
-        add("Economy", "Coin Shop", p -> CoinShopGui.open(p));
         add("Economy", "Commission", p -> CommissionGui.open(p));
         add("Economy", "Crate", p -> CrateGui.open(p));
         add("Economy", "Credits Trade", p -> CreditsTradeGui.open(p));
@@ -109,17 +131,9 @@ public final class AdminDirectoryGui {
         add("Combat", "Hunt", p -> HuntGui.open(p));
         add("Combat", "Hunts", p -> HuntsGui.openMainMenu(p));
         add("Combat", "Nemesis", p -> NemesisGui.open(p));
-        add("Combat", "Special Grade", p -> SpecialGradeGui.open(p));
         add("Combat", "World Boss", p -> WorldBossGui.openMainMenu(p));
 
-        // Magic
-        add("Magic", "Binding Vow", p -> BindingVowGui.open(p));
-        add("Magic", "Cursed Arsenal", p -> CursedArsenalGui.open(p));
-        add("Magic", "Cursed Spirit", p -> CursedSpiritGui.open(p));
-        add("Magic", "Magic", p -> MagicGui.openMainMenu(p));
-        add("Magic", "School Tree", p -> SchoolTreeGui.openSchoolList(p));
-        add("Magic", "Sorcerer", p -> SorcererGui.open(p));
-        add("Magic", "Technique", p -> TechniqueGui.open(p));
+        add("Combat", "Technique", p -> TechniqueGui.open(p));
 
         // Progress
         add("Progress", "Ascension Grind", p -> AscensionGrindGui.openMain(p));
@@ -151,7 +165,6 @@ public final class AdminDirectoryGui {
 
         // World
         add("World", "Atlas Map", p -> AtlasMapGui.open(p));
-        add("World", "Backrooms", p -> BackroomsGui.open(p));
         add("World", "Fishing", p -> FishingGui.openMainMenu(p));
         add("World", "Living World", p -> LivingWorldGui.open(p));
         add("World", "Season", p -> SeasonGui.open(p));

@@ -1,5 +1,15 @@
 package com.political;
+import com.political.government.Treasury;
 
+
+
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerManager;
+import com.political.economy.CoinManager;
+import com.political.government.DictatorManager;
+import com.political.government.ElectionManager;
+import com.political.government.PerkManager;
+import com.political.party.PoliticalPartyManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.server.MinecraftServer;
@@ -34,15 +44,30 @@ public class DataManager {
                 if (data == null) {
                     data = new SaveData();
                 }
+                if (data.governmentTreasury == 0 && data.governmentSpendingPot != 0) {
+                    data.governmentTreasury = data.governmentSpendingPot;
+                }
+                if (!data.vatInitialized && data.vatPercent == 0) {
+                    data.vatPercent = 5;
+                    data.vatInitialized = true;
+                }
                 SlayerManager.loadActiveQuests(data.activeSlayerQuests);
                 PerkManager.setActivePerks(data.activePerks);
                 PerkManager.setLastChairPerks(data.lastChairPerks);
                 PerkManager.setChairSelectedPerks(data.chairSelectedPerks);
-                PerkManager.setViceChairPerk(data.viceChairPerk);
+                if (data.viceChairPerks != null && !data.viceChairPerks.isEmpty()) {
+                    PerkManager.setViceChairPerks(data.viceChairPerks);
+                } else {
+                    PerkManager.setViceChairPerk(data.viceChairPerk);
+                }
                 PerkManager.setChairPerksSetThisTerm(data.chairPerksSetThisTerm);
                 PerkManager.setViceChairPerksSetThisTerm(data.viceChairPerksSetThisTerm);
                 PerkManager.setPreviousTermPerks(data.previousTermPerks);
                 PerkManager.loadTemporaryPerks(data.temporaryPerkExpirations);
+                if (!data.electionDeslopMigrated) {
+                    data.electionSystemEnabled = true;
+                    data.electionDeslopMigrated = true;
+                }
                 ElectionManager.loadFromData(data);
                 PrisonManager.loadFromData(data);
                 TaxManager.loadFromData(data);
@@ -80,6 +105,10 @@ public class DataManager {
             } catch (IOException e) {
                 PoliticalServer.LOGGER.error("Failed to load data", e);
             }
+        } else {
+            data.electionSystemEnabled = true;
+            data.electionDeslopMigrated = true;
+            ElectionManager.loadFromData(data);
         }
     }
 
@@ -92,11 +121,13 @@ public class DataManager {
         data.lastChairPerks = PerkManager.getLastChairPerks();
         data.chairSelectedPerks = PerkManager.getChairSelectedPerks();
         data.viceChairPerk = PerkManager.getViceChairPerk();
+        data.viceChairPerks = PerkManager.getViceChairPerks();
         data.chairPerksSetThisTerm = PerkManager.isChairPerksSetThisTerm();
         data.viceChairPerksSetThisTerm = PerkManager.isViceChairPerksSetThisTerm();
         data.previousTermPerks = PerkManager.getPreviousTermPerks();
         data.temporaryPerkExpirations = PerkManager.getTemporaryPerkExpirations();
         ElectionManager.saveToData(data);
+        data.electionDeslopMigrated = true;
         PrisonManager.saveToData(data);
         TaxManager.saveToData(data);
         DictatorManager.saveToData(data);
@@ -138,29 +169,35 @@ public class DataManager {
         return true;
     }
 
+    private static long asLong(Long value) {
+        return value == null ? 0L : value;
+    }
+
     // ============================================================
     // BANK SYSTEM
     // ============================================================
 
-    public static int getBankMain(String uuid) {
-        return data.playerBankMain.getOrDefault(uuid, 0);
+    public static long getBankMain(String uuid) {
+        return asLong(data.playerBankMain.get(uuid));
     }
 
-    public static void setBankMain(String uuid, int amount) {
-        data.playerBankMain.put(uuid, Math.max(0, amount));
+    public static void setBankMain(String uuid, long amount) {
+        data.playerBankMain.put(uuid, Math.max(0L, Math.min(5_000_000_000L, amount)));
     }
 
-    public static int getBankSavings(String uuid) {
-        return data.playerBankSavings.getOrDefault(uuid, 0);
+    public static long getBankSavings(String uuid) {
+        return asLong(data.playerBankSavings.get(uuid));
     }
 
-    public static void setBankSavings(String uuid, int amount) {
-        data.playerBankSavings.put(uuid, Math.max(0, amount));
+    public static void setBankSavings(String uuid, long amount) {
+        data.playerBankSavings.put(uuid, Math.max(0L, Math.min(5_000_000_000L, amount)));
     }
 
-    public static int getBankLoan(String uuid) {
+    public static long getBankLoan(String uuid) {
         List<LoanEntry> loans = getLoans(uuid);
-        return loans.stream().mapToInt(l -> l.amount).sum();
+        long sum = 0;
+        for (LoanEntry loan : loans) sum += loan.amount;
+        return sum;
     }
 
     public static void setBankLoan(String uuid, int amount) {
@@ -330,13 +367,13 @@ public class DataManager {
         data.loansAreFrozen = frozen;
     }
 
-    public static double getSavingsTierMultiplier(int savingsBalance) {
+    public static double getSavingsTierMultiplier(long savingsBalance) {
         if (savingsBalance >= 100_000) return 1.5;
         if (savingsBalance >= 10_000) return 1.2;
         return 1.0;
     }
 
-    public static double getEffectiveSavingsRate(int savingsBalance) {
+    public static double getEffectiveSavingsRate(long savingsBalance) {
         return data.savingsAccountInterestRate * getSavingsTierMultiplier(savingsBalance);
     }
 
@@ -426,13 +463,13 @@ public class DataManager {
         // If vice chair is changing to a different person, clear VC perks
         if (oldViceChair != null && !oldViceChair.equals(uuid)) {
             // Remove vice chair's perk from active perks
-            String vcPerk = PerkManager.getViceChairPerk();
-            if (vcPerk != null) {
+            List<String> vcPerks = PerkManager.getViceChairPerks();
+            if (!vcPerks.isEmpty()) {
                 List<String> activePerks = PerkManager.getActivePerks();
-                activePerks.remove(vcPerk);
+                activePerks.removeAll(vcPerks);
                 PerkManager.setActivePerks(activePerks);
             }
-            PerkManager.setViceChairPerk(null);
+            PerkManager.setViceChairPerks(List.of());
 
             // Unlock vice chair perk selection for new VC
             PerkManager.setViceChairPerksSetThisTerm(false);
@@ -525,21 +562,61 @@ public class DataManager {
     // ============================================================
 
     public static int getGovernmentTreasury() {
+        long v = data.governmentTreasury;
+        if (v > Integer.MAX_VALUE) return Integer.MAX_VALUE;
+        if (v < Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        return (int) v;
+    }
+
+    public static long getGovernmentTreasuryLong() {
         return data.governmentTreasury;
     }
 
     public static void setGovernmentTreasury(int amount) {
-        data.governmentTreasury = Math.max(0, amount);
+        data.governmentTreasury = amount;
+    }
+
+    public static void setGovernmentTreasury(long amount) {
+        data.governmentTreasury = amount;
     }
 
     public static void addGovernmentTreasury(int amount) {
-        data.governmentTreasury = Math.max(0, data.governmentTreasury + amount);
+        addGovernmentTreasury((long) amount);
+    }
+
+    public static void addGovernmentTreasury(long amount) {
+        data.governmentTreasury += amount;
     }
 
     public static boolean removeGovernmentTreasury(int amount) {
-        if (data.governmentTreasury < amount) return false;
+        return removeGovernmentTreasury((long) amount);
+    }
+
+    public static boolean removeGovernmentTreasury(long amount) {
         data.governmentTreasury -= amount;
         return true;
+    }
+
+    public static int getVatPercent() {
+        if (!data.vatInitialized) {
+            data.vatPercent = 5;
+            data.vatInitialized = true;
+        }
+        if (data.vatPercent < 0) data.vatPercent = 0;
+        if (data.vatPercent > 30) data.vatPercent = 30;
+        return data.vatPercent;
+    }
+
+    public static void setVatPercent(int percent) {
+        data.vatPercent = Math.max(0, Math.min(30, percent));
+        data.vatInitialized = true;
+    }
+
+    public static long getElectionTieSeed() {
+        if (data.electionTieSeed == 0 && PoliticalServer.server != null) {
+            data.electionTieSeed = PoliticalServer.server.overworld().getSeed();
+        }
+        return data.electionTieSeed;
     }
 
     // ============================================================
@@ -990,8 +1067,9 @@ public class DataManager {
         public long termEndTime = 0;
         public long electionEndTime = 0;
         public boolean electionActive = false;
-        public boolean electionSystemEnabled = false;
+        public boolean electionSystemEnabled = true;
         public boolean electionSystemPaused = false;
+        public boolean electionDeslopMigrated = false;
         public Map<String, Integer> votes = new HashMap<>();
         public Map<String, String> votedPlayers = new HashMap<>();
         public List<String> candidates = null;
@@ -1004,6 +1082,7 @@ public class DataManager {
         public List<String> lastChairPerks = null;
         public List<String> chairSelectedPerks = null;
         public String viceChairPerk = null;
+        public List<String> viceChairPerks = new ArrayList<>();
         public boolean chairPerksSetThisTerm = false;
         public boolean viceChairPerksSetThisTerm = false;
         public List<String> previousTermPerks = null;
@@ -1029,8 +1108,8 @@ public class DataManager {
         public Map<String, Integer> playerCredits = new HashMap<>();
 
         // Bank system
-        public Map<String, Integer> playerBankMain = new HashMap<>();
-        public Map<String, Integer> playerBankSavings = new HashMap<>();
+        public Map<String, Long> playerBankMain = new HashMap<>();
+        public Map<String, Long> playerBankSavings = new HashMap<>();
         // Legacy single-loan field kept for backward compatibility (migrated on load)
         public Map<String, Integer> playerBankLoan = new HashMap<>();
         public Map<String, List<LoanEntry>> playerBankLoans = new HashMap<>();
@@ -1049,7 +1128,7 @@ public class DataManager {
         // Bank upgrade system
         public Map<String, Integer> playerBankUpgradeLevel = new HashMap<>(); // 0-10 levels
 
-        // Government spending pot (cannot be withdrawn by leaders)
+        // Government spending pot (legacy alias; the live ledger is governmentTreasury)
         public long governmentSpendingPot = 0;
 
         // Dictator
@@ -1097,8 +1176,12 @@ public class DataManager {
         /** Extended buff progress (mirrors {@link BuffProgressManager}); survives restarts. */
         public BuffProgressSnapshot buffProgressSnapshot;
 
-    // Government Treasury (legacy; migrated to party budgets on load)
-    public int governmentTreasury = 0;
+    // Government Treasury (one national ledger; may be negative = debt)
+    public long governmentTreasury = 0;
+    public int vatPercent = 5;
+    public boolean vatInitialized = false;
+    public long lastDailyBudgetMs = 0;
+    public long electionTieSeed = 0;
 
     // Temporary Perks (from government spending)
     public Map<String, Long> temporaryPerkExpirations = new HashMap<>();

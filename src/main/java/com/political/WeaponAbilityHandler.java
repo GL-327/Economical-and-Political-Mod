@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -452,15 +455,6 @@ public class WeaponAbilityHandler {
             case ENDERMAN -> weaponName.contains("Void") || weaponName.contains("Ender");
             case IRON_GOLEM -> weaponName.contains("Gavel") || weaponName.contains("Sculk");
             case PIGLIN -> weaponName.contains("Gilded") || weaponName.contains("Ravager");
-            case HUSK -> weaponName.contains("Cleaver") || weaponName.contains("Undying");
-            case CAVE_SPIDER -> weaponName.contains("Fang") || weaponName.contains("Venomous");
-            case STRAY -> weaponName.contains("Bone") && weaponName.contains("Blade");
-            case MAGMA_CUBE -> weaponName.contains("Slime") || weaponName.contains("Gelatinous");
-            case BLAZE -> weaponName.contains("Void") || weaponName.contains("Ender");
-            case HOGLIN -> weaponName.contains("Gilded") || weaponName.contains("Ravager");
-            case WITHER_SKELETON -> weaponName.contains("Bone") && weaponName.contains("Blade");
-            case RAVAGER -> weaponName.contains("Gavel") || weaponName.contains("Sculk");
-            case NANITE -> weaponName.contains("Void") || weaponName.contains("Ender");
         };
     }
 
@@ -502,15 +496,6 @@ public class WeaponAbilityHandler {
             case ENDERMAN -> armorName.contains("Void") || armorName.contains("Phantom");
             case IRON_GOLEM -> armorName.contains("Sculk") || armorName.contains("Warden");
             case PIGLIN -> armorName.contains("Gilded") || armorName.contains("Ravager") || armorName.contains("Crown");
-            case HUSK -> armorName.contains("Berserker") || armorName.contains("Undying");
-            case CAVE_SPIDER -> armorName.contains("Venomous") || armorName.contains("Spider");
-            case STRAY -> armorName.contains("Bone") || armorName.contains("Desperado");
-            case MAGMA_CUBE -> armorName.contains("Slime") || armorName.contains("Gelatinous");
-            case BLAZE -> armorName.contains("Void") || armorName.contains("Phantom");
-            case HOGLIN -> armorName.contains("Gilded") || armorName.contains("Ravager") || armorName.contains("Crown");
-            case WITHER_SKELETON -> armorName.contains("Bone") || armorName.contains("Desperado");
-            case RAVAGER -> armorName.contains("Sculk") || armorName.contains("Warden");
-            case NANITE -> armorName.contains("Void") || armorName.contains("Phantom");
         };
     }
 

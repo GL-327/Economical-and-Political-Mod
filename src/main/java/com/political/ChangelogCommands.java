@@ -1,11 +1,12 @@
 package com.political;
 
+
+import com.political.economy.BazaarGui;
+import com.political.settlement.SettlementProgressGui;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.server.level.ServerPlayer;
 
 /** /changelog opens the version picker. The subcommands back the clickable chat prompts. */
 public final class ChangelogCommands {
@@ -15,93 +16,6 @@ public final class ChangelogCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Collections live here rather than in their own file because this class is already the
         // home for the small player facing browsers.
-        for (String alias : new String[]{"delveforge", "forge"}) {
-            dispatcher.register(Commands.literal(alias)
-                    .executes(ctx -> {
-                        DelveForgeGui.open(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    }));
-        }
-
-        // The front door. Short aliases on purpose: this is the screen a new player should find
-        // first and the one an old one should be able to reach without thinking.
-        dispatcher.register(Commands.literal("tutorial")
-                .executes(ctx -> {
-                    ServerPlayer p = ctx.getSource().getPlayerOrException();
-                    TutorialManager.start(p, true);
-                    return 1;
-                })
-                .then(Commands.literal("stop").executes(ctx -> {
-                    ServerPlayer p = ctx.getSource().getPlayerOrException();
-                    TutorialManager.stop(p);
-                    p.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                            "§7Walk through stopped. §8/tutorial to start it again."));
-                    return 1;
-                }))
-                // The admin form. Gated, because starting a walk through on somebody else is a
-                // thing that happens to them rather than something they asked for.
-                .then(Commands.argument("player", EntityArgument.player())
-                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .executes(ctx -> {
-                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                            TutorialManager.start(target, true);
-                            ctx.getSource().sendSuccess(() ->
-                                    net.minecraft.network.chat.Component.literal(
-                                            "§aStarted the walk through for "
-                                                    + target.getName().getString() + "."), true);
-                            return 1;
-                        })));
-
-        for (String alias : new String[]{"politics", "gov", "government"}) {
-            dispatcher.register(Commands.literal(alias)
-                    .executes(ctx -> {
-                        PoliticsHub.open(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    }));
-        }
-
-        for (String alias : new String[]{"delve", "delves"}) {
-            dispatcher.register(Commands.literal(alias)
-                    .executes(ctx -> {
-                        DelveGui.open(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    }));
-        }
-
-        for (String alias : new String[]{"hotreload", "livereload"}) {
-            dispatcher.register(Commands.literal(alias)
-                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                    .executes(ctx -> {
-                        HotReloadGui.open(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    })
-                    .then(Commands.literal("data").executes(ctx -> {
-                        HotReloadGui.runData(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    }))
-                    .then(Commands.literal("code").executes(ctx -> {
-                        HotReloadGui.runCode(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    })));
-        }
-
-        for (String alias : new String[]{"itemeditor", "edititem"}) {
-            dispatcher.register(Commands.literal(alias)
-                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                    .executes(ctx -> {
-                        ItemEditorGui.open(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    }));
-        }
-
-        for (String alias : new String[]{"enchants", "enchanting", "customenchants"}) {
-            dispatcher.register(Commands.literal(alias)
-                    .executes(ctx -> {
-                        CustomEnchantGui.open(ctx.getSource().getPlayerOrException());
-                        return 1;
-                    }));
-        }
-
         for (String alias : new String[]{"raredrops", "drops"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
@@ -202,6 +116,11 @@ public final class ChangelogCommands {
                 }));
 
         dispatcher.register(Commands.literal("minions")
+                .executes(ctx -> {
+                    MinionGui.open(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }));
+        dispatcher.register(Commands.literal("minion")
                 .executes(ctx -> {
                     MinionGui.open(ctx.getSource().getPlayerOrException());
                     return 1;

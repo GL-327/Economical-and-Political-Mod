@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.CustomItemHandler;
+import com.political.items.CustomItemHandler;
 import com.political.SpawnProtectionManager;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;

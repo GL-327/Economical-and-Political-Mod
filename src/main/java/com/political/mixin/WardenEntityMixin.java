@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.SlayerManager;
+import com.political.bounty.SlayerManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.warden.Warden;

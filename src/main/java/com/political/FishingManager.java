@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.core.BlockPos;

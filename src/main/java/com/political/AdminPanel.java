@@ -1,5 +1,28 @@
 package com.political;
 
+
+import com.political.bounty.BountyGui;
+import com.political.economy.AuctionHouseGui;
+import com.political.economy.BazaarGui;
+import com.political.economy.CoinManager;
+import com.political.economy.UndergroundAuctionGui;
+import com.political.government.GovernmentTreasuryGui;
+import com.political.government.PerksGui;
+import com.political.party.PartyLeaderGui;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.RecipesGui;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementEconomyGui;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.SettlementProgressGui;
+import com.political.settlement.SettlementScanner;
+import com.political.settlement.SettlementTier;
+import com.political.settlement.ShadowGovernmentManager;
+import com.political.settlement.WarGui;
+import com.political.settlement.WarManager;
+import com.political.stats.PlayerStatsManager;
+import com.political.technique.TechniqueGui;
+import com.political.technique.TechniqueManager;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -79,19 +102,19 @@ public final class AdminPanel {
         // Row 2: content and world.
         gui.setSlot(19, GuiKit.tile(Items.CRAFTING_TABLE, "Content", ChatFormatting.LIGHT_PURPLE,
                 () -> openContent(player),
-                "Custom items and recipes", "The seven gear lines", "Reforge, relics, contracts"));
+                "Custom items and recipes", "Reforge, relics, contracts"));
 
         gui.setSlot(20, GuiKit.tile(Items.ZOMBIE_HEAD, "Combat", ChatFormatting.DARK_PURPLE,
                 () -> openCombat(player),
-                "Mob scaling and bosses", "Cursed spirits and grades", "Bounties and slayers"));
+                "Mob scaling and bosses", "Bounties and slayers"));
 
-        gui.setSlot(21, GuiKit.tile(Items.ENCHANTING_TABLE, "Magic", ChatFormatting.BLUE,
-                () -> openMagic(player),
-                "Techniques and schools", "Cursed energy and domains", "Skill trees"));
+        gui.setSlot(21, GuiKit.tile(Items.ENCHANTED_BOOK, "Techniques", ChatFormatting.BLUE,
+                () -> TechniqueGui.open(player),
+                "Learned combat techniques"));
 
         gui.setSlot(22, GuiKit.tile(Items.COMPASS, "World", ChatFormatting.AQUA,
                 () -> openWorld(player),
-                "Spawn, time and weather", "Backrooms and dimensions", "World events and seasons"));
+                "Spawn, time and weather", "World events and seasons"));
 
         gui.setSlot(23, GuiKit.tile(Items.WRITABLE_BOOK, "Diagnostics", ChatFormatting.WHITE,
                 () -> openDiagnostics(player),
@@ -202,7 +225,6 @@ public final class AdminPanel {
                             TechniqueManager.save();
                             SchoolTreeManager.save();
                             HighCouncilManager.save();
-                            CursedEnergyManager.save();
                             player.sendSystemMessage(Component.literal("§aCore managers written to disk."));
                             openServer(player);
                         },
@@ -715,16 +737,7 @@ public final class AdminPanel {
         gui.setSlot(25, GuiKit.tile(Items.WRITTEN_BOOK, "Contracts", ChatFormatting.YELLOW,
                 () -> ContractGui.open(player), "The rotating board"));
 
-        gui.setSlot(29, GuiKit.tile(Items.HEAVY_CORE, "Line catalysts", ChatFormatting.YELLOW,
-                () -> {
-                    player.sendSystemMessage(Component.literal("§6The nine line catalysts:"));
-                    for (LineCatalyst c : LineCatalyst.values()) {
-                        player.sendSystemMessage(Component.literal("  §e" + c.display
-                                + " §8- " + c.purpose + " §7(" + c.tier.label() + ")"));
-                    }
-                }, "What keys each gear line"));
-
-        gui.setSlot(37, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
+        gui.setSlot(29, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
                 () -> TitleGui.open(player),
                 Title.values().length + " titles",
                 "Earned from every other system"));
@@ -768,13 +781,7 @@ public final class AdminPanel {
         GuiKit.header(gui, Items.ZOMBIE_HEAD, "Combat", ChatFormatting.DARK_PURPLE,
                 "Mobs, bosses and the things that hunt players");
 
-        gui.setSlot(19, GuiKit.tile(Items.WITHER_SKELETON_SKULL, "Cursed spirits", ChatFormatting.DARK_PURPLE,
-                () -> CursedSpiritGui.open(player), "Grade four up to special grade"));
-
-        gui.setSlot(20, GuiKit.tile(Items.NETHER_STAR, "Special grade bosses", ChatFormatting.RED,
-                () -> SpecialGradeGui.open(player), "The named encounters"));
-
-        gui.setSlot(21, GuiKit.tile(Items.DRAGON_HEAD, "World bosses", ChatFormatting.GOLD,
+        gui.setSlot(19, GuiKit.tile(Items.DRAGON_HEAD, "World bosses", ChatFormatting.GOLD,
                 () -> WorldBossGui.openMainMenu(player), "Spawn and schedule"));
 
         gui.setSlot(22, GuiKit.tile(Items.IRON_SWORD, "Bounties", ChatFormatting.YELLOW,
@@ -801,43 +808,10 @@ public final class AdminPanel {
                 NemesisManager.total() + " grudges on this server",
                 "Mobs that killed a player and came back"));
 
-        gui.setSlot(33, GuiKit.tile(Items.EMERALD, "Collectors", ChatFormatting.LIGHT_PURPLE,
-                () -> CollectorGui.open(player),
-                "Buys what the market cannot price",
-                "Place one with /placecollector"));
-
-        gui.setSlot(37, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
+        gui.setSlot(31, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
                 () -> RareDropGui.open(player, 0),
                 RareDrop.values().length + " drop only items",
                 "Published odds, per mob"));
-
-        gui.setSlot(39, GuiKit.tile(Items.EMERALD_BLOCK, "Legacy shop", ChatFormatting.DARK_GRAY,
-                () -> ShopGui.openMainMenu(player),
-                "The old fixed price shop",
-                "Players go to the bazaar now, but this",
-                "still grants anything it alone carried"));
-
-        gui.setSlot(28, GuiKit.tile(Items.KNOWLEDGE_BOOK, "Tutorial", ChatFormatting.YELLOW,
-                () -> TutorialGui.open(player),
-                TutorialManager.stepCount() + " steps, "
-                        + TutorialManager.seenCount() + " players have seen it",
-                "Run it on somebody, or turn it on for",
-                "everybody who joins"));
-
-        gui.setSlot(32, GuiKit.tile(Items.CLOCK, "Live reload", ChatFormatting.AQUA,
-                () -> HotReloadGui.open(player),
-                "Change the server without stopping it",
-                HotReloadAgent.available() ? "Code and data" : "Data only"));
-
-        gui.setSlot(34, GuiKit.tile(Items.ANVIL, "Item editor", ChatFormatting.GOLD,
-                () -> ItemEditorGui.open(player),
-                ItemOverrideManager.count() + " items carry an edit",
-                "Edits reach every copy in the world"));
-
-        gui.setSlot(41, GuiKit.tile(Items.ENCHANTING_TABLE, "Enchanting", ChatFormatting.DARK_PURPLE,
-                () -> CustomEnchantGui.open(player),
-                CustomEnchant.values().length + " custom enchantments",
-                "Applies to the item in your hand"));
 
         gui.setSlot(29, GuiKit.tile(Items.ZOMBIE_SPAWN_EGG, "Slayer admin", ChatFormatting.RED,
                 () -> AdminGui.openSlayerAdminGui(player), "Levels, bosses and resets"));
@@ -861,19 +835,7 @@ public final class AdminPanel {
         gui.setSlot(20, GuiKit.tile(Items.BOOKSHELF, "Schools", ChatFormatting.AQUA,
                 () -> SchoolTreeGui.openSchoolList(player), "The school trees"));
 
-        gui.setSlot(21, GuiKit.tile(Items.AMETHYST_SHARD, "Magic panel", ChatFormatting.BLUE,
-                () -> MagicGui.openMainMenu(player), "Spells, staves and levels"));
-
-        gui.setSlot(22, GuiKit.tile(Items.SOUL_LANTERN, "Cursed energy", ChatFormatting.DARK_PURPLE,
-                () -> {
-                    long e = CursedEnergyManager.getEnergy(player);
-                    player.sendSystemMessage(Component.literal("§5Your cursed energy: §d" + e));
-                }, "Read the current pool"));
-
-        gui.setSlot(23, GuiKit.tile(Items.END_CRYSTAL, "Sorcerer path", ChatFormatting.RED,
-                () -> SorcererGui.open(player), "Ranks and clans"));
-
-        gui.setSlot(24, GuiKit.tile(Items.BEACON, "Progression trees", ChatFormatting.GREEN,
+        gui.setSlot(21, GuiKit.tile(Items.BEACON, "Progression trees", ChatFormatting.GREEN,
                 () -> ProgressionTreeGui.openMainMenu(player), "Every unlock tree"));
 
         GuiKit.footer(gui, SIZE, player, () -> open(player));
@@ -914,10 +876,7 @@ public final class AdminPanel {
                     openWorld(player);
                 }, "Rain and thunder"));
 
-        gui.setSlot(23, GuiKit.tile(Items.YELLOW_CONCRETE, "Backrooms", ChatFormatting.YELLOW,
-                () -> BackroomsGui.open(player), "Levels and entrances"));
-
-        gui.setSlot(24, GuiKit.tile(Items.FILLED_MAP, "Atlas", ChatFormatting.GREEN,
+        gui.setSlot(23, GuiKit.tile(Items.FILLED_MAP, "Atlas", ChatFormatting.GREEN,
                 () -> AtlasMapGui.open(player), "The live world map"));
 
         gui.setSlot(31, GuiKit.tile(Items.CHERRY_SAPLING, "Custom villages", ChatFormatting.GREEN,
@@ -971,26 +930,20 @@ public final class AdminPanel {
 
         int recipes = 0;
         try {
-            recipes = RecipeManager.getAllRecipes().size();
+            recipes = RecipeConfigManager.getRecipes().size();
         } catch (Exception ignored) {
             // A recipe store that has not initialised yet reads as zero rather than throwing.
         }
         final int recipeCount = recipes;
 
         gui.setSlot(19, GuiKit.info(Items.CRAFTING_TABLE, "Recipes", ChatFormatting.GOLD,
-                recipeCount + " loaded",
-                "Expected 7216 on a full Version X"));
+                recipeCount + " loaded"));
 
         gui.setSlot(20, GuiKit.info(Items.CAMPFIRE, "Settlements", ChatFormatting.GREEN,
                 SettlementManager.getAllSettlements().size() + " registered"));
 
-        gui.setSlot(21, GuiKit.info(Items.NETHER_STAR, "Gear lines", ChatFormatting.LIGHT_PURPLE,
-                "Starbound 432", "Beastcraft, Clockwork, Grimoire 630 each",
-                "Tempest, Voyager, Regalia 630 each"));
-
-        gui.setSlot(22, GuiKit.info(Items.HEAVY_CORE, "Catalysts", ChatFormatting.YELLOW,
-                LineCatalyst.values().length + " line catalysts",
-                "Each craftable from a crafting core"));
+        gui.setSlot(21, GuiKit.info(Items.DRAGON_HEAD, "Dragon plates", ChatFormatting.LIGHT_PURPLE,
+                "Eight original chestplates"));
 
         gui.setSlot(23, GuiKit.action(Items.SPYGLASS, "Print recipe report", ChatFormatting.AQUA,
                 () -> {

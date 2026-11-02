@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.economy.CoinManager;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -201,7 +206,6 @@ public final class RelicManager {
                 case GOLEM_CORE -> ensure(player, MobEffects.HEALTH_BOOST, 0);
                 case CURSED_MARROW -> {
                     if (player.tickCount % 200 == 0) {
-                        CursedEnergyManager.earn(player, 2);
                     }
                 }
                 default -> { }
@@ -265,7 +269,6 @@ public final class RelicManager {
             if (r.trigger != Relic.Trigger.ON_KILL) continue;
             switch (r) {
                 case SOUL_LANTERN_RELIC -> {
-                    CursedEnergyManager.earn(player, 3);
                     VfxPlus.soulHarvest(level, victim.position().add(0, 1, 0), player.position().add(0, 1, 0));
                 }
                 case GLUTTON_HEART -> player.heal(r.power / 5.0f);

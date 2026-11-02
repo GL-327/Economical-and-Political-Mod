@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.SlayerItems;
+import com.political.bounty.SlayerItems;
 import com.political.ArmourAttribute;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.effect.MobEffectInstance;

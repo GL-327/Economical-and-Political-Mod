@@ -1,5 +1,10 @@
 package com.political;
+import com.political.mixin.FishingHookMixin;
 
+
+
+import com.political.economy.CoinManager;
+import com.political.party.PoliticalPartyManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -112,7 +117,6 @@ public final class FishingEventHandler {
         BuffProgressManager.recordFishCaught(player);
         FishingManager.addXp(player, baseXp);
         PoliticalPartyManager.progressPartyCommission(player, "FISH_CATCHES", 1);
-        MagicManager.tryProgressFish(player);
 
         boolean doubleLoot = FishingManager.hasNode(uuid, "tf_double_haul") && RNG.nextDouble() < 0.05;
 

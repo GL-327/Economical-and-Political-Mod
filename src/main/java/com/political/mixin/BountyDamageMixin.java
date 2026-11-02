@@ -1,18 +1,36 @@
 package com.political.mixin;
+import com.political.CollectionManager;
+import com.political.CompanionManager;
+import com.political.ContractManager;
+import com.political.NemesisManager;
+import com.political.PlayerBuffManager;
+import com.political.ProgressionTreeManager;
+import com.political.RareDropManager;
+import com.political.RelicManager;
+import com.political.WarrantArmour;
+import com.political.items.DragonPlateHandler;
 
+
+
+import com.political.government.DictatorManager;
+import com.political.government.PerkManager;
+import com.political.party.PartyPerkEffects;
+import com.political.settlement.WarManager;
+import com.political.stats.PlayerStatsManager;
+import com.political.technique.TechniqueManager;
 import com.political.AscensionGrindManager;
 import com.political.CivilCraftAchievements;
 import com.political.CrafterContractManager;
-import com.political.CoinManager;
-import com.political.CustomItemHandler;
-import com.political.HealthScalingManager;
+import com.political.economy.CoinManager;
+import com.political.items.CustomItemHandler;
+import com.political.stats.HealthScalingManager;
 import com.political.MasteryHeartTree;
 import com.political.MasteryManager;
 import com.political.WorldBossManager;
 import com.political.FishingEventHandler;
-import com.political.SlayerData;
-import com.political.SlayerItems;
-import com.political.SlayerManager;
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.damagesource.DamageSource;
@@ -53,13 +71,15 @@ public abstract class BountyDamageMixin {
 
         // === Player taking damage from slayer boss ===
         if (self instanceof ServerPlayer player) {
-            // Voidwalker's Crown — Phase Dodge. Handles the wearing check, the
-            // BYPASSES_INVULNERABILITY exclusion, the roll, blink, sound and actionbar itself;
-            // we only honour the boolean by negating the hit.
+            if (com.political.technique.TechniqueManager.absorbOnHurt(player, modifiedAmount)) {
+                return 0.0f;
+            }
             if (CustomItemHandler.tryPhaseDodge(player, source, modifiedAmount)) {
                 return 0.0f;
             }
-            // Relics that react to being hurt.
+            if (source.getEntity() instanceof LivingEntity attacker) {
+                com.political.items.DragonPlateHandler.onWearerHit(player, attacker, modifiedAmount);
+            }
             modifiedAmount *= com.political.RelicManager.onHurt(player, modifiedAmount);
             if (source.getEntity() instanceof LivingEntity attacker) {
                 if (SlayerManager.isSlayerBoss(attacker.getUUID())) {
@@ -76,26 +96,13 @@ public abstract class BountyDamageMixin {
                 modifiedAmount *= com.political.NemesisManager.onNemesisHit(nem, player, modifiedAmount);
             }
             // Grimoire: three of the Ward circle spends Focus as armour before defence applies.
-            modifiedAmount = com.political.GrimoireHandler.absorb(player, modifiedAmount);
             modifiedAmount = com.political.WarrantArmour.onHurt(player, modifiedAmount);
-            // Custom enchantments worn as armour, before defence turns damage into a division.
-            modifiedAmount = com.political.CustomEnchantEffects.onHurt(player, source, modifiedAmount);
-            // The dragon hits harder, and harder again once it is enraged.
-            if (source.getEntity() instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon drag) {
-                modifiedAmount *= com.political.DragonFightManager.outgoingScale(drag);
-            } else if (source.getDirectEntity() instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragonPart part
-                    && part.parentMob != null) {
-                // A hitbox part carries the damage, so the scale has to come off its parent.
-                modifiedAmount *= com.political.DragonFightManager.outgoingScale(part.parentMob);
-            }
-            if (source.getEntity() instanceof net.minecraft.world.entity.boss.wither.WitherBoss wb) {
-                modifiedAmount *= com.political.WitherFightManager.outgoingScale(wb);
-            }
             // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
-            return com.political.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
+            return com.political.stats.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
         }
 
-        // === Outgoing damage: player attacking something ===
+        // Damage order: vanilla amount → weapon uniques/slayer bonus (below) → PlayerStats (strength/crit/ferocity)
+        // Incoming players already applied defense: dmg * 100 / (100 + def).
         if (!(source.getEntity() instanceof ServerPlayer player)) {
             return modifiedAmount;
         }
@@ -108,7 +115,7 @@ public abstract class BountyDamageMixin {
                 modifiedAmount *= (float) multiplier;
             }
             // Apply HUNTERS_INSTINCT perk damage bonus against any bounty boss
-            modifiedAmount *= com.political.PerkManager.getBountyBossDamageMultiplier();
+            modifiedAmount *= com.political.government.PerkManager.getBountyBossDamageMultiplier();
             
             // SLAYER_ELITE buff: +10% bounty damage
             double slayerEliteBonus = com.political.PlayerBuffManager.getBountyDamageBonus(player.getUUID().toString());
@@ -150,34 +157,6 @@ public abstract class BountyDamageMixin {
 
         // Relics that fire when you land a strike.
         com.political.RelicManager.onHit(player, self);
-        com.political.AetherGearHandler.onHit(player, self);
-        com.political.RuneforgedHandler.onHit(player, self);
-        modifiedAmount += com.political.BeastcraftHandler.onHit(player, self, modifiedAmount);
-        com.political.TempestHandler.onHit(player, self, modifiedAmount);
-        com.political.GrimoireHandler.onHit(player, self, modifiedAmount);
-        modifiedAmount *= com.political.RegaliaHandler.damageMultiplier(player);
-        // Custom enchantments on the held weapon.
-        modifiedAmount = com.political.CustomEnchantEffects.onHit(player, self, modifiedAmount);
-        // The floor boss shields itself while its court stands, and every hit on it is banked for
-        // the payout split at the end of the run.
-        if (com.political.DelveBossFight.isBoss(self)) {
-            com.political.DelveRun dr = com.political.DelveManager.runOf(player);
-            if (dr != null) {
-                modifiedAmount *= com.political.DelveBossFight.incomingScale(dr);
-                dr.bossDamage.merge(player.getUUID(), modifiedAmount, Float::sum);
-            }
-        }
-        // Phase gating on the dragon, plus the contribution ledger the payout reads.
-        if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon dragonSelf) {
-            modifiedAmount *= com.political.DragonFightManager.incomingScale(dragonSelf);
-            com.political.DragonFightManager.onDragonHurt(dragonSelf, player, modifiedAmount);
-        }
-        if (self instanceof net.minecraft.world.entity.boss.wither.WitherBoss witherSelf) {
-            modifiedAmount *= com.political.WitherFightManager.incomingScale(witherSelf);
-            com.political.WitherFightManager.onHurt(witherSelf, player, modifiedAmount);
-        }
-        // The five meter lines share one handler, keyed off the item id prefix.
-        com.political.MeterLineHandler.onHit(player, self, modifiedAmount);
 
         // A nemesis reacts to being struck, which is where its defensive traits live.
         if (com.political.NemesisManager.isNemesis(self)) {
@@ -186,13 +165,13 @@ public abstract class BountyDamageMixin {
 
         // Wartime: citizens of polities at war strike harder at one another.
         if (self instanceof ServerPlayer victimPlayer) {
-            modifiedAmount *= com.political.WarManager.wartimeDamageMultiplier(player, victimPlayer);
+            modifiedAmount *= com.political.settlement.WarManager.wartimeDamageMultiplier(player, victimPlayer);
         }
 
         if (source.is(DamageTypeTags.IS_PROJECTILE)) {
-            modifiedAmount *= com.political.PartyPerkEffects.projectileDamageBonusMultiplier(player.getUUID().toString());
+            modifiedAmount *= com.political.party.PartyPerkEffects.projectileDamageBonusMultiplier(player.getUUID().toString());
         } else {
-            modifiedAmount *= com.political.PartyPerkEffects.meleeDamageBonusMultiplier(player.getUUID().toString());
+            modifiedAmount *= com.political.party.PartyPerkEffects.meleeDamageBonusMultiplier(player.getUUID().toString());
         }
 
         return CustomItemHandler.calculateSlayerDamage(player, self, modifiedAmount);
@@ -212,31 +191,8 @@ public abstract class BountyDamageMixin {
         // Relics that fire on any kill, mob or player.
         com.political.RelicManager.onKill(player, self);
         com.political.CompanionManager.onKill(player);
-        com.political.StarboundHandler.onKill(player);
-        com.political.VoyagerHandler.onKill(player);
         com.political.CollectionManager.onKill(player, self);
         com.political.RareDropManager.onKill(player, self);
-        com.political.CustomEnchantEffects.onKill(player, self);
-        com.political.DelvePopulator.onKill(player, self);
-        com.political.DelveDrops.onMobKill(player, self);
-        if (self instanceof ServerPlayer deadInDungeon) {
-            com.political.DelveManager.onDeath(deadInDungeon);
-        }
-        if (com.political.DelveBossFight.isBoss(self)) {
-            com.political.DelveRun dRun = com.political.DelveManager.runOf(player);
-            if (dRun != null) {
-                com.political.DelveDrops.onBossKill(dRun);
-                com.political.DelveBossFight.onBossDeath(dRun);
-            }
-        }
-        if (self instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon deadDragon
-                && self.level() instanceof net.minecraft.server.level.ServerLevel endLevel) {
-            com.political.DragonFightManager.onDragonDeath(deadDragon, endLevel);
-        }
-        if (self instanceof net.minecraft.world.entity.boss.wither.WitherBoss deadWither
-                && self.level() instanceof net.minecraft.server.level.ServerLevel wLevel) {
-            com.political.WitherFightManager.onDeath(deadWither, wLevel);
-        }
         com.political.NemesisManager.onNemesisDeathEffects(self);
         com.political.NemesisManager.onNemesisKilled(player, self);
         com.political.ContractManager.onKill(player);
@@ -269,7 +225,7 @@ public abstract class BountyDamageMixin {
         if (self instanceof ServerPlayer) {
             CivilCraftAchievements.trackPvPKill(player);
             // War score + spoils when the victim belonged to an enemy polity.
-            com.political.WarManager.onWartimeKill(player, (ServerPlayer) self);
+            com.political.settlement.WarManager.onWartimeKill(player, (ServerPlayer) self);
             com.political.ProgressionTreeManager.awardSkillPoints(player, com.political.ProgressionTreeManager.Branch.COMBAT, 10);
         } else if (self.getType().getCategory() == net.minecraft.world.entity.MobCategory.MONSTER
                 || self.getType().getCategory() == net.minecraft.world.entity.MobCategory.WATER_CREATURE) {
@@ -298,9 +254,9 @@ public abstract class BountyDamageMixin {
 
         // Dictator kill detection
         if (self instanceof ServerPlayer killedPlayer) {
-            if (com.political.DictatorManager.isDictator(killedPlayer.getUUID().toString())) {
+            if (com.political.government.DictatorManager.isDictator(killedPlayer.getUUID().toString())) {
                 if (source.getEntity() instanceof ServerPlayer killer) {
-                    com.political.DictatorManager.handleDictatorKilled(killedPlayer, killer);
+                    com.political.government.DictatorManager.handleDictatorKilled(killedPlayer, killer);
                 }
             }
         }

@@ -1,10 +1,12 @@
 package com.political.mixin;
+import com.political.ProgressionTreeManager;
+
 
 import com.political.BeamCraftingHandler;
-import com.political.BountyCraftingHandler;
+import com.political.recipe.BountyCraftingHandler;
 import com.political.MasteryManager;
-import com.political.SlayerItems;
-import com.political.SlayerRecipes;
+import com.political.bounty.SlayerItems;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.CraftingContainer;

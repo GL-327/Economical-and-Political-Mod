@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.government.Perk;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementManager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.server.level.ServerPlayer;

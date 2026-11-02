@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.SlayerItems;
+import com.political.bounty.SlayerItems;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

@@ -1,5 +1,10 @@
 package com.political;
+import com.political.mixin.AttributeDamageMixin;
+import com.political.mixin.BurningAttributeMixin;
 
+
+
+import com.political.bounty.SlayerItems;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

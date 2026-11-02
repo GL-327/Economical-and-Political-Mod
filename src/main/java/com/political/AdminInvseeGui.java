@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.economy.BankGui;
+import com.political.economy.CoinManager;
+import com.political.economy.CryptoMarket;
+import com.political.economy.StockMarket;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import eu.pb4.sgui.api.gui.SignGui;
@@ -83,9 +88,9 @@ public final class AdminInvseeGui {
         var border = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build();
         for (int i = 0; i < 27; i++) gui.setSlot(i, border);
 
-        int main = DataManager.getBankMain(uuid);
-        int savings = DataManager.getBankSavings(uuid);
-        int loan = DataManager.getBankLoan(uuid);
+        long main = DataManager.getBankMain(uuid);
+        long savings = DataManager.getBankSavings(uuid);
+        int loan = (int) Math.min(Integer.MAX_VALUE, DataManager.getBankLoan(uuid));
         long coins = DataManager.getCoins(uuid);
 
         gui.setSlot(10, new GuiElementBuilder(Items.GOLD_INGOT)

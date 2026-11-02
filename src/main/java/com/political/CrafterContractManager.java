@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.economy.CoinManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerPlayer;

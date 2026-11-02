@@ -1,5 +1,11 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.SettlementScanner;
+import com.political.settlement.WarManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

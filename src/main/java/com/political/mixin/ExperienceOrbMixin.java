@@ -1,10 +1,10 @@
 package com.political.mixin;
 
-import com.political.GemArmor;
+import com.political.items.GemGear;
 import com.political.MasteryHeartTree;
 import com.political.PartyManager;
-import com.political.PartyPerkEffects;
-import com.political.PerkManager;
+import com.political.party.PartyPerkEffects;
+import com.political.government.PerkManager;
 import com.political.PlayerBuffManager;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
@@ -30,8 +30,7 @@ public class ExperienceOrbMixin {
             double partyBonus = PartyManager.getPartyXpBonus(uuid);
             multiplier *= (1.0f + partyBonus);
             
-            // Lapis armor: +10% XP per piece worn
-            double lapisBonus = GemArmor.getLapisXpBonus(player);
+            double lapisBonus = GemGear.getLapisXpBonus(player);
             multiplier *= (1.0f + lapisBonus);
 
             multiplier *= (float) MasteryHeartTree.experienceOrbMultiplier(uuid);

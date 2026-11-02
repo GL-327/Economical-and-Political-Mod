@@ -1,165 +1,191 @@
 package com.political;
 
+
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementGui;
+import com.political.settlement.SettlementManager;
+import com.political.settlement.SettlementTier;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
 
 /**
- * The cartographer's table.
- *
- * <p>This screen used to <em>be</em> the Atlas: forty five glass panes arranged by world position,
- * which is a spreadsheet wearing a map's coat. The Atlas is now a real drawn map you hold, so all
- * this screen does is hand one out at the zoom you want, redraw the ones you already carry, and
- * list the settlements so you can find one by name rather than by squinting.</p>
+ * The Atlas — a 9x5 world map of every known settlement, plotted by relative world
+ * position (north = up), plus a live leadership feed along the bottom row.
  */
 public final class AtlasMapGui {
 
     private AtlasMapGui() {}
 
-    private static final int SIZE = 54;
+    private static final int COLS = 9;
+    private static final int ROWS = 4;   // top 4 rows are the map; row 5 is the feed
 
     public static void open(ServerPlayer player) {
-        open(player, 0);
-    }
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x5, player, false);
+        gui.setTitle(Component.literal("Atlas — Known Settlements"));
 
-    public static void open(ServerPlayer player, int page) {
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Cartographer's Table")
-                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        GuiKit.frame(gui, SIZE);
-
-        List<Settlement> all = new ArrayList<>(SettlementManager.getAllSettlements());
-        all.sort(Comparator.comparingInt((Settlement s) -> -s.tierEnum().rank())
-                .thenComparing(s -> s.name == null ? "" : s.name));
-
-        GuiKit.header(gui, Items.FILLED_MAP, "Cartographer's Table", ChatFormatting.GOLD,
-                all.size() + " settlements on record",
-                "Take a sheet, then read it in your hand");
-
-        // ── The three sheets ──────────────────────────────────────────────
-        int[] sheetSlots = {11, 13, 15};
-        AtlasCartographer.Zoom[] zooms = AtlasCartographer.Zoom.values();
-        for (int i = 0; i < zooms.length && i < sheetSlots.length; i++) {
-            final AtlasCartographer.Zoom zoom = zooms[i];
-            gui.setSlot(sheetSlots[i], new GuiElementBuilder(Items.FILLED_MAP)
-                    .setName(Component.literal(zoom.display)
-                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("§8" + zoom.blurb))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("§7Covers §f" + zoom.span() + "§7 blocks across"))
-                    .addLoreLine(Component.literal("§7Centred where you stand"))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("§7Terrain, claims, roads, wars and names,"))
-                    .addLoreLine(Component.literal("§7drawn onto the paper itself."))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("§eClick to have one drawn"))
-                    .glow()
-                    .setCallback((a, b, c, d) -> {
-                        player.closeContainer();
-                        AtlasMap.give(player, zoom);
-                    })
-                    .build());
+        for (int i = 0; i < 45; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                    .setName(Component.literal("")).build());
         }
 
-        gui.setSlot(29, GuiKit.action(Items.INK_SAC, "Redraw what I carry",
-                ChatFormatting.AQUA,
-                () -> {
-                    int n = AtlasMap.refreshHeld(player);
-                    player.sendSystemMessage(Component.literal(n == 0
-                            ? "§7You are not carrying an atlas. Take one above."
-                            : "§a" + n + " sheet" + (n == 1 ? "" : "s") + " brought up to date."));
-                    open(player, page);
-                },
-                "Every atlas in your pack is repainted",
-                "with the world as it stands now.",
-                "",
-                "Sheets keep their identity, so a copy",
-                "hanging on a wall updates with it."));
+        Collection<Settlement> all = SettlementManager.getAllSettlements();
+        List<Settlement> plotted = new ArrayList<>(all);
 
-        gui.setSlot(33, GuiKit.action(Items.COMPASS, "Plain explorer's map",
-                ChatFormatting.GRAY,
-                () -> {
-                    player.closeContainer();
-                    WorldMapItem.give(player);
-                },
-                "A vanilla map that fills itself in",
-                "as you walk, with no politics on it.",
-                "",
-                "Use this one for finding your way home."));
+        if (plotted.isEmpty()) {
+            gui.setSlot(22, new GuiElementBuilder(Items.BELL)
+                    .setName(Component.literal("No settlements yet")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD))
+                    .addLoreLine(Component.literal("§7Place a §eCornerstone §7to found one."))
+                    .addLoreLine(Component.literal("§8Craft it, then place it like a bell."))
+                    .build());
+            addFeed(gui, player);
+            gui.open();
+            return;
+        }
 
-        // ── The gazetteer ─────────────────────────────────────────────────
-        int perPage = 7;
-        int from = Math.max(0, page) * perPage;
-        int[] listSlots = {37, 38, 39, 40, 41, 42, 43};
-        for (int i = 0; i < perPage; i++) {
-            int idx = from + i;
-            if (idx >= all.size()) break;
-            Settlement s = all.get(idx);
+        // World bounds → grid cells.
+        int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
+        int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
+        for (Settlement s : plotted) {
+            minX = Math.min(minX, s.cornerstoneX);
+            maxX = Math.max(maxX, s.cornerstoneX);
+            minZ = Math.min(minZ, s.cornerstoneZ);
+            maxZ = Math.max(maxZ, s.cornerstoneZ);
+        }
+        int spanX = Math.max(1, maxX - minX);
+        int spanZ = Math.max(1, maxZ - minZ);
+
+        boolean[] taken = new boolean[COLS * ROWS];
+
+        for (Settlement s : plotted) {
+            int col = (int) Math.round((double) (s.cornerstoneX - minX) / spanX * (COLS - 1));
+            int row = (int) Math.round((double) (s.cornerstoneZ - minZ) / spanZ * (ROWS - 1));
+            int cell = row * COLS + col;
+            // Nudge to the next free cell if two settlements collide.
+            int guard = 0;
+            while (cell < taken.length && taken[cell] && guard++ < taken.length) {
+                cell = (cell + 1) % taken.length;
+            }
+            if (cell >= taken.length) continue;
+            taken[cell] = true;
+
             SettlementTier tier = s.tierEnum();
-
             GuiElementBuilder b = new GuiElementBuilder(iconFor(tier))
                     .setName(Component.literal(s.name).withStyle(tier.color, ChatFormatting.BOLD))
+                    .addLoreLine(Component.literal("§7Tier: " + tier.colorCode + tier.displayName))
+                    .addLoreLine(Component.literal("§7Population: §f" + s.population))
+                    .addLoreLine(Component.literal("§7Appeal: §f" + s.appeal))
+                    .addLoreLine(Component.literal("§7Beds: §f" + s.beds))
+                    .addLoreLine(Component.literal("§7Treasury: §6" + s.treasury))
                     .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("§7" + tier.colorCode + tier.displayName
-                            + " §8· §7pop §f" + s.population + " §8· §7appeal §f" + s.appeal))
-                    .addLoreLine(Component.literal("§8" + s.cornerstoneX + ", " + s.cornerstoneZ
-                            + " §8in " + shortDim(s.worldDim)))
-                    .addLoreLine(Component.literal(""));
+                    .addLoreLine(Component.literal("§8" + s.cornerstoneX + ", " + s.cornerstoneZ));
 
             if (s.leaders != null && !s.leaders.isEmpty()) {
+                b.addLoreLine(Component.literal("§7Leaders:"));
                 s.leaders.forEach((role, uuid) -> b.addLoreLine(
-                        Component.literal("§7" + role + ": §f" + DataManager.getPlayerName(uuid))));
-                b.addLoreLine(Component.literal(""));
+                        Component.literal("  §7" + role + ": §f" + DataManager.getPlayerName(uuid))));
             }
-            b.addLoreLine(Component.literal("§eLeft click §7for the full record"));
-            b.addLoreLine(Component.literal("§eRight click §7to draw a sheet centred here"));
-
-            if (tier.isAtLeast(SettlementTier.METROPOLIS)) b.glow();
-
-            b.setCallback((slot, clickType, action, sg) -> {
-                if (clickType.isRight) {
-                    player.closeContainer();
-                    ServerLevel level = (ServerLevel) player.level();
-                    var stack = AtlasMap.issue(level, s.cornerstoneX, s.cornerstoneZ,
-                            AtlasCartographer.Zoom.LOCAL, player);
-                    if (!player.getInventory().add(stack)) player.drop(stack, false);
-                    player.sendSystemMessage(Component.literal(
-                            "§6✦ §7A local chart of §f" + s.name + "§7 is drawn."));
-                } else {
-                    SettlementGui.open(player, s);
+            if (s.nearestMetropolisId != null) {
+                Settlement metro = SettlementManager.get(s.nearestMetropolisId);
+                if (metro != null) {
+                    b.addLoreLine(Component.literal("§7Follows §6" + metro.name));
                 }
-            });
-            gui.setSlot(listSlots[i], b.build());
+            }
+            b.addLoreLine(Component.literal(""));
+            b.addLoreLine(Component.literal("§eClick for details"));
+
+            final Settlement sel = s;
+            b.setCallback((index, clickType, action, slotGui) -> SettlementGui.open(player, sel));
+            if (tier.isAtLeast(SettlementTier.METROPOLIS)) b.glow();
+            gui.setSlot(cell, b.build());
         }
 
-        if (all.isEmpty()) {
-            gui.setSlot(40, GuiKit.info(Items.BELL, "Nothing founded yet", ChatFormatting.GRAY,
-                    "Place a Cornerstone to found a settlement.",
-                    "It will appear on every atlas from then on."));
-        }
-
-        GuiKit.pager(gui, SIZE, page, all.size(), perPage, p -> open(player, p));
-        GuiKit.footer(gui, SIZE, player, () -> CivilizationHubGui.open(player));
+        addFeed(gui, player);
         gui.open();
     }
 
-    private static String shortDim(String dim) {
-        if (dim == null) return "?";
-        int colon = dim.indexOf(':');
-        return colon < 0 ? dim : dim.substring(colon + 1);
+    /** Bottom row: live leadership feed. */
+    private static void addFeed(SimpleGui gui, ServerPlayer player) {
+        for (int i = 36; i < 45; i++) {
+            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    .setName(Component.literal("")).build());
+        }
+
+        String chair = DataManager.getChair();
+        String vice = DataManager.getViceChair();
+
+        gui.setSlot(36, new GuiElementBuilder(Items.GOLDEN_HELMET)
+                .setName(Component.literal("Chair").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§f" + (chair == null ? "§8vacant"
+                        : DataManager.getPlayerName(chair))))
+                .addLoreLine(Component.literal("§8Elected by the largest metropolis"))
+                .build());
+
+        gui.setSlot(37, new GuiElementBuilder(Items.IRON_HELMET)
+                .setName(Component.literal("Vice Chair").withStyle(ChatFormatting.BLUE, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§f" + (vice == null ? "§8vacant"
+                        : DataManager.getPlayerName(vice))))
+                .build());
+
+        String prime = HighCouncilManager.getPrimeSeatUuid();
+        GuiElementBuilder council = new GuiElementBuilder(Items.BEACON)
+                .setName(Component.literal("High Council").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
+        if (prime == null) {
+            council.addLoreLine(Component.literal("§8No council — requires a UTOPIA settlement."));
+        } else {
+            council.addLoreLine(Component.literal("§7Prime Seat: §f" + DataManager.getPlayerName(prime)));
+            HighCouncilManager.getMinisters().forEach((m, uuid) -> council.addLoreLine(
+                    Component.literal("§7" + m.displayName + ": §f" + DataManager.getPlayerName(uuid))));
+            boolean anyEdict = false;
+            for (HighCouncilManager.Edict e : HighCouncilManager.Edict.values()) {
+                if (!HighCouncilManager.isEdictActive(e)) continue;
+                if (!anyEdict) {
+                    council.addLoreLine(Component.literal(""));
+                    council.addLoreLine(Component.literal("§7Active edicts:"));
+                    anyEdict = true;
+                }
+                council.addLoreLine(Component.literal("  " + e.color.toString() + e.displayName));
+            }
+        }
+        gui.setSlot(38, council.build());
+
+        Settlement mine = SettlementManager.getRegisteredSettlement(player.getUUID().toString());
+        gui.setSlot(44, new GuiElementBuilder(mine == null ? Items.BARRIER : Items.BELL)
+                .setName(Component.literal(mine == null ? "Not registered" : "Your settlement: " + mine.name)
+                        .withStyle(mine == null ? ChatFormatting.GRAY : ChatFormatting.GREEN, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal(mine == null
+                        ? "§7Register at a settlement to vote."
+                        : "§eClick to open"))
+                .setCallback((index, clickType, action, slotGui) -> {
+                    if (mine != null) SettlementGui.open(player, mine);
+                })
+                .build());
+
+        // Hand out a real filled map that renders the actual terrain and blocks.
+        gui.setSlot(36, new GuiElementBuilder(Items.FILLED_MAP)
+                .setName(Component.literal("Get World Map").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .addLoreLine(Component.literal("§7A real map centred where you stand."))
+                .addLoreLine(Component.literal("§7Carry it and walk to reveal the land."))
+                .addLoreLine(Component.literal("§8Settlements in view are listed on it."))
+                .glow()
+                .setCallback((index, clickType, action, slotGui) -> {
+                    player.closeContainer();
+                    WorldMapItem.give(player);
+                })
+                .build());
     }
 
-    private static net.minecraft.world.item.Item iconFor(SettlementTier tier) {
+    private static Item iconFor(SettlementTier tier) {
         return switch (tier) {
             case OUTPOST -> Items.OAK_FENCE;
             case HAMLET -> Items.OAK_DOOR;

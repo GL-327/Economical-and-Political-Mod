@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.settlement.Settlement;
+import com.political.settlement.SettlementProgressGui;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

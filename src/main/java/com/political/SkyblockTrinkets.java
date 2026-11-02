@@ -1,5 +1,10 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.items.CustomItemManager;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.SlayerRecipes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.settlement.Settlement;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.PerkManager;
+import com.political.government.PerkManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.PatrolSpawner;
 import org.spongepowered.asm.mixin.Mixin;

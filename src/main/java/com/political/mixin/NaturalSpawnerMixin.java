@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.PerkManager;
+import com.political.government.PerkManager;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.NaturalSpawner;
 import org.spongepowered.asm.mixin.Mixin;

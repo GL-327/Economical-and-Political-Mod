@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.PerkManager;
+import com.political.government.PerkManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.server.level.ServerLevel;

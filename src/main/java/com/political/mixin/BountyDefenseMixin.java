@@ -1,9 +1,9 @@
 package com.political.mixin;
 
-import com.political.DragonChestplateRegistry;
-import com.political.SlayerArmorHandler;
-import com.political.SlayerItems;
-import com.political.SlayerManager;
+import com.political.items.DragonChestplateRegistry;
+import com.political.bounty.SlayerArmorHandler;
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;

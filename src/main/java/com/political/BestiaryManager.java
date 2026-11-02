@@ -1,4 +1,6 @@
 package com.political;
+import com.political.mixin.BestiaryDamageMixin;
+
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

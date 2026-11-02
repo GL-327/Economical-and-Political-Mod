@@ -1,8 +1,8 @@
 package com.political.mixin;
 
 import com.political.ArmourAttribute;
-import com.political.CustomItemHandler;
-import com.political.SlayerItems;
+import com.political.items.CustomItemHandler;
+import com.political.bounty.SlayerItems;
 import com.political.WeaponAttribute;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.equipment.Equippable;

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -97,43 +99,20 @@ public final class RareDropManager {
      * <p>Kept small on purpose. A drop that can be pushed from one in a thousand to one in fifty
      * stops being a rare drop and becomes a grind, so this tops out a little under double.</p>
      */
-    public static double luckOf(ServerPlayer player) {
-        return 1.0 + magicFindOf(player) / 100.0;
-    }
-
-    /**
-     * A player's total Magic Find.
-     *
-     * <p>Read from the stat sheet, which means it comes off item lore like any other stat and any
-     * piece of gear in the mod can carry it by writing one line into its tooltip. Progression adds
-     * a little on top so somebody with no magic find gear is not stuck at zero.</p>
-     */
-    public static double magicFindOf(ServerPlayer player) {
-        double mf = 0;
+    private static double luckOf(ServerPlayer player) {
+        double luck = 1.0;
         try {
-            mf += PlayerStatsManager.getStats(player).get(PlayerStatsManager.Stat.MAGIC_FIND);
+            // Collections are the long game, so they are the main source.
+            luck += Math.min(0.5, CollectionManager.totalTiers(player) / 1000.0);
+            // A maxed collection is worth a real nudge.
+            luck += Math.min(0.25, CollectionManager.maxedCount(player) * 0.025);
+            // Wearing the warrant says you have done the work.
+            if (WarrantArmour.fullSet(player)) luck += 0.2;
         } catch (Exception ignored) {
-            // Stats not ready simply means no gear contribution yet.
+            // Any system not ready simply contributes nothing.
         }
-        try {
-            // The long game contributes without any gear at all.
-            mf += Math.min(30, CollectionManager.totalTiers(player) / 20.0);
-            mf += Math.min(20, CollectionManager.maxedCount(player) * 2.0);
-            if (WarrantArmour.fullSet(player)) mf += 25;
-        } catch (Exception ignored) {
-            // Same guard.
-        }
-        return Math.max(0, Math.min(MAX_MAGIC_FIND, mf));
+        return Math.min(1.95, luck);
     }
-
-    /**
-     * The ceiling.
-     *
-     * <p>Four hundred means a one in a thousand drop becomes one in two hundred at the very top of
-     * the game, which is a real reward for building for it and still leaves the rarest things rare.
-     * Uncapped magic find would turn every drop table into a shopping list.</p>
-     */
-    public static final double MAX_MAGIC_FIND = 400.0;
 
     private static void award(ServerPlayer player, RareDrop d) {
         ItemStack stack = create(d);
@@ -191,39 +170,6 @@ public final class RareDropManager {
     }
 
     /** Every drop item, for the catalogue screens. */
-    /**
-     * One roll on the rare table for beating a boss, weighted by the player's Magic Find.
-     *
-     * <p>Separate from the kill hook because a boss reward is not the same question as "did this
-     * zombie drop something". Here the roll is guaranteed to produce an item; what Magic Find moves
-     * is how far up the table it lands.</p>
-     */
-    public static ItemStack rollBossReward(ServerPlayer player) {
-        double mf = magicFindOf(player);
-        double roll = player.getRandom().nextDouble() * 100.0 * (1.0 + mf / 200.0);
-
-        RareDrop.Tier want;
-        if (roll > 99.5) want = RareDrop.Tier.PRIMAL;
-        else if (roll > 97) want = RareDrop.Tier.MYTHIC;
-        else if (roll > 90) want = RareDrop.Tier.INSANE;
-        else if (roll > 72) want = RareDrop.Tier.CRAZY;
-        else if (roll > 40) want = RareDrop.Tier.RARE;
-        else want = RareDrop.Tier.UNCOMMON;
-
-        List<RareDrop> pool = new ArrayList<>();
-        for (RareDrop d : RareDrop.values()) {
-            if (d.tier == want) pool.add(d);
-        }
-        // A tier with nothing in it should hand back something rather than nothing at all.
-        if (pool.isEmpty()) {
-            for (RareDrop d : RareDrop.values()) pool.add(d);
-        }
-        if (pool.isEmpty()) return ItemStack.EMPTY;
-
-        RareDrop picked = pool.get(player.getRandom().nextInt(pool.size()));
-        return create(picked);
-    }
-
     public static List<ItemStack> allStacks() {
         List<ItemStack> out = new ArrayList<>();
         for (RareDrop d : RareDrop.values()) out.add(create(d));

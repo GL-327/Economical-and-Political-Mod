@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -106,7 +108,7 @@ public final class EnchantedShopManager {
         if (sellOverrides.containsKey(id)) {
             return Math.max(1, sellOverrides.get(id));
         }
-        return Math.max(1, EnchantedBlockGearPricing.defaultSellFromCraft(enchanted));
+        return 0;
     }
 
     public static int getBuyPrice(ItemStack enchanted) {
@@ -116,7 +118,6 @@ public final class EnchantedShopManager {
 
     public static List<ItemStack> allEnchantedBlockStacks() {
         List<ItemStack> list = new java.util.ArrayList<>();
-        BlockReflectiveCatalog.addEnchantedBlockGear(list);
         return list;
     }
 

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;

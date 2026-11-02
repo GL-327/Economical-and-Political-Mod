@@ -1,5 +1,9 @@
 package com.political;
 
+
+import com.political.magic.MagicManager;
+import com.political.settlement.WarGui;
+import com.political.stats.PlayerStatsManager;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;

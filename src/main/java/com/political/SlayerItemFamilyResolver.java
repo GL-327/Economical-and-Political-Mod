@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
+import com.political.recipe.RecipeConfigManager;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -16,11 +19,9 @@ import net.minecraft.world.item.ItemStack;
  *
  * <p>Resolution is purely reflective: the custom id is converted to PascalCase and
  * prefixed with {@code create}, then invoked as a no-arg static factory on
- * {@link SlayerItems}. This mirrors the existing BlockArmor / BlockWeapons reflection
  * fallbacks in RecipeConfigManager and stays robust as new members are added to a family.
  *
  * <p>If the reflected method does not exist (e.g. {@code gilded_blackstone_sword}, which
- * lives in BlockWeapons, not SlayerItems) this returns {@link ItemStack#EMPTY} so the
  * caller can continue down its normal fallback chain — the modern NBT-shape path and
  * every other explicit mapping are untouched.
  */

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.party.PoliticalPartyManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;

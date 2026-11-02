@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.PerkManager;
+import com.political.government.PerkManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Mixin;

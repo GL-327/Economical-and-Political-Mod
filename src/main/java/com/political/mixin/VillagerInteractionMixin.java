@@ -1,7 +1,9 @@
 package com.political.mixin;
 
+
+import com.political.economy.UndergroundAuctionGui;
 import com.political.AuctionMasterManager;
-import com.political.UndergroundAuctionManager;
+import com.political.economy.UndergroundAuctionManager;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +32,7 @@ public class VillagerInteractionMixin {
 
         // Check for Underground Auctioneer
         if (UndergroundAuctionManager.isAuctioneer(self)) {
-            com.political.UndergroundAuctionGui.open(serverPlayer);
+            com.political.economy.UndergroundAuctionGui.open(serverPlayer);
             cir.setReturnValue(InteractionResult.SUCCESS);
             return;
         }

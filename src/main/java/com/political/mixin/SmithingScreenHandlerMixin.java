@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.CustomItemHandler;
+import com.political.items.CustomItemHandler;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.SmithingMenu;
 import org.spongepowered.asm.mixin.Mixin;

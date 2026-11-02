@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.economy.CoinManager;
+import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -29,24 +32,23 @@ public final class ModernShowcaseGui {
         ModernGuiTheme.header(gui, "What Is New", "The latest systems, one click away");
 
         // ── featured systems ──
-        gui.setSlot(20, ModernGuiTheme.button(Items.WITHER_SKELETON_SKULL,
-                "Cursed Spirits", ChatFormatting.DARK_GRAY,
-                "Graded curses stalk the world.",
-                "Hunt them and bank cursed energy.",
-                () -> CursedSpiritGui.open(player)));
+        gui.setSlot(20, ModernGuiTheme.button(Items.GOLD_INGOT,
+                "Shop", ChatFormatting.GOLD,
+                "Buy and sell with VAT going to the treasury.",
+                "Chair sets the rate.",
+                () -> ShopGui.openMainMenu(player)));
 
-        gui.setSlot(21, ModernGuiTheme.button(Items.NETHERITE_SWORD,
-                "Sorcerer Path", ChatFormatting.DARK_PURPLE,
-                "Rank up and swear binding vows.",
-                "Wield reverse cursed technique.",
-                () -> SorcererGui.open(player)));
+        gui.setSlot(21, ModernGuiTheme.button(Items.ENCHANTED_BOOK,
+                "Techniques", ChatFormatting.LIGHT_PURPLE,
+                "Learn combat techniques from manuals.",
+                "Equip one and rank it up by using it.",
+                () -> TechniqueGui.open(player)));
 
         gui.setSlot(22, ModernGuiTheme.button(Items.NETHER_STAR,
-                "Special Grade", ChatFormatting.RED,
-                "Summon and fell the named horrors.",
-                "The hardest fights in the world.",
-                () -> SpecialGradeGui.open(player)));
-
+                "World Bosses", ChatFormatting.RED,
+                "Schedule and fight world bosses.",
+                "The hardest fights left in the world.",
+                () -> WorldBossGui.openMainMenu(player)));
         gui.setSlot(23, ModernGuiTheme.button(Items.ENDER_EYE,
                 "Expeditions", ChatFormatting.LIGHT_PURPLE,
                 "Instanced procedural dungeons.",
@@ -60,22 +62,20 @@ public final class ModernShowcaseGui {
                 () -> GuildGui.open(player)));
 
         // ── stat pills across the middle, demonstrating the modern pill element ──
-        String uuid = player.getUUID().toString();
         long coins = CoinManager.getCoinsLong(player);
-        int magicLevel = safeMagicLevel(uuid);
         gui.setSlot(29, ModernGuiTheme.pill(Items.SUNFLOWER,
                 "Your Coins", formatCoins(coins), ChatFormatting.GOLD));
-        gui.setSlot(31, ModernGuiTheme.pill(Items.ENCHANTED_BOOK,
-                "Magic Level", magicLevel >= 0 ? String.valueOf(magicLevel) : "-", ChatFormatting.LIGHT_PURPLE));
+        gui.setSlot(31, ModernGuiTheme.pill(Items.EMERALD,
+                "Treasury", formatCoins(com.political.government.Treasury.balance()), ChatFormatting.GREEN));
         gui.setSlot(33, ModernGuiTheme.pill(Items.NETHER_STAR,
                 "Featured Systems", "5", ChatFormatting.AQUA));
 
         // ── a short summary card ──
         gui.setSlot(40, new GuiElementBuilder(Items.WRITTEN_BOOK)
                 .setName(Component.literal("Highlights").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal("§7Curses now grade and stalk the world."))
-                .addLoreLine(Component.literal("§7Sorcerers rank up and expand domains."))
-                .addLoreLine(Component.literal("§7Expeditions run five deep dungeon tiers."))
+                .addLoreLine(Component.literal("§7National elections fill Chair and Vice."))
+                .addLoreLine(Component.literal("§7Shop and auction VAT funds the treasury."))
+                .addLoreLine(Component.literal("§7Learn techniques from crafted manuals."))
                 .addLoreLine(Component.literal("§7Guilds bind settlements into orders."))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§8Everything here opens by clicking above."))
@@ -93,14 +93,5 @@ public final class ModernShowcaseGui {
 
     private static String formatCoins(long coins) {
         return String.format(java.util.Locale.ROOT, "%,d", coins);
-    }
-
-    /** Reads the player's magic level defensively so the showcase never fails to open. */
-    private static int safeMagicLevel(String uuid) {
-        try {
-            return MagicManager.getLevel(uuid);
-        } catch (Throwable t) {
-            return -1;
-        }
     }
 }

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.bounty.SlayerManager;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,10 +37,10 @@ public class TexturePackCodes {
         
         // Gem Armor (Lapis & Emerald)
         if (itemId.startsWith("lapis_")) {
-            return "gem_armor:" + itemId + ":color=" + String.format("%06X", GemArmor.LAPIS_COLOR);
+            return "gem_armor:" + itemId + ":color=" + String.format("%06X", 0x1E90FF);
         }
         if (itemId.startsWith("emerald_")) {
-            return "gem_armor:" + itemId + ":color=" + String.format("%06X", GemArmor.EMERALD_COLOR);
+            return "gem_armor:" + itemId + ":color=" + String.format("%06X", 0x50C878);
         }
         
         // Block Armor
@@ -50,7 +52,7 @@ public class TexturePackCodes {
             itemId.startsWith("mossy_") || itemId.startsWith("soul_sand_") ||
             itemId.startsWith("magma_") || itemId.startsWith("sandstone_") ||
             itemId.startsWith("amethyst_") || itemId.startsWith("coal_")) {
-            return BlockArmor.getTextureCode(itemId);
+            return "block_armor:" + itemId;
         }
         
         // Block Tools
@@ -237,21 +239,21 @@ public class TexturePackCodes {
         // Gem Armor
         List<CustomItemEntry> gemArmor = new ArrayList<>();
         gemArmor.add(new CustomItemEntry("lapis_helmet", "Lapis Lazuli Helmet", 
-            getTextureCode("lapis_helmet"), "Gem Armor", GemArmor.LAPIS_COLOR));
+            getTextureCode("lapis_helmet"), "Gem Armor", 0x1E90FF));
         gemArmor.add(new CustomItemEntry("lapis_chestplate", "Lapis Lazuli Chestplate", 
-            getTextureCode("lapis_chestplate"), "Gem Armor", GemArmor.LAPIS_COLOR));
+            getTextureCode("lapis_chestplate"), "Gem Armor", 0x1E90FF));
         gemArmor.add(new CustomItemEntry("lapis_leggings", "Lapis Lazuli Leggings", 
-            getTextureCode("lapis_leggings"), "Gem Armor", GemArmor.LAPIS_COLOR));
+            getTextureCode("lapis_leggings"), "Gem Armor", 0x1E90FF));
         gemArmor.add(new CustomItemEntry("lapis_boots", "Lapis Lazuli Boots", 
-            getTextureCode("lapis_boots"), "Gem Armor", GemArmor.LAPIS_COLOR));
+            getTextureCode("lapis_boots"), "Gem Armor", 0x1E90FF));
         gemArmor.add(new CustomItemEntry("emerald_helmet", "Emerald Helmet", 
-            getTextureCode("emerald_helmet"), "Gem Armor", GemArmor.EMERALD_COLOR));
+            getTextureCode("emerald_helmet"), "Gem Armor", 0x50C878));
         gemArmor.add(new CustomItemEntry("emerald_chestplate", "Emerald Chestplate", 
-            getTextureCode("emerald_chestplate"), "Gem Armor", GemArmor.EMERALD_COLOR));
+            getTextureCode("emerald_chestplate"), "Gem Armor", 0x50C878));
         gemArmor.add(new CustomItemEntry("emerald_leggings", "Emerald Leggings", 
-            getTextureCode("emerald_leggings"), "Gem Armor", GemArmor.EMERALD_COLOR));
+            getTextureCode("emerald_leggings"), "Gem Armor", 0x50C878));
         gemArmor.add(new CustomItemEntry("emerald_boots", "Emerald Boots", 
-            getTextureCode("emerald_boots"), "Gem Armor", GemArmor.EMERALD_COLOR));
+            getTextureCode("emerald_boots"), "Gem Armor", 0x50C878));
         categories.put("💎 Gem Armor (Lapis & Emerald)", gemArmor);
         
         // Block Armor

@@ -1,5 +1,8 @@
 package com.political;
 
+
+import com.political.recipe.RecipesGui;
+import com.political.settlement.WarGui;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;

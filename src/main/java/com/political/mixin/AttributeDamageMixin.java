@@ -1,6 +1,6 @@
 package com.political.mixin;
 
-import com.political.SlayerItems;
+import com.political.bounty.SlayerItems;
 import com.political.ArmourAttribute;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;

@@ -1,5 +1,7 @@
 package com.political;
 
+
+import com.political.bounty.SlayerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

