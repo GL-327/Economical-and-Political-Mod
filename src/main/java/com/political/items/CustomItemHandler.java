@@ -244,9 +244,6 @@ public class CustomItemHandler {
             if (TechniqueManager.tryUseFromItem(serverPlayer, held)) {
                 return InteractionResult.SUCCESS;
             }
-            if (com.political.power.game.PowerInput.onUse(serverPlayer)) {
-                return InteractionResult.SUCCESS;
-            }
 
             String ascId = SlayerItems.getCustomItemId(held);
             if (ascId != null && ascId.startsWith("asc_")

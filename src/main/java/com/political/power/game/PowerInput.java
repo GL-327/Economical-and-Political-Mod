@@ -6,8 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The one cast input (program 10.7): sneak and right click in the air with an empty main hand. It is called from
- * the first branch of the item use handler in {@code CustomItemHandler}; no other handler claims that combination.
+ * The one cast input (program 10.7): sneak and press the swap-hands key (F by default), handled by
+ * {@code SwapHandsCastMixin}. The earlier gesture, a right click in the air with an empty hand, cannot work on a
+ * vanilla client: the client sends a use-item packet only for a hand that holds something, so the server never
+ * hears of it ({@code Minecraft.startUseItem} guards the call with {@code !heldItem.isEmpty()}). The
+ * {@code /technique cast} command stays as a second way to cast the selected ability.
  */
 public final class PowerInput {
 
@@ -17,11 +20,11 @@ public final class PowerInput {
     }
 
     /**
-     * @return true when the click was a cast attempt and must not go on to other handlers; false when the player is
-     *         not sneaking, holds something, or has no technique selected, so the click carries on as before
+     * @return true when the key press was a cast attempt and the swap must not happen; false when the player is not
+     *         sneaking or has no technique selected, so the swap carries on as in vanilla
      */
-    public static boolean onUse(ServerPlayer player) {
-        if (!player.isShiftKeyDown() || !player.getMainHandItem().isEmpty()) {
+    public static boolean onSwapHands(ServerPlayer player) {
+        if (!player.isShiftKeyDown()) {
             return false;
         }
         if (PowerService.selected(player.getUUID().toString()) == null) {

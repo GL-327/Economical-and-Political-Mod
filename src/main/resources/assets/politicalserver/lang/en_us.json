@@ -108,7 +108,7 @@
   "political.power.gui.abilities.ready_in": "Ready in %s s",
   "political.power.gui.abilities.selected": "Selected",
   "political.power.gui.cast": "How to Cast",
-  "political.power.gui.cast.how": "Sneak with an empty hand and right-click.",
+  "political.power.gui.cast.how": "Sneak and press the swap-hands key (F by default).",
   "political.power.gui.cast.what": "The selected ability fires at what you look at.",
   "political.power.gui.energy": "Cursed Energy",
   "political.power.gui.energy.amount": "%s / %s",

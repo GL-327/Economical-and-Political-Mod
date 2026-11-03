@@ -138,7 +138,7 @@ public final class TechniqueManager {
 
     // ── casting ─────────────────────────────────────────────────────────────────────────────
 
-    /** The cast command: the same cast as the sneak click. */
+    /** The cast command: the same cast as sneak plus the swap-hands key. */
     public static void castSelected(ServerPlayer player) {
         if (PowerService.selected(player.getUUID().toString()) == null) {
             player.sendSystemMessage(Text.tr("political.power.fail.no_technique_selected"), true);

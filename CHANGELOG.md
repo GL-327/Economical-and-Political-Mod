@@ -48,7 +48,7 @@
   header, footer, confirmation) and `STYLE.md`, the standard for everything a player sees. No existing screen was changed yet.
 
 ### M2 power system
-- Casting: the empty-hand sneak right click now goes through one validation pipeline with fixed failure reasons (global cooldown,
+- Casting: sneak and the swap-hands key (F by default) now cast the selected ability through one validation pipeline with fixed failure reasons (global cooldown,
   rate limit, range, valid target, enough resource, per-ability cooldown). The eight older techniques and their 32 abilities keep their
   effects but obey the same limits and spend one shared resource. Every number is a config key under `power.*` (`docs/CONFIG.md`).
 - New abilities: Blue (pull), Red (push), Cursed Blast, Reverse (heal), Barrier, Domain and Black Flash, plus binding vows (at most two).
@@ -58,6 +58,9 @@
 - Saving: `power.json` (schema 1) replaces `techniques.json`, `magic_data.json` and `magic_schools.json`. On first start the old files are
   imported, copies are kept as `<name>.pre-power`, and anything that does not fit is quarantined rather than dropped. Cooldowns, cast
   history and Domains are not saved.
+- Casting input fixed: the earlier gesture (right click in the air with an empty hand) never reached the server, because the game client sends no
+  use-item packet for an empty hand, so techniques could only be cast with `/technique cast`. The swap-hands key does reach the server whatever
+  the player holds. A player with a technique equipped who sneaks and presses F casts instead of swapping hands; `/technique cast` still works.
 - Old entry points (`TechniqueManager`, mana and shard methods) now forward to the new service; nothing was deleted.
 - Screens: the Techniques screen is now the Powers hub (level, Arcane Shards, school, techniques, abilities, the school tree with its next
   step and cost, binding vows, cursed energy). Every existing menu entry that opened Techniques opens it; there is no new player command.

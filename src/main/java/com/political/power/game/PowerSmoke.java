@@ -24,6 +24,8 @@ import net.fabricmc.fabric.api.permission.v1.PermissionEvents;
 import net.fabricmc.fabric.api.permission.v1.PermissionNode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -183,6 +185,7 @@ public final class PowerSmoke {
         progression(fake, uuid);
         screens(fake);
         barrierAndResource(fake, uuid);
+        swapHandsInput(fake, uuid);
 
         BlockPos spawn = world.getRespawnData().pos();
         double x = spawn.getX() + 0.5;
@@ -265,6 +268,33 @@ public final class PowerSmoke {
         PowerService.tickPlayer(fake);
         check("resource regenerates (" + spent + " to " + PowerService.resource(uuid) + ")", PowerService.resource(uuid) > spent);
         check("resource never passes the maximum", PowerService.resource(uuid) <= PowerService.maxResource(uuid));
+    }
+
+    /**
+     * The cast input: the swap-hands packet of a sneaking player with a technique equipped is turned into a cast by
+     * {@code SwapHandsCastMixin}. The packet goes through the fake player's real packet listener, so the mixin runs.
+     */
+    private void swapHandsInput(FakePlayer fake, String uuid) {
+        advance(PowerSettings.BARRIER_COOLDOWN_TICKS.get() + 1L);
+        PowerService.equip(fake, PowerCatalog.BARRIER);
+        PowerService.setResource(uuid, PowerService.maxResource(uuid));
+        ServerboundPlayerActionPacket swap = new ServerboundPlayerActionPacket(
+                ServerboundPlayerActionPacket.Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ZERO, Direction.DOWN);
+        double before = PowerService.resource(uuid);
+
+        fake.setShiftKeyDown(false);
+        fake.connection.handlePlayerAction(swap);
+        check("swap-hands without sneaking is not a cast", PowerService.resource(uuid) == before);
+
+        fake.setShiftKeyDown(true);
+        fake.connection.handlePlayerAction(swap);
+        check("sneak and swap-hands casts the selected ability (" + before + " to " + PowerService.resource(uuid) + ")",
+                Math.abs((before - PowerService.resource(uuid)) - PowerSettings.BARRIER_COST.get()) < 0.01);
+
+        PowerService.unequip(uuid);
+        check("without a technique the key press is left alone", !PowerInput.onSwapHands(fake));
+        fake.setShiftKeyDown(false);
+        advance(PowerSettings.BARRIER_COOLDOWN_TICKS.get() + 1L);
     }
 
     /** Script items 2 to 5 and 12: Blue, Red, a wall, Cursed Blast, Reverse on self, Black Flash. */
@@ -421,7 +451,9 @@ public final class PowerSmoke {
         CastDecision outside = decision(other);
         check("a second player outside the Domain may cast (" + outside + ")", outside instanceof CastDecision.Approved);
 
-        // a strike inside the Domain is dealt as magic damage with the bonus, replacing the hit
+        // a strike inside the Domain is dealt as magic damage with the bonus, replacing the hit; outside the Black Flash
+        // window, so that a chance event cannot change the number
+        advance(PowerSettings.BLACK_FLASH_WINDOW_TICKS.get() + 1L);
         dummy.setHealth(dummy.getMaxHealth());
         dummy.damageCooldownTime = 0;
         float plainStart = dummy.getHealth();

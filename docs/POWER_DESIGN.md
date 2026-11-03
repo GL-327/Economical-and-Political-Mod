@@ -10,7 +10,7 @@ status and the evidence for each claim.
 | Piece | Where | State found |
 | --- | --- | --- |
 | 8 techniques with 4 abilities each (the program says 10) | `technique/Technique.java` | Live. Learned from a Technique Manual, ranks by use count (Novice, Adept 15, Expert 45, Master 100), 4 abilities unlocked by rank. |
-| Cast input | `items/CustomItemHandler.java` UseItemCallback | Live. Sneak plus right click with an empty main hand casts the selected ability. |
+| Cast input | `items/CustomItemHandler.java` UseItemCallback | The old gesture (sneak plus right click with an empty main hand) never reached the server, because the game client sends no use-item packet for an empty hand; only `/technique cast` worked. Now sneak plus the swap-hands key (`mixin/SwapHandsCastMixin`). |
 | Energy pool | `TechniqueManager.PlayerTechniqueData.energy` | Live. Max 80 + 20 per rank, regen 4 per second by wall clock. |
 | Barrier | Ironmarrow `unbreakable` (`BARRIER_UNTIL`) | Live. 2.5 s of absorbing all damage through `BountyDamageMixin`. |
 | 12 magic schools (the program says 8), 33 spells, mana pool, magic levels | `magic/*`, `SchoolTree*` | **Dead code.** `MagicManager.initialize`, `SchoolTreeManager.initialize` and the spell tick handler are never called, so nothing is loaded or saved and mana never regenerates (`MagicManager` itself says "Unused on purpose"). Only the mana number is read, by the stats screen and companions. School trees are reachable by operators from the admin panel. |
@@ -62,7 +62,7 @@ reads the world and applies the result.
 
 ## Cast flow
 
-1. The single input handler calls `PowerInput.onUse(player)`.
+1. The single input handler (`SwapHandsCastMixin`) calls `PowerInput.onSwapHands(player)`.
 2. `PowerService.cast` builds `CastFacts` from the player and runs `CastPipeline`. The first failing check
    stops the cast and its reason is shown in the action bar.
 3. On success the pipeline returns an `EffectPlan` (cost, cooldown, what to do) computed as data.

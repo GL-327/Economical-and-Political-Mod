@@ -551,7 +551,7 @@ public final class PowerService {
 
     // ── casting ─────────────────────────────────────────────────────────────────────────────
 
-    /** Sneak plus right click with an empty hand arrives here. */
+    /** Sneak plus the swap-hands key (and `/technique cast`) arrive here. */
     public static void cast(ServerPlayer player) {
         String uuid = player.getUUID().toString();
         PlayerPower p = state(uuid);

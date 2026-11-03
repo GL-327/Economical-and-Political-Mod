@@ -16,8 +16,9 @@ the same code paths a click or a command would reach, not the clicks themselves.
 3. To test the real tree path: stop the server, open `power.json` in the world folder, and for your UUID set
    `"shards": 200` and `"shards_earned_total": 200`; start the server again. 200 is enough for the whole spine of one
    school (138 shards, level 50 needs 147 earned). Test server only: shards normally come only from expeditions.
-4. Where things are: the player screen is `/menu`, then "Techniques" (it opens the Powers hub). Casting is: empty hand,
-   sneak, right-click in the air, with a technique equipped and an ability selected.
+4. Where things are: the player screen is `/menu`, then "Techniques" (it opens the Powers hub). Casting is: hold sneak and press the
+   Swap Item With Offhand key (F by default) with a technique equipped and an ability selected. (A right click with an empty hand
+   sends nothing to a server, so it cannot be the input. `/technique cast` does the same cast.)
 5. Config values are in `config/political/config.json` under `power.*` (all listed in `docs/CONFIG.md`). The settings are
    read at startup.
 
@@ -26,7 +27,7 @@ the same code paths a click or a command would reach, not the clicks themselves.
 | # | Do | Expect | Already checked by the smoke run |
 | ---: | --- | --- | --- |
 | 1 | Join with a vanilla client. Choose a school in the Powers hub ("School"), then buy tree nodes ("School Tree") until a technique appears under "Techniques". | The hub opens, the choice asks for confirmation, a bought node shows a message, and the technique shows as Known. | School choice, a second choice refused, nodes bought in order, tier 4 after node 10, techniques granted at their nodes, every screen builds without error. NOT checked: how it looks, clicking. |
-| 2 | Cast Blue at a zombie 9 blocks away (grant Blue, equip it in "Techniques", look at the zombie, sneak and right-click with an empty hand). | The zombie is pulled toward you. Your cursed energy drops by 15 (see the bar in the hub). The action bar shows the ability name and the cost. | Blue at a mob 9 blocks away: pulled toward the caster, 15 spent. NOT checked: the action bar text, particles, sound. |
+| 2 | Cast Blue at a zombie 9 blocks away (grant Blue, equip it in "Techniques", look at the zombie, hold sneak and press F). | The zombie is pulled toward you. Your cursed energy drops by 15 (see the bar in the hub). The action bar shows the ability name and the cost. | Blue at a mob 9 blocks away: pulled toward the caster, 15 spent. NOT checked: the action bar text, particles, sound. |
 | 3 | Cast Blue again at once. | The action bar says "On cooldown: N s left." Nothing is spent. | A second Blue inside its cooldown is ON_COOLDOWN with time left, and nothing is spent. |
 | 4 | Stand 5 blocks from a mob with a stone wall between you and cast Red. | The action bar says "Something is in the way." Nothing is spent. Without the wall Red pushes the mob away and costs 20. | Red behind a stone block: NO_LINE_OF_SIGHT, nothing spent; without it, pushed away and 20 spent. |
 | 5 | At low health, cast Reverse on yourself (look up so no mob is in the crosshair). | You heal at most 8, it costs 2 energy per health healed, and you never go above full health. A mob under the crosshair is refused. | Heal and cost match, cap 8, no overheal, a mob refused, on cooldown does nothing. |
