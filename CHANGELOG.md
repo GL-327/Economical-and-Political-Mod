@@ -20,3 +20,5 @@
   collections) and five mixins and five worldgen processor lists to their new shapes.
 - Added `com.political.core.MixinAudit`, a dev check that loads every mixin target
   (`-Dpoliticalserver.mixinAudit=true`).
+- Logging: every `System.out`, `System.err` and `printStackTrace` call (118 sites in 40 files) now goes through an SLF4J logger
+  with the exception attached; `SourcePolicyTest` keeps it that way.

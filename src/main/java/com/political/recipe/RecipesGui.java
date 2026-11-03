@@ -1,4 +1,6 @@
 package com.political.recipe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.ArmourAttribute;
 import com.political.CustomItemLore;
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipesGui.class);
+
 
     // Track category stack for back navigation (allows multiple back presses)
     private static final java.util.Stack<CustomItemsGui.Category> categoryStack = new java.util.Stack<>();
@@ -283,8 +287,7 @@ public class RecipesGui {
 
         gui.open();
         } catch (Exception e) {
-            System.err.println("[RecipesGui] Error: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Failed to build the recipe main menu for player {}", player.getUUID(), e);
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal("Error: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
         }
     }

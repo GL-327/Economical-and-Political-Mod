@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerItems;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +24,8 @@ import java.util.Set;
  * Sell/buy overrides and enable flags for Skyblock-style enchanted block gear (custom id suffix {@code _sbl_ench}).
  */
 public final class EnchantedShopManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnchantedShopManager.class);
+
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("political").resolve("enchanted_shop.json");
@@ -53,7 +57,7 @@ public final class EnchantedShopManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[EnchantedShopManager] load failed: " + e.getMessage());
+            LOGGER.error("load failed", e);
         }
     }
 
@@ -67,7 +71,7 @@ public final class EnchantedShopManager {
                 GSON.toJson(d, w);
             }
         } catch (Exception e) {
-            System.err.println("[EnchantedShopManager] save failed: " + e.getMessage());
+            LOGGER.error("save failed", e);
         }
     }
 

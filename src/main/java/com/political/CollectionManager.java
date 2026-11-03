@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import com.political.stats.PlayerStatsManager;
@@ -34,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * into the stats engine so they behave exactly like a bonus from a piece of gear.</p>
  */
 public final class CollectionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectionManager.class);
+
 
     private CollectionManager() {}
 
@@ -68,7 +72,7 @@ public final class CollectionManager {
             if (data.counts != null) COUNTS.putAll(data.counts);
             if (data.paid != null) PAID.putAll(data.paid);
         } catch (Exception e) {
-            System.out.println("[Collections] Could not read progress: " + e.getMessage());
+            LOGGER.error("Could not read progress", e);
         }
     }
 
@@ -83,7 +87,7 @@ public final class CollectionManager {
                 GSON.toJson(data, w);
             }
         } catch (Exception e) {
-            System.out.println("[Collections] Could not write progress: " + e.getMessage());
+            LOGGER.error("Could not write progress", e);
         }
     }
 

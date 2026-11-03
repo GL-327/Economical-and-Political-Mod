@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Party members gain +5% XP when the party leader has the MENTOR buff.
  */
 public class PartyManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PartyManager.class);
+
 
     // Party data: party leader UUID -> set of member UUIDs (leader included)
     private static final Map<String, Set<String>> parties = new ConcurrentHashMap<>();
@@ -84,7 +88,7 @@ public class PartyManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[PartyManager] Failed to load data: " + e.getMessage());
+            LOGGER.error("Failed to load data", e);
         }
     }
 
@@ -111,7 +115,7 @@ public class PartyManager {
                 gson.toJson(out, writer);
             }
         } catch (Exception e) {
-            System.err.println("[PartyManager] Failed to save data: " + e.getMessage());
+            LOGGER.error("Failed to save data", e);
         }
     }
 

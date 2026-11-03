@@ -1,4 +1,6 @@
 package com.political;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.government.Treasury;
 
 
@@ -56,6 +58,8 @@ import java.util.UUID;
  * war is suspended outright — the embargo is total.
  */
 public final class TradeRouteManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TradeRouteManager.class);
+
 
     private TradeRouteManager() {}
 
@@ -150,7 +154,7 @@ public final class TradeRouteManager {
                 if (sf.seals != null) seals = new HashMap<>(sf.seals);
             }
         } catch (Exception e) {
-            System.err.println("[TradeRouteManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -166,7 +170,7 @@ public final class TradeRouteManager {
                 g.toJson(sf, w);
             }
         } catch (Exception e) {
-            System.err.println("[TradeRouteManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

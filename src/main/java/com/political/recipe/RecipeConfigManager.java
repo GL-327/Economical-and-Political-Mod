@@ -1,4 +1,6 @@
 package com.political.recipe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.DanielsPickaxe;
 import com.political.PoliticalServer;
 import com.political.RecipeIngredientHydrator;
@@ -41,6 +43,8 @@ import java.util.Map;
  * Both lists persist across server restarts.
  */
 public class RecipeConfigManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeConfigManager.class);
+
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     /** Live recipe JSON is the game config dir so loom boots do not rewrite the git stub. */
@@ -59,7 +63,7 @@ public class RecipeConfigManager {
 
     static {
         boolean fileExists = java.nio.file.Files.exists(CONFIG_FILE);
-        System.out.println("[RecipeConfigManager] JSON: " + (fileExists ? "OK" : "MISSING") + " | Path: " + CONFIG_FILE.toAbsolutePath());
+        LOGGER.info("JSON: {} | Path: {}", (fileExists ? "OK" : "MISSING"), CONFIG_FILE.toAbsolutePath());
     }
 
     /**
@@ -118,11 +122,10 @@ public class RecipeConfigManager {
             try (Writer writer = Files.newBufferedWriter(path)) {
                 GSON.toJson(root, writer);
             }
-            System.out.println("[RecipeConfigManager] Pruned slop recipe file (" + bytes
-                    + " bytes → empty) at " + path.toAbsolutePath());
+            LOGGER.info("Pruned slop recipe file ({} bytes → empty) at {}", bytes, path.toAbsolutePath());
             invalidateRecipeCache();
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to prune " + path + ": " + e.getMessage());
+            LOGGER.error("Failed to prune {}", path, e);
         }
     }
 
@@ -179,7 +182,7 @@ public class RecipeConfigManager {
                 JsonObject root = new JsonObject();
                 root.add("recipes", new JsonArray());
                 writeRecipeJsonRoot(root);
-                System.out.println("[RecipeConfigManager] Created empty custom_recipes.json at " + CONFIG_FILE.toAbsolutePath());
+                LOGGER.info("Created empty custom_recipes.json at {}", CONFIG_FILE.toAbsolutePath());
                 return;
             }
 
@@ -188,7 +191,7 @@ public class RecipeConfigManager {
                 JsonObject root = new JsonObject();
                 root.add("recipes", new JsonArray());
                 writeRecipeJsonRoot(root);
-                System.out.println("[RecipeConfigManager] custom_recipes.json was blank; initialized empty recipes at " + CONFIG_FILE.toAbsolutePath());
+                LOGGER.info("custom_recipes.json was blank; initialized empty recipes at {}", CONFIG_FILE.toAbsolutePath());
                 return;
             }
 
@@ -196,10 +199,10 @@ public class RecipeConfigManager {
             if (root == null || !root.has("recipes") || !root.get("recipes").isJsonArray()) {
                 // Never overwrite a non-trivial file — that was wiping large recipe lists on parse quirks.
                 long bytes = Files.size(CONFIG_FILE);
-                System.err.println("[RecipeConfigManager] custom_recipes.json missing valid \"recipes\" array — leaving file unchanged (size=" + bytes + " bytes). Path: " + CONFIG_FILE.toAbsolutePath());
+                LOGGER.error("custom_recipes.json missing valid \"recipes\" array — leaving file unchanged (size={} bytes). Path: {}", bytes, CONFIG_FILE.toAbsolutePath());
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to read custom_recipes.json: " + e.getMessage() + " | Path: " + CONFIG_FILE.toAbsolutePath());
+            LOGGER.error("Failed to read custom_recipes.json | Path: {}", CONFIG_FILE.toAbsolutePath(), e);
         }
     }
 
@@ -213,9 +216,9 @@ public class RecipeConfigManager {
             if (root != null && root.has("recipes") && root.get("recipes").isJsonArray()) {
                 count = root.getAsJsonArray("recipes").size();
             }
-            System.out.println("[RecipeConfigManager] JSON recipes in file: " + count + " | size=" + bytes + " bytes | " + abs);
+            LOGGER.info("JSON recipes in file: {} | size={} bytes | {}", count, bytes, abs);
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Could not summarize JSON recipes: " + e.getMessage() + " | Path: " + CONFIG_FILE.toAbsolutePath());
+            LOGGER.error("Could not summarize JSON recipes | Path: {}", CONFIG_FILE.toAbsolutePath(), e);
         }
     }
 
@@ -288,13 +291,13 @@ public class RecipeConfigManager {
                         long now = System.currentTimeMillis();
                         if (now - LAST_CRAFTING_STATUS_PRINT_MS > 10_000L) {
                             LAST_CRAFTING_STATUS_PRINT_MS = now;
-                            System.out.println("[RecipeConfigManager] crafting: OK | " + recipes.size() + " recipes (" + failed + " failed)");
+                            LOGGER.info("crafting: OK | {} recipes ({} failed)", recipes.size(), failed);
                             if (failed > 0) {
-                                System.out.println("[RecipeConfigManager] failed recipes: " + failedNames);
+                                LOGGER.info("failed recipes: {}", failedNames);
                             }
                         }
                     } else if ("recipe".equals(contextForLog)) {
-                        System.out.println("[RecipeConfigManager] /recipe: loaded " + recipes.size() + " recipes (" + failed + " failed)");
+                        LOGGER.info("/recipe: loaded {} recipes ({} failed)", recipes.size(), failed);
                     }
                 }
 
@@ -310,9 +313,9 @@ public class RecipeConfigManager {
             boolean exists = Files.exists(CONFIG_FILE);
             boolean readable = Files.isReadable(CONFIG_FILE);
             long size = exists ? Files.size(CONFIG_FILE) : 0;
-            System.out.println("[RecipeConfigManager] /recipe file: " + (exists && readable ? "OK" : "BAD") + " | size=" + size + " | " + CONFIG_FILE);
+            LOGGER.info("/recipe file: {} | size={} | {}", (exists && readable ? "OK" : "BAD"), size, CONFIG_FILE);
         } catch (Exception e) {
-            System.out.println("[RecipeConfigManager] /recipe file: BAD | " + e.getMessage());
+            LOGGER.error("/recipe file: BAD", e);
         }
     }
 
@@ -327,7 +330,7 @@ public class RecipeConfigManager {
                 DISABLED_RECIPES.add(elem.getAsString());
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to load disabled recipes: " + e.getMessage());
+            LOGGER.error("Failed to load disabled recipes", e);
         }
     }
 
@@ -341,7 +344,7 @@ public class RecipeConfigManager {
                 GSON.toJson(arr, writer);
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to save disabled recipes: " + e.getMessage());
+            LOGGER.error("Failed to save disabled recipes", e);
         }
     }
 
@@ -452,7 +455,7 @@ public class RecipeConfigManager {
 
         } catch (Exception e) {
             // Bootstrap should never hard-crash the server because of recipe file I/O.
-            System.err.println("[RecipeConfigManager] Bulk upsert failed: " + e.getMessage());
+            LOGGER.error("Bulk upsert failed", e);
         }
     }
 
@@ -470,9 +473,9 @@ public class RecipeConfigManager {
             root.add("recipes", recipesArr);
             writeRecipeJsonRoot(root);
             invalidateRecipeCache();
-            System.out.println("[RecipeConfigManager] Replaced recipe file with " + recipesArr.size() + " recipes");
+            LOGGER.info("Replaced recipe file with {} recipes", recipesArr.size());
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] replaceAllCustomRecipes failed: " + e.getMessage());
+            LOGGER.error("replaceAllCustomRecipes failed", e);
         }
     }
 
@@ -512,7 +515,7 @@ public class RecipeConfigManager {
             writeRecipeJsonRoot(root);
 
             if (!silent) {
-                System.out.println("[RecipeConfigManager] /setrecipe: OK | Wrote '" + recipe.name + "'");
+                LOGGER.info("/setrecipe: OK | Wrote '{}'", recipe.name);
             }
 
             // Force cache refresh on next access
@@ -523,8 +526,7 @@ public class RecipeConfigManager {
 
         } catch (Exception e) {
             if (!silent) {
-                System.err.println("[RecipeConfigManager] Failed to save recipe: " + e.getMessage());
-                e.printStackTrace();
+                LOGGER.error("Failed to save recipe", e);
             }
         }
     }
@@ -563,7 +565,7 @@ public class RecipeConfigManager {
                 
                 writeRecipeJsonRoot(root);
                 
-                System.out.println("[RecipeConfigManager] Removed recipe '" + name + "' from JSON");
+                LOGGER.info("Removed recipe '{}' from JSON", name);
                 
                 // Reload recipes into memory
                 load();
@@ -571,8 +573,7 @@ public class RecipeConfigManager {
             
             return removed;
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to remove recipe: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Failed to remove recipe", e);
             return false;
         }
     }
@@ -584,10 +585,9 @@ public class RecipeConfigManager {
             DefaultRecipeBootstrap.ensureRecipes();
             invalidateRecipeCache();
             SlayerRecipes.registerRecipes();
-            System.out.println("[RecipeConfigManager] Regenerated default recipes to " + CONFIG_FILE);
+            LOGGER.info("Regenerated default recipes to {}", CONFIG_FILE);
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to regenerate recipes: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Failed to regenerate recipes", e);
         }
     }
 
@@ -674,18 +674,18 @@ public class RecipeConfigManager {
             int level = obj.get("requiredLevel").getAsInt();
             
             // Log recipe being loaded
-            System.out.println("[RecipeConfigManager] Loading base recipe: " + name);
+            LOGGER.debug("Loading base recipe: {}", name);
             
             // Handle result with nbt field
             JsonObject resultObj = obj.getAsJsonObject("result");
             ItemStack result = deserializeStack(resultObj);
             
             if (result.isEmpty()) {
-                System.err.println("[RecipeConfigManager] FAILED to load base recipe '" + name + "': result item is empty");
+                LOGGER.error("FAILED to load base recipe '{}': result item is empty", name);
                 return null;
             }
             
-            System.out.println("[RecipeConfigManager] Successfully parsed result for base recipe: " + name);
+            LOGGER.debug("Successfully parsed result for base recipe: {}", name);
 
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
@@ -710,11 +710,10 @@ public class RecipeConfigManager {
                 }
             }
 
-            System.out.println("[RecipeConfigManager] Successfully loaded base recipe: " + name);
+            LOGGER.debug("Successfully loaded base recipe: {}", name);
             return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Error deserializing base recipe: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Error deserializing base recipe", e);
             return null;
         }
     }
@@ -783,7 +782,7 @@ public class RecipeConfigManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Failed to serialize stack: " + e.getMessage());
+            LOGGER.error("Failed to serialize stack", e);
         }
         
         return new com.google.gson.JsonPrimitive("");
@@ -1232,7 +1231,7 @@ public class RecipeConfigManager {
         } catch (IllegalArgumentException ignored) {
             // malformed identifier — ignore silently
         } catch (Exception e) {
-            System.err.println("[RecipeConfigManager] Unexpected error resolving item '" + customId + "': " + e.getMessage());
+            LOGGER.error("Unexpected error resolving item '{}'", customId, e);
         }
         return ItemStack.EMPTY;
     }

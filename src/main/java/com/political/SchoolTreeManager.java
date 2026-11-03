@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.magic.MagicManager;
 import com.political.magic.MagicSchool;
 import com.political.magic.MagicSkillTree;
@@ -29,6 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Persisted to {@code magic_schools.json} in the world root.</p>
  */
 public final class SchoolTreeManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchoolTreeManager.class);
+
 
     private SchoolTreeManager() {}
 
@@ -60,7 +64,7 @@ public final class SchoolTreeManager {
                 DATA.putAll(loaded);
             }
         } catch (Exception e) {
-            System.err.println("[SchoolTreeManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -73,7 +77,7 @@ public final class SchoolTreeManager {
                 gson.toJson(DATA, w);
             }
         } catch (Exception e) {
-            System.err.println("[SchoolTreeManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

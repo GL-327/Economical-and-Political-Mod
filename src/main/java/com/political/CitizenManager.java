@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementManager;
 import com.political.settlement.SettlementScanner;
@@ -40,6 +42,8 @@ import java.util.UUID;
  * Citizens are re-identified by entity tags when their chunks load. Persisted to citizens.json.
  */
 public class CitizenManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CitizenManager.class);
+
 
     public static final String TAG_CITIZEN = "political_citizen";
     public static final String TAG_PREFIX = "political_stl_";
@@ -73,7 +77,7 @@ public class CitizenManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[CitizenManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -86,7 +90,7 @@ public class CitizenManager {
                 g.toJson(new ArrayList<>(citizens.values()), w);
             }
         } catch (Exception e) {
-            System.err.println("[CitizenManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

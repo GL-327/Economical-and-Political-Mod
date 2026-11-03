@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.political.government.Perk;
 import com.political.settlement.Settlement;
@@ -42,6 +44,8 @@ import java.util.UUID;
  * transfers between a player, the guild and (via patronage) a settlement.</p>
  */
 public final class GuildManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GuildManager.class);
+
 
     private GuildManager() {}
 
@@ -127,7 +131,7 @@ public final class GuildManager {
                 if (sf.daily != null) daily.putAll(sf.daily);
             }
         } catch (Exception e) {
-            System.err.println("[GuildManager] Failed to load guilds.json: " + e.getMessage());
+            LOGGER.error("Failed to load guilds.json", e);
         }
     }
 
@@ -144,7 +148,7 @@ public final class GuildManager {
             }
             dirty = false;
         } catch (Exception e) {
-            System.err.println("[GuildManager] Failed to save guilds.json: " + e.getMessage());
+            LOGGER.error("Failed to save guilds.json", e);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerManager;
 import com.political.economy.ShopManager;
 import com.google.gson.Gson;
@@ -35,6 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Players can vote to trigger or suppress certain events.
  */
 public class WorldEventManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorldEventManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // EVENT TYPES
@@ -175,7 +179,7 @@ public class WorldEventManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[WorldEventManager] Failed to load data: " + e.getMessage());
+            LOGGER.error("Failed to load data", e);
         }
     }
     
@@ -194,7 +198,7 @@ public class WorldEventManager {
                 gson.toJson(toSave, writer);
             }
         } catch (Exception e) {
-            System.err.println("[WorldEventManager] Failed to save data: " + e.getMessage());
+            LOGGER.error("Failed to save data", e);
         }
     }
 

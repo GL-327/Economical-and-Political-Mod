@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.economy.BazaarManager;
 import com.political.economy.CoinManager;
@@ -37,6 +39,8 @@ import java.util.UUID;
  * rather than a replacement for playing.</p>
  */
 public final class MinionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MinionManager.class);
+
 
     private MinionManager() {}
 
@@ -83,7 +87,7 @@ public final class MinionManager {
             List<Minion> data = GSON.fromJson(r, t);
             if (data != null) MINIONS.addAll(data);
         } catch (Exception e) {
-            System.out.println("[Minions] Could not read placements: " + e.getMessage());
+            LOGGER.error("Could not read placements", e);
         }
     }
 
@@ -95,7 +99,7 @@ public final class MinionManager {
                 GSON.toJson(MINIONS, w);
             }
         } catch (Exception e) {
-            System.out.println("[Minions] Could not write placements: " + e.getMessage());
+            LOGGER.error("Could not write placements", e);
         }
     }
 

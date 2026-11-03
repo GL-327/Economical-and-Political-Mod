@@ -1,4 +1,6 @@
 package com.political.settlement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.Citizen;
 import com.political.CitizenManager;
 import com.political.DataManager;
@@ -38,6 +40,8 @@ import java.util.UUID;
  * NPC citizens vote via their personality model. Terms are 3 days. Own file: settlement_elections.json.
  */
 public class SettlementElectionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettlementElectionManager.class);
+
 
     private static final long TERM_MS = 3L * 24L * 60L * 60L * 1000L;
 
@@ -84,7 +88,7 @@ public class SettlementElectionManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[SettlementElectionManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -97,7 +101,7 @@ public class SettlementElectionManager {
                 g.toJson(new ArrayList<>(states.values()), w);
             }
         } catch (Exception e) {
-            System.err.println("[SettlementElectionManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

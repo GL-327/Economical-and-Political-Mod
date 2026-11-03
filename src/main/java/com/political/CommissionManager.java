@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
@@ -42,6 +44,8 @@ import java.util.UUID;
  * people who actually work it and cannot be widened any other way.</p>
  */
 public final class CommissionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommissionManager.class);
+
 
     private CommissionManager() {}
 
@@ -87,7 +91,7 @@ public final class CommissionManager {
             Map<String, Board> data = GSON.fromJson(r, t);
             if (data != null) BOARDS.putAll(data);
         } catch (Exception e) {
-            System.out.println("[Commissions] Could not read boards: " + e.getMessage());
+            LOGGER.error("Could not read boards", e);
         }
     }
 
@@ -99,7 +103,7 @@ public final class CommissionManager {
                 GSON.toJson(BOARDS, w);
             }
         } catch (Exception e) {
-            System.out.println("[Commissions] Could not write boards: " + e.getMessage());
+            LOGGER.error("Could not write boards", e);
         }
     }
 

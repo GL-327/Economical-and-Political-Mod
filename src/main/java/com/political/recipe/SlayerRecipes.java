@@ -1,4 +1,6 @@
 package com.political.recipe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.RecipeOutputIndex;
 
 
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SlayerRecipes {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SlayerRecipes.class);
+
 
     public static class Recipe {
         public final String name;
@@ -51,7 +55,7 @@ public class SlayerRecipes {
         List<Recipe> customRecipes = RecipeConfigManager.getCustomRecipes();
         RECIPES.addAll(customRecipes);
         
-        System.out.println("[SlayerRecipes] Registered " + RECIPES.size() + " total recipes (all treated as custom)");
+        LOGGER.info("Registered {} total recipes (all treated as custom)", RECIPES.size());
     }
 
     public static List<Recipe> getRecipes() {

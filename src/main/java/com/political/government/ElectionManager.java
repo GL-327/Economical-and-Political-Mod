@@ -1,4 +1,6 @@
 package com.political.government;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.BuffProgressManager;
 import com.political.CivilCraftAchievements;
 import com.political.CreditItem;
@@ -17,6 +19,8 @@ import net.minecraft.ChatFormatting;
 import java.util.*;
 
 public class ElectionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElectionManager.class);
+
 
     private static final long WEEK_MS = 7L * 24L * 60L * 60L * 1000L;
     private static final long DAY_MS = 24L * 60L * 60L * 1000L;
@@ -261,7 +265,7 @@ public class ElectionManager {
                 corruptCandidates.addAll(loaded);
             }
         } catch (Exception e) {
-            System.err.println("[ElectionManager] Failed to load corruption: " + e.getMessage());
+            LOGGER.error("Failed to load corruption", e);
         }
     }
 
@@ -274,7 +278,7 @@ public class ElectionManager {
                 g.toJson(corruptCandidates, w);
             }
         } catch (Exception e) {
-            System.err.println("[ElectionManager] Failed to save corruption: " + e.getMessage());
+            LOGGER.error("Failed to save corruption", e);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementManager;
@@ -70,6 +72,8 @@ import java.util.UUID;
  * cannot be farmed by camping a road.
  */
 public final class CaravanManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaravanManager.class);
+
 
     private CaravanManager() {}
 
@@ -169,7 +173,7 @@ public final class CaravanManager {
                 if (sf.plunderHistory != null) plunderHistory = new HashMap<>(sf.plunderHistory);
             }
         } catch (Exception e) {
-            System.err.println("[CaravanManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -186,7 +190,7 @@ public final class CaravanManager {
                 g.toJson(sf, w);
             }
         } catch (Exception e) {
-            System.err.println("[CaravanManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 
@@ -269,7 +273,7 @@ public final class CaravanManager {
             try {
                 step(server, c);
             } catch (Exception e) {
-                System.err.println("[CaravanManager] Caravan step failed: " + e.getMessage());
+                LOGGER.error("Caravan step failed", e);
                 despawnEntities(c);
                 caravans.remove(c.id);
             }

@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -22,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 10 unique classes with buffs and debuffs
  */
 public class ClassManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClassManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // CLASS DEFINITIONS
@@ -254,7 +258,7 @@ public class ClassManager {
                 playerClassExperience.put(uuid, exp);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("ClassManager.loadData failed", e);
         }
     }
 
@@ -284,7 +288,7 @@ public class ClassManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("ClassManager.saveData failed", e);
         }
     }
 

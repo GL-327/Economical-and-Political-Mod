@@ -1,4 +1,6 @@
 package com.political.items;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.ClassManager;
 import com.political.HuntsManager;
 import com.political.ItemRegistryIds;
@@ -34,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Create, manage, and distribute custom items with special properties
  */
 public class CustomItemManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomItemManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // CUSTOM ITEM DEFINITION
@@ -387,7 +391,7 @@ public class CustomItemManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("CustomItemManager.loadData failed", e);
         }
     }
 
@@ -421,7 +425,7 @@ public class CustomItemManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("CustomItemManager.saveData failed", e);
         }
     }
 

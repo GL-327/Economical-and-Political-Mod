@@ -1,4 +1,6 @@
 package com.political;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.government.Treasury;
 
 
@@ -44,6 +46,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Spawn mechanics, loot distribution, anti-exploit
  */
 public class WorldBossManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorldBossManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // BOSS TIERS
@@ -231,7 +235,7 @@ public class WorldBossManager {
                 playerBossKills.put(uuid, kills);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("WorldBossManager.loadData failed", e);
         }
     }
 
@@ -253,7 +257,7 @@ public class WorldBossManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("WorldBossManager.saveData failed", e);
         }
     }
 

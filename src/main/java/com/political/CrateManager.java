@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.economy.CoinManager;
 import com.political.recipe.RecipeConfigManager;
@@ -40,6 +42,8 @@ import java.util.UUID;
  * number of bad ones, so a losing streak has a known ceiling.</p>
  */
 public final class CrateManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CrateManager.class);
+
 
     private CrateManager() {}
 
@@ -77,7 +81,7 @@ public final class CrateManager {
             if (data.pity != null) PITY.putAll(data.pity);
             if (data.feed != null) FEED.addAll(data.feed);
         } catch (Exception e) {
-            System.out.println("[Crates] Could not read state: " + e.getMessage());
+            LOGGER.error("Could not read state", e);
         }
     }
 
@@ -93,7 +97,7 @@ public final class CrateManager {
                 GSON.toJson(data, w);
             }
         } catch (Exception e) {
-            System.out.println("[Crates] Could not write state: " + e.getMessage());
+            LOGGER.error("Could not write state", e);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +32,8 @@ import java.util.List;
  * {@code "V5 "} prefix so nothing existing is overwritten.</p>
  */
 public final class LivingWorldRecipeBootstrap {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LivingWorldRecipeBootstrap.class);
+
 
     private LivingWorldRecipeBootstrap() {}
 
@@ -46,11 +50,9 @@ public final class LivingWorldRecipeBootstrap {
         if (out.isEmpty()) return;
         try {
             RecipeConfigManager.upsertCustomRecipesSilent(out);
-            System.out.println("[LivingWorldRecipeBootstrap] Registered " + out.size()
-                    + " Living World recipes.");
+            LOGGER.info("Registered {} Living World recipes.", out.size());
         } catch (Throwable t) {
-            System.err.println("[LivingWorldRecipeBootstrap] Failed to register recipes: "
-                    + t.getMessage());
+            LOGGER.error("Failed to register recipes", t);
         }
     }
 

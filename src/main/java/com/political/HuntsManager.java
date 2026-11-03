@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Players collect specific items to complete hunts
  */
 public class HuntsManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HuntsManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // HUNT TIERS
@@ -230,7 +234,7 @@ public class HuntsManager {
                 playerHuntProgress.put(uuid, progress);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("HuntsManager.loadData failed", e);
         }
     }
 
@@ -269,7 +273,7 @@ public class HuntsManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("HuntsManager.saveData failed", e);
         }
     }
 

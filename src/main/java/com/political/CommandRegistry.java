@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.bounty.BountyGui;
 import com.political.bounty.SlayerData;
@@ -71,6 +73,8 @@ import java.util.Map;
 import com.political.bounty.SlayerManager.SlayerType;
 
 public class CommandRegistry {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistry.class);
+
 
     public static void registerAll(CommandDispatcher<CommandSourceStack> dispatcher) {
         registerVote(dispatcher);
@@ -235,7 +239,7 @@ public class CommandRegistry {
                     try {
                         RecipeEditorGui.openRecipeList(player);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.error("/setrecipe failed to open the recipe list for player {}", player.getUUID(), e);
                         player.sendSystemMessage(Component.literal("An unexpected error occurred: " + e.getClass().getSimpleName() + ": " + e.getMessage()).withStyle(ChatFormatting.RED), false);
                         StackTraceElement[] st = e.getStackTrace();
                         if (st != null) {
@@ -295,7 +299,7 @@ public class CommandRegistry {
                         player.sendSystemMessage(Component.literal("✓ Recipe browser opened — use the book for the full JSON index.").withStyle(ChatFormatting.GREEN), false);
                     } catch (Exception e) {
                         player.sendSystemMessage(Component.literal("Error: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
-                        e.printStackTrace();
+                        LOGGER.error("/recipe failed to open the recipe browser for player {}", player.getUUID(), e);
                     }
                     return 1;
                 })

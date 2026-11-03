@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.SlayerRecipes;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +35,8 @@ import java.util.List;
  * entries for collisions.
  */
 public final class V4RecipeBootstrap {
+    private static final Logger LOGGER = LoggerFactory.getLogger(V4RecipeBootstrap.class);
+
 
     private V4RecipeBootstrap() {}
 
@@ -48,9 +52,9 @@ public final class V4RecipeBootstrap {
         if (!out.isEmpty()) {
             try {
                 RecipeConfigManager.upsertCustomRecipesSilent(out);
-                System.out.println("[V4RecipeBootstrap] Registered " + out.size() + " V4 recipes.");
+                LOGGER.info("Registered {} V4 recipes.", out.size());
             } catch (Throwable t) {
-                System.err.println("[V4RecipeBootstrap] Failed to register recipes: " + t.getMessage());
+                LOGGER.error("Failed to register recipes", t);
             }
         }
     }

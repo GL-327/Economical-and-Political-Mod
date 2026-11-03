@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerItems;
 import com.political.bounty.SlayerManager;
 import com.google.gson.Gson;
@@ -34,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Max level is 10 per family. Total grind to max one family should feel like weeks of active play.
  */
 public class MasteryManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MasteryManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // ITEM FAMILIES
@@ -203,7 +207,7 @@ public class MasteryManager {
                 heartUnlocks.clear();
             }
         } catch (Exception e) {
-            System.err.println("[MasteryManager] Failed to load data: " + e.getMessage());
+            LOGGER.error("Failed to load data", e);
         }
     }
     
@@ -234,7 +238,7 @@ public class MasteryManager {
                 gson.toJson(out, writer);
             }
         } catch (Exception e) {
-            System.err.println("[MasteryManager] Failed to save data: " + e.getMessage());
+            LOGGER.error("Failed to save data", e);
         }
     }
 

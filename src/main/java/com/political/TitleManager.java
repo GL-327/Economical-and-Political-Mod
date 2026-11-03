@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +28,8 @@ import java.util.UUID;
  * thing that granted it has gone.</p>
  */
 public final class TitleManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TitleManager.class);
+
 
     private TitleManager() {}
 
@@ -54,7 +58,7 @@ public final class TitleManager {
             if (data.worn != null) WORN.putAll(data.worn);
             if (data.seen != null) SEEN.putAll(data.seen);
         } catch (Exception e) {
-            System.out.println("[Titles] Could not read state: " + e.getMessage());
+            LOGGER.error("Could not read state", e);
         }
     }
 
@@ -69,7 +73,7 @@ public final class TitleManager {
                 GSON.toJson(data, w);
             }
         } catch (Exception e) {
-            System.out.println("[Titles] Could not write state: " + e.getMessage());
+            LOGGER.error("Could not write state", e);
         }
     }
 

@@ -1,4 +1,6 @@
 package com.political.economy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.CollectionType;
 import com.political.GuiKit;
@@ -36,6 +38,8 @@ import java.util.UUID;
  * always better, which is the point: it is a floor, not a competitor.</p>
  */
 public final class BazaarManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BazaarManager.class);
+
 
     private BazaarManager() {}
 
@@ -93,7 +97,7 @@ public final class BazaarManager {
             List<Order> data = GSON.fromJson(r, t);
             if (data != null) ORDERS.addAll(data);
         } catch (Exception e) {
-            System.out.println("[Bazaar] Could not read the book: " + e.getMessage());
+            LOGGER.error("Could not read the book", e);
         }
     }
 
@@ -105,7 +109,7 @@ public final class BazaarManager {
                 GSON.toJson(ORDERS, w);
             }
         } catch (Exception e) {
-            System.out.println("[Bazaar] Could not write the book: " + e.getMessage());
+            LOGGER.error("Could not write the book", e);
         }
     }
 

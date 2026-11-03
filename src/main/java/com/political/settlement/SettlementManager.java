@@ -1,4 +1,6 @@
 package com.political.settlement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.CitizenManager;
 import com.political.HighCouncilManager;
 import com.political.SpawnProtectionManager;
@@ -41,6 +43,8 @@ import java.util.UUID;
  * rescans, tier changes, wander-in spawning, city perks, then the sub-managers' ticks.
  */
 public class SettlementManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettlementManager.class);
+
 
     private static final Map<String, Settlement> settlements = new LinkedHashMap<>();
     private static Path dataFile;
@@ -73,7 +77,7 @@ public class SettlementManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[SettlementManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -86,7 +90,7 @@ public class SettlementManager {
                     g.toJson(new ArrayList<>(settlements.values()), w);
                 }
             } catch (Exception e) {
-                System.err.println("[SettlementManager] Failed to save: " + e.getMessage());
+                LOGGER.error("Failed to save", e);
             }
         }
         CitizenManager.save();
@@ -313,7 +317,7 @@ public class SettlementManager {
             s.lastScanAt = System.currentTimeMillis();
             save();
         } catch (Exception e) {
-            System.err.println("[SettlementManager] Scan failed for " + s.name + ": " + e.getMessage());
+            LOGGER.error("Scan failed for {}", s.name, e);
         }
     }
 

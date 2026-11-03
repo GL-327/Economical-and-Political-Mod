@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -35,6 +37,8 @@ import java.util.TreeSet;
  * an item with no art keeps looking exactly as it does today.</p>
  */
 public final class PolymerBridge {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PolymerBridge.class);
+
 
     private PolymerBridge() {}
 
@@ -57,8 +61,7 @@ public final class PolymerBridge {
         polymerPresent = FabricLoader.getInstance().isModLoaded("polymer-core")
                 || FabricLoader.getInstance().isModLoaded("polymer-resource-pack");
         scanModels();
-        System.out.println("[Polymer] bridge ready. polymer=" + polymerPresent
-                + " models=" + KNOWN_MODELS.size());
+        LOGGER.info("bridge ready. polymer={} models={}", polymerPresent, KNOWN_MODELS.size());
     }
 
     /**
@@ -81,7 +84,7 @@ public final class PolymerBridge {
                 }
             }
         } catch (Exception e) {
-            System.out.println("[Polymer] could not read the bundled model index: " + e.getMessage());
+            LOGGER.error("could not read the bundled model index", e);
         }
 
         // Operator drop in folder: config/political/item_models/<id>.json
@@ -98,7 +101,7 @@ public final class PolymerBridge {
                 }
             }
         } catch (Exception e) {
-            System.out.println("[Polymer] could not read the model folder: " + e.getMessage());
+            LOGGER.error("could not read the model folder", e);
         }
         scanned = true;
     }
@@ -185,7 +188,7 @@ public final class PolymerBridge {
             Files.writeString(out, sb.toString(), StandardCharsets.UTF_8);
             return SEEN_IDS.size();
         } catch (Exception e) {
-            System.out.println("[Polymer] could not write the manifest: " + e.getMessage());
+            LOGGER.error("could not write the manifest", e);
             return 0;
         }
     }

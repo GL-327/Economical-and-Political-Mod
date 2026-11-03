@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -50,6 +52,8 @@ import java.nio.file.Path;
  * chance — it can never out-earn combat the player was already doing.
  */
 public final class SeasonFestivals {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SeasonFestivals.class);
+
 
     private SeasonFestivals() {}
 
@@ -124,7 +128,7 @@ public final class SeasonFestivals {
                     lastYear = sf.lastYear;
                 }
             } catch (Exception e) {
-                System.err.println("[SeasonFestivals] Failed to load: " + e.getMessage());
+                LOGGER.error("Failed to load", e);
             }
         }
     }
@@ -141,7 +145,7 @@ public final class SeasonFestivals {
                 g.toJson(sf, w);
             }
         } catch (Exception e) {
-            System.err.println("[SeasonFestivals] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

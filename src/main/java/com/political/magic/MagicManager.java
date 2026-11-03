@@ -1,4 +1,6 @@
 package com.political.magic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.Commission;
 
 
@@ -23,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Unused on purpose. Magic gameplay is left as a skeleton and is not registered.
  */
 public class MagicManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MagicManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // SPELLS
@@ -193,7 +197,7 @@ public class MagicManager {
                 playerData.putAll(loaded);
             }
         } catch (Exception e) {
-            System.err.println("[MagicManager] Failed to load data: " + e.getMessage());
+            LOGGER.error("Failed to load data", e);
         }
     }
 
@@ -206,7 +210,7 @@ public class MagicManager {
                 gson.toJson(playerData, writer);
             }
         } catch (Exception e) {
-            System.err.println("[MagicManager] Failed to save data: " + e.getMessage());
+            LOGGER.error("Failed to save data", e);
         }
     }
 

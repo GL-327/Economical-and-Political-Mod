@@ -1,5 +1,7 @@
 package com.political.technique;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -34,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * and may equip one technique at a time. Each ability has its own handler.
  */
 public final class TechniqueManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TechniqueManager.class);
+
 
     private TechniqueManager() {}
 
@@ -78,7 +82,7 @@ public final class TechniqueManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[TechniqueManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
     }
 
@@ -114,7 +118,7 @@ public final class TechniqueManager {
                 gson.toJson(save, w);
             }
         } catch (Exception e) {
-            System.err.println("[TechniqueManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

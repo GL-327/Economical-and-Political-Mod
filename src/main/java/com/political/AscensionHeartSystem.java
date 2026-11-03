@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Separate from {@link MasteryHeartTree}. Vanilla-themed perks only.
  */
 public final class AscensionHeartSystem {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AscensionHeartSystem.class);
+
 
     public enum HeartTree {
         MINING_DEPTHS("Mining Depths", "§8Like HotM — ores & stone", Items.NETHERITE_PICKAXE),
@@ -154,7 +158,7 @@ public final class AscensionHeartSystem {
                 unlocked.put(e.getKey(), m);
             }
         } catch (Exception ex) {
-            System.err.println("[AscensionHeartSystem] load failed: " + ex.getMessage());
+            LOGGER.error("load failed", ex);
         }
     }
 
@@ -175,7 +179,7 @@ public final class AscensionHeartSystem {
                 gson.toJson(out, w);
             }
         } catch (Exception ex) {
-            System.err.println("[AscensionHeartSystem] save failed: " + ex.getMessage());
+            LOGGER.error("save failed", ex);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementManager;
@@ -63,6 +65,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * </ul>
  */
 public final class ExpeditionRunManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpeditionRunManager.class);
+
 
     private ExpeditionRunManager() {}
 
@@ -197,7 +201,7 @@ public final class ExpeditionRunManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[ExpeditionRunManager] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
         save();
     }
@@ -215,7 +219,7 @@ public final class ExpeditionRunManager {
                 g.toJson(blob, w);
             }
         } catch (Exception e) {
-            System.err.println("[ExpeditionRunManager] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 
@@ -471,8 +475,7 @@ public final class ExpeditionRunManager {
         if (!PENDING_WIPES.isEmpty()) {
             int[] origin = PENDING_WIPES.remove(0);
             ExpeditionGenerator.wipe(level, origin[0], origin[1]);
-            System.out.println("[ExpeditionRunManager] Wiped orphaned instance at "
-                    + origin[0] + "," + origin[1]);
+            LOGGER.info("Wiped orphaned instance at {},{}", origin[0], origin[1]);
             return;
         }
 
@@ -483,7 +486,7 @@ public final class ExpeditionRunManager {
             try {
                 tickRun(server, level, d, now);
             } catch (Exception e) {
-                System.err.println("[ExpeditionRunManager] Run " + d.id + " errored: " + e.getMessage());
+                LOGGER.error("Run {} errored", d.id, e);
                 endRun(server, d, EndReason.FAILED);
             }
         }

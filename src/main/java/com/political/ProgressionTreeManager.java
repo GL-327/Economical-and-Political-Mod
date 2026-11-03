@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
@@ -16,6 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Players earn skill points through gameplay to unlock tiers
  */
 public class ProgressionTreeManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgressionTreeManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // BRANCH DEFINITIONS
@@ -111,7 +115,7 @@ public class ProgressionTreeManager {
                 playerTiers.put(uuid, tiers);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("ProgressionTreeManager.loadData failed", e);
         }
     }
 
@@ -138,7 +142,7 @@ public class ProgressionTreeManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("ProgressionTreeManager.saveData failed", e);
         }
     }
 

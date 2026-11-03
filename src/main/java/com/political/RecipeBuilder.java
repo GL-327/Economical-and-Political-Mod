@@ -1,9 +1,13 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.*;
 
 public class RecipeBuilder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeBuilder.class);
+
 
     public static void main(String[] args) throws IOException {
         Map<String, String> materials = new HashMap<>();
@@ -58,7 +62,7 @@ public class RecipeBuilder {
             out.println("]");
         }
 
-        System.out.println("Generated " + recipes.size() + " recipes");
+        LOGGER.info("Generated {} recipes", recipes.size());
     }
 
     private static int getTier(String material) {

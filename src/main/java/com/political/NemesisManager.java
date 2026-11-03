@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -52,6 +54,8 @@ import java.util.UUID;
  * been dying. That history is the content.</p>
  */
 public final class NemesisManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NemesisManager.class);
+
 
     private NemesisManager() {}
 
@@ -92,7 +96,7 @@ public final class NemesisManager {
                 n.entityUuid = "";
             }
         } catch (Exception e) {
-            System.out.println("[Nemesis] Could not read grudges: " + e.getMessage());
+            LOGGER.error("Could not read grudges", e);
         }
     }
 
@@ -104,7 +108,7 @@ public final class NemesisManager {
                 GSON.toJson(NEMESES, w);
             }
         } catch (Exception e) {
-            System.out.println("[Nemesis] Could not write grudges: " + e.getMessage());
+            LOGGER.error("Could not write grudges", e);
         }
     }
 

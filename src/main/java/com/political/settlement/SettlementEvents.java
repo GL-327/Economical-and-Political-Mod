@@ -1,4 +1,6 @@
 package com.political.settlement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.VarietyGui;
 
 
@@ -54,6 +56,8 @@ import java.util.Random;
  * ceiling, and one-time treasury effects are a capped fraction. Nothing here pays a player's wallet.
  */
 public final class SettlementEvents {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettlementEvents.class);
+
 
     private SettlementEvents() {}
 
@@ -197,7 +201,7 @@ public final class SettlementEvents {
                 lastRotateMs = sf.lastRotateMs;
             }
         } catch (Exception e) {
-            System.err.println("[SettlementEvents] Failed to load: " + e.getMessage());
+            LOGGER.error("Failed to load", e);
         }
         if (lastRotateMs == 0L) lastRotateMs = System.currentTimeMillis();
     }
@@ -214,7 +218,7 @@ public final class SettlementEvents {
                 g.toJson(sf, w);
             }
         } catch (Exception e) {
-            System.err.println("[SettlementEvents] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 

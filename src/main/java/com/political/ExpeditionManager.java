@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Lockout system prevents spam-running.
  */
 public class ExpeditionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpeditionManager.class);
+
 
     // ════════════════════════════════════════════════════════════
     // EXPEDITION ZONES
@@ -217,7 +221,7 @@ public class ExpeditionManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println("[ExpeditionManager] Failed to load data: " + e.getMessage());
+            LOGGER.error("Failed to load data", e);
         }
     }
     
@@ -236,7 +240,7 @@ public class ExpeditionManager {
                 gson.toJson(toSave, writer);
             }
         } catch (Exception e) {
-            System.err.println("[ExpeditionManager] Failed to save data: " + e.getMessage());
+            LOGGER.error("Failed to save data", e);
         }
     }
 

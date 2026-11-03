@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -48,6 +50,8 @@ import java.util.Random;
  * temporary — nothing here is permanent, stackable, or reachable by grinding.
  */
 public final class WorldModifiers {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorldModifiers.class);
+
 
     private WorldModifiers() {}
 
@@ -143,7 +147,7 @@ public final class WorldModifiers {
                     nextEligibleMs = sf.nextEligibleMs;
                 }
             } catch (Exception e) {
-                System.err.println("[WorldModifiers] Failed to load: " + e.getMessage());
+                LOGGER.error("Failed to load", e);
             }
         }
         long now = System.currentTimeMillis();
@@ -162,7 +166,7 @@ public final class WorldModifiers {
                 g.toJson(sf, w);
             }
         } catch (Exception e) {
-            System.err.println("[WorldModifiers] Failed to save: " + e.getMessage());
+            LOGGER.error("Failed to save", e);
         }
     }
 
