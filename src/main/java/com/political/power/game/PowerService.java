@@ -1,5 +1,6 @@
 package com.political.power.game;
 
+import com.mojang.serialization.JsonOps;
 import com.political.SchoolTree;
 import com.political.core.Clock;
 import com.political.core.persist.StoreRegistry;
@@ -399,6 +400,46 @@ public final class PowerService {
             }
             player.sendSystemMessage(line, false);
         }
+    }
+
+    /**
+     * Admin reset: the player starts over (no school, nodes, techniques, shards, vows or resource). The old state is
+     * first written to the quarantine as text under {@code <uuid>.reset.<time>}, so an admin's mistake can be undone
+     * by hand from power.json; unique techniques the player held are freed. Throws, changing nothing, if the old
+     * state cannot be written down.
+     */
+    public static void reset(String uuid) {
+        PowerData d = data();
+        PlayerPower old = d.players.get(uuid);
+        if (old != null) {
+            String archived = PlayerPower.CODEC.encodeStart(JsonOps.INSTANCE, old)
+                    .getOrThrow(message -> new IllegalStateException("cannot archive the power state of " + uuid + ": " + message))
+                    .toString();
+            d.quarantine.put(uuid + ".reset." + Clock.wallMillis(), archived);
+            d.players.remove(uuid);
+        }
+        for (PowerCatalog.TechniqueDef def : PowerCatalog.techniques()) {
+            UniqueHolders.release(d.uniqueHolders, def.id(), uuid);
+        }
+        UUID id = UUID.fromString(uuid);
+        PowerRuntime rt = RUNTIME.get(id);
+        if (rt != null) {
+            rt.vows = new VowSet();
+            rt.clearCombatState();
+        }
+        DomainManager.endEarly(id, Clock.ticks());
+        dirty();
+        LOGGER.info("Power state of {} was reset; the old state is in the quarantine of power.json", uuid);
+    }
+
+    /** How many archived states the quarantine holds (resets and old data that did not fit). */
+    public static int quarantineSize() {
+        return data().quarantine.size();
+    }
+
+    /** Unique technique id to the UUID of its holder, for the admin screen. */
+    public static Map<String, String> uniqueHolders() {
+        return Map.copyOf(data().uniqueHolders);
     }
 
     /** Writes the power data now if it changed (shutdown). */

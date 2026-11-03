@@ -23,7 +23,6 @@ import com.political.settlement.ShadowGovernmentManager;
 import com.political.settlement.WarGui;
 import com.political.settlement.WarManager;
 import com.political.stats.PlayerStatsManager;
-import com.political.technique.TechniqueGui;
 import com.political.technique.TechniqueManager;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -113,8 +112,8 @@ public final class AdminPanel {
                 "Mob scaling and bosses", "Bounties and slayers"));
 
         gui.setSlot(21, GuiKit.tile(Items.ENCHANTED_BOOK, "Techniques", ChatFormatting.BLUE,
-                () -> TechniqueGui.open(player),
-                "Learned combat techniques"));
+                () -> com.political.power.game.PowerAdminScreens.open(player, 0),
+                "Powers of every player"));
 
         gui.setSlot(22, GuiKit.tile(Items.COMPASS, "World", ChatFormatting.AQUA,
                 () -> openWorld(player),
@@ -835,10 +834,10 @@ public final class AdminPanel {
                 "Techniques, schools and energy");
 
         gui.setSlot(19, GuiKit.tile(Items.ENCHANTED_BOOK, "Techniques", ChatFormatting.LIGHT_PURPLE,
-                () -> TechniqueGui.open(player), "Every technique and its owner"));
+                () -> com.political.power.game.PowerAdminScreens.open(player, 0), "Every technique and its owner"));
 
         gui.setSlot(20, GuiKit.tile(Items.BOOKSHELF, "Schools", ChatFormatting.AQUA,
-                () -> SchoolTreeGui.openSchoolList(player), "The school trees"));
+                () -> com.political.power.game.PowerAdminScreens.open(player, 0), "Each player's school and tree"));
 
         gui.setSlot(21, GuiKit.tile(Items.BEACON, "Progression trees", ChatFormatting.GREEN,
                 () -> ProgressionTreeGui.openMainMenu(player), "Every unlock tree"));

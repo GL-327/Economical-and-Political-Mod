@@ -59,3 +59,8 @@
   imported, copies are kept as `<name>.pre-power`, and anything that does not fit is quarantined rather than dropped. Cooldowns, cast
   history and Domains are not saved.
 - Old entry points (`TechniqueManager`, mana and shard methods) now forward to the new service; nothing was deleted.
+- Screens: the Techniques screen is now the Powers hub (level, Arcane Shards, school, techniques, abilities, the school tree with its next
+  step and cost, binding vows, cursed energy). Every existing menu entry that opened Techniques opens it; there is no new player command.
+- Admin: a power administration screen (every online player's state, grant, revoke, set school, reset, who holds unique techniques) and
+  `/poweradmin`, both guarded by the permission `politicalserver:power.admin` (operators of level owners by default). A reset keeps a
+  copy of the old state in `power.json`. See `docs/OWNER_POWER_TEST.md` for the owner's test script.

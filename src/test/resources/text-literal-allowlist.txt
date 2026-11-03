@@ -254,5 +254,4 @@ com/political/settlement/WarGui.java | 72
 com/political/settlement/WarManager.java | 38
 com/political/stats/HealthScalingManager.java | 2
 com/political/stats/PlayerStatsManager.java | 11
-com/political/technique/TechniqueGui.java | 17
 com/political/technique/TechniqueItems.java | 6

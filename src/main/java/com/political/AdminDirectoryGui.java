@@ -26,7 +26,6 @@ import com.political.settlement.SettlementEventGui;
 import com.political.settlement.SettlementProgressGui;
 import com.political.settlement.WarGui;
 import com.political.technique.Technique;
-import com.political.technique.TechniqueGui;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
@@ -137,7 +136,7 @@ public final class AdminDirectoryGui {
         add("Combat", "Nemesis", p -> NemesisGui.open(p));
         add("Combat", "World Boss", p -> WorldBossGui.openMainMenu(p));
 
-        add("Combat", "Technique", p -> TechniqueGui.open(p));
+        add("Combat", "Technique", p -> com.political.power.game.PowerAdminScreens.open(p, 0));
 
         // Progress
         add("Progress", "Ascension Grind", p -> AscensionGrindGui.openMain(p));
