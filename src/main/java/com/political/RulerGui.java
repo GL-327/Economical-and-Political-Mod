@@ -24,7 +24,7 @@ public class RulerGui {
         gui.setTitle(Component.literal("Ruler Dashboard"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -132,7 +132,7 @@ public class RulerGui {
         gui.setTitle(Component.literal("Players in Debt"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }

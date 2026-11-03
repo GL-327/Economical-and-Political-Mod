@@ -61,7 +61,7 @@ public final class HighCouncilGui {
             HighCouncilManager.Ministry m = ministries[i];
             String holder = ministers.get(m);
             gui.setSlot(slots[i], new GuiElementBuilder(
-                    holder == null ? Items.GRAY_CONCRETE : Items.GOLDEN_HELMET)
+                    holder == null ? Items.CONCRETE.gray() : Items.GOLDEN_HELMET)
                     .setName(Component.literal(m.displayName).withStyle(m.color, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§f" + (holder == null ? "§8vacant"
                             : DataManager.getPlayerName(holder))))
@@ -82,7 +82,7 @@ public final class HighCouncilGui {
             long minsLeft = HighCouncilManager.edictRemainingMs(e) / 60000L;
 
             GuiElementBuilder b = new GuiElementBuilder(
-                    active ? Items.LIME_CONCRETE : canEnact ? Items.PAPER : Items.GRAY_CONCRETE)
+                    active ? Items.CONCRETE.lime() : canEnact ? Items.PAPER : Items.CONCRETE.gray())
                     .setName(Component.literal(e.displayName).withStyle(e.color, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7" + e.description))
                     .addLoreLine(Component.literal(""))

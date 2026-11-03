@@ -7,6 +7,7 @@ import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import com.political.items.CustomItemManager;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -74,33 +75,33 @@ public class WorldBossManager {
 
     public enum WorldBossType {
         // TIER 1: LESSER WORLD BOSSES (Spawn 30-60 min, Despawn 15 min, 1-3 players)
-        HOLLOW_KNIGHT("The Hollow Knight", "⚔", EntityType.WITHER_SKELETON, BossTier.COMMON,
+        HOLLOW_KNIGHT("The Hollow Knight", "⚔", EntityTypes.WITHER_SKELETON, BossTier.COMMON,
             "Ancient undead warrior", new String[]{"plains", "forest", "swamp"}),
-        MOSSWARDEN("Mosswarden", "🌿", EntityType.IRON_GOLEM, BossTier.COMMON,
+        MOSSWARDEN("Mosswarden", "🌿", EntityTypes.IRON_GOLEM, BossTier.COMMON,
             "Guardian of the forest", new String[]{"forest", "jungle", "swamp"}),
-        SCORCHFIEND("Scorchfiend", "🔥", EntityType.BLAZE, BossTier.COMMON,
+        SCORCHFIEND("Scorchfiend", "🔥", EntityTypes.BLAZE, BossTier.COMMON,
             "Born from volcanic fury", new String[]{"desert", "badlands", "nether_wastes"}),
-        SKULLTIDE_CAPTAIN("Skulltide Captain", "⚓", EntityType.DROWNED, BossTier.COMMON,
+        SKULLTIDE_CAPTAIN("Skulltide Captain", "⚓", EntityTypes.DROWNED, BossTier.COMMON,
             "Terror of the seas", new String[]{"ocean", "river", "beach"}),
         
         // TIER 2: GREATER WORLD BOSSES (Spawn 90-120 min, Despawn 20 min, 3-6 players)
-        NETHERMAW("Nethermaw", "🐗", EntityType.HOGLIN, BossTier.ELITE,
+        NETHERMAW("Nethermaw", "🐗", EntityTypes.HOGLIN, BossTier.ELITE,
             "Beast of the nether", new String[]{"crimson_forest", "nether_wastes", "desert"}),
-        WAILING_PHANTOM("The Wailing Phantom", "👻", EntityType.PHANTOM, BossTier.ELITE,
+        WAILING_PHANTOM("The Wailing Phantom", "👻", EntityTypes.PHANTOM, BossTier.ELITE,
             "Spectral terror of the night", new String[]{"any"}),
-        CRYSTAL_GOLEM("Crystal Golem", "💎", EntityType.IRON_GOLEM, BossTier.ELITE,
+        CRYSTAL_GOLEM("Crystal Golem", "💎", EntityTypes.IRON_GOLEM, BossTier.ELITE,
             "Animated gemstone guardian", new String[]{"mountains", "stalactite_caves", "dripstone_caves"}),
-        BLIGHT_MOTHER("Blight Mother", "🕷", EntityType.SPIDER, BossTier.ELITE,
+        BLIGHT_MOTHER("Blight Mother", "🕷", EntityTypes.SPIDER, BossTier.ELITE,
             "Mother of all vermin", new String[]{"forest", "jungle", "swamp", "cave"}),
         
         // TIER 3: APEX WORLD BOSSES (Spawn 3-5 hours, Despawn 30 min, 6-12+ players)
-        VOIDREAVER("Voidreaver", "\uD83D\uDD2E", EntityType.ENDERMAN, BossTier.LEGENDARY,
+        VOIDREAVER("Voidreaver", "\uD83D\uDD2E", EntityTypes.ENDERMAN, BossTier.LEGENDARY,
             "Traveler between dimensions", new String[]{"the_end", "desert", "badlands"}),
-        INFERNAL_HYDRA("Infernal Hydra", "\uD83D\uDC09", EntityType.RAVAGER, BossTier.LEGENDARY,
+        INFERNAL_HYDRA("Infernal Hydra", "\uD83D\uDC09", EntityTypes.RAVAGER, BossTier.LEGENDARY,
             "Three-headed elemental beast", new String[]{"desert", "nether_wastes", "basalt_deltas"}),
-        ANCIENT_ONE("The Ancient One", "🔱", EntityType.ELDER_GUARDIAN, BossTier.LEGENDARY,
+        ANCIENT_ONE("The Ancient One", "🔱", EntityTypes.ELDER_GUARDIAN, BossTier.LEGENDARY,
             "Primordial ocean terror", new String[]{"deep_ocean", "ocean_monument"}),
-        KING_OF_ASHES("King of Ashes", "\uD83D\uDC51", EntityType.WITHER_SKELETON, BossTier.LEGENDARY,
+        KING_OF_ASHES("King of Ashes", "\uD83D\uDC51", EntityTypes.WITHER_SKELETON, BossTier.LEGENDARY,
             "Ruler of the ashen realm", new String[]{"nether_wastes", "soul_sand_valley", "basalt_deltas"});
 
         public final String name;
@@ -661,7 +662,7 @@ public class WorldBossManager {
                 // Summon a couple adds
                 int adds = boss.tier == BossTier.LEGENDARY ? 6 : boss.tier == BossTier.ELITE ? 4 : 2;
                 for (int i = 0; i < adds; i++) {
-                    WitherSkeleton ws = EntityType.WITHER_SKELETON.create(boss.world, net.minecraft.world.entity.EntitySpawnReason.MOB_SUMMONED);
+                    WitherSkeleton ws = EntityTypes.WITHER_SKELETON.create(boss.world, net.minecraft.world.entity.EntitySpawnReason.MOB_SUMMONED);
                     if (ws != null) {
                         ws.teleportTo(entity.getX() + (random.nextDouble() - 0.5) * 6, entity.getY(), entity.getZ() + (random.nextDouble() - 0.5) * 6);
                         boss.world.addFreshEntity(ws);
@@ -735,7 +736,7 @@ public class WorldBossManager {
                 }
                 int drown = boss.tier == BossTier.LEGENDARY ? 4 : boss.tier == BossTier.ELITE ? 3 : 2;
                 for (int i = 0; i < drown; i++) {
-                    Mob d = EntityType.DROWNED.create(boss.world, EntitySpawnReason.MOB_SUMMONED);
+                    Mob d = EntityTypes.DROWNED.create(boss.world, EntitySpawnReason.MOB_SUMMONED);
                     if (d != null) {
                         d.teleportTo(entity.getX() + (random.nextDouble() - 0.5) * 5, entity.getY(), entity.getZ() + (random.nextDouble() - 0.5) * 5);
                         boss.world.addFreshEntity(d);
@@ -774,7 +775,7 @@ public class WorldBossManager {
                 }
                 int spiders = boss.tier == BossTier.LEGENDARY ? 5 : boss.tier == BossTier.ELITE ? 3 : 2;
                 for (int i = 0; i < spiders; i++) {
-                    CaveSpider cs = EntityType.CAVE_SPIDER.create(boss.world, EntitySpawnReason.MOB_SUMMONED);
+                    CaveSpider cs = EntityTypes.CAVE_SPIDER.create(boss.world, EntitySpawnReason.MOB_SUMMONED);
                     if (cs != null) {
                         cs.teleportTo(entity.getX() + (random.nextDouble() - 0.5) * 5, entity.getY(), entity.getZ() + (random.nextDouble() - 0.5) * 5);
                         boss.world.addFreshEntity(cs);
@@ -791,7 +792,7 @@ public class WorldBossManager {
                 }
                 int skel = boss.tier == BossTier.LEGENDARY ? 5 : 3;
                 for (int i = 0; i < skel; i++) {
-                    WitherSkeleton ws = EntityType.WITHER_SKELETON.create(boss.world, EntitySpawnReason.MOB_SUMMONED);
+                    WitherSkeleton ws = EntityTypes.WITHER_SKELETON.create(boss.world, EntitySpawnReason.MOB_SUMMONED);
                     if (ws != null) {
                         ws.teleportTo(entity.getX() + (random.nextDouble() - 0.5) * 6, entity.getY(), entity.getZ() + (random.nextDouble() - 0.5) * 6);
                         boss.world.addFreshEntity(ws);

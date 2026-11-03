@@ -15,7 +15,7 @@ public final class CivilAntiCheatGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, admin, false);
         gui.setTitle(Component.literal("Civil Anti-Cheat").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
 
-        var edge = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var edge = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build();
         for (int i = 0; i < 27; i++) gui.setSlot(i, edge);
 
         gui.setSlot(10, toggle(admin, Items.EXPERIENCE_BOTTLE, "Dupe scan (inventory tick)",

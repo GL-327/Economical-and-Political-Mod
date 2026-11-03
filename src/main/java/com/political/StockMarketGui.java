@@ -216,17 +216,17 @@ public class StockMarketGui {
                 .build());
         
         // Update buy buttons with current prices
-        gui.setSlot(20, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(20, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 1 Share").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + StockMarket.formatPrice(price) + " coins"))
                 .build());
         
-        gui.setSlot(21, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(21, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 10 Shares").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + StockMarket.formatPrice(price * 10) + " coins"))
                 .build());
         
-        gui.setSlot(22, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(22, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 100 Shares").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + StockMarket.formatPrice(price * 100) + " coins"))
                 .build());
@@ -251,7 +251,7 @@ public class StockMarketGui {
         guiViewType.put(player.getUUID(), "main");
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         // Header
@@ -340,7 +340,7 @@ public class StockMarketGui {
         guiPage.put(player.getUUID(), page);
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
@@ -433,7 +433,7 @@ public class StockMarketGui {
         guiPage.put(player.getUUID(), page);
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
@@ -530,7 +530,7 @@ public class StockMarketGui {
         guiSymbol.put(player.getUUID(), symbol);
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 36; i++) gui.setSlot(i, bg.build());
 
         double price = StockMarket.getPrice(symbol);
@@ -566,7 +566,7 @@ public class StockMarketGui {
         // Buy buttons
         final String sym = symbol;
         String pu = player.getUUID().toString();
-        gui.setSlot(20, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(20, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 1 Share").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + StockMarket.formatPrice(StockMarket.estimateBuyCoinCost(pu, sym, 1)) + " coins"))
                 .setCallback((idx, type, containerInput, slotGui) -> {
@@ -575,7 +575,7 @@ public class StockMarketGui {
                 })
                 .build());
 
-        gui.setSlot(21, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(21, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 10 Shares").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + StockMarket.formatPrice(StockMarket.estimateBuyCoinCost(pu, sym, 10)) + " coins"))
                 .setCallback((idx, type, containerInput, slotGui) -> {
@@ -584,7 +584,7 @@ public class StockMarketGui {
                 })
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(22, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 100 Shares").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + StockMarket.formatPrice(StockMarket.estimateBuyCoinCost(pu, sym, 100)) + " coins"))
                 .setCallback((idx, type, containerInput, slotGui) -> {
@@ -604,7 +604,7 @@ public class StockMarketGui {
 
         // Sell buttons
         if (owned > 0) {
-            gui.setSlot(24, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(24, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Sell 1 Share").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Value: §6" + StockMarket.formatPrice(price) + " coins"))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -613,7 +613,7 @@ public class StockMarketGui {
                     })
                     .build());
 
-            gui.setSlot(25, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(25, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Sell 10 Shares").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Value: §6" + StockMarket.formatPrice(price * 10) + " coins"))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -622,7 +622,7 @@ public class StockMarketGui {
                     })
                     .build());
 
-            gui.setSlot(26, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(26, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Sell All (" + owned + ")").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Value: §6" + StockMarket.formatPrice(price * owned) + " coins"))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -666,7 +666,7 @@ public class StockMarketGui {
         gui.setTitle(Component.literal("📰 Market News"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         List<StockMarket.MarketEvent> events = StockMarket.getActiveEvents();
@@ -690,7 +690,7 @@ public class StockMarketGui {
                 if (slot > 16) break;
                 
                 ChatFormatting color = event.priceModifier >= 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
-                gui.setSlot(slot, new GuiElementBuilder(event.priceModifier >= 0 ? Items.LIME_DYE : Items.RED_DYE)
+                gui.setSlot(slot, new GuiElementBuilder(event.priceModifier >= 0 ? Items.DYE.lime() : Items.DYE.red())
                         .setName(Component.literal("⚡ " + event.name).withStyle(color, ChatFormatting.BOLD))
                         .addLoreLine(Component.literal(event.description).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal(""))
@@ -720,7 +720,7 @@ public class StockMarketGui {
         gui.setTitle(Component.literal("🚀 Top Movers"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         // Find top gainers and losers
@@ -743,7 +743,7 @@ public class StockMarketGui {
             if (stock == null) continue;
             
             final String symbol = entry.getKey();
-            gui.setSlot(10 + i, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(10 + i, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("📈 " + stock.symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(stock.name).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""))
@@ -761,7 +761,7 @@ public class StockMarketGui {
             if (stock == null) continue;
             
             final String symbol = entry.getKey();
-            gui.setSlot(14 + i, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(14 + i, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("📉 " + stock.symbol).withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(stock.name).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""))
@@ -917,7 +917,7 @@ public class StockMarketGui {
         gui.setTitle(Component.literal("📊 " + symbol + " Price Chart"));
 
         // Dark background for better contrast
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         List<Double> history = StockMarket.getPriceHistory(symbol);
@@ -981,7 +981,7 @@ public class StockMarketGui {
                 for (int row = Math.min(highRow, lowRow); row <= Math.max(highRow, lowRow); row++) {
                     int slot = graphStartSlot + (row * 9) + col;
                     if (slot >= 0 && slot < 54) {
-                        Item wickItem = isUp ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE;
+                        Item wickItem = isUp ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red();
                         gui.setSlot(slot, new GuiElementBuilder(wickItem)
                                 .setName(Component.literal(isUp ? "§a▲ Bullish" : "§c▼ Bearish").withStyle(ChatFormatting.BOLD))
                                 .addLoreLine(Component.literal(""))
@@ -998,7 +998,7 @@ public class StockMarketGui {
                 // Draw body (thicker part) at center
                 int bodySlot = graphStartSlot + (bodyCenterRow * 9) + col;
                 if (bodySlot >= 0 && bodySlot < 54) {
-                    Item bodyItem = isUp ? Items.LIME_CONCRETE : Items.RED_CONCRETE;
+                    Item bodyItem = isUp ? Items.CONCRETE.lime() : Items.CONCRETE.red();
                     gui.setSlot(bodySlot, new GuiElementBuilder(bodyItem)
                             .setName(Component.literal(isUp ? "§a▲ Bullish Candle" : "§c▼ Bearish Candle").withStyle(ChatFormatting.BOLD))
                             .addLoreLine(Component.literal(""))
@@ -1013,11 +1013,11 @@ public class StockMarketGui {
             }
             
             // Legend with better styling
-            gui.setSlot(47, new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(47, new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("Bullish Candle").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Price went UP"))
                     .build());
-            gui.setSlot(48, new GuiElementBuilder(Items.RED_CONCRETE)
+            gui.setSlot(48, new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("Bearish Candle").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Price went DOWN"))
                     .build());

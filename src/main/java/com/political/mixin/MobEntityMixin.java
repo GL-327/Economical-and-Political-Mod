@@ -3,12 +3,13 @@ package com.political.mixin;
 import com.political.government.PerkManager;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.server.level.ServerLevel;
@@ -71,7 +72,7 @@ public abstract class MobEntityMixin {
 
         // Enderman spawn multiplier - spawn additional endermen
         Level spawnLevel = self.level();
-        if (self instanceof EnderMan && spawnLevel instanceof ServerLevel serverWorld) {
+        if (self instanceof Enderman && spawnLevel instanceof ServerLevel serverWorld) {
             float endermanMultiplier = PerkManager.getEndermanSpawnMultiplier();
             if (endermanMultiplier > 1.0f) {
                 int extraSpawns = (int) (endermanMultiplier - 1.0f);
@@ -83,7 +84,7 @@ public abstract class MobEntityMixin {
 
                 BlockPos pos = self.blockPosition();
                 for (int i = 0; i < extraSpawns; i++) {
-                    EnderMan extra = EntityType.ENDERMAN.create(serverWorld, EntitySpawnReason.NATURAL);
+                    Enderman extra = EntityTypes.ENDERMAN.create(serverWorld, EntitySpawnReason.NATURAL);
                     if (extra != null) {
                         extra.teleportTo(
                                 pos.getX() + random.nextInt(5) - 2,

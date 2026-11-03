@@ -217,7 +217,7 @@ public final class ExpeditionGui {
         String partyLeader = PartyManager.getPartyLeader(uuid);
         boolean leadsParty = partyLeader != null && partyLeader.equals(uuid);
         int partySize = leadsParty ? PartyManager.getPartyMembers(uuid).size() : 1;
-        gui.setSlot(10, new GuiElementBuilder(Items.WHITE_BANNER)
+        gui.setSlot(10, new GuiElementBuilder(Items.BANNER.white())
                 .setName(Component.literal("Party").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Entering with: §f" + partySize + " player(s)"))
                 .addLoreLine(Component.literal(leadsParty

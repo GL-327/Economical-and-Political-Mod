@@ -42,7 +42,7 @@ public class CreditsTradeGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                     .setName(Component.literal(""))
                     .build());
         }

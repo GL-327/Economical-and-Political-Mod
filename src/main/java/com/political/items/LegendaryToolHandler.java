@@ -127,7 +127,7 @@ public class LegendaryToolHandler {
         // Aether Axe - Wind Cut: hurls the target skyward on a gust
         if (toolId.equals("aether_axe")) {
             target.addDeltaMovement(new Vec3(0.0, 1.5, 0.0));
-            target.hurtMarked = true;
+            target.syncVelocity = true;
             if (player.level() instanceof ServerLevel sw) {
                 sw.sendParticles(net.minecraft.core.particles.ParticleTypes.CLOUD,
                         target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(),
@@ -157,7 +157,7 @@ public class LegendaryToolHandler {
             if (push.lengthSqr() > 1.0E-4) {
                 push = push.normalize().scale(1.1);
                 target.addDeltaMovement(new Vec3(push.x, 0.55, push.z));
-                target.hurtMarked = true;
+                target.syncVelocity = true;
             }
             player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0, true, false, false));
             if (player.level() instanceof ServerLevel sw) {
@@ -194,7 +194,7 @@ public class LegendaryToolHandler {
         // Thunder Axe - Summons lightning
         else if (toolId.equals("thunder_axe")) {
             if (target.level() instanceof ServerLevel serverWorld) {
-                net.minecraft.world.entity.LightningBolt lightning = new net.minecraft.world.entity.LightningBolt(net.minecraft.world.entity.EntityType.LIGHTNING_BOLT, serverWorld);
+                net.minecraft.world.entity.LightningBolt lightning = new net.minecraft.world.entity.LightningBolt(net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT, serverWorld);
                 lightning.setPos(target.getX(), target.getY(), target.getZ());
                 serverWorld.addFreshEntity(lightning);
             }
@@ -942,7 +942,7 @@ public class LegendaryToolHandler {
             if (state.getBlock() == oreBlock || ORE_BLOCKS.contains(state.getBlock())) {
                 // Summon lightning on the player instead of the ore
                 if (count == 0) {
-                    net.minecraft.world.entity.LightningBolt lightning = new net.minecraft.world.entity.LightningBolt(net.minecraft.world.entity.EntityType.LIGHTNING_BOLT, world);
+                    net.minecraft.world.entity.LightningBolt lightning = new net.minecraft.world.entity.LightningBolt(net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT, world);
                     lightning.setPos(player.getX(), player.getY(), player.getZ());
                     world.addFreshEntity(lightning);
                 }

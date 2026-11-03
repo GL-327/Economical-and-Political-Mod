@@ -171,7 +171,7 @@ public final class BestiaryGui {
             int typeKills = entry == null ? 0 : entry.killsOfType(path);
             boolean discovered = typeKills > 0;
 
-            GuiElementBuilder b = new GuiElementBuilder(discovered ? family.icon : Items.GRAY_DYE)
+            GuiElementBuilder b = new GuiElementBuilder(discovered ? family.icon : Items.DYE.gray())
                     .setName(Component.literal((discovered ? "" : "§8") + BestiaryManager.prettyType(path))
                             .withStyle(discovered ? family.color : ChatFormatting.DARK_GRAY,
                                     ChatFormatting.BOLD));

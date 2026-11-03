@@ -1,4 +1,5 @@
 package com.political.economy;
+import net.minecraft.util.Prediction;
 import com.political.BuffProgressManager;
 import com.political.CreditItem;
 import com.political.PoliticalServer;
@@ -149,21 +150,21 @@ public class AuctionHouseGui {
 
         // Fill background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
 
         // Top row decoration
         for (int i = 0; i < 9; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
 
         // Bottom row decoration
         for (int i = 18; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -229,7 +230,7 @@ public class AuctionHouseGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -413,7 +414,7 @@ public class AuctionHouseGui {
 
         // Fill background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -553,7 +554,7 @@ public class AuctionHouseGui {
         if (!buyer.addItem(toGive)) {
             // toGive may have a reduced count after a partial insert — drop what's left
             if (!toGive.isEmpty()) {
-                buyer.drop(toGive, false);
+                buyer.drop(toGive, false, Prediction.SERVER_ONLY);
             }
         }
 
@@ -602,7 +603,7 @@ public class AuctionHouseGui {
                             ItemStack existing = pendingSellItems.get(player.getUUID());
                             if (existing != null && !existing.isEmpty()) {
                                 if (!player.addItem(existing.copy())) {
-                                    player.drop(existing.copy(), false);
+                                    player.drop(existing.copy(), false, Prediction.SERVER_ONLY);
                                 }
                             }
 
@@ -635,14 +636,14 @@ public class AuctionHouseGui {
 
         // Fill entire GUI with background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
 
         // Top decorative row
         for (int i = 0; i < 9; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -668,7 +669,7 @@ public class AuctionHouseGui {
                     })
                     .build());
         } else {
-            gui.setSlot(4, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(4, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("Item Slot").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Click an item in your").withStyle(ChatFormatting.GRAY))
@@ -778,7 +779,7 @@ public class AuctionHouseGui {
 
         // Confirm Button (left)
         boolean canConfirm = pendingItem != null && !pendingItem.isEmpty() && currentPrice != null && currentPrice > 0;
-        gui.setSlot(38, new GuiElementBuilder(canConfirm ? Items.LIME_CONCRETE : Items.LIGHT_GRAY_CONCRETE)
+        gui.setSlot(38, new GuiElementBuilder(canConfirm ? Items.CONCRETE.lime() : Items.CONCRETE.lightGray())
                 .setName(Component.literal("Confirm Listing").withStyle(canConfirm ? ChatFormatting.GREEN : ChatFormatting.GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(canConfirm
@@ -824,7 +825,7 @@ public class AuctionHouseGui {
         // ROW 6 (slots 45-53): Bottom border
         // ═══════════════════════════════════════════════════════
         for (int i = 45; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -904,7 +905,7 @@ public class AuctionHouseGui {
 
         // Fill background
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -1010,7 +1011,7 @@ public class AuctionHouseGui {
 
         if (!item.isEmpty()) {
             if (!player.addItem(item.copy())) {
-                player.drop(item.copy(), false);
+                player.drop(item.copy(), false, Prediction.SERVER_ONLY);
             }
         }
 
@@ -1093,7 +1094,7 @@ public class AuctionHouseGui {
         pendingSellInCoins.remove(player.getUUID());
         if (pending != null && !pending.isEmpty()) {
             if (!player.addItem(pending.copy())) {
-                player.drop(pending.copy(), false);
+                player.drop(pending.copy(), false, Prediction.SERVER_ONLY);
             }
         }
     }

@@ -235,7 +235,7 @@ public class MagicSpellHandler {
         BlockHitResult hit = castBlockRay(player, 30);
         if (hit == null) return;
         BlockPos pos = hit.getBlockPos();
-        LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
+        LightningBolt bolt = new LightningBolt(EntityTypes.LIGHTNING_BOLT, world);
         bolt.teleportTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);
         bolt.setCause(player);
         world.addFreshEntity(bolt);
@@ -313,7 +313,7 @@ public class MagicSpellHandler {
         for (Entity e : nearby) {
             Vec3 dir = e.position().subtract(player.position()).normalize().scale(2.0);
             e.setDeltaMovement(dir.x, 0.5, dir.z);
-            e.hurtMarked = true;
+            e.syncVelocity = true;
         }
     }
 
@@ -402,7 +402,7 @@ public class MagicSpellHandler {
         if (t == null) return;
         Vec3 pull = player.position().subtract(t.position()).normalize().scale(0.8);
         t.setDeltaMovement(t.getDeltaMovement().add(pull.x, 0.35, pull.z));
-        t.hurtMarked = true;
+        t.syncVelocity = true;
     }
 
     private static void castSolarFlare(ServerPlayer player, ServerLevel world, float dmgMult) {
@@ -438,7 +438,7 @@ public class MagicSpellHandler {
         BlockHitResult hit = castBlockRay(player, 32);
         if (hit == null) return;
         BlockPos pos = hit.getBlockPos();
-        LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
+        LightningBolt bolt = new LightningBolt(EntityTypes.LIGHTNING_BOLT, world);
         bolt.teleportTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);
         bolt.setCause(player);
         world.addFreshEntity(bolt);
@@ -514,7 +514,7 @@ public class MagicSpellHandler {
             if (e instanceof LivingEntity living && e != player) {
                 Vec3 dir = e.position().subtract(player.position()).normalize().scale(3.5);
                 e.setDeltaMovement(dir.x, 0.8, dir.z);
-                e.hurtMarked = true;
+                e.syncVelocity = true;
             }
         }
     }
@@ -634,19 +634,19 @@ public class MagicSpellHandler {
                                                      MagicManager.MagicCreature type,
                                                      double x, double y, double z) {
         Mob creature = switch (type) {
-            case ARCANE_WISP   -> new Blaze(EntityType.BLAZE, world);
-            case VOID_WALKER   -> new EnderMan(EntityType.ENDERMAN, world);
+            case ARCANE_WISP   -> new Blaze(EntityTypes.BLAZE, world);
+            case VOID_WALKER   -> new Enderman(EntityTypes.ENDERMAN, world);
             case CRYSTAL_GOLEM -> {
-                var golem = new net.minecraft.world.entity.animal.golem.IronGolem(EntityType.IRON_GOLEM, world);
+                var golem = new net.minecraft.world.entity.animal.golem.IronGolem(EntityTypes.IRON_GOLEM, world);
                 golem.setPlayerCreated(false);
                 yield golem;
             }
-            case SHADOW_MAGE   -> new Witch(EntityType.WITCH, world);
-            case RIFT_GUARDIAN  -> new net.minecraft.world.entity.monster.warden.Warden(EntityType.WARDEN, world);
-            case STORM_PHANTOM  -> new Phantom(EntityType.PHANTOM, world);
-            case ASHEN_HULK     -> new net.minecraft.world.entity.monster.piglin.PiglinBrute(EntityType.PIGLIN_BRUTE, world);
-            case CELESTIAL_SERAPH -> new Vex(EntityType.VEX, world);
-            case ABYSS_DEVOURER -> new Ravager(EntityType.RAVAGER, world);
+            case SHADOW_MAGE   -> new Witch(EntityTypes.WITCH, world);
+            case RIFT_GUARDIAN  -> new net.minecraft.world.entity.monster.warden.Warden(EntityTypes.WARDEN, world);
+            case STORM_PHANTOM  -> new Phantom(EntityTypes.PHANTOM, world);
+            case ASHEN_HULK     -> new net.minecraft.world.entity.monster.piglin.PiglinBrute(EntityTypes.PIGLIN_BRUTE, world);
+            case CELESTIAL_SERAPH -> new Vex(EntityTypes.VEX, world);
+            case ABYSS_DEVOURER -> new Ravager(EntityTypes.RAVAGER, world);
         };
 
         creature.teleportTo(x, y, z);

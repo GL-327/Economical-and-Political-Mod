@@ -51,7 +51,7 @@ public final class SettlementProgressGui {
                 next == tier ? "This is the highest tier" : "Next: " + next.displayName);
 
         // ── The five headline numbers ─────────────────────────────────────
-        req(gui, 10, Items.RED_BED, "Beds", s.beds, next.minBeds, tier == next,
+        req(gui, 10, Items.BED.red(), "Beds", s.beds, next.minBeds, tier == next,
                 "Sheltered beds. A bed with no roof or walls does not count.");
         req(gui, 11, Items.PLAYER_HEAD, "Population", s.population, next.minPop, tier == next,
                 "Citizens living here. They move in on their own.");
@@ -90,7 +90,7 @@ public final class SettlementProgressGui {
 
         // ── Growth, in a sentence ─────────────────────────────────────────
         String blocker = SettlementEconomy.growthBlocker(s);
-        gui.setSlot(31, new GuiElementBuilder(blocker == null ? Items.LIME_DYE : Items.RED_DYE)
+        gui.setSlot(31, new GuiElementBuilder(blocker == null ? Items.DYE.lime() : Items.DYE.red())
                 .setName(Component.literal(blocker == null ? "People are moving in" : "Growth is stalled")
                         .withStyle(blocker == null ? ChatFormatting.GREEN : ChatFormatting.RED,
                                 ChatFormatting.BOLD))

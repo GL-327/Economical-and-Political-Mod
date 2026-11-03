@@ -285,11 +285,11 @@ public final class CrateGui {
 
     private static net.minecraft.world.item.Item bandIcon(Crate.Band b) {
         return switch (b) {
-            case COMMON -> Items.GRAY_DYE;
-            case UNCOMMON -> Items.LIME_DYE;
-            case RARE -> Items.LIGHT_BLUE_DYE;
-            case EPIC -> Items.PURPLE_DYE;
-            case LEGENDARY -> Items.ORANGE_DYE;
+            case COMMON -> Items.DYE.gray();
+            case UNCOMMON -> Items.DYE.lime();
+            case RARE -> Items.DYE.lightBlue();
+            case EPIC -> Items.DYE.purple();
+            case LEGENDARY -> Items.DYE.orange();
         };
     }
 }

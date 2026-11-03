@@ -72,7 +72,7 @@ public final class ContractGui {
         List<ContractManager.Active> active = ContractManager.activeOf(uuid);
         for (int i = 0; i < ACTIVE_CELLS.length; i++) {
             if (i >= active.size()) {
-                gui.setSlot(ACTIVE_CELLS[i], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(ACTIVE_CELLS[i], new GuiElementBuilder(Items.STAINED_GLASS_PANE.lightGray())
                         .setName(Component.literal("Open slot").withStyle(ChatFormatting.DARK_GRAY))
                         .addLoreLine(Component.literal("§8Take something from the board."))
                         .build());
@@ -83,7 +83,7 @@ public final class ContractGui {
             if (c == null) continue;
             boolean done = a.progress >= c.required;
 
-            GuiElementBuilder b = new GuiElementBuilder(done ? Items.LIME_CONCRETE : c.icon)
+            GuiElementBuilder b = new GuiElementBuilder(done ? Items.CONCRETE.lime() : c.icon)
                     .setName(Component.literal(c.display).withStyle(c.colour, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Progress: §f" + a.progress + "§7/§f" + c.required))
                     .addLoreLine(Component.literal(bar(a.progress, c.required)))

@@ -21,7 +21,7 @@ public class DictatorGui {
         gui.setTitle(Component.literal("⚠ Dictator Control Panel ⚠"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -106,7 +106,7 @@ public class DictatorGui {
                 })
                 .build());
 
-        gui.setSlot(43, new GuiElementBuilder(Items.LIGHTNING_ROD)
+        gui.setSlot(43, new GuiElementBuilder(Items.LIGHTNING_ROD.weathering().unaffected())
                 .setName(Component.literal("Smite Players").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Use /smite <player> to strike").withStyle(ChatFormatting.GRAY))
@@ -121,7 +121,7 @@ public class DictatorGui {
         gui.setTitle(Component.literal("Players in Debt - Click to Summon"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal(""))
                     .build());
         }

@@ -22,6 +22,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -370,9 +371,9 @@ public final class NemesisManager {
     private static EntityType<?> typeOf(Nemesis n) {
         try {
             Identifier id = Identifier.parse(n.entityType);
-            return BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityType.ZOMBIE);
+            return BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityTypes.ZOMBIE);
         } catch (Exception e) {
-            return EntityType.ZOMBIE;
+            return EntityTypes.ZOMBIE;
         }
     }
 
@@ -486,7 +487,7 @@ public final class NemesisManager {
         }
         if (n.has(NemesisTrait.STORMTOUCHED) && RNG.nextDouble() < 0.15
                 && victim.level() instanceof ServerLevel level) {
-            var bolt = EntityType.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
+            var bolt = EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
             if (bolt != null) {
                 bolt.snapTo(victim.getX(), victim.getY(), victim.getZ());
                 level.addFreshEntity(bolt);
@@ -562,7 +563,7 @@ public final class NemesisManager {
     private static void summonHelp(LivingEntity mob, Nemesis n) {
         if (!(mob.level() instanceof ServerLevel level)) return;
         for (int i = 0; i < 2; i++) {
-            Entity add = EntityType.ZOMBIE.spawn(level, mob.blockPosition().above(),
+            Entity add = EntityTypes.ZOMBIE.spawn(level, mob.blockPosition().above(),
                     EntitySpawnReason.EVENT);
             if (add instanceof Mob m) {
                 m.setCustomName(Component.literal("§8" + n.name + "'s Hand"));

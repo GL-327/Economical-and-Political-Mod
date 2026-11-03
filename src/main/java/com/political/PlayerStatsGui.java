@@ -31,7 +31,7 @@ public final class PlayerStatsGui {
                 .addLoreLine(Component.literal("§7Stats come from the lore on your gear."))
                 .glow().build());
 
-        gui.setSlot(10, statSlot(Items.RED_DYE, PlayerStatsManager.Stat.HEALTH,
+        gui.setSlot(10, statSlot(Items.DYE.red(), PlayerStatsManager.Stat.HEALTH,
                 Math.round(player.getMaxHealth()) + "",
                 "§8Base 20 + gear + bonuses"));
         gui.setSlot(11, statSlot(Items.IRON_CHESTPLATE, PlayerStatsManager.Stat.DEFENSE,

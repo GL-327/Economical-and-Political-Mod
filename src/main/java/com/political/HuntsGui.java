@@ -25,7 +25,7 @@ public class HuntsGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -88,11 +88,11 @@ public class HuntsGui {
             
             boolean unlocked = huntTier.ordinal() <= tier.ordinal();
             var tierIcon = unlocked ? switch (huntTier) {
-                case NOVICE -> Items.LIME_CONCRETE;
-                case APPRENTICE -> Items.YELLOW_CONCRETE;
-                case JOURNEYMAN -> Items.LIGHT_BLUE_CONCRETE;
-                case EXPERT -> Items.MAGENTA_CONCRETE;
-                case MASTER -> Items.ORANGE_CONCRETE;
+                case NOVICE -> Items.CONCRETE.lime();
+                case APPRENTICE -> Items.CONCRETE.yellow();
+                case JOURNEYMAN -> Items.CONCRETE.lightBlue();
+                case EXPERT -> Items.CONCRETE.magenta();
+                case MASTER -> Items.CONCRETE.orange();
             } : Items.BARRIER;
             
             gui.setSlot(slot, new GuiElementBuilder(tierIcon)
@@ -140,7 +140,7 @@ public class HuntsGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -152,11 +152,11 @@ public class HuntsGui {
             .build());
 
         var tierHeaderIcon = switch (tier) {
-            case NOVICE -> Items.LIME_CONCRETE;
-            case APPRENTICE -> Items.YELLOW_CONCRETE;
-            case JOURNEYMAN -> Items.LIGHT_BLUE_CONCRETE;
-            case EXPERT -> Items.MAGENTA_CONCRETE;
-            case MASTER -> Items.ORANGE_CONCRETE;
+            case NOVICE -> Items.CONCRETE.lime();
+            case APPRENTICE -> Items.CONCRETE.yellow();
+            case JOURNEYMAN -> Items.CONCRETE.lightBlue();
+            case EXPERT -> Items.CONCRETE.magenta();
+            case MASTER -> Items.CONCRETE.orange();
         };
         gui.setSlot(4, new GuiElementBuilder(tierHeaderIcon)
             .setName(Component.literal(tier.stars + " " + tier.name + " Hunts").withStyle(tier.color, ChatFormatting.BOLD))

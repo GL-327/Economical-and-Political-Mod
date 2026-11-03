@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.BountyGui;
 import com.political.bounty.SlayerData;
 import com.political.bounty.SlayerItems;
@@ -2171,7 +2172,7 @@ public class CommandRegistry {
                             ServerPlayer player = context.getSource().getPlayerOrException();
                             ItemStack core = SlayerItems.createCustomCrafterCoreT1();
                             if (!player.addItem(core)) {
-                                player.drop(core, false);
+                                player.drop(core, false, Prediction.SERVER_ONLY);
                             }
                             player.sendSystemMessage(Component.literal("✔ Received Custom Crafting Core T1!").withStyle(ChatFormatting.GREEN), false);
                             return 1;
@@ -2181,7 +2182,7 @@ public class CommandRegistry {
                             ServerPlayer player = context.getSource().getPlayerOrException();
                             ItemStack core = SlayerItems.createCustomCrafterCoreT2();
                             if (!player.addItem(core)) {
-                                player.drop(core, false);
+                                player.drop(core, false, Prediction.SERVER_ONLY);
                             }
                             player.sendSystemMessage(Component.literal("✔ Received Custom Crafting Core T2!").withStyle(ChatFormatting.AQUA), false);
                             return 1;
@@ -2191,7 +2192,7 @@ public class CommandRegistry {
                             ServerPlayer player = context.getSource().getPlayerOrException();
                             ItemStack core = SlayerItems.createCustomCrafterCoreT3();
                             if (!player.addItem(core)) {
-                                player.drop(core, false);
+                                player.drop(core, false, Prediction.SERVER_ONLY);
                             }
                             player.sendSystemMessage(Component.literal("✔ Received Custom Crafting Core T3!").withStyle(ChatFormatting.GOLD), false);
                             return 1;
@@ -2684,7 +2685,7 @@ public class CommandRegistry {
 
         // Background
         eu.pb4.sgui.api.elements.GuiElementBuilder bg = new eu.pb4.sgui.api.elements.GuiElementBuilder(
-            net.minecraft.world.item.Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+            net.minecraft.world.item.Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         // Header
@@ -3167,9 +3168,9 @@ public class CommandRegistry {
                             ServerPlayer player = context.getSource().getPlayerOrException();
                             
                             net.minecraft.world.entity.EntityType<?> entityType = switch (type) {
-                                case "elite" -> net.minecraft.world.entity.EntityType.ZOMBIE;
-                                case "champion" -> net.minecraft.world.entity.EntityType.SKELETON;
-                                case "enchanted" -> net.minecraft.world.entity.EntityType.VINDICATOR;
+                                case "elite" -> net.minecraft.world.entity.EntityTypes.ZOMBIE;
+                                case "champion" -> net.minecraft.world.entity.EntityTypes.SKELETON;
+                                case "enchanted" -> net.minecraft.world.entity.EntityTypes.VINDICATOR;
                                 default -> {
                                     player.sendSystemMessage(Component.literal("Invalid type! Use: elite, champion, or enchanted").withStyle(ChatFormatting.RED));
                                     yield null;
@@ -3255,7 +3256,7 @@ public class CommandRegistry {
                     
                     // Create baby villager
                     net.minecraft.world.entity.npc.villager.Villager villager = new net.minecraft.world.entity.npc.villager.Villager(
-                        net.minecraft.world.entity.EntityType.VILLAGER, world);
+                        net.minecraft.world.entity.EntityTypes.VILLAGER, world);
                     
                     // Set as baby and prevent aging
                     villager.setBaby(true);
@@ -3438,7 +3439,7 @@ public class CommandRegistry {
                     gui.setTitle(Component.literal("⚔ World Bosses (12)"));
 
                     for (int i = 0; i < 54; i++) {
-                        gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+                        gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
                     }
 
                     gui.setSlot(4, new GuiElementBuilder(Items.BEACON)
@@ -3516,7 +3517,7 @@ public class CommandRegistry {
                             gui.setTitle(Component.literal("⚔ Admin — All World Bosses"));
 
                             for (int i = 0; i < 54; i++) {
-                                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+                                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
                             }
 
                             gui.setSlot(4, new GuiElementBuilder(Items.COMMAND_BLOCK)

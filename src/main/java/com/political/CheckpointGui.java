@@ -25,7 +25,7 @@ public class CheckpointGui {
         
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
         
@@ -55,7 +55,7 @@ public class CheckpointGui {
                         })
                         .build());
             } else {
-                gui.setSlot(slots[i], new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(slots[i], new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                         .setName(Component.literal("Empty Slot").withStyle(ChatFormatting.DARK_GRAY))
                         .build());
             }
@@ -100,7 +100,7 @@ public class CheckpointGui {
         
         // Fill background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
         

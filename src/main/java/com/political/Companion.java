@@ -2,6 +2,7 @@ package com.political;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
@@ -15,57 +16,57 @@ import net.minecraft.world.item.Items;
 public enum Companion {
 
     // ── Damage ────────────────────────────────────────────────────────────
-    EMBER_PUP("Ember Pup", EntityType.WOLF, Items.FIRE_CHARGE, ChatFormatting.GOLD,
+    EMBER_PUP("Ember Pup", EntityTypes.WOLF, Items.FIRE_CHARGE, ChatFormatting.GOLD,
             Role.DAMAGE, Rarity.COMMON, "Sets what it bites alight.", 12.0, 3.0),
-    DIRE_WOLF("Dire Wolf", EntityType.WOLF, Items.BONE, ChatFormatting.GRAY,
+    DIRE_WOLF("Dire Wolf", EntityTypes.WOLF, Items.BONE, ChatFormatting.GRAY,
             Role.DAMAGE, Rarity.COMMON, "Runs down anything that flees.", 16.0, 4.0),
-    SHADOW_CAT("Shadow Cat", EntityType.CAT, Items.BLACK_DYE, ChatFormatting.DARK_GRAY,
+    SHADOW_CAT("Shadow Cat", EntityTypes.CAT, Items.DYE.black(), ChatFormatting.DARK_GRAY,
             Role.DAMAGE, Rarity.UNCOMMON, "Strikes from where you were not looking.", 10.0, 5.0),
-    STING_WASP("Sting Wasp", EntityType.BEE, Items.HONEYCOMB, ChatFormatting.YELLOW,
+    STING_WASP("Sting Wasp", EntityTypes.BEE, Items.HONEYCOMB, ChatFormatting.YELLOW,
             Role.DAMAGE, Rarity.COMMON, "Leaves venom in every wound.", 8.0, 3.0),
-    BASALT_HOUND("Basalt Hound", EntityType.WOLF, Items.BASALT, ChatFormatting.DARK_RED,
+    BASALT_HOUND("Basalt Hound", EntityTypes.WOLF, Items.BASALT, ChatFormatting.DARK_RED,
             Role.DAMAGE, Rarity.RARE, "Born in the deep heat and still burning.", 20.0, 6.0),
-    VOID_STALKER("Void Stalker", EntityType.CAT, Items.ENDER_EYE, ChatFormatting.DARK_PURPLE,
+    VOID_STALKER("Void Stalker", EntityTypes.CAT, Items.ENDER_EYE, ChatFormatting.DARK_PURPLE,
             Role.DAMAGE, Rarity.EPIC, "Blinks to your target before you do.", 18.0, 7.0),
 
     // ── Tank ──────────────────────────────────────────────────────────────
-    IRON_GUARDIAN("Iron Guardian", EntityType.IRON_GOLEM, Items.IRON_BLOCK, ChatFormatting.GRAY,
+    IRON_GUARDIAN("Iron Guardian", EntityTypes.IRON_GOLEM, Items.IRON_BLOCK, ChatFormatting.GRAY,
             Role.TANK, Rarity.RARE, "Stands in front of you without being asked.", 40.0, 4.0),
-    STONE_WARD("Stone Ward", EntityType.IRON_GOLEM, Items.STONE, ChatFormatting.WHITE,
+    STONE_WARD("Stone Ward", EntityTypes.IRON_GOLEM, Items.STONE, ChatFormatting.WHITE,
             Role.TANK, Rarity.UNCOMMON, "Slow, patient and very hard to move.", 32.0, 3.0),
-    SHELL_BROTHER("Shell Brother", EntityType.TURTLE, Items.TURTLE_HELMET, ChatFormatting.GREEN,
+    SHELL_BROTHER("Shell Brother", EntityTypes.TURTLE, Items.TURTLE_HELMET, ChatFormatting.GREEN,
             Role.TANK, Rarity.COMMON, "Takes the hit so you do not.", 24.0, 2.0),
-    BASTION_GOLEM("Bastion Golem", EntityType.IRON_GOLEM, Items.NETHERITE_INGOT, ChatFormatting.DARK_GRAY,
+    BASTION_GOLEM("Bastion Golem", EntityTypes.IRON_GOLEM, Items.NETHERITE_INGOT, ChatFormatting.DARK_GRAY,
             Role.TANK, Rarity.EPIC, "A wall that follows you around.", 55.0, 6.0),
 
     // ── Support ───────────────────────────────────────────────────────────
-    MENDING_ALLAY("Mending Allay", EntityType.ALLAY, Items.GLISTERING_MELON_SLICE, ChatFormatting.AQUA,
+    MENDING_ALLAY("Mending Allay", EntityTypes.ALLAY, Items.GLISTERING_MELON_SLICE, ChatFormatting.AQUA,
             Role.SUPPORT, Rarity.RARE, "Closes your wounds while you work.", 10.0, 1.0),
-    LANTERN_WISP("Lantern Wisp", EntityType.ALLAY, Items.LANTERN, ChatFormatting.YELLOW,
+    LANTERN_WISP("Lantern Wisp", EntityTypes.ALLAY, Items.LANTERN, ChatFormatting.YELLOW,
             Role.SUPPORT, Rarity.UNCOMMON, "Keeps the dark off you.", 8.0, 1.0),
-    ARCANE_FAMILIAR("Arcane Familiar", EntityType.ALLAY, Items.AMETHYST_SHARD, ChatFormatting.LIGHT_PURPLE,
+    ARCANE_FAMILIAR("Arcane Familiar", EntityTypes.ALLAY, Items.AMETHYST_SHARD, ChatFormatting.LIGHT_PURPLE,
             Role.SUPPORT, Rarity.EPIC, "Feeds your mana back to you.", 12.0, 1.0),
-    CHOIR_PARROT("Choir Parrot", EntityType.PARROT, Items.FEATHER, ChatFormatting.GREEN,
+    CHOIR_PARROT("Choir Parrot", EntityTypes.PARROT, Items.FEATHER, ChatFormatting.GREEN,
             Role.SUPPORT, Rarity.COMMON, "Its song puts strength in your arms.", 8.0, 1.0),
 
     // ── Forager ───────────────────────────────────────────────────────────
-    TRUFFLE_PIG("Truffle Pig", EntityType.PIG, Items.CARROT, ChatFormatting.RED,
+    TRUFFLE_PIG("Truffle Pig", EntityTypes.PIG, Items.CARROT, ChatFormatting.RED,
             Role.FORAGER, Rarity.COMMON, "Noses out things worth keeping.", 12.0, 1.0),
-    PACK_MULE("Pack Mule", EntityType.MULE, Items.CHEST, ChatFormatting.GOLD,
+    PACK_MULE("Pack Mule", EntityTypes.MULE, Items.CHEST, ChatFormatting.GOLD,
             Role.FORAGER, Rarity.UNCOMMON, "Carries the takings home.", 20.0, 2.0),
-    PROSPECT_FOX("Prospect Fox", EntityType.FOX, Items.RAW_GOLD, ChatFormatting.GOLD,
+    PROSPECT_FOX("Prospect Fox", EntityTypes.FOX, Items.RAW_GOLD, ChatFormatting.GOLD,
             Role.FORAGER, Rarity.RARE, "Digs up coin from nothing at all.", 14.0, 2.0),
-    GLOW_SQUIRE("Glow Squire", EntityType.GLOW_SQUID, Items.GLOW_INK_SAC, ChatFormatting.AQUA,
+    GLOW_SQUIRE("Glow Squire", EntityTypes.GLOW_SQUID, Items.GLOW_INK_SAC, ChatFormatting.AQUA,
             Role.FORAGER, Rarity.UNCOMMON, "Finds what the dark was hiding.", 12.0, 1.0),
 
     // ── Scout ─────────────────────────────────────────────────────────────
-    SCOUT_HAWK("Scout Hawk", EntityType.PARROT, Items.SPYGLASS, ChatFormatting.WHITE,
+    SCOUT_HAWK("Scout Hawk", EntityTypes.PARROT, Items.SPYGLASS, ChatFormatting.WHITE,
             Role.SCOUT, Rarity.COMMON, "Marks what is coming before it arrives.", 8.0, 2.0),
-    FROST_HARE("Frost Hare", EntityType.RABBIT, Items.SNOWBALL, ChatFormatting.AQUA,
+    FROST_HARE("Frost Hare", EntityTypes.RABBIT, Items.SNOWBALL, ChatFormatting.AQUA,
             Role.SCOUT, Rarity.UNCOMMON, "Quick enough to drag you along with it.", 8.0, 1.0),
-    CURSE_MOTH("Curse Moth", EntityType.BAT, Items.PHANTOM_MEMBRANE, ChatFormatting.DARK_PURPLE,
+    CURSE_MOTH("Curse Moth", EntityTypes.BAT, Items.PHANTOM_MEMBRANE, ChatFormatting.DARK_PURPLE,
             Role.SCOUT, Rarity.RARE, "Drawn to cursed things, and warns you of them.", 10.0, 2.0),
-    STAR_OWL("Star Owl", EntityType.PARROT, Items.NETHER_STAR, ChatFormatting.LIGHT_PURPLE,
+    STAR_OWL("Star Owl", EntityTypes.PARROT, Items.NETHER_STAR, ChatFormatting.LIGHT_PURPLE,
             Role.SCOUT, Rarity.LEGENDARY, "Sees a little further than it should.", 16.0, 3.0);
 
     public enum Role {

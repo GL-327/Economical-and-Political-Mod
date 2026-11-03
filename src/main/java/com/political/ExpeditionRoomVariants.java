@@ -109,7 +109,7 @@ public final class ExpeditionRoomVariants {
         switch (archetype) {
             case TRAP_SPIKES      -> stampTrapSpikes(level, c);
             case TRAP_INFERNO     -> stampTrapInferno(level, c);
-            case SHRINE_VITALITY  -> stampShrine(level, c, Blocks.RED_CANDLE.defaultBlockState(), Blocks.RED_CARPET.defaultBlockState());
+            case SHRINE_VITALITY  -> stampShrine(level, c, Blocks.DYED_CANDLE.red().defaultBlockState(), Blocks.CARPET.red().defaultBlockState());
             case SHRINE_MIGHT     -> stampShrine(level, c, Blocks.SOUL_CAMPFIRE.defaultBlockState(), Blocks.CRIMSON_NYLIUM.defaultBlockState());
             case GAUNTLET_PILLARS -> stampGauntletPillars(level, c);
             case GAUNTLET_MAZE    -> stampGauntletMaze(level, c);
@@ -196,10 +196,10 @@ public final class ExpeditionRoomVariants {
         // A little market stall with a barrel of modest supplies.
         set(level, c.getX() - 1, ExpeditionGenerator.STAND_Y, c.getZ(), Blocks.OAK_FENCE.defaultBlockState());
         set(level, c.getX() + 1, ExpeditionGenerator.STAND_Y, c.getZ(), Blocks.OAK_FENCE.defaultBlockState());
-        set(level, c.getX() - 1, ExpeditionGenerator.STAND_Y + 1, c.getZ(), Blocks.RED_WOOL.defaultBlockState());
-        set(level, c.getX() + 1, ExpeditionGenerator.STAND_Y + 1, c.getZ(), Blocks.RED_WOOL.defaultBlockState());
+        set(level, c.getX() - 1, ExpeditionGenerator.STAND_Y + 1, c.getZ(), Blocks.WOOL.red().defaultBlockState());
+        set(level, c.getX() + 1, ExpeditionGenerator.STAND_Y + 1, c.getZ(), Blocks.WOOL.red().defaultBlockState());
         set(level, c.getX(), ExpeditionGenerator.STAND_Y + 1, c.getZ() - 1,
-                Blocks.RED_WOOL.defaultBlockState());
+                Blocks.WOOL.red().defaultBlockState());
         placeStockedContainer(level, new BlockPos(c.getX(), ExpeditionGenerator.STAND_Y, c.getZ() - 1),
                 Blocks.BARREL.defaultBlockState(), flavourLoot(d.seed, d.floor, MERCHANT_STALL));
     }

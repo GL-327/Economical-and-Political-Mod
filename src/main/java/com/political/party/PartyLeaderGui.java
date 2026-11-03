@@ -27,7 +27,7 @@ public final class PartyLeaderGui {
         gui.setTitle(Component.literal("Party Leader").withStyle(ChatFormatting.GOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple()).setName(Component.literal("")).build());
         }
 
         // --- Header ---
@@ -115,7 +115,7 @@ public final class PartyLeaderGui {
         gui.setTitle(Component.literal("Declare War On...").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red()).setName(Component.literal("")).build());
         }
 
         int slot = 10;
@@ -127,7 +127,7 @@ public final class PartyLeaderGui {
             boolean alreadyAtWar = PoliticalPartyManager.isAtWar(myPartyId, p.id);
             boolean isAlly = PoliticalPartyManager.isAllied(myPartyId, p.id);
 
-            GuiElementBuilder item = new GuiElementBuilder(Items.RED_BANNER)
+            GuiElementBuilder item = new GuiElementBuilder(Items.BANNER.red())
                     .setName(Component.literal(p.displayName).withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Members: " + p.members.size()).withStyle(ChatFormatting.GRAY));
 
@@ -165,7 +165,7 @@ public final class PartyLeaderGui {
         gui.setTitle(Component.literal("Propose Alliance To...").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.LIGHT_BLUE_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.lightBlue()).setName(Component.literal("")).build());
         }
 
         int slot = 10;
@@ -177,7 +177,7 @@ public final class PartyLeaderGui {
             boolean isAlly = PoliticalPartyManager.isAllied(myPartyId, p.id);
             boolean atWar = PoliticalPartyManager.isAtWar(myPartyId, p.id);
 
-            GuiElementBuilder item = new GuiElementBuilder(Items.BLUE_BANNER)
+            GuiElementBuilder item = new GuiElementBuilder(Items.BANNER.blue())
                     .setName(Component.literal(p.displayName).withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Members: " + p.members.size()).withStyle(ChatFormatting.GRAY));
 

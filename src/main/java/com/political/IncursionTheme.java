@@ -2,6 +2,7 @@ package com.political;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
@@ -21,65 +22,65 @@ public enum IncursionTheme {
     VERDANT("Verdant Incursion", ChatFormatting.DARK_GREEN, Items.OAK_SAPLING,
             "The green comes in and does not stop.",
             "Overgrowth. The air is thick and everything is poisoned.",
-            new EntityType<?>[]{EntityType.SPIDER, EntityType.CAVE_SPIDER, EntityType.WITCH,
-                    EntityType.ZOMBIE, EntityType.SLIME},
-            EntityType.RAVAGER, Hazard.POISON),
+            new EntityType<?>[]{EntityTypes.SPIDER, EntityTypes.CAVE_SPIDER, EntityTypes.WITCH,
+                    EntityTypes.ZOMBIE, EntityTypes.SLIME},
+            EntityTypes.RAVAGER, Hazard.POISON),
 
     FROZEN("Frozen Incursion", ChatFormatting.AQUA, Items.BLUE_ICE,
             "Something under the ice noticed you.",
             "The cold bites and the footing is gone.",
-            new EntityType<?>[]{EntityType.STRAY, EntityType.SKELETON, EntityType.POLAR_BEAR,
-                    EntityType.ZOMBIE, EntityType.PHANTOM},
-            EntityType.IRON_GOLEM, Hazard.FREEZE),
+            new EntityType<?>[]{EntityTypes.STRAY, EntityTypes.SKELETON, EntityTypes.POLAR_BEAR,
+                    EntityTypes.ZOMBIE, EntityTypes.PHANTOM},
+            EntityTypes.IRON_GOLEM, Hazard.FREEZE),
 
     SCORCHED("Scorched Incursion", ChatFormatting.GOLD, Items.SAND,
             "The heat had been building for a while.",
             "Open ground, no shade, and the sand remembers.",
-            new EntityType<?>[]{EntityType.HUSK, EntityType.BLAZE, EntityType.SKELETON,
-                    EntityType.ZOMBIE, EntityType.VINDICATOR},
-            EntityType.RAVAGER, Hazard.BURN),
+            new EntityType<?>[]{EntityTypes.HUSK, EntityTypes.BLAZE, EntityTypes.SKELETON,
+                    EntityTypes.ZOMBIE, EntityTypes.VINDICATOR},
+            EntityTypes.RAVAGER, Hazard.BURN),
 
     DROWNED("Drowned Incursion", ChatFormatting.BLUE, Items.PRISMARINE,
             "The water gave something back.",
             "Waterlogged and heavy. Everything here breathes better than you.",
-            new EntityType<?>[]{EntityType.DROWNED, EntityType.GUARDIAN, EntityType.SLIME,
-                    EntityType.ZOMBIE, EntityType.WITCH},
-            EntityType.ELDER_GUARDIAN, Hazard.DROWN),
+            new EntityType<?>[]{EntityTypes.DROWNED, EntityTypes.GUARDIAN, EntityTypes.SLIME,
+                    EntityTypes.ZOMBIE, EntityTypes.WITCH},
+            EntityTypes.ELDER_GUARDIAN, Hazard.DROWN),
 
     HOLLOW("Hollow Incursion", ChatFormatting.DARK_AQUA, Items.SCULK,
             "It has been listening down here for a long time.",
             "The dark is total and the ground is listening.",
-            new EntityType<?>[]{EntityType.SKELETON, EntityType.CAVE_SPIDER, EntityType.SILVERFISH,
-                    EntityType.ZOMBIE, EntityType.CREEPER},
-            EntityType.WARDEN, Hazard.BLIND),
+            new EntityType<?>[]{EntityTypes.SKELETON, EntityTypes.CAVE_SPIDER, EntityTypes.SILVERFISH,
+                    EntityTypes.ZOMBIE, EntityTypes.CREEPER},
+            EntityTypes.WARDEN, Hazard.BLIND),
 
     INFERNAL("Infernal Incursion", ChatFormatting.RED, Items.NETHERRACK,
             "A door that was already open opened further.",
             "Fire underfoot and nothing here is surprised to see you.",
-            new EntityType<?>[]{EntityType.BLAZE, EntityType.ZOMBIFIED_PIGLIN, EntityType.MAGMA_CUBE,
-                    EntityType.PIGLIN_BRUTE, EntityType.WITHER_SKELETON},
-            EntityType.WITHER_SKELETON, Hazard.BURN),
+            new EntityType<?>[]{EntityTypes.BLAZE, EntityTypes.ZOMBIFIED_PIGLIN, EntityTypes.MAGMA_CUBE,
+                    EntityTypes.PIGLIN_BRUTE, EntityTypes.WITHER_SKELETON},
+            EntityTypes.WITHER_SKELETON, Hazard.BURN),
 
     VOIDBORNE("Voidborne Incursion", ChatFormatting.DARK_PURPLE, Items.END_STONE,
             "Something stepped through sideways.",
             "The ground is a suggestion and the things here move wrong.",
-            new EntityType<?>[]{EntityType.ENDERMAN, EntityType.SHULKER, EntityType.PHANTOM,
-                    EntityType.ENDERMITE, EntityType.VEX},
-            EntityType.ENDERMAN, Hazard.PHASE),
+            new EntityType<?>[]{EntityTypes.ENDERMAN, EntityTypes.SHULKER, EntityTypes.PHANTOM,
+                    EntityTypes.ENDERMITE, EntityTypes.VEX},
+            EntityTypes.ENDERMAN, Hazard.PHASE),
 
-    STORMWRACKED("Stormwracked Incursion", ChatFormatting.YELLOW, Items.LIGHTNING_ROD,
+    STORMWRACKED("Stormwracked Incursion", ChatFormatting.YELLOW, Items.LIGHTNING_ROD.weathering().unaffected(),
             "The weather picked a side.",
             "Exposed, loud, and the sky keeps intervening.",
-            new EntityType<?>[]{EntityType.PHANTOM, EntityType.SKELETON, EntityType.VEX,
-                    EntityType.WITCH, EntityType.PILLAGER},
-            EntityType.EVOKER, Hazard.SHOCK),
+            new EntityType<?>[]{EntityTypes.PHANTOM, EntityTypes.SKELETON, EntityTypes.VEX,
+                    EntityTypes.WITCH, EntityTypes.PILLAGER},
+            EntityTypes.EVOKER, Hazard.SHOCK),
 
     BLIGHTED("Blighted Incursion", ChatFormatting.DARK_GRAY, Items.WITHER_ROSE,
             "Nothing has grown here in a long time.",
             "Sour ground. Whatever lived here left something behind.",
-            new EntityType<?>[]{EntityType.ZOMBIE, EntityType.SKELETON, EntityType.WITCH,
-                    EntityType.HUSK, EntityType.ZOGLIN},
-            EntityType.WITHER_SKELETON, Hazard.WITHER);
+            new EntityType<?>[]{EntityTypes.ZOMBIE, EntityTypes.SKELETON, EntityTypes.WITCH,
+                    EntityTypes.HUSK, EntityTypes.ZOGLIN},
+            EntityTypes.WITHER_SKELETON, Hazard.WITHER);
 
     /** The standing hazard that makes each theme feel like its own place. */
     public enum Hazard {

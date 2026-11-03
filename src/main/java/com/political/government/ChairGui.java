@@ -25,7 +25,7 @@ public class ChairGui {
         gui.setTitle(Component.literal("👑 Chair Dashboard"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -119,7 +119,7 @@ public class ChairGui {
                 .build());
 
         boolean taxEnabled = TaxManager.isTaxEnabled();
-        gui.setSlot(16, new GuiElementBuilder(taxEnabled ? Items.LIME_DYE : Items.RED_DYE)
+        gui.setSlot(16, new GuiElementBuilder(taxEnabled ? Items.DYE.lime() : Items.DYE.red())
                 .setName(Component.literal("📋 Tax System").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Status: " + (taxEnabled ? "§aENABLED" : "§cDISABLED")))

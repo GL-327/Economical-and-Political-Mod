@@ -277,13 +277,13 @@ public class TexturePackCodes {
             String typeName = type.name().toLowerCase();
             for (int tier = 1; tier <= 2; tier++) {
                 slayerArmor.add(new CustomItemEntry(typeName + "_helmet_t" + tier, 
-                    type.displayName + " Helmet T" + tier, getTextureCode(typeName + "_helmet_t" + tier), "Slayer Armor", type.color.getColor() != null ? type.color.getColor() : 0xFFFFFF));
+                    type.displayName + " Helmet T" + tier, getTextureCode(typeName + "_helmet_t" + tier), "Slayer Armor", legacyRgb(type.color)));
                 slayerArmor.add(new CustomItemEntry(typeName + "_chestplate_t" + tier, 
-                    type.displayName + " Chestplate T" + tier, getTextureCode(typeName + "_chestplate_t" + tier), "Slayer Armor", type.color.getColor() != null ? type.color.getColor() : 0xFFFFFF));
+                    type.displayName + " Chestplate T" + tier, getTextureCode(typeName + "_chestplate_t" + tier), "Slayer Armor", legacyRgb(type.color)));
                 slayerArmor.add(new CustomItemEntry(typeName + "_leggings_t" + tier, 
-                    type.displayName + " Leggings T" + tier, getTextureCode(typeName + "_leggings_t" + tier), "Slayer Armor", type.color.getColor() != null ? type.color.getColor() : 0xFFFFFF));
+                    type.displayName + " Leggings T" + tier, getTextureCode(typeName + "_leggings_t" + tier), "Slayer Armor", legacyRgb(type.color)));
                 slayerArmor.add(new CustomItemEntry(typeName + "_boots_t" + tier, 
-                    type.displayName + " Boots T" + tier, getTextureCode(typeName + "_boots_t" + tier), "Slayer Armor", type.color.getColor() != null ? type.color.getColor() : 0xFFFFFF));
+                    type.displayName + " Boots T" + tier, getTextureCode(typeName + "_boots_t" + tier), "Slayer Armor", legacyRgb(type.color)));
             }
         }
         categories.put("⚔ Slayer Armor", slayerArmor);
@@ -307,9 +307,9 @@ public class TexturePackCodes {
         for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
             String typeName = type.name().toLowerCase();
             materials.add(new CustomItemEntry(typeName + "_core", type.displayName + " Core", 
-                getTextureCode(typeName + "_core"), "Materials", type.color.getColor() != null ? type.color.getColor() : 0xFFFFFF));
+                getTextureCode(typeName + "_core"), "Materials", legacyRgb(type.color)));
             materials.add(new CustomItemEntry(typeName + "_chunk", type.displayName + " Chunk", 
-                getTextureCode(typeName + "_chunk"), "Materials", type.color.getColor() != null ? type.color.getColor() : 0xFFFFFF));
+                getTextureCode(typeName + "_chunk"), "Materials", legacyRgb(type.color)));
         }
         categories.put("📦 Materials (Cores & Chunks)", materials);
         
@@ -325,7 +325,7 @@ public class TexturePackCodes {
         // Attribute Tokens
         List<CustomItemEntry> attributeTokens = new ArrayList<>();
         for (ArmourAttribute attr : ArmourAttribute.values()) {
-            int colorValue = attr.color != null && attr.color.getColor() != null ? attr.color.getColor() : 0xFFFFFF;
+            int colorValue = attr.color != null ? legacyRgb(attr.color) : 0xFFFFFF;
             attributeTokens.add(new CustomItemEntry(attr.id + "_token", attr.displayName + " Token", 
                 getTextureCode(attr.id + "_token"), "Attribute Tokens", colorValue));
         }
@@ -334,7 +334,7 @@ public class TexturePackCodes {
         // Weapon Attributes
         List<CustomItemEntry> weaponAttributes = new ArrayList<>();
         for (WeaponAttribute attr : WeaponAttribute.values()) {
-            int colorValue = attr.color != null && attr.color.getColor() != null ? attr.color.getColor() : 0xFFFFFF;
+            int colorValue = attr.color != null ? legacyRgb(attr.color) : 0xFFFFFF;
             weaponAttributes.add(new CustomItemEntry("weapon_" + attr.id + "_token", attr.displayName + " Token", 
                 getTextureCode("weapon_" + attr.id + "_token"), "Weapon Attributes", colorValue));
         }
@@ -418,5 +418,11 @@ public class TexturePackCodes {
             allItems.addAll(categoryItems);
         }
         return allItems;
+    }
+
+    /** RGB of a legacy chat colour, white when the formatting has none (bold, reset and similar). */
+    private static int legacyRgb(net.minecraft.ChatFormatting formatting) {
+        net.minecraft.network.chat.TextColor color = net.minecraft.network.chat.TextColor.fromLegacyFormat(formatting);
+        return color != null ? color.getValue() : 0xFFFFFF;
     }
 }

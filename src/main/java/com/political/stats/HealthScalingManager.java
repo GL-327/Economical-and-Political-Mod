@@ -8,6 +8,7 @@ import com.political.WorldBossManager;
 import com.political.bounty.SlayerManager;
 import com.political.economy.CoinManager;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
@@ -215,53 +216,53 @@ public class HealthScalingManager {
     // Scalable mob types
     private static final Set<EntityType<?>> SCALABLE_MOBS = Set.of(
             // Undead
-            EntityType.ZOMBIE,
-            EntityType.SKELETON,
-            EntityType.ZOMBIE_VILLAGER,
-            EntityType.HUSK,
-            EntityType.DROWNED,
-            EntityType.STRAY,
-            EntityType.WITHER_SKELETON,
-            EntityType.PHANTOM,
+            EntityTypes.ZOMBIE,
+            EntityTypes.SKELETON,
+            EntityTypes.ZOMBIE_VILLAGER,
+            EntityTypes.HUSK,
+            EntityTypes.DROWNED,
+            EntityTypes.STRAY,
+            EntityTypes.WITHER_SKELETON,
+            EntityTypes.PHANTOM,
 
             // Arthropods
-            EntityType.SPIDER,
-            EntityType.CAVE_SPIDER,
-            EntityType.SILVERFISH,
-            EntityType.ENDERMITE,
+            EntityTypes.SPIDER,
+            EntityTypes.CAVE_SPIDER,
+            EntityTypes.SILVERFISH,
+            EntityTypes.ENDERMITE,
 
             // Nether
-            EntityType.BLAZE,
-            EntityType.GHAST,
-            EntityType.MAGMA_CUBE,
-            EntityType.PIGLIN_BRUTE,
-            EntityType.HOGLIN,
-            EntityType.ZOGLIN,
-            EntityType.WITHER,
+            EntityTypes.BLAZE,
+            EntityTypes.GHAST,
+            EntityTypes.MAGMA_CUBE,
+            EntityTypes.PIGLIN_BRUTE,
+            EntityTypes.HOGLIN,
+            EntityTypes.ZOGLIN,
+            EntityTypes.WITHER,
 
             // Overworld hostile
-            EntityType.CREEPER,
-            EntityType.SLIME,
-            EntityType.WITCH,
-            EntityType.VINDICATOR,
-            EntityType.PILLAGER,
-            EntityType.RAVAGER,
-            EntityType.EVOKER,
-            EntityType.VEX,
-            EntityType.BREEZE,
-            EntityType.BOGGED,
+            EntityTypes.CREEPER,
+            EntityTypes.SLIME,
+            EntityTypes.WITCH,
+            EntityTypes.VINDICATOR,
+            EntityTypes.PILLAGER,
+            EntityTypes.RAVAGER,
+            EntityTypes.EVOKER,
+            EntityTypes.VEX,
+            EntityTypes.BREEZE,
+            EntityTypes.BOGGED,
 
             // End
-            EntityType.ENDERMAN,
-            EntityType.SHULKER,
-            EntityType.ENDER_DRAGON,
+            EntityTypes.ENDERMAN,
+            EntityTypes.SHULKER,
+            EntityTypes.ENDER_DRAGON,
 
             // Ocean
-            EntityType.GUARDIAN,
-            EntityType.ELDER_GUARDIAN,
+            EntityTypes.GUARDIAN,
+            EntityTypes.ELDER_GUARDIAN,
 
             // Deep Dark
-            EntityType.WARDEN
+            EntityTypes.WARDEN
     );
 
     // ============================================================

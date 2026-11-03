@@ -121,7 +121,7 @@ public final class CollectionGui {
 
         b.addLoreLine(Component.literal(""));
         b.addLoreLine(Component.literal("§7Feeds §"
-                + CollectionManager.statColour(c.statKey).getChar()
+                + CollectionManager.statColour(c.statKey).toString().charAt(1)
                 + CollectionManager.statLabel(c.statKey)
                 + " §8(+" + c.statBonusFor(tier) + " now)"));
         b.addLoreLine(Component.literal(""));
@@ -153,9 +153,9 @@ public final class CollectionGui {
             boolean current = !done && t == tier + 1;
 
             GuiElementBuilder b = new GuiElementBuilder(
-                    done ? Items.LIME_STAINED_GLASS_PANE
-                            : current ? Items.YELLOW_STAINED_GLASS_PANE
-                            : Items.RED_STAINED_GLASS_PANE)
+                    done ? Items.STAINED_GLASS_PANE.lime()
+                            : current ? Items.STAINED_GLASS_PANE.yellow()
+                            : Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal(c.display + " " + CollectionManager.roman(t))
                             .withStyle(done ? ChatFormatting.GREEN
                                     : current ? ChatFormatting.YELLOW : ChatFormatting.RED,

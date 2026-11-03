@@ -21,14 +21,14 @@ public class ViceChairGui {
 
         // Dark elegant background
         for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
         // Decorative border with cyan
         int[] cyanBorder = {0, 1, 2, 3, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
         for (int slot : cyanBorder) {
-            gui.setSlot(slot, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+            gui.setSlot(slot, new GuiElementBuilder(Items.STAINED_GLASS_PANE.cyan())
                     .setName(Component.literal("")).build());
         }
 
@@ -51,7 +51,7 @@ public class ViceChairGui {
                 .build());
 
         // Gap at 11
-        gui.setSlot(12, new GuiElementBuilder(TaxManager.isTaxEnabled() ? Items.LIME_DYE : Items.RED_DYE)
+        gui.setSlot(12, new GuiElementBuilder(TaxManager.isTaxEnabled() ? Items.DYE.lime() : Items.DYE.red())
                 .setName(Component.literal("📋 Tax Status").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Status: " + (TaxManager.isTaxEnabled() ? "§aENABLED" : "§cDISABLED")))

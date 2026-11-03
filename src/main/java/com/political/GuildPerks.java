@@ -49,7 +49,7 @@ public final class GuildPerks {
                 "§7Members may travel to the guild hall",
                 "§7from the Guild menu (§f10 min §7cooldown)."),
 
-        EXPEDITION_BANNER("expedition_banner", "Expedition Banner", Items.WHITE_BANNER, 1_250_000L, 7, null,
+        EXPEDITION_BANNER("expedition_banner", "Expedition Banner", Items.BANNER.white(), 1_250_000L, 7, null,
                 "§7+5% coins from expedition payouts,",
                 "§7and +25% guild XP from expeditions."),
 

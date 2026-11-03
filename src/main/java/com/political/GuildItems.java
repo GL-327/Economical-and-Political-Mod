@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -75,7 +76,7 @@ public final class GuildItems {
         if (player == null) return;
         ItemStack s = createGuildCharter();
         if (!player.getInventory().add(s)) {
-            player.drop(s, false);
+            player.drop(s, false, Prediction.SERVER_ONLY);
         }
     }
 }

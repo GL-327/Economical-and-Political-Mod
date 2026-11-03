@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
@@ -653,11 +654,11 @@ public class ExpeditionManager {
     
     private static EntityType<? extends Monster> getZoneMobType(ExpeditionZone zone) {
         return switch (zone) {
-            case ASHEN_MINES -> EntityType.BLAZE;
-            case DROWNED_ARCHIVES -> EntityType.DROWNED;
-            case GLACIAL_SPIRE -> EntityType.STRAY;
-            case VOID_RIFT -> EntityType.ENDERMITE;
-            case DEEP_SEAM -> EntityType.WARDEN;
+            case ASHEN_MINES -> EntityTypes.BLAZE;
+            case DROWNED_ARCHIVES -> EntityTypes.DROWNED;
+            case GLACIAL_SPIRE -> EntityTypes.STRAY;
+            case VOID_RIFT -> EntityTypes.ENDERMITE;
+            case DEEP_SEAM -> EntityTypes.WARDEN;
         };
     }
     

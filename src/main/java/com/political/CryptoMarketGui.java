@@ -202,17 +202,17 @@ public class CryptoMarketGui {
                 .addLoreLine(Component.literal("§7Value: §6$" + CryptoMarket.formatCrypto(price * owned)))
                 .build());
         
-        gui.setSlot(20, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(20, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 0.1 " + symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6$" + CryptoMarket.formatCrypto(price * 0.1)))
                 .build());
         
-        gui.setSlot(21, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(21, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 1 " + symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6$" + CryptoMarket.formatCrypto(price)))
                 .build());
         
-        gui.setSlot(22, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(22, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 10 " + symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6$" + CryptoMarket.formatCrypto(price * 10)))
                 .build());
@@ -237,7 +237,7 @@ public class CryptoMarketGui {
         guiViewType.put(player.getUUID(), "main");
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 36; i++) gui.setSlot(i, bg.build());
 
         // Header with market info
@@ -373,7 +373,7 @@ public class CryptoMarketGui {
         guiViewType.put(player.getUUID(), "browser");
         guiPage.put(player.getUUID(), page);
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
@@ -465,7 +465,7 @@ public class CryptoMarketGui {
         guiViewType.put(player.getUUID(), "detail");
         guiSymbol.put(player.getUUID(), symbol);
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 36; i++) gui.setSlot(i, bg.build());
 
         double price = CryptoMarket.getPrice(symbol);
@@ -507,7 +507,7 @@ public class CryptoMarketGui {
         // Buy buttons
         final String sym = symbol;
         String pu = player.getUUID().toString();
-        gui.setSlot(20, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(20, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 1 " + symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + CryptoMarket.formatCrypto(CryptoMarket.estimateBuyCoinCost(pu, sym, 1)) + " coins"))
                 .setCallback((idx, type, containerInput, slotGui) -> {
@@ -516,7 +516,7 @@ public class CryptoMarketGui {
                 })
                 .build());
 
-        gui.setSlot(21, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(21, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 10 " + symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + CryptoMarket.formatCrypto(CryptoMarket.estimateBuyCoinCost(pu, sym, 10)) + " coins"))
                 .setCallback((idx, type, containerInput, slotGui) -> {
@@ -525,7 +525,7 @@ public class CryptoMarketGui {
                 })
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(22, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("Buy 100 " + symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + CryptoMarket.formatCrypto(CryptoMarket.estimateBuyCoinCost(pu, sym, 100)) + " coins"))
                 .setCallback((idx, type, containerInput, slotGui) -> {
@@ -545,7 +545,7 @@ public class CryptoMarketGui {
 
         // Sell buttons
         if (balance > 0) {
-            gui.setSlot(24, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(24, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Sell 1 " + symbol).withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Value: §6" + CryptoMarket.formatCrypto(price * 1000) + " coins"))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -554,7 +554,7 @@ public class CryptoMarketGui {
                     })
                     .build());
 
-            gui.setSlot(25, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(25, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Sell All").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Value: §6" + CryptoMarket.formatCrypto(price * balance * 1000) + " coins"))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -621,7 +621,7 @@ public class CryptoMarketGui {
         openCryptoGuis.put(player.getUUID(), gui);
         guiViewType.put(player.getUUID(), "wallet");
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         Map<String, Double> wallet = CryptoMarket.getWallet(player.getUUID().toString());
@@ -698,7 +698,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🔒 Staking"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.RECOVERY_COMPASS)
@@ -744,7 +744,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🔒 Stake " + symbol));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         double apy = CryptoMarket.getStakingApy(symbol);
@@ -764,7 +764,7 @@ public class CryptoMarketGui {
         
         // Stake buttons
         if (balance >= 1) {
-            gui.setSlot(10, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(10, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("Stake 1 " + symbol).withStyle(ChatFormatting.GREEN))
                     .setCallback((idx, type, containerInput, slotGui) -> {
                         CryptoMarket.stakeCrypto(player, sym, 1);
@@ -774,7 +774,7 @@ public class CryptoMarketGui {
         }
         
         if (balance >= 10) {
-            gui.setSlot(11, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(11, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("Stake 10 " + symbol).withStyle(ChatFormatting.GREEN))
                     .setCallback((idx, type, containerInput, slotGui) -> {
                         CryptoMarket.stakeCrypto(player, sym, 10);
@@ -784,7 +784,7 @@ public class CryptoMarketGui {
         }
         
         if (balance >= 100) {
-            gui.setSlot(12, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(12, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("Stake All").withStyle(ChatFormatting.GREEN))
                     .setCallback((idx, type, containerInput, slotGui) -> {
                         CryptoMarket.stakeCrypto(player, sym, balance);
@@ -795,7 +795,7 @@ public class CryptoMarketGui {
 
         // Unstake buttons
         if (staked >= 1) {
-            gui.setSlot(14, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(14, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Unstake 1 " + symbol).withStyle(ChatFormatting.RED))
                     .setCallback((idx, type, containerInput, slotGui) -> {
                         CryptoMarket.unstakeCrypto(player, sym, 1);
@@ -803,7 +803,7 @@ public class CryptoMarketGui {
                     })
                     .build());
             
-            gui.setSlot(15, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(15, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("Unstake All").withStyle(ChatFormatting.RED))
                     .setCallback((idx, type, containerInput, slotGui) -> {
                         CryptoMarket.unstakeCrypto(player, sym, staked);
@@ -828,7 +828,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🧪 DeFi Hub"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.BREWING_STAND)
@@ -871,7 +871,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🔄 Token Swap"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.SPECTRAL_ARROW)
@@ -925,7 +925,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Swap " + from + " → " + to));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         double balance = CryptoMarket.getBalance(player.getUUID().toString(), from);
@@ -945,7 +945,7 @@ public class CryptoMarketGui {
         final String toSym = to;
 
         if (balance >= 1) {
-            gui.setSlot(10, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(10, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("Swap 1 " + from).withStyle(ChatFormatting.GREEN))
                     .addLoreLine(Component.literal("§7→ " + CryptoMarket.formatCrypto(rate) + " " + to))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -956,7 +956,7 @@ public class CryptoMarketGui {
         }
         
         if (balance >= 10) {
-            gui.setSlot(11, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(11, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("Swap 10 " + from).withStyle(ChatFormatting.GREEN))
                     .addLoreLine(Component.literal("§7→ " + CryptoMarket.formatCrypto(rate * 10) + " " + to))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -967,7 +967,7 @@ public class CryptoMarketGui {
         }
         
         if (balance > 0) {
-            gui.setSlot(12, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(12, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("Swap All").withStyle(ChatFormatting.GREEN))
                     .addLoreLine(Component.literal("§7→ " + CryptoMarket.formatCrypto(rate * balance) + " " + to))
                     .setCallback((idx, type, containerInput, slotGui) -> {
@@ -989,7 +989,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("💧 Liquidity Pools"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.WATER_BUCKET)
@@ -1031,7 +1031,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("📊 Margin Trading"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.DIAMOND_SWORD)
@@ -1056,7 +1056,7 @@ public class CryptoMarketGui {
                 ChatFormatting pnlColor = pnl >= 0 ? ChatFormatting.GREEN : ChatFormatting.RED;
                 
                 final String key = entry.getKey();
-                gui.setSlot(slot, new GuiElementBuilder(pos.isLong ? Items.LIME_DYE : Items.RED_DYE)
+                gui.setSlot(slot, new GuiElementBuilder(pos.isLong ? Items.DYE.lime() : Items.DYE.red())
                         .setName(Component.literal((pos.isLong ? "📈 " : "📉 ") + pos.symbol + " " + 
                                 (int)pos.leverage + "x").withStyle(ChatFormatting.BOLD))
                         .addLoreLine(Component.literal(""))
@@ -1102,7 +1102,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🚀 Top Movers"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.SPECTRAL_ARROW)
@@ -1122,7 +1122,7 @@ public class CryptoMarketGui {
             if (crypto == null) continue;
             
             final String symbol = entry.getKey();
-            gui.setSlot(10 + i, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(10 + i, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("📈 " + crypto.symbol).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(crypto.name).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""))
@@ -1140,7 +1140,7 @@ public class CryptoMarketGui {
             if (crypto == null) continue;
             
             final String symbol = entry.getKey();
-            gui.setSlot(14 + i, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(14 + i, new GuiElementBuilder(Items.DYE.red())
                     .setName(Component.literal("📉 " + crypto.symbol).withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(crypto.name).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""))
@@ -1166,7 +1166,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("💎 Stablecoins"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.EMERALD)
@@ -1211,7 +1211,7 @@ public class CryptoMarketGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🐕 Meme Coins"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.WOLF_SPAWN_EGG)
@@ -1375,7 +1375,7 @@ public class CryptoMarketGui {
         gui.setTitle(Component.literal("📊 " + symbol + " Price Chart"));
 
         // Dark background for better contrast
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         List<Double> history = CryptoMarket.getPriceHistory(symbol);
@@ -1439,7 +1439,7 @@ public class CryptoMarketGui {
                 for (int row = Math.min(highRow, lowRow); row <= Math.max(highRow, lowRow); row++) {
                     int slot = graphStartSlot + (row * 9) + col;
                     if (slot >= 0 && slot < 54) {
-                        Item wickItem = isUp ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE;
+                        Item wickItem = isUp ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red();
                         gui.setSlot(slot, new GuiElementBuilder(wickItem)
                                 .setName(Component.literal(isUp ? "§a▲ Bullish" : "§c▼ Bearish").withStyle(ChatFormatting.BOLD))
                                 .addLoreLine(Component.literal(""))
@@ -1456,7 +1456,7 @@ public class CryptoMarketGui {
                 // Draw body (thicker part) at center
                 int bodySlot = graphStartSlot + (bodyCenterRow * 9) + col;
                 if (bodySlot >= 0 && bodySlot < 54) {
-                    Item bodyItem = isUp ? Items.LIME_CONCRETE : Items.RED_CONCRETE;
+                    Item bodyItem = isUp ? Items.CONCRETE.lime() : Items.CONCRETE.red();
                     gui.setSlot(bodySlot, new GuiElementBuilder(bodyItem)
                             .setName(Component.literal(isUp ? "§a▲ Bullish Candle" : "§c▼ Bearish Candle").withStyle(ChatFormatting.BOLD))
                             .addLoreLine(Component.literal(""))
@@ -1471,11 +1471,11 @@ public class CryptoMarketGui {
             }
             
             // Legend with better styling
-            gui.setSlot(47, new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(47, new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("Bullish Candle").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Price went UP"))
                     .build());
-            gui.setSlot(48, new GuiElementBuilder(Items.RED_CONCRETE)
+            gui.setSlot(48, new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("Bearish Candle").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Price went DOWN"))
                     .build());

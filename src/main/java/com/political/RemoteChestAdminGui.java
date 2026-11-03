@@ -65,13 +65,13 @@ public final class RemoteChestAdminGui {
                                                ServerLevel world, BlockPos pos, MinecraftServer server) {
         int size = inv.getContainerSize();
         for (int i = size; i < gui.getSize(); i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
         for (int i = 0; i < size; i++) {
             final int idx = i;
             ItemStack st = inv.getItem(idx);
             GuiElementBuilder b = st.isEmpty()
-                    ? new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    ? new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("Empty #" + idx).withStyle(ChatFormatting.DARK_GRAY))
                     : new GuiElementBuilder(st.copy());
             b.setCallback((si, ct, ac, __slotGui) -> {

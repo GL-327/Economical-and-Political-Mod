@@ -26,7 +26,7 @@ public final class PrevChestsAdminGui {
         gui.setTitle(Component.literal("Chests (page " + (p + 1) + "/" + totalPages + "): ")
                 .withStyle(ChatFormatting.GOLD).append(watchedPlayer.getDisplayName()));
 
-        var bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build();
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg);
 
         gui.setSlot(4, new GuiElementBuilder(Items.SPYGLASS)

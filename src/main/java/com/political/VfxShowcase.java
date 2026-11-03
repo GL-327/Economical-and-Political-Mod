@@ -32,7 +32,7 @@ public final class VfxShowcase {
                     "A beam that drags the void along behind it."),
             new Entry(Vfx.Kind.LANCE_CURSED, "Cursed Lance", Items.WITHER_SKELETON_SKULL, ChatFormatting.DARK_GRAY,
                     "Soulfire and sculk, for the sorcerers."),
-            new Entry(Vfx.Kind.STORM_STRIKE, "Storm Strike", Items.LIGHTNING_ROD, ChatFormatting.YELLOW,
+            new Entry(Vfx.Kind.STORM_STRIKE, "Storm Strike", Items.LIGHTNING_ROD.weathering().unaffected(), ChatFormatting.YELLOW,
                     "A bolt from the sky with forks and a ground shockwave."),
             new Entry(Vfx.Kind.DOMAIN_COLLAPSE, "Domain Collapse", Items.BEACON, ChatFormatting.AQUA,
                     "A dome slams out, holds, then implodes to a point."),

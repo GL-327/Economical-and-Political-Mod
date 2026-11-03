@@ -71,7 +71,7 @@ public final class SettlementEconomyGui {
 
         // ── Growth gate ──
         boolean canGrow = SettlementEconomy.canGrow(s);
-        gui.setSlot(29, new GuiElementBuilder(canGrow ? Items.LIME_CONCRETE : Items.RED_CONCRETE)
+        gui.setSlot(29, new GuiElementBuilder(canGrow ? Items.CONCRETE.lime() : Items.CONCRETE.red())
                 .setName(Component.literal(canGrow ? "Growing" : "Growth Stalled")
                         .withStyle(canGrow ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Free sheltered beds: §f"

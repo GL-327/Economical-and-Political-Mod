@@ -17,7 +17,7 @@ public class TaxGui {
         gui.setTitle(Component.literal("Tax Payment"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -38,7 +38,7 @@ public class TaxGui {
                 .build());
 
         if (taxOwed <= 0) {
-            gui.setSlot(13, new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(13, new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("No Taxes Owed!").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("You're all clear!").withStyle(ChatFormatting.GRAY))
                     .build());

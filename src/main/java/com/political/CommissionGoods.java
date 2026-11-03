@@ -72,7 +72,7 @@ public final class CommissionGoods {
         g(Items.FEATHER, "Feathers", 4, Tier.COMMON);
         g(Items.LEATHER, "Leather", 8, Tier.COMMON);
         g(Items.EGG, "Eggs", 4, Tier.COMMON);
-        g(Items.WHITE_WOOL, "Wool", 5, Tier.COMMON);
+        g(Items.WOOL.white(), "Wool", 5, Tier.COMMON);
         g(Items.COD, "Cod", 5, Tier.COMMON);
         g(Items.SALMON, "Salmon", 6, Tier.COMMON);
         g(Items.KELP, "Kelp", 2, Tier.COMMON);
@@ -120,7 +120,7 @@ public final class CommissionGoods {
         g(Items.LAPIS_BLOCK, "Lapis Blocks", 130, Tier.VALUABLE);
         g(Items.REDSTONE_BLOCK, "Redstone Blocks", 110, Tier.VALUABLE);
         g(Items.COAL_BLOCK, "Coal Blocks", 55, Tier.VALUABLE);
-        g(Items.COPPER_BLOCK, "Copper Blocks", 95, Tier.VALUABLE);
+        g(Items.COPPER_BLOCK.weathering().unaffected(), "Copper Blocks", 95, Tier.VALUABLE);
         g(Items.AMETHYST_BLOCK, "Amethyst Blocks", 85, Tier.VALUABLE);
         g(Items.GLOWSTONE, "Glowstone Blocks", 60, Tier.VALUABLE);
         g(Items.ENDER_EYE, "Eyes of Ender", 90, Tier.VALUABLE);

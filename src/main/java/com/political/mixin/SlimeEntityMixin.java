@@ -3,7 +3,7 @@ package com.political.mixin;
 import com.political.BossAbilityManager;
 import com.political.bounty.SlayerManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

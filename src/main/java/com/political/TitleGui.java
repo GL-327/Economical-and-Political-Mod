@@ -45,7 +45,7 @@ public final class TitleGui {
             boolean on = TitleManager.isWorn(player, t);
 
             GuiElementBuilder b = new GuiElementBuilder(
-                    on ? Items.WRITTEN_BOOK : has ? Items.NAME_TAG : Items.GRAY_DYE)
+                    on ? Items.WRITTEN_BOOK : has ? Items.NAME_TAG : Items.DYE.gray())
                     .setName(Component.literal(t.display).withStyle(
                             has ? t.colour : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(""))

@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import com.google.gson.Gson;
@@ -236,7 +237,7 @@ public final class CommissionManager {
             if (p != null) {
                 b.warrantPieces.add(p.key);
                 ItemStack give = WarrantArmour.create(p);
-                if (!player.getInventory().add(give)) player.drop(give, false);
+                if (!player.getInventory().add(give)) player.drop(give, false, Prediction.SERVER_ONLY);
                 piece = p.display;
             }
         }
@@ -343,7 +344,7 @@ public final class CommissionManager {
         while (left > 0) {
             int stack = Math.min(left, c.good.item().getDefaultMaxStackSize());
             ItemStack give = new ItemStack(c.good.item(), stack);
-            if (!player.getInventory().add(give)) player.drop(give, false);
+            if (!player.getInventory().add(give)) player.drop(give, false, Prediction.SERVER_ONLY);
             left -= stack;
         }
         player.sendSystemMessage(Component.literal("§6Levy answers. The shortfall is made up."));

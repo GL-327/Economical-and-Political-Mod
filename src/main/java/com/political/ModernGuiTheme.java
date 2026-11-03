@@ -39,11 +39,11 @@ public final class ModernGuiTheme {
     public static final ChatFormatting VALUE = ChatFormatting.WHITE;
 
     /** The glass used for the outer frame. */
-    public static final Item BORDER_GLASS = Items.CYAN_STAINED_GLASS_PANE;
+    public static final Item BORDER_GLASS = Items.STAINED_GLASS_PANE.cyan();
     /** The glass used for the top header strip behind the title. */
-    public static final Item HEADER_GLASS = Items.BLUE_STAINED_GLASS_PANE;
+    public static final Item HEADER_GLASS = Items.STAINED_GLASS_PANE.blue();
     /** The glass used for the bottom footer strip. */
-    public static final Item FOOTER_GLASS = Items.GRAY_STAINED_GLASS_PANE;
+    public static final Item FOOTER_GLASS = Items.STAINED_GLASS_PANE.gray();
 
     /**
      * Draws a coloured border around the whole inventory and fills the interior with a dark
@@ -57,7 +57,7 @@ public final class ModernGuiTheme {
         int rows = size / cols;
         GuiElement frame = new GuiElementBuilder(BORDER_GLASS)
                 .setName(Component.literal("")).build();
-        GuiElement inner = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+        GuiElement inner = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal("")).build();
         for (int i = 0; i < size; i++) {
             int col = i % cols;

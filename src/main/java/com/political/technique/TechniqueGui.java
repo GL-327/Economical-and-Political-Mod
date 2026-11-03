@@ -21,7 +21,7 @@ public final class TechniqueGui {
         gui.setTitle(Component.literal("Techniques"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -47,7 +47,7 @@ public final class TechniqueGui {
             boolean known = learned.contains(technique);
             boolean isEq = equipped == technique;
             GuiElementBuilder tile = new GuiElementBuilder(
-                    !known ? Items.BOOK : (isEq ? Items.LIME_CONCRETE : Items.YELLOW_CONCRETE))
+                    !known ? Items.BOOK : (isEq ? Items.CONCRETE.lime() : Items.CONCRETE.yellow()))
                     .setName(Component.literal(technique.displayName).withStyle(technique.color, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(technique.flavor).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""));
@@ -77,7 +77,7 @@ public final class TechniqueGui {
                 boolean unlocked = TechniqueManager.isAbilityUnlocked(uuid, ability);
                 boolean isSel = selected != null && selected.id().equals(ability.id());
                 GuiElementBuilder b = new GuiElementBuilder(
-                        !unlocked ? Items.GRAY_CONCRETE : (isSel ? Items.LIME_DYE : Items.PAPER))
+                        !unlocked ? Items.CONCRETE.gray() : (isSel ? Items.DYE.lime() : Items.PAPER))
                         .setName(Component.literal(ability.name()).withStyle(unlocked ? equipped.color : ChatFormatting.DARK_GRAY))
                         .addLoreLine(Component.literal(ability.description()).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal("Rank " + (ability.rankIndex() + 1)

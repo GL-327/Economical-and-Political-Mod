@@ -25,7 +25,7 @@ public class WorldBossGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -104,7 +104,7 @@ public class WorldBossGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -159,7 +159,7 @@ public class WorldBossGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -185,7 +185,7 @@ public class WorldBossGui {
             int slot = slots[i];
             int kills = WorldBossManager.getPlayerBossKills(uuid, bossType);
 
-            gui.setSlot(slot, new GuiElementBuilder(kills > 0 ? Items.DIAMOND : Items.GRAY_DYE)
+            gui.setSlot(slot, new GuiElementBuilder(kills > 0 ? Items.DIAMOND : Items.DYE.gray())
                 .setName(Component.literal(bossType.icon + " " + bossType.name))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§7Kills: §f" + kills))
@@ -201,7 +201,7 @@ public class WorldBossGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }

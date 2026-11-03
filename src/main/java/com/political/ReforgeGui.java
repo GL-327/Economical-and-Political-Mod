@@ -56,7 +56,7 @@ public final class ReforgeGui {
         // Reroll.
         long cost = ok ? ReforgeManager.costFor(held) : 0;
         boolean afford = ok && CoinManager.getCoinsLong(player) >= cost;
-        gui.setSlot(29, new GuiElementBuilder(ok && afford ? Items.GOLD_INGOT : Items.GRAY_CONCRETE)
+        gui.setSlot(29, new GuiElementBuilder(ok && afford ? Items.GOLD_INGOT : Items.CONCRETE.gray())
                 .setName(Component.literal("Reroll Reforge")
                         .withStyle(ok && afford ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY,
                                 ChatFormatting.BOLD))
@@ -74,7 +74,7 @@ public final class ReforgeGui {
                 .build());
 
         // Remove.
-        gui.setSlot(33, new GuiElementBuilder(current != null ? Items.SHEARS : Items.GRAY_CONCRETE)
+        gui.setSlot(33, new GuiElementBuilder(current != null ? Items.SHEARS : Items.CONCRETE.gray())
                 .setName(Component.literal("Remove Reforge")
                         .withStyle(current != null ? ChatFormatting.YELLOW : ChatFormatting.DARK_GRAY,
                                 ChatFormatting.BOLD))

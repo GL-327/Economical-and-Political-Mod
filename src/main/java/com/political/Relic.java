@@ -16,7 +16,7 @@ public enum Relic {
     // ── Combat, fire on hit ───────────────────────────────────────────────
     EMBER_CORE("Ember Core", Items.FIRE_CHARGE, ChatFormatting.GOLD, Trigger.ON_HIT, Family.COMBAT,
             "Your strikes set the air alight.", 15),
-    THUNDER_SEED("Thunder Seed", Items.LIGHTNING_ROD, ChatFormatting.YELLOW, Trigger.ON_HIT, Family.COMBAT,
+    THUNDER_SEED("Thunder Seed", Items.LIGHTNING_ROD.weathering().unaffected(), ChatFormatting.YELLOW, Trigger.ON_HIT, Family.COMBAT,
             "Every so often a strike calls the storm down.", 8),
     VENOM_SAC("Venom Sac", Items.SPIDER_EYE, ChatFormatting.DARK_GREEN, Trigger.ON_HIT, Family.COMBAT,
             "Wounds you open refuse to close cleanly.", 20),
@@ -68,7 +68,7 @@ public enum Relic {
             "Stone yields faster under your hands.", 1),
     ARCANE_BATTERY("Arcane Battery", Items.AMETHYST_CLUSTER, ChatFormatting.LIGHT_PURPLE, Trigger.PASSIVE, Family.ARCANE,
             "You hold more power than your frame should allow.", 1),
-    SILENT_TREAD("Silent Tread", Items.WHITE_WOOL, ChatFormatting.GRAY, Trigger.PASSIVE, Family.MOBILITY,
+    SILENT_TREAD("Silent Tread", Items.WOOL.white(), ChatFormatting.GRAY, Trigger.PASSIVE, Family.MOBILITY,
             "Nothing hears you coming.", 1),
     IRON_STOMACH("Iron Stomach", Items.BREAD, ChatFormatting.GOLD, Trigger.PASSIVE, Family.SURVIVAL,
             "Hunger comes for you more slowly.", 1),
@@ -88,7 +88,7 @@ public enum Relic {
             "The restless dead look past you.", 1),
     MERCHANTS_RING("Merchant's Ring", Items.GOLD_NUGGET, ChatFormatting.YELLOW, Trigger.PASSIVE, Family.FORTUNE,
             "Coin finds you in greater number.", 1),
-    STORM_CHARM("Storm Charm", Items.COPPER_BLOCK, ChatFormatting.YELLOW, Trigger.PASSIVE, Family.ARCANE,
+    STORM_CHARM("Storm Charm", Items.COPPER_BLOCK.weathering().unaffected(), ChatFormatting.YELLOW, Trigger.PASSIVE, Family.ARCANE,
             "The sky is on your side.", 1),
     VERDANT_SEED("Verdant Seed", Items.WHEAT_SEEDS, ChatFormatting.GREEN, Trigger.PASSIVE, Family.FORTUNE,
             "Green things grow eager around you.", 1),
@@ -108,7 +108,7 @@ public enum Relic {
             "Beasts fall to you more readily.", 1),
     SPELUNKERS_ROPE("Spelunker's Rope", Items.LEAD, ChatFormatting.GOLD, Trigger.PASSIVE, Family.FORTUNE,
             "The deep gives up its ores to you.", 1),
-    WARLORD_BANNER("Warlord's Banner", Items.WHITE_BANNER, ChatFormatting.RED, Trigger.PASSIVE, Family.COMBAT,
+    WARLORD_BANNER("Warlord's Banner", Items.BANNER.white(), ChatFormatting.RED, Trigger.PASSIVE, Family.COMBAT,
             "You fight harder when your realm is at war.", 1);
 
     /** When the relic does its work. */

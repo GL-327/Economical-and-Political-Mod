@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementManager;
 import com.political.settlement.SettlementTier;
@@ -83,7 +84,7 @@ public final class WorldMapItem {
     public static void give(ServerPlayer player) {
         ItemStack map = createFor(player);
         if (!player.getInventory().add(map)) {
-            player.drop(map, false);
+            player.drop(map, false, Prediction.SERVER_ONLY);
         }
         player.sendSystemMessage(Component.literal("§aYou receive a §6Realm Atlas Map§a. "
                 + "Hold it and walk to reveal the land.").withStyle(ChatFormatting.GREEN));

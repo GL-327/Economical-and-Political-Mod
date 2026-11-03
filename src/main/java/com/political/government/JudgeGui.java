@@ -22,14 +22,14 @@ public class JudgeGui {
 
         // Dark elegant background
         for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
         // Decorative border with purple
         int[] purpleBorder = {0, 1, 2, 3, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
         for (int slot : purpleBorder) {
-            gui.setSlot(slot, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+            gui.setSlot(slot, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                     .setName(Component.literal("")).build());
         }
 
@@ -152,7 +152,7 @@ public class JudgeGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 

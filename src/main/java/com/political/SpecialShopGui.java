@@ -33,11 +33,11 @@ public class SpecialShopGui {
         // Fill background with decorative pattern
         for (int i = 0; i < 54; i++) {
             if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                         .setName(Component.literal("⬛").withStyle(ChatFormatting.DARK_PURPLE))
                         .build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                         .setName(Component.literal(""))
                         .build());
             }
@@ -161,7 +161,7 @@ public class SpecialShopGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -312,7 +312,7 @@ public class SpecialShopGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.MAGENTA_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.magenta())
                     .setName(Component.literal(""))
                     .build());
         }

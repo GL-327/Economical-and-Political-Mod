@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.bounty.SlayerManager;
 import com.political.items.CustomItemHandler;
@@ -75,7 +76,7 @@ public class BeamCraftingHandler {
         ItemStack upgraded = getUpgradedBeam(currentTier);
         if (upgraded != null) {
             if (!player.addItem(upgraded)) {
-                player.drop(upgraded, false);
+                player.drop(upgraded, false, Prediction.SERVER_ONLY);
             }
             player.sendSystemMessage(Component.literal("✓ Upgraded to " + getBeamName(currentTier + 1) + "!")
                     .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD), false);
@@ -99,7 +100,7 @@ public class BeamCraftingHandler {
 
         ItemStack upgraded = CustomItemHandler.createUltraOverclockedBeam();
         if (!player.addItem(upgraded)) {
-            player.drop(upgraded, false);
+            player.drop(upgraded, false, Prediction.SERVER_ONLY);
         }
         player.sendSystemMessage(Component.literal("✓ Upgraded to Ultra Overclocked HPEBM!")
                 .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD), false);

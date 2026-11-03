@@ -19,6 +19,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
@@ -185,7 +186,7 @@ public final class SiegeManager {
             if (leader != null && spawnNemesisCommander(level, a, leader, tier)) {
                 broadcast(level, a, "  §4" + leader.fullName() + " §7leads them.");
             } else {
-                spawnAttacker(level, a, EntityType.RAVAGER, true, tier);
+                spawnAttacker(level, a, EntityTypes.RAVAGER, true, tier);
             }
         }
 
@@ -233,20 +234,20 @@ public final class SiegeManager {
     /** The attackers get nastier as the siege runs rather than simply more numerous. */
     private static EntityType<?> rosterFor(int wave) {
         if (wave <= 2) {
-            return RNG.nextBoolean() ? EntityType.ZOMBIE : EntityType.SKELETON;
+            return RNG.nextBoolean() ? EntityTypes.ZOMBIE : EntityTypes.SKELETON;
         }
         if (wave <= 4) {
             return switch (RNG.nextInt(3)) {
-                case 0 -> EntityType.PILLAGER;
-                case 1 -> EntityType.HUSK;
-                default -> EntityType.STRAY;
+                case 0 -> EntityTypes.PILLAGER;
+                case 1 -> EntityTypes.HUSK;
+                default -> EntityTypes.STRAY;
             };
         }
         return switch (RNG.nextInt(4)) {
-            case 0 -> EntityType.VINDICATOR;
-            case 1 -> EntityType.PILLAGER;
-            case 2 -> EntityType.WITCH;
-            default -> EntityType.EVOKER;
+            case 0 -> EntityTypes.VINDICATOR;
+            case 1 -> EntityTypes.PILLAGER;
+            case 2 -> EntityTypes.WITCH;
+            default -> EntityTypes.EVOKER;
         };
     }
 

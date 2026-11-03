@@ -190,7 +190,7 @@ public class T2CraftingGui {
 
         // Craft button (40)
         if (hasMaterials) {
-            gui.setSlot(40, new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(40, new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("✓ CRAFT").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Click to craft!").withStyle(ChatFormatting.YELLOW))
                     .setCallback((idx, clicktype, containerInput, slotGui) -> {
@@ -206,7 +206,7 @@ public class T2CraftingGui {
                     })
                     .build());
         } else {
-            gui.setSlot(40, new GuiElementBuilder(Items.RED_CONCRETE)
+            gui.setSlot(40, new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("✗ Missing Materials").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Gather required items first").withStyle(ChatFormatting.GRAY))
                     .build());
@@ -322,10 +322,10 @@ public class T2CraftingGui {
     }
 
     private static void fillBackground(SimpleGui gui) {
-        ItemStack glass = new ItemStack(Items.GRAY_STAINED_GLASS_PANE);
+        ItemStack glass = new ItemStack(Items.STAINED_GLASS_PANE.gray());
         glass.set(DataComponents.CUSTOM_NAME, Component.literal(""));
         for (int i = 0; i < gui.getSize(); i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .hideDefaultTooltip()
                     .build());

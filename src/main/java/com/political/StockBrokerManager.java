@@ -1,6 +1,7 @@
 package com.political;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,13 +28,13 @@ public class StockBrokerManager {
     private static final Set<UUID> stockBrokerIds = new HashSet<>();
 
     public static Villager spawnStockBroker(ServerLevel world, double x, double y, double z, float yaw) {
-        Villager villager = new Villager(EntityType.VILLAGER, world);
+        Villager villager = new Villager(EntityTypes.VILLAGER, world);
         villager.setPos(x, y, z);
         villager.setYRot(yaw);
         villager.setXRot(0f);
         villager.setCustomName(Component.literal("Stock Broker").withStyle(ChatFormatting.DARK_BLUE, ChatFormatting.BOLD));
         villager.setCustomNameVisible(true);
-        villager.setInvulnerable(true);
+        villager.setPermanentlyInvulnerable(true);
         villager.setNoAi(true);
         villager.setSilent(true);
         villager.setNoGravity(false);

@@ -26,7 +26,7 @@ public final class SchoolTreeGui {
         gui.setTitle(Component.literal("Schools of Magic"));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -74,7 +74,7 @@ public final class SchoolTreeGui {
         gui.setTitle(Component.literal(school.displayName + " Tree"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -92,8 +92,8 @@ public final class SchoolTreeGui {
             boolean buyable = !owned && parentOk && affordable;
 
             GuiElementBuilder b = new GuiElementBuilder(
-                    owned ? Items.LIME_CONCRETE : buyable ? Items.GOLD_BLOCK
-                            : parentOk ? Items.YELLOW_CONCRETE : Items.GRAY_CONCRETE)
+                    owned ? Items.CONCRETE.lime() : buyable ? Items.GOLD_BLOCK
+                            : parentOk ? Items.CONCRETE.yellow() : Items.CONCRETE.gray())
                     .setName(Component.literal((n.capstone() ? "✦ " : "") + n.name())
                             .withStyle(owned ? ChatFormatting.GREEN : school.color, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7" + n.description()))
@@ -143,7 +143,7 @@ public final class SchoolTreeGui {
         return switch (s.prefix) {
             case "pyr" -> Items.BLAZE_POWDER;
             case "fro" -> Items.PACKED_ICE;
-            case "sto" -> Items.LIGHTNING_ROD;
+            case "sto" -> Items.LIGHTNING_ROD.weathering().unaffected();
             case "voi" -> Items.ENDER_PEARL;
             case "blo" -> Items.REDSTONE;
             case "ver" -> Items.MOSS_BLOCK;

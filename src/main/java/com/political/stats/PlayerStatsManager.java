@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.core.component.DataComponents;
@@ -305,7 +306,7 @@ public final class PlayerStatsManager {
                 target.hurtServer(sl, attacker.damageSources().magic(), damage * 0.5f);
                 // This runs inside the main hit's HEAD mixin: clear the i-frames the extra
                 // strike just granted, or the main hit would be reduced to almost nothing.
-                target.invulnerableTime = 0;
+                target.setInvulnerableTime(0);
                 sl.sendParticles(ParticleTypes.SWEEP_ATTACK,
                         target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(),
                         1, 0.1, 0.1, 0.1, 0.0);
@@ -353,7 +354,7 @@ public final class PlayerStatsManager {
             Hologram oldest = holograms.pollFirst();
             if (oldest != null) oldest.stand().discard();
         }
-        ArmorStand stand = new ArmorStand(EntityType.ARMOR_STAND, sl);
+        ArmorStand stand = new ArmorStand(EntityTypes.ARMOR_STAND, sl);
         double angle = sl.getRandom().nextDouble() * Math.PI * 2;
         stand.setPos(target.getX() + Math.cos(angle) * 0.6,
                 target.getY() + target.getBbHeight() * 0.75,

@@ -28,19 +28,19 @@ public final class RecipeGuiTheme {
         int row = index / 9;
         int col = index % 9;
         if (row == 0) {
-            return Items.LIGHT_BLUE_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.lightBlue();
         }
         if (row == 5) {
-            return Items.BLUE_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.blue();
         }
         if (col == 0 || col == 8) {
-            return Items.BLACK_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.black();
         }
         if (row >= 1 && row <= 4 && col >= 1 && col <= 7) {
-            return Items.GRAY_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.gray();
         }
-        return ((row + col) % 2 == 0) ? Items.GRAY_STAINED_GLASS_PANE
-                                       : Items.GRAY_STAINED_GLASS_PANE;
+        return ((row + col) % 2 == 0) ? Items.STAINED_GLASS_PANE.gray()
+                                       : Items.STAINED_GLASS_PANE.gray();
     }
 
     /**
@@ -58,34 +58,34 @@ public final class RecipeGuiTheme {
         int col = index % 9;
         if (goldTrim) {
             if (row == 0) {
-                return Items.YELLOW_STAINED_GLASS_PANE;
+                return Items.STAINED_GLASS_PANE.yellow();
             }
             if (row == 5) {
-                return Items.ORANGE_STAINED_GLASS_PANE;
+                return Items.STAINED_GLASS_PANE.orange();
             }
             if (col == 0 || col == 8) {
-                return Items.YELLOW_STAINED_GLASS_PANE;
+                return Items.STAINED_GLASS_PANE.yellow();
             }
             if (row >= 1 && row <= 4 && col >= 1 && col <= 7) {
-                return Items.GRAY_STAINED_GLASS_PANE;
+                return Items.STAINED_GLASS_PANE.gray();
             }
-            return ((row + col) % 2 == 0) ? Items.BLACK_STAINED_GLASS_PANE
-                                           : Items.GRAY_STAINED_GLASS_PANE;
+            return ((row + col) % 2 == 0) ? Items.STAINED_GLASS_PANE.black()
+                                           : Items.STAINED_GLASS_PANE.gray();
         }
         if (row == 0) {
-            return Items.CYAN_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.cyan();
         }
         if (row == 5) {
-            return Items.BLUE_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.blue();
         }
         if (col == 0 || col == 8) {
-            return Items.BLACK_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.black();
         }
         if (row >= 1 && row <= 4 && col >= 1 && col <= 7) {
-            return Items.GRAY_STAINED_GLASS_PANE;
+            return Items.STAINED_GLASS_PANE.gray();
         }
-        return ((row + col) % 2 == 0) ? Items.GRAY_STAINED_GLASS_PANE
-                                       : Items.GRAY_STAINED_GLASS_PANE;
+        return ((row + col) % 2 == 0) ? Items.STAINED_GLASS_PANE.gray()
+                                       : Items.STAINED_GLASS_PANE.gray();
     }
 
     /** 9×4 sub-hubs (sector picks, mob drops, etc.). */
@@ -95,15 +95,15 @@ public final class RecipeGuiTheme {
             int col = i % 9;
             Item pane;
             if (row == 0) {
-                pane = Items.LIGHT_BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.lightBlue();
             } else if (row == 3) {
-                pane = Items.BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.blue();
             } else if (col == 0 || col == 8) {
-                pane = Items.BLACK_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.black();
             } else if (row >= 1 && row <= 2 && col >= 1 && col <= 7) {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             } else {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             }
             gui.setSlot(i, new GuiElementBuilder(pane).setName(Component.literal("")).build());
         }
@@ -116,15 +116,15 @@ public final class RecipeGuiTheme {
             int col = i % 9;
             Item pane;
             if (row == 0) {
-                pane = Items.LIGHT_BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.lightBlue();
             } else if (row == 2) {
-                pane = Items.BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.blue();
             } else if (col == 0 || col == 8) {
-                pane = Items.BLACK_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.black();
             } else if (row == 1 && col >= 1 && col <= 7) {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             } else {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             }
             gui.setSlot(i, new GuiElementBuilder(pane).setName(Component.literal("")).build());
         }
@@ -137,15 +137,15 @@ public final class RecipeGuiTheme {
             int col = i % 9;
             Item pane;
             if (row == 0) {
-                pane = Items.LIGHT_BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.lightBlue();
             } else if (row == 4) {
-                pane = Items.BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.blue();
             } else if (col == 0 || col == 8) {
-                pane = Items.BLACK_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.black();
             } else if (row >= 1 && row <= 3 && col >= 1 && col <= 7) {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             } else {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             }
             gui.setSlot(i, new GuiElementBuilder(pane).setName(Component.literal("")).build());
         }
@@ -172,13 +172,13 @@ public final class RecipeGuiTheme {
             int col = i % 9;
             Item pane;
             if (row == 0) {
-                pane = Items.LIGHT_BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.lightBlue();
             } else if (row == 3) {
-                pane = Items.BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.blue();
             } else if (col == 0 || col == 8) {
-                pane = Items.BLACK_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.black();
             } else {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             }
             gui.setSlot(i, new GuiElementBuilder(pane).setName(Component.literal("")).build());
         }
@@ -197,10 +197,10 @@ public final class RecipeGuiTheme {
             int row = i / 9;
             int col = i % 9;
             Item pane;
-            if (row == 0) pane = Items.LIGHT_BLUE_STAINED_GLASS_PANE;
-            else if (row == 5) pane = Items.BLUE_STAINED_GLASS_PANE;
-            else if (col == 0 || col == 8) pane = Items.BLACK_STAINED_GLASS_PANE;
-            else pane = Items.GRAY_STAINED_GLASS_PANE;
+            if (row == 0) pane = Items.STAINED_GLASS_PANE.lightBlue();
+            else if (row == 5) pane = Items.STAINED_GLASS_PANE.blue();
+            else if (col == 0 || col == 8) pane = Items.STAINED_GLASS_PANE.black();
+            else pane = Items.STAINED_GLASS_PANE.gray();
             gui.setSlot(i, new GuiElementBuilder(pane).setName(Component.literal("")).build());
         }
     }
@@ -228,13 +228,13 @@ public final class RecipeGuiTheme {
             int col = i % 9;
             Item pane;
             if (row == 0) {
-                pane = Items.LIGHT_BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.lightBlue();
             } else if (row == 4) {
-                pane = Items.BLUE_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.blue();
             } else if (col == 0 || col == 8) {
-                pane = Items.BLACK_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.black();
             } else {
-                pane = Items.GRAY_STAINED_GLASS_PANE;
+                pane = Items.STAINED_GLASS_PANE.gray();
             }
             gui.setSlot(i, new GuiElementBuilder(pane).setName(Component.literal("")).build());
         }

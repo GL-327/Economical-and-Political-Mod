@@ -21,7 +21,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§6§l⚡ Upgrades Hub"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         // Economic Upgrades
@@ -128,7 +128,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§6§l💰 Economic Upgrades"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(10, new GuiElementBuilder(Items.ENDER_CHEST)
@@ -202,7 +202,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§4§l⚔️ Bounty Upgrades"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(10, new GuiElementBuilder(Items.NETHERITE_SWORD)
@@ -240,7 +240,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§c§l🛡️ Combat Upgrades"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(10, new GuiElementBuilder(Items.DIAMOND_SWORD)
@@ -292,7 +292,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§b§l🔧 Utility Upgrades"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(10, new GuiElementBuilder(Items.ELYTRA)
@@ -366,7 +366,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§d§l✨ Cosmetic Upgrades"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(10, new GuiElementBuilder(Items.WRITABLE_BOOK)
@@ -415,10 +415,10 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§e§l⭐ VIP Upgrades"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
-        gui.setSlot(10, new GuiElementBuilder(Items.RED_BED)
+        gui.setSlot(10, new GuiElementBuilder(Items.BED.red())
                 .setName(Component.literal("§c§l🏠 Extra Home Slot"))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§6Cost: 25,000,000 coins"))
@@ -466,7 +466,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§5§l🎰 Gambling"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(10, new GuiElementBuilder(Items.PAPER)
@@ -514,7 +514,7 @@ public class UpgradesGui {
                 .setCallback((index, type, containerInput, slotGui) -> { CoinSinkManager.purchaseMysteryBox(player); openGamblingGui(player); })
                 .build());
 
-        gui.setSlot(14, new GuiElementBuilder(Items.YELLOW_SHULKER_BOX)
+        gui.setSlot(14, new GuiElementBuilder(Items.DYED_SHULKER_BOX.yellow())
                 .setName(Component.literal("§6§l📦 Legendary Mystery Box"))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§6Cost: 150,000,000 coins"))
@@ -539,7 +539,7 @@ public class UpgradesGui {
         gui.setTitle(Component.literal("§d§l✦ Premium Items"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         // Row 1 - Weapons

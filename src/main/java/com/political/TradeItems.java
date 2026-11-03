@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -93,7 +94,7 @@ public final class TradeItems {
     public static void give(ServerPlayer player, ItemStack stack) {
         if (player == null || stack == null || stack.isEmpty()) return;
         if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
+            player.drop(stack, false, Prediction.SERVER_ONLY);
         }
     }
 

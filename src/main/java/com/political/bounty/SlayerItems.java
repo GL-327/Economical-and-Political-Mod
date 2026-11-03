@@ -1,4 +1,5 @@
 package com.political.bounty;
+import net.minecraft.util.Prediction;
 import com.political.CustomItemLore;
 import com.political.PolymerBridge;
 import com.political.WeaponAttribute;
@@ -731,9 +732,9 @@ public class SlayerItems {
             case SKELETON -> entity instanceof net.minecraft.world.entity.monster.skeleton.Skeleton
                     || entity instanceof net.minecraft.world.entity.monster.skeleton.Stray
                     || entity instanceof net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
-            case SLIME -> entity instanceof net.minecraft.world.entity.monster.Slime
-                    || entity instanceof net.minecraft.world.entity.monster.MagmaCube;
-            case ENDERMAN -> entity instanceof net.minecraft.world.entity.monster.EnderMan;
+            case SLIME -> entity instanceof net.minecraft.world.entity.monster.cubemob.Slime
+                    || entity instanceof net.minecraft.world.entity.monster.cubemob.MagmaCube;
+            case ENDERMAN -> entity instanceof net.minecraft.world.entity.monster.Enderman;
             case IRON_GOLEM -> entity instanceof net.minecraft.world.entity.monster.warden.Warden;
             case PIGLIN -> entity instanceof net.minecraft.world.entity.monster.piglin.PiglinBrute || entity instanceof net.minecraft.world.entity.monster.piglin.Piglin;
         };
@@ -1063,7 +1064,7 @@ public class SlayerItems {
 
     private static void giveItem(ServerPlayer player, ItemStack stack) {
         if (!player.addItem(stack)) {
-            player.drop(stack, false);
+            player.drop(stack, false, Prediction.SERVER_ONLY);
         }
     }
 
@@ -1094,7 +1095,7 @@ public class SlayerItems {
         // Give sword
         ItemStack sword = createSlayerSword(type);
         if (!player.addItem(sword)) {
-            player.drop(sword, false);
+            player.drop(sword, false, Prediction.SERVER_ONLY);
         }
 
         player.sendSystemMessage(Component.literal("✔ Crafted " + type.displayName + " Bounty Hunter's Sword!")
@@ -1106,7 +1107,7 @@ public class SlayerItems {
     public static void giveSlayerSword(ServerPlayer player, SlayerManager.SlayerType type) {
         ItemStack sword = createSlayerSword(type);
         if (!player.addItem(sword)) {
-            player.drop(sword, false);
+            player.drop(sword, false, Prediction.SERVER_ONLY);
         }
         player.sendSystemMessage(Component.literal("✔ Received " + type.displayName + " Bounty Hunter's Sword!")
                 .withStyle(ChatFormatting.GREEN), false);
@@ -1115,7 +1116,7 @@ public class SlayerItems {
     public static void giveCore(ServerPlayer player, SlayerManager.SlayerType type) {
         ItemStack core = createCustomCrafterCoreT1();
         if (!player.addItem(core)) {
-            player.drop(core, false);
+            player.drop(core, false, Prediction.SERVER_ONLY);
         }
         core.set(DataComponents.CUSTOM_NAME,
                 Component.literal("⚙ Custom Crafting Core (T1)").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
@@ -4296,7 +4297,7 @@ public class SlayerItems {
     }
 
     public static ItemStack createEnchantedCopperBlock() {
-        ItemStack copper = new ItemStack(Items.COPPER_BLOCK);
+        ItemStack copper = new ItemStack(Items.COPPER_BLOCK.weathering().unaffected());
         copper.set(DataComponents.CUSTOM_NAME,
                 Component.literal("✧ Enchanted Copper Block").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         List<Component> lore = new ArrayList<>();

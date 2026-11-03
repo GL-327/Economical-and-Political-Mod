@@ -22,6 +22,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -384,7 +385,7 @@ public final class CaravanManager {
         BlockPos ground = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 new BlockPos((int) Math.floor(c.curX), (int) Math.floor(c.curY), (int) Math.floor(c.curZ)));
 
-        Villager v = new Villager(EntityType.VILLAGER, world);
+        Villager v = new Villager(EntityTypes.VILLAGER, world);
         v.setPos(ground.getX() + 0.5, ground.getY(), ground.getZ() + 0.5);
         v.setPersistenceRequired();
         v.setNoAi(true);
@@ -414,7 +415,7 @@ public final class CaravanManager {
         for (int i = 0; i < escorts; i++) {
             try {
                 BlockPos side = ground.offset(i + 1, 0, 0);
-                Entity llama = EntityType.LLAMA.spawn(world, side, EntitySpawnReason.EVENT);
+                Entity llama = EntityTypes.LLAMA.spawn(world, side, EntitySpawnReason.EVENT);
                 if (llama == null) continue;
                 llama.addTag(TAG_ESCORT);
                 llama.addTag(TAG_PREFIX + c.id);

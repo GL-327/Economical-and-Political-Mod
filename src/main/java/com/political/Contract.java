@@ -63,7 +63,7 @@ public enum Contract {
             "Walk out past where the roads end.", 1, 3200, 2),
     DELVE_EXPEDITION("Delve Commission", Kind.EXPLORE, Items.ENDER_EYE, ChatFormatting.DARK_PURPLE,
             "Clear an expedition and bring back what you saw.", 1, 8000, 3),
-    BACKROOMS_SURVEY("Deep Cave Survey", Kind.EXPLORE, Items.YELLOW_CONCRETE, ChatFormatting.YELLOW,
+    BACKROOMS_SURVEY("Deep Cave Survey", Kind.EXPLORE, Items.CONCRETE.yellow(), ChatFormatting.YELLOW,
             "Map a cave system and come back with a report.", 1, 8500, 4),
 
     // ── Craft ─────────────────────────────────────────────────────────────

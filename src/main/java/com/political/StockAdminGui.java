@@ -21,7 +21,7 @@ public class StockAdminGui {
         gui.setTitle(Component.literal("📊 Stock Admin"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         // Header
@@ -63,7 +63,7 @@ public class StockAdminGui {
 
         // Toggle Market Open/Closed
         boolean isOpen = StockMarket.isMarketOpen();
-        gui.setSlot(14, new GuiElementBuilder(isOpen ? Items.LIME_DYE : Items.RED_DYE)
+        gui.setSlot(14, new GuiElementBuilder(isOpen ? Items.DYE.lime() : Items.DYE.red())
                 .setName(Component.literal(isOpen ? "🔒 Close Market" : "🔓 Open Market").withStyle(isOpen ? ChatFormatting.RED : ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§7Market is currently: " + (isOpen ? "§aOpen" : "§cClosed")))
@@ -99,7 +99,7 @@ public class StockAdminGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("📊 Select Stock"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)

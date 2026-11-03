@@ -245,7 +245,7 @@ public final class RelicManager {
                 }
                 case RIPPER_FANG -> {
                     target.hurtServer(level, player.damageSources().magic(), 3.0f);
-                    target.invulnerableTime = 0;
+                    target.setInvulnerableTime(0);
                 }
                 case SUNDERING_NAIL -> target.addEffect(
                         new MobEffectInstance(MobEffects.WEAKNESS, 100, 0, true, false, true));

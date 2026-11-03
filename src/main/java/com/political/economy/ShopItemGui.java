@@ -100,7 +100,7 @@ public class ShopItemGui {
 
                 gui.setSlot(i, builder.build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
             }
         }
 
@@ -171,7 +171,7 @@ public class ShopItemGui {
                 });
                 gui.setSlot(i, b.build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
             }
         }
 
@@ -187,7 +187,7 @@ public class ShopItemGui {
                     .setCallback((index, type, containerInput, slotGui) -> openPage(player, page - 1, filter))
                     .build());
         } else {
-            gui.setSlot(45, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("§7First Page")).build());
+            gui.setSlot(45, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("§7First Page")).build());
         }
 
         gui.setSlot(46, new GuiElementBuilder(Items.LAPIS_LAZULI)
@@ -221,7 +221,7 @@ public class ShopItemGui {
                     .setCallback((index, type, containerInput, slotGui) -> openPage(player, page + 1, filter))
                     .build());
         } else {
-            gui.setSlot(53, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("§7Last Page")).build());
+            gui.setSlot(53, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("§7Last Page")).build());
         }
     }
 
@@ -233,7 +233,7 @@ public class ShopItemGui {
                     .setCallback((index, type, containerInput, slotGui) -> openPage(player, page - 1, filter))
                     .build());
         } else {
-            gui.setSlot(45, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("§7First Page")).build());
+            gui.setSlot(45, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("§7First Page")).build());
         }
 
         gui.setSlot(46, new GuiElementBuilder(Items.GOLD_INGOT)
@@ -266,7 +266,7 @@ public class ShopItemGui {
                     .setCallback((index, type, containerInput, slotGui) -> openPage(player, page + 1, filter))
                     .build());
         } else {
-            gui.setSlot(53, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("§7Last Page")).build());
+            gui.setSlot(53, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("§7Last Page")).build());
         }
     }
 
@@ -305,7 +305,7 @@ public class ShopItemGui {
                 .glow(!disabled)
                 .build());
 
-        gui.setSlot(10, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(10, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("§aEnable Item"))
                 .setCallback((index, type, containerInput, slotGui) -> {
                     ShopManager.enableItem(item);
@@ -330,7 +330,7 @@ public class ShopItemGui {
                 })
                 .build());
 
-        gui.setSlot(16, new GuiElementBuilder(Items.RED_DYE)
+        gui.setSlot(16, new GuiElementBuilder(Items.DYE.red())
                 .setName(Component.literal("§cDisable Item"))
                 .setCallback((index, type, containerInput, slotGui) -> {
                     ShopManager.disableItem(item);
@@ -407,7 +407,7 @@ public class ShopItemGui {
                 .glow(!disabled)
                 .build());
 
-        gui.setSlot(10, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(10, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("§aEnable"))
                 .setCallback((i, t, containerInput, slotGui) -> {
                     EnchantedShopManager.setDisabled(cid, false);
@@ -431,7 +431,7 @@ public class ShopItemGui {
                 })
                 .build());
 
-        gui.setSlot(16, new GuiElementBuilder(Items.RED_DYE)
+        gui.setSlot(16, new GuiElementBuilder(Items.DYE.red())
                 .setName(Component.literal("§cDisable"))
                 .setCallback((i, t, containerInput, slotGui) -> {
                     EnchantedShopManager.setDisabled(cid, true);

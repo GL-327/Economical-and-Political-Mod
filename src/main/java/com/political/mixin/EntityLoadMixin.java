@@ -17,7 +17,7 @@ public class EntityLoadMixin {
     private void onEntityLoad(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof Villager villager) {
             if (AuctionMasterManager.isAuctionMaster(villager) || UndergroundAuctionManager.isAuctioneer(villager)) {
-                villager.setInvulnerable(true);
+                villager.setPermanentlyInvulnerable(true);
             }
         }
     }

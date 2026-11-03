@@ -115,7 +115,7 @@ public class DailyRewards {
         gui.setTitle(Component.literal("§6§l🎁 Daily Rewards"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();

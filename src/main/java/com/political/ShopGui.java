@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import com.political.economy.ShopManager;
@@ -33,11 +34,11 @@ public class ShopGui {
         // Fill background with decorative pattern
         for (int i = 0; i < 54; i++) {
             if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                         .setName(Component.literal("⬛").withStyle(ChatFormatting.DARK_GRAY))
                         .build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                         .setName(Component.literal(""))
                         .build());
             }
@@ -65,10 +66,10 @@ public class ShopGui {
                 Items.NETHERITE_PICKAXE, // Tools & Utility
                 Items.GRASS_BLOCK,       // Plants
                 Items.BREWING_STAND,     // Brewing
-                Items.CYAN_DYE,          // Dyes & Decoration
+                Items.DYE.cyan(),          // Dyes & Decoration
                 Items.ENDER_CHEST,       // Miscellaneous
                 Items.WHEAT,             // Farming & Natural
-                Items.WHITE_WOOL,        // Wool & Carpets
+                Items.WOOL.white(),        // Wool & Carpets
                 Items.SKELETON_SKULL     // Heads & Banners
         };
 
@@ -105,7 +106,7 @@ public class ShopGui {
                 .setCallback((i, t, containerInput, slotGui) -> openEnchantedBooksPage(player, 0))
                 .build());
 
-        gui.setSlot(39, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+        gui.setSlot(39, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
 
@@ -222,7 +223,7 @@ public class ShopGui {
         gui.setTitle(Component.literal("📘 Enchanted Books — Page " + (page + 1)).withStyle(ChatFormatting.AQUA));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         java.util.List<net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment>> enchants = new java.util.ArrayList<>();
@@ -267,7 +268,7 @@ public class ShopGui {
                             }
                             CoinManager.removeCoins(player, price);
                             if (!player.addItem(book.copy())) {
-                                player.drop(book.copy(), false);
+                                player.drop(book.copy(), false, Prediction.SERVER_ONLY);
                             }
                             player.sendSystemMessage(Component.literal("✓ Purchased enchanted book.").withStyle(ChatFormatting.GREEN), false);
                         })
@@ -303,7 +304,7 @@ public class ShopGui {
                             CustomEnchantmentManager.addEnchantment(purchased, custom.key, custom.maxLevel);
                             CustomEnchantmentManager.addEnchantmentLore(purchased);
                             if (!player.addItem(purchased)) {
-                                player.drop(purchased, false);
+                                player.drop(purchased, false, Prediction.SERVER_ONLY);
                             }
                             player.sendSystemMessage(Component.literal("✓ Purchased " + custom.displayName + ".").withStyle(ChatFormatting.GREEN), false);
                         })
@@ -343,7 +344,7 @@ public class ShopGui {
         gui.setTitle(Component.literal("✦ Enchanted block gear — " + (page + 1)));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         int perPage = 28;
@@ -389,7 +390,7 @@ public class ShopGui {
                         ItemStack g = offer.copy();
                         g.setCount(1);
                         if (!player.addItem(g)) {
-                            player.drop(g, false);
+                            player.drop(g, false, Prediction.SERVER_ONLY);
                         }
                         player.sendSystemMessage(Component.literal("Purchased enchanted gear.").withStyle(ChatFormatting.GREEN), false);
                         openEnchantedBlockGearPage(player, p);
@@ -431,7 +432,7 @@ public class ShopGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -581,7 +582,7 @@ public class ShopGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.LIME_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.lime())
                     .setName(Component.literal(""))
                     .build());
         }

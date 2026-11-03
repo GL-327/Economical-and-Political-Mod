@@ -50,7 +50,7 @@ public class PerksGui {
             case "TREASURE_HUNTER"             -> Items.DIAMOND;
             case "DIPLOMATIC_IMMUNITY"         -> Items.GOLDEN_HELMET;
             case "NIGHTVISION_DECREE"          -> Items.ENDER_EYE;
-            case "ETERNAL_FOG"                 -> Items.GRAY_DYE;
+            case "ETERNAL_FOG"                 -> Items.DYE.gray();
             case "BIGGER_ISNT_ALWAYS_BETTER"   -> Items.COOKIE;
             case "NIGHT_OWL_POLICY"            -> Items.PHANTOM_MEMBRANE;
             case "WILDLIFE_PROTECTION"         -> Items.OAK_SAPLING;
@@ -106,7 +106,7 @@ public class PerksGui {
             case "VETERANS_CARE"               -> Items.GOLDEN_CHESTPLATE;
             case "OPEN_SKIES"                  -> Items.FEATHER;
             case "COMMONS_LICENSE"             -> Items.MAP;
-            case "STORM_DRILL"                 -> Items.LIGHTNING_ROD;
+            case "STORM_DRILL"                 -> Items.LIGHTNING_ROD.weathering().unaffected();
             case "AURORA_POLICY"               -> Items.BLUE_ICE;
             case "MUSEUM_CURFEW"               -> Items.ITEM_FRAME;
             case "COIN_FLIP_DECREE"            -> Items.PLAYER_HEAD;
@@ -166,7 +166,7 @@ public class PerksGui {
         gui.setTitle(Component.literal(title));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -202,7 +202,7 @@ public class PerksGui {
 
             // ADDED: Show Chair's perks as blocked for Vice Chair
             if (isChairPerk || isVicePerk) {
-                builder = new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                builder = new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                         .setName(Component.literal(perk.name).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.STRIKETHROUGH))
                         .addLoreLine(Component.literal(perk.description).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal(""))
@@ -237,7 +237,7 @@ public class PerksGui {
                             openPage(player, isChair);
                         });
             } else if (!canSelect) {
-                builder = new GuiElementBuilder(Items.RED_CONCRETE)
+                builder = new GuiElementBuilder(Items.CONCRETE.red())
                         .setName(Component.literal(perk.name).withStyle(ChatFormatting.RED))
                         .addLoreLine(Component.literal(perk.description).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal(""));
@@ -333,7 +333,7 @@ public class PerksGui {
         }
 
         if (canConfirm) {
-            gui.setSlot(50, new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(50, new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("✓ CONFIRM PERKS").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Click to activate perks!").withStyle(ChatFormatting.YELLOW))
                     .glow()
@@ -378,7 +378,7 @@ public class PerksGui {
                 }
             }
 
-            GuiElementBuilder confirmBuilder = new GuiElementBuilder(Items.RED_CONCRETE)
+            GuiElementBuilder confirmBuilder = new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("✗ CANNOT CONFIRM").withStyle(ChatFormatting.RED));
             for (String line : lore) {
                 confirmBuilder.addLoreLine(Component.literal(line));

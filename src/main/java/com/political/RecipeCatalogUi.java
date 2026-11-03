@@ -44,7 +44,7 @@ public final class RecipeCatalogUi {
                 if (slot < 0 || slot >= usedSlots.length || usedSlots[slot]) {
                     continue;
                 }
-                GuiElementBuilder b = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE);
+                GuiElementBuilder b = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray());
                 if (lastPageComingSoon) {
                     b.setName(Component.literal("Coming soon").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC))
                             .addLoreLine(Component.literal("More items later").withStyle(ChatFormatting.DARK_GRAY));

@@ -26,7 +26,7 @@ public class PlayerBuffAdminGui {
         gui.setTitle(Component.literal("✦ Player Buff Admin - Select Player"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
@@ -67,7 +67,7 @@ public class PlayerBuffAdminGui {
         gui.setTitle(Component.literal("✦ Manage Buffs: " + target.getName().getString()));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 

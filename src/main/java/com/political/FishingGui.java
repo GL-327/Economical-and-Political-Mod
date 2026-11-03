@@ -115,7 +115,7 @@ public class FishingGui {
         gui.setTitle(Component.literal("Fishing Skill Tree").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();
@@ -154,16 +154,16 @@ public class FishingGui {
             net.minecraft.world.item.Item paneColor;
             ChatFormatting nameColor;
             if (unlocked) {
-                paneColor = Items.LIME_STAINED_GLASS_PANE;
+                paneColor = Items.STAINED_GLASS_PANE.lime();
                 nameColor = ChatFormatting.GREEN;
             } else if (affordable) {
-                paneColor = Items.YELLOW_STAINED_GLASS_PANE;
+                paneColor = Items.STAINED_GLASS_PANE.yellow();
                 nameColor = ChatFormatting.YELLOW;
             } else if (available) {
-                paneColor = Items.ORANGE_STAINED_GLASS_PANE;
+                paneColor = Items.STAINED_GLASS_PANE.orange();
                 nameColor = ChatFormatting.GOLD;
             } else {
-                paneColor = Items.RED_STAINED_GLASS_PANE;
+                paneColor = Items.STAINED_GLASS_PANE.red();
                 nameColor = ChatFormatting.RED;
             }
 
@@ -227,7 +227,7 @@ public class FishingGui {
         gui.setTitle(Component.literal("Fishing Rods").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();
@@ -311,7 +311,7 @@ public class FishingGui {
         gui.setTitle(Component.literal("Sea Bestiary").withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();
@@ -334,7 +334,7 @@ public class FishingGui {
                 el = new GuiElementBuilder(creature.icon)
                         .setName(Component.literal(creature.displayName).withStyle(creature.tier.color, ChatFormatting.BOLD));
             } else {
-                el = new GuiElementBuilder(Items.GRAY_DYE)
+                el = new GuiElementBuilder(Items.DYE.gray())
                         .setName(Component.literal("???").withStyle(ChatFormatting.DARK_GRAY));
             }
 
@@ -371,7 +371,7 @@ public class FishingGui {
         gui.setTitle(Component.literal("Fishing Leaderboard").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(4, new GuiElementBuilder(Items.GOLDEN_APPLE)

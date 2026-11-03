@@ -1,4 +1,5 @@
 package com.political.economy;
+import net.minecraft.util.Prediction;
 import com.political.DataManager;
 import com.political.PoliticalServer;
 import com.political.government.Treasury;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -128,7 +130,7 @@ public class UndergroundAuctionManager {
 
     private static void giveWonItem(ServerPlayer winner, ItemStack stack, String name) {
         if (!winner.addItem(stack)) {
-            winner.drop(stack, false);
+            winner.drop(stack, false, Prediction.SERVER_ONLY);
         }
         winner.sendSystemMessage(Component.literal("You won " + name + "!").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
     }
@@ -149,7 +151,7 @@ public class UndergroundAuctionManager {
             ItemStack stack = decodeStack(data);
             if (stack == null || stack.isEmpty()) continue;
             if (!player.addItem(stack)) {
-                player.drop(stack, false);
+                player.drop(stack, false, Prediction.SERVER_ONLY);
             }
         }
         player.sendSystemMessage(Component.literal("Delivered " + encoded.size() + " underground auction win(s).")
@@ -257,14 +259,14 @@ public class UndergroundAuctionManager {
     // ═══════════════════════════════════════════════════════════════
 
     public static Villager spawnAuctioneer(ServerLevel world, double x, double y, double z, float yaw) {
-        Villager villager = new Villager(EntityType.VILLAGER, world);
+        Villager villager = new Villager(EntityTypes.VILLAGER, world);
 
         villager.setPos(x, y, z);
         villager.setYRot(yaw);
         villager.setXRot(0f);
         villager.setCustomName(Component.literal("Underground Auctioneer").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
         villager.setCustomNameVisible(true);
-        villager.setInvulnerable(true);
+        villager.setPermanentlyInvulnerable(true);
         villager.setNoAi(true);
         villager.setSilent(true);
         villager.setNoGravity(false);

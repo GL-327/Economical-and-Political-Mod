@@ -70,7 +70,7 @@ public abstract class CustomEnchantDamageMixin {
         if (CustomEnchantmentManager.has(weapon, CustomEnchantmentManager.THUNDERBOLT)) {
             if (world.getRandom().nextFloat() < 0.05f) {
                 net.minecraft.world.entity.LightningBolt lightning =
-                        net.minecraft.world.entity.EntityType.LIGHTNING_BOLT.create(world,
+                        net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(world,
                                 net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
                 if (lightning != null) {
                     lightning.setPos(self.getX(), self.getY(), self.getZ());

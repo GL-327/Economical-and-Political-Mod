@@ -134,7 +134,7 @@ public class PlayerBuffManager {
         DIMENSION_HOPPER("dimension_hopper", "Dimension Hopper", "§d", Items.ENDER_PEARL,
                 "Use /warp 100 times", "Free warp cooldown, -50% warp cost"),
         
-        BACKROOMS_SURVIVOR("backrooms_survivor", "Backrooms Survivor", "§e", Items.YELLOW_WOOL,
+        BACKROOMS_SURVIVOR("backrooms_survivor", "Backrooms Survivor", "§e", Items.WOOL.yellow(),
                 "Escape the Backrooms 25 times", "+20% damage in Backrooms, see boss locations"),
         
         VOID_WALKER("void_walker", "Void Walker", "§5", Items.ENDER_EYE,

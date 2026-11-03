@@ -36,7 +36,7 @@ public final class SiegeGui {
                 .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
         GuiKit.frame(gui, SIZE, GuiKit.DANGER_EDGE);
 
-        GuiKit.header(gui, Items.RED_BANNER, "Sieges", ChatFormatting.DARK_RED,
+        GuiKit.header(gui, Items.BANNER.red(), "Sieges", ChatFormatting.DARK_RED,
                 SiegeManager.count() + " under attack right now",
                 "What you built is what is at stake");
 
@@ -44,7 +44,7 @@ public final class SiegeGui {
 
         // Anything happening right now goes first.
         for (SiegeManager.Active a : SiegeManager.all()) {
-            entries.add(GuiKit.info(Items.RED_BANNER, a.settlementName, ChatFormatting.RED,
+            entries.add(GuiKit.info(Items.BANNER.red(), a.settlementName, ChatFormatting.RED,
                     "§cUnder siege",
                     "Wave " + a.wave + " of " + a.totalWaves,
                     a.attackers.size() + " still standing",
@@ -96,7 +96,7 @@ public final class SiegeGui {
         gui.setTitle(Component.literal("Call a siege")
                 .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
         GuiKit.frame(gui, SIZE, GuiKit.DANGER_EDGE);
-        GuiKit.header(gui, Items.RED_BANNER, "Call a siege", ChatFormatting.DARK_RED,
+        GuiKit.header(gui, Items.BANNER.red(), "Call a siege", ChatFormatting.DARK_RED,
                 "Starts one immediately",
                 "Scale comes from the settlement's tier");
 

@@ -29,7 +29,7 @@ public class MenuGui {
         gui.setTitle(Component.literal("Player Hub").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();
@@ -108,7 +108,7 @@ public class MenuGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Combat & Bounty").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
         String uuid = player.getUUID().toString();
 
@@ -147,7 +147,7 @@ public class MenuGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Mastery & Class").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
         String uuid = player.getUUID().toString();
 
@@ -193,7 +193,7 @@ public class MenuGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Skills & Magic").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
         String uuid = player.getUUID().toString();
 
@@ -245,7 +245,7 @@ public class MenuGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x4, player, false);
         gui.setTitle(Component.literal("Economy").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
         String uuid = player.getUUID().toString();
         long coins = CoinManager.getCoinsLong(uuid);
@@ -290,7 +290,7 @@ public class MenuGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x4, player, false);
         gui.setTitle(Component.literal("Party").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
         String uuid = player.getUUID().toString();
         long support = PoliticalPartyManager.getSupport(uuid);

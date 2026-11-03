@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -116,42 +117,42 @@ public final class HuntManager {
 
     private static final List<Archetype> ARCHETYPES = List.of(
             new Archetype("thornmaw", "Thornmaw", "the Hollow Beast",
-                    EntityType.RAVAGER, BestiaryEntry.MobFamily.ILLAGER,
+                    EntityTypes.RAVAGER, BestiaryEntry.MobFamily.ILLAGER,
                     7.0, 1.8, LivingWorldItems.ID_TROPHY_FANG, Items.IRON_AXE,
                     "It has been driven off four times. It has never been killed."),
 
             new Archetype("grimhold", "Grimhold", "Warden of Ash",
-                    EntityType.WITHER_SKELETON, BestiaryEntry.MobFamily.UNDEAD,
+                    EntityTypes.WITHER_SKELETON, BestiaryEntry.MobFamily.UNDEAD,
                     9.0, 1.9, LivingWorldItems.ID_TROPHY_CROWN, Items.WITHER_SKELETON_SKULL,
                     "Wears a crown it did not earn and will not surrender."),
 
             new Archetype("cinderjaw", "Cinderjaw", "the Long Burning",
-                    EntityType.BLAZE, BestiaryEntry.MobFamily.NETHERBORN,
+                    EntityTypes.BLAZE, BestiaryEntry.MobFamily.NETHERBORN,
                     10.0, 1.7, LivingWorldItems.ID_TROPHY_ASHEN, Items.BLAZE_POWDER,
                     "Something opened a door and this walked out of it."),
 
             new Archetype("tidecaller", "Tidecaller", "of the Drowned Halls",
-                    EntityType.ELDER_GUARDIAN, BestiaryEntry.MobFamily.AQUATIC,
+                    EntityTypes.ELDER_GUARDIAN, BestiaryEntry.MobFamily.AQUATIC,
                     4.0, 1.6, LivingWorldItems.ID_TROPHY_DEPTHS, Items.PRISMARINE_SHARD,
                     "The wells went salt the week it surfaced."),
 
             new Archetype("pale_cantor", "The Pale Cantor", "Unbanished",
-                    EntityType.EVOKER, BestiaryEntry.MobFamily.ILLAGER,
+                    EntityTypes.EVOKER, BestiaryEntry.MobFamily.ILLAGER,
                     12.0, 1.6, LivingWorldItems.ID_TROPHY_CROWN, Items.TOTEM_OF_UNDYING,
                     "Sings the same seven notes. Nothing that hears them sleeps well."),
 
             new Archetype("voidstalker", "Voidstalker", "the Patient",
-                    EntityType.ENDERMAN, BestiaryEntry.MobFamily.ENDERBORN,
+                    EntityTypes.ENDERMAN, BestiaryEntry.MobFamily.ENDERBORN,
                     8.0, 1.8, LivingWorldItems.ID_TROPHY_DEPTHS, Items.ENDER_EYE,
                     "It has been standing at the edge of the treeline for two days."),
 
             new Archetype("hollowking", "The Hollow King", "Crowned in Rot",
-                    EntityType.ZOMBIE, BestiaryEntry.MobFamily.UNDEAD,
+                    EntityTypes.ZOMBIE, BestiaryEntry.MobFamily.UNDEAD,
                     14.0, 2.0, LivingWorldItems.ID_TROPHY_FANG, Items.ROTTEN_FLESH,
                     "Marches at the head of nothing at all, and still marches."),
 
             new Archetype("gravebloom", "Gravebloom", "the Splitting",
-                    EntityType.RAVAGER, BestiaryEntry.MobFamily.BEAST,
+                    EntityTypes.RAVAGER, BestiaryEntry.MobFamily.BEAST,
                     8.0, 1.7, LivingWorldItems.ID_TROPHY_ASHEN, Items.CRIMSON_FUNGUS,
                     "Where it lies down, nothing grows back the same.")
     );

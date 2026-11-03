@@ -34,10 +34,10 @@ public final class GuiKit {
 
     // ── Palette ───────────────────────────────────────────────────────────
 
-    public static final Item FRAME = Items.BLACK_STAINED_GLASS_PANE;
-    public static final Item EDGE = Items.GRAY_STAINED_GLASS_PANE;
-    public static final Item ACCENT_EDGE = Items.CYAN_STAINED_GLASS_PANE;
-    public static final Item DANGER_EDGE = Items.RED_STAINED_GLASS_PANE;
+    public static final Item FRAME = Items.STAINED_GLASS_PANE.black();
+    public static final Item EDGE = Items.STAINED_GLASS_PANE.gray();
+    public static final Item ACCENT_EDGE = Items.STAINED_GLASS_PANE.cyan();
+    public static final Item DANGER_EDGE = Items.STAINED_GLASS_PANE.red();
 
     /** A blank pane with no name, used to fill dead space. */
     public static GuiElement blank(Item item) {
@@ -139,7 +139,7 @@ public final class GuiKit {
 
     /** An on or off switch that repaints its own screen after flipping. */
     public static GuiElement toggle(String label, boolean on, Runnable onFlip, String... lines) {
-        GuiElementBuilder b = new GuiElementBuilder(on ? Items.LIME_DYE : Items.GRAY_DYE)
+        GuiElementBuilder b = new GuiElementBuilder(on ? Items.DYE.lime() : Items.DYE.gray())
                 .setName(Component.literal(label).withStyle(
                         on ? ChatFormatting.GREEN : ChatFormatting.GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
@@ -264,13 +264,13 @@ public final class GuiKit {
         gui.setSlot(4, info(Items.COMMAND_BLOCK, what, ChatFormatting.RED, consequence,
                 "This cannot be undone."));
 
-        gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("✔ Confirm").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7" + what))
                 .setCallback((a, b, c, d) -> onYes.run())
                 .build());
 
-        gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("✖ Cancel").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Nothing happens."))
                 .setCallback((a, b, c, d) -> {
@@ -321,9 +321,9 @@ public final class GuiKit {
     public static String bar(double fraction, ChatFormatting full, ChatFormatting empty) {
         int filled = (int) Math.round(Math.max(0, Math.min(1, fraction)) * 10);
         StringBuilder sb = new StringBuilder();
-        sb.append("§").append(full.getChar());
+        sb.append("§").append(full.toString().charAt(1));
         for (int i = 0; i < filled; i++) sb.append('|');
-        sb.append("§").append(empty.getChar());
+        sb.append("§").append(empty.toString().charAt(1));
         for (int i = filled; i < 10; i++) sb.append('|');
         return sb.toString();
     }

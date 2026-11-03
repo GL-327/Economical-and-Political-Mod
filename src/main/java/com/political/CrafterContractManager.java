@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import net.minecraft.world.entity.player.Player;
@@ -81,7 +82,7 @@ public final class CrafterContractManager {
         DataManager.save(PoliticalServer.server);
         ItemStack core = rollCore();
         if (!player.addItem(core.copy())) {
-            player.drop(core.copy(), false);
+            player.drop(core.copy(), false, Prediction.SERVER_ONLY);
         }
         player.sendSystemMessage(Component.literal("§a§lContract complete! §rYou received a crafter core.").withStyle(ChatFormatting.GREEN), false);
     }

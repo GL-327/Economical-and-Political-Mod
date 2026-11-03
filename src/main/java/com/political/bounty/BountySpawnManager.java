@@ -3,10 +3,11 @@ import com.political.PoliticalServer;
 
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.Enderman;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.spider.Spider;
@@ -136,17 +137,17 @@ public class BountySpawnManager {
 
     private static Mob createMobForType(ServerLevel world, SlayerManager.SlayerType type) {
         return switch (type) {
-            case ZOMBIE -> new Zombie(EntityType.ZOMBIE, world);
-            case SPIDER -> new Spider(EntityType.SPIDER, world);
-            case SKELETON -> new Skeleton(EntityType.SKELETON, world);
+            case ZOMBIE -> new Zombie(EntityTypes.ZOMBIE, world);
+            case SPIDER -> new Spider(EntityTypes.SPIDER, world);
+            case SKELETON -> new Skeleton(EntityTypes.SKELETON, world);
             case SLIME -> {
-                Slime slime = new Slime(EntityType.SLIME, world);
+                Slime slime = new Slime(EntityTypes.SLIME, world);
                 // Random size 1-3
                 yield slime;
             }
-            case ENDERMAN -> new EnderMan(EntityType.ENDERMAN, world);
+            case ENDERMAN -> new Enderman(EntityTypes.ENDERMAN, world);
             case IRON_GOLEM -> null; // Never spawn wardens [1]
-            case PIGLIN -> new PiglinBrute(EntityType.PIGLIN_BRUTE, world);
+            case PIGLIN -> new PiglinBrute(EntityTypes.PIGLIN_BRUTE, world);
         };
     }
 

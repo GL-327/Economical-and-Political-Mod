@@ -1,4 +1,5 @@
 package com.political.items;
+import net.minecraft.util.Prediction;
 import com.political.AscensionGrindManager;
 import com.political.CollectionManager;
 import com.political.CompanionManager;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.WindCharge;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.BossEvent;
 import net.minecraft.server.level.ServerBossEvent;
@@ -167,7 +169,7 @@ public class CustomItemHandler {
                     ServerLevel sw = (ServerLevel) world;
 
                     // Primary strike
-                    LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(sw, EntitySpawnReason.TRIGGERED);
+                    LightningBolt lightning = EntityTypes.LIGHTNING_BOLT.create(sw, EntitySpawnReason.TRIGGERED);
                     if (lightning != null) {
                         lightning.setPos(target.getX(), target.getY(), target.getZ());
                         sw.addFreshEntity(lightning);
@@ -177,7 +179,7 @@ public class CustomItemHandler {
                     int zaps = 0;
                     for (LivingEntity e : sw.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(6.0),
                             e -> e != null && e.isAlive() && e != player && e != target && !(e instanceof net.minecraft.world.entity.player.Player))) {
-                        LightningBolt chain = EntityType.LIGHTNING_BOLT.create(sw, EntitySpawnReason.TRIGGERED);
+                        LightningBolt chain = EntityTypes.LIGHTNING_BOLT.create(sw, EntitySpawnReason.TRIGGERED);
                         if (chain != null) {
                             chain.setPos(e.getX(), e.getY(), e.getZ());
                             sw.addFreshEntity(chain);
@@ -298,7 +300,7 @@ public class CustomItemHandler {
                 AABB area = new AABB(center.subtract(6, 4, 6), center.add(6, 4, 6));
                 for (LivingEntity e : sw.getEntitiesOfClass(LivingEntity.class, area,
                         e -> e != null && e.isAlive() && !(e instanceof net.minecraft.world.entity.player.Player))) {
-                    LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(sw, EntitySpawnReason.TRIGGERED);
+                    LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(sw, EntitySpawnReason.TRIGGERED);
                     if (bolt != null) {
                         bolt.setPos(e.getX(), e.getY(), e.getZ());
                         sw.addFreshEntity(bolt);
@@ -755,9 +757,9 @@ public class CustomItemHandler {
                 upStrength,
                 lookDirection.z * forwardStrength
         );
-        player.hurtMarked = true;
+        player.syncVelocity = true;
 
-        WindCharge windCharge = new WindCharge(EntityType.WIND_CHARGE, world);
+        WindCharge windCharge = new WindCharge(EntityTypes.WIND_CHARGE, world);
         windCharge.setOwner(player);
         windCharge.setPos(player.getX(), player.getY(), player.getZ());
         windCharge.setDeltaMovement(0, -2.0, 0);
@@ -780,7 +782,7 @@ public class CustomItemHandler {
         }
 
         UUID uuid = player.getUUID();
-        boolean isSwinging = player.swinging;
+        boolean isSwinging = player.isSwinging();
         boolean wasSwingingBefore = wasSwinging.getOrDefault(uuid, false);
 
         // Check if player is right-clicking - if so, don't trigger left-click ability
@@ -1344,7 +1346,7 @@ public class CustomItemHandler {
             ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && !isGoldItem(stack)) {
                 // Drop the item on the ground
-                player.drop(stack, true);
+                player.drop(stack, true, Prediction.SERVER_ONLY);
                 player.getInventory().setItem(i, ItemStack.EMPTY);
                 player.sendSystemMessage(Component.literal(" Only gold items allowed while wearing the crown!").withStyle(ChatFormatting.YELLOW));
                 break; // Only remove one item per check to avoid spam
@@ -2198,7 +2200,7 @@ public class CustomItemHandler {
 
         // Spawn 2 small slimes
         for (int i = 0; i < 2; i++) {
-            net.minecraft.world.entity.monster.Slime slime = net.minecraft.world.entity.EntityType.SLIME.create(world, EntitySpawnReason.TRIGGERED);
+            net.minecraft.world.entity.monster.cubemob.Slime slime = net.minecraft.world.entity.EntityTypes.SLIME.create(world, EntitySpawnReason.TRIGGERED);
             if (slime != null) {
                 slime.setSize(1, true); // Small slime
                 slime.setPos(player.getX() + (i - 0.5), player.getY(), player.getZ());

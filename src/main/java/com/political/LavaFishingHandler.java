@@ -3,6 +3,7 @@ package com.political;
 
 import com.political.economy.CoinManager;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -52,7 +53,7 @@ public final class LavaFishingHandler {
         double tidal = AscensionHeartSystem.tidalPotency(player.getUUID().toString());
         float r = player.getRandom().nextFloat();
         if (r < 0.08f * (float) tidal) {
-            Silverfish leech = EntityType.SILVERFISH.create(world, EntitySpawnReason.TRIGGERED);
+            Silverfish leech = EntityTypes.SILVERFISH.create(world, EntitySpawnReason.TRIGGERED);
             if (leech != null) {
                 leech.teleportTo(bob.getX(), bob.getY(), bob.getZ());
                 leech.setCustomName(Component.literal("Scoria Leech").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));

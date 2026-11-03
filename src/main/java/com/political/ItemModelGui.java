@@ -39,7 +39,7 @@ public final class ItemModelGui {
                 have + " of " + seen + " items have art",
                 polymer ? "Polymer is loaded" : "Polymer is not loaded");
 
-        gui.setSlot(19, GuiKit.info(polymer ? Items.LIME_DYE : Items.GRAY_DYE,
+        gui.setSlot(19, GuiKit.info(polymer ? Items.DYE.lime() : Items.DYE.gray(),
                 "Polymer", polymer ? ChatFormatting.GREEN : ChatFormatting.GRAY,
                 polymer ? "Loaded and serving the pack."
                         : "Not loaded. Models will not reach clients.",

@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.stats.PlayerStatsManager;
 import net.minecraft.ChatFormatting;
@@ -241,7 +242,7 @@ public final class LivingWorldItems {
     public static void give(ServerPlayer player, ItemStack stack) {
         if (player == null || stack == null || stack.isEmpty()) return;
         if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
+            player.drop(stack, false, Prediction.SERVER_ONLY);
         }
     }
 }

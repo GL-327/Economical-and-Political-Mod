@@ -65,7 +65,7 @@ public class PlayerBuffGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("✦ Player Buffs — Page " + (page + 1) + "/" + pageCount));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 54; i++) {
             gui.setSlot(i, bg.build());
@@ -137,7 +137,7 @@ public class PlayerBuffGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("✦ Your Buffs"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 

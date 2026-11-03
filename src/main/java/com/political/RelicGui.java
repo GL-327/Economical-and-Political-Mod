@@ -72,7 +72,7 @@ public final class RelicGui {
             boolean owned = RelicManager.owns(uuid, r);
             boolean on = RelicManager.isEquipped(uuid, r);
 
-            GuiElementBuilder b = new GuiElementBuilder(owned ? r.icon : Items.GRAY_DYE)
+            GuiElementBuilder b = new GuiElementBuilder(owned ? r.icon : Items.DYE.gray())
                     .setName(Component.literal(r.display)
                             .withStyle(owned ? r.colour : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§8" + r.family.label + " Relic"))

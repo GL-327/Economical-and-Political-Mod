@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -116,7 +117,7 @@ public final class RareDropManager {
 
     private static void award(ServerPlayer player, RareDrop d) {
         ItemStack stack = create(d);
-        if (!player.getInventory().add(stack.copy())) player.drop(stack.copy(), false);
+        if (!player.getInventory().add(stack.copy())) player.drop(stack.copy(), false, Prediction.SERVER_ONLY);
         announce(player, d);
 
         if (player.level() instanceof ServerLevel level) {

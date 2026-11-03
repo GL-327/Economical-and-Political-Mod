@@ -5,6 +5,7 @@ import com.political.bounty.SlayerManager;
 import com.political.economy.CoinManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import java.util.Set;
 import java.util.HashSet;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.monster.spider.CaveSpider;
 import net.minecraft.world.entity.monster.zombie.Zombie;
@@ -378,7 +379,7 @@ public class BossAbilityManager {
     private static boolean zombieSummonMinions(LivingEntity boss, ServerPlayer target, ServerLevel world) {
         int count = 3;
         for (int i = 0; i < count; i++) {
-            Entity minionEnt = EntityType.ZOMBIE.create(world, EntitySpawnReason.MOB_SUMMONED);
+            Entity minionEnt = EntityTypes.ZOMBIE.create(world, EntitySpawnReason.MOB_SUMMONED);
             if (minionEnt instanceof Zombie minion) {
                 double angle = (2 * Math.PI / count) * i;
                 double x = boss.getX() + Math.cos(angle) * 3;
@@ -537,7 +538,7 @@ public class BossAbilityManager {
         int count = 8;
 
         for (int i = 0; i < count; i++) {
-            Entity spiderEnt = EntityType.CAVE_SPIDER.create(world, EntitySpawnReason.MOB_SUMMONED);
+            Entity spiderEnt = EntityTypes.CAVE_SPIDER.create(world, EntitySpawnReason.MOB_SUMMONED);
             if (spiderEnt instanceof CaveSpider spider) {
                 double angle = (2 * Math.PI / count) * i;
                 double radius = 2 + boss.getRandom().nextDouble() * 2;
@@ -720,7 +721,7 @@ public class BossAbilityManager {
         int count = 4;
 
         for (int i = 0; i < count; i++) {
-            Slime slime = EntityType.SLIME.create(world, EntitySpawnReason.MOB_SUMMONED);
+            Slime slime = EntityTypes.SLIME.create(world, EntitySpawnReason.MOB_SUMMONED);
             if (slime != null) {
                 double angle = (2 * Math.PI / count) * i;
                 double x = boss.getX() + Math.cos(angle) * 2;
@@ -1039,7 +1040,7 @@ public class BossAbilityManager {
 
         // Grant brief invulnerability
         int shieldTicks = 40 + tier * 10;  // 2–3 seconds
-        boss.setInvulnerable(true);
+        boss.setPermanentlyInvulnerable(true);
         piglinShieldEndTimes.put(bossId, now + shieldTicks * 50L);
 
         // Glowing gold effect
@@ -1074,7 +1075,7 @@ public class BossAbilityManager {
             int offsetZ = (world.getRandom().nextInt(5) - 2);
             BlockPos spawnPos = bossBlock.offset(offsetX, 0, offsetZ);
 
-            PiglinBrute brute = EntityType.PIGLIN_BRUTE.create(world, EntitySpawnReason.EVENT);
+            PiglinBrute brute = EntityTypes.PIGLIN_BRUTE.create(world, EntitySpawnReason.EVENT);
             if (brute != null) {
                 brute.teleportTo(spawnPos.getX() + 0.5,
                         spawnPos.getY(), spawnPos.getZ() + 0.5);
@@ -1102,7 +1103,7 @@ public class BossAbilityManager {
                 // Find the entity and remove invulnerability
                 net.minecraft.world.entity.Entity entity = world.getEntity(entry.getKey());
                 if (entity instanceof LivingEntity living) {
-                    living.setInvulnerable(false);
+                    living.setPermanentlyInvulnerable(false);
                 }
                 return true;
             }
@@ -1817,7 +1818,7 @@ public class BossAbilityManager {
     }
 
     private static UUID spawnSplitSlime(ServerLevel world, LivingEntity parent, int splitLevel, int tier, ServerPlayer player) {
-        Slime slime = (Slime) EntityType.SLIME.create(world, EntitySpawnReason.TRIGGERED);
+        Slime slime = (Slime) EntityTypes.SLIME.create(world, EntitySpawnReason.TRIGGERED);
         if (slime == null) return null;
 
         // Position near parent with random offset

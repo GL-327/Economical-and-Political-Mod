@@ -25,15 +25,15 @@ public final class AscensionHeartsGui {
         gui.setTitle(Component.literal("Heart of the Sectors").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
         for (int c = 0; c < 9; c++) {
-            gui.setSlot(c, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(45 + c, new GuiElementBuilder(Items.BLUE_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(c, new GuiElementBuilder(Items.STAINED_GLASS_PANE.cyan()).setName(Component.literal("")).build());
+            gui.setSlot(45 + c, new GuiElementBuilder(Items.STAINED_GLASS_PANE.blue()).setName(Component.literal("")).build());
         }
         for (int r = 1; r < 5; r++) {
-            gui.setSlot(r * 9, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(r * 9 + 8, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(r * 9, new GuiElementBuilder(Items.STAINED_GLASS_PANE.cyan()).setName(Component.literal("")).build());
+            gui.setSlot(r * 9 + 8, new GuiElementBuilder(Items.STAINED_GLASS_PANE.cyan()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();
@@ -106,11 +106,11 @@ public final class AscensionHeartsGui {
         gui.setTitle(Component.literal(tree.title).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
         for (int c = 0; c < 9; c++) {
-            gui.setSlot(c, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(45 + c, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(c, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
+            gui.setSlot(45 + c, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(4, new GuiElementBuilder(tree.icon)
@@ -128,7 +128,7 @@ public final class AscensionHeartsGui {
             boolean has = u.contains(node.id());
             boolean can = !has && AscensionHeartSystem.canUnlock(player, node.id()) && CoinManager.hasCoins(player, node.coinCost());
 
-            var b = new GuiElementBuilder(has ? Items.LIME_STAINED_GLASS_PANE : (can ? Items.GOLD_BLOCK : Items.GRAY_STAINED_GLASS_PANE))
+            var b = new GuiElementBuilder(has ? Items.STAINED_GLASS_PANE.lime() : (can ? Items.GOLD_BLOCK : Items.STAINED_GLASS_PANE.gray()))
                     .setName(Component.literal(node.name()).withStyle(has ? ChatFormatting.GREEN : can ? ChatFormatting.YELLOW : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(node.description()).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""))

@@ -147,7 +147,7 @@ public class MagicGui {
         gui.setTitle(Component.literal("✦ Magic Skill Tree").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -217,7 +217,7 @@ public class MagicGui {
                 .withStyle(CAT_COLORS[cat], ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -251,13 +251,13 @@ public class MagicGui {
             Item icon;
             ChatFormatting nameColor;
             if (unlocked) {
-                icon = Items.LIME_STAINED_GLASS_PANE;
+                icon = Items.STAINED_GLASS_PANE.lime();
                 nameColor = ChatFormatting.GREEN;
             } else if (canUnlock) {
-                icon = Items.YELLOW_STAINED_GLASS_PANE;
+                icon = Items.STAINED_GLASS_PANE.yellow();
                 nameColor = ChatFormatting.YELLOW;
             } else {
-                icon = Items.RED_STAINED_GLASS_PANE;
+                icon = Items.STAINED_GLASS_PANE.red();
                 nameColor = ChatFormatting.RED;
             }
 
@@ -363,7 +363,7 @@ public class MagicGui {
             boolean learned = MagicManager.hasSpell(uuid, spell);
             boolean isActive = spell == active;
 
-            GuiElementBuilder elem = new GuiElementBuilder(learned ? spell.icon : Items.GRAY_DYE)
+            GuiElementBuilder elem = new GuiElementBuilder(learned ? spell.icon : Items.DYE.gray())
                     .setName(Component.literal(spell.displayName)
                             .withStyle(learned ? spell.color : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(""))
@@ -548,7 +548,7 @@ public class MagicGui {
         gui.setTitle(Component.literal("✦ Magic Commissions").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 

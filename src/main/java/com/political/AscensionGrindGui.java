@@ -20,17 +20,17 @@ public final class AscensionGrindGui {
         gui.setTitle(Component.literal("Heart of the Grind").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
         for (int c = 0; c < 9; c++) {
-            gui.setSlot(c, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(45 + c, new GuiElementBuilder(Items.ORANGE_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(c, new GuiElementBuilder(Items.STAINED_GLASS_PANE.yellow()).setName(Component.literal("")).build());
+            gui.setSlot(45 + c, new GuiElementBuilder(Items.STAINED_GLASS_PANE.orange()).setName(Component.literal("")).build());
         }
         for (int r = 1; r < 5; r++) {
-            gui.setSlot(r * 9, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(r * 9 + 8, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(r * 9, new GuiElementBuilder(Items.STAINED_GLASS_PANE.yellow()).setName(Component.literal("")).build());
+            gui.setSlot(r * 9 + 8, new GuiElementBuilder(Items.STAINED_GLASS_PANE.yellow()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();

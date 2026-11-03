@@ -95,7 +95,7 @@ public final class SettlementEventGui {
                     })
                     .build());
 
-            gui.setSlot(50, new GuiElementBuilder(here != null ? Items.BARRIER : Items.GRAY_DYE)
+            gui.setSlot(50, new GuiElementBuilder(here != null ? Items.BARRIER : Items.DYE.gray())
                     .setName(Component.literal(here != null ? "Clear the event here" : "Nothing to clear")
                             .withStyle(here != null ? ChatFormatting.RED : ChatFormatting.DARK_GRAY,
                                     ChatFormatting.BOLD))
@@ -138,7 +138,7 @@ public final class SettlementEventGui {
     }
 
     private static void fill(SimpleGui gui) {
-        GuiElementBuilder pane = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder pane = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(" "));
         for (int i = 0; i < 54; i++) gui.setSlot(i, pane.build());
     }

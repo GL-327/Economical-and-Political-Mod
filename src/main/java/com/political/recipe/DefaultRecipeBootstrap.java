@@ -186,9 +186,9 @@ public final class DefaultRecipeBootstrap {
                 Items.GOLD_INGOT, Items.GOLDEN_SWORD, Items.GOLD_INGOT,
                 Items.GOLD_BLOCK, Items.DIAMOND, Items.GOLD_BLOCK)));
         out.add(shaped("Harvey's Stick", CustomItemHandler.createHarveysStick(), grid(
-                Items.COPPER_INGOT, Items.LIGHTNING_ROD, Items.COPPER_INGOT,
+                Items.COPPER_INGOT, Items.LIGHTNING_ROD.weathering().unaffected(), Items.COPPER_INGOT,
                 Items.COPPER_INGOT, Items.STICK, Items.COPPER_INGOT,
-                Items.COPPER_BLOCK, Items.NETHER_STAR, Items.COPPER_BLOCK)));
+                Items.COPPER_BLOCK.weathering().unaffected(), Items.NETHER_STAR, Items.COPPER_BLOCK.weathering().unaffected())));
         out.add(shaped("Hermes Shoes", CustomItemHandler.createHermesShoes(), grid(
                 Items.FEATHER, Items.SUGAR, Items.FEATHER,
                 Items.GOLD_INGOT, Items.IRON_BOOTS, Items.GOLD_INGOT,

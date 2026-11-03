@@ -130,7 +130,7 @@ public final class GuildGui {
 
         Settlement hall = g.hallSettlementId == null ? null : SettlementManager.get(g.hallSettlementId);
 
-        gui.setSlot(4, new GuiElementBuilder(Items.WHITE_BANNER)
+        gui.setSlot(4, new GuiElementBuilder(Items.BANNER.white())
                 .setName(Component.literal(g.name).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§8[" + g.tag + "] §7" + (g.motto == null ? "" : g.motto)))
                 .addLoreLine(Component.literal(""))
@@ -325,7 +325,7 @@ public final class GuildGui {
                 .addLoreLine(Component.literal("§7Guild: §f" + g.name))
                 .glow().build());
 
-        gui.setSlot(11, new GuiElementBuilder(canManage ? Items.LIME_DYE : Items.GRAY_DYE)
+        gui.setSlot(11, new GuiElementBuilder(canManage ? Items.DYE.lime() : Items.DYE.gray())
                 .setName(Component.literal("Promote").withStyle(
                         canManage ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7→ " + targetRank.up().colored()))
@@ -335,7 +335,7 @@ public final class GuildGui {
                 })
                 .build());
 
-        gui.setSlot(13, new GuiElementBuilder(canManage ? Items.ORANGE_DYE : Items.GRAY_DYE)
+        gui.setSlot(13, new GuiElementBuilder(canManage ? Items.DYE.orange() : Items.DYE.gray())
                 .setName(Component.literal("Demote").withStyle(
                         canManage ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7→ " + targetRank.down().colored()))
@@ -345,7 +345,7 @@ public final class GuildGui {
                 })
                 .build());
 
-        gui.setSlot(15, new GuiElementBuilder(canManage ? Items.BARRIER : Items.GRAY_DYE)
+        gui.setSlot(15, new GuiElementBuilder(canManage ? Items.BARRIER : Items.DYE.gray())
                 .setName(Component.literal("Remove from Guild").withStyle(
                         canManage ? ChatFormatting.RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(canManage ? "§cClick to kick" : "§cNot permitted"))
@@ -355,7 +355,7 @@ public final class GuildGui {
                 .build());
 
         boolean canTransfer = actorRank == Guild.Rank.MASTER && !isSelf;
-        gui.setSlot(17, new GuiElementBuilder(canTransfer ? Items.GOLDEN_HELMET : Items.GRAY_DYE)
+        gui.setSlot(17, new GuiElementBuilder(canTransfer ? Items.GOLDEN_HELMET : Items.DYE.gray())
                 .setName(Component.literal("Transfer Mastery").withStyle(
                         canTransfer ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Make them Guild Master."))
@@ -399,7 +399,7 @@ public final class GuildGui {
         int[] depositSlots = {19, 20, 21, 22};
         for (int i = 0; i < amounts.length; i++) {
             long amt = amounts[i];
-            gui.setSlot(depositSlots[i], new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(depositSlots[i], new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("Deposit " + GuildManager.fmt(amt))
                             .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Move coins from you to the guild."))
@@ -425,7 +425,7 @@ public final class GuildGui {
         for (int i = 0; i < amounts.length; i++) {
             long amt = amounts[i];
             final boolean allowed = officer;
-            gui.setSlot(withdrawSlots[i], new GuiElementBuilder(allowed ? Items.RED_CONCRETE : Items.GRAY_CONCRETE)
+            gui.setSlot(withdrawSlots[i], new GuiElementBuilder(allowed ? Items.CONCRETE.red() : Items.CONCRETE.gray())
                     .setName(Component.literal("Withdraw " + GuildManager.fmt(amt))
                             .withStyle(allowed ? ChatFormatting.RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Move coins from the guild to you."))
@@ -445,7 +445,7 @@ public final class GuildGui {
         }
 
         final boolean allowedCustom = officer;
-        gui.setSlot(32, new GuiElementBuilder(allowedCustom ? Items.PAPER : Items.GRAY_DYE)
+        gui.setSlot(32, new GuiElementBuilder(allowedCustom ? Items.PAPER : Items.DYE.gray())
                 .setName(Component.literal("Withdraw Custom Amount")
                         .withStyle(allowedCustom ? ChatFormatting.RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(allowedCustom ? "§eClick to type an amount" : "§cOfficer+ only"))
@@ -460,7 +460,7 @@ public final class GuildGui {
 
         Settlement hall = g.hallSettlementId == null ? null : SettlementManager.get(g.hallSettlementId);
         boolean canPatron = officer && hall != null;
-        gui.setSlot(40, new GuiElementBuilder(canPatron ? Items.EMERALD : Items.GRAY_DYE)
+        gui.setSlot(40, new GuiElementBuilder(canPatron ? Items.EMERALD : Items.DYE.gray())
                 .setName(Component.literal("Fund the Hall").withStyle(
                         canPatron ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Transfer guild coins into your hall"))
@@ -513,7 +513,7 @@ public final class GuildGui {
             boolean affordable = g.treasury >= perk.cost;
 
             GuiElementBuilder b = new GuiElementBuilder(owned ? perk.icon
-                    : available ? perk.icon : Items.GRAY_STAINED_GLASS_PANE)
+                    : available ? perk.icon : Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal((owned ? "§a✔ " : available ? "§e" : "§8") + perk.display)
                             .withStyle(ChatFormatting.BOLD));
             for (String line : perk.lore) {
@@ -647,7 +647,7 @@ public final class GuildGui {
         int slot = 10;
         for (Guild g : invites) {
             if (slot > 43) break;
-            gui.setSlot(slot, new GuiElementBuilder(Items.WHITE_BANNER)
+            gui.setSlot(slot, new GuiElementBuilder(Items.BANNER.white())
                     .setName(Component.literal(g.name).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§8[" + g.tag + "] §7" + (g.motto == null ? "" : g.motto)))
                     .addLoreLine(Component.literal("§7Level §b" + g.level + " §7• §f" + g.memberCount() + " members"))
@@ -713,7 +713,7 @@ public final class GuildGui {
                 && here.tierEnum().isAtLeast(SettlementTier.TOWN)
                 && (hall == null || !here.id.equals(hall.id));
 
-        gui.setSlot(20, new GuiElementBuilder(canDeclare ? Items.LIME_CONCRETE : Items.GRAY_CONCRETE)
+        gui.setSlot(20, new GuiElementBuilder(canDeclare ? Items.CONCRETE.lime() : Items.CONCRETE.gray())
                 .setName(Component.literal("Declare Hall Here").withStyle(
                         canDeclare ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Settlement: §f"
@@ -751,7 +751,7 @@ public final class GuildGui {
                 .build());
 
         boolean canAbandon = isMaster && hall != null;
-        gui.setSlot(24, new GuiElementBuilder(canAbandon ? Items.BARRIER : Items.GRAY_DYE)
+        gui.setSlot(24, new GuiElementBuilder(canAbandon ? Items.BARRIER : Items.DYE.gray())
                 .setName(Component.literal("Abandon Hall").withStyle(
                         canAbandon ? ChatFormatting.RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7The declaration fee is not refunded."))
@@ -783,7 +783,7 @@ public final class GuildGui {
             if (idx >= all.size()) break;
             Guild g = all.get(idx);
             Settlement hall = g.hallSettlementId == null ? null : SettlementManager.get(g.hallSettlementId);
-            gui.setSlot(9 + i, new GuiElementBuilder(Items.WHITE_BANNER)
+            gui.setSlot(9 + i, new GuiElementBuilder(Items.BANNER.white())
                     .setName(Component.literal("#" + (idx + 1) + " " + g.name)
                             .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§8[" + g.tag + "] §7" + (g.motto == null ? "" : g.motto)))
@@ -830,7 +830,7 @@ public final class GuildGui {
                 .addLoreLine(Component.literal("§7" + (g.motto == null || g.motto.isEmpty() ? "§8no motto" : g.motto)))
                 .glow().build());
 
-        gui.setSlot(20, new GuiElementBuilder(isMaster ? Items.NAME_TAG : Items.GRAY_DYE)
+        gui.setSlot(20, new GuiElementBuilder(isMaster ? Items.NAME_TAG : Items.DYE.gray())
                 .setName(Component.literal("Rename Guild").withStyle(
                         isMaster ? ChatFormatting.YELLOW : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Cost: §6" + GuildManager.fmt(GuildManager.RENAME_COST)
@@ -843,7 +843,7 @@ public final class GuildGui {
                 .build());
 
         final boolean canMotto = officer;
-        gui.setSlot(22, new GuiElementBuilder(canMotto ? Items.WRITABLE_BOOK : Items.GRAY_DYE)
+        gui.setSlot(22, new GuiElementBuilder(canMotto ? Items.WRITABLE_BOOK : Items.DYE.gray())
                 .setName(Component.literal("Set Motto").withStyle(
                         canMotto ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Shown in the directory and roster."))
@@ -864,7 +864,7 @@ public final class GuildGui {
                 })
                 .build());
 
-        gui.setSlot(24, new GuiElementBuilder(isMaster ? Items.TNT : Items.GRAY_DYE)
+        gui.setSlot(24, new GuiElementBuilder(isMaster ? Items.TNT : Items.DYE.gray())
                 .setName(Component.literal("Disband Guild").withStyle(
                         isMaster ? ChatFormatting.DARK_RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§cPermanently destroys the guild."))
@@ -888,7 +888,7 @@ public final class GuildGui {
         gui.setTitle(Component.literal("Disband " + g.name + "?").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
         WarGui.fill(gui, 27);
 
-        gui.setSlot(11, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("YES — disband").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§cThis cannot be undone."))
                 .addLoreLine(Component.literal("§c" + GuildManager.fmt(g.treasury) + " coins will be lost."))
@@ -898,7 +898,7 @@ public final class GuildGui {
                 })
                 .build());
 
-        gui.setSlot(15, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("NO — keep the guild").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((a, b, c, d) -> openSettings(player))
                 .build());

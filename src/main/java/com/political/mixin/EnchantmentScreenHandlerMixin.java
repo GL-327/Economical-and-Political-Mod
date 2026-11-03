@@ -129,7 +129,7 @@ public class EnchantmentScreenHandlerMixin {
         boolean isSword = stack.is(Items.WOODEN_SWORD) || stack.is(Items.STONE_SWORD)
                 || stack.is(Items.IRON_SWORD) || stack.is(Items.GOLDEN_SWORD)
                 || stack.is(Items.DIAMOND_SWORD) || stack.is(Items.NETHERITE_SWORD);
-        boolean isAxe = stack.getItem() instanceof net.minecraft.world.item.AxeItem;
+        boolean isAxe = stack.is(net.minecraft.tags.ItemTags.AXES);
         boolean isWeapon = isSword || isAxe;
 
         String applied = null;

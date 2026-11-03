@@ -124,7 +124,7 @@ public final class BazaarGui {
                 "Fills the best buy orders first"));
         for (int i = 0; i < AMOUNTS.length; i++) {
             final int amount = AMOUNTS[i];
-            gui.setSlot(20 + i, GuiKit.action(Items.LIME_CONCRETE, "Sell " + amount,
+            gui.setSlot(20 + i, GuiKit.action(Items.CONCRETE.lime(), "Sell " + amount,
                     ChatFormatting.GREEN,
                     () -> {
                         BazaarManager.sellInstantly(player, c, amount);
@@ -145,7 +145,7 @@ public final class BazaarGui {
                 "Fills the cheapest sell offers first"));
         for (int i = 0; i < AMOUNTS.length; i++) {
             final int amount = AMOUNTS[i];
-            gui.setSlot(29 + i, GuiKit.action(Items.ORANGE_CONCRETE, "Buy " + amount,
+            gui.setSlot(29 + i, GuiKit.action(Items.CONCRETE.orange(), "Buy " + amount,
                     ChatFormatting.GOLD,
                     () -> {
                         BazaarManager.buyInstantly(player, c, amount);

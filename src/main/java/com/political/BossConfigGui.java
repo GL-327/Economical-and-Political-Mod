@@ -18,7 +18,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("⚙ Boss Configuration").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -65,7 +65,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("Select Boss Type").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -81,7 +81,7 @@ public class BossConfigGui {
                     .build());
         }
 
-        gui.setSlot(27, new GuiElementBuilder(Items.GREEN_WOOL)
+        gui.setSlot(27, new GuiElementBuilder(Items.WOOL.green())
                 .setName(Component.literal("Reset All Stats").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     DataManager.resetAllBossConfigs();
@@ -104,7 +104,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal(bossType.bossName + " Config").withStyle(bossType.color, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -142,7 +142,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("Edit " + bossType.bossName + " T" + tierNum).withStyle(bossType.color, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -193,7 +193,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("Multipliers: " + bossType.bossName).withStyle(bossType.color, ChatFormatting.BOLD));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -219,7 +219,7 @@ public class BossConfigGui {
                 .setCallback((idx, clicktype, containerInput, slotGui) -> openXpMultiplierSign(player, bossType))
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.GREEN_WOOL)
+        gui.setSlot(22, new GuiElementBuilder(Items.WOOL.green())
                 .setName(Component.literal("Reset Multipliers").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     DataManager.setBossHpMultiplier(bossType, 1.0f);
@@ -432,7 +432,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("⚔ Sword Damage %").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -450,7 +450,7 @@ public class BossConfigGui {
                 .setCallback((idx, clicktype, containerInput, slotGui) -> openT2SwordSign(player))
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.GREEN_WOOL)
+        gui.setSlot(22, new GuiElementBuilder(Items.WOOL.green())
                 .setName(Component.literal("Reset Defaults").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     DataManager.setT1SwordDamagePercent(2.5);
@@ -538,7 +538,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("⚡ Boss Abilities").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
 
         for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -550,7 +550,7 @@ public class BossConfigGui {
             boolean enabled = DataManager.isBossAbilitiesEnabled(bossType);
             int cooldown = DataManager.getBossAbilityCooldown(bossType);
 
-            gui.setSlot(slots[i], new GuiElementBuilder(enabled ? Items.LIME_CONCRETE : Items.RED_CONCRETE)
+            gui.setSlot(slots[i], new GuiElementBuilder(enabled ? Items.CONCRETE.lime() : Items.CONCRETE.red())
                     .setName(Component.literal(bossType.displayName).withStyle(bossType.color, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Abilities: " + (enabled ? "§aENABLED" : "§cDISABLED")).withStyle(ChatFormatting.WHITE))
                     .addLoreLine(Component.literal("Cooldown: " + cooldown + "s").withStyle(ChatFormatting.YELLOW))
@@ -559,7 +559,7 @@ public class BossConfigGui {
                     .build());
         }
 
-        gui.setSlot(40, new GuiElementBuilder(Items.GREEN_WOOL)
+        gui.setSlot(40, new GuiElementBuilder(Items.WOOL.green())
                 .setName(Component.literal("Enable All").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
@@ -571,7 +571,7 @@ public class BossConfigGui {
                 })
                 .build());
 
-        gui.setSlot(41, new GuiElementBuilder(Items.RED_WOOL)
+        gui.setSlot(41, new GuiElementBuilder(Items.WOOL.red())
                 .setName(Component.literal("Disable All").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {
@@ -596,14 +596,14 @@ public class BossConfigGui {
         gui.setTitle(Component.literal(bossType.displayName + " Abilities").withStyle(bossType.color, ChatFormatting.BOLD));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
         boolean enabled = DataManager.isBossAbilitiesEnabled(bossType);
         int cooldown = DataManager.getBossAbilityCooldown(bossType);
 
-        gui.setSlot(11, new GuiElementBuilder(enabled ? Items.LIME_WOOL : Items.RED_WOOL)
+        gui.setSlot(11, new GuiElementBuilder(enabled ? Items.WOOL.lime() : Items.WOOL.red())
                 .setName(Component.literal("Abilities: " + (enabled ? "ENABLED" : "DISABLED")).withStyle(enabled ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Click to toggle").withStyle(ChatFormatting.GREEN))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
@@ -620,7 +620,7 @@ public class BossConfigGui {
                 .setCallback((idx, clicktype, containerInput, slotGui) -> openCooldownSign(player, bossType))
                 .build());
 
-        gui.setSlot(22, new GuiElementBuilder(Items.GREEN_WOOL)
+        gui.setSlot(22, new GuiElementBuilder(Items.WOOL.green())
                 .setName(Component.literal("Reset to Defaults").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     DataManager.setBossAbilitiesEnabled(bossType, true);
@@ -677,7 +677,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("🛡 Boss Gear & Defense").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -713,7 +713,7 @@ public class BossConfigGui {
         gui.setTitle(Component.literal("⚔ Boss-Specific Defense").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -732,7 +732,7 @@ public class BossConfigGui {
                     .build());
         }
 
-        gui.setSlot(27, new GuiElementBuilder(Items.GREEN_WOOL)
+        gui.setSlot(27, new GuiElementBuilder(Items.WOOL.green())
                 .setName(Component.literal("Reset All Defense").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {
                     for (SlayerManager.SlayerType type : SlayerManager.SlayerType.values()) {

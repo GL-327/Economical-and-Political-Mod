@@ -1,4 +1,5 @@
 package com.political.bounty;
+import net.minecraft.util.Prediction;
 import com.political.BossAbilityManager;
 import com.political.BuffProgressManager;
 import com.political.CivilCraftAchievements;
@@ -14,6 +15,7 @@ import com.political.government.PerkManager;
 import com.political.party.PoliticalPartyManager;
 import com.political.stats.HealthScalingManager;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,7 +24,9 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
+import net.minecraft.world.entity.monster.cubemob.MagmaCube;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.skeleton.Stray;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
@@ -555,7 +559,7 @@ public class SlayerManager {
             case SKELETON -> entity instanceof Skeleton || entity instanceof Stray
                     || entity instanceof WitherSkeleton;
             case SLIME -> entity instanceof Slime || entity instanceof MagmaCube;
-            case ENDERMAN -> entity instanceof EnderMan;
+            case ENDERMAN -> entity instanceof Enderman;
             case IRON_GOLEM -> entity instanceof Warden;
             case PIGLIN -> entity instanceof PiglinBrute || entity instanceof Piglin;
         };
@@ -590,7 +594,7 @@ public class SlayerManager {
 
         // Spawn actual Warden entity
         if (type == SlayerType.IRON_GOLEM) {
-            boss = (Mob) EntityType.IRON_GOLEM.create(world, EntitySpawnReason.MOB_SUMMONED);
+            boss = (Mob) EntityTypes.IRON_GOLEM.create(world, EntitySpawnReason.MOB_SUMMONED);
             if (boss == null) {
                 player.sendSystemMessage(Component.literal("✖ Failed to spawn boss!")
                         .withStyle(ChatFormatting.RED), false);
@@ -743,19 +747,19 @@ public class SlayerManager {
 
     private static Mob createBossEntity(ServerLevel world, SlayerType type, TierConfig config) {
         EntityType<?> entityType = switch (type) {
-            case ZOMBIE -> EntityType.ZOMBIE;
-            case SPIDER -> EntityType.SPIDER;
-            case SKELETON -> EntityType.SKELETON;
-            case SLIME -> EntityType.SLIME;
-            case ENDERMAN -> EntityType.ENDERMAN;
-            case IRON_GOLEM -> EntityType.IRON_GOLEM;
-            case PIGLIN -> EntityType.PIGLIN_BRUTE;
+            case ZOMBIE -> EntityTypes.ZOMBIE;
+            case SPIDER -> EntityTypes.SPIDER;
+            case SKELETON -> EntityTypes.SKELETON;
+            case SLIME -> EntityTypes.SLIME;
+            case ENDERMAN -> EntityTypes.ENDERMAN;
+            case IRON_GOLEM -> EntityTypes.IRON_GOLEM;
+            case PIGLIN -> EntityTypes.PIGLIN_BRUTE;
         };
 
         Mob mob = (Mob) entityType.create(world, EntitySpawnReason.MOB_SUMMONED);
 
         // Set slime size to max (4) for Slime bosses
-        if (type == SlayerType.SLIME && mob instanceof net.minecraft.world.entity.monster.Slime slime) {
+        if (type == SlayerType.SLIME && mob instanceof net.minecraft.world.entity.monster.cubemob.Slime slime) {
             slime.setSize(4, true);
         }
 
@@ -964,7 +968,7 @@ public class SlayerManager {
                     .append(drop.getHoverName().copy().withStyle(ChatFormatting.GOLD)), false);
 
             if (!owner.addItem(drop)) {
-                owner.drop(drop, false);
+                owner.drop(drop, false, Prediction.SERVER_ONLY);
             }
         }
 
@@ -1299,13 +1303,13 @@ public class SlayerManager {
 
     private static LivingEntity createUpgradedMob(ServerLevel world, SlayerType type) {
         LivingEntity mob = switch (type) {
-            case ZOMBIE -> EntityType.ZOMBIE.create(world, EntitySpawnReason.COMMAND);
-            case SPIDER -> EntityType.SPIDER.create(world, EntitySpawnReason.COMMAND);
-            case SKELETON -> EntityType.SKELETON.create(world, EntitySpawnReason.COMMAND);
-            case SLIME -> EntityType.SLIME.create(world, EntitySpawnReason.COMMAND);
-            case ENDERMAN -> EntityType.ENDERMAN.create(world, EntitySpawnReason.COMMAND);
-            case IRON_GOLEM -> EntityType.IRON_GOLEM.create(world, EntitySpawnReason.COMMAND);
-            case PIGLIN -> EntityType.PIGLIN_BRUTE.create(world, EntitySpawnReason.COMMAND);
+            case ZOMBIE -> EntityTypes.ZOMBIE.create(world, EntitySpawnReason.COMMAND);
+            case SPIDER -> EntityTypes.SPIDER.create(world, EntitySpawnReason.COMMAND);
+            case SKELETON -> EntityTypes.SKELETON.create(world, EntitySpawnReason.COMMAND);
+            case SLIME -> EntityTypes.SLIME.create(world, EntitySpawnReason.COMMAND);
+            case ENDERMAN -> EntityTypes.ENDERMAN.create(world, EntitySpawnReason.COMMAND);
+            case IRON_GOLEM -> EntityTypes.IRON_GOLEM.create(world, EntitySpawnReason.COMMAND);
+            case PIGLIN -> EntityTypes.PIGLIN_BRUTE.create(world, EntitySpawnReason.COMMAND);
         };
 
         if (mob != null) {

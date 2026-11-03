@@ -57,7 +57,7 @@ public class UndergroundAuctionGui {
 
         // Fill with dark glass
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -95,7 +95,7 @@ public class UndergroundAuctionGui {
 
             // Clear bid slots when no auction
             for (int slot : new int[]{28, 29, 30, 31, 32, 34}) {
-                gui.setSlot(slot, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                gui.setSlot(slot, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                         .setName(Component.literal(""))
                         .build());
             }
@@ -206,7 +206,7 @@ public class UndergroundAuctionGui {
                 .addLoreLine(Component.literal("Enter a higher amount").withStyle(ChatFormatting.GRAY))
                 .build());
 
-        gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(2, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("Confirm Bid").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to place your bid").withStyle(ChatFormatting.GRAY))

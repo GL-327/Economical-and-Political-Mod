@@ -52,7 +52,7 @@ public final class VfxPalettes {
             Vfx.INFERNO);
     public static final Named VOID = reg("void", "Void", ChatFormatting.DARK_PURPLE, Items.ENDER_EYE,
             Vfx.VOID);
-    public static final Named STORM = reg("storm", "Storm", ChatFormatting.YELLOW, Items.LIGHTNING_ROD,
+    public static final Named STORM = reg("storm", "Storm", ChatFormatting.YELLOW, Items.LIGHTNING_ROD.weathering().unaffected(),
             Vfx.STORM);
     public static final Named CURSED = reg("cursed", "Cursed", ChatFormatting.DARK_GRAY, Items.WITHER_SKELETON_SKULL,
             Vfx.CURSED);

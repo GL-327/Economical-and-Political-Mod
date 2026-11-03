@@ -34,7 +34,7 @@ public final class AtlasMapGui {
         gui.setTitle(Component.literal("Atlas — Known Settlements"));
 
         for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.lightGray())
                     .setName(Component.literal("")).build());
         }
 
@@ -117,7 +117,7 @@ public final class AtlasMapGui {
     /** Bottom row: live leadership feed. */
     private static void addFeed(SimpleGui gui, ServerPlayer player) {
         for (int i = 36; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 

@@ -549,7 +549,7 @@ public final class TechniqueManager {
                 for (LivingEntity le : nearby(player, 8)) {
                     Vec3 pull = player.position().subtract(le.position()).normalize().scale(0.9);
                     le.setDeltaMovement(le.getDeltaMovement().add(pull.x, 0.15, pull.z));
-                    le.hurtMarked = true;
+                    le.syncVelocity = true;
                     hurt(player, world, le, 4f);
                 }
             }
@@ -601,13 +601,13 @@ public final class TechniqueManager {
         if (dir.lengthSqr() < 0.0001) dir = player.getLookAngle();
         Vec3 n = dir.normalize();
         target.setDeltaMovement(target.getDeltaMovement().add(n.x * xz, y, n.z * xz));
-        target.hurtMarked = true;
+        target.syncVelocity = true;
     }
 
     private static void dash(ServerPlayer player, double blocks) {
         Vec3 look = player.getLookAngle().normalize().scale(blocks * 0.28);
         player.setDeltaMovement(look.x, Math.max(0.15, look.y), look.z);
-        player.hurtMarked = true;
+        player.syncVelocity = true;
         player.fallDistance = 0;
     }
 

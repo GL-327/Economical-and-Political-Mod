@@ -17,7 +17,7 @@ public class ImpeachmentGui {
         gui.setTitle(Component.literal("Impeachment Vote"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -33,15 +33,15 @@ public class ImpeachmentGui {
         boolean hasVoted = ElectionManager.hasImpeachVoted(player.getUUID().toString());
 
         if (hasVoted) {
-            gui.setSlot(11, new GuiElementBuilder(Items.GRAY_CONCRETE)
+            gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.gray())
                     .setName(Component.literal("Already Voted").withStyle(ChatFormatting.GRAY))
                     .build());
 
-            gui.setSlot(15, new GuiElementBuilder(Items.GRAY_CONCRETE)
+            gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.gray())
                     .setName(Component.literal("Already Voted").withStyle(ChatFormatting.GRAY))
                     .build());
         } else {
-            gui.setSlot(11, new GuiElementBuilder(Items.GREEN_CONCRETE)
+            gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.green())
                     .setName(Component.literal("YES - Remove Chair").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Vote to impeach the Chair").withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal(""))
@@ -53,7 +53,7 @@ public class ImpeachmentGui {
                     })
                     .build());
 
-            gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+            gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("NO - Keep Chair").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Vote against impeachment").withStyle(ChatFormatting.GRAY))
                     .setCallback((index, type, containerInput, slotGui) -> {

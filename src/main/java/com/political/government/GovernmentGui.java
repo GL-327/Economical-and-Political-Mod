@@ -123,7 +123,7 @@ public final class GovernmentGui {
                                                              net.minecraft.world.item.Item icon,
                                                              String title, boolean allowed,
                                                              Runnable action, String denyNote) {
-        GuiElementBuilder b = new GuiElementBuilder(allowed ? icon : Items.GRAY_CONCRETE)
+        GuiElementBuilder b = new GuiElementBuilder(allowed ? icon : Items.CONCRETE.gray())
                 .setName(Component.literal(title)
                         .withStyle(allowed ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY,
                                 ChatFormatting.BOLD))

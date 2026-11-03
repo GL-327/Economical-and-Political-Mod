@@ -36,7 +36,7 @@ public class WeatherManager {
                                 .lookupOrThrow(Registries.WORLD_CLOCK)
                                 .getOrThrow(WorldClocks.OVERWORLD);
                         ServerClockManager cm = world.clockManager();
-                        long totalTicks = cm.getTotalTicks(overworldClock);
+                        long totalTicks = cm.getInstance(overworldClock).totalTicks();
                         long timeOfDay = totalTicks % 24000;
                         if (timeOfDay < 13000 || timeOfDay > 23000) {
                             long dayBase = (totalTicks / 24000) * 24000;

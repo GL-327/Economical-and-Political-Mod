@@ -23,6 +23,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -703,11 +704,11 @@ public final class ExpeditionRunManager {
 
     private static EntityType<? extends Mob> bossType(Tier tier) {
         return switch (tier) {
-            case DELVE -> EntityType.RAVAGER;
-            case DESCENT -> EntityType.EVOKER;
-            case ABYSS -> EntityType.PIGLIN_BRUTE;
-            case CATACLYSM -> EntityType.WITHER_SKELETON;
-            case APOTHEOSIS -> EntityType.WARDEN;
+            case DELVE -> EntityTypes.RAVAGER;
+            case DESCENT -> EntityTypes.EVOKER;
+            case ABYSS -> EntityTypes.PIGLIN_BRUTE;
+            case CATACLYSM -> EntityTypes.WITHER_SKELETON;
+            case APOTHEOSIS -> EntityTypes.WARDEN;
         };
     }
 
@@ -719,11 +720,11 @@ public final class ExpeditionRunManager {
     @SuppressWarnings("unchecked")
     private static EntityType<? extends Mob>[] mobPool(Tier tier) {
         return switch (tier) {
-            case DELVE -> new EntityType[]{EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER};
-            case DESCENT -> new EntityType[]{EntityType.HUSK, EntityType.STRAY, EntityType.CAVE_SPIDER, EntityType.PILLAGER};
-            case ABYSS -> new EntityType[]{EntityType.WITHER_SKELETON, EntityType.VINDICATOR, EntityType.BLAZE};
-            case CATACLYSM -> new EntityType[]{EntityType.PIGLIN_BRUTE, EntityType.VINDICATOR, EntityType.WITHER_SKELETON, EntityType.BLAZE};
-            case APOTHEOSIS -> new EntityType[]{EntityType.PIGLIN_BRUTE, EntityType.RAVAGER, EntityType.EVOKER, EntityType.WITHER_SKELETON};
+            case DELVE -> new EntityType[]{EntityTypes.ZOMBIE, EntityTypes.SKELETON, EntityTypes.SPIDER};
+            case DESCENT -> new EntityType[]{EntityTypes.HUSK, EntityTypes.STRAY, EntityTypes.CAVE_SPIDER, EntityTypes.PILLAGER};
+            case ABYSS -> new EntityType[]{EntityTypes.WITHER_SKELETON, EntityTypes.VINDICATOR, EntityTypes.BLAZE};
+            case CATACLYSM -> new EntityType[]{EntityTypes.PIGLIN_BRUTE, EntityTypes.VINDICATOR, EntityTypes.WITHER_SKELETON, EntityTypes.BLAZE};
+            case APOTHEOSIS -> new EntityType[]{EntityTypes.PIGLIN_BRUTE, EntityTypes.RAVAGER, EntityTypes.EVOKER, EntityTypes.WITHER_SKELETON};
         };
     }
 

@@ -17,10 +17,10 @@ public class CivilCraftGui {
         // Decorative border
         for (int i = 0; i < 54; i++) {
             if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) {
-                gui.setSlot(i, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.yellow())
                         .setName(Component.literal("")).build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                         .setName(Component.literal("")).build());
             }
         }

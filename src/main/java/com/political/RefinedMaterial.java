@@ -57,7 +57,7 @@ public enum RefinedMaterial {
             "Ice that decided to become a mineral."),
     BLOODSTONE("Bloodstone", ChatFormatting.DARK_RED, Items.REDSTONE, Items.NETHER_WART, 7,
             "It is not blood. It is not not blood either."),
-    STORMGLASS("Stormglass", ChatFormatting.YELLOW, Items.GLASS, Items.LIGHTNING_ROD, 8,
+    STORMGLASS("Stormglass", ChatFormatting.YELLOW, Items.GLASS, Items.LIGHTNING_ROD.weathering().unaffected(), 8,
             "Made where the sand was standing when it happened."),
 
     // ── The organics ──────────────────────────────────────────────────────

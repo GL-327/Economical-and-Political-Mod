@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
@@ -161,7 +162,7 @@ public class CitizenManager {
         int oz = base.getZ() + world.getRandom().nextInt(17) - 8;
         BlockPos spawn = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(ox, base.getY(), oz));
 
-        Villager v = new Villager(EntityType.VILLAGER, world);
+        Villager v = new Villager(EntityTypes.VILLAGER, world);
         v.setPos(spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5);
         v.setPersistenceRequired();
         v.setNoAi(false);

@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -344,7 +345,7 @@ public final class IncursionManager {
             }
             case SHOCK -> {
                 if (a.ticks % 140 == 0) {
-                    var bolt = EntityType.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
+                    var bolt = EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
                     if (bolt != null) {
                         Vec3 p = owner.position();
                         bolt.snapTo(p.x + RNG.nextInt(9) - 4, p.y, p.z + RNG.nextInt(9) - 4);

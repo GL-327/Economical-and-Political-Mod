@@ -239,7 +239,7 @@ public class FletchingTableGui {
                 return CustomArrows.ArrowType.FROST_ARROW;
             }
             // Lightning (copper + lightning rod)
-            if (tip.getItem() == Items.COPPER_INGOT && modifier != null && modifier.getItem() == Items.LIGHTNING_ROD) {
+            if (tip.getItem() == Items.COPPER_INGOT && modifier != null && modifier.getItem() == Items.LIGHTNING_ROD.weathering().unaffected()) {
                 return CustomArrows.ArrowType.LIGHTNING_ARROW;
             }
             // Healing (golden apple + glistering melon)

@@ -201,7 +201,7 @@ public class CustomArrows {
             }
             case LIGHTNING_ARROW -> {
                 // Strike target with lightning
-                net.minecraft.world.entity.EntityType.LIGHTNING_BOLT.spawn(world, 
+                net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.spawn(world, 
                         target.blockPosition(), net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
                 world.sendParticles(ParticleTypes.ELECTRIC_SPARK,
                         target.getX(), target.getY() + 1.0, target.getZ(),
@@ -232,7 +232,7 @@ public class CustomArrows {
             }
             case BOUNCING_ARROW -> {
                 // Bouncing effect - knockback
-                target.knockback(1.5, -arrow.getDeltaMovement().x, -arrow.getDeltaMovement().z);
+                target.knockback(1.5, -arrow.getDeltaMovement().x, -arrow.getDeltaMovement().z, target.damageSources().generic(), 0.0F);
                 world.sendParticles(ParticleTypes.ITEM_SLIME,
                         target.getX(), target.getY() + 1.0, target.getZ(),
                         4, 0.3, 0.5, 0.3, 0.05);
@@ -326,7 +326,7 @@ public class CustomArrows {
             case LIGHTNING_ARROW -> new ItemStack[]{
                     new ItemStack(Items.ARROW, 4),
                     new ItemStack(Items.COPPER_INGOT),
-                    new ItemStack(Items.LIGHTNING_ROD)
+                    new ItemStack(Items.LIGHTNING_ROD.weathering().unaffected())
             };
             case HEALING_ARROW -> new ItemStack[]{
                     new ItemStack(Items.ARROW, 4),

@@ -27,9 +27,9 @@ public final class SkyblockTrinkets {
                        String effect) {}
 
     private static final List<Def> DEFS = Arrays.asList(
-            def("sb_glacite_splinter", "§b§lGlacite Splinter", "luck_60", Items.LIGHT_BLUE_DYE),
+            def("sb_glacite_splinter", "§b§lGlacite Splinter", "luck_60", Items.DYE.lightBlue()),
             def("sb_mithril_flake", "§5§lMithril Flake", "haste_80", Items.IRON_INGOT),
-            def("sb_gemstone_dust", "§d§lGemstone Dust", "speed_80", Items.PURPLE_DYE),
+            def("sb_gemstone_dust", "§d§lGemstone Dust", "speed_80", Items.DYE.purple()),
             def("sb_dwarven_geode", "§6§lDwarven Geode", "coins_5000", Items.CLAY_BALL),
             def("sb_crystal_hollows_map", "§5§lCrystal Hollows Map", "night_vision_200", Items.MAP),
             def("sb_jungle_fern", "§2§lJungle Fern", "regen_100", Items.FERN),

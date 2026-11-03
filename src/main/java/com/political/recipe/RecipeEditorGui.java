@@ -1019,7 +1019,7 @@ public class RecipeEditorGui {
                     .setName(Component.literal(set.name + " T1").withStyle(set.color, ChatFormatting.BOLD))
                     .glow().build());
 
-            gui.setSlot(row1Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(row1Base + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
             
@@ -1065,7 +1065,7 @@ public class RecipeEditorGui {
                     .setName(Component.literal(set.name + " T2").withStyle(set.color, ChatFormatting.BOLD))
                     .glow().build());
 
-            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
             
@@ -1150,7 +1150,7 @@ public class RecipeEditorGui {
 
         if (cat == Category.BLOCK_WEAPONS) {
             for (int i = 0; i < 54; i++) {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
             }
         } else {
             RecipeGuiTheme.fillCategoryItemGrid(gui, cat == Category.SPECIAL_ITEMS);
@@ -1268,7 +1268,7 @@ public class RecipeEditorGui {
 
         // Plain black shell (excluded from shared theme — same as /customitems gem & block hub)
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         // Header
@@ -1421,7 +1421,7 @@ public class RecipeEditorGui {
                     .build());
 
             // Gap slot
-            gui.setSlot(slots[1], new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(slots[1], new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
 
@@ -1649,7 +1649,7 @@ public class RecipeEditorGui {
 
         updateResultSlot(gui, editableResult[0]);
 
-        gui.setSlot(SLOT_SAVE, new GuiElementBuilder(Items.LIME_DYE)
+        gui.setSlot(SLOT_SAVE, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("§a§lSave Recipe"))
                 .addLoreLine(Component.literal("§7Click to save this recipe."))
                 .glow().build());
@@ -1741,7 +1741,7 @@ public class RecipeEditorGui {
                 if (!isLocked) {
                     RecipeGuiTheme.setRecipeEmptyGridSlot(gui, GRID_SLOTS[g]);
                 } else {
-                    GuiElementBuilder builder = new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+                    GuiElementBuilder builder = new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                             .setName(Component.literal("§c[Locked — middle-click to unlock]"))
                             .addLoreLine(Component.literal("§7Slot is locked"))
                             .addLoreLine(Component.literal("§7Middle-click to unlock"));

@@ -27,7 +27,7 @@ public enum TradeGood {
     TIMBER("Timber", "§6", Items.OAK_LOG, 6),
     STONE("Cut Stone", "§7", Items.STONE_BRICKS, 7),
     ORE("Ore", "§b", Items.RAW_IRON, 20),
-    CLOTH("Cloth", "§d", Items.WHITE_WOOL, 16),
+    CLOTH("Cloth", "§d", Items.WOOL.white(), 16),
     TOOLS("Tools", "§e", Items.IRON_PICKAXE, 30),
     MEDICINE("Medicine", "§a", Items.GLISTERING_MELON_SLICE, 38),
     REAGENTS("Reagents", "§5", Items.BLAZE_POWDER, 46),

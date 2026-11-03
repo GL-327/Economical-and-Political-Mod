@@ -233,14 +233,14 @@ public final class TradeGui {
                 .addLoreLine(Component.literal("§cThe charter is not refunded."))
                 .build());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("Confirm").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((a, b, c, d) -> {
                     TradeRouteManager.cancel(player, r);
                     openRoutes(player, s);
                 })
                 .build());
-        gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("Cancel").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .setCallback((a, b, c, d) -> openRoutes(player, s))
                 .build());
@@ -395,7 +395,7 @@ public final class TradeGui {
         }
         gui.setSlot(13, info.build());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("File charter").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Spends coins and one Caravan Charter."))
                 .setCallback((a, b, c, d) -> {
@@ -406,7 +406,7 @@ public final class TradeGui {
                     }
                 })
                 .build());
-        gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("← Back").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .setCallback((a, b, c, d) -> openGoodPicker(player, home, partner))
                 .build());

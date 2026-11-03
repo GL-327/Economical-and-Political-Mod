@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.economy.UndergroundAuctionManager;
 import com.political.government.DictatorManager;
 import com.political.government.ElectionManager;
@@ -242,7 +243,7 @@ public class AdminGui {
         boolean impeachmentActive = ElectionManager.isImpeachmentActive();
 
         // Start Election
-        gui.setSlot(10, new GuiElementBuilder(Items.GREEN_CONCRETE)
+        gui.setSlot(10, new GuiElementBuilder(Items.CONCRETE.green())
                 .setName(Component.literal("Start Election").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Force start an election now").withStyle(ChatFormatting.GRAY))
@@ -256,7 +257,7 @@ public class AdminGui {
                 .build());
 
         // End Election
-        gui.setSlot(11, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("End Election").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Force end current election").withStyle(ChatFormatting.GRAY))
@@ -270,7 +271,7 @@ public class AdminGui {
                 .build());
 
         // Toggle System
-        gui.setSlot(12, new GuiElementBuilder(electionEnabled ? Items.LIME_DYE : Items.GRAY_DYE)
+        gui.setSlot(12, new GuiElementBuilder(electionEnabled ? Items.DYE.lime() : Items.DYE.gray())
                 .setName(Component.literal("Election System").withStyle(electionEnabled ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Status: " + (electionEnabled ? "ENABLED" : "DISABLED")).withStyle(electionEnabled ? ChatFormatting.GREEN : ChatFormatting.RED))
@@ -284,7 +285,7 @@ public class AdminGui {
                 .build());
 
         // Pause/Resume
-        gui.setSlot(13, new GuiElementBuilder(electionPaused ? Items.ORANGE_DYE : Items.LIGHT_BLUE_DYE)
+        gui.setSlot(13, new GuiElementBuilder(electionPaused ? Items.DYE.orange() : Items.DYE.lightBlue())
                 .setName(Component.literal("Election Timer").withStyle(electionPaused ? ChatFormatting.GOLD : ChatFormatting.AQUA, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Status: " + (electionPaused ? "PAUSED" : "RUNNING")).withStyle(electionPaused ? ChatFormatting.GOLD : ChatFormatting.AQUA))
@@ -334,7 +335,7 @@ public class AdminGui {
         String timeStr = PoliticalServer.formatTime(timeUntil);
 
         // Status display
-        gui.setSlot(10, new GuiElementBuilder(auctionActive ? Items.LIME_CONCRETE : Items.RED_CONCRETE)
+        gui.setSlot(10, new GuiElementBuilder(auctionActive ? Items.CONCRETE.lime() : Items.CONCRETE.red())
                 .setName(Component.literal("Auction Status").withStyle(auctionActive ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Status: " + (auctionActive ? "ACTIVE" : "Waiting")).withStyle(auctionActive ? ChatFormatting.GREEN : ChatFormatting.RED))
@@ -1166,7 +1167,7 @@ public class AdminGui {
                 .build());
 
         // Smite Player
-        gui.setSlot(13, new GuiElementBuilder(Items.LIGHTNING_ROD)
+        gui.setSlot(13, new GuiElementBuilder(Items.LIGHTNING_ROD.weathering().unaffected())
                 .setName(Component.literal("Smite Player").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Strike with lightning").withStyle(ChatFormatting.GRAY))
@@ -1306,7 +1307,7 @@ public class AdminGui {
 
         // Auction House Toggle
         boolean auctionActive = UndergroundAuctionManager.isAuctionActive();
-        gui.setSlot(13, new GuiElementBuilder(auctionActive ? Items.LIME_STAINED_GLASS_PANE : Items.GRAY_STAINED_GLASS_PANE)
+        gui.setSlot(13, new GuiElementBuilder(auctionActive ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal("Underground Auction").withStyle(auctionActive ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Status: " + (auctionActive ? "§aACTIVE" : "§cINACTIVE")).withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("Next: §f" + PoliticalServer.formatTime(UndergroundAuctionManager.getTimeUntilNextAuction())).withStyle(ChatFormatting.GRAY))
@@ -1399,7 +1400,7 @@ public class AdminGui {
                 .build());
 
         // Place Underground Auctioneer
-        gui.setSlot(20, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS)
+        gui.setSlot(20, new GuiElementBuilder(Items.STAINED_GLASS.purple())
                 .setName(Component.literal("Place Underground Auctioneer").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Spawn at your location").withStyle(ChatFormatting.GRAY))
@@ -1414,7 +1415,7 @@ public class AdminGui {
                 .build());
 
         // Spawn Protection Region
-        gui.setSlot(21, new GuiElementBuilder(SpawnProtectionManager.isActive() ? Items.ORANGE_TERRACOTTA : Items.WHITE_TERRACOTTA)
+        gui.setSlot(21, new GuiElementBuilder(SpawnProtectionManager.isActive() ? Items.DYED_TERRACOTTA.orange() : Items.DYED_TERRACOTTA.white())
                 .setName(Component.literal("Spawn Protection").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Status: " + (SpawnProtectionManager.isActive() ? "§aACTIVE" : "§cINACTIVE")).withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("Min: " + SpawnProtectionManager.getMinX() + "," + SpawnProtectionManager.getMinY() + "," + SpawnProtectionManager.getMinZ()).withStyle(ChatFormatting.YELLOW))
@@ -1527,7 +1528,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("Select Player - " + action.substring(0, 1).toUpperCase() + action.substring(1)));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -1730,7 +1731,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("Give Credits - Select Player"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -1822,7 +1823,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("⚔ Basic Bounty Swords"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -1851,7 +1852,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("⚔ Upgraded Bounty Swords"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -1867,7 +1868,7 @@ public class AdminGui {
                     .setCallback((idx, clickType, containerInput, slotGui) -> {
                         ItemStack sword = SlayerItems.createUpgradedSlayerSword(finalType);
                         if (!player.addItem(sword)) {
-                            player.drop(sword, false);
+                            player.drop(sword, false, Prediction.SERVER_ONLY);
                         }
                         player.sendSystemMessage(Component.literal("✔ Received " + finalType.displayName + " Bounty Sword II!")
                                 .withStyle(ChatFormatting.GREEN), false);
@@ -1895,19 +1896,19 @@ public class AdminGui {
 
         // Background with dark theme
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
 
         // Decorative border
         for (int i = 0; i < 9; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(45 + i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red()).setName(Component.literal("")).build());
+            gui.setSlot(45 + i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red()).setName(Component.literal("")).build());
         }
         for (int i = 0; i < 6; i++) {
-            gui.setSlot(i * 9, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE).setName(Component.literal("")).build());
-            gui.setSlot(i * 9 + 8, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i * 9, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red()).setName(Component.literal("")).build());
+            gui.setSlot(i * 9 + 8, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red()).setName(Component.literal("")).build());
         }
 
         // Header
@@ -2476,7 +2477,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -2542,7 +2543,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -2607,7 +2608,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -2714,7 +2715,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -2833,7 +2834,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("👑 Piglin Items"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal("")).build());
         }
 
@@ -2979,7 +2980,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3071,7 +3072,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3176,7 +3177,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3222,7 +3223,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3294,7 +3295,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3310,7 +3311,7 @@ public class AdminGui {
             int level = levelSlots[i];
             boolean isCurrent = level == currentLevel;
 
-            gui.setSlot(guiSlots[i], new GuiElementBuilder(isCurrent ? Items.LIME_STAINED_GLASS_PANE : Items.WHITE_STAINED_GLASS_PANE)
+            gui.setSlot(guiSlots[i], new GuiElementBuilder(isCurrent ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.white())
                     .setName(Component.literal("Level " + level).withStyle(isCurrent ? ChatFormatting.GREEN : ChatFormatting.YELLOW, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(isCurrent
@@ -3349,7 +3350,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3395,7 +3396,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3478,7 +3479,7 @@ public class AdminGui {
 
         // Background - red to indicate danger
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3530,7 +3531,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3548,7 +3549,7 @@ public class AdminGui {
                 .build());
 
         // Confirm button
-        gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("✓ CONFIRM RESET").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to permanently reset").withStyle(ChatFormatting.YELLOW))
@@ -3568,7 +3569,7 @@ public class AdminGui {
                 .build());
 
         // Cancel button
-        gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("✗ CANCEL").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Go back without resetting").withStyle(ChatFormatting.GRAY))
@@ -3587,7 +3588,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3657,7 +3658,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3709,7 +3710,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3769,7 +3770,7 @@ public class AdminGui {
                     .glow()
                     .build());
         } else {
-            gui.setSlot(31, new GuiElementBuilder(Items.GRAY_DYE)
+            gui.setSlot(31, new GuiElementBuilder(Items.DYE.gray())
                     .setName(Component.literal("No Active Quest").withStyle(ChatFormatting.GRAY))
                     .build());
         }
@@ -3865,7 +3866,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("Prison Controls"));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3919,7 +3920,7 @@ public class AdminGui {
         gui.setTitle(Component.literal("Imprison " + target.getName().getString()));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -3971,7 +3972,7 @@ public class AdminGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -4095,7 +4096,7 @@ private static void openSpawnBossMenu(ServerPlayer player) {
 
     // Background
     for (int i = 0; i < 36; i++) {
-        gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+        gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
     }
@@ -4130,7 +4131,7 @@ private static void openSpawnBossMenu(ServerPlayer player) {
 
         // Background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -4171,24 +4172,24 @@ private static void openSpawnBossMenu(ServerPlayer player) {
 
         // Background
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.LIME_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.lime())
                     .setName(Component.literal(""))
                     .build());
         }
 
         // Mob types with tiers
         gui.setSlot(10, createUpgradedMobButton(player, "Zombie", Items.ZOMBIE_HEAD,
-                net.minecraft.world.entity.EntityType.ZOMBIE));
+                net.minecraft.world.entity.EntityTypes.ZOMBIE));
         gui.setSlot(11, createUpgradedMobButton(player, "Skeleton", Items.SKELETON_SKULL,
-                net.minecraft.world.entity.EntityType.SKELETON));
+                net.minecraft.world.entity.EntityTypes.SKELETON));
         gui.setSlot(12, createUpgradedMobButton(player, "Spider", Items.SPIDER_EYE,
-                net.minecraft.world.entity.EntityType.SPIDER));
+                net.minecraft.world.entity.EntityTypes.SPIDER));
         gui.setSlot(13, createUpgradedMobButton(player, "Creeper", Items.CREEPER_HEAD,
-                net.minecraft.world.entity.EntityType.CREEPER));
+                net.minecraft.world.entity.EntityTypes.CREEPER));
         gui.setSlot(14, createUpgradedMobButton(player, "Enderman", Items.ENDER_PEARL,
-                net.minecraft.world.entity.EntityType.ENDERMAN));
+                net.minecraft.world.entity.EntityTypes.ENDERMAN));
         gui.setSlot(15, createUpgradedMobButton(player, "Slime", Items.SLIME_BALL,
-                net.minecraft.world.entity.EntityType.SLIME));
+                net.minecraft.world.entity.EntityTypes.SLIME));
 
 
         // Back button
@@ -4218,7 +4219,7 @@ private static void openSpawnBossMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("⚔ Legendary Weapons"));
 
         for (int i = 0; i < 18; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                     .setName(Component.literal("")).build());
         }
 
@@ -4237,7 +4238,7 @@ private static void openSpawnBossMenu(ServerPlayer player) {
                 .setCallback((int idx, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {
                     ItemStack sword = SlayerItems.createEnderSword();
                     if (!player.addItem(sword)) {
-                        player.drop(sword, false);
+                        player.drop(sword, false, Prediction.SERVER_ONLY);
                     }
                     player.sendSystemMessage(Component.literal("✔ Received Ender Sword!")
                             .withStyle(ChatFormatting.GREEN), false);
@@ -4259,7 +4260,7 @@ private static void openSpawnBossMenu(ServerPlayer player) {
                 .setCallback((int idx, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {
                     ItemStack sword = SlayerItems.createAbyssalBlade();
                     if (!player.addItem(sword)) {
-                        player.drop(sword, false);
+                        player.drop(sword, false, Prediction.SERVER_ONLY);
                     }
                     player.sendSystemMessage(Component.literal("✔ Received Abyssal Blade!")
                             .withStyle(ChatFormatting.GREEN), false);
@@ -4282,7 +4283,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
     gui.setTitle(Component.literal("🛡 Bounty Armor Admin"));
 
     for (int i = 0; i < 36; i++) {
-        gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+        gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.cyan())
                 .setName(Component.literal("")).build());
     }
 
@@ -4345,7 +4346,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("⚡ HPEBM Weapons"));
 
         for (int i = 0; i < 18; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.CYAN_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.cyan())
                     .setName(Component.literal("")).build());
         }
 
@@ -4428,7 +4429,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
     private static void giveHPEBM(ServerPlayer player, int mk) {
         ItemStack weapon = CustomItemHandler.createHPEBM(mk);
         if (!player.addItem(weapon)) {
-            player.drop(weapon, false);
+            player.drop(weapon, false, Prediction.SERVER_ONLY);
         }
         player.sendSystemMessage(Component.literal("✔ Received HPEBM Mk" + mk + "!")
                 .withStyle(ChatFormatting.GREEN), false);
@@ -4443,7 +4444,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("✦ Cores & Chunks"));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.ORANGE_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.orange())
                     .setName(Component.literal("")).build());
         }
 
@@ -4495,7 +4496,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                     .setCallback((idx, clickType, containerInput, slotGui) -> {
                         ItemStack chunk = SlayerItems.createChunk(finalType);
                         if (!player.addItem(chunk)) {
-                            player.drop(chunk, false);
+                            player.drop(chunk, false, Prediction.SERVER_ONLY);
                         }
                         player.sendSystemMessage(Component.literal("✔ Received " + chunkName + "!")
                                 .withStyle(ChatFormatting.GREEN), false);
@@ -4521,7 +4522,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("✦ Special Items"));
 
         for (int i = 0; i < 18; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal("")).build());
         }
 
@@ -4536,7 +4537,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                 .setCallback((int idx, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {
                     ItemStack gavel = CustomItemHandler.createGavel();
                     if (!player.addItem(gavel)) {
-                        player.drop(gavel, false);
+                        player.drop(gavel, false, Prediction.SERVER_ONLY);
                     }
                     player.sendSystemMessage(Component.literal("✔ Received The Gavel!")
                             .withStyle(ChatFormatting.GREEN), false);
@@ -4600,7 +4601,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("👤 Player Management"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.LIME_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.lime())
                     .setName(Component.literal("")).build());
         }
 
@@ -4654,12 +4655,12 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("⚠ Confirm Reset?"));
 
         for (int i = 0; i < 9; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal("")).build());
         }
 
         // Confirm button
-        gui.setSlot(2, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(2, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("✔ Confirm Reset")
                         .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
@@ -4675,7 +4676,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                 .build());
 
         // Cancel button
-        gui.setSlot(6, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(6, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("✖ Cancel")
                         .withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .setCallback((int idx, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPlayerManagementMenu(player))
@@ -4705,11 +4706,11 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         gui.setTitle(Component.literal("§6§lAdmin: Custom Items"));
 
         // Fill background
-        ItemStack filler = new ItemStack(Items.BLACK_STAINED_GLASS_PANE);
+        ItemStack filler = new ItemStack(Items.STAINED_GLASS_PANE.black());
         filler.set(DataComponents.CUSTOM_NAME, Component.literal(" "));
         for (int i = 0; i < 54; i++) {
             int finalI = i;
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(" "))
                     .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {})
                     .build());
@@ -4873,7 +4874,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -4931,7 +4932,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                         1, "Vampiric"))
                 .build());
 
-        gui.setSlot(14, new GuiElementBuilder(Items.LIGHTNING_ROD)
+        gui.setSlot(14, new GuiElementBuilder(Items.LIGHTNING_ROD.weathering().unaffected())
                 .setName(Component.literal("⚡ Thunderbolt").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Max Level: I").withStyle(ChatFormatting.GRAY))
@@ -5099,7 +5100,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
             float dmgMult = DataManager.getBossDamageMultiplier(t);
             boolean abilEnabled = DataManager.isBossAbilitiesEnabled(t);
 
-            gui.setSlot(hpSlots[i], new GuiElementBuilder(Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(hpSlots[i], new GuiElementBuilder(Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal(t.displayName + " HP").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Multiplier: §f" + String.format("%.2f", hpMult) + "x").withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").withStyle(ChatFormatting.DARK_GRAY))
@@ -5116,7 +5117,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                         openBossSettingsPage(player);
                     }).build());
 
-            gui.setSlot(dmgSlots[i], new GuiElementBuilder(Items.ORANGE_STAINED_GLASS_PANE)
+            gui.setSlot(dmgSlots[i], new GuiElementBuilder(Items.STAINED_GLASS_PANE.orange())
                     .setName(Component.literal(t.displayName + " DMG").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Multiplier: §f" + String.format("%.2f", dmgMult) + "x").withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal("L: +0.1 | R: -0.1 | Shift: ±0.5").withStyle(ChatFormatting.DARK_GRAY))
@@ -5133,7 +5134,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                         openBossSettingsPage(player);
                     }).build());
 
-            gui.setSlot(abilSlots[i], new GuiElementBuilder(abilEnabled ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE)
+            gui.setSlot(abilSlots[i], new GuiElementBuilder(abilEnabled ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal(t.displayName + " Abilities").withStyle(abilEnabled ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Status: " + (abilEnabled ? "§aENABLED" : "§cDISABLED")).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal("Click to toggle").withStyle(ChatFormatting.YELLOW))
@@ -5484,7 +5485,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                 .glow().build());
 
         boolean showAuction = DataManager.isScoreboardShowAuction();
-        gui.setSlot(11, new GuiElementBuilder(showAuction ? Items.LIME_DYE : Items.GRAY_DYE)
+        gui.setSlot(11, new GuiElementBuilder(showAuction ? Items.DYE.lime() : Items.DYE.gray())
                 .setName(Component.literal("Show Auction Timer").withStyle(showAuction ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Status: " + (showAuction ? "§aVISIBLE" : "§cHIDDEN")).withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("Click to toggle").withStyle(ChatFormatting.YELLOW))
@@ -5495,7 +5496,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
                 }).build());
 
         boolean showBounty = DataManager.isScoreboardShowBountyGear();
-        gui.setSlot(13, new GuiElementBuilder(showBounty ? Items.LIME_DYE : Items.GRAY_DYE)
+        gui.setSlot(13, new GuiElementBuilder(showBounty ? Items.DYE.lime() : Items.DYE.gray())
                 .setName(Component.literal("Show Bounty Gear Stats").withStyle(showBounty ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Status: " + (showBounty ? "§aVISIBLE" : "§cHIDDEN")).withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("Click to toggle").withStyle(ChatFormatting.YELLOW))
@@ -5522,7 +5523,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("✦ Perk Management"));
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
@@ -5550,7 +5551,7 @@ private static void openArmorAdminMenu(ServerPlayer player) {
             if (slot % 9 == 8) { slot++; continue; }
 
             boolean active = activePerks.contains(perk.id);
-            net.minecraft.world.item.Item perkIcon = active ? Items.LIME_DYE : Items.GRAY_DYE;
+            net.minecraft.world.item.Item perkIcon = active ? Items.DYE.lime() : Items.DYE.gray();
             final Perk finalPerk = perk;
             gui.setSlot(slot, new GuiElementBuilder(perkIcon)
                     .setName(Component.literal(perk.name).withStyle(active ? ChatFormatting.GREEN : ChatFormatting.GRAY, ChatFormatting.BOLD))

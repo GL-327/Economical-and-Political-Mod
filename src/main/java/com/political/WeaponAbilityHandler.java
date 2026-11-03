@@ -266,7 +266,7 @@ public class WeaponAbilityHandler {
                                 player.getX(), player.getY() + 1.0, player.getZ(), 2, 0.2, 0.2, 0.2, 0.02);
                     }
                     case 4 -> { // Knockback smash
-                        target.knockback(1.1f, player.getX() - target.getX(), player.getZ() - target.getZ());
+                        target.knockback(1.1f, player.getX() - target.getX(), player.getZ() - target.getZ(), target.damageSources().generic(), 0.0F);
                         finalDamage *= 1.06f;
                     }
                     case 5 -> { // Weakness
@@ -406,7 +406,8 @@ public class WeaponAbilityHandler {
                 // Knockback & Flight boost
                 target.knockback(1.5f, 
                         player.getX() - target.getX(), 
-                        player.getZ() - target.getZ());
+                        player.getZ() - target.getZ(),
+                        target.damageSources().generic(), 0.0F);
                 // Reduced damage on ground
                 if (player.onGround()) {
                     finalDamage *= 0.85f;

@@ -29,7 +29,7 @@ public class TextureHelperGui {
         gui.setTitle(Component.literal("🎨 Texture Pack Helper"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
@@ -114,7 +114,7 @@ public class TextureHelperGui {
         gui.setTitle(Component.literal("🎨 " + categoryName));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
@@ -198,7 +198,7 @@ public class TextureHelperGui {
         gui.setTitle(Component.literal("🎨 All Custom Items"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 

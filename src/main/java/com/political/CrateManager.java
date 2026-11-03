@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.economy.CoinManager;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.SlayerRecipes;
@@ -191,7 +192,7 @@ public final class CrateManager {
             CoinManager.giveCoins(player, coins);
             pull.label = GuiKit.num(coins) + " coins";
         } else if (!player.getInventory().add(pull.reward.copy())) {
-            player.drop(pull.reward.copy(), false);
+            player.drop(pull.reward.copy(), false, Prediction.SERVER_ONLY);
         }
 
         record(player, crate, band, pull.label);

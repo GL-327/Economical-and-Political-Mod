@@ -593,9 +593,9 @@ public class BankGui {
                     .addLoreLine(Component.literal("Repay a loan to take a new one.").withStyle(ChatFormatting.GRAY))
                     .build());
         } else {
-            gui.setSlot(10, makeLoanTermButton(player, "short", Items.LIME_DYE, ChatFormatting.GREEN));
-            gui.setSlot(12, makeLoanTermButton(player, "standard", Items.YELLOW_DYE, ChatFormatting.YELLOW));
-            gui.setSlot(14, makeLoanTermButton(player, "long", Items.RED_DYE, ChatFormatting.RED));
+            gui.setSlot(10, makeLoanTermButton(player, "short", Items.DYE.lime(), ChatFormatting.GREEN));
+            gui.setSlot(12, makeLoanTermButton(player, "standard", Items.DYE.yellow(), ChatFormatting.YELLOW));
+            gui.setSlot(14, makeLoanTermButton(player, "long", Items.DYE.red(), ChatFormatting.RED));
         }
 
         gui.setSlot(16, new GuiElementBuilder(Items.BOOK)
@@ -909,7 +909,7 @@ public class BankGui {
                 gui.setSlot(i, new GuiElementBuilder(Items.GOLD_BLOCK)
                         .setName(Component.literal("").withStyle(ChatFormatting.YELLOW)).build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                         .setName(Component.literal("")).build());
             }
         }

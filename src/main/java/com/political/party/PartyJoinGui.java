@@ -52,7 +52,7 @@ public final class PartyJoinGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("My Party").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
-        fillPane(gui, 54, Items.BLACK_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.black());
 
         String leaderName = leaderUuid != null ? DataManager.getPlayerName(leaderUuid) : "None";
         GuiElementBuilder banner = new GuiElementBuilder(Items.PLAYER_HEAD)
@@ -165,7 +165,7 @@ public final class PartyJoinGui {
         gui.setSlot(26, eventItem.build());
 
         // --- Slot 37: Leave Party ---
-        gui.setSlot(37, new GuiElementBuilder(Items.RED_DYE)
+        gui.setSlot(37, new GuiElementBuilder(Items.DYE.red())
                 .setName(Component.literal("Leave Party").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Click to leave " + party.displayName).withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("24h cooldown before joining another").withStyle(ChatFormatting.DARK_GRAY))
@@ -233,7 +233,7 @@ public final class PartyJoinGui {
 
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Party Perks").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
-        fillPane(gui, 54, Items.PURPLE_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.purple());
 
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Component.literal("Party perk treasury").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
@@ -255,7 +255,7 @@ public final class PartyJoinGui {
             if (i >= slots.length) break;
             int s = slots[i++];
             boolean has = owned.contains(def.id);
-            var perkIcon = has ? Items.LIME_DYE : (isLeader ? Items.RED_DYE : Items.GRAY_DYE);
+            var perkIcon = has ? Items.DYE.lime() : (isLeader ? Items.DYE.red() : Items.DYE.gray());
             GuiElementBuilder item = new GuiElementBuilder(perkIcon)
                     .setName(Component.literal(def.displayName).withStyle(has ? ChatFormatting.GREEN : ChatFormatting.WHITE, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(def.description).withStyle(ChatFormatting.GRAY))
@@ -278,7 +278,7 @@ public final class PartyJoinGui {
             gui.setSlot(s, item.build());
         }
         for (; i < slots.length; i++) {
-            gui.setSlot(slots[i], new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(slots[i], new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
@@ -302,7 +302,7 @@ public final class PartyJoinGui {
 
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Diplomacy").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
-        fillPane(gui, 54, Items.RED_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.red());
 
         // Header
         gui.setSlot(4, new GuiElementBuilder(Items.SHIELD)
@@ -322,7 +322,7 @@ public final class PartyJoinGui {
             if (slot >= 18) break;
             PoliticalPartyManager.Party enemy = PoliticalPartyManager.getParty(enemyId);
             String eName = enemy != null ? enemy.displayName : enemyId;
-            GuiElementBuilder warItem = new GuiElementBuilder(Items.RED_BANNER)
+            GuiElementBuilder warItem = new GuiElementBuilder(Items.BANNER.red())
                     .setName(Component.literal(eName).withStyle(ChatFormatting.RED))
                     .addLoreLine(Component.literal("At war").withStyle(ChatFormatting.DARK_RED));
             if (isLeader) {
@@ -346,7 +346,7 @@ public final class PartyJoinGui {
             if (slot >= 27) break;
             PoliticalPartyManager.Party ally = PoliticalPartyManager.getParty(allyId);
             String aName = ally != null ? ally.displayName : allyId;
-            GuiElementBuilder allyItem = new GuiElementBuilder(Items.BLUE_BANNER)
+            GuiElementBuilder allyItem = new GuiElementBuilder(Items.BANNER.blue())
                     .setName(Component.literal(aName).withStyle(ChatFormatting.AQUA))
                     .addLoreLine(Component.literal("Allied").withStyle(ChatFormatting.GREEN));
             if (isLeader) {
@@ -364,7 +364,7 @@ public final class PartyJoinGui {
         // Peace offers inbox
         if (isLeader && !peaceInbox.isEmpty()) {
             slot = 27;
-            gui.setSlot(slot++, new GuiElementBuilder(Items.WHITE_BANNER)
+            gui.setSlot(slot++, new GuiElementBuilder(Items.BANNER.white())
                     .setName(Component.literal("\u2618 Peace Offers").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                     .build());
             for (String fromId : peaceInbox) {
@@ -372,7 +372,7 @@ public final class PartyJoinGui {
                 PoliticalPartyManager.Party from = PoliticalPartyManager.getParty(fromId);
                 String fName = from != null ? from.displayName : fromId;
                 String fid = fromId;
-                gui.setSlot(slot++, new GuiElementBuilder(Items.YELLOW_BANNER)
+                gui.setSlot(slot++, new GuiElementBuilder(Items.BANNER.yellow())
                         .setName(Component.literal(fName + " offers peace").withStyle(ChatFormatting.YELLOW))
                         .addLoreLine(Component.literal("Click to accept").withStyle(ChatFormatting.GREEN))
                         .setCallback((index, type, containerInput, slotGui) -> {
@@ -386,7 +386,7 @@ public final class PartyJoinGui {
         // Alliance offers inbox
         if (isLeader && !allyInbox.isEmpty()) {
             slot = 36;
-            gui.setSlot(slot++, new GuiElementBuilder(Items.CYAN_BANNER)
+            gui.setSlot(slot++, new GuiElementBuilder(Items.BANNER.cyan())
                     .setName(Component.literal("\u2764 Alliance Offers").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                     .build());
             for (String fromId : allyInbox) {
@@ -394,7 +394,7 @@ public final class PartyJoinGui {
                 PoliticalPartyManager.Party from = PoliticalPartyManager.getParty(fromId);
                 String fName = from != null ? from.displayName : fromId;
                 String fid = fromId;
-                gui.setSlot(slot++, new GuiElementBuilder(Items.LIGHT_BLUE_BANNER)
+                gui.setSlot(slot++, new GuiElementBuilder(Items.BANNER.lightBlue())
                         .setName(Component.literal(fName + " offers alliance").withStyle(ChatFormatting.AQUA))
                         .addLoreLine(Component.literal("Click to accept").withStyle(ChatFormatting.GREEN))
                         .setCallback((index, type, containerInput, slotGui) -> {
@@ -422,7 +422,7 @@ public final class PartyJoinGui {
 
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Treasury Log").withStyle(ChatFormatting.GREEN));
-        fillPane(gui, 54, Items.LIME_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.lime());
 
         List<PoliticalPartyManager.TreasuryLog> reversed = new ArrayList<>(logs);
         Collections.reverse(reversed);
@@ -459,7 +459,7 @@ public final class PartyJoinGui {
     private static void openStartEventGui(ServerPlayer player, String partyId) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Start Party Event").withStyle(ChatFormatting.GOLD));
-        fillPane(gui, 27, Items.ORANGE_STAINED_GLASS_PANE);
+        fillPane(gui, 27, Items.STAINED_GLASS_PANE.orange());
 
         gui.setSlot(10, new GuiElementBuilder(Items.DIAMOND_SWORD)
                 .setName(Component.literal("Mob Kill Race").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
@@ -521,9 +521,9 @@ public final class PartyJoinGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Council Vote: " + proposal.perkId).withStyle(ChatFormatting.LIGHT_PURPLE));
 
-        fillPane(gui, 27, Items.PURPLE_STAINED_GLASS_PANE);
+        fillPane(gui, 27, Items.STAINED_GLASS_PANE.purple());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("Approve").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Cost: " + fmt(proposal.costCoins) + " from budget").withStyle(ChatFormatting.GRAY))
                 .setCallback((index, type, containerInput, slotGui) -> {
@@ -532,7 +532,7 @@ public final class PartyJoinGui {
                 })
                 .build());
 
-        gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("Reject").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("Deny this perk proposal").withStyle(ChatFormatting.GRAY))
                 .setCallback((index, type, containerInput, slotGui) -> {
@@ -572,7 +572,7 @@ public final class PartyJoinGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal(party.displayName + " — Members").withStyle(ChatFormatting.AQUA));
 
-        fillPane(gui, 54, Items.GRAY_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.gray());
 
         int slot = 0;
         for (Map.Entry<String, PoliticalPartyManager.PartyMember> entry : sorted) {
@@ -626,7 +626,7 @@ public final class PartyJoinGui {
 
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Manage: " + name).withStyle(ChatFormatting.AQUA));
-        fillPane(gui, 27, Items.LIGHT_BLUE_STAINED_GLASS_PANE);
+        fillPane(gui, 27, Items.STAINED_GLASS_PANE.lightBlue());
 
         gui.setSlot(4, new GuiElementBuilder(Items.PLAYER_HEAD)
                 .setName(Component.literal(name).withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD))
@@ -636,7 +636,7 @@ public final class PartyJoinGui {
         if (PoliticalPartyManager.canPromote(myRank, currentRank)) {
             int nextIdx = PoliticalPartyManager.RANK_ORDER.indexOf(currentRank) - 1;
             String nextRank = PoliticalPartyManager.RANK_ORDER.get(nextIdx);
-            gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+            gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                     .setName(Component.literal("Promote").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(currentRank + " -> " + nextRank).withStyle(ChatFormatting.GRAY))
                     .setCallback((index, type, containerInput, slotGui) -> {
@@ -645,7 +645,7 @@ public final class PartyJoinGui {
                     })
                     .build());
         } else {
-            gui.setSlot(11, new GuiElementBuilder(Items.GRAY_DYE)
+            gui.setSlot(11, new GuiElementBuilder(Items.DYE.gray())
                     .setName(Component.literal("Promote").withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal("Cannot promote further").withStyle(ChatFormatting.DARK_GRAY))
                     .build());
@@ -654,7 +654,7 @@ public final class PartyJoinGui {
         if (PoliticalPartyManager.canDemote(myRank, currentRank)) {
             int nextIdx = PoliticalPartyManager.RANK_ORDER.indexOf(currentRank) + 1;
             String nextRank = PoliticalPartyManager.RANK_ORDER.get(nextIdx);
-            gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+            gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("Demote").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(currentRank + " -> " + nextRank).withStyle(ChatFormatting.GRAY))
                     .setCallback((index, type, containerInput, slotGui) -> {
@@ -663,7 +663,7 @@ public final class PartyJoinGui {
                     })
                     .build());
         } else {
-            gui.setSlot(15, new GuiElementBuilder(Items.GRAY_DYE)
+            gui.setSlot(15, new GuiElementBuilder(Items.DYE.gray())
                     .setName(Component.literal("Demote").withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal("Cannot demote further").withStyle(ChatFormatting.DARK_GRAY))
                     .build());
@@ -744,9 +744,9 @@ public final class PartyJoinGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Leave " + partyName + "?").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
 
-        fillPane(gui, 27, Items.RED_STAINED_GLASS_PANE);
+        fillPane(gui, 27, Items.STAINED_GLASS_PANE.red());
 
-        gui.setSlot(11, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(11, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("Confirm Leave").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("You will lose your support rank.").withStyle(ChatFormatting.RED))
                 .addLoreLine(Component.literal("24h cooldown to join another party.").withStyle(ChatFormatting.GRAY))
@@ -756,7 +756,7 @@ public final class PartyJoinGui {
                 })
                 .build());
 
-        gui.setSlot(15, new GuiElementBuilder(Items.RED_CONCRETE)
+        gui.setSlot(15, new GuiElementBuilder(Items.CONCRETE.red())
                 .setName(Component.literal("Cancel").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .setCallback((index, type, containerInput, slotGui) -> open(player))
                 .build());
@@ -772,7 +772,7 @@ public final class PartyJoinGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("All Parties").withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD));
 
-        fillPane(gui, 54, Items.GRAY_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.gray());
 
         String rulingId = PoliticalPartyManager.getRulingPartyId();
         int slot = 10;
@@ -821,7 +821,7 @@ public final class PartyJoinGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Choose your party").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
-        fillPane(gui, 54, Items.GRAY_STAINED_GLASS_PANE);
+        fillPane(gui, 54, Items.STAINED_GLASS_PANE.gray());
 
         String rulingId = PoliticalPartyManager.getRulingPartyId();
 
@@ -940,7 +940,7 @@ public final class PartyJoinGui {
         gui.setTitle(Component.literal("Party Commissions").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();

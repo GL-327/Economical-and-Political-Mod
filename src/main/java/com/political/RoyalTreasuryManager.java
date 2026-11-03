@@ -34,7 +34,7 @@ public final class RoyalTreasuryManager {
         gui.setTitle(Component.literal("\uD83C\uDFDB Royal Treasury").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         long bal = DataManager.getCoins(player.getUUID().toString());

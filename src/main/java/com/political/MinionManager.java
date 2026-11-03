@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.economy.BazaarManager;
 import com.political.economy.CoinManager;
 import com.google.gson.Gson;
@@ -323,7 +324,7 @@ public final class MinionManager {
         while (left > 0) {
             int stack = Math.min(left, c.material.getDefaultMaxStackSize());
             ItemStack give = new ItemStack(c.material, stack);
-            if (!player.getInventory().add(give)) player.drop(give, false);
+            if (!player.getInventory().add(give)) player.drop(give, false, Prediction.SERVER_ONLY);
             left -= stack;
         }
     }

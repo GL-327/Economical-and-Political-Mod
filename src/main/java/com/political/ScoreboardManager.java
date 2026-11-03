@@ -285,7 +285,7 @@ public class ScoreboardManager {
             ClassManager.PlayerClass playerClass = ClassManager.getPlayerClass(uuid);
             if (playerClass != null) {
                 int classLevel = ClassManager.getClassLevel(uuid, playerClass);
-                lines.add("§" + playerClass.color.getChar() + " ⚔ " + playerClass.name + " §7Lv." + classLevel);
+                lines.add("§" + playerClass.color.toString().charAt(1) + " ⚔ " + playerClass.name + " §7Lv." + classLevel);
             }
         }
 

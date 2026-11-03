@@ -317,7 +317,7 @@ public class ArmorAbilityHandler {
                 if (entity.isSprinting()) madeNoise = true;
 
                 // 2. Entity is attacking
-                if (entity.swinging) madeNoise = true;
+                if (entity.isSwinging()) madeNoise = true;
 
                 // 3. Entity is moving (very low threshold to catch walking)
                 double velocitySq = entity.getDeltaMovement().horizontalDistanceSqr();
@@ -1389,7 +1389,7 @@ public class ArmorAbilityHandler {
         // 1% chance to strike target with lightning
         if (Math.random() < 0.01) {
             ServerLevel world = (ServerLevel) player.level();
-            net.minecraft.world.entity.LightningBolt lightning = net.minecraft.world.entity.EntityType.LIGHTNING_BOLT.create(world, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+            net.minecraft.world.entity.LightningBolt lightning = net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(world, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
             if (lightning != null) {
                 lightning.setPos(target.getX(), target.getY(), target.getZ());
                 world.addFreshEntity(lightning);

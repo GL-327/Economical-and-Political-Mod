@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import com.political.recipe.RecipeConfigManager;
@@ -332,7 +333,7 @@ public final class ExpeditionRewards {
 
     private static void giveOrDrop(ServerPlayer player, ItemStack stack) {
         if (!player.addItem(stack)) {
-            player.drop(stack, false);
+            player.drop(stack, false, Prediction.SERVER_ONLY);
         }
     }
 

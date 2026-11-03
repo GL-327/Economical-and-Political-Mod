@@ -55,7 +55,7 @@ public class ProgressionTreeGui {
         long lifetimePoints = ProgressionTreeManager.getLifetimePoints(uuid);
         int totalTiers = ProgressionTreeManager.getTotalTiers(uuid);
 
-        fillBackground(gui, Items.BLACK_STAINED_GLASS_PANE);
+        fillBackground(gui, Items.STAINED_GLASS_PANE.black());
 
         gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
             .setName(Component.literal("§6§l✦ Heart of the Forest ✦"))
@@ -155,7 +155,7 @@ public class ProgressionTreeGui {
         int currentTier = ProgressionTreeManager.getTier(uuid, branch);
         long lifetime = ProgressionTreeManager.getLifetimePoints(uuid);
 
-        fillBackground(gui, Items.GRAY_STAINED_GLASS_PANE);
+        fillBackground(gui, Items.STAINED_GLASS_PANE.gray());
 
         placePaths(gui, currentTier);
 
@@ -174,13 +174,13 @@ public class ProgressionTreeGui {
 
             GuiElementBuilder builder;
             if (unlocked) {
-                builder = new GuiElementBuilder(Items.LIME_CONCRETE);
+                builder = new GuiElementBuilder(Items.CONCRETE.lime());
                 builder.setName(Component.literal("§a✔ " + tierLabel));
             } else if (isNext) {
-                builder = new GuiElementBuilder(Items.YELLOW_CONCRETE);
+                builder = new GuiElementBuilder(Items.CONCRETE.yellow());
                 builder.setName(Component.literal("§e➤ " + tierLabel));
             } else {
-                builder = new GuiElementBuilder(Items.RED_CONCRETE);
+                builder = new GuiElementBuilder(Items.CONCRETE.red());
                 builder.setName(Component.literal("§c✖ " + tierLabel));
             }
 
@@ -271,7 +271,7 @@ public class ProgressionTreeGui {
                 placed[row][col] = true;
 
                 gui.setSlot(slot, new GuiElementBuilder(
-                    unlocked ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE
+                    unlocked ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red()
                 ).setName(Component.literal(unlocked ? "§a│" : "§c│")).build());
             }
         }
@@ -291,7 +291,7 @@ public class ProgressionTreeGui {
             boolean unlocked = associatedTier <= currentTier;
 
             gui.setSlot(slot, new GuiElementBuilder(
-                unlocked ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE
+                unlocked ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red()
             ).setName(Component.literal(unlocked ? "§a│" : "§c│")).build());
         }
     }

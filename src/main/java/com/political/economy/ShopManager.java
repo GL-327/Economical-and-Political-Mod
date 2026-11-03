@@ -73,7 +73,7 @@ public class ShopManager {
                 // Quartz
                 Items.QUARTZ_BLOCK, Items.SMOOTH_QUARTZ, Items.QUARTZ_BRICKS, Items.QUARTZ_PILLAR,
                 // Special blocks
-                Items.COPPER_BLOCK, Items.EXPOSED_COPPER, Items.WEATHERED_COPPER, Items.OXIDIZED_COPPER
+                Items.COPPER_BLOCK.weathering().unaffected(), Items.COPPER_BLOCK.weathering().exposed(), Items.COPPER_BLOCK.weathering().weathered(), Items.COPPER_BLOCK.weathering().oxidized()
                 // Ore blocks - REMOVED to prevent dupes (these are in Ores & Materials category)
                 // Material blocks (iron/gold/diamond/emerald/lapis/redstone/netherite blocks) - REMOVED - see Material Blocks category
         );
@@ -122,7 +122,7 @@ public class ShopManager {
                 Items.TURTLE_SCUTE, Items.ARMADILLO_SCUTE, Items.GOAT_HORN,
                 Items.EXPERIENCE_BOTTLE,
                 Items.NAUTILUS_SHELL, Items.TURTLE_EGG,
-                Items.WHITE_WOOL, Items.BLACK_WOOL, Items.COBWEB
+                Items.WOOL.white(), Items.WOOL.black(), Items.COBWEB
         );
         CATEGORIES.put("Mob Drops", mobDrops);
 
@@ -136,7 +136,7 @@ public class ShopManager {
                 Items.STONE_PRESSURE_PLATE, Items.OAK_PRESSURE_PLATE,
                 Items.LIGHT_WEIGHTED_PRESSURE_PLATE, Items.HEAVY_WEIGHTED_PRESSURE_PLATE,
                 Items.TRIPWIRE_HOOK, Items.TRAPPED_CHEST, Items.TNT,
-                Items.NOTE_BLOCK, Items.JUKEBOX, Items.DAYLIGHT_DETECTOR, Items.TARGET, Items.LIGHTNING_ROD,
+                Items.NOTE_BLOCK, Items.JUKEBOX, Items.DAYLIGHT_DETECTOR, Items.TARGET, Items.LIGHTNING_ROD.weathering().unaffected(),
                 Items.SCULK_SENSOR, Items.CALIBRATED_SCULK_SENSOR
         );
         CATEGORIES.put("Redstone", redstone);
@@ -174,18 +174,18 @@ public class ShopManager {
 
         // ===== DYES & DECORATION =====
         List<Item> dyesDecoration = Arrays.asList(
-                Items.WHITE_DYE, Items.ORANGE_DYE, Items.MAGENTA_DYE, Items.LIGHT_BLUE_DYE,
-                Items.YELLOW_DYE, Items.LIME_DYE, Items.PINK_DYE, Items.GRAY_DYE, Items.LIGHT_GRAY_DYE,
-                Items.CYAN_DYE, Items.PURPLE_DYE, Items.BLUE_DYE, Items.BROWN_DYE, Items.GREEN_DYE,
-                Items.RED_DYE, Items.BLACK_DYE,
-                Items.WHITE_CONCRETE, Items.ORANGE_CONCRETE, Items.MAGENTA_CONCRETE, Items.LIGHT_BLUE_CONCRETE,
-                Items.YELLOW_CONCRETE, Items.LIME_CONCRETE, Items.PINK_CONCRETE, Items.GRAY_CONCRETE,
-                Items.LIGHT_GRAY_CONCRETE, Items.CYAN_CONCRETE, Items.PURPLE_CONCRETE, Items.BLUE_CONCRETE,
-                Items.BROWN_CONCRETE, Items.GREEN_CONCRETE, Items.RED_CONCRETE, Items.BLACK_CONCRETE,
-                Items.WHITE_CONCRETE_POWDER, Items.BLACK_CONCRETE_POWDER,
-                Items.TERRACOTTA, Items.WHITE_TERRACOTTA, Items.ORANGE_TERRACOTTA, Items.BLACK_TERRACOTTA,
-                Items.WHITE_GLAZED_TERRACOTTA, Items.BLACK_GLAZED_TERRACOTTA,
-                Items.WHITE_STAINED_GLASS, Items.BLACK_STAINED_GLASS
+                Items.DYE.white(), Items.DYE.orange(), Items.DYE.magenta(), Items.DYE.lightBlue(),
+                Items.DYE.yellow(), Items.DYE.lime(), Items.DYE.pink(), Items.DYE.gray(), Items.DYE.lightGray(),
+                Items.DYE.cyan(), Items.DYE.purple(), Items.DYE.blue(), Items.DYE.brown(), Items.DYE.green(),
+                Items.DYE.red(), Items.DYE.black(),
+                Items.CONCRETE.white(), Items.CONCRETE.orange(), Items.CONCRETE.magenta(), Items.CONCRETE.lightBlue(),
+                Items.CONCRETE.yellow(), Items.CONCRETE.lime(), Items.CONCRETE.pink(), Items.CONCRETE.gray(),
+                Items.CONCRETE.lightGray(), Items.CONCRETE.cyan(), Items.CONCRETE.purple(), Items.CONCRETE.blue(),
+                Items.CONCRETE.brown(), Items.CONCRETE.green(), Items.CONCRETE.red(), Items.CONCRETE.black(),
+                Items.CONCRETE_POWDER.white(), Items.CONCRETE_POWDER.black(),
+                Items.TERRACOTTA, Items.DYED_TERRACOTTA.white(), Items.DYED_TERRACOTTA.orange(), Items.DYED_TERRACOTTA.black(),
+                Items.GLAZED_TERRACOTTA.white(), Items.GLAZED_TERRACOTTA.black(),
+                Items.STAINED_GLASS.white(), Items.STAINED_GLASS.black()
         );
         CATEGORIES.put("Dyes & Decoration", dyesDecoration);
 
@@ -199,7 +199,7 @@ public class ShopManager {
                 Items.MINECART, Items.CHEST_MINECART, Items.FURNACE_MINECART, Items.TNT_MINECART, Items.HOPPER_MINECART,
                 Items.OAK_BOAT, Items.OAK_CHEST_BOAT, Items.BAMBOO_RAFT,
                 Items.RAIL, Items.POWERED_RAIL, Items.DETECTOR_RAIL, Items.ACTIVATOR_RAIL,
-                Items.CHEST, Items.ENDER_CHEST, Items.SHULKER_BOX, Items.WHITE_SHULKER_BOX, Items.BLACK_SHULKER_BOX,
+                Items.CHEST, Items.ENDER_CHEST, Items.SHULKER_BOX, Items.DYED_SHULKER_BOX.white(), Items.DYED_SHULKER_BOX.black(),
                 Items.BUNDLE, Items.RECOVERY_COMPASS, Items.SPONGE, Items.WET_SPONGE,
                 Items.RESPAWN_ANCHOR, Items.LODESTONE,
                 Items.SPAWNER // Silk touch pickaxe required to mine
@@ -225,15 +225,15 @@ public class ShopManager {
 
         // ===== WOOL & CARPETS =====
         List<Item> woolCarpets = Arrays.asList(
-                Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL, Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL, Items.RED_WOOL, Items.BLACK_WOOL,
-                Items.WHITE_CARPET, Items.ORANGE_CARPET, Items.MAGENTA_CARPET, Items.LIGHT_BLUE_CARPET, Items.YELLOW_CARPET, Items.LIME_CARPET, Items.PINK_CARPET, Items.GRAY_CARPET, Items.LIGHT_GRAY_CARPET, Items.CYAN_CARPET, Items.PURPLE_CARPET, Items.BLUE_CARPET, Items.BROWN_CARPET, Items.GREEN_CARPET, Items.RED_CARPET, Items.BLACK_CARPET
+                Items.WOOL.white(), Items.WOOL.orange(), Items.WOOL.magenta(), Items.WOOL.lightBlue(), Items.WOOL.yellow(), Items.WOOL.lime(), Items.WOOL.pink(), Items.WOOL.gray(), Items.WOOL.lightGray(), Items.WOOL.cyan(), Items.WOOL.purple(), Items.WOOL.blue(), Items.WOOL.brown(), Items.WOOL.green(), Items.WOOL.red(), Items.WOOL.black(),
+                Items.CARPET.white(), Items.CARPET.orange(), Items.CARPET.magenta(), Items.CARPET.lightBlue(), Items.CARPET.yellow(), Items.CARPET.lime(), Items.CARPET.pink(), Items.CARPET.gray(), Items.CARPET.lightGray(), Items.CARPET.cyan(), Items.CARPET.purple(), Items.CARPET.blue(), Items.CARPET.brown(), Items.CARPET.green(), Items.CARPET.red(), Items.CARPET.black()
         );
         CATEGORIES.put("Wool & Carpets", woolCarpets);
 
         // ===== HEADS & BANNERS =====
         List<Item> headsBanners = Arrays.asList(
                 Items.PLAYER_HEAD, Items.ZOMBIE_HEAD, Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, Items.CREEPER_HEAD, Items.PIGLIN_HEAD, Items.DRAGON_HEAD,
-                Items.WHITE_BANNER, Items.BLACK_BANNER, Items.RED_BANNER, Items.BLUE_BANNER
+                Items.BANNER.white(), Items.BANNER.black(), Items.BANNER.red(), Items.BANNER.blue()
         );
         CATEGORIES.put("Heads & Banners", headsBanners);
 
@@ -341,10 +341,10 @@ public class ShopManager {
         setPrice(Items.QUARTZ_PILLAR, 16);
 
         // Copper blocks
-        setPrice(Items.COPPER_BLOCK, 45);
-        setPrice(Items.EXPOSED_COPPER, 45);
-        setPrice(Items.WEATHERED_COPPER, 45);
-        setPrice(Items.OXIDIZED_COPPER, 45);
+        setPrice(Items.COPPER_BLOCK.weathering().unaffected(), 45);
+        setPrice(Items.COPPER_BLOCK.weathering().exposed(), 45);
+        setPrice(Items.COPPER_BLOCK.weathering().weathered(), 45);
+        setPrice(Items.COPPER_BLOCK.weathering().oxidized(), 45);
 
         // ===== ORES & RAW MATERIALS =====
         setPrice(Items.COAL, 2);
@@ -369,7 +369,7 @@ public class ShopManager {
         // Ore blocks (9 ingots each)
         setPrice(Items.COAL_BLOCK, 18);
         setPrice(Items.IRON_BLOCK, 135);
-        setPrice(Items.COPPER_BLOCK, 45);
+        setPrice(Items.COPPER_BLOCK.weathering().unaffected(), 45);
         setPrice(Items.GOLD_BLOCK, 405);
         setPrice(Items.DIAMOND_BLOCK, 900);
         setPrice(Items.EMERALD_BLOCK, 720);
@@ -466,8 +466,8 @@ public class ShopManager {
         setPrice(Items.EXPERIENCE_BOTTLE, 30);
         setPrice(Items.NAUTILUS_SHELL, 80);
         setPrice(Items.TURTLE_EGG, 30);
-        setPrice(Items.WHITE_WOOL, 2);
-        setPrice(Items.BLACK_WOOL, 2);
+        setPrice(Items.WOOL.white(), 2);
+        setPrice(Items.WOOL.black(), 2);
         setPrice(Items.COBWEB, 15);
 
         // ===== REDSTONE =====
@@ -499,7 +499,7 @@ public class ShopManager {
         setPrice(Items.JUKEBOX, 50);
         setPrice(Items.DAYLIGHT_DETECTOR, 20);
         setPrice(Items.TARGET, 25);
-        setPrice(Items.LIGHTNING_ROD, 15);
+        setPrice(Items.LIGHTNING_ROD.weathering().unaffected(), 15);
         setPrice(Items.SCULK_SENSOR, 30);
         setPrice(Items.CALIBRATED_SCULK_SENSOR, 60);
 
@@ -574,48 +574,48 @@ public class ShopManager {
         setPrice(Items.GLOWSTONE_DUST, 8);
 
         // ===== DYES =====
-        setPrice(Items.WHITE_DYE, 2);
-        setPrice(Items.ORANGE_DYE, 2);
-        setPrice(Items.MAGENTA_DYE, 2);
-        setPrice(Items.LIGHT_BLUE_DYE, 2);
-        setPrice(Items.YELLOW_DYE, 2);
-        setPrice(Items.LIME_DYE, 2);
-        setPrice(Items.PINK_DYE, 2);
-        setPrice(Items.GRAY_DYE, 2);
-        setPrice(Items.LIGHT_GRAY_DYE, 2);
-        setPrice(Items.CYAN_DYE, 2);
-        setPrice(Items.PURPLE_DYE, 2);
-        setPrice(Items.BLUE_DYE, 2);
-        setPrice(Items.BROWN_DYE, 2);
-        setPrice(Items.GREEN_DYE, 2);
-        setPrice(Items.RED_DYE, 2);
-        setPrice(Items.BLACK_DYE, 2);
-        setPrice(Items.WHITE_CONCRETE, 3);
-        setPrice(Items.ORANGE_CONCRETE, 3);
-        setPrice(Items.MAGENTA_CONCRETE, 3);
-        setPrice(Items.LIGHT_BLUE_CONCRETE, 3);
-        setPrice(Items.YELLOW_CONCRETE, 3);
-        setPrice(Items.LIME_CONCRETE, 3);
-        setPrice(Items.PINK_CONCRETE, 3);
-        setPrice(Items.GRAY_CONCRETE, 3);
-        setPrice(Items.LIGHT_GRAY_CONCRETE, 3);
-        setPrice(Items.CYAN_CONCRETE, 3);
-        setPrice(Items.PURPLE_CONCRETE, 3);
-        setPrice(Items.BLUE_CONCRETE, 3);
-        setPrice(Items.BROWN_CONCRETE, 3);
-        setPrice(Items.GREEN_CONCRETE, 3);
-        setPrice(Items.RED_CONCRETE, 3);
-        setPrice(Items.BLACK_CONCRETE, 3);
-        setPrice(Items.WHITE_CONCRETE_POWDER, 2);
-        setPrice(Items.BLACK_CONCRETE_POWDER, 2);
+        setPrice(Items.DYE.white(), 2);
+        setPrice(Items.DYE.orange(), 2);
+        setPrice(Items.DYE.magenta(), 2);
+        setPrice(Items.DYE.lightBlue(), 2);
+        setPrice(Items.DYE.yellow(), 2);
+        setPrice(Items.DYE.lime(), 2);
+        setPrice(Items.DYE.pink(), 2);
+        setPrice(Items.DYE.gray(), 2);
+        setPrice(Items.DYE.lightGray(), 2);
+        setPrice(Items.DYE.cyan(), 2);
+        setPrice(Items.DYE.purple(), 2);
+        setPrice(Items.DYE.blue(), 2);
+        setPrice(Items.DYE.brown(), 2);
+        setPrice(Items.DYE.green(), 2);
+        setPrice(Items.DYE.red(), 2);
+        setPrice(Items.DYE.black(), 2);
+        setPrice(Items.CONCRETE.white(), 3);
+        setPrice(Items.CONCRETE.orange(), 3);
+        setPrice(Items.CONCRETE.magenta(), 3);
+        setPrice(Items.CONCRETE.lightBlue(), 3);
+        setPrice(Items.CONCRETE.yellow(), 3);
+        setPrice(Items.CONCRETE.lime(), 3);
+        setPrice(Items.CONCRETE.pink(), 3);
+        setPrice(Items.CONCRETE.gray(), 3);
+        setPrice(Items.CONCRETE.lightGray(), 3);
+        setPrice(Items.CONCRETE.cyan(), 3);
+        setPrice(Items.CONCRETE.purple(), 3);
+        setPrice(Items.CONCRETE.blue(), 3);
+        setPrice(Items.CONCRETE.brown(), 3);
+        setPrice(Items.CONCRETE.green(), 3);
+        setPrice(Items.CONCRETE.red(), 3);
+        setPrice(Items.CONCRETE.black(), 3);
+        setPrice(Items.CONCRETE_POWDER.white(), 2);
+        setPrice(Items.CONCRETE_POWDER.black(), 2);
         setPrice(Items.TERRACOTTA, 2);
-        setPrice(Items.WHITE_TERRACOTTA, 3);
-        setPrice(Items.ORANGE_TERRACOTTA, 3);
-        setPrice(Items.BLACK_TERRACOTTA, 3);
-        setPrice(Items.WHITE_GLAZED_TERRACOTTA, 5);
-        setPrice(Items.BLACK_GLAZED_TERRACOTTA, 5);
-        setPrice(Items.WHITE_STAINED_GLASS, 3);
-        setPrice(Items.BLACK_STAINED_GLASS, 3);
+        setPrice(Items.DYED_TERRACOTTA.white(), 3);
+        setPrice(Items.DYED_TERRACOTTA.orange(), 3);
+        setPrice(Items.DYED_TERRACOTTA.black(), 3);
+        setPrice(Items.GLAZED_TERRACOTTA.white(), 5);
+        setPrice(Items.GLAZED_TERRACOTTA.black(), 5);
+        setPrice(Items.STAINED_GLASS.white(), 3);
+        setPrice(Items.STAINED_GLASS.black(), 3);
 
         // ===== MISCELLANEOUS =====
         setPrice(Items.BUCKET, 15);
@@ -649,8 +649,8 @@ public class ShopManager {
         setPrice(Items.CHEST, 5);
         setPrice(Items.ENDER_CHEST, 300);
         setPrice(Items.SHULKER_BOX, 250);  // 2 shells + chest = 200+5, priced higher
-        setPrice(Items.WHITE_SHULKER_BOX, 252);
-        setPrice(Items.BLACK_SHULKER_BOX, 252);
+        setPrice(Items.DYED_SHULKER_BOX.white(), 252);
+        setPrice(Items.DYED_SHULKER_BOX.black(), 252);
         setPrice(Items.BUNDLE, 30);
         setPrice(Items.RECOVERY_COMPASS, 200);
         setPrice(Items.SPONGE, 150);
@@ -660,36 +660,36 @@ public class ShopManager {
         setPrice(Items.SPAWNER, 1_000_000); // 1M - requires silk touch to mine
 
         // ===== WOOL & CARPETS =====
-        setPrice(Items.ORANGE_WOOL, 2);
-        setPrice(Items.MAGENTA_WOOL, 2);
-        setPrice(Items.LIGHT_BLUE_WOOL, 2);
-        setPrice(Items.YELLOW_WOOL, 2);
-        setPrice(Items.LIME_WOOL, 2);
-        setPrice(Items.PINK_WOOL, 2);
-        setPrice(Items.GRAY_WOOL, 2);
-        setPrice(Items.LIGHT_GRAY_WOOL, 2);
-        setPrice(Items.CYAN_WOOL, 2);
-        setPrice(Items.PURPLE_WOOL, 2);
-        setPrice(Items.BLUE_WOOL, 2);
-        setPrice(Items.BROWN_WOOL, 2);
-        setPrice(Items.GREEN_WOOL, 2);
-        setPrice(Items.RED_WOOL, 2);
-        setPrice(Items.WHITE_CARPET, 1);
-        setPrice(Items.ORANGE_CARPET, 1);
-        setPrice(Items.MAGENTA_CARPET, 1);
-        setPrice(Items.LIGHT_BLUE_CARPET, 1);
-        setPrice(Items.YELLOW_CARPET, 1);
-        setPrice(Items.LIME_CARPET, 1);
-        setPrice(Items.PINK_CARPET, 1);
-        setPrice(Items.GRAY_CARPET, 1);
-        setPrice(Items.LIGHT_GRAY_CARPET, 1);
-        setPrice(Items.CYAN_CARPET, 1);
-        setPrice(Items.PURPLE_CARPET, 1);
-        setPrice(Items.BLUE_CARPET, 1);
-        setPrice(Items.BROWN_CARPET, 1);
-        setPrice(Items.GREEN_CARPET, 1);
-        setPrice(Items.RED_CARPET, 1);
-        setPrice(Items.BLACK_CARPET, 1);
+        setPrice(Items.WOOL.orange(), 2);
+        setPrice(Items.WOOL.magenta(), 2);
+        setPrice(Items.WOOL.lightBlue(), 2);
+        setPrice(Items.WOOL.yellow(), 2);
+        setPrice(Items.WOOL.lime(), 2);
+        setPrice(Items.WOOL.pink(), 2);
+        setPrice(Items.WOOL.gray(), 2);
+        setPrice(Items.WOOL.lightGray(), 2);
+        setPrice(Items.WOOL.cyan(), 2);
+        setPrice(Items.WOOL.purple(), 2);
+        setPrice(Items.WOOL.blue(), 2);
+        setPrice(Items.WOOL.brown(), 2);
+        setPrice(Items.WOOL.green(), 2);
+        setPrice(Items.WOOL.red(), 2);
+        setPrice(Items.CARPET.white(), 1);
+        setPrice(Items.CARPET.orange(), 1);
+        setPrice(Items.CARPET.magenta(), 1);
+        setPrice(Items.CARPET.lightBlue(), 1);
+        setPrice(Items.CARPET.yellow(), 1);
+        setPrice(Items.CARPET.lime(), 1);
+        setPrice(Items.CARPET.pink(), 1);
+        setPrice(Items.CARPET.gray(), 1);
+        setPrice(Items.CARPET.lightGray(), 1);
+        setPrice(Items.CARPET.cyan(), 1);
+        setPrice(Items.CARPET.purple(), 1);
+        setPrice(Items.CARPET.blue(), 1);
+        setPrice(Items.CARPET.brown(), 1);
+        setPrice(Items.CARPET.green(), 1);
+        setPrice(Items.CARPET.red(), 1);
+        setPrice(Items.CARPET.black(), 1);
 
         // ===== HEADS & BANNERS =====
         setPrice(Items.PLAYER_HEAD, 100);
@@ -699,10 +699,10 @@ public class ShopManager {
         setPrice(Items.CREEPER_HEAD, 75);
         setPrice(Items.PIGLIN_HEAD, 75);
         setPrice(Items.DRAGON_HEAD, 5000);
-        setPrice(Items.WHITE_BANNER, 5);
-        setPrice(Items.BLACK_BANNER, 5);
-        setPrice(Items.RED_BANNER, 5);
-        setPrice(Items.BLUE_BANNER, 5);
+        setPrice(Items.BANNER.white(), 5);
+        setPrice(Items.BANNER.black(), 5);
+        setPrice(Items.BANNER.red(), 5);
+        setPrice(Items.BANNER.blue(), 5);
 
         // ===== CUSTOM ITEMS - COMPACTED MATERIALS (REMOVED - Dupe Prevention) =====
         // Compacted items pricing removed to prevent crafting/selling dupe exploits

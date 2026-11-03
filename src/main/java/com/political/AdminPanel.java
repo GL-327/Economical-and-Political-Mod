@@ -367,7 +367,7 @@ public final class AdminPanel {
 
         // Moderation.
         boolean prisoner = PrisonManager.isPrisoner(target.getUUID().toString());
-        gui.setSlot(32, GuiKit.action(prisoner ? Items.LIME_DYE : Items.IRON_BARS,
+        gui.setSlot(32, GuiKit.action(prisoner ? Items.DYE.lime() : Items.IRON_BARS,
                 prisoner ? "Release from prison" : "Imprison", ChatFormatting.RED,
                 () -> {
                     if (prisoner) {
@@ -390,12 +390,12 @@ public final class AdminPanel {
                     openPlayerCard(admin, target);
                 }, VanishManager.isVanished(target) ? "Currently hidden" : "Currently visible"));
 
-        gui.setSlot(34, GuiKit.action(Items.LIGHTNING_ROD, "Smite", ChatFormatting.YELLOW,
+        gui.setSlot(34, GuiKit.action(Items.LIGHTNING_ROD.weathering().unaffected(), "Smite", ChatFormatting.YELLOW,
                 () -> GuiKit.confirm(admin, "Smite " + name,
                         "Strikes them with lightning where they stand.",
                         () -> {
                             ServerLevel lvl = ((ServerLevel) target.level());
-                            var bolt = net.minecraft.world.entity.EntityType.LIGHTNING_BOLT.create(
+                            var bolt = net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(
                                     lvl, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
                             if (bolt != null) {
                                 bolt.snapTo(target.getX(), target.getY(), target.getZ());
@@ -536,13 +536,13 @@ public final class AdminPanel {
                 () -> AdminGui.openPage(player, AdminGui.AdminPage.GOVERNMENT),
                 "Chair, vice, judge and dictator"));
 
-        gui.setSlot(21, GuiKit.tile(Items.WHITE_BANNER, "Parties", ChatFormatting.AQUA,
+        gui.setSlot(21, GuiKit.tile(Items.BANNER.white(), "Parties", ChatFormatting.AQUA,
                 () -> PartyLeaderGui.open(player), "Membership and leadership"));
 
         gui.setSlot(22, GuiKit.tile(Items.END_CRYSTAL, "High council", ChatFormatting.LIGHT_PURPLE,
                 () -> HighCouncilGui.open(player), "The layer above the chair"));
 
-        gui.setSlot(23, GuiKit.tile(Items.BLACK_BANNER, "Shadow government", ChatFormatting.DARK_GRAY,
+        gui.setSlot(23, GuiKit.tile(Items.BANNER.black(), "Shadow government", ChatFormatting.DARK_GRAY,
                 () -> {
                     Settlement home = SettlementManager.getRegisteredSettlement(
                             player.getUUID().toString());
@@ -619,7 +619,7 @@ public final class AdminPanel {
                 "Population " + s.population,
                 "Appeal " + s.appeal);
 
-        gui.setSlot(19, GuiKit.info(Items.RED_BED, "Beds", ChatFormatting.RED,
+        gui.setSlot(19, GuiKit.info(Items.BED.red(), "Beds", ChatFormatting.RED,
                 String.valueOf(s.beds), "Needs " + tier.minBeds + " for this tier"));
 
         gui.setSlot(20, GuiKit.info(Items.EMERALD, "Appeal", ChatFormatting.GREEN,
@@ -793,7 +793,7 @@ public final class AdminPanel {
         gui.setSlot(24, GuiKit.tile(Items.BOOK, "Bestiary", ChatFormatting.GREEN,
                 () -> BestiaryGui.open(player), "What has been discovered"));
 
-        gui.setSlot(31, GuiKit.tile(Items.RED_BANNER, "Sieges", ChatFormatting.DARK_RED,
+        gui.setSlot(31, GuiKit.tile(Items.BANNER.red(), "Sieges", ChatFormatting.DARK_RED,
                 () -> SiegeGui.openAdmin(player),
                 SiegeManager.count() + " running",
                 "Send an army at a settlement"));
@@ -858,7 +858,7 @@ public final class AdminPanel {
                     openWorld(player);
                 }, "Morning in this dimension"));
 
-        gui.setSlot(20, GuiKit.action(Items.BLACK_DYE, "Set night", ChatFormatting.DARK_GRAY,
+        gui.setSlot(20, GuiKit.action(Items.DYE.black(), "Set night", ChatFormatting.DARK_GRAY,
                 () -> {
                     run(player, "time set night");
                     openWorld(player);
@@ -870,7 +870,7 @@ public final class AdminPanel {
                     openWorld(player);
                 }, "Stops rain and thunder"));
 
-        gui.setSlot(22, GuiKit.action(Items.LIGHTNING_ROD, "Start a storm", ChatFormatting.BLUE,
+        gui.setSlot(22, GuiKit.action(Items.LIGHTNING_ROD.weathering().unaffected(), "Start a storm", ChatFormatting.BLUE,
                 () -> {
                     run(player, "weather thunder");
                     openWorld(player);
@@ -889,7 +889,7 @@ public final class AdminPanel {
         gui.setSlot(29, GuiKit.tile(Items.BEACON, "World events", ChatFormatting.LIGHT_PURPLE,
                 () -> LivingWorldGui.open(player), "What the world is doing on its own"));
 
-        gui.setSlot(30, GuiKit.action(Items.RED_BED, "Set spawn here", ChatFormatting.RED,
+        gui.setSlot(30, GuiKit.action(Items.BED.red(), "Set spawn here", ChatFormatting.RED,
                 () -> GuiKit.confirm(player, "Move world spawn",
                         "Every new player will arrive where you are standing.",
                         () -> {

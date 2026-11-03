@@ -1040,7 +1040,7 @@ public class CustomItemsGui {
             gui.setSlot(base, new GuiElementBuilder(set.icon)
                     .setName(Component.literal(set.name + " Tools").withStyle(set.color, ChatFormatting.BOLD))
                     .glow().build());
-            gui.setSlot(base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(base + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
 
             ItemStack[] tools = { set.pickaxe, set.axe, set.shovel, set.hoe };
@@ -1124,7 +1124,7 @@ public class CustomItemsGui {
             gui.setSlot(row1Base, new GuiElementBuilder(set.icon)
                     .setName(Component.literal(set.name + " T1").withStyle(set.color, ChatFormatting.BOLD))
                     .glow().build());
-            gui.setSlot(row1Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(row1Base + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
 
             ItemStack[] t1Items = { set.t1Sword, set.t1Helmet, set.t1Chestplate, set.t1Leggings, set.t1Boots };
@@ -1144,7 +1144,7 @@ public class CustomItemsGui {
             gui.setSlot(row2Base, new GuiElementBuilder(set.icon)
                     .setName(Component.literal(set.name + " T2").withStyle(set.color, ChatFormatting.BOLD))
                     .glow().build());
-            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(row2Base + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
 
             ItemStack[] t2Items = { set.t2Sword, set.t2Helmet, set.t2Chestplate, set.t2Leggings, set.t2Boots };
@@ -1200,7 +1200,7 @@ public class CustomItemsGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -1247,7 +1247,7 @@ public class CustomItemsGui {
                     .build());
             
             // Gap slot (shifted armor 1 to the right)
-            gui.setSlot(slots[1], new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(slots[1], new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
 
@@ -1338,7 +1338,7 @@ public class CustomItemsGui {
 
         if (cat == Category.REFLECT_BLOCK_WEAPONS) {
             for (int i = 0; i < 54; i++) {
-                gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
             }
         } else {
             RecipeGuiTheme.fillCategoryItemGrid(gui, skyblockSpecial);
@@ -1520,7 +1520,7 @@ public class CustomItemsGui {
             final SlayerRecipes.Recipe recipeForCraft = finalRecipe;
             boolean canCraft = checkCanCraft(player, finalRecipe);
             if (canCraft) {
-                gui.setSlot(31, new GuiElementBuilder(Items.LIME_CONCRETE)
+                gui.setSlot(31, new GuiElementBuilder(Items.CONCRETE.lime())
                         .setName(Component.literal("⚡ Instant Craft").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                         .addLoreLine(Component.literal(""))
                         .addLoreLine(Component.literal("Click to craft instantly!").withStyle(ChatFormatting.YELLOW))
@@ -1535,7 +1535,7 @@ public class CustomItemsGui {
                         })
                         .build());
             } else {
-                gui.setSlot(31, new GuiElementBuilder(Items.RED_CONCRETE)
+                gui.setSlot(31, new GuiElementBuilder(Items.CONCRETE.red())
                         .setName(Component.literal("⚠ Cannot Craft").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                         .addLoreLine(Component.literal(""))
                         .addLoreLine(Component.literal("You don't have the required materials").withStyle(ChatFormatting.GRAY))

@@ -108,7 +108,7 @@ public final class DragonGearRecipeBootstrap {
         if (containsAny(t, "terra", "verdant", "moss", "swamp", "bloom", "pollen", "thorn", "leaf")) return Blocks.MOSS_BLOCK;
         if (containsAny(t, "venom", "blight", "hollow")) return Blocks.SLIME_BLOCK;
         if (containsAny(t, "star", "comet", "astral", "moon", "dawn")) return Blocks.GLOWSTONE;
-        if (containsAny(t, "storm", "thunder", "tempest", "vortex", "seeker")) return Blocks.LIGHTNING_ROD;
+        if (containsAny(t, "storm", "thunder", "tempest", "vortex", "seeker")) return Blocks.LIGHTNING_ROD.weathering().unaffected();
         if (containsAny(t, "prism", "arcane", "rune", "aurora")) return Blocks.AMETHYST_BLOCK;
 
         // Safe fallback.

@@ -70,7 +70,7 @@ public final class CompanionGui {
             boolean isActive = active == c;
             int lvl = CompanionManager.levelOf(uuid, c);
 
-            GuiElementBuilder b = new GuiElementBuilder(owned ? c.icon : Items.GRAY_DYE)
+            GuiElementBuilder b = new GuiElementBuilder(owned ? c.icon : Items.DYE.gray())
                     .setName(Component.literal(CompanionManager.nameOf(uuid, c))
                             .withStyle(owned ? c.colour : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§8" + c.rarity.colour + c.rarity.label

@@ -31,7 +31,7 @@ public class GovernmentTreasuryGui {
         gui.setTitle(Component.literal("Party budgets").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.YELLOW_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.yellow())
                     .setName(Component.literal("")).build());
         }
 

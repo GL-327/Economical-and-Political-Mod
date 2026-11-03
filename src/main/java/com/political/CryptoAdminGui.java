@@ -21,7 +21,7 @@ public class CryptoAdminGui {
         gui.setTitle(Component.literal("🔮 Crypto Admin"));
 
         // Background
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 27; i++) gui.setSlot(i, bg.build());
 
         // Header
@@ -89,7 +89,7 @@ public class CryptoAdminGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal(isGiveMode ? "💰 Give Crypto" : "💵 Set Price"));
 
-        GuiElementBuilder bg = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal(""));
+        GuiElementBuilder bg = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal(""));
         for (int i = 0; i < 54; i++) gui.setSlot(i, bg.build());
 
         gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)

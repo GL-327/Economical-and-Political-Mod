@@ -26,7 +26,7 @@ public class SetPriceGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -52,7 +52,7 @@ public class SetPriceGui {
                 Items.LANTERN,             // Decoration
                 Items.OAK_SAPLING,         // Plants
                 Items.BREWING_STAND,       // Brewing
-                Items.RED_DYE,             // Dyes
+                Items.DYE.red(),             // Dyes
                 Items.ENDER_PEARL          // Miscellaneous
         };
 
@@ -128,7 +128,7 @@ public class SetPriceGui {
 
         // Fill background (bottom row only)
         for (int i = 45; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -194,7 +194,7 @@ public class SetPriceGui {
         gui.setTitle(Component.literal("§6⚙ Edit: " + itemName));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -216,8 +216,8 @@ public class SetPriceGui {
 
         // Subtract buttons
         int[] diffs = {-1000, -100, -10, 10, 100, 1000};
-        Item[] diffIcons = {Items.RED_CONCRETE, Items.RED_CONCRETE, Items.RED_CONCRETE,
-                Items.LIME_CONCRETE, Items.LIME_CONCRETE, Items.LIME_CONCRETE};
+        Item[] diffIcons = {Items.CONCRETE.red(), Items.CONCRETE.red(), Items.CONCRETE.red(),
+                Items.CONCRETE.lime(), Items.CONCRETE.lime(), Items.CONCRETE.lime()};
         ChatFormatting[] diffColors = {ChatFormatting.DARK_RED, ChatFormatting.RED, ChatFormatting.LIGHT_PURPLE,
                 ChatFormatting.GREEN, ChatFormatting.YELLOW, ChatFormatting.GOLD};
         int[] diffSlots = {0, 1, 2, 6, 7, 8};
@@ -253,7 +253,7 @@ public class SetPriceGui {
                 .build());
 
         // Disable/Enable toggle
-        gui.setSlot(18, new GuiElementBuilder(disabled ? Items.GREEN_CONCRETE : Items.RED_CONCRETE)
+        gui.setSlot(18, new GuiElementBuilder(disabled ? Items.CONCRETE.green() : Items.CONCRETE.red())
                 .setName(disabled
                         ? Component.literal("Enable Item in Shop").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD)
                         : Component.literal("Disable Item from Shop").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))

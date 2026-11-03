@@ -104,7 +104,7 @@ public class SkeletonBowHandler {
         }
 
         UUID playerId = player.getUUID();
-        if (player.swinging) {
+        if (player.isSwinging()) {
             if (!currentlySwinging.contains(playerId)) {
                 // New swing started — fire shot
                 currentlySwinging.add(playerId);

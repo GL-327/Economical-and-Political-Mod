@@ -481,7 +481,7 @@ public class CivilCraftAchievements {
         int startIndex = page * 45;
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         int slot = 0;
@@ -489,7 +489,7 @@ public class CivilCraftAchievements {
             Achievement ach = achievements[i];
             boolean hasIt = unlocked.contains(ach.id);
 
-            GuiElementBuilder builder = new GuiElementBuilder(hasIt ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE)
+            GuiElementBuilder builder = new GuiElementBuilder(hasIt ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red())
                     .setName(Component.literal((hasIt ? "§a✓ " : "§c✗ ") + ach.name))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("§7" + ach.description))

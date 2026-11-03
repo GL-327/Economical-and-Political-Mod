@@ -20,7 +20,7 @@ public final class PartyLeaderElectionGui {
         gui.setTitle(Component.literal("Ruling party vote").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
 
         gui.setSlot(4, new GuiElementBuilder(Items.LECTERN)
@@ -44,7 +44,7 @@ public final class PartyLeaderElectionGui {
             String leaderName = leaderUuid != null ? DataManager.getPlayerName(leaderUuid) : "— (no members)";
             String v = PoliticalPartyManager.getLeaderElectionVotes().get(player.getUUID().toString());
             boolean votedHere = p.id.equals(v);
-            gui.setSlot(slot, new GuiElementBuilder(votedHere ? Items.LIME_DYE : Items.WHITE_BANNER)
+            gui.setSlot(slot, new GuiElementBuilder(votedHere ? Items.DYE.lime() : Items.BANNER.white())
                     .setName(Component.literal(p.displayName).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Party leader candidate: " + leaderName).withStyle(ChatFormatting.WHITE))
                     .addLoreLine(Component.literal(""))

@@ -32,7 +32,7 @@ public class BountyGui {
         // Old West style - Brown/wood themed background
         // Use brown stained glass and oak planks for wooden look
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BROWN_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.brown())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -200,7 +200,7 @@ public class BountyGui {
         // Center area with brown glass
         int[] centerSlots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
         for (int slot : centerSlots) {
-            gui.setSlot(slot, new GuiElementBuilder(Items.BROWN_STAINED_GLASS_PANE)
+            gui.setSlot(slot, new GuiElementBuilder(Items.STAINED_GLASS_PANE.brown())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -386,7 +386,7 @@ public class BountyGui {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -527,7 +527,7 @@ public class BountyGui {
                 .build());
 
         // Start bounty button
-        gui.setSlot(49, new GuiElementBuilder(Items.LIME_CONCRETE)
+        gui.setSlot(49, new GuiElementBuilder(Items.CONCRETE.lime())
                 .setName(Component.literal("▶ Start This Bounty")
                         .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .setCallback((idx, clicktype, containerInput, slotGui) -> {

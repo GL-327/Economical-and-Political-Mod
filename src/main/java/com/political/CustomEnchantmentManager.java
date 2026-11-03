@@ -196,10 +196,10 @@ public class CustomEnchantmentManager {
                 || entity instanceof net.minecraft.world.entity.monster.skeleton.Stray) {
             return type == SlayerManager.SlayerType.SKELETON;
         }
-        if (entity instanceof net.minecraft.world.entity.monster.Slime) {
+        if (entity instanceof net.minecraft.world.entity.monster.cubemob.Slime) {
             return type == SlayerManager.SlayerType.SLIME;
         }
-        if (entity instanceof net.minecraft.world.entity.monster.EnderMan) {
+        if (entity instanceof net.minecraft.world.entity.monster.Enderman) {
             return type == SlayerManager.SlayerType.ENDERMAN;
         }
         if (entity instanceof net.minecraft.world.entity.monster.warden.Warden) {

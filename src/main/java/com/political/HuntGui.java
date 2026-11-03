@@ -122,7 +122,7 @@ public final class HuntGui {
                                 System.currentTimeMillis() - r.killedAtMs) + " ago"))
                         .build());
             } else {
-                gui.setSlot(HISTORY_SLOTS[i], new GuiElementBuilder(Items.LIGHT_GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(HISTORY_SLOTS[i], new GuiElementBuilder(Items.STAINED_GLASS_PANE.lightGray())
                         .setName(Component.literal("§8— no record —")).build());
             }
         }
@@ -199,7 +199,7 @@ public final class HuntGui {
                     .build());
 
             gui.setSlot(47, new GuiElementBuilder(HuntManager.isEnabled()
-                    ? Items.LIME_DYE : Items.GRAY_DYE)
+                    ? Items.DYE.lime() : Items.DYE.gray())
                     .setName(Component.literal(HuntManager.isEnabled()
                             ? "Hunts: ENABLED" : "Hunts: DISABLED")
                             .withStyle(HuntManager.isEnabled() ? ChatFormatting.GREEN : ChatFormatting.RED,

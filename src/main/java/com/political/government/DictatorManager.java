@@ -6,6 +6,7 @@ import com.political.TaxManager;
 
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.server.level.ServerPlayer;
@@ -210,7 +211,7 @@ public class DictatorManager {
     public static void smitePlayer(ServerPlayer source, ServerPlayer target) {
         if (!canSmite()) return;
 
-        LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(target.level(), EntitySpawnReason.EVENT);
+        LightningBolt lightning = EntityTypes.LIGHTNING_BOLT.create(target.level(), EntitySpawnReason.EVENT);
         if (lightning != null) {
             lightning.setPos(target.getX(), target.getY(), target.getZ());
             target.level().addFreshEntity(lightning);

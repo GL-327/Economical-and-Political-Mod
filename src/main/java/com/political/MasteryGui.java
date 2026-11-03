@@ -29,7 +29,7 @@ public class MasteryGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -128,7 +128,7 @@ public class MasteryGui {
         gui.setTitle(Component.literal("Heart of Mastery — Coin Tree").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -177,16 +177,16 @@ public class MasteryGui {
                 Item icon;
                 ChatFormatting nameCol;
                 if (has) {
-                    icon = Items.LIME_CONCRETE;
+                    icon = Items.CONCRETE.lime();
                     nameCol = ChatFormatting.GREEN;
                 } else if (canBuy) {
                     icon = Items.GOLD_BLOCK;
                     nameCol = ChatFormatting.YELLOW;
                 } else if (!prereqMet) {
-                    icon = Items.RED_CONCRETE;
+                    icon = Items.CONCRETE.red();
                     nameCol = ChatFormatting.DARK_GRAY;
                 } else {
-                    icon = Items.YELLOW_CONCRETE;
+                    icon = Items.CONCRETE.yellow();
                     nameCol = ChatFormatting.DARK_GRAY;
                 }
 
@@ -270,7 +270,7 @@ public class MasteryGui {
 
         // Fill background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -321,7 +321,7 @@ public class MasteryGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -347,9 +347,9 @@ public class MasteryGui {
             boolean unlocked = level <= currentLevel;
             
             ChatFormatting color = unlocked ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY;
-            Item icon = unlocked ? Items.LIME_STAINED_GLASS_PANE : Items.RED_STAINED_GLASS_PANE;
+            Item icon = unlocked ? Items.STAINED_GLASS_PANE.lime() : Items.STAINED_GLASS_PANE.red();
             if (level == 10 && unlocked) icon = Items.NETHER_STAR;
-            else if (level == 10) icon = Items.GRAY_STAINED_GLASS_PANE;
+            else if (level == 10) icon = Items.STAINED_GLASS_PANE.gray();
             
             String levelName = level == 10 ? "Grandmaster" : "Level " + level;
             
@@ -422,7 +422,7 @@ public class MasteryGui {
         gui.setTitle(Component.literal("Your Enhancements").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build());
         }
 
         String uuid = player.getUUID().toString();
@@ -455,7 +455,7 @@ public class MasteryGui {
         for (MasteryHeartTree.HeartNode node : MasteryHeartTree.NODES) {
             if (heartUnlocks.contains(node.id())) {
                 if (heartSlot > 26) break;
-                gui.setSlot(heartSlot, new GuiElementBuilder(Items.LIME_CONCRETE)
+                gui.setSlot(heartSlot, new GuiElementBuilder(Items.CONCRETE.lime())
                         .setName(Component.literal("♦ " + node.title()).withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                         .addLoreLine(Component.literal(node.description()).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal(node.branch() + " Tier " + node.tier()).withStyle(ChatFormatting.DARK_GRAY))
@@ -464,7 +464,7 @@ public class MasteryGui {
             }
         }
         while (heartSlot <= 26) {
-            gui.setSlot(heartSlot, new GuiElementBuilder(Items.RED_CONCRETE)
+            gui.setSlot(heartSlot, new GuiElementBuilder(Items.CONCRETE.red())
                     .setName(Component.literal("Locked").withStyle(ChatFormatting.DARK_GRAY))
                     .addLoreLine(Component.literal("Purchase from /mastery coin tree").withStyle(ChatFormatting.GRAY))
                     .build());

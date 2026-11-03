@@ -24,7 +24,7 @@ public final class SettlementGui {
         gui.setTitle(Component.literal(s.name + " — " + tier.displayName));
 
         for (int i = 0; i < 45; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -39,7 +39,7 @@ public final class SettlementGui {
                 .glow()
                 .build());
 
-        gui.setSlot(19, stat(Items.RED_BED, "Beds", s.beds, tier.next() == null ? -1 : tier.next().minBeds));
+        gui.setSlot(19, stat(Items.BED.red(), "Beds", s.beds, tier.next() == null ? -1 : tier.next().minBeds));
         gui.setSlot(20, stat(Items.PLAYER_HEAD, "Population", s.population,
                 tier.next() == null ? -1 : tier.next().minPop));
         gui.setSlot(21, stat(Items.FLOWER_POT, "Appeal", s.appeal,
@@ -121,7 +121,7 @@ public final class SettlementGui {
         String uuid = player.getUUID().toString();
         boolean registered = s.registeredPlayers != null && s.registeredPlayers.contains(uuid);
         long fee = SettlementManager.registrationFee(tier);
-        gui.setSlot(33, new GuiElementBuilder(registered ? Items.LIME_CONCRETE : Items.PAPER)
+        gui.setSlot(33, new GuiElementBuilder(registered ? Items.CONCRETE.lime() : Items.PAPER)
                 .setName(Component.literal(registered ? "Registered Citizen" : "Register Here")
                         .withStyle(registered ? ChatFormatting.GREEN : ChatFormatting.YELLOW, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(registered

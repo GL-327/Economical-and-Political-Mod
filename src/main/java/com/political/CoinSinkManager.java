@@ -17,6 +17,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -1223,7 +1224,7 @@ public class CoinSinkManager {
 
         // Background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -1446,7 +1447,7 @@ public class CoinSinkManager {
                     .build());
 
             // Luck Boost
-            gui.setSlot(2, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(2, new GuiElementBuilder(Items.DYE.lime())
                     .setName(Component.literal("🍀 2x Luck Boost").withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Cost: 30,000,000 coins").withStyle(ChatFormatting.GOLD))
@@ -1558,7 +1559,7 @@ public class CoinSinkManager {
                     .build());
 
             // Extra Home
-            gui.setSlot(13, new GuiElementBuilder(Items.RED_BED)
+            gui.setSlot(13, new GuiElementBuilder(Items.BED.red())
                     .setName(Component.literal("🏠 Extra Home Slot").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Cost: 25,000,000 coins").withStyle(ChatFormatting.GOLD))
@@ -1983,7 +1984,7 @@ public class CoinSinkManager {
         gui.setTitle(Component.literal("📖 Title Shop"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -2410,11 +2411,11 @@ public class CoinSinkManager {
         var pos = player.blockPosition();
         
         net.minecraft.world.entity.Entity entity = switch (petType.toLowerCase()) {
-            case "wolf" -> EntityType.WOLF.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
-            case "cat" -> EntityType.CAT.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
-            case "parrot" -> EntityType.PARROT.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
-            case "fox" -> EntityType.FOX.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
-            default -> EntityType.WOLF.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            case "wolf" -> EntityTypes.WOLF.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            case "cat" -> EntityTypes.CAT.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            case "parrot" -> EntityTypes.PARROT.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            case "fox" -> EntityTypes.FOX.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            default -> EntityTypes.WOLF.spawn(world, pos, net.minecraft.world.entity.EntitySpawnReason.EVENT);
         };
         
         if (entity instanceof TamableAnimal pet) {
@@ -2486,7 +2487,7 @@ public class CoinSinkManager {
                     .getOrThrow(WorldClocks.OVERWORLD);
             ServerClockManager cm = world.clockManager();
             long targetTime = day ? 1000 : 13000;
-            long total = cm.getTotalTicks(overworldClock);
+            long total = cm.getInstance(overworldClock).totalTicks();
             long base = (total / 24000) * 24000;
             cm.setTotalTicks(overworldClock, base + targetTime);
         }

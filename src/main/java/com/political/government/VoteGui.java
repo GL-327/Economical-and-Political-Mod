@@ -22,7 +22,7 @@ public class VoteGui {
         gui.setTitle(Component.literal("Vote for Chair"));
 
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                     .setName(Component.literal(""))
                     .build());
         }
@@ -43,7 +43,7 @@ public class VoteGui {
             GuiElementBuilder builder;
 
             if (hasVoted) {
-                builder = new GuiElementBuilder(Items.GRAY_CONCRETE)
+                builder = new GuiElementBuilder(Items.CONCRETE.gray())
                         .setName(Component.literal(candidateName).withStyle(ChatFormatting.GRAY))
                         .addLoreLine(Component.literal("Votes: " + voteCount).withStyle(ChatFormatting.WHITE))
                         .addLoreLine(Component.literal(""))

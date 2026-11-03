@@ -34,7 +34,7 @@ public final class VillageSiegeGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Crisis: Village Lines").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
         gui.setSlot(4, new GuiElementBuilder(Items.VILLAGER_SPAWN_EGG)
                 .setName(Component.literal("Fortify lanes — party purse").withStyle(ChatFormatting.YELLOW))

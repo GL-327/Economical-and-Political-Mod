@@ -36,7 +36,7 @@ public final class AdminInvseeGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, admin, false);
         gui.setTitle(Component.literal("Invsee [OFFLINE] — ").withStyle(ChatFormatting.GOLD).append(Component.literal(name)));
 
-        var border = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var border = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build();
         for (int i = 0; i < 27; i++) {
             gui.setSlot(i, border);
         }
@@ -85,7 +85,7 @@ public final class AdminInvseeGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, admin, false);
         gui.setTitle(Component.literal("Bank [OFFLINE] — ").withStyle(ChatFormatting.YELLOW).append(Component.literal(name)));
 
-        var border = new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var border = new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray()).setName(Component.literal("")).build();
         for (int i = 0; i < 27; i++) gui.setSlot(i, border);
 
         long main = DataManager.getBankMain(uuid);
@@ -243,7 +243,7 @@ public final class AdminInvseeGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x4, admin, false);
         gui.setTitle(Component.literal("Invsee — ").withStyle(ChatFormatting.GOLD).append(target.getDisplayName()));
 
-        var border = new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var border = new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple()).setName(Component.literal("")).build();
         for (int i = 0; i < 36; i++) {
             gui.setSlot(i, border);
         }
@@ -308,7 +308,7 @@ public final class AdminInvseeGui {
     }
 
     private static void drawPlayerInventory(SimpleGui gui, ServerPlayer admin, ServerPlayer target) {
-        var filler = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var filler = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build();
         for (int i = 0; i < 54; i++) {
             if (i == 53) continue;
             gui.setSlot(i, filler);
@@ -337,7 +337,7 @@ public final class AdminInvseeGui {
                                     int invIndex, int guiIndex, Runnable redraw) {
         ItemStack st = target.getInventory().getItem(invIndex);
         GuiElementBuilder b = st.isEmpty()
-                ? new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                ? new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal("Empty #" + invIndex).withStyle(ChatFormatting.DARK_GRAY))
                 : new GuiElementBuilder(st.copy());
         b.setCallback((idx, type, containerInput, slotGui) -> {
@@ -365,7 +365,7 @@ public final class AdminInvseeGui {
     }
 
     private static void drawEnder(SimpleGui gui, ServerPlayer admin, ServerPlayer target) {
-        var filler = new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build();
+        var filler = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build();
         for (int i = 0; i < 36; i++) {
             gui.setSlot(i, filler);
         }
@@ -376,7 +376,7 @@ public final class AdminInvseeGui {
                 final int enderIndex = idx;
                 ItemStack st = target.getEnderChestInventory().getItem(enderIndex);
                 GuiElementBuilder b = st.isEmpty()
-                        ? new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                        ? new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                         .setName(Component.literal("Ender #" + enderIndex).withStyle(ChatFormatting.DARK_GRAY))
                         : new GuiElementBuilder(st.copy());
                 b.setCallback((a, b2, containerInput, slotGui) -> {

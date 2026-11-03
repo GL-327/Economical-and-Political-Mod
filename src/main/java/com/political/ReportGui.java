@@ -23,10 +23,10 @@ public class ReportGui {
 
         for (int i = 0; i < 54; i++) {
             if (i % 9 == 0 || i % 9 == 8 || i < 9 || i >= 45) {
-                gui.setSlot(i, new GuiElementBuilder(Items.PURPLE_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.purple())
                         .setName(Component.literal("")).build());
             } else {
-                gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                         .setName(Component.literal("")).build());
             }
         }

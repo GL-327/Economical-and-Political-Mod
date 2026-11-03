@@ -34,7 +34,7 @@ public final class BorderRaidGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x4, player, false);
         gui.setTitle(Component.literal("Crisis: Border Raid").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         for (int i = 0; i < 36; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
         int[] slots = {12, 14, 16};
         for (int i = 0; i < 3; i++) {

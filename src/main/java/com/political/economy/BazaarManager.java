@@ -1,4 +1,5 @@
 package com.political.economy;
+import net.minecraft.util.Prediction;
 import com.political.CollectionType;
 import com.political.GuiKit;
 import com.political.PoliticalServer;
@@ -413,7 +414,7 @@ public final class BazaarManager {
             int stack = Math.min(left, c.material.getDefaultMaxStackSize());
             ItemStack give = new ItemStack(c.material, stack);
             if (!player.getInventory().add(give)) {
-                player.drop(give, false);
+                player.drop(give, false, Prediction.SERVER_ONLY);
             }
             left -= stack;
         }

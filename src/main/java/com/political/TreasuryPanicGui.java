@@ -36,7 +36,7 @@ public final class TreasuryPanicGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Crisis: Treasury Leak").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE).setName(Component.literal("")).build());
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
         }
         long nextCost = 200_000L * (s + 1);
         gui.setSlot(13, new GuiElementBuilder(Items.IRON_BARS)

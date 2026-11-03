@@ -31,7 +31,7 @@ public class MagicManager {
     public enum Spell {
         FIREBALL("Fireball", "Launches a fire charge projectile", 20, 8f, 40, Items.FIRE_CHARGE, ChatFormatting.RED, 1),
         ICE_SPIKE("Ice Spike", "Freezes target for 3 seconds", 25, 4f, 50, Items.BLUE_ICE, ChatFormatting.AQUA, 1),
-        LIGHTNING_STRIKE("Lightning Strike", "Calls lightning on target", 40, 12f, 60, Items.LIGHTNING_ROD, ChatFormatting.YELLOW, 1),
+        LIGHTNING_STRIKE("Lightning Strike", "Calls lightning on target", 40, 12f, 60, Items.LIGHTNING_ROD.weathering().unaffected(), ChatFormatting.YELLOW, 1),
         HEALING_WAVE("Healing Wave", "Heals 4 hearts in small AOE", 30, 0f, 45, Items.GOLDEN_APPLE, ChatFormatting.GREEN, 1),
         SHADOW_STEP("Shadow Step", "Teleport 8 blocks forward", 15, 0f, 30, Items.ENDER_PEARL, ChatFormatting.DARK_GRAY, 1),
         ARCANE_SHIELD("Arcane Shield", "Absorption II for 10 seconds", 35, 0f, 50, Items.SHIELD, ChatFormatting.BLUE, 1),

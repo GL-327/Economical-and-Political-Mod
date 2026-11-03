@@ -614,7 +614,7 @@ public class PerkManager {
                 .lookupOrThrow(Registries.WORLD_CLOCK)
                 .getOrThrow(WorldClocks.OVERWORLD);
         ServerClockManager cm = overworld.clockManager();
-        long total = cm.getTotalTicks(clockHolder);
+        long total = cm.getInstance(clockHolder).totalTicks();
         long dayBase = (total / 24000) * 24000;
         long tod = total - dayBase;
 
@@ -646,7 +646,7 @@ public class PerkManager {
         }
 
         if (hasActivePerk("NIGHT_OWL_POLICY")) {
-            long t = cm.getTotalTicks(clockHolder);
+            long t = cm.getInstance(clockHolder).totalTicks();
             long phase = t % 24000;
             if (phase >= 13000 && phase <= 23000 && server.getTickCount() % 20 == 0) {
                 cm.setTotalTicks(clockHolder, t - 1);

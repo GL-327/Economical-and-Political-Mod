@@ -1,6 +1,7 @@
 package com.political;
 
 
+import net.minecraft.util.Prediction;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.SlayerRecipes;
 import com.political.settlement.WarGui;
@@ -109,7 +110,7 @@ public final class ExpansionCatalogGui {
                 b.addLoreLine(Component.literal("§eClick to receive (operator)"));
                 final ItemStack give = stack.copy();
                 b.setCallback((a, c, d, g) -> {
-                    if (!player.getInventory().add(give.copy())) player.drop(give.copy(), false);
+                    if (!player.getInventory().add(give.copy())) player.drop(give.copy(), false, Prediction.SERVER_ONLY);
                 });
             }
             gui.setSlot(cells[i], b.build());

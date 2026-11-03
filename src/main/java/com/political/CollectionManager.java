@@ -229,21 +229,21 @@ public final class CollectionManager {
 
     private static CollectionType forVictim(net.minecraft.world.entity.LivingEntity victim) {
         net.minecraft.world.entity.EntityType<?> t = victim.getType();
-        if (t == net.minecraft.world.entity.EntityType.ZOMBIE
-                || t == net.minecraft.world.entity.EntityType.HUSK
-                || t == net.minecraft.world.entity.EntityType.DROWNED
-                || t == net.minecraft.world.entity.EntityType.ZOMBIE_VILLAGER) return CollectionType.ROTTEN_FLESH;
-        if (t == net.minecraft.world.entity.EntityType.SKELETON
-                || t == net.minecraft.world.entity.EntityType.STRAY) return CollectionType.BONE;
-        if (t == net.minecraft.world.entity.EntityType.WITHER_SKELETON) return CollectionType.WITHER_SKULL;
-        if (t == net.minecraft.world.entity.EntityType.SPIDER) return CollectionType.STRING;
-        if (t == net.minecraft.world.entity.EntityType.CAVE_SPIDER) return CollectionType.SPIDER_EYE;
-        if (t == net.minecraft.world.entity.EntityType.CREEPER) return CollectionType.GUNPOWDER;
-        if (t == net.minecraft.world.entity.EntityType.ENDERMAN) return CollectionType.ENDER_PEARL;
-        if (t == net.minecraft.world.entity.EntityType.BLAZE) return CollectionType.BLAZE_ROD;
-        if (t == net.minecraft.world.entity.EntityType.GHAST) return CollectionType.GHAST_TEAR;
-        if (t == net.minecraft.world.entity.EntityType.SLIME
-                || t == net.minecraft.world.entity.EntityType.MAGMA_CUBE) return CollectionType.SLIME;
+        if (t == net.minecraft.world.entity.EntityTypes.ZOMBIE
+                || t == net.minecraft.world.entity.EntityTypes.HUSK
+                || t == net.minecraft.world.entity.EntityTypes.DROWNED
+                || t == net.minecraft.world.entity.EntityTypes.ZOMBIE_VILLAGER) return CollectionType.ROTTEN_FLESH;
+        if (t == net.minecraft.world.entity.EntityTypes.SKELETON
+                || t == net.minecraft.world.entity.EntityTypes.STRAY) return CollectionType.BONE;
+        if (t == net.minecraft.world.entity.EntityTypes.WITHER_SKELETON) return CollectionType.WITHER_SKULL;
+        if (t == net.minecraft.world.entity.EntityTypes.SPIDER) return CollectionType.STRING;
+        if (t == net.minecraft.world.entity.EntityTypes.CAVE_SPIDER) return CollectionType.SPIDER_EYE;
+        if (t == net.minecraft.world.entity.EntityTypes.CREEPER) return CollectionType.GUNPOWDER;
+        if (t == net.minecraft.world.entity.EntityTypes.ENDERMAN) return CollectionType.ENDER_PEARL;
+        if (t == net.minecraft.world.entity.EntityTypes.BLAZE) return CollectionType.BLAZE_ROD;
+        if (t == net.minecraft.world.entity.EntityTypes.GHAST) return CollectionType.GHAST_TEAR;
+        if (t == net.minecraft.world.entity.EntityTypes.SLIME
+                || t == net.minecraft.world.entity.EntityTypes.MAGMA_CUBE) return CollectionType.SLIME;
         return null;
     }
 

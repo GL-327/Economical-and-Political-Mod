@@ -24,7 +24,7 @@ public class ClassGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -129,7 +129,7 @@ public class ClassGui {
 
         // Fill background
         for (int i = 0; i < 27; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }
@@ -158,7 +158,7 @@ public class ClassGui {
         // Buffs
         int buffSlot = 10;
         for (ClassManager.ClassEffect effect : playerClass.buffs) {
-            gui.setSlot(buffSlot++, new GuiElementBuilder(Items.LIME_DYE)
+            gui.setSlot(buffSlot++, new GuiElementBuilder(Items.DYE.lime())
                 .setName(Component.literal("§a+ " + effect.name))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§7Level " + (effect.amplifier + 1)))
@@ -168,7 +168,7 @@ public class ClassGui {
         // Debuffs
         int debuffSlot = 16;
         for (ClassManager.ClassEffect effect : playerClass.debuffs) {
-            gui.setSlot(debuffSlot++, new GuiElementBuilder(Items.RED_DYE)
+            gui.setSlot(debuffSlot++, new GuiElementBuilder(Items.DYE.red())
                 .setName(Component.literal("§c- " + effect.name))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§7Level " + (effect.amplifier + 1)))
@@ -191,7 +191,7 @@ public class ClassGui {
 
         // Fill background
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                 .setName(Component.literal(""))
                 .build());
         }

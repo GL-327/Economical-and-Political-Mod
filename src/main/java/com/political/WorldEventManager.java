@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
@@ -395,7 +396,7 @@ public class WorldEventManager {
                         BlockPos spawnPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                                 new BlockPos((int) x, 0, (int) z));
                         
-                        EntityType<? extends Monster> mobType = random.nextBoolean() ? EntityType.ZOMBIE : EntityType.SKELETON;
+                        EntityType<? extends Monster> mobType = random.nextBoolean() ? EntityTypes.ZOMBIE : EntityTypes.SKELETON;
                         mobType.spawn(world, spawnPos, EntitySpawnReason.EVENT);
                     }
                 });
@@ -514,10 +515,10 @@ public class WorldEventManager {
             
             // Spawn a boss-level mob
             EntityType<? extends Monster> bossType = switch (random.nextInt(4)) {
-                case 0 -> EntityType.RAVAGER;
-                case 1 -> EntityType.WARDEN;
-                case 2 -> EntityType.WITHER;
-                default -> EntityType.ELDER_GUARDIAN;
+                case 0 -> EntityTypes.RAVAGER;
+                case 1 -> EntityTypes.WARDEN;
+                case 2 -> EntityTypes.WITHER;
+                default -> EntityTypes.ELDER_GUARDIAN;
             };
             
             var boss = bossType.spawn(world, spawnPos, EntitySpawnReason.EVENT);
@@ -557,7 +558,7 @@ public class WorldEventManager {
             
             // Spawn endermen around it
             for (int j = 0; j < 5; j++) {
-                EntityType.ENDERMAN.spawn(world, riftPos.offset(random.nextInt(10) - 5, 0, random.nextInt(10) - 5), EntitySpawnReason.EVENT);
+                EntityTypes.ENDERMAN.spawn(world, riftPos.offset(random.nextInt(10) - 5, 0, random.nextInt(10) - 5), EntitySpawnReason.EVENT);
             }
         }
         

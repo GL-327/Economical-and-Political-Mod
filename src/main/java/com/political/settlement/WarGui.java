@@ -70,7 +70,7 @@ public final class WarGui {
             boolean canVote = role != null;
             Boolean myVote = motion.votes.get(uuid);
 
-            gui.setSlot(29, new GuiElementBuilder(canVote ? Items.LIME_CONCRETE : Items.GRAY_CONCRETE)
+            gui.setSlot(29, new GuiElementBuilder(canVote ? Items.CONCRETE.lime() : Items.CONCRETE.gray())
                     .setName(Component.literal("Vote FOR war")
                             .withStyle(canVote ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(canVote
@@ -81,7 +81,7 @@ public final class WarGui {
                     })
                     .build());
 
-            gui.setSlot(33, new GuiElementBuilder(canVote ? Items.RED_CONCRETE : Items.GRAY_CONCRETE)
+            gui.setSlot(33, new GuiElementBuilder(canVote ? Items.CONCRETE.red() : Items.CONCRETE.gray())
                     .setName(Component.literal("Vote AGAINST war")
                             .withStyle(canVote ? ChatFormatting.RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal(canVote
@@ -94,7 +94,7 @@ public final class WarGui {
                     })
                     .build());
         } else {
-            gui.setSlot(13, new GuiElementBuilder(Items.WHITE_BANNER)
+            gui.setSlot(13, new GuiElementBuilder(Items.BANNER.white())
                     .setName(Component.literal("No motion before the council")
                             .withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("§7Peace, for now."))
@@ -103,7 +103,7 @@ public final class WarGui {
 
         // ── Declare war (target picker) ──
         boolean canPropose = role != null;
-        gui.setSlot(20, new GuiElementBuilder(canPropose ? Items.IRON_SWORD : Items.GRAY_CONCRETE)
+        gui.setSlot(20, new GuiElementBuilder(canPropose ? Items.IRON_SWORD : Items.CONCRETE.gray())
                 .setName(Component.literal("Declare War")
                         .withStyle(canPropose ? ChatFormatting.RED : ChatFormatting.DARK_GRAY, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(canPropose
@@ -132,7 +132,7 @@ public final class WarGui {
         boolean atWar = WarManager.isAtWar(polity.id);
         boolean canSue = role == WarManager.WarRole.CHAIR || role == WarManager.WarRole.VICE_CHAIR
                 || role == WarManager.WarRole.PRIME_SEAT;
-        gui.setSlot(40, new GuiElementBuilder(atWar && canSue ? Items.WHITE_BANNER : Items.GRAY_CONCRETE)
+        gui.setSlot(40, new GuiElementBuilder(atWar && canSue ? Items.BANNER.white() : Items.CONCRETE.gray())
                 .setName(Component.literal("Sue for Peace")
                         .withStyle(atWar && canSue ? ChatFormatting.WHITE : ChatFormatting.DARK_GRAY,
                                 ChatFormatting.BOLD))

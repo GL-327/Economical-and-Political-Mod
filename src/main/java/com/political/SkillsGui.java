@@ -17,7 +17,7 @@ public class SkillsGui {
         String uuid = player.getUUID().toString();
 
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                 .setName(Component.literal("")).build());
         }
 

@@ -1,6 +1,7 @@
 package com.political;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,13 +25,13 @@ public class CryptoBrokerManager {
     private static final Set<UUID> cryptoBrokerIds = new HashSet<>();
 
     public static Villager spawnCryptoBroker(ServerLevel world, double x, double y, double z, float yaw) {
-        Villager villager = new Villager(EntityType.VILLAGER, world);
+        Villager villager = new Villager(EntityTypes.VILLAGER, world);
         villager.setPos(x, y, z);
         villager.setYRot(yaw);
         villager.setXRot(0f);
         villager.setCustomName(Component.literal("🔮 Crypto Broker").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
         villager.setCustomNameVisible(true);
-        villager.setInvulnerable(true);
+        villager.setPermanentlyInvulnerable(true);
         villager.setNoAi(true);
         villager.setSilent(true);
         villager.setNoGravity(false);

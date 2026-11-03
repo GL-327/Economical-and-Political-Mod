@@ -1,4 +1,5 @@
 package com.political.recipe;
+import net.minecraft.util.Prediction;
 import com.political.ArmourAttribute;
 import com.political.CustomItemLore;
 import com.political.CustomItemsGui;
@@ -418,7 +419,7 @@ public class RecipesGui {
 
         // Background with dark theme
         for (int i = 0; i < 54; i++) {
-            gui.setSlot(i, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal("")).build());
         }
 
@@ -479,7 +480,7 @@ public class RecipesGui {
                     .build());
             
             // Gap slot (shifted armor 1 to the right)
-            gui.setSlot(baseSlot + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(baseSlot + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
             
@@ -501,7 +502,7 @@ public class RecipesGui {
             Component setName = Component.literal("━━ " + set.name + " Set ━━").withStyle(ChatFormatting.DARK_GRAY);
             for (int sep = baseSlot + 9; sep < baseSlot + 15 && sep < 54; sep++) {
                 if (sep < 45) {
-                    gui.setSlot(sep, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    gui.setSlot(sep, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                             .setName(setName)
                             .build());
                 }
@@ -654,7 +655,7 @@ public class RecipesGui {
             // Add separator lore below
             Component setName = Component.literal("━━ " + set.name + " Tools ━━").withStyle(ChatFormatting.DARK_GRAY);
             for (int sep = baseSlot + 9; sep < baseSlot + 14 && sep < 54; sep++) {
-                gui.setSlot(sep, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                gui.setSlot(sep, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                         .setName(setName)
                         .build());
             }
@@ -1056,7 +1057,7 @@ public class RecipesGui {
                     .build());
             
             // Gap slot
-            gui.setSlot(baseSlot + 1, new GuiElementBuilder(Items.BLACK_STAINED_GLASS_PANE)
+            gui.setSlot(baseSlot + 1, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black())
                     .setName(Component.literal(""))
                     .build());
             
@@ -1071,7 +1072,7 @@ public class RecipesGui {
             for (int sep = 0; sep < 9; sep++) {
                 int sepSlot = baseSlot + 9 + sep;
                 if (sepSlot < 54) {
-                    gui.setSlot(sepSlot, new GuiElementBuilder(Items.GRAY_STAINED_GLASS_PANE)
+                    gui.setSlot(sepSlot, new GuiElementBuilder(Items.STAINED_GLASS_PANE.gray())
                             .setName(separator)
                             .build());
                 }
@@ -1487,7 +1488,7 @@ public class RecipesGui {
         // Give result to player
         ItemStack crafted = result.copy();
         if (!player.addItem(crafted)) {
-            player.drop(crafted, false);
+            player.drop(crafted, false, Prediction.SERVER_ONLY);
         }
 
         player.sendSystemMessage(Component.literal("§a§l✓ Autocrafted successfully!"), false);

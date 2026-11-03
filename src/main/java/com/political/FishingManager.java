@@ -6,6 +6,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -55,11 +56,11 @@ public class FishingManager {
     }
 
     public enum SeaCreature {
-        TIDAL_LURKER("Tidal Lurker", CreatureTier.COMMON, EntityType.DROWNED, 40, Items.COD),
-        REEF_STALKER("Reef Stalker", CreatureTier.UNCOMMON, EntityType.GUARDIAN, 60, Items.PRISMARINE_SHARD),
-        ABYSSAL_ANGLER("Abyssal Angler", CreatureTier.RARE, EntityType.ELDER_GUARDIAN, 150, Items.PRISMARINE_CRYSTALS),
-        STORM_KRAKEN("Storm Kraken", CreatureTier.EPIC, EntityType.GUARDIAN, 500, Items.HEART_OF_THE_SEA),
-        LEVIATHAN("Leviathan", CreatureTier.LEGENDARY, EntityType.WARDEN, 1000, Items.NETHER_STAR);
+        TIDAL_LURKER("Tidal Lurker", CreatureTier.COMMON, EntityTypes.DROWNED, 40, Items.COD),
+        REEF_STALKER("Reef Stalker", CreatureTier.UNCOMMON, EntityTypes.GUARDIAN, 60, Items.PRISMARINE_SHARD),
+        ABYSSAL_ANGLER("Abyssal Angler", CreatureTier.RARE, EntityTypes.ELDER_GUARDIAN, 150, Items.PRISMARINE_CRYSTALS),
+        STORM_KRAKEN("Storm Kraken", CreatureTier.EPIC, EntityTypes.GUARDIAN, 500, Items.HEART_OF_THE_SEA),
+        LEVIATHAN("Leviathan", CreatureTier.LEGENDARY, EntityTypes.WARDEN, 1000, Items.NETHER_STAR);
 
         public final String displayName;
         public final CreatureTier tier;

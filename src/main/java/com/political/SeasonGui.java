@@ -147,7 +147,7 @@ public final class SeasonGui {
                     .build());
 
             gui.setSlot(47, new GuiElementBuilder(SeasonManager.isEnabled()
-                    ? Items.LIME_DYE : Items.GRAY_DYE)
+                    ? Items.DYE.lime() : Items.DYE.gray())
                     .setName(Component.literal(SeasonManager.isEnabled()
                             ? "Seasons: ENABLED" : "Seasons: DISABLED")
                             .withStyle(SeasonManager.isEnabled() ? ChatFormatting.GREEN : ChatFormatting.RED,
