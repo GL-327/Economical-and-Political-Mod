@@ -27,7 +27,6 @@ public final class LivingWorldCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         registerSeason(dispatcher);
         registerBestiary(dispatcher);
-        registerHunt(dispatcher);
     }
 
     // ── /season ─────────────────────────────────────────────────────────────
@@ -142,70 +141,6 @@ public final class LivingWorldCommands {
                                     ctx.getSource().sendSuccess(() -> Component.literal(
                                             "✓ Cleared the bestiary of "
                                                     + target.getName().getString())
-                                            .withStyle(ChatFormatting.GREEN), true);
-                                    return 1;
-                                }))));
-    }
-
-    // ── /hunt ───────────────────────────────────────────────────────────────
-
-    private static void registerHunt(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("hunt")
-                .executes(ctx -> {
-                    ServerPlayer p = ctx.getSource().getPlayerOrException();
-                    HuntGui.open(p);
-                    return 1;
-                })
-                .then(Commands.literal("info")
-                        .executes(ctx -> {
-                            ServerPlayer p = ctx.getSource().getPlayerOrException();
-                            HuntManager.ActiveHunt active = HuntManager.active();
-                            p.sendSystemMessage(Component.literal("§6§l━━━ The Great Hunt ━━━"));
-                            if (active == null) {
-                                p.sendSystemMessage(Component.literal("§7No hunt is active."));
-                                p.sendSystemMessage(Component.literal("§7Next in: §f"
-                                        + PoliticalServer.formatTime(HuntManager.msUntilNextHunt())));
-                            } else {
-                                HuntManager.Archetype a = active.archetype();
-                                p.sendSystemMessage(Component.literal("§c"
-                                        + (a == null ? "Unknown quarry"
-                                        : a.title() + ", " + a.epithet())));
-                                p.sendSystemMessage(Component.literal("§7Last seen: §f"
-                                        + HuntManager.locationHint()));
-                                p.sendSystemMessage(Component.literal("§7Leaves in: §f"
-                                        + PoliticalServer.formatTime(active.remainingMs())));
-                            }
-                            p.sendSystemMessage(Component.literal("§7Purse: §6"
-                                    + HuntManager.fmt(HuntManager.currentReward()) + " coins"));
-                            p.sendSystemMessage(Component.literal("§7Hunts felled: §f"
-                                    + HuntManager.huntsCompleted()));
-                            return 1;
-                        }))
-                .then(Commands.literal("start")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .executes(ctx -> {
-                            HuntManager.forceSpawn(ctx.getSource().getServer());
-                            ctx.getSource().sendSuccess(() -> Component.literal(
-                                    "✓ Great Hunt started.").withStyle(ChatFormatting.GREEN), true);
-                            return 1;
-                        }))
-                .then(Commands.literal("toggle")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .executes(ctx -> {
-                            HuntManager.setEnabled(!HuntManager.isEnabled());
-                            ctx.getSource().sendSuccess(() -> Component.literal(
-                                    "✓ Hunts " + (HuntManager.isEnabled() ? "enabled" : "disabled"))
-                                    .withStyle(ChatFormatting.GREEN), true);
-                            return 1;
-                        }))
-                .then(Commands.literal("interval")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("minutes", IntegerArgumentType.integer(15, 100000))
-                                .executes(ctx -> {
-                                    int minutes = IntegerArgumentType.getInteger(ctx, "minutes");
-                                    HuntManager.setCooldownMs(minutes * 60_000L);
-                                    ctx.getSource().sendSuccess(() -> Component.literal(
-                                            "✓ Hunt interval set to " + minutes + " minutes")
                                             .withStyle(ChatFormatting.GREEN), true);
                                     return 1;
                                 }))));

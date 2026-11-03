@@ -529,12 +529,26 @@ public class CommandRegistry {
                         }))
         );
 
+        // /bounty opens the menu, /bounty cancel drops the active quest. These were two registrations of the
+        // same root; they are one now (M1.8), with the same effect Brigadier's merge had.
         dispatcher.register(Commands.literal("bounty")
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
                     BountyGui.openMainMenu(player);  // Changed from SlayerGui
                     return 1;
                 })
+                .then(Commands.literal("cancel")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            if (SlayerManager.hasActiveQuest(player)) {
+                                SlayerManager.cancelQuest(player);
+                            } else {
+                                player.sendSystemMessage(Component.literal("✖ No active bounty!")
+                                        .withStyle(ChatFormatting.RED), false);
+                            }
+                            return 1;
+                        })
+                )
         );
 
         // /stocks command - Stock Market access
@@ -701,24 +715,6 @@ public class CommandRegistry {
                                                     return 1;
                                                 }))))));
 
-        // /slayer cancel - Cancel active quest
-        dispatcher.register(Commands.literal("bounty")
-                .then(Commands.literal("cancel")
-// ... (rest of the code remains the same)
-                        .executes(context -> {
-                            ServerPlayer player = context.getSource().getPlayerOrException();
-                            if (SlayerManager.hasActiveQuest(player)) {
-                                SlayerManager.cancelQuest(player);
-                            } else {
-                                player.sendSystemMessage(Component.literal("✖ No active bounty!")
-                                        .withStyle(ChatFormatting.RED), false);
-                            }
-                            return 1;
-                        })
-                )
-        );
-        // Add this command registration
-
         registerShopPriceCommands(dispatcher);
         registerVanish(dispatcher);
         registerSetTitle(dispatcher);
@@ -845,94 +841,6 @@ public class CommandRegistry {
                     return 1;
                 })
         );
-        // ============ CREDITS COMMANDS ============
-        dispatcher.register(Commands.literal("credits")
-                .then(Commands.literal("add")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
-                                            CreditItem.giveCreditsQuiet(target, amount);
-                                            ctx.getSource().sendSystemMessage(Component.literal("Added " + amount + " credits to " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
-                                            target.sendSystemMessage(Component.literal("+" + amount + " credits (admin)").withStyle(ChatFormatting.GREEN));
-                                            return 1;
-                                        }))))
-                .then(Commands.literal("remove")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
-                                            int current = CreditItem.countCredits(target);
-                                            CreditItem.setCredits(target, Math.max(0, current - amount));
-                                            ctx.getSource().sendSystemMessage(Component.literal("Removed " + amount + " credits from " + target.getName().getString()).withStyle(ChatFormatting.YELLOW));
-                                            return 1;
-                                        }))))
-                .then(Commands.literal("set")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
-                                            CreditItem.setCredits(target, amount);
-                                            ctx.getSource().sendSystemMessage(Component.literal("Set " + target.getName().getString() + "'s credits to " + amount).withStyle(ChatFormatting.GREEN));
-                                            return 1;
-                                        }))))
-                .then(Commands.literal("check")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(ctx -> {
-                                    ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                    int credits = CreditItem.countCredits(target);
-                                    ctx.getSource().sendSystemMessage(Component.literal(target.getName().getString() + " has " + credits + " credits").withStyle(ChatFormatting.GOLD));
-                                    return 1;
-                                })))
-        );
-
-// ============ COINS COMMANDS ============
-        dispatcher.register(Commands.literal("coins")
-                .then(Commands.literal("add")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
-                                            CoinManager.giveCoinsQuiet(target, amount);
-                                            ctx.getSource().sendSystemMessage(Component.literal("Added " + amount + " coins to " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
-                                            target.sendSystemMessage(Component.literal("+" + amount + " coins (admin)").withStyle(ChatFormatting.YELLOW));
-                                            return 1;
-                                        }))))
-                .then(Commands.literal("remove")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
-                                            int current = CoinManager.getCoins(target);
-                                            CoinManager.setCoins(target.getUUID().toString(), Math.max(0, current - amount));
-                                            DataManager.save(PoliticalServer.server);
-                                            ctx.getSource().sendSystemMessage(Component.literal("Removed " + amount + " coins from " + target.getName().getString()).withStyle(ChatFormatting.YELLOW));
-                                            return 1;
-                                        }))))
-                .then(Commands.literal("set")
-                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
-                                            CoinManager.setCoins(target.getUUID().toString(), amount);
-                                            DataManager.save(PoliticalServer.server);
-                                            ctx.getSource().sendSystemMessage(Component.literal("Set " + target.getName().getString() + "'s coins to " + amount).withStyle(ChatFormatting.GREEN));
-                                            return 1;
-                                        }))))
-        );
-
 // ============ BALTOP COMMAND ============
         dispatcher.register(Commands.literal("baltop")
                 .executes(ctx -> {
@@ -1091,6 +999,12 @@ public class CommandRegistry {
                     return 1;
                 }));
     }
+    /**
+     * /coins. Two registrations of this root used to exist (here and in registerForceUndergroundAuction);
+     * they are one now (M1.8) with the effect Brigadier's merge gave them: the bare command shows the
+     * caller's coins, add/remove/set keep the requirement of this (the first) registration, which is a
+     * player who is an operator, and run the quiet admin executors of the second one.
+     */
     private static void registerCoins(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("coins")
                 .executes(context -> {
@@ -1109,11 +1023,12 @@ public class CommandRegistry {
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(context -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                            int amount = IntegerArgumentType.getInteger(context, "amount");
-                                            CoinManager.giveCoins(target, amount);
-                                            context.getSource().sendSystemMessage(Component.literal("Gave " + amount + " coins to " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
+                                        .executes(ctx -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            CoinManager.giveCoinsQuiet(target, amount);
+                                            ctx.getSource().sendSystemMessage(Component.literal("Added " + amount + " coins to " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
+                                            target.sendSystemMessage(Component.literal("+" + amount + " coins (admin)").withStyle(ChatFormatting.YELLOW));
                                             return 1;
                                         }))))
                 .then(Commands.literal("remove")
@@ -1123,11 +1038,13 @@ public class CommandRegistry {
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(context -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                            int amount = IntegerArgumentType.getInteger(context, "amount");
-                                            CoinManager.removeCoins(target, amount);
-                                            context.getSource().sendSystemMessage(Component.literal("Removed " + amount + " coins from " + target.getName().getString()).withStyle(ChatFormatting.RED));
+                                        .executes(ctx -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            int current = CoinManager.getCoins(target);
+                                            CoinManager.setCoins(target.getUUID().toString(), Math.max(0, current - amount));
+                                            DataManager.save(PoliticalServer.server);
+                                            ctx.getSource().sendSystemMessage(Component.literal("Removed " + amount + " coins from " + target.getName().getString()).withStyle(ChatFormatting.YELLOW));
                                             return 1;
                                         }))))
                 .then(Commands.literal("set")
@@ -1137,11 +1054,12 @@ public class CommandRegistry {
                         })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                                        .executes(context -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                            int amount = IntegerArgumentType.getInteger(context, "amount");
+                                        .executes(ctx -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
                                             CoinManager.setCoins(target.getUUID().toString(), amount);
-                                            context.getSource().sendSystemMessage(Component.literal("Set " + target.getName().getString() + "'s coins to " + amount).withStyle(ChatFormatting.GREEN));
+                                            DataManager.save(PoliticalServer.server);
+                                            ctx.getSource().sendSystemMessage(Component.literal("Set " + target.getName().getString() + "'s coins to " + amount).withStyle(ChatFormatting.GREEN));
                                             return 1;
                                         })))));
     }
@@ -1277,7 +1195,8 @@ public class CommandRegistry {
                     return 1;
                 }));
 
-        // ADMIN ONLY: /startundergroundauction
+        // ADMIN ONLY: /startundergroundauction. A second registration with identical behavior and a looser
+        // "player who is an operator" requirement was dropped in M1.8; this one's requirement was the one in force.
         dispatcher.register(Commands.literal("startundergroundauction")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {
@@ -1292,18 +1211,6 @@ public class CommandRegistry {
                 .executes(context -> {
                     UndergroundAuctionManager.forceEndAuction();
                     context.getSource().sendSuccess(() -> Component.literal("✓ Ended Underground Auction!").withStyle(ChatFormatting.RED), true);
-                    return 1;
-                }));
-
-
-        dispatcher.register(Commands.literal("startundergroundauction")
-                .requires(source -> {
-                    ServerPlayer player = source.getPlayer();
-                    return player != null && PoliticalServer.isOperator(player);
-                })
-                .executes(context -> {
-                    UndergroundAuctionManager.startAuction(PoliticalServer.server);
-                    context.getSource().sendSuccess(() -> Component.literal("✓ Started Underground Auction!").withStyle(ChatFormatting.LIGHT_PURPLE), true);
                     return 1;
                 }));
     }
@@ -1677,9 +1584,33 @@ public class CommandRegistry {
                 }));
     }
 
+    /**
+     * /judge. Two registrations of this root used to exist (here and in registerRoleCommands); they are one
+     * now (M1.8) with the effect Brigadier's merge gave them: "/judge <player>" appoints the judge, and the bare
+     * "/judge" opens the judge's screen. The requirement of this (the first) registration, LEVEL_OWNERS, covers
+     * both forms, so today a Judge who is not an operator cannot open the screen. That is a defect
+     * (HANDOFF.md, KNOWN ISSUES) kept as it was; it is fixed in M4 with a test.
+     */
     private static void registerJudge(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("judge")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayer();
+                    if (player == null) return 0;
+                    String uuid = player.getUUID().toString();
+
+                    if (DictatorManager.isDictator(uuid)) {
+                        player.sendSystemMessage(Component.literal("Dictators must use /dictator instead!").withStyle(ChatFormatting.RED));
+                        return 0;
+                    }
+
+                    if (!uuid.equals(DataManager.getJudge())) {
+                        player.sendSystemMessage(Component.literal("Only the Judge can use this command!").withStyle(ChatFormatting.RED));
+                        return 0;
+                    }
+                    JudgeGui.open(player);
+                    return 1;
+                })
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> {
                             ServerPlayer target = EntityArgument.getPlayer(context, "player");
@@ -2000,6 +1931,12 @@ public class CommandRegistry {
         );
     }
 
+    /**
+     * /credits. Two registrations of this root used to exist (here and in registerForceUndergroundAuction);
+     * they are one now (M1.8) with the effect Brigadier's merge gave them: the whole command needs
+     * LEVEL_OWNERS (the first registration's requirement), the bare command and balance show the caller's
+     * balance, add/remove/set run the quiet admin versions, and check shows another player's balance.
+     */
     private static void registerCredits(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("credits")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
@@ -2025,64 +1962,43 @@ public class CommandRegistry {
                 .then(Commands.literal("add")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(context -> {
-                                            ServerPlayer source = context.getSource().getPlayer();
-                                            if (source == null) return 0;
-
-                                            if (!PoliticalServer.isOperator(source)) {
-                                                source.sendSystemMessage(Component.literal("You don't have permission!").withStyle(ChatFormatting.RED));
-                                                return 0;
-                                            }
-
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                            int amount = IntegerArgumentType.getInteger(context, "amount");
-
-                                            CreditItem.giveCredits(target, amount);
-
-                                            source.sendSystemMessage(Component.literal("Added " + amount + " credits to " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
-                                            target.sendSystemMessage(Component.literal("You received " + amount + " credits!").withStyle(ChatFormatting.GREEN));
+                                        .executes(ctx -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            CreditItem.giveCreditsQuiet(target, amount);
+                                            ctx.getSource().sendSystemMessage(Component.literal("Added " + amount + " credits to " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
+                                            target.sendSystemMessage(Component.literal("+" + amount + " credits (admin)").withStyle(ChatFormatting.GREEN));
                                             return 1;
                                         }))))
                 .then(Commands.literal("remove")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1))
-                                        .executes(context -> {
-                                            ServerPlayer source = context.getSource().getPlayer();
-                                            if (source == null) return 0;
-
-                                            if (!PoliticalServer.isOperator(source)) {
-                                                source.sendSystemMessage(Component.literal("You don't have permission!").withStyle(ChatFormatting.RED));
-                                                return 0;
-                                            }
-
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                            int amount = IntegerArgumentType.getInteger(context, "amount");
-
-                                            CreditItem.removeCredits(target, amount);
-
-                                            source.sendSystemMessage(Component.literal("Removed " + amount + " credits from " + target.getName().getString()).withStyle(ChatFormatting.GREEN));
+                                        .executes(ctx -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                            int current = CreditItem.countCredits(target);
+                                            CreditItem.setCredits(target, Math.max(0, current - amount));
+                                            ctx.getSource().sendSystemMessage(Component.literal("Removed " + amount + " credits from " + target.getName().getString()).withStyle(ChatFormatting.YELLOW));
                                             return 1;
                                         }))))
                 .then(Commands.literal("set")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
-                                        .executes(context -> {
-                                            ServerPlayer source = context.getSource().getPlayer();
-                                            if (source == null) return 0;
-
-                                            if (!PoliticalServer.isOperator(source)) {
-                                                source.sendSystemMessage(Component.literal("You don't have permission!").withStyle(ChatFormatting.RED));
-                                                return 0;
-                                            }
-
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "player");
-                                            int amount = IntegerArgumentType.getInteger(context, "amount");
-
+                                        .executes(ctx -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                            int amount = IntegerArgumentType.getInteger(ctx, "amount");
                                             CreditItem.setCredits(target, amount);
-
-                                            source.sendSystemMessage(Component.literal("Set " + target.getName().getString() + "'s credits to " + amount).withStyle(ChatFormatting.GREEN));
+                                            ctx.getSource().sendSystemMessage(Component.literal("Set " + target.getName().getString() + "'s credits to " + amount).withStyle(ChatFormatting.GREEN));
                                             return 1;
                                         }))))
+                .then(Commands.literal("check")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(ctx -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+                                    int credits = CreditItem.countCredits(target);
+                                    ctx.getSource().sendSystemMessage(Component.literal(target.getName().getString() + " has " + credits + " credits").withStyle(ChatFormatting.GOLD));
+                                    return 1;
+                                })))
         );
     }
 
@@ -2132,25 +2048,6 @@ public class CommandRegistry {
                         return 0;
                     }
                     ViceChairGui.open(player);
-                    return 1;
-                }));
-
-        dispatcher.register(Commands.literal("judge")
-                .executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayer();
-                    if (player == null) return 0;
-                    String uuid = player.getUUID().toString();
-
-                    if (DictatorManager.isDictator(uuid)) {
-                        player.sendSystemMessage(Component.literal("Dictators must use /dictator instead!").withStyle(ChatFormatting.RED));
-                        return 0;
-                    }
-
-                    if (!uuid.equals(DataManager.getJudge())) {
-                        player.sendSystemMessage(Component.literal("Only the Judge can use this command!").withStyle(ChatFormatting.RED));
-                        return 0;
-                    }
-                    JudgeGui.open(player);
                     return 1;
                 }));
 
@@ -2320,6 +2217,8 @@ public class CommandRegistry {
                     CivilAntiCheatGui.open(ctx.getSource().getPlayerOrException());
                     return 1;
                 }));
+        // /view accepts both "/view <player> prevchests" and "/view prevchests <player>". They were two
+        // registrations of the same root; they are one now (M1.8), with the same two forms.
         dispatcher.register(Commands.literal("view")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .then(Commands.argument("player", EntityArgument.player())
@@ -2329,9 +2228,7 @@ public class CommandRegistry {
                                     ServerPlayer watched = EntityArgument.getPlayer(ctx, "player");
                                     PrevChestsAdminGui.open(adminP, watched);
                                     return 1;
-                                }))));
-        dispatcher.register(Commands.literal("view")
-                .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                                })))
                 .then(Commands.literal("prevchests")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes(ctx -> {
@@ -3344,6 +3241,14 @@ public class CommandRegistry {
     // HUNTS COMMAND
     // ════════════════════════════════════════════════════════════
 
+    /**
+     * /hunt. Two registrations of this root used to exist, one for the Great Hunt (LivingWorldCommands) and
+     * this one for the older Hunts system. They are one now (M1.8) with the effect Brigadier's merge gave
+     * them: the bare "/hunt" opens the older Hunts menu (this registration ran later, so its executor won),
+     * and the Great Hunt keeps its sub-commands info, start, toggle and interval. The Great Hunt screen
+     * (HuntGui.open) is therefore not reachable from the bare command; whether it should be is a design
+     * question for M6 (HANDOFF.md, KNOWN ISSUES).
+     */
     private static void registerHunt(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("hunt")
                 .executes(context -> {
@@ -3351,6 +3256,59 @@ public class CommandRegistry {
                     HuntsGui.openMainMenu(player);
                     return 1;
                 })
+                .then(Commands.literal("info")
+                        .executes(ctx -> {
+                            ServerPlayer p = ctx.getSource().getPlayerOrException();
+                            HuntManager.ActiveHunt active = HuntManager.active();
+                            p.sendSystemMessage(Component.literal("§6§l━━━ The Great Hunt ━━━"));
+                            if (active == null) {
+                                p.sendSystemMessage(Component.literal("§7No hunt is active."));
+                                p.sendSystemMessage(Component.literal("§7Next in: §f"
+                                        + PoliticalServer.formatTime(HuntManager.msUntilNextHunt())));
+                            } else {
+                                HuntManager.Archetype a = active.archetype();
+                                p.sendSystemMessage(Component.literal("§c"
+                                        + (a == null ? "Unknown quarry"
+                                        : a.title() + ", " + a.epithet())));
+                                p.sendSystemMessage(Component.literal("§7Last seen: §f"
+                                        + HuntManager.locationHint()));
+                                p.sendSystemMessage(Component.literal("§7Leaves in: §f"
+                                        + PoliticalServer.formatTime(active.remainingMs())));
+                            }
+                            p.sendSystemMessage(Component.literal("§7Purse: §6"
+                                    + HuntManager.fmt(HuntManager.currentReward()) + " coins"));
+                            p.sendSystemMessage(Component.literal("§7Hunts felled: §f"
+                                    + HuntManager.huntsCompleted()));
+                            return 1;
+                        }))
+                .then(Commands.literal("start")
+                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                        .executes(ctx -> {
+                            HuntManager.forceSpawn(ctx.getSource().getServer());
+                            ctx.getSource().sendSuccess(() -> Component.literal(
+                                    "✓ Great Hunt started.").withStyle(ChatFormatting.GREEN), true);
+                            return 1;
+                        }))
+                .then(Commands.literal("toggle")
+                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                        .executes(ctx -> {
+                            HuntManager.setEnabled(!HuntManager.isEnabled());
+                            ctx.getSource().sendSuccess(() -> Component.literal(
+                                    "✓ Hunts " + (HuntManager.isEnabled() ? "enabled" : "disabled"))
+                                    .withStyle(ChatFormatting.GREEN), true);
+                            return 1;
+                        }))
+                .then(Commands.literal("interval")
+                        .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
+                        .then(Commands.argument("minutes", IntegerArgumentType.integer(15, 100000))
+                                .executes(ctx -> {
+                                    int minutes = IntegerArgumentType.getInteger(ctx, "minutes");
+                                    HuntManager.setCooldownMs(minutes * 60_000L);
+                                    ctx.getSource().sendSuccess(() -> Component.literal(
+                                            "✓ Hunt interval set to " + minutes + " minutes")
+                                            .withStyle(ChatFormatting.GREEN), true);
+                                    return 1;
+                                })))
                 .then(Commands.literal("claim")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();

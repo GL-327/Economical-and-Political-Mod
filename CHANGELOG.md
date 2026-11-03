@@ -38,3 +38,6 @@
 - Config: new `config/political/config.json` (created with defaults on first start) with typed, range-checked settings; a bad value
   falls back or is clamped with a logged warning and never stops the server. `docs/CONFIG.md` lists every setting and is generated
   from the code. The first settings are the tick budgets and the data flush interval.
+- Commands: one registration entry point (`ModCommands`) and a registrar that reports a command registered twice; in a development run
+  that is a startup error. The eight roots that were defined twice (bounty, credits, coins, judge, startundergroundauction,
+  placeauctionmaster, view, hunt) are one definition each; the command tree is identical to before.
