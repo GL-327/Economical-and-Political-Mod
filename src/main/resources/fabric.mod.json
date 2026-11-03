@@ -3,7 +3,7 @@
 	"id": "politicalserver",
 	"version": "1.0.0",
 	"name": "Political Server",
-	"description": "Weekly elections with perks system",
+	"description": "Server-side political and economic mod: weekly elections and perks, settlements, markets, guilds and wars.",
 	"authors": ["You"],
 	"contact": {},
 	"license": "MIT",
