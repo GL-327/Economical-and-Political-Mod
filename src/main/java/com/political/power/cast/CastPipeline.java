@@ -1,6 +1,7 @@
 package com.political.power.cast;
 
 import com.political.power.PowerSettings;
+import com.political.power.formula.ReverseFormula;
 import com.political.power.model.AbilityKind;
 import com.political.power.model.AbilitySpec;
 import com.political.power.model.FailureReason;
@@ -86,16 +87,14 @@ public final class CastPipeline {
                 if (target.fullHealth()) {
                     return reject(FailureReason.TARGET_FULL_HEALTH);
                 }
-                healAmount = Math.min(PowerSettings.REVERSE_MAX_HEAL.get(), target.healthMissing());
+                healAmount = ReverseFormula.healAmount(target.healthMissing());
             }
         }
         if (ability.kind() == AbilityKind.DOMAIN && facts.domainOverlap()) {
             return reject(FailureReason.DOMAIN_OVERLAP);
         }
 
-        double cost = ability.kind() == AbilityKind.REVERSE
-                ? healAmount * PowerSettings.REVERSE_COST_PER_HP.get()
-                : ability.cost();
+        double cost = ability.kind() == AbilityKind.REVERSE ? ReverseFormula.cost(healAmount) : ability.cost();
         if (facts.resource() < cost) {
             return new CastDecision.Rejected(FailureReason.INSUFFICIENT_RESOURCE, (long) Math.ceil(cost), "");
         }

@@ -46,7 +46,7 @@ stops the server. Settings are read at startup.
 | `power.domain.cost` | int | `150` | 0 to 100000 | Resource cost of a Domain, available from a school capstone. |
 | `power.domain.damage_bonus` | double | `0.25` | 0.0 to 10.0 | Extra damage the caster's melee deals inside the Domain (0.25 is +25 percent). Melee also ignores armor and the Defense stat there. |
 | `power.domain.duration_ticks` | int | `600` | 20 to 72000 | How long a Domain lasts, in ticks. |
-| `power.domain.min_separation` | double | `24.0` | 0.0 to 512.0 | A Domain cannot be cast if another one in the same dimension is closer than this, in blocks. |
+| `power.domain.min_separation` | double | `24.0` | 0.0 to 512.0 | A Domain cannot be cast if another one in the same dimension is this close or closer, in blocks (exactly this far is refused). |
 | `power.domain.radius` | double | `12.0` | 1.0 to 128.0 | Radius of a Domain around its caster, in blocks. |
 | `power.enabled` | boolean | `true` | true or false | Master switch for the power system. When off, no technique can be cast (the cast is refused with SYSTEM_DISABLED). |
 | `power.red.cooldown_ticks` | int | `100` | 0 to 72000 | Cooldown of Red, in ticks. |

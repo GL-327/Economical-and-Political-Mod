@@ -139,7 +139,7 @@ public final class PowerSettings {
             "power.domain.radius", 12.0, 1.0, 128.0, "Radius of a Domain around its caster, in blocks.");
     public static final ConfigKey<Double> DOMAIN_MIN_SEPARATION = ConfigKey.decimal(
             "power.domain.min_separation", 24.0, 0.0, 512.0,
-            "A Domain cannot be cast if another one in the same dimension is closer than this, in blocks.");
+            "A Domain cannot be cast if another one in the same dimension is this close or closer, in blocks (exactly this far is refused).");
     public static final ConfigKey<Double> DOMAIN_DAMAGE_BONUS = ConfigKey.decimal(
             "power.domain.damage_bonus", 0.25, 0.0, 10.0,
             "Extra damage the caster's melee deals inside the Domain (0.25 is +25 percent). Melee also ignores armor and the Defense stat there.");
