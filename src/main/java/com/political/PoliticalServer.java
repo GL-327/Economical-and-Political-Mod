@@ -391,6 +391,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         });
 
         ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
+            com.political.core.persist.StoreRegistry.global().saveAllOnShutdown();
             // The eight most expensive tick services of this run, for the M8.1 performance baseline.
             for (String line : TICKS.summaryLines(8)) {
                 LOGGER.info("Tick service {}", line);

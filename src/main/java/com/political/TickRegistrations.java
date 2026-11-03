@@ -4,6 +4,7 @@ import com.political.bounty.BountySpawnManager;
 import com.political.bounty.SlayerArmorHandler;
 import com.political.bounty.SlayerManager;
 import com.political.bounty.T2ArmorAbilityHandler;
+import com.political.core.persist.StoreRegistry;
 import com.political.core.tick.TickDispatcher;
 import com.political.core.tick.TickReporter;
 import com.political.core.tick.TickService;
@@ -152,6 +153,9 @@ final class TickRegistrations {
             BankTick.applyHourly(s);
             AuctionHouseManager.cleanupExpiredListings(7L * 24L * 60L * 60L * 1000L);
         });
+
+        // Versioned stores (M1.6): write the dirty ones every 30 seconds. The shutdown hook flushes the rest.
+        r.server("persistence-flush", 600, s -> StoreRegistry.global().saveDirty());
         return d;
     }
 

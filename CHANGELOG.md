@@ -33,3 +33,5 @@
 - Tick architecture: the one 140-line tick handler is now 72 named services (`TickRegistrations`) run by a `TickDispatcher` in the
   same order. A service that throws no longer stops the others, slow services are logged by name, and the server logs its eight
   costliest services when it stops.
+- Persistence layer: `VersionedStore` writes versioned JSON atomically, applies one migration per schema step, copies a corrupt file
+  aside instead of overwriting it and refuses to overwrite a file from a newer version. Nothing uses it yet; the power system (M2) is first.

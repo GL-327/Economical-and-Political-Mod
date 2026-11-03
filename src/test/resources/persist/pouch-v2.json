@@ -1,0 +1,10 @@
+{
+  "schema_version": 2,
+  "data": {
+    "items": [
+      {"id": "sword", "count": 1},
+      {"id": "apple", "count": 1}
+    ],
+    "coins": 12
+  }
+}
