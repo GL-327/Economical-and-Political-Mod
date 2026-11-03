@@ -59,3 +59,6 @@ c3.txt
 build_output*.txt
 boot*.log
 full_boot*.log
+
+# local Claude Code settings (machine specific paths)
+.claude/*.local.json
