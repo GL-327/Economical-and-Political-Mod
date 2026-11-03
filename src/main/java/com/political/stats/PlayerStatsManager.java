@@ -284,6 +284,7 @@ public final class PlayerStatsManager {
      */
     public static float applyOutgoingDamage(ServerPlayer attacker, LivingEntity target, float damage) {
         StatSheet sheet = getStats(attacker);
+        double critMultiplier = 1.0;
 
         double strength = sheet.get(Stat.STRENGTH);
         if (strength != 0) {
@@ -292,7 +293,8 @@ public final class PlayerStatsManager {
 
         boolean crit = attacker.getRandom().nextDouble() * 100.0 < sheet.get(Stat.CRIT_CHANCE);
         if (crit) {
-            damage *= (float) (1.0 + sheet.get(Stat.CRIT_DAMAGE) / 100.0);
+            critMultiplier = 1.0 + sheet.get(Stat.CRIT_DAMAGE) / 100.0;
+            damage *= (float) critMultiplier;
             if (attacker.level() instanceof ServerLevel sl) {
                 sl.sendParticles(ParticleTypes.ENCHANTED_HIT,
                         target.getX(), target.getY() + target.getBbHeight() * 0.6, target.getZ(),
@@ -321,7 +323,22 @@ public final class PlayerStatsManager {
         }
 
         spawnDamageHologram(target, damage, crit);
+        // Set last, after the Ferocity strikes above (which come back through here), so it describes this hit.
+        lastCritMultiplier = critMultiplier;
         return damage;
+    }
+
+    /** The multiplier the most recent outgoing hit got from a critical (1.0 when it was not critical). */
+    private static double lastCritMultiplier = 1.0;
+
+    /**
+     * The crit multiplier of the hit {@link #applyOutgoingDamage} just handled, then reset to 1.0. The power system's
+     * Black Flash reads it so that it replaces a critical hit instead of stacking with it.
+     */
+    public static double takeLastCritMultiplier() {
+        double value = lastCritMultiplier;
+        lastCritMultiplier = 1.0;
+        return value;
     }
 
     /** Incoming damage reduction: dmg * 100 / (100 + defense). Void damage is never reduced. */

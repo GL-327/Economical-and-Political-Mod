@@ -140,7 +140,6 @@ com/political/ReportGui.java | 38
 com/political/RoyalTreasuryManager.java | 18
 com/political/RulerGui.java | 34
 com/political/SchoolTreeGui.java | 32
-com/political/SchoolTreeManager.java | 1
 com/political/ScoreboardManager.java | 4
 com/political/SeasonFestivals.java | 6
 com/political/SeasonGui.java | 68
@@ -257,4 +256,3 @@ com/political/stats/HealthScalingManager.java | 2
 com/political/stats/PlayerStatsManager.java | 11
 com/political/technique/TechniqueGui.java | 17
 com/political/technique/TechniqueItems.java | 6
-com/political/technique/TechniqueManager.java | 17

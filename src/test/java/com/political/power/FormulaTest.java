@@ -179,9 +179,9 @@ class FormulaTest {
     @Test
     void blackFlashAtChanceZeroNeverHappensAndAtChanceOneAlwaysDoes() {
         setChance(0.0);
-        assertFalse(BlackFlash.apply(10, false, 4, 0, 0.0).triggered(), "chance 0 never triggers, even at roll 0");
+        assertFalse(BlackFlash.apply(10, 1.0, 4, 0, 0.0).triggered(), "chance 0 never triggers, even at roll 0");
         setChance(1.0);
-        BlackFlash.Result r = BlackFlash.apply(10, false, 4, 0, 0.999999);
+        BlackFlash.Result r = BlackFlash.apply(10, 1.0, 4, 0, 0.999999);
         assertTrue(r.triggered());
         assertEquals(25.0, r.damage(), EPS);
     }
@@ -189,24 +189,27 @@ class FormulaTest {
     @Test
     void blackFlashRollBoundary() {
         // Default chance 0.05: a roll of exactly 0.05 misses, just below hits.
-        assertTrue(BlackFlash.apply(10, false, 3, 0, 0.0499).triggered());
-        assertFalse(BlackFlash.apply(10, false, 3, 0, 0.05).triggered());
+        assertTrue(BlackFlash.apply(10, 1.0, 3, 0, 0.0499).triggered());
+        assertFalse(BlackFlash.apply(10, 1.0, 3, 0, 0.05).triggered());
     }
 
     @Test
     void blackFlashReplacesTheCritMultiplierInsteadOfStackingWithIt() {
         setChance(1.0);
         // A critical hit of 15 came from 10 x 1.5. A Black Flash makes it 10 x 2.5, not 15 x 2.5.
-        BlackFlash.Result crit = BlackFlash.apply(15.0, true, 4, 0, 0.0);
+        BlackFlash.Result crit = BlackFlash.apply(15.0, 1.5, 4, 0, 0.0);
         assertEquals(25.0, crit.damage(), EPS);
-        BlackFlash.Result plain = BlackFlash.apply(10.0, false, 4, 0, 0.0);
+        BlackFlash.Result plain = BlackFlash.apply(10.0, 1.0, 4, 0, 0.0);
         assertEquals(25.0, plain.damage(), EPS);
+        // A bigger crit (Crit Damage +100 percent) is undone just as exactly.
+        BlackFlash.Result bigCrit = BlackFlash.apply(20.0, 2.0, 4, 0, 0.0);
+        assertEquals(25.0, bigCrit.damage(), EPS);
     }
 
     @Test
     void blackFlashLeavesDamageAloneWhenItDoesNotQualify() {
         setChance(1.0);
-        BlackFlash.Result r = BlackFlash.apply(12.0, true, 1, 0, 0.0);
+        BlackFlash.Result r = BlackFlash.apply(12.0, 1.5, 1, 0, 0.0);
         assertFalse(r.triggered());
         assertEquals(12.0, r.damage(), EPS);
     }

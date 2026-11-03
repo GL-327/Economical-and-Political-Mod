@@ -35,6 +35,11 @@ public final class VowSet {
         return active.contains(vow);
     }
 
+    /** After loading: the wait that was left when the player last played, counted from now. */
+    public void restoreWait(long nowTick, long remainingTicks) {
+        reacceptAtTick = remainingTicks > 0 ? nowTick + remainingTicks : 0L;
+    }
+
     /** Ticks left before a new vow may be taken, 0 when allowed. */
     public long reacceptRemaining(long nowTick) {
         return Math.max(0L, reacceptAtTick - nowTick);

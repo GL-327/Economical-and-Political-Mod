@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -65,6 +66,15 @@ public final class Text {
             english = key;
         }
         return Component.translatableWithFallback(key, english, args);
+    }
+
+    /**
+     * Text for a key that is a family plus an id, such as {@code political.power.vow} and {@code no_armor}. The
+     * family must be a literal in the caller so it can be found; a test lists every id of the family and checks each
+     * key exists (see {@code PowerTextTest}), because {@code TextPolicyTest} can only read keys written in full.
+     */
+    public static MutableComponent trNamed(String family, String id, Object... args) {
+        return tr(family + "." + id.toLowerCase(Locale.ROOT), args);
     }
 
     /** Text that is data, not words: a name, a number, a coordinate. Words go through {@link #tr}. */

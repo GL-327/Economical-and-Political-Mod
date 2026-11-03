@@ -244,7 +244,7 @@ public class CustomItemHandler {
             if (TechniqueManager.tryUseFromItem(serverPlayer, held)) {
                 return InteractionResult.SUCCESS;
             }
-            if (held.isEmpty() && TechniqueManager.tryCastSneak(serverPlayer)) {
+            if (com.political.power.game.PowerInput.onUse(serverPlayer)) {
                 return InteractionResult.SUCCESS;
             }
 

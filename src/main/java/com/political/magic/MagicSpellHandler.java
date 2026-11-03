@@ -66,9 +66,9 @@ public class MagicSpellHandler {
     public static boolean handleStaffUse(ServerPlayer player, ItemStack stack) {
         if (!MagicStaff.isStaff(stack)) return false;
 
-        // Sneak + right-click casts the selected Magic Technique ability instead of the spell.
+        // Sneak + right-click is the power system's cast input (PowerInput), not a staff spell.
         if (player.isShiftKeyDown()) {
-            return TechniqueManager.handleStaffSneakUse(player, stack);
+            return false;
         }
 
         String uuid = player.getUUID().toString();

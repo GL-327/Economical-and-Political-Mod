@@ -110,6 +110,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (entity instanceof ServerPlayer player) {
                 DeathPenaltyManager.onPlayerDeath(player, damageSource);
+                com.political.power.game.PowerService.onDeath(player);
             }
             if (!(entity instanceof ServerPlayer)) {
                 Entity mobKiller = damageSource.getEntity();
@@ -151,6 +152,16 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             CustomItemHandler.onPlayerDisconnect(player.getUUID());
             PlayerStatsManager.onPlayerDisconnect(player.getUUID());
             CompanionManager.onLogout(player);
+            com.political.power.game.PowerService.onLogout(player);
+        });
+
+        // Power system: a Domain ends when its caster changes dimension; vows are rechecked when equipment changes.
+        net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register(
+                (player, origin, destination) -> com.political.power.game.PowerService.onDimensionChange(player));
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.EQUIPMENT_CHANGE.register((entity, slot, previous, current) -> {
+            if (entity instanceof ServerPlayer player) {
+                com.political.power.game.PowerService.onEquipmentChange(player);
+            }
         });
 
         // Reapply perks on respawn (death and other player copy events)
@@ -290,6 +301,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             ServerPlayer player = handler.getPlayer();
             final java.util.UUID joinId = player.getUUID();
             DataManager.registerPlayer(player.getUUID().toString(), player.getName().getString());
+            com.political.power.game.PowerService.onJoin(player);
             ProgressionTreeManager.registerPlayer(player.getUUID().toString(), player.getName().getString());
             HuntsManager.registerPlayer(player.getUUID().toString());
             ClassManager.registerPlayer(player.getUUID().toString());

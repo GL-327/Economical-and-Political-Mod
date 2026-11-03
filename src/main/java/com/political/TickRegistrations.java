@@ -110,10 +110,13 @@ final class TickRegistrations {
         r.player("relics", RelicManager::tickPlayer);
         r.player("warrant-armour", WarrantArmour::tickPlayer);
         r.player("titles", TitleManager::tickPlayer);
+        // Power system: resource regeneration and the vow check, once a second per player.
+        r.player("power-players", 20, com.political.power.game.PowerService::tickPlayer);
         r.player("spawn-protection-boundary", SpawnProtectionManager::tickPlayerBoundary);
 
         // ── Server level, second group ──────────────────────────────────────
         r.server("slayers", SlayerManager::tick);
+        r.server("power-domains", 10, com.political.power.game.PowerService::tickDomains);
         r.server("elections", ElectionManager::tick);
         r.server("prison", PrisonManager::tick);
         r.server("weather", WeatherManager::tick);
@@ -213,7 +216,11 @@ final class TickRegistrations {
         }
 
         void player(String name, Consumer<ServerPlayer> task) {
-            dispatcher.register(TickService.player(name, 1, playerBudgetMs, task));
+            player(name, 1, task);
+        }
+
+        void player(String name, int intervalTicks, Consumer<ServerPlayer> task) {
+            dispatcher.register(TickService.player(name, intervalTicks, playerBudgetMs, task));
         }
     }
 }

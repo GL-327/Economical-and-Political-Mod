@@ -49,6 +49,7 @@ stops the server. Settings are read at startup.
 | `power.domain.min_separation` | double | `24.0` | 0.0 to 512.0 | A Domain cannot be cast if another one in the same dimension is this close or closer, in blocks (exactly this far is refused). |
 | `power.domain.radius` | double | `12.0` | 1.0 to 128.0 | Radius of a Domain around its caster, in blocks. |
 | `power.enabled` | boolean | `true` | true or false | Master switch for the power system. When off, no technique can be cast (the cast is refused with SYSTEM_DISABLED). |
+| `power.progression.shards_per_level` | int | `3` | 1 to 1000 | Arcane shards earned in total for each power level (level = 1 + shards earned / this, at most 50). School tree nodes need a level. Shards still only come from expedition rewards, so this changes how fast levels follow, not how many shards exist. |
 | `power.red.cooldown_ticks` | int | `100` | 0 to 72000 | Cooldown of Red, in ticks. |
 | `power.red.cost` | int | `20` | 0 to 10000 | Resource cost of Red, which pushes a target away from the caster. |
 | `power.red.damage` | double | `0.0` | 0.0 to 1000.0 | Damage Red deals on top of the push. Zero by default. |
@@ -64,6 +65,12 @@ stops the server. Settings are read at startup.
 | `power.reverse.cost_per_hp` | double | `2.0` | 0.0 to 1000.0 | Resource charged for every point of health Reverse actually restores. |
 | `power.reverse.max_heal` | double | `8.0` | 0.0 to 1000.0 | Most health Reverse can restore in one cast, in half-hearts (2 = one heart). |
 | `power.reverse.range` | double | `6.0` | 1.0 to 128.0 | How far away Reverse can reach another player, in blocks. |
+| `power.unique.barrier` | boolean | `false` | true or false | Only one player at a time can hold the Barrier. Off by default. |
+| `power.unique.blue` | boolean | `false` | true or false | Only one player at a time can hold Blue. Off by default. |
+| `power.unique.cursed_blast` | boolean | `false` | true or false | Only one player at a time can hold Cursed Blast. Off by default. |
+| `power.unique.domain` | boolean | `false` | true or false | Only one player at a time can hold Domain. Off by default. |
+| `power.unique.red` | boolean | `false` | true or false | Only one player at a time can hold Red. Off by default. |
+| `power.unique.reverse` | boolean | `false` | true or false | Only one player at a time can hold Reverse. Off by default. |
 | `power.vow.check_interval_ticks` | int | `20` | 1 to 1200 | How often vows are checked while a player plays, in ticks. |
 | `power.vow.max_active` | int | `2` | 0 to 3 | How many binding vows a player can hold at once. |
 | `power.vow.no_armor_resource_bonus` | int | `20` | 0 to 10000 | Maximum resource gained from the no-armor vow. |

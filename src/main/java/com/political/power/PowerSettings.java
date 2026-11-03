@@ -52,6 +52,26 @@ public final class PowerSettings {
             "power.resource.death_keep_fraction", 0.5, 0.0, 1.0,
             "Fraction of the current resource kept when the player dies (0.5 halves it).");
 
+    // ── progression and unique techniques (C1, C13) ─────────────────────────────────────────
+
+    public static final ConfigKey<Integer> SHARDS_PER_LEVEL = ConfigKey.integer(
+            "power.progression.shards_per_level", 3, 1, 1000,
+            "Arcane shards earned in total for each power level (level = 1 + shards earned / this, at most 50). School tree nodes need a level. "
+                    + "Shards still only come from expedition rewards, so this changes how fast levels follow, not how many shards exist.");
+
+    public static final ConfigKey<Boolean> UNIQUE_BLUE = ConfigKey.bool(
+            "power.unique.blue", false, "Only one player at a time can hold Blue. Off by default.");
+    public static final ConfigKey<Boolean> UNIQUE_RED = ConfigKey.bool(
+            "power.unique.red", false, "Only one player at a time can hold Red. Off by default.");
+    public static final ConfigKey<Boolean> UNIQUE_CURSED_BLAST = ConfigKey.bool(
+            "power.unique.cursed_blast", false, "Only one player at a time can hold Cursed Blast. Off by default.");
+    public static final ConfigKey<Boolean> UNIQUE_REVERSE = ConfigKey.bool(
+            "power.unique.reverse", false, "Only one player at a time can hold Reverse. Off by default.");
+    public static final ConfigKey<Boolean> UNIQUE_BARRIER = ConfigKey.bool(
+            "power.unique.barrier", false, "Only one player at a time can hold the Barrier. Off by default.");
+    public static final ConfigKey<Boolean> UNIQUE_DOMAIN = ConfigKey.bool(
+            "power.unique.domain", false, "Only one player at a time can hold Domain. Off by default.");
+
     // ── Blue, Red, Cursed Blast, Reverse (C3 to C6) ─────────────────────────────────────────
 
     public static final ConfigKey<Integer> BLUE_COST = ConfigKey.integer(

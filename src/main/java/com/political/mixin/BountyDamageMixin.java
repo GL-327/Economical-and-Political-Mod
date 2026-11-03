@@ -67,11 +67,15 @@ public abstract class BountyDamageMixin {
     )
     private float modifyDamageAmount(float amount, ServerLevel world, DamageSource source) {
         LivingEntity self = (LivingEntity) (Object) this;
+        // A Domain strike deals exactly the damage it computed: no Defense, no multipliers a second time.
+        if (com.political.power.game.PowerDamage.inDomainStrike()) {
+            return amount;
+        }
         float modifiedAmount = amount;
 
         // === Player taking damage from slayer boss ===
         if (self instanceof ServerPlayer player) {
-            if (com.political.technique.TechniqueManager.absorbOnHurt(player, modifiedAmount)) {
+            if (com.political.power.game.PowerDamage.absorbs(player, source)) {
                 return 0.0f;
             }
             if (CustomItemHandler.tryPhaseDodge(player, source, modifiedAmount)) {
@@ -174,7 +178,9 @@ public abstract class BountyDamageMixin {
             modifiedAmount *= com.political.party.PartyPerkEffects.meleeDamageBonusMultiplier(player.getUUID().toString());
         }
 
-        return CustomItemHandler.calculateSlayerDamage(player, self, modifiedAmount);
+        // Last stage: Black Flash and the Domain (power system).
+        return com.political.power.game.PowerDamage.outgoing(player, self, source,
+                CustomItemHandler.calculateSlayerDamage(player, self, modifiedAmount));
     }
 
     @Inject(method = "die", at = @At("HEAD"))

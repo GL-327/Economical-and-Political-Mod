@@ -265,20 +265,17 @@ public class MagicManager {
     // MANA
     // ════════════════════════════════════════════════════════════
 
+    // The mana pool is the power system's resource now (M2); these three keep the old callers working.
     public static int getMaxMana(String uuid) {
-        PlayerMagicData data = getPlayerData(uuid);
-        int base = 100 + (data.level * 5);
-        int bonus = MagicSkillTree.getManaBonus(data.skillTreeUnlocks);
-        // Intelligence stat above its 100 base adds max mana 1:1 (gear lore "✎ Intelligence: +X").
-        return base + bonus + PlayerStatsManager.getBonusMana(uuid);
+        return (int) com.political.power.game.PowerService.maxResource(uuid);
     }
 
     public static float getMana(String uuid) {
-        return getPlayerData(uuid).mana;
+        return (float) com.political.power.game.PowerService.resource(uuid);
     }
 
     public static void setMana(String uuid, float mana) {
-        getPlayerData(uuid).mana = Math.max(0, Math.min(mana, getMaxMana(uuid)));
+        com.political.power.game.PowerService.setResource(uuid, mana);
     }
 
     public static boolean consumeMana(ServerPlayer player, int amount) {

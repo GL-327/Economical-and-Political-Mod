@@ -46,3 +46,16 @@
   unchanged; `docs/TEXT_MIGRATION.md` plans its conversion.
 - Screens: added a shared layout module (`com.political.core.gui`: palette, icons, slot grid, pager, stepper, progress bar, frame,
   header, footer, confirmation) and `STYLE.md`, the standard for everything a player sees. No existing screen was changed yet.
+
+### M2 power system
+- Casting: the empty-hand sneak right click now goes through one validation pipeline with fixed failure reasons (global cooldown,
+  rate limit, range, valid target, enough resource, per-ability cooldown). The eight older techniques and their 32 abilities keep their
+  effects but obey the same limits and spend one shared resource. Every number is a config key under `power.*` (`docs/CONFIG.md`).
+- New abilities: Blue (pull), Red (push), Cursed Blast, Reverse (heal), Barrier, Domain and Black Flash, plus binding vows (at most two).
+  Black Flash replaces the critical hit multiplier instead of stacking with it. A Domain is a sphere of radius 12 around the caster.
+- Progression: Arcane Shards earned in total set a power level; school tree nodes give damage, resource and cooldown passives; the tier of
+  a school follows the spine nodes (1, 4, 7, 10). The spell mana pool is the power resource.
+- Saving: `power.json` (schema 1) replaces `techniques.json`, `magic_data.json` and `magic_schools.json`. On first start the old files are
+  imported, copies are kept as `<name>.pre-power`, and anything that does not fit is quarantined rather than dropped. Cooldowns, cast
+  history and Domains are not saved.
+- Old entry points (`TechniqueManager`, mana and shard methods) now forward to the new service; nothing was deleted.

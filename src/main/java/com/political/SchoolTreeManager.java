@@ -92,13 +92,8 @@ public final class SchoolTreeManager {
     }
 
     public static void addShards(ServerPlayer player, int amount) {
-        if (amount <= 0) return;
-        PlayerSchoolData d = get(player.getUUID().toString());
-        d.shards += amount;
-        d.shardsEarnedTotal += amount;
-        player.sendSystemMessage(Component.literal("✦ +" + amount + " Arcane Shard" + (amount == 1 ? "" : "s"))
-                .withStyle(ChatFormatting.LIGHT_PURPLE));
-        save();
+        // Shards live in the power data now (M2); expedition rewards still call this.
+        com.political.power.game.PowerService.addShards(player, amount);
     }
 
     /** Bare add without message (used for bulk grants such as grimoires). */
