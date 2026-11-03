@@ -27,3 +27,6 @@
 - Timing: added `com.political.core.Clock`. Boss, armor, weapon, item, home and bounty-armor timers that live only in memory now run
   on game ticks instead of the wall clock (same durations, but a lagging server no longer skips them). The other wall-clock uses are
   listed with reasons in `src/test/resources/wallclock-allowlist.txt`.
+- Libraries: dropped the bundled placeholder-api and player-data-api (no code used them; player-data-api has no 26.3 build). Added
+  `docs/PROFILING.md` on using spark. Recorded why fabric-permissions-api and Caffeine were rejected (Fabric API and Guava already
+  provide them).

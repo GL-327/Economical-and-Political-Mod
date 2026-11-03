@@ -61,15 +61,10 @@ dependencies {
 
 	// Server side libraries, bundled so a server owner drops in one jar.
 	//
-	// These are the ones with a real 26.1 build that this mod actually has a use for.
-	// hologram-api and common-protection-api were considered and left out because neither has
-	// been built for 26.1, and pulling a 1.21 jar in would fail at runtime rather than at compile
-	// time, which is the worse of the two failures.
-	implementation "eu.pb4:placeholder-api:${project.placeholder_version}"
-	include "eu.pb4:placeholder-api:${project.placeholder_version}"
-
-	implementation "eu.pb4:player-data-api:${project.playerdata_version}"
-	include "eu.pb4:player-data-api:${project.playerdata_version}"
+	// placeholder-api and player-data-api were bundled here but no code ever imported them, and
+	// player-data-api has no build tagged 26.3 (M1.4 in HANDOFF.md), so they were dropped. Add one back
+	// only for a named problem. hologram-api and common-protection-api were considered earlier and left
+	// out because neither had a build for the game version at the time.
 
 	// Polymer serves the resource pack that defines the custom item models. Core is needed for
 	// the pack machinery to attach to the server at all, resource-pack is the half that builds
