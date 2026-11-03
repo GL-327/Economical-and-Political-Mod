@@ -80,6 +80,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
         LOGGER.info("PoliticalServer mod initializing");
+        com.political.core.MixinAudit.runIfRequested();
 
         // Scale + name upgraded mobs on spawn (not only on first damage) so tier tags are visible without hitting.
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {

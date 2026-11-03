@@ -125,8 +125,9 @@ public class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "knockback", at = @At("HEAD"), cancellable = true)
-    private void preventKnockback(double strength, double x, double z, CallbackInfo ci) {
+    // The 5 argument overload delegates here, so this one hook covers every knockback entry point.
+    @Inject(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V", at = @At("HEAD"), cancellable = true)
+    private void preventKnockback(double strength, double x, double z, DamageSource source, float damage, boolean comesFromEffect, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity)(Object)this;
         if (!(entity instanceof ServerPlayer player)) return;
 

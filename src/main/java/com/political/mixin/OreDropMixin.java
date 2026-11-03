@@ -27,10 +27,10 @@ import java.util.List;
 public class OreDropMixin {
 
     @Inject(method = "playerDestroy", at = @At("TAIL"))
-    private void applyCollectorDoubleDrop(Level world, Player player, BlockPos pos, BlockState state,
+    private void applyCollectorDoubleDrop(net.minecraft.server.level.ServerLevel world, ServerPlayer serverPlayer, BlockPos pos, BlockState state,
             net.minecraft.world.level.block.entity.BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
         
-        if (world.isClientSide() || !(player instanceof ServerPlayer serverPlayer)) return;
+        if (world.isClientSide()) return;
         
         // Check if this is an ore block (contains "ore" in translation key or is a known ore type)
         String blockId = state.getBlock().toString().toLowerCase();

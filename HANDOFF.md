@@ -1,14 +1,14 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-03 12:00 UTC  |  Session: 2  |  Device: Windows
+Last updated: 2026-11-03 14:20 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
-Do the 26.1 to 26.3 version bump in `gradle.properties` (minecraft_version, loader_version, loom_version, fabric_api_version and the four bundled libraries) after looking up each target build, then fix compile errors; this is the first task of M1 and goes in its own commit before M1.1.
+M1.1 logging: replace the 101 `System.out`/`System.err` calls and 17 `printStackTrace` calls under `src/main/java` with an SLF4J logger per class (`LoggerFactory.getLogger(X.class)`), one package at a time, building after each batch; record the before/after counts.
 
 ## STATUS
-Milestone: M0   Branch: modern/m0-baseline   Last commit: 0a8455e M0/M0.11: add CHANGELOG.md and HANDOFF.md (this file's M0.7 update is committed after it)
+Milestone: M1 (M0 done except M0.7 partial)   Branch: modern/m1-core (cut from modern/m0-baseline at 32cee78)   Last commit: see the last HISTORY line
 PUSH STATUS: see the last HISTORY line
-BUILD STATUS: GREEN (`./gradlew build --console=plain`, exit 0, 17s, session 2 after the M0.4 and M0.10 changes; baseline before any change also exit 0, 1m31s)
-TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST-com.political.ModMetadataTest.xml: tests=5 failures=0)
+BUILD STATUS: GREEN on Minecraft 26.3 (`./gradlew build --console=plain`, exit 0, 19s)
+TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/*.xml: tests=5 failures=0)
 
 ## MILESTONE CHECKLIST
 - [x] M0.1 Clone repo, branch, HANDOFF.md — the working copy already is the real repo (origin = https://github.com/GL-327/Economical-and-Political-Mod, history intact). Branch modern/m0-baseline cut from master 3189016.
@@ -16,12 +16,26 @@ TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST
 - [x] M0.3 Recount owner numbers — see VERIFIED and NOT VERIFIED.
 - [x] M0.4 Metadata — license CC0-1.0 and authors ["GL-327"] set in fabric.mod.json, contact links added, description refreshed, `fabric-api` bounded to ">=0.144.3" (the range moves with the version bump). Guarded by ModMetadataTest.licenseFieldMatchesLicenseFile and authorIsNotThePlaceholder. LICENSE file unchanged.
 - [x] M0.5 Build green on current code before any modernization — `./gradlew build --console=plain`, exit 0, 1m31s, on 3189016 unmodified.
-- [ ] M0.6 Loom — PARTIAL: no pin change. The `1.15-SNAPSHOT` pin currently resolves to Loom 1.15.5, a release (Gradle output "Fabric Loom: 1.15.5"), so there is little drift risk on 26.1 today. Whether any non-snapshot Loom supports 26.3 is NOT VERIFIED; Fabric's own example mod pins `1.19-SNAPSHOT` for 26.3. This can only be settled by the version bump.
-- [ ] M0.7 JVM flags — PARTIAL, see the M0.7 notes under VERIFIED. No flag was removed.
+- [x] M0.6 Loom — a non-snapshot Loom does support 26.3: `1.19.3` (release on maven.fabricmc.net) is pinned in gradle.properties and the 26.3 build and boot succeeded with it; it needs Gradle 9.8.0 or newer, so the wrapper moved to 9.8.2. Earlier note:  The `1.15-SNAPSHOT` pin currently resolves to Loom 1.15.5, a release (Gradle output "Fabric Loom: 1.15.5"), so there is little drift risk on 26.1 today. Whether any non-snapshot Loom supports 26.3 is NOT VERIFIED; Fabric's own example mod pins `1.19-SNAPSHOT` for 26.3. This can only be settled by the version bump.
+- [ ] M0.7 JVM flags — PARTIAL, see the M0.7 notes under VERIFIED. No flag was removed. Boots on 26.3 also ran without the flags (runServerVerify): see VERIFIED.
 - [x] M0.8 JUnit 5 test source set — `./gradlew build` runs `ModMetadataTest` (3 tests, 0 failures).
 - [x] M0.9 Static checks — counts under VERIFIED.
 - [x] M0.10 Repo cleanup — 10 empty `.windsurf/workflows/*.md` moved to `archive/windsurf-workflows/`; 27 files moved from `scripts/` to `scripts/archive/` with a README; the 9 root docs moved to `docs/archive/` with a README (all `git mv`, nothing deleted). `tools/mojmap_bulk_fix.py` left in place.
 - [x] M0.11 CHANGELOG.md — created with an Unreleased section.
+
+## M1 CHECKLIST (branch modern/m1-core)
+- [x] M1.0 Bump 26.1 to 26.3 — gradle.properties: minecraft 26.3, loader 0.20.1, loom 1.19.3, Fabric API 0.165.2+26.3, sgui 2.2.1+26.3, placeholder-api 3.2.0+26.3, player-data-api 0.11.0+26.2 (no 26.3 build exists; its fabric.mod.json says minecraft ">=26.1-" and the server booted with it), polymer 0.18.6+26.3; Gradle 9.8.2. Sources ported (1,298 compile errors to 0). `./gradlew build` exit 0; `runServerVerify` reaches `PoliticalServer data loaded`.
+- [ ] M1.1 Logging — NEXT.
+- [ ] M1.2 Error policy
+- [ ] M1.3 Time policy
+- [ ] M1.4 Libraries
+- [ ] M1.5 Tick architecture
+- [ ] M1.6 Persistence
+- [ ] M1.7 Config
+- [ ] M1.8 Commands
+- [ ] M1.9 Text
+- [ ] M1.10 GUI layout
+- [ ] M1.11 Tests
 
 ## POWER CAPABILITY STATUS (M2 onward)
 - Not started. Audit-time facts only: `Technique.exclusives()` returns `List.of()` (technique/Technique.java:132-134); seven files read sneak state (see VERIFIED).
@@ -37,10 +51,12 @@ TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST
 - License: CC0-1.0. OWNER (chat, 2026-11-03: "whichever you need to to do it all", delegating the choice). Reason: the LICENSE file in the repo is already the CC0 text, so this grants nothing beyond what is already published, and CC0 needs no copyright-holder name. Reversible before any release; LICENSE file not touched.
 - Author: "GL-327". OWNER (same delegation). Reason: it is the public GitHub account in the repo URL; no real name was guessed.
 - Docs: 9 root docs moved to docs/archive/ and marked stale in docs/archive/README.md. OWNER (same delegation).
-- Version bump 26.1 to 26.3: first task of M1, own commit, before M1.1. OWNER (same delegation) over DEFAULT.
+- Version bump 26.1 to 26.3: first task of M1, own commit, before M1.1. OWNER (same delegation) over DEFAULT. Done as M1.0.
+- 26.3 port choices: `Items.<COLOR>_<FAMILY>` became `Items.<FAMILY>.<color>()` (ColorCollection); `EntityType.X` became `EntityTypes.X`; `drop(stack, false)` became `drop(stack, false, Prediction.SERVER_ONLY)` because every call is a server-initiated give or drop; `hurtMarked = true` became `syncVelocity = true` (ServerEntity sends the motion packet to tracking players and self); `setInvulnerable` became `setPermanentlyInvulnerable`; `knockback(power,x,z)` became the 5-argument form with `damageSources().generic()` and 0 (the source and damage arguments are unused in vanilla's body); `ChatFormatting.getColor()` became `TextColor.fromLegacyFormat(f).getValue()`; `getChar()` became `toString().charAt(1)`; OreDropMixin and SpawnerSilkTouchMixin now take `ServerLevel`/`ServerPlayer` (Block.playerDestroy changed); LivingEntityMixin targets the 6-argument knockback, which the 5-argument one calls; SlimeEntityMixin now targets AbstractCubeMob, where `remove` moved, so it covers Slime and MagmaCube as before; the five vsrevamped processor_list files use the new block-state keys `id`/`properties`. DEFAULT.
+- MixinAudit (com.political.core.MixinAudit, opt in with `-Dpoliticalserver.mixinAudit=true`) force-loads every mixin target. DEFAULT, new dev tool.
 - Snapshot target for M9: 26.4-snapshot-6, re-check when M9 starts. OWNER (same delegation).
 - Player-join JIT test (old OWNER QUESTION 7): cannot be done by the agent. JVM flags stay in runServer/runClient/serverInt. DEFAULT.
-- Not changed: LICENSE file, Loom version (changes with the bump).
+- Not changed: LICENSE file.
 
 ## OWNER QUESTIONS (open)
 1. Can you test one player join on `./gradlew runServer` (JVM flags on) and, separately, with the flags off? Only a join can show whether the JIT crash you saw is still real. — not blocking
@@ -48,6 +64,9 @@ TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST
 3. Power system (M2): default is one system with schools as the structure (10.2). Confirm, or choose one of the alternatives. — not blocking until M2 starts
 
 ## VERIFIED
+- 26.3 port: `./gradlew compileJava` went from 1,298 errors (first run, 2,596 lines counting the log twice) to exit 0; `./gradlew build --console=plain` exit 0 (19s), 5 tests pass. Target versions looked up on maven.nucleoid.xyz and maven.fabricmc.net metadata (curl), not guessed.
+- Boot on 26.3, `bash boot.sh` (runServerVerify, stop after `PoliticalServer data loaded`): data loaded, `Done (0.874s)`, `[Polymer] bridge ready. polymer=true models=0`, 296 recipes, no `Mixin apply ... failed`. With `-Dpoliticalserver.mixinAudit=true`: `Mixin audit loaded 28 target classes`, `Mixin audit passed` (54 mixins registered in the two configs; CustomArrowEntityMixin is a file that is in no config).
+- The run-verify world was upgraded in place from 26.1 data on the first 26.3 boot (log: `Upgrade done for world "world"`). run-verify is gitignored and throwaway.
 - Baseline build: `./gradlew build --console=plain` on unmodified 3189016, exit 0, 1m31s. Tasks run: compileJava, processResources, sourcesJar, jar, build; `:test` reported NO-SOURCE.
 - Build with tests after the M0 changes: same command, exit 0, 43s, 3 tests, 0 failures.
 - Counts (`git ls-files` and grep over src/main/java): 384 Java files, 128,703 lines, 55 mixin files, 120 resource files, 0 lang files, no src/test before M0.
@@ -66,8 +85,8 @@ TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST
 - Block armors (owner: 144): NOT CONFIRMED. BlockArmor.java, BlockArmorHandler.java and the BlockGear files are not in the tree; only RecipeConfigManager, RecipeGenerator and RecipesGui still mention BlockArmor.
 - Dragon chestplates (owner: 121): NOT CONFIRMED. Real value: 8, `DragonChestplateRegistry.IDS` (items/DragonChestplateRegistry.java:12-21).
 - Item IDs (owner: about 2,090): NOT CONFIRMED. No static catalog exists and nothing in the boot log counts them.
-- Non-snapshot Loom support for 26.3 was not tested.
-- Target builds of sgui, placeholder-api, player-data-api and polymer for 26.3: not checked yet (M1.4).
+- player-data-api has no build tagged 26.3 (newest is 0.11.0+26.2). It loads and the server boots, but no feature that uses it was exercised: NOT VERIFIED beyond boot. Check `grep -rn playerdata` call sites in M1.4.
+- Gameplay on 26.3 (item behavior, entity abilities, GUIs): not exercised by anyone. Only compile, boot and mixin loading are verified. The owner test script (section 15, item 13) is the first real check.
 - Whether the JVM flags are still needed: not settled. Untested: `runServer` with the flags, flags off on `runServer`/`runClient`, any player join, and repeated boots under load. One JIT crash is probabilistic, so a few clean boots are weak evidence.
 - Cause of the growing main-thread stall (see KNOWN ISSUES): not investigated; the machine also had several Gradle daemons running.
 - GitHub Actions status: `gh` is not authenticated on this machine (HTTP 401), so no CI run was checked.
@@ -82,6 +101,9 @@ TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST
 - None yet.
 
 ## KNOWN ISSUES
+- MerchantOfferMixin.political_modifyTradePrice targets `getDisplayedFirstBuyItem`, which does not exist in 26.1 or 26.3 (javap of both jars: only getBaseCostA/getCostA), and it has `require = 0`, so it never applied: the TRADE multiplier perk and Trader's Gambit pricing are dead. Its `<init>` hook runs `maxUses * 3` at the end of every MerchantOffer constructor, and constructors delegate, so the factor may apply more than once. Not changed (balance, 4.4): S3, mixin/MerchantOfferMixin.java:27,44.
+- CustomArrowEntityMixin.java is in neither mixin config, so it never loads: S4.
+- The pause after `Done` was 5,481 ms on the first 26.3 boot of the upgraded world (`Can't keep up! ... 109 ticks behind`): S2, same family as the earlier stall.
 - Docs describe a tree that no longer exists: master is the cursor rewrite, which removed Backrooms, Delves, block armor, Aether gear, Beastcraft and the generated recipe set. PROJECT_STATUS.md, V4_DESIGN.md, V4_STATUS.md, V5_STATUS.md, VERSION_X.md and OBTAINING.md refer to them: S3.
 - Startup stalls the server thread and the stall grew on every restart of the same run-verify world. Log line `Can't keep up! ... Running Nms behind` after `Done`: boot 1 3,370 ms, boot 2 5,208, boot 4 6,929, boot 5 8,679, boot 6 8,905, boot 7 17,144, while custom_recipes.json stayed 1,188,357 bytes. The recipe bootstraps run on the server thread right after `Done`. Likely the same fault noted in commit a4bcc78 (a recipe file rewritten synchronously on the main thread): S2, planned for M3/M6. Could be partly machine load.
 - Eight duplicate root command literals (listed under VERIFIED) and two `CommandRegistrationCallback` blocks: S2, PoliticalServer.java:163 and :436. Planned for M1.8.
@@ -115,3 +137,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-03 09:25 UTC Session 1: M0.1, M0.2, M0.3, M0.5, M0.8, M0.9, M0.11 done; M0.10 partial; M0.6 lookups done; M0.4 blocked on license and author; M0.7 started.
 - 2026-11-03 10:30 UTC Session 1: M0.7 boots run (flags not applied to runServerVerify; 6 of 7 boots clean); console-command NPE traced to the test method; startup stall growth recorded; session stops at the license/author owner questions.
 - 2026-11-03 12:00 UTC Session 2: owner delegated the open decisions; M0.4 and M0.10 done (license CC0-1.0, author GL-327, docs archived), build green with 5 tests; M0 done-when met except M0.6 and M0.7, which stay partial with evidence recorded; starting the 26.3 version bump.
+- 2026-11-03 14:20 UTC Session 2: M1.0 done: Minecraft 26.3, Gradle 9.8.2, Loom 1.19.3 and all libraries bumped, sources, 5 mixins and 5 worldgen data files ported; build green, server boots, MixinAudit passes; starting M1.1.

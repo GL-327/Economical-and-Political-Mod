@@ -35,11 +35,10 @@ import java.util.Optional;
 public class SpawnerSilkTouchMixin {
 
     @Inject(method = "playerDestroy", at = @At("HEAD"), cancellable = true)
-    private void onSpawnerBreak(Level world, Player player, BlockPos pos, BlockState state,
+    private void onSpawnerBreak(net.minecraft.server.level.ServerLevel world, ServerPlayer serverPlayer, BlockPos pos, BlockState state,
             BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
         
         if (world.isClientSide()) return;
-        if (!(player instanceof ServerPlayer serverPlayer)) return;
         
         // Only handle spawner blocks
         if (state.getBlock() != Blocks.SPAWNER) return;

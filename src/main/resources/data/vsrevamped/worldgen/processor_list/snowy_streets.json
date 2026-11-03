@@ -14,8 +14,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:ice",
-            "Properties": {}
+            "id": "minecraft:ice",
+            "properties": {}
           }
         },
         {
@@ -29,8 +29,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:water",
-            "Properties": {}
+            "id": "minecraft:water",
+            "properties": {}
           }
         },
         {
@@ -44,8 +44,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:ice",
-            "Properties": {}
+            "id": "minecraft:ice",
+            "properties": {}
           }
         },
         {
@@ -59,8 +59,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:snow_block",
-            "Properties": {}
+            "id": "minecraft:snow_block",
+            "properties": {}
           }
         },
         {
@@ -74,8 +74,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:ice",
-            "Properties": {}
+            "id": "minecraft:ice",
+            "properties": {}
           }
         },
         {
@@ -89,8 +89,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:packed_ice",
-            "Properties": {}
+            "id": "minecraft:packed_ice",
+            "properties": {}
           }
         },
         {
@@ -104,8 +104,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:blue_ice",
-            "Properties": {}
+            "id": "minecraft:blue_ice",
+            "properties": {}
           }
         },
         {
@@ -119,8 +119,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:ice",
-            "Properties": {}
+            "id": "minecraft:ice",
+            "properties": {}
           }
         },
         {
@@ -134,8 +134,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:snow_block",
-            "Properties": {}
+            "id": "minecraft:snow_block",
+            "properties": {}
           }
         },
         {
@@ -149,8 +149,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:ice",
-            "Properties": {}
+            "id": "minecraft:ice",
+            "properties": {}
           }
         },
         {
@@ -164,8 +164,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:packed_ice",
-            "Properties": {}
+            "id": "minecraft:packed_ice",
+            "properties": {}
           }
         },
         {
@@ -179,8 +179,8 @@
             "probability": 1
           },
           "output_state": {
-            "Name": "minecraft:blue_ice",
-            "Properties": {}
+            "id": "minecraft:blue_ice",
+            "properties": {}
           }
         }
       ]

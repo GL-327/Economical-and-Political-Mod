@@ -14,8 +14,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_slab",
-            "Properties": {
+            "id": "minecraft:spruce_slab",
+            "properties": {
                 "type": "top",
                 "waterlogged": "true"
             }
@@ -32,8 +32,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_slab",
-            "Properties": {
+            "id": "minecraft:spruce_slab",
+            "properties": {
                 "type": "top",
                 "waterlogged": "true"
             }
@@ -50,8 +50,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_slab",
-            "Properties": {
+            "id": "minecraft:spruce_slab",
+            "properties": {
                 "type": "top",
                 "waterlogged": "true"
             }
@@ -68,8 +68,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_trapdoor",
-            "Properties": {
+            "id": "minecraft:spruce_trapdoor",
+            "properties": {
                 "waterlogged": "true",
                 "facing": "north",
                 "half": "top"
@@ -87,8 +87,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_trapdoor",
-            "Properties": {
+            "id": "minecraft:spruce_trapdoor",
+            "properties": {
                 "waterlogged": "true",
                 "facing": "north",
                 "half": "top"
@@ -106,8 +106,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_trapdoor",
-            "Properties": {
+            "id": "minecraft:spruce_trapdoor",
+            "properties": {
                 "waterlogged": "true",
                 "facing": "north",
                 "half": "top"
@@ -125,8 +125,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_trapdoor",
-            "Properties": {
+            "id": "minecraft:spruce_trapdoor",
+            "properties": {
                 "waterlogged": "true",
                 "facing": "west",
                 "half": "top"
@@ -144,8 +144,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_trapdoor",
-            "Properties": {
+            "id": "minecraft:spruce_trapdoor",
+            "properties": {
                 "waterlogged": "true",
                 "facing": "west",
                 "hald": "top"
@@ -163,8 +163,8 @@
             "probability": 0.8
           },
           "output_state": {
-            "Name": "minecraft:spruce_trapdoor",
-            "Properties": {
+            "id": "minecraft:spruce_trapdoor",
+            "properties": {
                 "waterlogged": "true",
                 "facing": "west",
                 "half": "top"
