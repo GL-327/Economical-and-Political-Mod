@@ -46,4 +46,19 @@ class ModMetadataTest {
         assertEquals(1, server.size());
         assertEquals("com.political.PoliticalServer", server.get(0).getAsString());
     }
+
+    @Test
+    void licenseFieldMatchesLicenseFile() throws IOException {
+        // The LICENSE file is the CC0 1.0 legal text, so the metadata must say the same.
+        assertEquals("CC0-1.0", metadata.get("license").getAsString());
+        String text = java.nio.file.Files.readString(java.nio.file.Path.of("LICENSE"), StandardCharsets.UTF_8);
+        assertTrue(text.contains("CC0 1.0 Universal"), "LICENSE is no longer the CC0 text");
+    }
+
+    @Test
+    void authorIsNotThePlaceholder() {
+        JsonArray authors = metadata.getAsJsonArray("authors");
+        assertEquals(1, authors.size());
+        assertTrue(!authors.get(0).getAsString().equals("You"), "authors still holds the template placeholder");
+    }
 }

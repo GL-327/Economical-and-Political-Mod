@@ -1,26 +1,26 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-03 10:30 UTC  |  Session: 1  |  Device: Windows
+Last updated: 2026-11-03 12:00 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
-Get the owner's answers to OWNER QUESTIONS 1 and 2 (license, author), then finish M0.4 in `LICENSE` and `src/main/resources/fabric.mod.json`; M1 does not start until M0's done-when is met (license decision recorded).
+Do the 26.1 to 26.3 version bump in `gradle.properties` (minecraft_version, loader_version, loom_version, fabric_api_version and the four bundled libraries) after looking up each target build, then fix compile errors; this is the first task of M1 and goes in its own commit before M1.1.
 
 ## STATUS
 Milestone: M0   Branch: modern/m0-baseline   Last commit: 0a8455e M0/M0.11: add CHANGELOG.md and HANDOFF.md (this file's M0.7 update is committed after it)
-PUSH STATUS: pushed to origin/modern/m0-baseline (5 commits, up to 0a8455e) before the first verify boot at 09:26 UTC; this M0.7 handoff update is pushed in the next commit
-BUILD STATUS: GREEN (`./gradlew build --console=plain`, exit 0, 43s, with the new test; baseline before any change also exit 0, 1m31s)
-TEST STATUS: 3 tests, 3 passing, `./gradlew build` (build/test-results/test/TEST-com.political.ModMetadataTest.xml)
+PUSH STATUS: see the last HISTORY line
+BUILD STATUS: GREEN (`./gradlew build --console=plain`, exit 0, 17s, session 2 after the M0.4 and M0.10 changes; baseline before any change also exit 0, 1m31s)
+TEST STATUS: 5 tests, 5 passing, `./gradlew build` (build/test-results/test/TEST-com.political.ModMetadataTest.xml: tests=5 failures=0)
 
 ## MILESTONE CHECKLIST
 - [x] M0.1 Clone repo, branch, HANDOFF.md — the working copy already is the real repo (origin = https://github.com/GL-327/Economical-and-Political-Mod, history intact). Branch modern/m0-baseline cut from master 3189016.
 - [x] M0.2 Stop tracking local settings — `git rm --cached .claude/settings.local.json`; `git ls-files .claude` now lists 0 files; `.claude/*.local.json` added to .gitignore (run/, run-verify/, build/, .gradle/ were already ignored). The local file was not deleted.
 - [x] M0.3 Recount owner numbers — see VERIFIED and NOT VERIFIED.
-- [ ] M0.4 Metadata — BLOCKED: license and author unanswered (OWNER QUESTIONS 1, 2). Done so far: `description` in fabric.mod.json refreshed. Not done: license, authors, `fabric-api` range (needs the target bump, OWNER QUESTION 3).
+- [x] M0.4 Metadata — license CC0-1.0 and authors ["GL-327"] set in fabric.mod.json, contact links added, description refreshed, `fabric-api` bounded to ">=0.144.3" (the range moves with the version bump). Guarded by ModMetadataTest.licenseFieldMatchesLicenseFile and authorIsNotThePlaceholder. LICENSE file unchanged.
 - [x] M0.5 Build green on current code before any modernization — `./gradlew build --console=plain`, exit 0, 1m31s, on 3189016 unmodified.
 - [ ] M0.6 Loom — PARTIAL: no pin change. The `1.15-SNAPSHOT` pin currently resolves to Loom 1.15.5, a release (Gradle output "Fabric Loom: 1.15.5"), so there is little drift risk on 26.1 today. Whether any non-snapshot Loom supports 26.3 is NOT VERIFIED; Fabric's own example mod pins `1.19-SNAPSHOT` for 26.3. This can only be settled by the version bump.
 - [ ] M0.7 JVM flags — PARTIAL, see the M0.7 notes under VERIFIED. No flag was removed.
 - [x] M0.8 JUnit 5 test source set — `./gradlew build` runs `ModMetadataTest` (3 tests, 0 failures).
 - [x] M0.9 Static checks — counts under VERIFIED.
-- [ ] M0.10 Repo cleanup — PARTIAL: 10 empty `.windsurf/workflows/*.md` moved to `archive/windsurf-workflows/`; 27 files moved from `scripts/` to `scripts/archive/` with a README (`git mv`, nothing deleted). BLOCKED: moving the 9 root docs to `docs/archive/` needs the owner's agreement (OWNER QUESTION 4). `tools/mojmap_bulk_fix.py` left in place.
+- [x] M0.10 Repo cleanup — 10 empty `.windsurf/workflows/*.md` moved to `archive/windsurf-workflows/`; 27 files moved from `scripts/` to `scripts/archive/` with a README; the 9 root docs moved to `docs/archive/` with a README (all `git mv`, nothing deleted). `tools/mojmap_bulk_fix.py` left in place.
 - [x] M0.11 CHANGELOG.md — created with an Unreleased section.
 
 ## POWER CAPABILITY STATUS (M2 onward)
@@ -34,16 +34,18 @@ TEST STATUS: 3 tests, 3 passing, `./gradlew build` (build/test-results/test/TEST
 - JUnit: 5.14.4 via the junit-bom, test scope only. DEFAULT. JUnit 6.1.3 is now the newest line on Maven Central; the program says JUnit 5, so 5 was used. Revisit in M1.4.
 - Dev server files in run-verify/: build.gradle left untouched (4.6). DEFAULT. For verify boots a throwaway `run-verify/server.properties` was created with the build script's contents plus `max-tick-time=-1` (as VERSION_X.md advises); run-verify/ is gitignored.
 - JVM flags (`-XX:TieredStopAtLevel=1`, `-Xshare:off`, the `CompileCommand` exclude) kept in `runServer`, `runClient` and `serverInt`. DEFAULT: the crash the owner saw happens on player join, which no test here can exercise.
-- Not changed: LICENSE, `license` and `authors` in fabric.mod.json, `fabric-api` range, Loom version. DEFAULT.
+- License: CC0-1.0. OWNER (chat, 2026-11-03: "whichever you need to to do it all", delegating the choice). Reason: the LICENSE file in the repo is already the CC0 text, so this grants nothing beyond what is already published, and CC0 needs no copyright-holder name. Reversible before any release; LICENSE file not touched.
+- Author: "GL-327". OWNER (same delegation). Reason: it is the public GitHub account in the repo URL; no real name was guessed.
+- Docs: 9 root docs moved to docs/archive/ and marked stale in docs/archive/README.md. OWNER (same delegation).
+- Version bump 26.1 to 26.3: first task of M1, own commit, before M1.1. OWNER (same delegation) over DEFAULT.
+- Snapshot target for M9: 26.4-snapshot-6, re-check when M9 starts. OWNER (same delegation).
+- Player-join JIT test (old OWNER QUESTION 7): cannot be done by the agent. JVM flags stay in runServer/runClient/serverInt. DEFAULT.
+- Not changed: LICENSE file, Loom version (changes with the bump).
 
 ## OWNER QUESTIONS (open)
-1. License: LICENSE is CC0-1.0, fabric.mod.json says MIT. Which one? — blocking (M0.4)
-2. Author name for fabric.mod.json (currently "You")? — blocking (M0.4)
-3. The program has a target (26.3) but no task that performs the 26.1 to 26.3 bump. Default if unanswered: make it the first task of M1, in its own commit, before M1.1. — not blocking M0
-4. May the 9 root docs (ABILITY_CATALOG*.md, OBTAINING.md, PERFORMANCE_OPTIMIZATION_REPORT.md, PROJECT_STATUS.md, V4_DESIGN.md, V4_STATUS.md, V5_STATUS.md, VERSION_X.md) move to docs/archive/? — not blocking
-5. Snapshot target for M9: the newest snapshot is 26.4-snapshot-6 (2026-10-27). Use it? — not blocking
-6. Several owner docs describe systems that are not in the current tree (see KNOWN ISSUES). Archive them as stale, or keep? — not blocking
-7. Can you test one player join on `./gradlew runServer` (JVM flags on) and, separately, with the flags off? Only a join can show whether the JIT crash you saw is still real. — not blocking
+1. Can you test one player join on `./gradlew runServer` (JVM flags on) and, separately, with the flags off? Only a join can show whether the JIT crash you saw is still real. — not blocking
+2. Several owner docs describe systems that are not in the current tree; they are archived, not deleted. Delete them for good later? — not blocking
+3. Power system (M2): default is one system with schools as the structure (10.2). Confirm, or choose one of the alternatives. — not blocking until M2 starts
 
 ## VERIFIED
 - Baseline build: `./gradlew build --console=plain` on unmodified 3189016, exit 0, 1m31s. Tasks run: compileJava, processResources, sourcesJar, jar, build; `:test` reported NO-SOURCE.
@@ -51,7 +53,7 @@ TEST STATUS: 3 tests, 3 passing, `./gradlew build` (build/test-results/test/TEST
 - Counts (`git ls-files` and grep over src/main/java): 384 Java files, 128,703 lines, 55 mixin files, 120 resource files, 0 lang files, no src/test before M0.
 - Static checks (M0.9): client references (`net.minecraft.client`, `Minecraft.getInstance`): 0. `System.out`/`System.err`: 101. `printStackTrace`: 17. Files using `currentTimeMillis`: 67. `catch (Exception|Throwable)`: 219. `Component.literal`: 13,965. Files importing `eu.pb4.sgui`: 114.
 - Audit structure claims: PoliticalServer.java registers `CommandRegistrationCallback` at lines 163 and 436, and the single `END_SERVER_TICK` lambda at line 492. Root command literals registered twice: view, coins, bounty, hunt, judge, credits, startundergroundauction, placeauctionmaster (166 distinct root literals via `register(Commands.literal(...))`). Seven files read sneak state: EnderPhaseHandler, VoidwalkerHandler, items/ArmorAbilityHandler, items/CustomItemHandler, items/LegendaryToolHandler, magic/MagicSpellHandler, technique/TechniqueManager. Static collection fields: 597 by regex (audit said about 595).
-- Metadata claims: fabric.mod.json had license MIT, authors ["You"], `fabric-api` "*"; LICENSE is CC0 1.0; no `*.java.backup` files; the 10 `.windsurf/workflows` files were all 0 bytes; scripts/ held 27 files; the tracked `.claude/settings.local.json` contained machine specific paths.
+- Metadata claims (before M0.4): fabric.mod.json had license MIT, authors ["You"], `fabric-api` "*"; LICENSE is CC0 1.0; no `*.java.backup` files; the 10 `.windsurf/workflows` files were all 0 bytes; scripts/ held 27 files; the tracked `.claude/settings.local.json` contained machine specific paths.
 - Polymer: the audit said 2 files. Actual: 0 files import `eu.pb4.polymer`; PolymerBridge.java only checks `isModLoaded("polymer-core")` / `isModLoaded("polymer-resource-pack")` (lines 57-58), and 5 files mention Polymer in text. At runtime the log says `[Polymer] bridge ready. polymer=true models=0`.
 - Content numbers: classes "over 380" is CONFIRMED (384 files, 598 type declarations by regex). Runtime recipes (boot 7 log): vanilla `Loaded 1515 recipes`; the mod logs `RecipeConfigManager crafting: OK | 296 recipes (0 failed)`, `SlayerRecipes Registered 296 total recipes`, `V4RecipeBootstrap Registered 1`, `LivingWorldRecipeBootstrap Registered 4`. Whether the last 5 are inside the 296 is not established.
 - Target lookups (WebFetch, so summarized by a tool; check fabricmc.net/develop before the bump): Mojang manifest latest release 26.3 and latest snapshot 26.4-snapshot-6; Fabric meta lists 26.3 stable; Modrinth Fabric API 0.165.0+26.3 (release, 2026-10-23); fabric-example-mod master pins minecraft 26.3, loader 0.20.1, loom 1.19-SNAPSHOT, Fabric API 0.165.0+26.3, Gradle 9.8.2 (this repo: loader 0.18.5, loom 1.15-SNAPSHOT, Fabric API 0.144.3+26.1, Gradle 9.4.0).
@@ -112,3 +114,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 ## HISTORY (append only)
 - 2026-11-03 09:25 UTC Session 1: M0.1, M0.2, M0.3, M0.5, M0.8, M0.9, M0.11 done; M0.10 partial; M0.6 lookups done; M0.4 blocked on license and author; M0.7 started.
 - 2026-11-03 10:30 UTC Session 1: M0.7 boots run (flags not applied to runServerVerify; 6 of 7 boots clean); console-command NPE traced to the test method; startup stall growth recorded; session stops at the license/author owner questions.
+- 2026-11-03 12:00 UTC Session 2: owner delegated the open decisions; M0.4 and M0.10 done (license CC0-1.0, author GL-327, docs archived), build green with 5 tests; M0 done-when met except M0.6 and M0.7, which stay partial with evidence recorded; starting the 26.3 version bump.
