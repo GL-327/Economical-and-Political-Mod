@@ -35,3 +35,6 @@
   costliest services when it stops.
 - Persistence layer: `VersionedStore` writes versioned JSON atomically, applies one migration per schema step, copies a corrupt file
   aside instead of overwriting it and refuses to overwrite a file from a newer version. Nothing uses it yet; the power system (M2) is first.
+- Config: new `config/political/config.json` (created with defaults on first start) with typed, range-checked settings; a bad value
+  falls back or is clamped with a logged warning and never stops the server. `docs/CONFIG.md` lists every setting and is generated
+  from the code. The first settings are the tick budgets and the data flush interval.

@@ -4,6 +4,7 @@ import com.political.bounty.BountySpawnManager;
 import com.political.bounty.SlayerArmorHandler;
 import com.political.bounty.SlayerManager;
 import com.political.bounty.T2ArmorAbilityHandler;
+import com.political.core.config.CoreSettings;
 import com.political.core.persist.StoreRegistry;
 import com.political.core.tick.TickDispatcher;
 import com.political.core.tick.TickReporter;
@@ -39,14 +40,11 @@ import net.minecraft.world.entity.LivingEntity;
  * does; what changes is that one manager throwing no longer skips the rest of the tick, and that a
  * slow one is reported by name.
  *
- * <p>Budgets are placeholders: 5 ms for server work and 10 ms in total for per-player work. They only
- * decide when a line is logged (at most once a minute per service) and are to be tuned from real
- * numbers in M8.1.</p>
+ * <p>Budgets come from the config ({@code tick.budget.server_ms}, default 5, and
+ * {@code tick.budget.player_ms}, default 10 in total for per-player work). They only decide when a line
+ * is logged (at most once a minute per service); tune them from real numbers in M8.1.</p>
  */
 final class TickRegistrations {
-
-    private static final double SERVER_BUDGET_MS = 5.0;
-    private static final double PLAYER_BUDGET_MS = 10.0;
 
     private TickRegistrations() {
     }
@@ -60,7 +58,7 @@ final class TickRegistrations {
                 ServerLevel::players,
                 System::nanoTime,
                 TickReporter.logging());
-        Registrar r = new Registrar(d);
+        Registrar r = new Registrar(d, CoreSettings.TICK_BUDGET_SERVER_MS.get(), CoreSettings.TICK_BUDGET_PLAYER_MS.get());
 
         // ── Server level, first group ───────────────────────────────────────
         r.server("death-penalty-reset", s -> DeathPenaltyManager.clearRecentDeaths());
@@ -154,8 +152,8 @@ final class TickRegistrations {
             AuctionHouseManager.cleanupExpiredListings(7L * 24L * 60L * 60L * 1000L);
         });
 
-        // Versioned stores (M1.6): write the dirty ones every 30 seconds. The shutdown hook flushes the rest.
-        r.server("persistence-flush", 600, s -> StoreRegistry.global().saveDirty());
+        // Versioned stores (M1.6): write the dirty ones on a timer (default every 30 seconds). The shutdown hook flushes the rest.
+        r.server("persistence-flush", CoreSettings.PERSISTENCE_FLUSH_INTERVAL_TICKS.get(), s -> StoreRegistry.global().saveDirty());
         return d;
     }
 
@@ -193,9 +191,13 @@ final class TickRegistrations {
     /** Short registration helpers so the list above reads one line per service. */
     private static final class Registrar {
         private final TickDispatcher<MinecraftServer, ServerLevel, ServerPlayer> dispatcher;
+        private final double serverBudgetMs;
+        private final double playerBudgetMs;
 
-        Registrar(TickDispatcher<MinecraftServer, ServerLevel, ServerPlayer> dispatcher) {
+        Registrar(TickDispatcher<MinecraftServer, ServerLevel, ServerPlayer> dispatcher, double serverBudgetMs, double playerBudgetMs) {
             this.dispatcher = dispatcher;
+            this.serverBudgetMs = serverBudgetMs;
+            this.playerBudgetMs = playerBudgetMs;
         }
 
         void server(String name, Consumer<MinecraftServer> task) {
@@ -203,15 +205,15 @@ final class TickRegistrations {
         }
 
         void server(String name, int intervalTicks, Consumer<MinecraftServer> task) {
-            dispatcher.register(TickService.server(name, intervalTicks, SERVER_BUDGET_MS, task));
+            dispatcher.register(TickService.server(name, intervalTicks, serverBudgetMs, task));
         }
 
         void world(String name, Consumer<ServerLevel> task) {
-            dispatcher.register(TickService.world(name, 1, SERVER_BUDGET_MS, task));
+            dispatcher.register(TickService.world(name, 1, serverBudgetMs, task));
         }
 
         void player(String name, Consumer<ServerPlayer> task) {
-            dispatcher.register(TickService.player(name, 1, PLAYER_BUDGET_MS, task));
+            dispatcher.register(TickService.player(name, 1, playerBudgetMs, task));
         }
     }
 }

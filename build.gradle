@@ -83,6 +83,8 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	// Lets `./gradlew test -Dpolitical.updateDocs=true` rewrite the generated docs (docs/CONFIG.md).
+	systemProperty 'political.updateDocs', System.getProperty('political.updateDocs', 'false')
 }
 
 processResources {

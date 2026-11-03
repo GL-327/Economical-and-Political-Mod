@@ -74,12 +74,20 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     
     public static MinecraftServer server;
-    private static final TickDispatcher<MinecraftServer, ServerLevel, ServerPlayer> TICKS = TickRegistrations.create();
+    private static TickDispatcher<MinecraftServer, ServerLevel, ServerPlayer> TICKS;
 
     @Override
     public void onInitializeServer() {
         LOGGER.info("PoliticalServer mod initializing");
         com.political.core.MixinAudit.runIfRequested();
+        // Settings first: the tick services read their budgets from them when they are registered.
+        var configStore = com.political.core.config.Config.load(
+                net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().resolve("political").resolve("config.json"));
+        if (!configStore.warnings().isEmpty()) {
+            LOGGER.warn("config/political/config.json has {} problem(s); see the lines above, the defaults are used for those settings",
+                    configStore.warnings().size());
+        }
+        TICKS = TickRegistrations.create();
 
         // Scale + name upgraded mobs on spawn (not only on first damage) so tier tags are visible without hitting.
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
