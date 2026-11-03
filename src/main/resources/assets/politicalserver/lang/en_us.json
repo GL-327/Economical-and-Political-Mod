@@ -1,5 +1,25 @@
 {
-  "political.text.selfcheck": "The Political Server text layer is working.",
   "political.error.generic": "Something went wrong. Please tell an admin.",
-  "political.error.no_permission": "You are not allowed to do that."
+  "political.error.no_permission": "You are not allowed to do that.",
+  "political.gui.back": "Back",
+  "political.gui.cancel": "Cancel",
+  "political.gui.cannot_undo": "This cannot be undone.",
+  "political.gui.click_to_manage": "Click to manage",
+  "political.gui.click_to_open": "Click to open",
+  "political.gui.click_to_turn_off": "Click to turn off",
+  "political.gui.click_to_turn_on": "Click to turn on",
+  "political.gui.close": "Close",
+  "political.gui.confirm": "Confirm",
+  "political.gui.currently_off": "Currently off",
+  "political.gui.currently_on": "Currently on",
+  "political.gui.entries": "%s entries",
+  "political.gui.next": "Next",
+  "political.gui.nothing_happens": "Nothing happens.",
+  "political.gui.page": "Page %1$s of %2$s",
+  "political.gui.previous": "Previous",
+  "political.gui.stepper.left": "Left click: +%s",
+  "political.gui.stepper.now": "Now: %s",
+  "political.gui.stepper.right": "Right click: -%s",
+  "political.gui.stepper.shift": "Hold shift for ten times as much",
+  "political.text.selfcheck": "The Political Server text layer is working."
 }

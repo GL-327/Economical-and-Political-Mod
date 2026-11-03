@@ -44,3 +44,5 @@
 - Text: added a translation layer (`Text.tr`, `assets/politicalserver/lang/en_us.json`) and the bundled server translation library, so
   new text can be translated per player language on a vanilla client, with English as the built-in fallback. Existing text is
   unchanged; `docs/TEXT_MIGRATION.md` plans its conversion.
+- Screens: added a shared layout module (`com.political.core.gui`: palette, icons, slot grid, pager, stepper, progress bar, frame,
+  header, footer, confirmation) and `STYLE.md`, the standard for everything a player sees. No existing screen was changed yet.
