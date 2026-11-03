@@ -69,7 +69,14 @@ public final class PowerSmoke {
     }
 
     public static boolean requested() {
-        return Boolean.getBoolean(PROPERTY);
+        String value = System.getProperty(PROPERTY);
+        return value != null && !value.equalsIgnoreCase("false");
+    }
+
+    /** {@code write} and {@code read} are the two halves of the restart check; anything else is the full run. */
+    private static String mode() {
+        String value = System.getProperty(PROPERTY, "true");
+        return value.equalsIgnoreCase("write") || value.equalsIgnoreCase("read") ? value.toLowerCase(java.util.Locale.ROOT) : "full";
     }
 
     /**
@@ -163,7 +170,50 @@ public final class PowerSmoke {
 
     // ── the sequence ────────────────────────────────────────────────────────────────────────
 
+    /**
+     * Item 8 of the owner's script, the part a server can do alone: state written before a restart is there after it.
+     * Run once with {@code write} (leaves the fake player's state in power.json), stop the server, run again with
+     * {@code read} (checks it came back through the real file, then removes it).
+     */
+    private void restart(MinecraftServer server, boolean write) {
+        FakePlayer fake = FakePlayer.get(server.overworld());
+        String uuid = fake.getUUID().toString();
+        if (write) {
+            PowerService.reset(uuid);
+            PowerService.onJoin(fake);
+            PowerService.addShards(fake, 60);
+            check("choose Radiance", PowerService.chooseSchool(fake, MagicSchool.RADIANCE) == PowerService.SchoolResult.OK);
+            for (int i = 1; i <= 4; i++) {
+                check("unlock rad" + i, PowerService.unlockNode(fake, "rad" + i) == PowerService.NodeResult.OK);
+            }
+            check("learn Blue", PowerService.learn(fake, PowerCatalog.BLUE) == PowerService.LearnResult.OK);
+            check("equip Blue", PowerService.equip(fake, PowerCatalog.BLUE));
+            check("take a vow", PowerService.acceptVow(fake, Vow.NO_SPRINT) == VowSet.AcceptResult.ACCEPTED);
+            PowerService.setResource(uuid, 33.0);
+            LOGGER.info("Power smoke: state written for {} (school RADIANCE, nodes rad1 to rad4, Blue equipped, vow no_sprint, resource 33)", uuid);
+            return;
+        }
+        check("the school came back", PowerService.school(uuid) == MagicSchool.RADIANCE);
+        check("tier 2 came back (node 4)", PowerService.tier(uuid) == 2);
+        check("the four nodes came back", PowerService.state(uuid).unlockedNodes.containsAll(List.of("rad1", "rad2", "rad3", "rad4")));
+        check("the shards left came back", PowerService.state(uuid).shards == 60 - (4 + 6 + 8 + 10));
+        check("the shards earned came back", PowerService.state(uuid).shardsEarnedTotal == 60);
+        check("Blue is learned and equipped", PowerService.holds(uuid, PowerCatalog.BLUE) && PowerCatalog.BLUE.equals(PowerService.state(uuid).equipped));
+        check("the resource came back", PowerService.resource(uuid) == 33.0);
+        PowerService.onJoin(fake);
+        check("the vow is active again after joining", PowerService.vowsOf(uuid).isActive(Vow.NO_SPRINT));
+        check("no cooldown survives a restart", PowerService.cooldownRemaining(uuid, PowerCatalog.abilities(PowerCatalog.BLUE).get(0)) == 0);
+        screens(fake);
+        PowerService.onLogout(fake);
+        PowerService.reset(uuid);
+    }
+
     private void everything(MinecraftServer server) {
+        String mode = mode();
+        if (!mode.equals("full")) {
+            restart(server, mode.equals("write"));
+            return;
+        }
         ServerLevel world = server.overworld();
         FakePlayer fake = FakePlayer.get(world);
         FakePlayer other = FakePlayer.get(world, new GameProfile(SECOND, "[PowerSmokeB]"));
