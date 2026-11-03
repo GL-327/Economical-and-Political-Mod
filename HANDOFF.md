@@ -2,10 +2,10 @@
 Last updated: 2026-11-03 14:20 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
-M2.1 power-system audit: before writing any code, fill POWER CAPABILITY STATUS (C1 to C13 of the program's section 10.4) with Implemented, Partial, Missing or Stub and file:line evidence, by reading `technique/TechniqueManager.java`, `technique/Technique.java`, `magic/MagicManager.java`, `magic/MagicSpellHandler.java`, `magic/MagicSkillTree.java`, `magic/SchoolTreeManager.java`, `items/CustomItemHandler.java` and the other five files that read sneak state; then write the input map (10.7) in the same file. Cut branch `modern/m2-power` from `modern/m1-core` first.
+M2.2: create `src/main/java/com/political/power/` with `PowerSettings` (config keys, registered in `ConfigCatalog.HOLDERS`), the model (`AbilityKind`, `FailureReason` in the order of program 10.5, `CastFacts`, `AbilitySpec`) and `CastPipeline`, with a `CastPipelineTest` that fails each of the 15 reasons in isolation and checks the order; then `./gradlew test -Dpolitical.updateDocs=true` to regenerate docs/CONFIG.md.
 
 ## STATUS
-Milestone: M1 DONE, M2 next (M0 done except M0.7 partial)   Branch: modern/m1-core (cut from modern/m0-baseline at 32cee78)   Last commit: see the last HISTORY line
+Milestone: M2 in progress (M1 done; M0 done except M0.7 partial)   Branch: modern/m2-power (cut from modern/m1-core at c5b0ca5)   Last commit: see the last HISTORY line
 PUSH STATUS: see the last HISTORY line
 BUILD STATUS: GREEN on Minecraft 26.3 (`./gradlew build --console=plain`, exit 0, 19s)
 TEST STATUS: 86 tests, 86 passing, `./gradlew build` (build/test-results/test/*.xml: ModMetadataTest 5, SourcePolicyTest 2, ClockTest 3, WallClockPolicyTest 1, TickDispatcherTest 13, VersionedStoreTest 14, ConfigStoreTest 12, ConfigReferenceTest 1, CommandRegistrarTest 8, TextPolicyTest 6, RepoHygieneTest 1, LayoutModuleTest 20, StyleGuideTest 1, failures=0)
@@ -38,7 +38,40 @@ TEST STATUS: 86 tests, 86 passing, `./gradlew build` (build/test-results/test/*.
 - [x] M1.11 Tests — each listed area has fixtures and tests: config parsing `ConfigStoreTest` (12) and `ConfigReferenceTest`; persistence migrations `VersionedStoreTest` (14, fixtures `src/test/resources/persist/pouch-v0/v1/v2/corrupt/wrong-shape/too-new.json`); command duplicate detection `CommandRegistrarTest` (8, includes Brigadier's merge rule); tick-service budgets and isolation `TickDispatcherTest` (13); the time abstraction `ClockTest` (3) and `WallClockPolicyTest`; source rules `SourcePolicyTest`, `TextPolicyTest`, `RepoHygieneTest`.
 
 ## POWER CAPABILITY STATUS (M2 onward)
-- Not started. Audit-time facts only: `Technique.exclusives()` returns `List.of()` (technique/Technique.java:132-134); seven files read sneak state (see VERIFIED).
+Audit of session 2, before any M2 code (statuses below change as tasks land; see the M2 CHECKLIST).
+- C1 Unlock path: Partial. A technique is learned from a Technique Manual (`technique/TechniqueManager.java:225-244`, `technique/TechniqueItems.java`). No school-tree path, no unique-holder rule: `Technique.exclusives()` returns an empty list (`technique/Technique.java:132-134`).
+- C2 Cursed resource: Partial. Technique "energy": max 80 + 20 per rank, regen 4 per second by wall clock, no regen delay, no death halving (`TechniqueManager.java:163-170,325-337`; `onPlayerDeath` is empty at `:301`). The mana pool (`magic/MagicManager.java:213-236`) is never loaded or regenerated because nothing calls `MagicManager.initialize` or `MagicSpellHandler.tick`.
+- C3 Blue (pull): Missing. Nearest: Tidebound `undertow` pulls nearby foes (`TechniqueManager.java:552-559`).
+- C4 Red (push): Missing. Nearest: Tidebound `riptide`, Whisperwind `cyclone` knockback.
+- C5 Cursed blast: Missing. Nearest: single-target ray abilities using `rayTarget` (`TechniqueManager.java:658-677`), which ignores blocks in the way and uses `magic()` damage scaled by rank.
+- C6 Reverse technique: Missing. Nearest: Umbral Step `umbral_rend` heals the caster 4 (`TechniqueManager.java:482-487`).
+- C7 Barrier: Partial. Ironmarrow `unbreakable` sets `BARRIER_UNTIL` for 2.5 s (`TechniqueManager.java:539`) and `absorbOnHurt` cancels all damage (`:190-193`, called from `mixin/BountyDamageMixin.java:74`); duration, cost and fall/void rule are not configurable or recorded.
+- C8 Black Flash: Missing.
+- C9 Domain: Missing.
+- C10 Binding vows: Missing.
+- C11 Summons: Not part of the power system. Reviewed: minions (`MinionManager`), companions (`CompanionManager`) and the boss-side summons in `BossAbilityManager` are separate systems and stay as they are; no new summon types.
+- C12 Visuals: Partial. Particles and sounds per ability in `TechniqueManager.java` (`bolt`, `sendParticles`, `world.playSound`); a `Vfx` scheduler exists (`Vfx.java`, ticked by the `vfx` tick service) but the old techniques do not use it. No 64-block limit, no short/medium/long variants.
+- C13 Progression: Partial. `technique/TechniqueGui.java` shows rank and abilities. `SchoolTreeGui` shows school trees but is only linked from `AdminPanel.java:841`. No tier, capstone or next-step display for players.
+- Magic (12 schools, 33 spells, 14-node trees, magic levels): Stub. The code compiles and a GUI for the trees exists, but `MagicManager.initialize`, `SchoolTreeManager.initialize` and `MagicSpellHandler.tick` have no callers (checked with grep), so no state is loaded, saved or regenerated, and spells cannot be cast. `MagicManager.java:22` says "Unused on purpose".
+- Counts that differ from the program: 8 techniques (not 10), 12 schools (not 8).
+
+## INPUT MAP (M2.1, rule 10.7)
+Handlers of UseItemCallback, UseEntityCallback, UseBlockCallback, AttackEntityCallback and readers of the sneak state, found with grep on `src/main/java`:
+- Empty main hand + sneak + right click in the air (UseItemCallback `items/CustomItemHandler.java:238`): casts the selected ability of the equipped technique (`TechniqueManager.tryCastSneak`, `:318-323`). This is the only cast input; the staff route `MagicSpellHandler.handleStaffUse` calls `TechniqueManager.handleStaffSneakUse`, which returns false, and is not registered anyway.
+- Other UseItemCallback handlers: `CustomItemHandler.java:497` and `:1171`, `LivingWorldEvents.java:76`. They react to specific items in hand, not to an empty hand, so they do not claim the cast input.
+- UseBlockCallback: `CustomItemHandler.java:112,426,1147`, `BeamCraftingHandler.java:23`. UseEntityCallback: `PoliticalServer.java:124`. AttackEntityCallback: `CustomItemHandler.java:163,1159`. None of these claims an empty-hand sneak right click.
+- Sneak-state readers (not clicks): `EnderPhaseHandler.java:54` (hold sneak to phase), `VoidwalkerHandler.java:71` (sprint + sneak), `items/ArmorAbilityHandler.java:338,1149`, `items/CustomItemHandler.java:2247,2296`, `items/LegendaryToolHandler.java:235`, `technique/TechniqueManager.java:319`, `magic/MagicSpellHandler.java:70`.
+- Rule for M2: casting stays on the one input above and moves into `PowerInput`, called from the same place in `CustomItemHandler.java:238`; no second handler claims it. Black Flash and Domain add no input; they are damage-time effects.
+
+## M2 CHECKLIST (branch modern/m2-power, cut from modern/m1-core at c5b0ca5)
+- [x] M2.1 Audit and input map — above; design recorded in `docs/POWER_DESIGN.md`.
+- [ ] M2.2 Settings, model and the validation pipeline (15 reasons in order, effect plan, commit and rollback) — evidence target: unit tests per reason.
+- [ ] M2.3 Formulas C2 to C10 as pure functions — evidence target: boundary tests listed in the program's 10.10.
+- [ ] M2.4 Persistence: `PowerStore` on `VersionedStore`, migrations from `techniques.json`, `magic_data.json`, `magic_schools.json`, quarantine — evidence target: fixture per old file and a migration test.
+- [ ] M2.5 Game adapters: facts, target resolution, effects, input, damage hooks, logout/death/dimension cleanup — evidence target: build, boot, mixin audit.
+- [ ] M2.6 Player and admin surface: hub entries, progression screen, admin commands with permissions — evidence target: build, boot, command-tree dump.
+- [ ] M2.7 Retire the old paths behind adapters — evidence target: build, boot, tests, no second cast handler.
+- [ ] M2.8 Owner power test script (section 15, items 1 to 12) — NOT RUN: needs a vanilla client. M2 is not done until it passes.
 
 ## DECISIONS MADE (mark each one DEFAULT or OWNER)
 - GUI stack (M1.10): sgui 2.2.1+26.3 with the new `com.political.core.gui` layout module, GuiKit retired later. DEFAULT. Reason: sgui is already used by 114 files and has a 26.3 build; GuiKit alone is one class built on string literals and `ChatFormatting`, so it cannot carry translatable text, a palette or tests. The module is GuiKit's successor, built on sgui. GuiKit stays as the adapter for the 32 files (451 calls) that use it until they are converted in M2 to M7; deleting it is a removal that needs the owner's approval (rule 4.7).
@@ -169,3 +202,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-03 23:00 UTC Session 2: M1.9 done: Text helper, lang file, server-translations-api added and verified at boot, literal-call ratchet, migration plan.
 - 2026-11-04 00:00 UTC Session 2: stopped tracking test logs (they had been committed by `git add -A` since M1.7), ignore list pinned by a test; incident recorded under KNOWN ISSUES.
 - 2026-11-04 01:00 UTC Session 2: M1.10 and M1.11 done, M1 done-when met: layout module and STYLE.md added, 86 tests, build green, boot clean (icons, sounds and translations resolve, strict command registration passes, mixin audit passes).
+- 2026-11-04 02:00 UTC Session 2: M2.1 done: audit of the technique and magic code (magic is dead code, 8 techniques and 12 schools, not 10 and 8), input map, design in docs/POWER_DESIGN.md.
