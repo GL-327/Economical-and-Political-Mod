@@ -1098,7 +1098,7 @@ public class CryptoMarket {
             if (root.lastUpdateTick != null) lastUpdateTick = root.lastUpdateTick;
             try {
                 if (root.currentPhase != null) currentPhase = MarketPhase.valueOf(root.currentPhase);
-            } catch (Exception ignored) {}
+            } catch (IllegalArgumentException ignored) {}
             if (root.fearGreedIndex != null) fearGreedIndex = root.fearGreedIndex;
             if (root.liquidityPools != null) {
                 for (Map.Entry<String, PoolSnapshot> e : root.liquidityPools.entrySet()) {

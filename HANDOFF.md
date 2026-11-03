@@ -2,13 +2,13 @@
 Last updated: 2026-11-03 14:20 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
-M1.2 error policy: count `catch (Exception|Throwable)` sites (219 at audit) with `grep -rnE "catch \((Exception|Throwable)" src/main/java`, narrow each to the specific exception type where the try body can only throw a known one, make every remaining broad catch log with context (player UUID, system, identifiers) or document why it swallows, and record the before/after count here.
+M1.3 time policy: list every `currentTimeMillis` use with `grep -rn "currentTimeMillis" src/main/java` (67 files at audit), add `com.political.core.Clock` (tick based, injectable for tests), move gameplay timing (cooldowns, regen, barriers, expiries) to game ticks one package at a time without changing durations, and record each remaining wall-clock use and why it stays.
 
 ## STATUS
 Milestone: M1 (M0 done except M0.7 partial)   Branch: modern/m1-core (cut from modern/m0-baseline at 32cee78)   Last commit: see the last HISTORY line
 PUSH STATUS: see the last HISTORY line
 BUILD STATUS: GREEN on Minecraft 26.3 (`./gradlew build --console=plain`, exit 0, 19s)
-TEST STATUS: 6 tests, 6 passing, `./gradlew build` (build/test-results/test/*.xml: ModMetadataTest 5, SourcePolicyTest 1, failures=0)
+TEST STATUS: 7 tests, 7 passing, `./gradlew build` (build/test-results/test/*.xml: ModMetadataTest 5, SourcePolicyTest 2, failures=0)
 
 ## MILESTONE CHECKLIST
 - [x] M0.1 Clone repo, branch, HANDOFF.md — the working copy already is the real repo (origin = https://github.com/GL-327/Economical-and-Political-Mod, history intact). Branch modern/m0-baseline cut from master 3189016.
@@ -26,7 +26,7 @@ TEST STATUS: 6 tests, 6 passing, `./gradlew build` (build/test-results/test/*.xm
 ## M1 CHECKLIST (branch modern/m1-core)
 - [x] M1.0 Bump 26.1 to 26.3 — gradle.properties: minecraft 26.3, loader 0.20.1, loom 1.19.3, Fabric API 0.165.2+26.3, sgui 2.2.1+26.3, placeholder-api 3.2.0+26.3, player-data-api 0.11.0+26.2 (no 26.3 build exists; its fabric.mod.json says minecraft ">=26.1-" and the server booted with it), polymer 0.18.6+26.3; Gradle 9.8.2. Sources ported (1,298 compile errors to 0). `./gradlew build` exit 0; `runServerVerify` reaches `PoliticalServer data loaded`.
 - [x] M1.1 Logging — 118 sites in 40 files (101 `System.out`/`System.err` + 17 `printStackTrace`) replaced by one SLF4J `LOGGER` per class (`LoggerFactory.getLogger(X.class)`); `grep -rn "System\.out\|System\.err\|printStackTrace" src/main/java` now returns 0 lines; guarded by `SourcePolicyTest.noConsolePrintsOrStackTraces`. Exceptions are passed as the last argument, so stack traces are logged with context. Per-recipe chatter in RecipeConfigManager moved to debug. Boot log shows `(RecipeConfigManager)`, `(PolymerBridge)` etc. as logger names.
-- [ ] M1.2 Error policy
+- [x] M1.2 Error policy — before: 220 `catch (Exception|Throwable)` sites, of which 85 swallowed silently (16 empty, 23 comment only, 46 bare `return`/`continue`) and 20 neither logged nor rethrew. After: 204 broad sites (190 Exception, 14 Throwable), every one logs through SLF4J or rethrows, 0 silent. 16 sites narrowed to the exceptions their one call can throw (enum `valueOf` and `UUID.fromString` become `IllegalArgumentException | NullPointerException` because a null value throws NPE; `Long.parseLong` becomes `NumberFormatException | NullPointerException`); 89 sites kept broad and now log `ClassName.method: ignored an error` with the exception (debug, or warn where the block tells a player it failed). The remaining broad catches are boundaries (tick handlers, command and GUI callbacks, persistence load/save, event hooks) where one failure must not take the server down until the M1.5 tick services isolate them. Guarded by `SourcePolicyTest.broadCatchesNeverSwallowSilently`, checked to fail on a violating file.
 - [ ] M1.3 Time policy
 - [ ] M1.4 Libraries
 - [ ] M1.5 Tick architecture
@@ -139,3 +139,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-03 12:00 UTC Session 2: owner delegated the open decisions; M0.4 and M0.10 done (license CC0-1.0, author GL-327, docs archived), build green with 5 tests; M0 done-when met except M0.6 and M0.7, which stay partial with evidence recorded; starting the 26.3 version bump.
 - 2026-11-03 14:20 UTC Session 2: M1.0 done: Minecraft 26.3, Gradle 9.8.2, Loom 1.19.3 and all libraries bumped, sources, 5 mixins and 5 worldgen data files ported; build green, server boots, MixinAudit passes; starting M1.1.
 - 2026-11-03 15:00 UTC Session 2: M1.1 done: all console prints and stack traces now go through SLF4J loggers; policy test added; build green, boot shows logger names.
+- 2026-11-03 16:00 UTC Session 2: M1.2 done: broad catches 220 to 204, silent 85 to 0, 16 narrowed; two source policy tests guard logging and catches.

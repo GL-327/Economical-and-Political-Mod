@@ -114,6 +114,7 @@ public class SettlementManager {
             ResourceKey<Level> key = ResourceKey.create(Registries.DIMENSION, Identifier.parse(s.worldDim));
             return server.getLevel(key);
         } catch (Exception e) {
+            LOGGER.debug("SettlementManager.levelFor: ignored an error", e);
             return null;
         }
     }
@@ -196,7 +197,7 @@ public class SettlementManager {
             SettlementScanner.ScanResult r = SettlementScanner.scan(world, pos, SettlementTier.OUTPOST);
             applyScan(s, r);
             recomputeTier(s);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { LOGGER.debug("SettlementManager.foundSettlement: ignored an error", ignored); }
 
         save();
 

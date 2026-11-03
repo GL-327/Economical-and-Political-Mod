@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementEconomyGui;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
@@ -18,6 +20,8 @@ import net.minecraft.world.item.Items;
  * Operators get an extra row of controls, gated on {@link SpawnProtectionManager#isOperator}.</p>
  */
 public final class SeasonGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SeasonGui.class);
+
 
     private SeasonGui() {}
 
@@ -199,6 +203,7 @@ public final class SeasonGui {
         try {
             return SpawnProtectionManager.isOperator(player);
         } catch (Throwable t) {
+            LOGGER.debug("SeasonGui.isOperator: ignored an error", t);
             return false;
         }
     }

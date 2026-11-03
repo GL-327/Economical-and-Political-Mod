@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.BountyGui;
 import com.political.economy.AuctionHouseGui;
 import com.political.economy.BazaarGui;
@@ -48,6 +50,8 @@ import java.util.List;
  * click away under Legacy so nothing that used to work stopped working.</p>
  */
 public final class AdminPanel {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminPanel.class);
+
 
     private AdminPanel() {}
 
@@ -583,7 +587,7 @@ public final class AdminPanel {
             SettlementTier tier;
             try {
                 tier = SettlementTier.valueOf(s.tier);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 tier = SettlementTier.OUTPOST;
             }
             final SettlementTier shown = tier;
@@ -610,7 +614,7 @@ public final class AdminPanel {
         SettlementTier tier;
         try {
             tier = SettlementTier.valueOf(s.tier);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             tier = SettlementTier.OUTPOST;
         }
 
@@ -639,7 +643,7 @@ public final class AdminPanel {
                         SettlementTier cur;
                         try {
                             cur = SettlementTier.valueOf(s.tier);
-                        } catch (Exception ex) {
+                        } catch (IllegalArgumentException | NullPointerException ex) {
                             cur = SettlementTier.OUTPOST;
                         }
                         SettlementScanner.ScanResult res = SettlementScanner.scan(target,
@@ -648,6 +652,7 @@ public final class AdminPanel {
                         player.sendSystemMessage(Component.literal("§aRescanned " + s.name
                                 + ": beds " + res.beds + ", appeal " + res.appeal));
                     } catch (Exception e) {
+                        LOGGER.warn("AdminPanel.openSettlementCard: ignored an error", e);
                         player.sendSystemMessage(Component.literal("§cScan failed: " + e.getMessage()));
                     }
                     openSettlementCard(player, s);
@@ -914,6 +919,7 @@ public final class AdminPanel {
                 server.getCommands().getDispatcher()
                         .execute(command, player.createCommandSourceStack());
             } catch (Exception e) {
+                LOGGER.warn("AdminPanel.run: ignored an error", e);
                 player.sendSystemMessage(Component.literal("§cCould not run: " + command));
             }
         });
@@ -932,6 +938,7 @@ public final class AdminPanel {
         try {
             recipes = RecipeConfigManager.getRecipes().size();
         } catch (Exception ignored) {
+            LOGGER.debug("AdminPanel.openDiagnostics: ignored an error", ignored);
             // A recipe store that has not initialised yet reads as zero rather than throwing.
         }
         final int recipeCount = recipes;

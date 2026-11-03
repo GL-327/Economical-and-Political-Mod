@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -20,6 +22,8 @@ import java.util.List;
  * make that decision with the real number in front of them.</p>
  */
 public final class RareDropGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RareDropGui.class);
+
 
     private RareDropGui() {}
 
@@ -84,6 +88,7 @@ public final class RareDropGui {
             luck += Math.min(0.25, CollectionManager.maxedCount(player) * 0.025);
             if (WarrantArmour.fullSet(player)) luck += 0.2;
         } catch (Exception ignored) {
+            LOGGER.debug("RareDropGui.luckPercent: ignored an error", ignored);
             // Same guard as the roll itself.
         }
         return (Math.min(1.95, luck) - 1.0) * 100;

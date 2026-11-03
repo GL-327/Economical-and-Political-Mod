@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerItems;
 import com.political.economy.CoinManager;
 import com.political.magic.MagicManager;
@@ -48,6 +50,8 @@ import java.util.UUID;
  * nothing is left wandering.</p>
  */
 public final class CompanionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanionManager.class);
+
 
     private CompanionManager() {}
 
@@ -223,6 +227,7 @@ public final class CompanionManager {
         try {
             dismiss(player);
         } catch (Exception ignored) {
+            LOGGER.debug("CompanionManager.onLogout: ignored an error", ignored);
             LIVE.remove(player.getUUID().toString());
         }
     }

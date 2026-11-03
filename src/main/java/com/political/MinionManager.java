@@ -299,6 +299,7 @@ public final class MinionManager {
                 CollectionManager.record(owner, c, 1);
             }
             } catch (Exception e) {
+                LOGGER.debug("MinionManager.tick: ignored an error", e);
                 // One broken minion is not worth stopping the other eleven.
             }
         }
@@ -311,6 +312,7 @@ public final class MinionManager {
             if (m.ownerUuid == null || m.ownerUuid.isEmpty()) return null;
             return server.getPlayerList().getPlayer(UUID.fromString(m.ownerUuid));
         } catch (Exception e) {
+            LOGGER.debug("MinionManager.ownerOf: ignored an error", e);
             // A corrupt id in the save file must not take down the tick loop.
             return null;
         }

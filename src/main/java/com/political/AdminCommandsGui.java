@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.mojang.brigadier.tree.CommandNode;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
@@ -30,6 +32,8 @@ import java.util.Locale;
  * work on their own run directly.</p>
  */
 public final class AdminCommandsGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminCommandsGui.class);
+
 
     private AdminCommandsGui() {}
 
@@ -128,12 +132,14 @@ public final class AdminCommandsGui {
                 try {
                     if (!node.canUse(source)) continue;
                 } catch (Exception e) {
+                    LOGGER.debug("AdminCommandsGui.collect: ignored an error", e);
                     continue;
                 }
                 out.add(new Node(node.getName().toLowerCase(Locale.ROOT),
                         node.getCommand() != null, node.getChildren().size()));
             }
         } catch (Exception e) {
+            LOGGER.debug("AdminCommandsGui.collect: ignored an error", e);
             // A dispatcher that will not enumerate leaves an empty list rather than a broken screen.
         }
         out.sort((a, b) -> a.name.compareTo(b.name));
@@ -148,6 +154,7 @@ public final class AdminCommandsGui {
                 server.getCommands().getDispatcher()
                         .execute(command, player.createCommandSourceStack());
             } catch (Exception e) {
+                LOGGER.warn("AdminCommandsGui.run: ignored an error", e);
                 player.sendSystemMessage(Component.literal("§c/" + command + " did not run: "
                         + (e.getMessage() == null ? "needs arguments" : e.getMessage())));
             }
@@ -173,6 +180,7 @@ public final class AdminCommandsGui {
                 player.sendSystemMessage(Component.literal("  §8Type it in chat to see the options."));
             }
         } catch (Exception e) {
+            LOGGER.warn("AdminCommandsGui.usage: ignored an error", e);
             player.sendSystemMessage(Component.literal("§7Type §f/" + command
                     + "§7 in chat to see its options."));
         }

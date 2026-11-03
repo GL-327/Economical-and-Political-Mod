@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -68,6 +70,8 @@ import java.util.UUID;
  * rounding error against the 10M cost of a war.</p>
  */
 public final class HuntManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HuntManager.class);
+
 
     private HuntManager() {}
 
@@ -379,6 +383,7 @@ public final class HuntManager {
                     new BlockPos(x, (int) anchor.getY(), z));
             y = ground.getY() + 1;
         } catch (Throwable t) {
+            LOGGER.debug("HuntManager.trySpawn: ignored an error", t);
             y = (int) anchor.getY();
         }
         if (y < level.getMinY() + 2) y = (int) anchor.getY();
@@ -577,6 +582,7 @@ public final class HuntManager {
             try {
                 helper = server.getPlayerList().getPlayer(UUID.fromString(uuid));
             } catch (Exception ex) {
+                LOGGER.debug("HuntManager.payAssists: ignored an error", ex);
                 continue;
             }
             if (helper == null) continue;
@@ -630,6 +636,7 @@ public final class HuntManager {
                 Entity e = level.getEntity(UUID.fromString(active.entityUuid));
                 if (e != null) e.discard();
             } catch (Exception ignored) {
+                LOGGER.debug("HuntManager.despawn: ignored an error", ignored);
                 // Malformed uuid from a hand-edited save; nothing to discard.
             }
         }
@@ -676,6 +683,7 @@ public final class HuntManager {
             Entity e = level.getEntity(UUID.fromString(active.entityUuid));
             if (e instanceof LivingEntity le) return le.getHealth();
         } catch (Exception ignored) {
+            LOGGER.debug("HuntManager.currentHealth: ignored an error", ignored);
             return -1;
         }
         return -1;

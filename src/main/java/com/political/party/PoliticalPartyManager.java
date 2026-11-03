@@ -1,4 +1,6 @@
 package com.political.party;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.BuffProgressManager;
 import com.political.Commission;
 import com.political.CreditItem;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
  * ranks, party perks, wars, alliances, treasury logs, and weekly party events.
  */
 public final class PoliticalPartyManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PoliticalPartyManager.class);
+
 
     public static final int CREATE_PARTY_CREDITS = 10_000;
     public static final long DEFECT_COOLDOWN_MS = 24L * 60L * 60L * 1000L;
@@ -1507,7 +1511,7 @@ public final class PoliticalPartyManager {
     public static PartyCommission getActivePartyCommission(String uuid) {
         String name = activePartyCommission.get(uuid);
         if (name == null) return null;
-        try { return PartyCommission.valueOf(name); } catch (Exception e) { return null; }
+        try { return PartyCommission.valueOf(name); } catch (Exception e) { LOGGER.debug("PoliticalPartyManager.getActivePartyCommission: ignored an error", e); return null; }
     }
 
     public static int getPartyCommissionProgress(String uuid) {

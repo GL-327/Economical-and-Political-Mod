@@ -1,4 +1,6 @@
 package com.political.items;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.AscensionGrindManager;
 import com.political.CollectionManager;
@@ -82,6 +84,8 @@ import com.political.economy.CoinManager;
 import java.util.*;
 
 public class CustomItemHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomItemHandler.class);
+
     private static final Map<UUID, Boolean> wasSwinging = new HashMap<>();
     private static final Map<UUID, Long> gavelCooldowns = new HashMap<>();
     private static final long GAVEL_COOLDOWN_MS = 3000;
@@ -142,6 +146,7 @@ public class CustomItemHandler {
             try {
                 CollectionManager.recordBlock(sp, state);
             } catch (Exception ignored) {
+                LOGGER.debug("CustomItemHandler.register: ignored an error", ignored);
                 // A collection store that is not ready must never break mining.
             }
             if (DanielsPickaxe.isDanielsPickaxe(tool)) {
@@ -1100,6 +1105,7 @@ public class CustomItemHandler {
         try {
             return nbt.getByte(tagName).orElse((byte) 0) != 0;
         } catch (Exception e) {
+            LOGGER.debug("CustomItemHandler.hasCustomTag: ignored an error", e);
             return false;
         }
     }

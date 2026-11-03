@@ -393,6 +393,7 @@ public final class GuildManager {
         try {
             return ((ServerLevel) player.level()).getServer();
         } catch (Exception e) {
+            LOGGER.debug("GuildManager.serverOf: ignored an error", e);
             return PoliticalServer.server;
         }
     }
@@ -424,6 +425,7 @@ public final class GuildManager {
         try {
             return server.getPlayerList().getPlayer(UUID.fromString(uuid));
         } catch (Exception e) {
+            LOGGER.debug("GuildManager.playerFor: ignored an error", e);
             return null;
         }
     }

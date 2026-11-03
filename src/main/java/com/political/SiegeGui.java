@@ -61,7 +61,7 @@ public final class SiegeGui {
             SettlementTier tier;
             try {
                 tier = SettlementTier.valueOf(s.tier);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 tier = SettlementTier.OUTPOST;
             }
             final SettlementTier t = tier;
@@ -107,7 +107,7 @@ public final class SiegeGui {
             SettlementTier tier;
             try {
                 tier = SettlementTier.valueOf(s.tier);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 tier = SettlementTier.OUTPOST;
             }
             final SettlementTier t = tier;

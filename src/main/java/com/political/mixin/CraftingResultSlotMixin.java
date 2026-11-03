@@ -79,6 +79,7 @@ public class CraftingResultSlotMixin {
         try {
             resultInventory = (ResultContainer) ((Slot) (Object) this).container;
         } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger("politicalserver.mixin").debug("CraftingResultSlotMixin.refreshResult: ignored an error", e);
             return;
         }
 

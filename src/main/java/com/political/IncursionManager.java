@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -42,6 +44,8 @@ import java.util.UUID;
  * thing you kite across the map.</p>
  */
 public final class IncursionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IncursionManager.class);
+
 
     private IncursionManager() {}
 
@@ -155,6 +159,7 @@ public final class IncursionManager {
             var key = holder.unwrapKey().orElse(null);
             return key == null ? "" : key.identifier().toString();
         } catch (Exception e) {
+            LOGGER.debug("IncursionManager.biomeIdAt: ignored an error", e);
             // An unreadable biome is not worth refusing the fight over, it just becomes the default.
             return "";
         }
@@ -425,6 +430,7 @@ public final class IncursionManager {
         try {
             return server.getPlayerList().getPlayer(UUID.fromString(a.ownerUuid));
         } catch (Exception e) {
+            LOGGER.debug("IncursionManager.ownerOf: ignored an error", e);
             return null;
         }
     }

@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerItems;
 import com.political.recipe.RecipeConfigManager;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,8 @@ import net.minecraft.world.item.ItemStack;
  * every other explicit mapping are untouched.
  */
 public final class SlayerItemFamilyResolver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SlayerItemFamilyResolver.class);
+
 
     private SlayerItemFamilyResolver() {}
 
@@ -50,6 +54,7 @@ public final class SlayerItemFamilyResolver {
                 return stack;
             }
         } catch (Exception ignored) {
+            LOGGER.debug("SlayerItemFamilyResolver.resolve: ignored an error", ignored);
             // No matching factory — fall through to EMPTY so other resolvers can try.
         }
         return ItemStack.EMPTY;

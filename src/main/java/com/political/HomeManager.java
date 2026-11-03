@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.party.PartyPerkEffects;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
@@ -14,6 +16,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class HomeManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HomeManager.class);
+
 
     private static final ConcurrentHashMap<String, Long> lastHomeTeleportMs = new ConcurrentHashMap<>();
 
@@ -75,6 +79,7 @@ public class HomeManager {
             player.sendSystemMessage(Component.literal("Teleported home!").withStyle(ChatFormatting.GREEN));
             return true;
         } catch (Exception e) {
+            LOGGER.warn("HomeManager.teleportHome: ignored an error", e);
             player.sendSystemMessage(Component.literal("Error teleporting home!").withStyle(ChatFormatting.RED));
             return false;
         }

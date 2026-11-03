@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressionTreeGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgressionTreeGui.class);
+
 
     private static final int[] TREE_SLOTS = {
         37, 38, 39,  // Tiers 1-3: bottom row
@@ -347,7 +351,7 @@ public class ProgressionTreeGui {
             if (tiers != null) {
                 tiers.put(branch.name(), 0);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { LOGGER.debug("ProgressionTreeGui.resetBranchTier: ignored an error", ignored); }
     }
 
     private static void setSkillPoints(String uuid, long amount) {
@@ -357,7 +361,7 @@ public class ProgressionTreeGui {
             @SuppressWarnings("unchecked")
             var map = (java.util.Map<String, Long>) field.get(null);
             map.put(uuid, Math.max(0, amount));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { LOGGER.debug("ProgressionTreeGui.setSkillPoints: ignored an error", ignored); }
     }
 
     // ════════════════════════════════════════════════════════════

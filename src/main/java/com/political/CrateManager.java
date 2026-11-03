@@ -217,6 +217,7 @@ public final class CrateManager {
             if (pool.isEmpty()) return ItemStack.EMPTY;
             return pool.get(RNG.nextInt(pool.size())).copy();
         } catch (Exception e) {
+            LOGGER.debug("CrateManager.rollReward: ignored an error", e);
             return ItemStack.EMPTY;
         }
     }
@@ -241,6 +242,7 @@ public final class CrateManager {
         try {
             recipes = RecipeConfigManager.getRecipes();
         } catch (Exception e) {
+            LOGGER.debug("CrateManager.rebuildIndexIfStale: ignored an error", e);
             return;
         }
         int count = recipes.size();
@@ -255,6 +257,7 @@ public final class CrateManager {
             }
             indexedAtCount = count;
         } catch (Exception e) {
+            LOGGER.debug("CrateManager.rebuildIndexIfStale: ignored an error", e);
             // A catalogue that will not enumerate leaves the pools empty, which pays coins
             // instead of items rather than failing a pull.
         }
@@ -322,6 +325,7 @@ public final class CrateManager {
                 out.add(pool.get(i).getHoverName().getString());
             }
         } catch (Exception ignored) {
+            LOGGER.debug("CrateManager.sampleOf: ignored an error", ignored);
             // An unavailable catalogue simply shows nothing rather than failing the screen.
         }
         return out;
@@ -332,6 +336,7 @@ public final class CrateManager {
         try {
             return poolFor(band).size();
         } catch (Exception e) {
+            LOGGER.debug("CrateManager.poolSize: ignored an error", e);
             return 0;
         }
     }

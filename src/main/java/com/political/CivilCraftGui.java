@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.item.Items;
@@ -9,6 +11,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 
 public class CivilCraftGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CivilCraftGui.class);
+
 
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
@@ -226,6 +230,7 @@ public class CivilCraftGui {
                 String raw = command.startsWith("/") ? command.substring(1) : command;
                 PoliticalServer.server.getCommands().getDispatcher().execute(raw, player.createCommandSourceStack());
             } catch (Exception e) {
+                LOGGER.warn("CivilCraftGui.executeCommand: ignored an error", e);
                 player.sendSystemMessage(Component.literal("✖ Command not available: /" + command).withStyle(ChatFormatting.RED), false);
             }
         });

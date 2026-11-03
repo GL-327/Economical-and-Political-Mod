@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementManager;
@@ -46,6 +48,8 @@ import java.util.UUID;
  * problems rather than a pure upgrade.</p>
  */
 public final class SiegeManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SiegeManager.class);
+
 
     private SiegeManager() {}
 
@@ -114,7 +118,7 @@ public final class SiegeManager {
     private static SettlementTier tierOf(Settlement s) {
         try {
             return SettlementTier.valueOf(s.tier);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             return SettlementTier.OUTPOST;
         }
     }
@@ -475,6 +479,7 @@ public final class SiegeManager {
         try {
             return level.getServer().getPlayerList().getPlayer(UUID.fromString(uuid));
         } catch (Exception e) {
+            LOGGER.debug("SiegeManager.playerOf: ignored an error", e);
             return null;
         }
     }

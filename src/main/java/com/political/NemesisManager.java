@@ -377,6 +377,7 @@ public final class NemesisManager {
             Identifier id = Identifier.parse(n.entityType);
             return BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityTypes.ZOMBIE);
         } catch (Exception e) {
+            LOGGER.debug("NemesisManager.typeOf: ignored an error", e);
             return EntityTypes.ZOMBIE;
         }
     }

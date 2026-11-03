@@ -91,7 +91,7 @@ public class Settlement {
     public SettlementTier tierEnum() {
         try {
             return SettlementTier.valueOf(tier);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             return SettlementTier.OUTPOST;
         }
     }

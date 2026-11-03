@@ -63,7 +63,7 @@ public class Guild {
             if (s == null) return INITIATE;
             try {
                 return Rank.valueOf(s);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 return INITIATE;
             }
         }

@@ -1,4 +1,6 @@
 package com.political;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.mixin.BestiaryDamageMixin;
 
 
@@ -68,6 +70,8 @@ import java.util.UUID;
  * ceiling that is still many hours of genuine fighting, and the payoff is 10%.
  */
 public final class BestiaryManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BestiaryManager.class);
+
 
     private BestiaryManager() {}
 
@@ -214,6 +218,7 @@ public final class BestiaryManager {
             var key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
             return key == null ? "unknown" : key.getPath();
         } catch (Throwable t) {
+            LOGGER.debug("BestiaryManager.typePath: ignored an error", t);
             return "unknown";
         }
     }

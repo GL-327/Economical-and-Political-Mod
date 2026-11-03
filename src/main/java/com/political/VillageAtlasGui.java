@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementProgressGui;
 import eu.pb4.sgui.api.gui.SimpleGui;
@@ -25,6 +27,8 @@ import net.minecraft.world.item.Items;
  * manual check ever disagree, the bug is here rather than somewhere subtle in worldgen.</p>
  */
 public final class VillageAtlasGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VillageAtlasGui.class);
+
 
     private VillageAtlasGui() {}
 
@@ -103,6 +107,7 @@ public final class VillageAtlasGui {
                 server.getCommands().getDispatcher()
                         .execute(command, player.createCommandSourceStack());
             } catch (Exception e) {
+                LOGGER.warn("VillageAtlasGui.run: ignored an error", e);
                 player.sendSystemMessage(Component.literal(
                         "§cNothing found nearby. Try standing in the right biome."));
             }

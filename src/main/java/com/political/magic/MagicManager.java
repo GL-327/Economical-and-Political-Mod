@@ -527,7 +527,7 @@ public class MagicManager {
     public static MagicCommission getActiveCommission(String uuid) {
         PlayerMagicData data = getPlayerData(uuid);
         if (data.activeCommission == null) return null;
-        try { return MagicCommission.valueOf(data.activeCommission); } catch (Exception e) { return null; }
+        try { return MagicCommission.valueOf(data.activeCommission); } catch (Exception e) { LOGGER.debug("MagicManager.getActiveCommission: ignored an error", e); return null; }
     }
 
     public static int getCommissionProgress(String uuid) {

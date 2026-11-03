@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.SlayerRecipes;
@@ -25,6 +27,8 @@ import java.util.function.Predicate;
  * per-item bookkeeping. Operators can click an item to receive it.
  */
 public final class ExpansionCatalogGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpansionCatalogGui.class);
+
 
     private ExpansionCatalogGui() {}
 
@@ -138,6 +142,7 @@ public final class ExpansionCatalogGui {
         try {
             return RecipeConfigManager.getRecipes();
         } catch (Exception e) {
+            LOGGER.debug("ExpansionCatalogGui.safeRecipes: ignored an error", e);
             return new ArrayList<>();
         }
     }

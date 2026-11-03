@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -17,6 +19,8 @@ import net.minecraft.world.item.Items;
  * decided by where you start it and there is no way to change your mind afterwards.</p>
  */
 public final class IncursionGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IncursionGui.class);
+
 
     private IncursionGui() {}
 
@@ -113,6 +117,7 @@ public final class IncursionGui {
                     key == null ? "" : key.identifier().toString(),
                     at.getY());
         } catch (Exception e) {
+            LOGGER.debug("IncursionGui.themeHere: ignored an error", e);
             return IncursionTheme.BLIGHTED;
         }
     }

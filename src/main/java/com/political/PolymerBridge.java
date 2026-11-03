@@ -121,6 +121,7 @@ public final class PolymerBridge {
         try {
             stack.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath(NAMESPACE, customItemId));
         } catch (Exception e) {
+            LOGGER.debug("PolymerBridge.applyModel: ignored an error", e);
             // A bad id is not worth failing item creation over.
         }
     }

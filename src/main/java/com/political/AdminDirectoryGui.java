@@ -1,4 +1,6 @@
 package com.political;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.government.Treasury;
 
 
@@ -51,6 +53,8 @@ import java.util.Map;
  * hand written index of a hundred menus is out of date the day after it is written.</p>
  */
 public final class AdminDirectoryGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminDirectoryGui.class);
+
 
     private AdminDirectoryGui() {}
 
@@ -232,6 +236,7 @@ public final class AdminDirectoryGui {
                         try {
                             en.opener().open(player);
                         } catch (Exception ex) {
+                            LOGGER.warn("AdminDirectoryGui.openGroup: ignored an error", ex);
                             // Some screens need context an operator may not have, a settlement or
                             // a party. Say so plainly rather than closing with no explanation.
                             player.sendSystemMessage(Component.literal(

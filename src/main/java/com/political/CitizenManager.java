@@ -132,6 +132,7 @@ public class CitizenManager {
                     }
                 }
             } catch (Exception ignored) {
+                LOGGER.debug("CitizenManager.killCitizens: ignored an error", ignored);
                 // A citizen whose villager is already gone still counts as removed.
             }
         }
@@ -277,7 +278,7 @@ public class CitizenManager {
         Entity sheriffEntity = null;
         try {
             sheriffEntity = world.getEntity(UUID.fromString(sheriffUuid));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { LOGGER.debug("CitizenManager.runSheriff: ignored an error", ignored); }
         if (!(sheriffEntity instanceof Villager sheriff) || !sheriff.isAlive()) return;
 
         AABB box = sheriff.getBoundingBox().inflate(SHERIFF_RADIUS);
@@ -316,6 +317,6 @@ public class CitizenManager {
         try {
             v.setVillagerData(v.getVillagerData()
                     .withProfession(BuiltInRegistries.VILLAGER_PROFESSION.getOrThrow(prof)));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { LOGGER.debug("CitizenManager.applyProfession: ignored an error", ignored); }
     }
 }

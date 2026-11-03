@@ -50,6 +50,7 @@ public class CraftingShiftClickBlockerMixin {
                 cir.setReturnValue(ItemStack.EMPTY);
             }
         } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger("politicalserver.mixin").debug("CraftingShiftClickBlockerMixin.political_blockShiftClick: ignored an error", e);
             // Fall through to vanilla
         }
     }

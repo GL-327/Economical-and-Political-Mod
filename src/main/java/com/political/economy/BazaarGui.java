@@ -278,7 +278,7 @@ public final class BazaarGui {
     private static long parse(String text) {
         try {
             return Long.parseLong(text.replaceAll("[^0-9]", ""));
-        } catch (Exception e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return -1;
         }
     }

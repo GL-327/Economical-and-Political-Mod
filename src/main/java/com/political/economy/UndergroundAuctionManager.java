@@ -213,7 +213,7 @@ public class UndergroundAuctionManager {
                         for (String id : data.auctioneerIds) {
                             try {
                                 auctioneerIds.add(UUID.fromString(id));
-                            } catch (Exception ignored) {
+                            } catch (IllegalArgumentException | NullPointerException ignored) {
                             }
                         }
                     }

@@ -80,6 +80,7 @@ public class SpawnerSilkTouchMixin {
                 ItemEnchantments.EMPTY);
             return enchantments.getLevel(silkTouchEntry) > 0;
         } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger("politicalserver.mixin").debug("SpawnerSilkTouchMixin.hasSilkTouch: ignored an error", e);
             return false;
         }
     }

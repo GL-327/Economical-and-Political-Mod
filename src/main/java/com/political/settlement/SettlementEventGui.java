@@ -1,4 +1,6 @@
 package com.political.settlement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.CivilizationHubGui;
 import com.political.PoliticalServer;
 import com.political.SpawnProtectionManager;
@@ -23,6 +25,8 @@ import java.util.List;
  * is inspectable here; no command is ever required.
  */
 public final class SettlementEventGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettlementEventGui.class);
+
 
     private SettlementEventGui() {}
 
@@ -147,6 +151,7 @@ public final class SettlementEventGui {
         try {
             return SpawnProtectionManager.isOperator(player);
         } catch (Throwable t) {
+            LOGGER.debug("SettlementEventGui.isOperator: ignored an error", t);
             return false;
         }
     }

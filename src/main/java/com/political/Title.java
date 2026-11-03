@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerData;
 import com.political.bounty.SlayerManager;
 import com.political.economy.CoinManager;
@@ -160,6 +162,8 @@ public enum Title {
         boolean met(ServerPlayer player);
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Title.class);
+
     public final String display;
     public final ChatFormatting colour;
     public final Kind kind;
@@ -183,6 +187,7 @@ public enum Title {
         try {
             return check.met(player);
         } catch (Exception e) {
+            LOGGER.debug("Title.earnedBy: ignored an error", e);
             // A system that is not ready simply has not granted its titles yet.
             return false;
         }

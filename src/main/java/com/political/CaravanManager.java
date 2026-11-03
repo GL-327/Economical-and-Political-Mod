@@ -361,6 +361,7 @@ public final class CaravanManager {
             Entity e = world.getEntity(UUID.fromString(c.villagerUuid));
             return e instanceof Villager v ? v : null;
         } catch (Exception ex) {
+            LOGGER.debug("CaravanManager.resolveVillager: ignored an error", ex);
             return null;
         }
     }
@@ -379,6 +380,7 @@ public final class CaravanManager {
         try {
             return world.getServer().getPlayerList().getPlayer(UUID.fromString(c.lastAttackerUuid));
         } catch (Exception e) {
+            LOGGER.debug("CaravanManager.lastAttacker: ignored an error", e);
             return null;
         }
     }
@@ -430,6 +432,7 @@ public final class CaravanManager {
                 }
                 c.escorts().add(llama.getUUID().toString());
             } catch (Exception ignored) {
+                LOGGER.debug("CaravanManager.spawnCaravan: ignored an error", ignored);
             }
         }
 
@@ -459,6 +462,7 @@ public final class CaravanManager {
             try {
                 e = world.getEntity(UUID.fromString(uuid));
             } catch (Exception ex) {
+                LOGGER.debug("CaravanManager.moveEntities: ignored an error", ex);
                 continue;
             }
             if (e == null || !e.isAlive()) {
@@ -486,6 +490,7 @@ public final class CaravanManager {
                 Entity e = world.getEntity(UUID.fromString(c.villagerUuid));
                 if (e != null) e.discard();
             } catch (Exception ignored) {
+                LOGGER.debug("CaravanManager.despawnEntities: ignored an error", ignored);
             }
             c.villagerUuid = null;
         }
@@ -494,6 +499,7 @@ public final class CaravanManager {
                 Entity e = world.getEntity(UUID.fromString(uuid));
                 if (e != null) e.discard();
             } catch (Exception ignored) {
+                LOGGER.debug("CaravanManager.despawnEntities: ignored an error", ignored);
             }
         }
         c.escorts().clear();
@@ -509,6 +515,7 @@ public final class CaravanManager {
                     e -> e.entityTags().contains(tag));
             for (Entity e : found) e.discard();
         } catch (Exception ignored) {
+            LOGGER.debug("CaravanManager.sweepStrays: ignored an error", ignored);
         }
     }
 

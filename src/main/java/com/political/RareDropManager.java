@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
 import com.political.bounty.SlayerItems;
 import net.minecraft.ChatFormatting;
@@ -30,6 +32,8 @@ import java.util.Random;
  * every other reward can be planned for, and a server needs a few things that cannot.</p>
  */
 public final class RareDropManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RareDropManager.class);
+
 
     private RareDropManager() {}
 
@@ -67,6 +71,7 @@ public final class RareDropManager {
         try {
             return d.source.getDescription().getString();
         } catch (Exception e) {
+            LOGGER.debug("RareDropManager.sourceName: ignored an error", e);
             return "something";
         }
     }
@@ -90,6 +95,7 @@ public final class RareDropManager {
                 return;
             }
         } catch (Exception e) {
+            LOGGER.debug("RareDropManager.onKill: ignored an error", e);
             // A drop is never worth failing a kill over.
         }
     }
@@ -110,6 +116,7 @@ public final class RareDropManager {
             // Wearing the warrant says you have done the work.
             if (WarrantArmour.fullSet(player)) luck += 0.2;
         } catch (Exception ignored) {
+            LOGGER.debug("RareDropManager.luckOf: ignored an error", ignored);
             // Any system not ready simply contributes nothing.
         }
         return Math.min(1.95, luck);

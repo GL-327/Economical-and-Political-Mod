@@ -1,4 +1,6 @@
 package com.political.stats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.CollectionManager;
 import com.political.PlayerStatsGui;
 import com.political.PoliticalServer;
@@ -63,6 +65,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * ("⚔ Damage:" lines stay handled by calculateSlayerDamage as the weapon's base damage.)
  */
 public final class PlayerStatsManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerStatsManager.class);
+
 
     private PlayerStatsManager() {}
 
@@ -179,6 +183,7 @@ public final class PlayerStatsManager {
         try {
             CollectionManager.applyBonuses(player, sheet);
         } catch (Exception ignored) {
+            LOGGER.debug("PlayerStatsManager.compute: ignored an error", ignored);
             // A collection store that has not initialised yet must never break stats.
         }
         sheet.clamp();

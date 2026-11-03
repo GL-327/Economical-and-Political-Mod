@@ -1,4 +1,6 @@
 package com.political.stats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.MasteryHeartTree;
 import com.political.PoliticalServer;
 import com.political.WorldBossManager;
@@ -32,6 +34,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 
 public class HealthScalingManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HealthScalingManager.class);
+
     private static final java.util.Random javaRandom = new java.util.Random();
     private static final double SPAWN_CHANCE = 0.3; // Add this at top of class
         // ============================================================
@@ -371,6 +375,7 @@ public class HealthScalingManager {
             mob.addTag(TIER_TAG_PREFIX + tier.ordinal());
 
         } catch (Exception e) {
+            LOGGER.debug("HealthScalingManager.applyScaling: ignored an error", e);
             // Silently fail if attributes don't exist
             checkedEntities.add(mob.getUUID());
         }

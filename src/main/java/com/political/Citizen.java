@@ -47,7 +47,7 @@ public class Citizen {
     public CitizenJob jobEnum() {
         try {
             return CitizenJob.valueOf(job);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             return CitizenJob.CITIZEN;
         }
     }

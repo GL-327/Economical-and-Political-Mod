@@ -51,6 +51,7 @@ public abstract class BestiaryDamageMixin {
             if (mult <= 1.0) return amount;
             return (float) (amount * mult);
         } catch (Throwable t) {
+            org.slf4j.LoggerFactory.getLogger("politicalserver.mixin").debug("BestiaryDamageMixin.livingworld_applyBestiaryBonus: ignored an error", t);
             return amount;
         }
     }
@@ -81,6 +82,7 @@ public abstract class BestiaryDamageMixin {
         try {
             BestiaryManager.recordDamage(attacker, self, dealt);
         } catch (Throwable ignored) {
+            org.slf4j.LoggerFactory.getLogger("politicalserver.mixin").debug("BestiaryDamageMixin.livingworld_recordContribution: ignored an error", ignored);
             // Never let bookkeeping break a hit.
         }
     }

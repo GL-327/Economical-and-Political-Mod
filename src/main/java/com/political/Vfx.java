@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,6 +40,8 @@ import java.util.List;
  * be attached to any existing ability without touching balance.</p>
  */
 public final class Vfx {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Vfx.class);
+
 
     private Vfx() {}
 
@@ -79,6 +83,7 @@ public final class Vfx {
                 try {
                     return !r.fx.tick(r.level, r.frame++);
                 } catch (Exception e) {
+                    LOGGER.debug("Vfx.tick: ignored an error", e);
                     // A broken effect must never take the server tick down with it.
                     return true;
                 }

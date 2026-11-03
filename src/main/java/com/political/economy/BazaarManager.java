@@ -360,6 +360,7 @@ public final class BazaarManager {
             if (PoliticalServer.server == null) return null;
             return PoliticalServer.server.getPlayerList().getPlayer(java.util.UUID.fromString(uuid));
         } catch (Exception e) {
+            LOGGER.debug("BazaarManager.onlinePlayer: ignored an error", e);
             return null;
         }
     }

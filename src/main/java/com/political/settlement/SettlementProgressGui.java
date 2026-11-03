@@ -1,4 +1,6 @@
 package com.political.settlement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.CitizenManager;
 import com.political.GuiKit;
 import com.political.government.Treasury;
@@ -33,6 +35,8 @@ import java.util.List;
  * moving in.</p>
  */
 public final class SettlementProgressGui {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SettlementProgressGui.class);
+
 
     private SettlementProgressGui() {}
 
@@ -125,6 +129,7 @@ public final class SettlementProgressGui {
                                     + " is " + s.tierEnum().displayName + "."));
                         }
                     } catch (Exception e) {
+                        LOGGER.warn("SettlementProgressGui.open: ignored an error", e);
                         player.sendSystemMessage(Component.literal("§cScan failed: " + e.getMessage()));
                     }
                     open(player, s);
@@ -165,6 +170,7 @@ public final class SettlementProgressGui {
                                     "§aA settler arrives in " + s.name + "."));
                         }
                     } catch (Exception e) {
+                        LOGGER.warn("SettlementProgressGui.open: ignored an error", e);
                         CoinManager.giveCoins(player, cost);
                         player.sendSystemMessage(Component.literal("§cNobody came. Coins refunded."));
                     }

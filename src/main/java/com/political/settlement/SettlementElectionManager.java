@@ -353,7 +353,7 @@ public class SettlementElectionManager {
             try {
                 ServerPlayer p = server.getPlayerList().getPlayer(UUID.fromString(uuid));
                 if (p != null) p.sendSystemMessage(msg);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) { LOGGER.debug("SettlementElectionManager.broadcastToSettlement: ignored an error", ignored); }
         }
     }
 }

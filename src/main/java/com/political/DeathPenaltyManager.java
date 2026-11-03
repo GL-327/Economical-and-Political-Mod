@@ -1,5 +1,7 @@
 package com.political;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.economy.CoinManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * </ul>
  */
 public class DeathPenaltyManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeathPenaltyManager.class);
+
 
     private static final Set<UUID> RECENT_DEATHS = ConcurrentHashMap.newKeySet();
 
@@ -41,6 +45,7 @@ public class DeathPenaltyManager {
         try {
             NemesisManager.onPlayerDeath(victim, source);
         } catch (Exception ignored) {
+            LOGGER.debug("DeathPenaltyManager.onPlayerDeath: ignored an error", ignored);
             // A grudge is never worth failing a death handler over.
         }
 

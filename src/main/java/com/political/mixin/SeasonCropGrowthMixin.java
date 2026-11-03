@@ -36,6 +36,7 @@ public class SeasonCropGrowthMixin {
         try {
             multiplier = SeasonManager.cropGrowthMultiplier();
         } catch (Throwable t) {
+            org.slf4j.LoggerFactory.getLogger("politicalserver.mixin").debug("SeasonCropGrowthMixin.livingworld_seasonalGrowth: ignored an error", t);
             return;
         }
         if (multiplier == 1.0) return;

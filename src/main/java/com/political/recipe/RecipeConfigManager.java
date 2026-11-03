@@ -83,6 +83,7 @@ public class RecipeConfigManager {
                 try {
                     return e.getAsJsonObject().get("name").getAsString();
                 } catch (Exception ex) {
+                    LOGGER.debug("RecipeConfigManager.sortRecipesByName: ignored an error", ex);
                     return "";
                 }
             }));
@@ -90,6 +91,7 @@ public class RecipeConfigManager {
             items.forEach(sorted::add);
             root.add("recipes", sorted);
         } catch (Exception ignored) {
+            LOGGER.debug("RecipeConfigManager.sortRecipesByName: ignored an error", ignored);
             // A malformed root is still worth writing unsorted rather than not at all.
         }
     }
@@ -159,6 +161,7 @@ public class RecipeConfigManager {
             if (root == null || !root.has("recipes") || !root.get("recipes").isJsonArray()) return 0;
             return root.getAsJsonArray("recipes").size();
         } catch (Exception e) {
+            LOGGER.debug("RecipeConfigManager.countRecipesOnDisk: ignored an error", e);
             return 0;
         }
     }
@@ -274,6 +277,7 @@ public class RecipeConfigManager {
                                 failedNames.add(name);
                             }
                         } catch (Exception e) {
+                            LOGGER.warn("RecipeConfigManager.getRecipesCached: ignored an error", e);
                             failed++;
                             failedNames.add(name + " (" + e.getClass().getSimpleName() + ")");
                         }
@@ -304,6 +308,7 @@ public class RecipeConfigManager {
                 return RECIPE_CACHE;
             }
         } catch (Exception e) {
+            LOGGER.debug("RecipeConfigManager.getRecipesCached: ignored an error", e);
             return java.util.Collections.emptyList();
         }
     }
@@ -418,6 +423,7 @@ public class RecipeConfigManager {
                         continue;
                     }
                 } catch (Exception ignored) {
+                    LOGGER.debug("RecipeConfigManager.upsertCustomRecipesSilent: ignored an error", ignored);
                     // Fallback below for malformed entries.
                 }
 
@@ -434,6 +440,7 @@ public class RecipeConfigManager {
                         }
                     }
                 } catch (Exception ignored) {
+                    LOGGER.debug("RecipeConfigManager.upsertCustomRecipesSilent: ignored an error", ignored);
                     // ignore malformed recipe object
                 }
             }
@@ -689,7 +696,7 @@ public class RecipeConfigManager {
 
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
-                try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) {}
+                try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) { LOGGER.debug("RecipeConfigManager.deserializeBaseRecipe: ignored an error", ignored); }
             }
 
             JsonArray gridArr = obj.getAsJsonArray("ingredients");
@@ -733,7 +740,7 @@ public class RecipeConfigManager {
             
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
-                try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) {}
+                try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) { LOGGER.debug("RecipeConfigManager.deserialize: ignored an error", ignored); }
             }
 
             JsonArray gridArr = obj.getAsJsonArray("ingredients");
@@ -756,6 +763,7 @@ public class RecipeConfigManager {
 
             return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
         } catch (Exception e) {
+            LOGGER.debug("RecipeConfigManager.deserialize: ignored an error", e);
             return null;
         }
     }
@@ -820,6 +828,7 @@ public class RecipeConfigManager {
                 return rebuilt;
             }
         } catch (Exception ignored) {
+            LOGGER.debug("RecipeConfigManager.rebuildFromEmbeddedCustomId: ignored an error", ignored);
             // fall through
         }
         return ItemStack.EMPTY;
@@ -883,6 +892,7 @@ public class RecipeConfigManager {
                     if (rebuilt != null && !rebuilt.isEmpty()) return rebuilt;
                 }
             } catch (Exception e) {
+                LOGGER.debug("RecipeConfigManager.deserializeStack: ignored an error", e);
                 try {
                     String nbtString = obj.get("nbt").getAsString();
                     ItemStack fallback = parseStackFromSnbtString(nbtString, obj);
@@ -890,6 +900,7 @@ public class RecipeConfigManager {
                     ItemStack rebuilt = rebuildFromEmbeddedCustomId(nbtString, obj);
                     if (rebuilt != null && !rebuilt.isEmpty()) return rebuilt;
                 } catch (Exception ignored) {
+                    LOGGER.debug("RecipeConfigManager.deserializeStack: ignored an error", ignored);
                     // ignore
                 }
 
@@ -1093,6 +1104,7 @@ public class RecipeConfigManager {
             if (item == Items.AIR) return ItemStack.EMPTY;
             return new ItemStack(item);
         } catch (Exception e) {
+            LOGGER.debug("RecipeConfigManager.resolveItem: ignored an error", e);
             return ItemStack.EMPTY;
         }
     }
@@ -1220,6 +1232,7 @@ public class RecipeConfigManager {
                 if (fromDef != null && !fromDef.isEmpty()) return fromDef;
             }
         } catch (Exception ignored) {
+            LOGGER.debug("RecipeConfigManager.resolveCustomItem: ignored an error", ignored);
             // Custom items may not be initialized yet during early recipe load.
         }
 

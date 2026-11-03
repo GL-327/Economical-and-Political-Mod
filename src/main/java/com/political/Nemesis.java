@@ -96,7 +96,7 @@ public final class Nemesis {
     public Rank rank() {
         try {
             return Rank.valueOf(rank);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             return Rank.STALKER;
         }
     }

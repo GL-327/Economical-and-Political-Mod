@@ -1,6 +1,8 @@
 package com.political;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.political.bounty.SlayerItems;
 import com.political.bounty.SlayerManager;
 import com.political.recipe.RecipeGenerator;
@@ -21,6 +23,8 @@ import java.util.regex.Pattern;
  * Keeps the deserialized core stack so tier and NBT stay correct.
  */
 public final class RecipeIngredientHydrator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeIngredientHydrator.class);
+
 
     private static final Map<String, String> MATERIAL_LOOKUP = new HashMap<>();
     private static final Pattern SLAYER_ARMOR_TIER = Pattern.compile("^(zombie|skeleton|spider|slime)_(helmet|chestplate|leggings|boots)_t([12])$");
@@ -130,7 +134,7 @@ public final class RecipeIngredientHydrator {
     private static SlayerManager.SlayerType parseSlayerType(String s) {
         try {
             return SlayerManager.SlayerType.valueOf(s.toUpperCase());
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             return null;
         }
     }
@@ -189,6 +193,7 @@ public final class RecipeIngredientHydrator {
             if (item == Items.AIR) return ItemStack.EMPTY;
             return new ItemStack(item, 1);
         } catch (Exception e) {
+            LOGGER.debug("RecipeIngredientHydrator.stackForId: ignored an error", e);
             return ItemStack.EMPTY;
         }
     }

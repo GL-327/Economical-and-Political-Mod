@@ -1179,7 +1179,7 @@ public class StockMarket {
             if (root.marketOpen != null) marketOpen = root.marketOpen;
             try {
                 if (root.currentTrend != null) currentTrend = MarketTrend.valueOf(root.currentTrend);
-            } catch (Exception ignored) {}
+            } catch (IllegalArgumentException ignored) {}
             if (root.playerTradeCounts != null) {
                 playerTradeCounts.clear();
                 playerTradeCounts.putAll(root.playerTradeCounts);
@@ -1207,7 +1207,7 @@ public class StockMarket {
                     try {
                         OrderType t = OrderType.valueOf(s.type);
                         limitOrders.add(new LimitOrder(s.playerUuid, s.symbol, t, s.targetPrice, s.shares, s.createdTick));
-                    } catch (Exception ignored) {}
+                    } catch (IllegalArgumentException | NullPointerException ignored) {}
                 }
             }
             activeEvents.clear();

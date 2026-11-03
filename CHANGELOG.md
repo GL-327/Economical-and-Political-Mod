@@ -22,3 +22,5 @@
   (`-Dpoliticalserver.mixinAudit=true`).
 - Logging: every `System.out`, `System.err` and `printStackTrace` call (118 sites in 40 files) now goes through an SLF4J logger
   with the exception attached; `SourcePolicyTest` keeps it that way.
+- Error handling: no broad `catch (Exception|Throwable)` swallows an error silently any more (85 did). Each now logs with its
+  class and method, or rethrows; 16 were narrowed to the exceptions they can actually get. No gameplay change.
