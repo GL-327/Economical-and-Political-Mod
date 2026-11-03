@@ -1,0 +1,24 @@
+{
+  "aaaaaaaa-0000-0000-0000-000000000002": {
+    "level": 12,
+    "xp": 2400,
+    "mana": 55.0,
+    "unlockedSpells": ["FIREBALL", "ICE_SPIKE"],
+    "activeSpell": "FIREBALL",
+    "skillTreeUnlocks": ["n1", "n2"],
+    "activeCommission": null,
+    "commissionProgress": 0,
+    "lastCommissionTime": 0
+  },
+  "aaaaaaaa-0000-0000-0000-000000000001": {
+    "level": 3,
+    "xp": 300,
+    "mana": 100.0,
+    "unlockedSpells": [],
+    "activeSpell": null,
+    "skillTreeUnlocks": [],
+    "activeCommission": null,
+    "commissionProgress": 0,
+    "lastCommissionTime": 0
+  }
+}

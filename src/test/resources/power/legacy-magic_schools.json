@@ -1,0 +1,12 @@
+{
+  "aaaaaaaa-0000-0000-0000-000000000002": {
+    "shards": 3,
+    "shardsEarnedTotal": 40,
+    "unlocked": ["gra1", "gra2", "gra3", "pyr1", "bogus9"]
+  },
+  "aaaaaaaa-0000-0000-0000-000000000001": {
+    "shards": 0,
+    "shardsEarnedTotal": 0,
+    "unlocked": []
+  }
+}

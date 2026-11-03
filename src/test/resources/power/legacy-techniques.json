@@ -1,0 +1,29 @@
+{
+  "players": {
+    "aaaaaaaa-0000-0000-0000-000000000001": {
+      "learned": ["EMBERHEART", "GLACIER_SOUL"],
+      "equipped": "EMBERHEART",
+      "usesByTechnique": {"EMBERHEART": 50, "GLACIER_SOUL": 3},
+      "selectedAbility": "cinder_bloom",
+      "energy": 72.5,
+      "lastEnergyMs": 1730000000000,
+      "cooldowns": {"ember_lash": 1730000005000},
+      "abilityUses": {}
+    },
+    "aaaaaaaa-0000-0000-0000-000000000003": {
+      "learned": [],
+      "equipped": null,
+      "technique": "STORM_VEIN",
+      "usesByTechnique": {},
+      "energy": 100.0,
+      "abilityUses": {"volt_strike": 4, "arc_chain": 2}
+    },
+    "aaaaaaaa-0000-0000-0000-000000000004": {
+      "learned": ["SHADOW_CLAN", "UMBRAL_STEP"],
+      "equipped": "SHADOW_CLAN",
+      "usesByTechnique": {"SHADOW_CLAN": 9, "UMBRAL_STEP": 1},
+      "selectedAbility": "bogus_ability",
+      "energy": 10.0
+    }
+  }
+}
