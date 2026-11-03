@@ -62,3 +62,8 @@ full_boot*.log
 
 # local Claude Code settings (machine specific paths)
 .claude/*.local.json
+
+# log files written by test and dev runs (they contain local paths)
+logs/
+crash-reports/
+hs_err_pid*.log

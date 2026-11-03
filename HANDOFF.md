@@ -8,7 +8,7 @@ M1.10 GUI layout: choose the GUI stack (sgui with a shared layout module, record
 Milestone: M1 (M0 done except M0.7 partial)   Branch: modern/m1-core (cut from modern/m0-baseline at 32cee78)   Last commit: see the last HISTORY line
 PUSH STATUS: see the last HISTORY line
 BUILD STATUS: GREEN on Minecraft 26.3 (`./gradlew build --console=plain`, exit 0, 19s)
-TEST STATUS:  tests,  passing, `./gradlew build` (build/test-results/test/*.xml: ModMetadataTest 5, SourcePolicyTest 2, ClockTest 3, WallClockPolicyTest 1, TickDispatcherTest 13, VersionedStoreTest 14, ConfigStoreTest 12, ConfigReferenceTest 1, CommandRegistrarTest 8, TextPolicyTest 6, failures=0)
+TEST STATUS: 65 tests, 65 passing, `./gradlew build` (build/test-results/test/*.xml: ModMetadataTest 5, SourcePolicyTest 2, ClockTest 3, WallClockPolicyTest 1, TickDispatcherTest 13, VersionedStoreTest 14, ConfigStoreTest 12, ConfigReferenceTest 1, CommandRegistrarTest 8, TextPolicyTest 6, failures=0)
 
 ## MILESTONE CHECKLIST
 - [x] M0.1 Clone repo, branch, HANDOFF.md — the working copy already is the real repo (origin = https://github.com/GL-327/Economical-and-Political-Mod, history intact). Branch modern/m0-baseline cut from master 3189016.
