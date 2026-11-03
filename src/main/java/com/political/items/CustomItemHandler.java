@@ -1,4 +1,5 @@
 package com.political.items;
+import com.political.core.Clock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.minecraft.util.Prediction;
@@ -269,7 +270,7 @@ public class CustomItemHandler {
 
             // Beam Weapons
             if (isAnyBeamWeapon(held)) {
-                hpebmLastRightClick.put(player.getUUID(), System.currentTimeMillis());
+                hpebmLastRightClick.put(player.getUUID(), Clock.gameMillis());
                 return InteractionResult.CONSUME;
             }
 
@@ -283,7 +284,7 @@ public class CustomItemHandler {
 
             // Harvey's Stick: Stormcall (right-click) — consumes 1 copper ingot
             if (isHarveysStick(held)) {
-                long now = System.currentTimeMillis();
+                long now = Clock.gameMillis();
                 long last = harveyStormcallCooldowns.getOrDefault(serverPlayer.getUUID(), 0L);
                 if (now - last < 8000L) { // 8s cooldown
                     return InteractionResult.FAIL;
@@ -329,7 +330,7 @@ public class CustomItemHandler {
             String cid = SlayerItems.getCustomItemId(held);
             if (cid != null && (cid.equals("rift_mirror") || cid.equals("ember_signet") || cid.equals("frostbound_talisman")
                     || cid.equals("echo_chime") || cid.equals("terra_relay"))) {
-                long now = System.currentTimeMillis();
+                long now = Clock.gameMillis();
                 long last = relicCooldowns.getOrDefault(serverPlayer.getUUID(), 0L);
                 if (now - last < 6000L) { // shared 6s cooldown
                     return InteractionResult.FAIL;
@@ -729,7 +730,7 @@ public class CustomItemHandler {
 
     public static boolean useGavelAbility(ServerPlayer player, ItemStack gavelStack) {
         UUID uuid = player.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         if (gavelCooldowns.containsKey(uuid)) {
             long remaining = (gavelCooldowns.get(uuid) + GAVEL_COOLDOWN_MS) - now;
@@ -792,7 +793,7 @@ public class CustomItemHandler {
 
         // Check if player is right-clicking - if so, don't trigger left-click ability
         long lastClick = hpebmLastRightClick.getOrDefault(uuid, 0L);
-        boolean isRightClicking = (System.currentTimeMillis() - lastClick) < 200;
+        boolean isRightClicking = (Clock.gameMillis() - lastClick) < 200;
 
         // Detect new swing (left-click) - only if NOT ng
         if (isSwinging && !wasSwingingBefore && !isRightClicking) {
@@ -826,7 +827,7 @@ public class CustomItemHandler {
         UUID uuid = player.getUUID();
 
         long lastClick = hpebmLastRightClick.getOrDefault(uuid, 0L);
-        boolean rightClickHeld = (System.currentTimeMillis() - lastClick) < 200;
+        boolean rightClickHeld = (Clock.gameMillis() - lastClick) < 200;
 
         if (!holdingBeam || !rightClickHeld) {
             hpebmUseTicks.remove(uuid);
@@ -984,7 +985,7 @@ public class CustomItemHandler {
     }
 
     public static void markRightClick(ServerPlayer player) {
-        hpebmLastRightClick.put(player.getUUID(), System.currentTimeMillis());
+        hpebmLastRightClick.put(player.getUUID(), Clock.gameMillis());
     }
 
     // Upgraded beam (Tiers 2-7) - unique particles per tier, fast dissipating
@@ -1433,7 +1434,7 @@ public class CustomItemHandler {
                 }
             } else {
                 // Player doesn't meet level requirement - show warning [1]
-                long now = System.currentTimeMillis();
+                long now = Clock.gameMillis();
                 long lastWarning = berserkerWarningCooldown.getOrDefault(uuid, 0L);
 
                 if (now - lastWarning > WARNING_COOLDOWN_MS) {
@@ -2039,7 +2040,7 @@ public class CustomItemHandler {
 
     public static int getUltraOverclockedCooldownSeconds(ServerPlayer player) {
         UUID uuid = player.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long lastUse = ultraOverclockedCooldowns.getOrDefault(uuid, 0L);
         long remaining = ULTRA_OVERCLOCKED_COOLDOWN_MS - (now - lastUse);
 
@@ -2159,7 +2160,7 @@ public class CustomItemHandler {
         // Check if shrunk state should end
         UUID uuid = player.getUUID();
         if (slimeBootsActiveUntil.containsKey(uuid)) {
-            if (System.currentTimeMillis() > slimeBootsActiveUntil.get(uuid)) {
+            if (Clock.gameMillis() > slimeBootsActiveUntil.get(uuid)) {
                 // Time's up - return to normal size
                 player.refreshDimensions();
                 slimeBootsShrunk.remove(uuid);
@@ -2177,7 +2178,7 @@ public class CustomItemHandler {
         if (!SlayerItems.canUseSlimeBoots(player)) return false;
 
         UUID uuid = player.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         // Check cooldown
         if (slimeBootsCooldowns.containsKey(uuid)) {
@@ -2325,7 +2326,7 @@ public class CustomItemHandler {
 // ============================================================
     public static void sendLevelWarning(ServerPlayer player, String itemName, int reqLevel, String slayerType) {
         UUID uuid = player.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         // Only warn once per 5 seconds
         if (levelWarningCooldowns.containsKey(uuid)) {

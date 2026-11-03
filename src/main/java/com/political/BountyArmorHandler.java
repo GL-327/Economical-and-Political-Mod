@@ -1,4 +1,5 @@
 package com.political;
+import com.political.core.Clock;
 import com.political.mixin.LivingEntityMixin;
 
 
@@ -185,7 +186,7 @@ public class BountyArmorHandler {
         String chestId = SlayerItems.getCustomItemId(player.getItemBySlot(EquipmentSlot.CHEST));
         if ("slime_t2_chestplate".equals(chestId)) {
             UUID uuid = player.getUUID();
-            long now = System.currentTimeMillis();
+            long now = Clock.gameMillis();
             Long last = absorptionCooldown.get(uuid);
             if (last == null || (now - last) >= ABSORPTION_COOLDOWN_MS) {
                 if (!player.hasEffect(MobEffects.ABSORPTION)) {
@@ -449,17 +450,17 @@ public class BountyArmorHandler {
     
     public static void extendProtection(String uuid, long durationMs) {
         long current = bountyProtectionExpirations.getOrDefault(uuid, 0L);
-        bountyProtectionExpirations.put(uuid, Math.max(current, System.currentTimeMillis()) + durationMs);
+        bountyProtectionExpirations.put(uuid, Math.max(current, Clock.gameMillis()) + durationMs);
     }
     
     public static boolean hasBountyProtection(String uuid) {
         Long exp = bountyProtectionExpirations.get(uuid);
-        return exp != null && exp > System.currentTimeMillis();
+        return exp != null && exp > Clock.gameMillis();
     }
     
     public static long getProtectionRemaining(String uuid) {
         Long exp = bountyProtectionExpirations.get(uuid);
         if (exp == null) return 0;
-        return Math.max(0, exp - System.currentTimeMillis());
+        return Math.max(0, exp - Clock.gameMillis());
     }
 }

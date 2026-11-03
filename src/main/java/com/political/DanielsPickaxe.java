@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.Clock;
 import com.political.bounty.SlayerItems;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -143,7 +144,7 @@ public class DanielsPickaxe {
     public static void toggleAbility(ServerPlayer player) {
         UUID uuid = player.getUUID();
 
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long last = lastToggleTime.getOrDefault(uuid, 0L);
         if (now - last < 5000) {
             player.sendSystemMessage(Component.literal("⏳ Please wait before switching modes again").withStyle(ChatFormatting.RED));
@@ -265,7 +266,7 @@ public class DanielsPickaxe {
     public static void tickPlayer(ServerPlayer player) {
         if (!isAbilityActive(player)) {
             // Insta-mine mode - apply Haste 5
-            long currentTime = System.currentTimeMillis();
+            long currentTime = Clock.gameMillis();
             long lastTime = lastHasteTime.getOrDefault(player.getUUID(), 0L);
             
             // Refresh every 1000ms (1 second), duration 40 ticks (2 seconds)

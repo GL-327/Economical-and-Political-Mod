@@ -1,5 +1,6 @@
 package com.political.items;
 
+import com.political.core.Clock;
 import com.political.items.DragonChestplates;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -147,7 +148,7 @@ public final class DragonPlateHandler {
     }
 
     private static void tryVoidBlink(ServerPlayer player) {
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         Long until = VOID_BLINK_UNTIL.get(player.getUUID());
         if (until != null && now < until) return;
         VOID_BLINK_UNTIL.put(player.getUUID(), now + 8000L);
@@ -159,7 +160,7 @@ public final class DragonPlateHandler {
     }
 
     private static void chainLightning(ServerPlayer player, ServerLevel world, LivingEntity first) {
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         Long until = STORM_CHAIN_UNTIL.get(player.getUUID());
         if (until != null && now < until) return;
         STORM_CHAIN_UNTIL.put(player.getUUID(), now + 2500L);

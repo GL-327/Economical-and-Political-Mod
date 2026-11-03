@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.Clock;
 import com.political.bounty.SlayerManager;
 import com.political.economy.CoinManager;
 import net.minecraft.world.entity.Entity;
@@ -115,7 +116,7 @@ public class BossAbilityManager {
         // DELETE THE SECOND IRON_GOLEM CHECK THAT USES "player" - IT'S A DUPLICATE
 
         UUID bossId = boss.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         ServerBossEvent splitBar = splitBossBars.get(bossId);
         if (splitBar != null) {
             splitBar.setProgress(boss.getHealth() / boss.getMaxHealth());
@@ -178,7 +179,7 @@ public class BossAbilityManager {
         }
 
         undyingRageUsed.add(bossId);
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         undyingRageEndTimes.put(bossId, now + UNDYING_RAGE_DURATION_MS);
         undyingRageCooldowns.put(bossId, now);
 
@@ -224,7 +225,7 @@ public class BossAbilityManager {
     public static boolean isInUndyingRage(LivingEntity boss) {
         Long endTime = undyingRageEndTimes.get(boss.getUUID());
         if (endTime == null) return false;
-        return System.currentTimeMillis() < endTime;
+        return Clock.gameMillis() < endTime;
     }
 
     /**
@@ -236,7 +237,7 @@ public class BossAbilityManager {
 
         if (endTime == null) return;
 
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         // Check if rage just ended
         if (now >= endTime) {
@@ -434,7 +435,7 @@ public class BossAbilityManager {
         boss.addEffect(new MobEffectInstance(MobEffects.SPEED, 100, 2));
 
         // Schedule rage end
-        enrageEndTimes.put(bossId, System.currentTimeMillis() + 5000);
+        enrageEndTimes.put(bossId, Clock.gameMillis() + 5000);
 
         // Particles
         world.sendParticles(ParticleTypes.ANGRY_VILLAGER,
@@ -645,7 +646,7 @@ public class BossAbilityManager {
     private static boolean skeletonBoneShield(LivingEntity boss, ServerPlayer target, ServerLevel world) {
         UUID bossId = boss.getUUID();
 
-        shieldedBosses.put(bossId, System.currentTimeMillis() + 5000);
+        shieldedBosses.put(bossId, Clock.gameMillis() + 5000);
 
         boss.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 100, 3));
         boss.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
@@ -669,7 +670,7 @@ public class BossAbilityManager {
     private static boolean skeletonDeathMark(LivingEntity boss, ServerPlayer target, ServerLevel world) {
         UUID targetId = target.getUUID();
 
-        deathMarkedPlayers.put(targetId, new DeathMark(boss.getUUID(), System.currentTimeMillis() + 3000, 50.0f));
+        deathMarkedPlayers.put(targetId, new DeathMark(boss.getUUID(), Clock.gameMillis() + 3000, 50.0f));
 
         target.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0));
 
@@ -889,7 +890,7 @@ public class BossAbilityManager {
     private static boolean endermanPhaseShift(LivingEntity boss, ServerPlayer target, ServerLevel world) {
         UUID bossId = boss.getUUID();
 
-        phasedBosses.put(bossId, System.currentTimeMillis() + 4000);
+        phasedBosses.put(bossId, Clock.gameMillis() + 4000);
 
         boss.addEffect(new MobEffectInstance(MobEffects.SPEED, 80, 3));
         boss.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 80, 0));
@@ -922,7 +923,7 @@ public class BossAbilityManager {
 
         UUID bossId = boss.getUUID();
         Vec3 bossCenter = new Vec3(boss.getX(), boss.getY(), boss.getZ());
-        voidZones.put(bossId, new VoidZone(bossCenter, System.currentTimeMillis() + 8000, 6.0));
+        voidZones.put(bossId, new VoidZone(bossCenter, Clock.gameMillis() + 8000, 6.0));
 
         for (int i = 0; i < 100; i++) {
             double a = boss.getRandom().nextDouble() * Math.PI * 2;
@@ -956,7 +957,7 @@ public class BossAbilityManager {
     private static boolean usePiglinAbility(LivingEntity boss, ServerPlayer target, int tier, ServerLevel world) {
         UUID bossId = boss.getUUID();
         Map<String, Long> cooldowns = abilityCooldowns.computeIfAbsent(bossId, k -> new HashMap<>());
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         // Cycle through abilities: Gold Rush → Greed Aura → Barter Shield → Reinforcements
         int counter = piglinAbilityCounter.getOrDefault(bossId, 0);
@@ -1034,7 +1035,7 @@ public class BossAbilityManager {
     /** Barter Shield: boss becomes temporarily immune and throws items */
     private static boolean piglinBarterShield(LivingEntity boss, int tier, ServerLevel world) {
         UUID bossId = boss.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long existingShield = piglinShieldEndTimes.getOrDefault(bossId, 0L);
         if (now < existingShield) return false;
 
@@ -1097,7 +1098,7 @@ public class BossAbilityManager {
 
     /** Tick method to remove Barter Shield when expired */
     public static void tickPiglinShields(ServerLevel world) {
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         piglinShieldEndTimes.entrySet().removeIf(entry -> {
             if (now >= entry.getValue()) {
                 // Find the entity and remove invulnerability
@@ -1211,7 +1212,7 @@ public class BossAbilityManager {
         }
 
         if (!sculkPositions.isEmpty()) {
-            sculkInfestations.put(boss.getUUID(), new SculkInfestation(sculkPositions, System.currentTimeMillis() + 10000));
+            sculkInfestations.put(boss.getUUID(), new SculkInfestation(sculkPositions, Clock.gameMillis() + 10000));
         }
 
         world.playSound(null, boss, SoundEvents.SCULK_BLOCK_SPREAD,
@@ -1282,7 +1283,7 @@ public class BossAbilityManager {
 
         // Phase 2: Schedule explosion damage after pull
         Vec3 bossCenter = new Vec3(boss.getX(), boss.getY(), boss.getZ());
-        abyssalRoarTargets.put(boss.getUUID(), new AbyssalRoar(System.currentTimeMillis() + 1500, bossCenter));
+        abyssalRoarTargets.put(boss.getUUID(), new AbyssalRoar(Clock.gameMillis() + 1500, bossCenter));
 
         // Massive particle vortex
         for (int ring = 0; ring < 10; ring++) {
@@ -1334,7 +1335,7 @@ public class BossAbilityManager {
     private static int cleanupTickCounter = 0;
 
     public static void tickAllBossAbilities(MinecraftServer server) {
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         tickEnrageEffects(now);
         tickPhaseShift(now);
@@ -1574,11 +1575,11 @@ public class BossAbilityManager {
     // ============================================================
 
     private static void scheduleBlockRemoval(ServerLevel world, BlockPos pos, int ticks) {
-        scheduledBlockRemovals.add(new ScheduledBlockRemoval(world, pos, System.currentTimeMillis() + (ticks * 50L)));
+        scheduledBlockRemovals.add(new ScheduledBlockRemoval(world, pos, Clock.gameMillis() + (ticks * 50L)));
     }
 
     public static void tickScheduledBlockRemovals() {
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         Iterator<ScheduledBlockRemoval> iter = scheduledBlockRemovals.iterator();
         while (iter.hasNext()) {
             ScheduledBlockRemoval removal = iter.next();

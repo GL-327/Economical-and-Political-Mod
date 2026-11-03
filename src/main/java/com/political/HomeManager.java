@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.Clock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.political.party.PartyPerkEffects;
@@ -48,7 +49,7 @@ public class HomeManager {
             return false;
         }
 
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long cd = PartyPerkEffects.homeCooldownMs(uuid);
         Long last = lastHomeTeleportMs.get(uuid);
         if (last != null && now - last < cd) {
@@ -75,7 +76,7 @@ public class HomeManager {
             }
 
             PlayerTeleportHelper.teleport(player, world, x, y, z, yaw, pitch);
-            lastHomeTeleportMs.put(uuid, System.currentTimeMillis());
+            lastHomeTeleportMs.put(uuid, Clock.gameMillis());
             player.sendSystemMessage(Component.literal("Teleported home!").withStyle(ChatFormatting.GREEN));
             return true;
         } catch (Exception e) {

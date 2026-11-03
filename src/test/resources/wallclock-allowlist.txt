@@ -1,0 +1,71 @@
+# Files that may still call System.currentTimeMillis(), with the most calls each may make.
+# WallClockPolicyTest fails when a file goes over its number or a new file appears, and the number
+# only ever goes down: when a system moves to Clock.gameMillis()/ticks() lower the number here.
+#
+# Categories (assigned in M1.3 from the field names and the save code around each call; the calls
+# were not individually traced to disk unless noted):
+#   P  the timestamp or deadline is stored in a record that is saved. Moving it to ticks needs a
+#      saved-format version and a migration (rule 4.3), so it moves with its owning milestone.
+#   S  the schedule is real time by design (daily reward, weekly term, hourly auction, season day).
+#   D  display of elapsed or remaining time, an ID built from the time, or a random seed. Not a timer.
+#   N  an in-memory timer or not yet traced; move to Clock.gameMillis() in the owning milestone.
+#
+# format: path | max calls | category | owning milestone | why it stays
+com/political/core/Clock.java | 1 | S | M1 | the single wall-clock source everything else asks for
+com/political/AscensionGrindManager.java | 2 | N | M6 | 60 second double-drop window, ascension content system
+com/political/BestiaryManager.java | 4 | N | M6 | ledger touch stamps and record timing
+com/political/CaravanManager.java | 3 | P | M6 | caravan deadlines live in the saved caravan records
+com/political/CheckpointManager.java | 1 | D | M6 | createdAt label on a saved checkpoint
+com/political/ClassManager.java | 2 | P | M2 | class change cooldown is saved
+com/political/CoinSinkManager.java | 26 | P | M3 | boost expirations, VIP perks and lottery draw time are saved economy state
+com/political/CommissionManager.java | 3 | P | M6 | board reroll times are saved
+com/political/CompanionManager.java | 1 | S | M5 | real-time day number for the daily companion gift
+com/political/ContractManager.java | 5 | S | M6 | contract board rotates on a real-time interval, plus a random seed
+com/political/DailyRewards.java | 4 | S | M6 | daily claim is real time by design
+com/political/DataManager.java | 4 | P | M3 | bank and record creation stamps are saved
+com/political/ExpeditionCommands.java | 1 | D | M6 | shows remaining time of a saved deadline
+com/political/ExpeditionGui.java | 1 | D | M6 | shows remaining time of a saved deadline
+com/political/ExpeditionManager.java | 4 | P | M6 | tier lockouts are saved
+com/political/ExpeditionRunManager.java | 6 | P | M6 | run deadlines are saved
+com/political/Guild.java | 1 | P | M6 | createdAt of a saved guild
+com/political/GuildManager.java | 5 | S | M6 | real-time day number, waystone cooldown, hall declaration stamp
+com/political/HighCouncilManager.java | 4 | P | M4 | edict durations in hours are saved
+com/political/HuntGui.java | 1 | D | M6 | shows time since a saved kill
+com/political/HuntManager.java | 10 | P | M6 | spawn schedule and kill times are saved
+com/political/IncursionManager.java | 4 | N | M6 | owner cooldown map, not traced
+com/political/MasteryManager.java | 1 | P | M6 | last family change is saved
+com/political/Nemesis.java | 1 | P | M6 | lastSeen of a saved nemesis
+com/political/NemesisManager.java | 3 | P | M6 | lastSeen of saved nemeses
+com/political/PartyCrisisManager.java | 3 | P | M4 | next eligible time is saved with the party state
+com/political/PrisonManager.java | 4 | P | M4 | release time is saved
+com/political/RelicManager.java | 1 | N | M5 | not traced
+com/political/SeasonManager.java | 3 | S | M6 | seasons follow real time
+com/political/TaxManager.java | 2 | S | M3 | tax interval is real time by design
+com/political/TradeRouteManager.java | 5 | P | M4 | route and seal timestamps are saved
+com/political/WorldBossManager.java | 8 | P | M6 | spawn cooldowns and the next random spawn are saved
+com/political/WorldEventManager.java | 5 | P | M6 | event window and last event time are saved
+com/political/WorldModifiers.java | 7 | P | M6 | active modifier end and cooldown are saved
+com/political/bounty/SlayerManager.java | 1 | N | M5 | quest start stamp, not traced
+com/political/economy/AuctionHouseGui.java | 1 | D | M3 | shows time left on a saved listing
+com/political/economy/AuctionHouseManager.java | 2 | P | M3 | listing times are saved
+com/political/economy/BankGui.java | 5 | P | M3 | savings withdraw time is saved
+com/political/economy/BazaarManager.java | 1 | P | M3 | order createdAt is saved
+com/political/economy/CryptoMarket.java | 1 | D | M3 | unique key built from the time
+com/political/economy/UndergroundAuctionManager.java | 12 | S | M3 | auction runs on a real-time interval and the next time is saved
+com/political/government/DictatorManager.java | 6 | N | M4 | summon and smite cooldowns, not traced
+com/political/government/ElectionManager.java | 8 | S | M4 | 24 hour election and weekly term are real time by design
+com/political/government/JudgeGui.java | 1 | D | M4 | shows minutes left of a saved sentence
+com/political/government/PerkManager.java | 3 | P | M4 | temporary perk expirations are saved
+com/political/government/Treasury.java | 1 | N | M4 | not traced
+com/political/magic/MagicManager.java | 5 | N | M2 | spell cooldowns and commission rotation, replaced by the power system
+com/political/party/PartyJoinGui.java | 3 | D | M4 | shows time left and time since for saved party data
+com/political/party/PoliticalPartyManager.java | 14 | P | M4 | salary interval, leader election window and treasury log stamps are saved
+com/political/recipe/RecipeConfigManager.java | 1 | D | M6 | load timing around recipe parsing
+com/political/settlement/Settlement.java | 1 | P | M4 | foundedAt of a saved settlement
+com/political/settlement/SettlementElectionManager.java | 1 | S | M4 | settlement election windows are real time
+com/political/settlement/SettlementEventGui.java | 1 | D | M4 | passes the start time to the event system
+com/political/settlement/SettlementEvents.java | 6 | S | M4 | event rotation is real time and saved
+com/political/settlement/SettlementManager.java | 1 | P | M4 | lastScanAt is saved
+com/political/settlement/WarGui.java | 1 | D | M4 | shows time left on a saved motion
+com/political/settlement/WarManager.java | 6 | S | M4 | war and peace motion windows are real time and saved
+com/political/technique/TechniqueManager.java | 4 | N | M2 | cooldowns and barrier windows, replaced by the power system

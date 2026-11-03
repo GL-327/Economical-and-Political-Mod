@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.Clock;
 import com.political.bounty.SlayerItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -68,7 +69,7 @@ public final class VoidwalkerHandler {
 
         // Void Step: sprint + sneak to blink.
         if (player.isSprinting() && player.isShiftKeyDown()) {
-            long now = System.currentTimeMillis();
+            long now = Clock.gameMillis();
             long ready = voidStepCooldown.getOrDefault(player.getUUID(), 0L);
             if (now >= ready) {
                 voidStepCooldown.put(player.getUUID(), now + VOID_STEP_COOLDOWN_MS);

@@ -24,3 +24,6 @@
   with the exception attached; `SourcePolicyTest` keeps it that way.
 - Error handling: no broad `catch (Exception|Throwable)` swallows an error silently any more (85 did). Each now logs with its
   class and method, or rethrows; 16 were narrowed to the exceptions they can actually get. No gameplay change.
+- Timing: added `com.political.core.Clock`. Boss, armor, weapon, item, home and bounty-armor timers that live only in memory now run
+  on game ticks instead of the wall clock (same durations, but a lagging server no longer skips them). The other wall-clock uses are
+  listed with reasons in `src/test/resources/wallclock-allowlist.txt`.

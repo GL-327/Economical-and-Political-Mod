@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.Clock;
 import com.political.bounty.SlayerItems;
 import com.political.bounty.SlayerManager;
 import net.minecraft.core.component.DataComponents;
@@ -156,7 +157,7 @@ public class WeaponAbilityHandler {
         // ===== VOID TOUCHED SWORD - Void Strike =====
         if (weaponName.contains("Void") || weaponName.contains("Ender") || weaponName.contains("Void-Touched")) {
             String cooldownKey = player.getUUID() + "_void_strike";
-            long now = System.currentTimeMillis();
+            long now = Clock.gameMillis();
             long lastUse = cooldowns.getOrDefault(cooldownKey, 0L);
 
             if (now - lastUse > 5000) { // 5 second cooldown
@@ -241,7 +242,7 @@ public class WeaponAbilityHandler {
         if (cid != null) {
             int sig = Math.floorMod(cid.hashCode(), 9);
             String cdKey = player.getUUID() + "_wproc_" + sig;
-            long now = System.currentTimeMillis();
+            long now = Clock.gameMillis();
             long last = cooldowns.getOrDefault(cdKey, 0L);
             long cdMs = 1800L + sig * 350L; // 1.8s..4.6s
             if (now - last >= cdMs) {
@@ -512,7 +513,7 @@ public class WeaponAbilityHandler {
      */
     public static boolean isOnCooldown(UUID playerUuid, String abilityName, long cooldownMs) {
         String key = playerUuid + "_" + abilityName;
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long lastUse = cooldowns.getOrDefault(key, 0L);
         return (now - lastUse) < cooldownMs;
     }
@@ -522,7 +523,7 @@ public class WeaponAbilityHandler {
      */
     public static float getRemainingCooldown(UUID playerUuid, String abilityName, long cooldownMs) {
         String key = playerUuid + "_" + abilityName;
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long lastUse = cooldowns.getOrDefault(key, 0L);
         long remaining = cooldownMs - (now - lastUse);
         return remaining > 0 ? remaining / 1000f : 0f;

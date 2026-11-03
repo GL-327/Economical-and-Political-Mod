@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.Clock;
 import com.political.bounty.SlayerItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -44,7 +45,7 @@ public final class VenomHandler {
     public static void onHit(ServerPlayer player, LivingEntity target) {
         if (!(player.level() instanceof ServerLevel world)) return;
         UUID id = target.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
 
         Venom prev = venom.get(id);
         int stacks = (prev == null || now - prev.lastHit() > STACK_TTL_MS) ? 0 : prev.stacks();

@@ -1,4 +1,5 @@
 package com.political.items;
+import com.political.core.Clock;
 import com.political.PoliticalServer;
 
 
@@ -155,7 +156,7 @@ public class ArmorAbilityHandler {
         armorAbilityTickCounter++;
         if (armorAbilityTickCounter < NOISE_CLEANUP_INTERVAL) return;
         armorAbilityTickCounter = 0;
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         entityNoiseTimestamps.entrySet().removeIf(e -> now - e.getValue() > NOISE_FADE_TIME_MS);
     }
 
@@ -167,7 +168,7 @@ public class ArmorAbilityHandler {
         if (!isSlimeBoots(boots)) return false;
 
         UUID uuid = player.getUUID();
-        long now = System.currentTimeMillis();
+        long now = Clock.gameMillis();
         long lastSave = deathSaveCooldowns.getOrDefault(uuid, 0L);
 
         // 5 minute cooldown
@@ -339,7 +340,7 @@ public class ArmorAbilityHandler {
                 }
 
                 if (madeNoise) {
-                    entityNoiseTimestamps.put(entity.getUUID(), System.currentTimeMillis());
+                    entityNoiseTimestamps.put(entity.getUUID(), Clock.gameMillis());
                 }
             }
         }
@@ -379,7 +380,7 @@ public class ArmorAbilityHandler {
         // Passive 3: ESP - check every 10 ticks
         if (player.tickCount % 10 == 0) {
             ServerLevel world = player.level();
-            long now = System.currentTimeMillis();
+            long now = Clock.gameMillis();
 
             // Clean up old entries (older than 5 seconds)
             entityNoiseTimestamps.entrySet().removeIf(entry ->
@@ -416,7 +417,7 @@ public class ArmorAbilityHandler {
             ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
             if (isWardenChestplate(chestplate)) {
                 // Register noise for this entity
-                entityNoiseTimestamps.put(entity.getUUID(), System.currentTimeMillis());
+                entityNoiseTimestamps.put(entity.getUUID(), Clock.gameMillis());
             }
         }
     }
