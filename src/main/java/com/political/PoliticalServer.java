@@ -233,6 +233,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             RelicManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             CompanionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             ContractManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            com.political.core.text.TextSelfCheck.run();
             LOGGER.info("PoliticalServer data loaded");
         });
 

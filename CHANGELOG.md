@@ -41,3 +41,6 @@
 - Commands: one registration entry point (`ModCommands`) and a registrar that reports a command registered twice; in a development run
   that is a startup error. The eight roots that were defined twice (bounty, credits, coins, judge, startundergroundauction,
   placeauctionmaster, view, hunt) are one definition each; the command tree is identical to before.
+- Text: added a translation layer (`Text.tr`, `assets/politicalserver/lang/en_us.json`) and the bundled server translation library, so
+  new text can be translated per player language on a vanilla client, with English as the built-in fallback. Existing text is
+  unchanged; `docs/TEXT_MIGRATION.md` plans its conversion.

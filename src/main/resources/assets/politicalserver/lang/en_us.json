@@ -1,0 +1,5 @@
+{
+  "political.text.selfcheck": "The Political Server text layer is working.",
+  "political.error.generic": "Something went wrong. Please tell an admin.",
+  "political.error.no_permission": "You are not allowed to do that."
+}

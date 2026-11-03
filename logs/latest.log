@@ -1,9 +1,9 @@
-[14:50:03] [Test worker/ERROR]: Command registration: /bounty is registered by big-registry and again by big-registry
-[14:50:03] [Test worker/ERROR]: Command registration: /hunt is registered by a and again by b
-[14:50:03] [Test worker/INFO]: Registered 2 command roots from the mod with no duplicates
-[14:50:03] [Test worker/WARN]: Config: the config file config.json must contain a JSON object; every setting uses its default
-[14:50:03] [Test worker/WARN]: Config: testcfg.limits.count: expected a whole number, got 7.5; using the default 10
-[14:50:03] [Test worker/ERROR]: Config: the config file config.json could not be read as JSON (java.io.EOFException: End of input at line 1 column 34 path $.testcfg.limits.count); every setting uses its default until it is fixed
+[14:53:53] [Test worker/ERROR]: Command registration: /bounty is registered by big-registry and again by big-registry
+[14:53:53] [Test worker/ERROR]: Command registration: /hunt is registered by a and again by b
+[14:53:53] [Test worker/INFO]: Registered 2 command roots from the mod with no duplicates
+[14:53:53] [Test worker/WARN]: Config: the config file config.json must contain a JSON object; every setting uses its default
+[14:53:53] [Test worker/WARN]: Config: testcfg.limits.count: expected a whole number, got 7.5; using the default 10
+[14:53:53] [Test worker/ERROR]: Config: the config file config.json could not be read as JSON (java.io.EOFException: End of input at line 1 column 34 path $.testcfg.limits.count); every setting uses its default until it is fixed
 com.google.gson.JsonSyntaxException: java.io.EOFException: End of input at line 1 column 34 path $.testcfg.limits.count
 	at com.google.gson.internal.Streams.parse(Streams.java:58)
 	at com.google.gson.JsonParser.parseReader(JsonParser.java:144)
@@ -107,14 +107,14 @@ Caused by: java.io.EOFException: End of input at line 1 column 34 path $.testcfg
 	at com.google.gson.internal.bind.JsonElementTypeAdapter.read(JsonElementTypeAdapter.java:102)
 	at com.google.gson.internal.Streams.parse(Streams.java:48)
 	... 94 more
-[14:50:03] [Test worker/WARN]: Config: testcfg.feature.enabled: expected true or false, got yes; using the default true
-[14:50:03] [Test worker/WARN]: Config: testcfg.feature.mode: turbo is not one of [fast, safe]; using the default fast
-[14:50:03] [Test worker/WARN]: Config: testcfg.limits.count: expected a whole number, got many; using the default 10
-[14:50:03] [Test worker/WARN]: Config: testcfg.limits.rate: expected a number, got true; using the default 0.5
-[14:50:03] [Test worker/WARN]: Config: testcfg.limits.count: 5000 is outside 1..100; using 100
-[14:50:03] [Test worker/WARN]: Config: testcfg.limits.rate: -3.0 is outside 0.0..1.0; using 0.0
-[14:50:03] [Test worker/WARN]: Config: unknown setting testcfg.limits.cuont (a typo? it is ignored)
-[14:50:03] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-14241731621653541421\pouch.json) could not be loaded: migration from schema 1 failed. The file was copied to pouch.json.corrupt-20231114-221320 and defaults are in use.
+[14:53:53] [Test worker/WARN]: Config: testcfg.feature.enabled: expected true or false, got yes; using the default true
+[14:53:53] [Test worker/WARN]: Config: testcfg.feature.mode: turbo is not one of [fast, safe]; using the default fast
+[14:53:53] [Test worker/WARN]: Config: testcfg.limits.count: expected a whole number, got many; using the default 10
+[14:53:53] [Test worker/WARN]: Config: testcfg.limits.rate: expected a number, got true; using the default 0.5
+[14:53:53] [Test worker/WARN]: Config: testcfg.limits.count: 5000 is outside 1..100; using 100
+[14:53:53] [Test worker/WARN]: Config: testcfg.limits.rate: -3.0 is outside 0.0..1.0; using 0.0
+[14:53:53] [Test worker/WARN]: Config: unknown setting testcfg.limits.cuont (a typo? it is ignored)
+[14:53:53] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-13757129102837078010\pouch.json) could not be loaded: migration from schema 1 failed. The file was copied to pouch.json.corrupt-20231114-221320 and defaults are in use.
 java.lang.IllegalStateException: cannot upgrade this one
 	at com.political.core.persist.VersionedStoreTest.lambda$aFailingMigrationIsTreatedAsCorrupt$1(VersionedStoreTest.java:210)
 	at com.political.core.persist.VersionedStore.load(VersionedStore.java:270)
@@ -207,12 +207,12 @@ java.lang.IllegalStateException: cannot upgrade this one
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:72)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-[14:50:03] [Test worker/INFO]: Store pouch migrated from schema 1 to 2; the upgraded file is written by the next save.
-[14:50:03] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-11701395719420151781\pouch.json) could not be loaded: the data does not match schema 2: Not a number: "many"; Not a json array: "nope". The file was copied to pouch.json.corrupt-20231114-221320 and defaults are in use.
-[14:50:03] [Test worker/INFO]: Store pouch migrated from schema 0 to 2; the upgraded file is written by the next save.
-[14:50:03] [Test worker/ERROR]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-18244944633447795455\pouch.json) was written by a newer version of the mod (schema 99, this build knows 2). It is left untouched and not saved over; update the mod to use it.
-[14:50:03] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-18244944633447795455\pouch.json) is read only and was not saved.
-[14:50:03] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-2484042027356525857\pouch.json) could not be loaded: the file cannot be read as JSON. The file was copied to pouch.json.corrupt-20231114-221320 and defaults are in use.
+[14:53:53] [Test worker/INFO]: Store pouch migrated from schema 1 to 2; the upgraded file is written by the next save.
+[14:53:53] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-11932309956016738393\pouch.json) could not be loaded: the data does not match schema 2: Not a number: "many"; Not a json array: "nope". The file was copied to pouch.json.corrupt-20231114-221320 and defaults are in use.
+[14:53:53] [Test worker/INFO]: Store pouch migrated from schema 0 to 2; the upgraded file is written by the next save.
+[14:53:53] [Test worker/ERROR]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-35411156797458033\pouch.json) was written by a newer version of the mod (schema 99, this build knows 2). It is left untouched and not saved over; update the mod to use it.
+[14:53:53] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-35411156797458033\pouch.json) is read only and was not saved.
+[14:53:53] [Test worker/WARN]: Store pouch (C:\Users\Arthur\AppData\Local\Temp\junit-13608959924572066059\pouch.json) could not be loaded: the file cannot be read as JSON. The file was copied to pouch.json.corrupt-20231114-221320 and defaults are in use.
 com.google.gson.JsonSyntaxException: java.io.EOFException: End of input at line 5 column 1 path $.data.items[0]
 	at com.google.gson.internal.Streams.parse(Streams.java:58)
 	at com.google.gson.JsonParser.parseReader(JsonParser.java:144)
@@ -315,8 +315,8 @@ Caused by: java.io.EOFException: End of input at line 5 column 1 path $.data.ite
 	at com.google.gson.internal.bind.JsonElementTypeAdapter.read(JsonElementTypeAdapter.java:95)
 	at com.google.gson.internal.Streams.parse(Streams.java:48)
 	... 93 more
-[14:50:03] [Test worker/ERROR]: Store stuck (C:\Users\Arthur\AppData\Local\Temp\junit-9185124426635936379\blocker\x.json) could not be saved; it stays dirty and will be retried
-java.nio.file.FileAlreadyExistsException: C:\Users\Arthur\AppData\Local\Temp\junit-9185124426635936379\blocker
+[14:53:53] [Test worker/ERROR]: Store stuck (C:\Users\Arthur\AppData\Local\Temp\junit-1181480169416352495\blocker\x.json) could not be saved; it stays dirty and will be retried
+java.nio.file.FileAlreadyExistsException: C:\Users\Arthur\AppData\Local\Temp\junit-1181480169416352495\blocker
 	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:87)
 	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
 	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
@@ -416,4 +416,5 @@ java.nio.file.FileAlreadyExistsException: C:\Users\Arthur\AppData\Local\Temp\jun
 	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:72)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
 	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-[14:50:03] [Test worker/ERROR]: These stores could not be saved at shutdown: [stuck]
+[14:53:53] [Test worker/ERROR]: These stores could not be saved at shutdown: [stuck]
+[14:53:54] [Test worker/WARN]: Text key political.not.in.the.file is not in en_us.json; players will see the key

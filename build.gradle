@@ -59,6 +59,11 @@ dependencies {
 	implementation "eu.pb4:sgui:${sguiVer}"
 	include "eu.pb4:sgui:${sguiVer}"
 
+	// Translates Component.translatable keys on the server, per player language, so a vanilla client
+	// without a resource pack sees words instead of raw keys (M1.9 in HANDOFF.md).
+	implementation "xyz.nucleoid:server-translations-api:${project.server_translations_version}"
+	include "xyz.nucleoid:server-translations-api:${project.server_translations_version}"
+
 	// Server side libraries, bundled so a server owner drops in one jar.
 	//
 	// placeholder-api and player-data-api were bundled here but no code ever imported them, and
@@ -89,6 +94,12 @@ test {
 
 processResources {
 	inputs.property "version", project.version
+
+	// One source file for the language texts: assets/politicalserver/lang/*.json is what a resource pack
+	// uses, and the server translation library reads the same files from data/politicalserver/lang/.
+	from("src/main/resources/assets/politicalserver/lang") {
+		into "data/politicalserver/lang"
+	}
 
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version

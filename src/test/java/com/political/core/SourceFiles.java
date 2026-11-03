@@ -8,24 +8,24 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /** Reads the mod's own sources for the policy tests. Paths are relative to the Gradle project directory. */
-final class SourceFiles {
+public final class SourceFiles {
 
-    static final Path MAIN_JAVA = Path.of("src", "main", "java");
+    public static final Path MAIN_JAVA = Path.of("src", "main", "java");
 
     private SourceFiles() {
     }
 
-    static List<Path> javaFiles() throws IOException {
+    public static List<Path> javaFiles() throws IOException {
         try (Stream<Path> walk = Files.walk(MAIN_JAVA)) {
             return walk.filter(p -> p.toString().endsWith(".java")).sorted().toList();
         }
     }
 
-    static String read(Path file) throws IOException {
+    public static String read(Path file) throws IOException {
         return Files.readString(file, StandardCharsets.UTF_8).replace("\r\n", "\n");
     }
 
-    static String relative(Path file) {
+    public static String relative(Path file) {
         return MAIN_JAVA.relativize(file).toString().replace(file.getFileSystem().getSeparator(), "/");
     }
 
@@ -34,7 +34,7 @@ final class SourceFiles {
      * the quote characters, so offsets and line numbers still match the original and a pattern can only
      * hit real code.
      */
-    static String codeOnly(String src) {
+    public static String codeOnly(String src) {
         StringBuilder out = new StringBuilder(src.length());
         int i = 0;
         int n = src.length();
@@ -93,7 +93,7 @@ final class SourceFiles {
     }
 
     /** Index of the brace that closes the one at {@code open}, in text produced by {@link #codeOnly}. */
-    static int matchBrace(String code, int open) {
+    public static int matchBrace(String code, int open) {
         int depth = 0;
         for (int i = open; i < code.length(); i++) {
             char c = code.charAt(i);
@@ -109,7 +109,7 @@ final class SourceFiles {
         return code.length() - 1;
     }
 
-    static int lineOf(String text, int index) {
+    public static int lineOf(String text, int index) {
         int line = 1;
         for (int i = 0; i < index && i < text.length(); i++) {
             if (text.charAt(i) == '\n') {
