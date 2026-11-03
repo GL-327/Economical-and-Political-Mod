@@ -1,4 +1,5 @@
 package com.political;
+import com.political.core.tick.TickDispatcher;
 import com.political.recipe.DefaultRecipeBootstrap;
 
 
@@ -73,9 +74,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     
     public static MinecraftServer server;
-    private static int visibilityTickCounter = 0;
-    private static int bankInterestTickCounter = 0;
-    private static boolean runSpawnProtection = true;
+    private static final TickDispatcher<MinecraftServer, ServerLevel, ServerPlayer> TICKS = TickRegistrations.create();
 
     @Override
     public void onInitializeServer() {
@@ -392,6 +391,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         });
 
         ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
+            // The eight most expensive tick services of this run, for the M8.1 performance baseline.
+            for (String line : TICKS.summaryLines(8)) {
+                LOGGER.info("Tick service {}", line);
+            }
             CryptoMarket.persistSave(s);
             StockMarket.persistSave(s);
             AscensionHeartSystem.save();
@@ -490,144 +493,10 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             return true; // Allow normal broadcast for players without title/role
         });
 
+        // All per-tick work is a named service in TickRegistrations; one failing no longer skips the rest.
         ServerTickEvents.END_SERVER_TICK.register((MinecraftServer s) -> {
             server = s;
-            DeathPenaltyManager.clearRecentDeaths();
-            if (s.getTickCount() % 1200 == 0) {
-                syncPlaytimeAndBuffChecks(s);
-            }
-            WorldBossManager.tick(s);
-            MinionManager.tick(s);
-            NemesisManager.tick(s);
-            IncursionManager.tick(s);
-            SiegeManager.tick(s);
-            PoliticalPartyManager.tick(s);
-            PartyCrisisManager.tick(s);
-            LavaFishingHandler.tick(s);
-            FishingEventHandler.tick(s);
-            FishingManager.tick(s);
-            ScoreboardManager.tick(s);
-            TabListManager.tick(s);
-            VanishManager.tick(s);
-            BountyArmorHandler.tick(s);
-            StockMarket.tick(s);
-            CryptoMarket.tick(s);
-            DupeGuard.tick(s);
-
-            // Boss abilities - iterate worlds
-            for (ServerLevel world : s.getAllLevels()) {
-                ArmorAbilityHandler.detectEntityNoise(world);
-            }
-            // Periodic armor ability housekeeping (noise map cleanup, etc.)
-            ArmorAbilityHandler.tickWorld();
-            // Boss abilities (OPTIMIZED: Only process every 10 ticks to reduce overhead)
-            if (s.getTickCount() % 10 == 0) {
-                BossAbilityManager.tickScheduledBlockRemovals();
-                BossAbilityManager.tickAllBossAbilities(s);
-
-                for (ServerLevel world : s.getAllLevels()) {
-                    for (UUID bossId : BossAbilityManager.getActiveBosses()) {
-                        Entity entity = world.getEntity(bossId);
-                        if (entity instanceof LivingEntity boss && boss.isAlive()) {
-                            ServerPlayer target = null;
-                            double bestDist = 30.0 * 30.0;
-                            for (ServerPlayer p : world.players()) {
-                                double d = p.distanceToSqr(boss);
-                                if (d <= bestDist) {
-                                    bestDist = d;
-                                    target = p;
-                                }
-                            }
-
-                            if (target != null) {
-                                BossAbilityManager.BossAbilityState state = BossAbilityManager.getBossState(bossId);
-                                if (state != null) {
-                                    BossAbilityManager.tickBossAbilities(boss, target, state.type, state.tier);
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // World and player ticks
-            for (ServerLevel world : s.getAllLevels()) {
-                BountySpawnManager.tick(world);
-                HealthScalingManager.tickUpgradedMobDespawn(world);
-
-                // Player ticks for this world
-                for (ServerPlayer player : world.players()) {
-                    ArmorAbilityHandler.tick(player);
-                    TechniqueManager.tick(player);
-                    CustomItemHandler.tickSkeletonBow(player);
-                    CustomItemHandler.tickUltraOverclockedLeftClick(player);
-                    CustomItemHandler.tickHPEBM(player);
-                    SlayerArmorHandler.applyCustomArmorAttributes(player);
-                    T2ArmorAbilityHandler.tick(player);
-                    CustomItemHandler.tickCrownOfGreed(player);
-                    CustomItemHandler.tickCrownOfMidas(player);
-                    ArmourAttributeHandler.tick(player);
-                    PlayerStatsManager.tickPlayer(player);
-                    DanielsPickaxe.tickPlayer(player);
-                    LegendaryToolHandler.tickPlayer(player);
-                    // Voidwalker Void Step/Sight + Ender Phase enter/exit
-                    CustomItemHandler.tickFlagshipItems(player);
-                    RelicManager.tickPlayer(player);
-                    WarrantArmour.tickPlayer(player);
-                    TitleManager.tickPlayer(player);
-                    if (runSpawnProtection) SpawnProtectionManager.tickPlayerBoundary(player);
-                }
-            }
-
-            // Slayer manager
-            SlayerManager.tick(s);
-
-            // Other managers
-            ElectionManager.tick(s);
-            PrisonManager.tick(s);
-            WeatherManager.tick(s);
-            PerkManager.tickOverworldClockPerks(s);
-            TaxManager.tick(s);
-            PerkManager.tickPerks(s);
-            PerkManager.tickTemporaryPerks();
-            CoinSinkManager.tick(s);
-            UndergroundAuctionManager.tick(s);
-            UndergroundAuctionGui.tick();
-            StockMarketGui.tick();
-            CryptoMarketGui.tick();
-
-            PlayerStatsManager.tickServer(s);
-            // SettlementManager.tick fans out to CitizenManager / SettlementEconomy /
-            // SettlementElectionManager / HighCouncilManager — do not tick those again here.
-            SettlementManager.tick(s);
-            // ── V5 ──
-            ExpeditionRunManager.tick(s);
-            GuildManager.tick(s);
-            TradeRouteManager.tick(s);
-            CaravanManager.tick(s);
-            LivingWorldEvents.tick(s);
-            SettlementEvents.tick(s);
-            SeasonFestivals.tick(s);
-            WorldModifiers.tick(s);
-            Vfx.tick(s);
-            CompanionManager.tick(s);
-            ContractManager.tick(s);
-
-            visibilityTickCounter++;
-            if (visibilityTickCounter >= 10) {
-                visibilityTickCounter = 0;
-                HealthScalingManager.tickNameTagVisibility(s);
-            }
-            HealthScalingManager.tickCleanup();
-
-            // Bank interest (every 864000 ticks = 12 hours at 20 TPS)
-            bankInterestTickCounter++;
-            if (bankInterestTickCounter >= 72_000) { // 1 hour at 20 tps — matches Chair "per hour" labels
-                bankInterestTickCounter = 0;
-                com.political.economy.BankTick.applyHourly(s);
-                AuctionHouseManager.cleanupExpiredListings(7L * 24L * 60L * 60L * 1000L);
-            }
+            TICKS.tick(s);
         });
     }
 
@@ -793,7 +662,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
     }
 
     /** ~1 real minute online → +1 stored playtime minute (VETERAN buff); re-scan buff eligibility. */
-    private static void syncPlaytimeAndBuffChecks(MinecraftServer s) {
+    static void syncPlaytimeAndBuffChecks(MinecraftServer s) {
         for (ServerPlayer p : s.getPlayerList().getPlayers()) {
             String u = p.getUUID().toString();
             DataManager.addPlaytimeMinutes(u, 1);

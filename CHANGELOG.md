@@ -30,3 +30,6 @@
 - Libraries: dropped the bundled placeholder-api and player-data-api (no code used them; player-data-api has no 26.3 build). Added
   `docs/PROFILING.md` on using spark. Recorded why fabric-permissions-api and Caffeine were rejected (Fabric API and Guava already
   provide them).
+- Tick architecture: the one 140-line tick handler is now 72 named services (`TickRegistrations`) run by a `TickDispatcher` in the
+  same order. A service that throws no longer stops the others, slow services are logged by name, and the server logs its eight
+  costliest services when it stops.
