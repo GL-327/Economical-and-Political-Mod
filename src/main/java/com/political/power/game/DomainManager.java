@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -46,9 +47,18 @@ final class DomainManager {
                 caster.getX(), caster.getY(), caster.getZ(), state));
         COOLDOWNS.put(caster.getUUID(), state);
         ServerLevel world = caster.level();
-        world.playSound(null, caster.blockPosition(), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 0.8f, 0.7f);
+        int fx = PowerVfx.variant(world);
+        world.playSound(null, caster.blockPosition(), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 0.8f, PowerVfx.pick(fx, 0.6f, 0.7f, 0.85f));
         PowerVfx.ring(world, ParticleTypes.SOUL_FIRE_FLAME, caster.getX(), caster.getY(), caster.getZ(),
-                PowerSettings.DOMAIN_RADIUS.get(), 48);
+                PowerSettings.DOMAIN_RADIUS.get(), PowerVfx.pick(fx, 32, 48, 64));
+        // a title for the caster and for everyone inside the sphere
+        Component title = Text.tr("political.power.domain.started");
+        Component subtitle = Text.tr("political.power.domain.started.sub", Text.plain(caster.getName().getString()));
+        for (ServerPlayer viewer : world.players()) {
+            if (viewer == caster || contains(ACTIVE.get(caster.getUUID()), viewer)) {
+                PowerVfx.title(viewer, title, subtitle);
+            }
+        }
     }
 
     /** Takes back a Domain that was started in a cast that then failed. */
@@ -145,7 +155,7 @@ final class DomainManager {
             d.state().endEarly(now);
         }
         if (caster != null) {
-            caster.sendSystemMessage(Text.tr("political.power.domain.ended"), true);
+            PowerVfx.title(caster, Text.tr("political.power.domain.ended.title"), Text.tr("political.power.domain.ended"));
             caster.level().playSound(null, caster.blockPosition(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.8f, 0.8f);
         }
         LOGGER.debug("Domain of {} ended{}", d.caster(), early ? " early" : "");

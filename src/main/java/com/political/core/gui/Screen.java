@@ -137,6 +137,7 @@ public final class Screen {
     }
 
     public void open() {
+        UiSound.OPEN.play(player);
         gui.open();
     }
 

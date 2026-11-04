@@ -45,8 +45,9 @@ final class PowerEffects {
         Impulses.Velocity v = Impulses.blue(player.getX(), player.getY(), player.getZ(), target.getX(), target.getY(), target.getZ());
         target.setDeltaMovement(v.x(), v.y(), v.z());
         target.syncVelocity = true;
-        PowerVfx.beam(world, ParticleTypes.SOUL_FIRE_FLAME, player.getEyePosition(), target.getBoundingBox().getCenter(), 12);
-        world.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 0.6f, 0.6f);
+        int fx = PowerVfx.variant(world);
+        PowerVfx.beam(world, ParticleTypes.SOUL_FIRE_FLAME, player.getEyePosition(), target.getBoundingBox().getCenter(), PowerVfx.pick(fx, 8, 12, 18));
+        world.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 0.6f, PowerVfx.pick(fx, 0.5f, 0.6f, 0.75f));
     }
 
     private static void red(ServerPlayer player, ServerLevel world, LivingEntity target) {
@@ -58,29 +59,34 @@ final class PowerEffects {
         if (damage > 0.0) {
             hurt(player, world, target, damage, PowerCatalog.RED);
         }
-        PowerVfx.beam(world, ParticleTypes.FLAME, player.getEyePosition(), target.getBoundingBox().getCenter(), 12);
-        PowerVfx.particles(world, ParticleTypes.EXPLOSION, target.getX(), target.getY() + 1.0, target.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-        world.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 0.4f, 1.6f);
+        int fx = PowerVfx.variant(world);
+        PowerVfx.beam(world, ParticleTypes.FLAME, player.getEyePosition(), target.getBoundingBox().getCenter(), PowerVfx.pick(fx, 8, 12, 18));
+        PowerVfx.particles(world, ParticleTypes.EXPLOSION, target.getX(), target.getY() + 1.0, target.getZ(), PowerVfx.pick(fx, 1, 1, 2), 0.2, 0.2, 0.2, 0.0);
+        world.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 0.4f, PowerVfx.pick(fx, 1.4f, 1.6f, 1.8f));
     }
 
     private static void blast(ServerPlayer player, ServerLevel world, LivingEntity target) {
         hurt(player, world, target, PowerSettings.BLAST_DAMAGE.get(), PowerCatalog.CURSED_BLAST);
-        PowerVfx.beam(world, ParticleTypes.WITCH, player.getEyePosition(), target.getBoundingBox().getCenter(), 24);
-        world.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.PLAYERS, 0.3f, 1.9f);
+        int fx = PowerVfx.variant(world);
+        PowerVfx.beam(world, ParticleTypes.WITCH, player.getEyePosition(), target.getBoundingBox().getCenter(), PowerVfx.pick(fx, 16, 24, 32));
+        world.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.PLAYERS, 0.3f, PowerVfx.pick(fx, 1.7f, 1.9f, 2.0f));
     }
 
     private static void reverse(ServerPlayer player, ServerLevel world, EffectPlan plan, LivingEntity target) {
         LivingEntity patient = target != null ? target : player;
         patient.heal((float) plan.healAmount());
-        PowerVfx.particles(world, ParticleTypes.HEART, patient.getX(), patient.getY() + 1.2, patient.getZ(), 6, 0.4, 0.4, 0.4, 0.0);
-        world.playSound(null, patient.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.8f, 1.4f);
+        int fx = PowerVfx.variant(world);
+        PowerVfx.particles(world, ParticleTypes.HEART, patient.getX(), patient.getY() + 1.2, patient.getZ(), PowerVfx.pick(fx, 4, 6, 9), 0.4, 0.4, 0.4, 0.0);
+        world.playSound(null, patient.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.8f, PowerVfx.pick(fx, 1.2f, 1.4f, 1.6f));
     }
 
     private static void barrier(ServerPlayer player, ServerLevel world) {
         PowerService.raiseBarrier(player, PowerSettings.BARRIER_DURATION_TICKS.get());
-        PowerVfx.ring(world, ParticleTypes.END_ROD, player.getX(), player.getY() + 0.5, player.getZ(), 1.4, 16);
-        PowerVfx.ring(world, ParticleTypes.END_ROD, player.getX(), player.getY() + 1.5, player.getZ(), 1.4, 16);
-        world.playSound(null, player.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.5f, 1.8f);
+        int fx = PowerVfx.variant(world);
+        int points = PowerVfx.pick(fx, 12, 16, 24);
+        PowerVfx.ring(world, ParticleTypes.END_ROD, player.getX(), player.getY() + 0.5, player.getZ(), 1.4, points);
+        PowerVfx.ring(world, ParticleTypes.END_ROD, player.getX(), player.getY() + 1.5, player.getZ(), 1.4, points);
+        world.playSound(null, player.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.5f, PowerVfx.pick(fx, 1.6f, 1.8f, 2.0f));
     }
 
     private static void legacy(ServerPlayer player, ServerLevel world, AbilitySpec spec) {

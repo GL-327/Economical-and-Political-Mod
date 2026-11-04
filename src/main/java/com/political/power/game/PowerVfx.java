@@ -1,6 +1,10 @@
 package com.political.power.game;
 
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -10,7 +14,39 @@ final class PowerVfx {
 
     static final double RADIUS = 64.0;
 
+    /** The three variants of every effect (STYLE.md): short, medium, long. */
+    static final int VARIANTS = 3;
+
     private PowerVfx() {
+    }
+
+    /** Which variant this casting uses, so the same effect does not repeat endlessly. */
+    static int variant(ServerLevel world) {
+        return world.getRandom().nextInt(VARIANTS);
+    }
+
+    /** One of three values by variant: {@code pick(v, short, medium, long)}. */
+    static int pick(int variant, int shortV, int mediumV, int longV) {
+        return switch (variant) {
+            case 0 -> shortV;
+            case 1 -> mediumV;
+            default -> longV;
+        };
+    }
+
+    static float pick(int variant, float shortV, float mediumV, float longV) {
+        return switch (variant) {
+            case 0 -> shortV;
+            case 1 -> mediumV;
+            default -> longV;
+        };
+    }
+
+    /** A title for a major event (a Domain starting or ending); the only place the power system uses titles. */
+    static void title(ServerPlayer player, Component title, Component subtitle) {
+        player.connection.send(new ClientboundSetTitlesAnimationPacket(8, 40, 12));
+        player.connection.send(new ClientboundSetTitleTextPacket(title));
+        player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
     }
 
     static void particles(ServerLevel world, ParticleOptions options, double x, double y, double z,

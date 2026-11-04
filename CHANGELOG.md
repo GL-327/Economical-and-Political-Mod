@@ -67,3 +67,4 @@
 - Admin: a power administration screen (every online player's state, grant, revoke, set school, reset, who holds unique techniques) and
   `/poweradmin`, both guarded by the permission `politicalserver:power.admin` (operators of level owners by default). A reset keeps a
   copy of the old state in `power.json`. See `docs/OWNER_POWER_TEST.md` for the owner's test script.
+- Effects: each power effect now has a short, medium and long variant; a Domain starting or ending shows a title; screens play the open sound.
