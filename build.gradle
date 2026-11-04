@@ -49,6 +49,19 @@ loom {
 	}
 }
 
+// A real Minecraft client that joins the dev server and plays the owner's power test script (docs/OWNER_POWER_TEST.md).
+// ./gradlew runClientGameTest, with the dev server of runServerVerify already running on port 25566. Nothing here ships.
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "politicalserver-clienttest"
+		enableGameTests = false
+		enableClientGameTests = true
+		eula = true
+		username = "PowerTester"
+	}
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 

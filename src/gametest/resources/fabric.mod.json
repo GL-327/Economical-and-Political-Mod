@@ -1,0 +1,15 @@
+{
+	"schemaVersion": 1,
+	"id": "politicalserver-clienttest",
+	"version": "1.0.0",
+	"name": "Political Server client test",
+	"description": "Plays the owner's power test with a real client against the dev server. Never shipped.",
+	"license": "CC0-1.0",
+	"environment": "client",
+	"entrypoints": {
+		"fabric-client-gametest": ["com.political.clienttest.PowerClientTest"]
+	},
+	"depends": {
+		"fabric-client-gametest-api-v1": "*"
+	}
+}

@@ -8,6 +8,11 @@ the owner only needs to look at what a client can show (action bar text, particl
 The smoke run is not a substitute: it has no client, so it cannot show text, effects or screen layout, and it calls
 the same code paths a click or a command would reach, not the clicks themselves.
 
+A second automatic check, the real-client run, plays most of the script with an actual Minecraft 26.3 client (Fabric's
+client game test): it joins the dev server, presses the real keys, clicks the real screens, reads what the client
+received (action bar, chat) and takes screenshots. See "Real client run" below for what it covers. It still runs the dev
+client with Fabric API (not a launcher install), and it cannot judge how anything looks: that stays with the owner.
+
 ## Setup (test server only)
 
 1. Start the server, join with a vanilla 26.3 client, and make yourself an operator (`op <name>` in the console).
@@ -63,6 +68,33 @@ Fill this in as you go.
 | 11 | | |
 | 12 | | |
 | 13 | | |
+
+## Real client run
+
+`scripts/power-client-test.sh` starts the dev server on port 25566, gives the test player `PowerTester` 200 Arcane Shards
+and no school, opens the Minecraft client window, plays the phases below, and stops the server. It needs a desktop and
+takes about five minutes. Screenshots are written to `build/run/clientGameTest/screenshots` (tooltips included: the
+cursor is moved over tiles). The test is `src/gametest/java/com/political/clienttest/PowerClientTest.java`; the result
+lines start with `CLIENTTEST`. 62 checks passed on 2026-11-04 with Minecraft 26.3; a second run with
+`power.black_flash.chance` set to 1.0 (`-Dpowertest.phases=setup,blackflash`) passed its checks.
+
+| Item | What the real client did and saw |
+| ---: | --- |
+| 1 | `/menu`, Skills & Magic, Techniques opened the Powers hub. The School tile, a confirmation, "You chose Radiance"; ten nodes bought through ten confirmations ("Unlocked Radiance Path N"); the hub then says Tier 4 of 4. |
+| 2 | Blue equipped through the techniques screen; sneak + the swap-hands key cast it at a zombie 9 blocks away: the action bar showed "Blue -15" and the zombie moved toward the player. |
+| 3 | A second cast showed "On cooldown: 1.6 s left." |
+| 4 | Red with a stone block in between: "Something is in the way." Without the block: "Red -20" and the zombie moved away. |
+| 5 | At 7 to 11 health, Reverse on self (looking up) healed exactly 8, "Reverse -16". |
+| 6 | Vow screen: No armor with a helmet on gave "You do not meet the vow now"; without it "You took the vow", the maximum went from 300 to 320; putting the helmet on gave "Your vow was broken". |
+| 7 | After `/kill` and the respawn button the energy was half of what it had been (plus a few seconds of regeneration), and the Barrier, cast just before dying, could be cast at once. |
+| 8 | Not covered (see the smoke run's restart check). |
+| 9 | Without the operator level `/poweradmin` gave "Unknown or incomplete command"; after `op` it answered. |
+| 10 | Not covered: needs a second player. |
+| 11 | The caster's side: the title "Domain Expansion / PowerTester opens a Domain", the action bar "-150", 150 energy spent, the "Domain Ended" title after the duration. Not covered: a second player inside. |
+| 12 | With chance 1.0, a punch right after a Barrier cast showed "BLACK FLASH!" and did 2.4 damage. |
+
+Also seen on screenshots: every screen draws, tooltips show the lore lines, the cursed energy bar, the school tooltip
+with where each technique comes from, the tree's "Next Step" panel with its cost, and the titles.
 
 ## How to run the smoke run
 
