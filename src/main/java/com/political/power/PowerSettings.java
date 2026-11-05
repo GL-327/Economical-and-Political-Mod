@@ -1,6 +1,7 @@
 package com.political.power;
 
 import com.political.core.config.ConfigKey;
+import java.util.List;
 
 /**
  * Every number of the power system (M2) as a documented setting. The defaults are the numbers of the
@@ -178,4 +179,43 @@ public final class PowerSettings {
             "power.vow.check_interval_ticks", 20, 1, 1200, "How often vows are checked while a player plays, in ticks.");
     public static final ConfigKey<Integer> VOW_REACCEPT_COOLDOWN_TICKS = ConfigKey.integer(
             "power.vow.reaccept_cooldown_ticks", 6000, 0, 720_000, "Ticks a player must wait to take a vow again after breaking one.");
+
+    // ── innate technique, awakening, rerolls, mastery ───────────────────────────────────────
+
+    public static final ConfigKey<String> AWAKENING_BOSS = ConfigKey.choice(
+            "power.awakening.boss", "ender_dragon", List.of("ender_dragon", "wither", "warden", "none"),
+            "The boss whose defeat awakens a player's technique. Until then the technique sleeps and cannot be used. "
+                    + "Players near the boss when it dies are awakened. 'none' awakens everyone from the start.");
+
+    public static final ConfigKey<String> REROLL_CHARGE_BOSS = ConfigKey.choice(
+            "power.reroll.charge_boss", "wither", List.of("wither", "warden", "ender_dragon", "none"),
+            "The boss that gives a free reroll charge to the players near it when it dies, up to the maximum below. 'none' turns this source off.");
+
+    public static final ConfigKey<Integer> REROLL_SHARD_BASE = ConfigKey.integer(
+            "power.reroll.shard_base", 10, 0, 10_000,
+            "Arcane Shards a first random reroll costs (before the awakened multiplier).");
+
+    public static final ConfigKey<Integer> REROLL_SHARD_STEP = ConfigKey.integer(
+            "power.reroll.shard_step", 5, 0, 10_000,
+            "How much more every earlier reroll adds to the price.");
+
+    public static final ConfigKey<Double> REROLL_AWAKENED_MULTIPLIER = ConfigKey.decimal(
+            "power.reroll.awakened_multiplier", 2.0, 1.0, 100.0,
+            "The price of a shard reroll is multiplied by this once the technique is awakened.");
+
+    public static final ConfigKey<Integer> REROLL_SHARD_MAX = ConfigKey.integer(
+            "power.reroll.shard_max", 100, 1, 100_000,
+            "The price of a shard reroll never goes above this.");
+
+    public static final ConfigKey<Integer> REROLL_MAX_CHARGES = ConfigKey.integer(
+            "power.reroll.max_charges", 3, 0, 100,
+            "Most free reroll charges a player can hold.");
+
+    public static final ConfigKey<Double> MASTERY_DAMAGE_PER_RANK = ConfigKey.decimal(
+            "power.mastery.damage_per_rank", 0.05, 0.0, 1.0,
+            "Extra technique damage for every mastery rank above Novice (0.05 is +5 percent per rank).");
+
+    public static final ConfigKey<Double> MASTERY_COOLDOWN_PER_RANK = ConfigKey.decimal(
+            "power.mastery.cooldown_per_rank", 0.03, 0.0, 0.3,
+            "Share of every cooldown taken off for every mastery rank above Novice (0.03 is 3 percent per rank).");
 }

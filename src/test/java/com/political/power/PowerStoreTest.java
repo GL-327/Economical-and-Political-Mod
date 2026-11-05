@@ -236,4 +236,56 @@ class PowerStoreTest {
         assertEquals(1, registry.saveDirty());
         assertTrue(Files.exists(world.resolve("power.json")));
     }
+
+    // ── schema 2: the innate technique ──────────────────────────────────────────────────────
+
+    private static final String OLD = "aaaaaaaa-0000-0000-0000-0000000000a1";
+
+    @Test
+    void aSchemaOneFileOpensWithNothingLostAndNoInnateTechniqueYet() throws IOException {
+        Files.writeString(world.resolve("power.json"), fixture("power-v1.json"), StandardCharsets.UTF_8);
+        PowerStore store = PowerStore.open(world);
+        PlayerPower p = store.data().players.get(OLD);
+        assertNotNull(p);
+        assertEquals("RADIANCE", p.school);
+        assertEquals(12, p.shards);
+        assertEquals(60, p.shardsEarnedTotal);
+        assertEquals(Set.of("rad1", "rad2", "rad3", "rad4"), p.unlockedNodes);
+        assertEquals(Set.of("BLUE"), p.learned);
+        assertEquals("REVERSE", p.equipped);
+        assertEquals("reverse", p.selectedAbility);
+        assertEquals(7, p.uses.get("REVERSE"));
+        assertEquals(88.5, p.resource, 1e-9);
+        assertEquals(Set.of("NO_SPRINT"), p.vows);
+        assertEquals(120L, p.vowWaitTicks);
+        assertNull(p.innate, "the draw or the legacy choice happens at the next join");
+        assertFalse(p.awakened);
+        assertEquals(0, p.rerolls);
+        assertTrue(store.data().quarantine.containsKey(OLD + ".spells"), "quarantined data stays");
+    }
+
+    @Test
+    void theFirstSaveWritesSchemaTwoKeepsTheOldFileAsABackupAndRoundTripsTheNewFields() throws IOException {
+        Files.writeString(world.resolve("power.json"), fixture("power-v1.json"), StandardCharsets.UTF_8);
+        PowerStore store = PowerStore.open(world);
+        PlayerPower p = store.data().players.get(OLD);
+        p.innate = "REVERSE";
+        p.awakened = true;
+        p.rerolls = 2;
+        p.rerollCharges = 1;
+        store.markDirty();
+        store.saveIfDirty();
+
+        String written = Files.readString(world.resolve("power.json"), StandardCharsets.UTF_8);
+        assertTrue(written.replaceAll("\s", "").contains("\"schema_version\":2"), written);
+        assertTrue(Files.exists(world.resolve("power.json.v1.bak")), "the version 1 file is kept");
+
+        PlayerPower again = PowerStore.open(world).data().players.get(OLD);
+        assertTrue(p.sameAs(again));
+        assertEquals("REVERSE", again.innate);
+        assertTrue(again.awakened);
+        assertEquals(2, again.rerolls);
+        assertEquals(1, again.rerollCharges);
+        assertEquals("RADIANCE", again.school, "the old school is kept even though the game no longer reads it");
+    }
 }

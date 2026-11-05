@@ -115,6 +115,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
                 com.political.power.game.PowerService.onDeath(player);
             }
             if (!(entity instanceof ServerPlayer)) {
+                com.political.power.game.PowerService.onMobDeath(entity);
                 Entity mobKiller = damageSource.getEntity();
                 if (mobKiller instanceof ServerPlayer killerPlayer) {
                     PoliticalPartyManager.progressPartyCommission(killerPlayer, "KILL_MOBS", 1);

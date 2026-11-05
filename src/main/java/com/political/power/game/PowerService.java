@@ -1,19 +1,20 @@
 package com.political.power.game;
 
 import com.mojang.serialization.JsonOps;
-import com.political.SchoolTree;
 import com.political.core.Clock;
 import com.political.core.persist.StoreRegistry;
 import com.political.core.text.Text;
-import com.political.magic.MagicSchool;
 import com.political.power.PowerSettings;
 import com.political.power.cast.CastDecision;
 import com.political.power.cast.CastPipeline;
 import com.political.power.cast.EffectPlan;
 import com.political.power.formula.BarrierRules;
+import com.political.power.formula.Innate;
+import com.political.power.formula.LegacyChoice;
+import com.political.power.formula.Mastery;
+import com.political.power.formula.Reroll;
 import com.political.power.formula.Progression;
 import com.political.power.formula.ResourcePool;
-import com.political.power.formula.SchoolPassives;
 import com.political.power.formula.Tiers;
 import com.political.power.formula.UniqueHolders;
 import com.political.power.formula.Vow;
@@ -102,29 +103,24 @@ public final class PowerService {
         DomainManager.clear();
     }
 
-    // ── school, tier, level ─────────────────────────────────────────────────────────────────
+    // ── tier, awakening, level ──────────────────────────────────────────────────────────────
 
-    public static MagicSchool school(String uuid) {
-        String name = state(uuid).school;
-        if (name == null) {
-            return null;
-        }
-        try {
-            return MagicSchool.valueOf(name);
-        } catch (IllegalArgumentException e) {
-            LOGGER.warn("Player {} has an unknown school {} in the power data; treating it as none", uuid, name);
-            return null;
-        }
+    /** Whether the player's technique is awake: its boss was defeated, an admin woke it, or the server asks for no boss. */
+    public static boolean awakened(String uuid) {
+        return state(uuid).awakened || "none".equals(PowerSettings.AWAKENING_BOSS.get());
     }
 
-    private static int highestNode(PlayerPower p, MagicSchool school) {
-        return school == null ? 0 : SchoolPassives.highestSpineNode(school, p.unlockedNodes);
-    }
-
-    /** The tier (0 to 4) of the player's chosen school. */
+    /** 0 while the technique sleeps, otherwise the mastery rank of the innate technique: 1 (Novice) to 4 (Master). */
     public static int tier(String uuid) {
         PlayerPower p = state(uuid);
-        return Tiers.tier(highestNode(p, school(uuid)));
+        int uses = p.innate == null ? 0 : p.uses.getOrDefault(p.innate, 0);
+        return Mastery.tier(awakened(uuid), uses);
+    }
+
+    /** Mastery rank of the innate technique (Novice if there is none). */
+    public static Technique.MasteryRank innateRank(String uuid) {
+        PlayerPower p = state(uuid);
+        return Mastery.rank(p.innate == null ? 0 : p.uses.getOrDefault(p.innate, 0));
     }
 
     public static int level(String uuid) {
@@ -135,10 +131,7 @@ public final class PowerService {
 
     public static double maxResource(String uuid) {
         PlayerPower p = state(uuid);
-        MagicSchool school = school(uuid);
-        double bonus = PlayerStatsManager.getBonusMana(uuid)
-                + (school == null ? 0 : SchoolPassives.resourceBonus(school, p.unlockedNodes))
-                + vowsOf(uuid).resourceBonus();
+        double bonus = PlayerStatsManager.getBonusMana(uuid) + vowsOf(uuid).resourceBonus();
         return ResourcePool.max(tier(uuid), bonus);
     }
 
@@ -209,25 +202,21 @@ public final class PowerService {
 
     // ── techniques and abilities ────────────────────────────────────────────────────────────
 
-    private static boolean granted(PlayerPower p, MagicSchool school, PowerCatalog.TechniqueDef def) {
-        if (school == null) {
-            return false;
+    private static boolean granted(String uuid, PlayerPower p, PowerCatalog.TechniqueDef def) {
+        if (def.id().equals(p.innate)) {
+            return true;
         }
-        int node = highestNode(p, school);
-        if (PowerCatalog.DOMAIN.equals(def.id())) {
-            return Tiers.capstone(node);
-        }
-        return def.schoolId() != null && def.schoolId().equals(school.name()) && node >= def.unlockNode();
+        return PowerCatalog.DOMAIN.equals(def.id()) && Mastery.domainUnlocked(tier(uuid));
     }
 
-    /** Whether the player holds the technique: learned, granted by their school's tree, or given by an admin. */
+    /** Whether the player holds the technique: their innate one, one an admin gave, or the Domain once they have mastered theirs. */
     public static boolean holds(String uuid, String techniqueId) {
         Optional<PowerCatalog.TechniqueDef> def = PowerCatalog.technique(techniqueId);
         if (def.isEmpty()) {
             return false;
         }
         PlayerPower p = state(uuid);
-        boolean has = p.learned.contains(techniqueId) || granted(p, school(uuid), def.get());
+        boolean has = p.learned.contains(techniqueId) || granted(uuid, p, def.get());
         if (!has) {
             return false;
         }
@@ -257,7 +246,7 @@ public final class PowerService {
     }
 
     public static boolean unlocked(String uuid, AbilitySpec spec) {
-        if (!holds(uuid, spec.techniqueId())) {
+        if (!holds(uuid, spec.techniqueId()) || !awakened(uuid)) {
             return false;
         }
         if (spec.kind() == AbilityKind.LEGACY) {
@@ -358,16 +347,14 @@ public final class PowerService {
         return false;
     }
 
-    /** Learning a technique from a manual (or an admin grant) with the messages a player expects. */
+    /**
+     * A Technique Manual picks the player's innate technique: it becomes that technique (mastery starts again) and the
+     * manual is used up. Returns true when the manual should be consumed.
+     */
     public static boolean learnFromManual(ServerPlayer player, String techniqueId) {
-        LearnResult result = learn(player, techniqueId);
-        switch (result) {
-            case OK -> player.sendSystemMessage(Text.tr("political.power.learned", techniqueName(techniqueId)), false);
-            case ALREADY -> player.sendSystemMessage(Text.tr("political.power.already_known", techniqueName(techniqueId)), false);
-            case TAKEN -> player.sendSystemMessage(Text.tr("political.power.technique.taken", techniqueName(techniqueId)), false);
-            case UNKNOWN -> player.sendSystemMessage(Text.tr("political.power.equip.failed"), false);
-        }
-        return result == LearnResult.OK;
+        RerollResult result = rerollTo(player, techniqueId);
+        player.sendSystemMessage(Text.trNamed("political.power.reroll.result", result.name(), techniqueName(techniqueId)), false);
+        return result == RerollResult.OK;
     }
 
     /** The display name of a technique: the old ones keep their names and colors, the new ones come from the language file. */
@@ -449,65 +436,204 @@ public final class PowerService {
         }
     }
 
-    // ── schools and the tree ────────────────────────────────────────────────────────────────
+    // ── the innate technique: roll, reroll, awaken ──────────────────────────────────────────
 
-    public enum SchoolResult { OK, DORMANT, ALREADY_CHOSEN }
+    public enum RerollResult { OK, NOT_ENOUGH_SHARDS, NO_CHARGE, NOTHING_TO_DRAW, UNKNOWN_TECHNIQUE, SAME_TECHNIQUE }
 
-    /** The first choice is free; changing school afterwards is an admin action ({@link #setSchool}). */
-    public static SchoolResult chooseSchool(ServerPlayer player, MagicSchool school) {
-        if (!PowerCatalog.selectableSchools().contains(school.name())) {
-            return SchoolResult.DORMANT;
+    /** Techniques a draw cannot land on: the current one, and unique techniques somebody else holds. */
+    private static Set<String> unavailable(String uuid, PlayerPower p) {
+        Set<String> out = new LinkedHashSet<>();
+        if (p.innate != null) {
+            out.add(p.innate);
         }
-        String uuid = player.getUUID().toString();
-        PlayerPower p = state(uuid);
-        if (p.school != null) {
-            return SchoolResult.ALREADY_CHOSEN;
+        for (String id : Innate.pool()) {
+            String holder = data().uniqueHolders.get(id);
+            if (UniqueHolders.isUnique(id) && holder != null && !holder.equals(uuid)) {
+                out.add(id);
+            }
         }
-        setSchool(player, school);
-        return SchoolResult.OK;
+        return out;
     }
 
-    /** Sets the school without the first-choice rule. Used by admins and by the first choice. */
-    public static void setSchool(ServerPlayer player, MagicSchool school) {
+    /** Arcane Shards the next random reroll costs this player. */
+    public static int rerollShardCost(String uuid) {
+        return Reroll.shardCost(state(uuid).rerolls, awakened(uuid));
+    }
+
+    /** Gives a player who has no innate technique one: they keep what they had before rolling, or get a random one. */
+    static void ensureInnate(ServerPlayer player) {
+        String uuid = player.getUUID().toString();
+        PlayerPower p = state(uuid);
+        if (p.innate != null && PowerCatalog.isTechnique(p.innate)) {
+            return;
+        }
+        String legacy = LegacyChoice.of(p.equipped, p.learned, p.school, p.unlockedNodes);
+        if (legacy != null) {
+            p.innate = legacy;
+            p.awakened = true;
+            UniqueHolders.claim(data().uniqueHolders, legacy, uuid);
+            LOGGER.info("{} keeps {} from before techniques were rolled and counts as awakened", uuid, legacy);
+        } else {
+            String drawn = Innate.draw(player.getRandom().nextDouble(), unavailable(uuid, p));
+            if (drawn == null) {
+                LOGGER.warn("No technique could be drawn for {}", uuid);
+                return;
+            }
+            p.innate = drawn;
+            UniqueHolders.claim(data().uniqueHolders, drawn, uuid);
+            LOGGER.info("{} was given {} at random", uuid, drawn);
+            player.sendSystemMessage(Text.tr("political.power.innate.rolled", techniqueName(drawn)), false);
+            player.sendSystemMessage(Text.trNamed("political.power.awaken.how", PowerSettings.AWAKENING_BOSS.get()), false);
+        }
+        if (p.equipped == null || !holds(uuid, p.equipped)) {
+            equipQuietly(p, p.innate);
+        }
+        dirty();
+    }
+
+    private static void applyInnate(ServerPlayer player, PlayerPower p, String techniqueId) {
+        String uuid = player.getUUID().toString();
+        if (p.innate != null && !p.learned.contains(p.innate)) {
+            UniqueHolders.release(data().uniqueHolders, p.innate, uuid);
+        }
+        UniqueHolders.claim(data().uniqueHolders, techniqueId, uuid);
+        p.innate = techniqueId;
+        p.uses.put(techniqueId, 0);
+        p.rerolls++;
+        equipQuietly(p, techniqueId);
+        PowerRuntime rt = runtime(player.getUUID());
+        rt.clearCombatState();
+        DomainManager.endEarly(player.getUUID(), Clock.ticks());
+        p.resource = ResourcePool.clampToMax(p.resource, maxResource(uuid));
+        dirty();
+    }
+
+    public static RerollResult rerollWithShards(ServerPlayer player) {
+        String uuid = player.getUUID().toString();
+        PlayerPower p = state(uuid);
+        int cost = rerollShardCost(uuid);
+        if (p.shards < cost) {
+            return RerollResult.NOT_ENOUGH_SHARDS;
+        }
+        String drawn = Innate.draw(player.getRandom().nextDouble(), unavailable(uuid, p));
+        if (drawn == null) {
+            return RerollResult.NOTHING_TO_DRAW;
+        }
+        p.shards -= cost;
+        applyInnate(player, p, drawn);
+        player.sendSystemMessage(Text.trNamed("political.power.reroll.result", RerollResult.OK.name(), techniqueName(drawn)), false);
+        return RerollResult.OK;
+    }
+
+    public static RerollResult rerollWithCharge(ServerPlayer player) {
+        String uuid = player.getUUID().toString();
+        PlayerPower p = state(uuid);
+        if (p.rerollCharges <= 0) {
+            return RerollResult.NO_CHARGE;
+        }
+        String drawn = Innate.draw(player.getRandom().nextDouble(), unavailable(uuid, p));
+        if (drawn == null) {
+            return RerollResult.NOTHING_TO_DRAW;
+        }
+        p.rerollCharges--;
+        applyInnate(player, p, drawn);
+        player.sendSystemMessage(Text.trNamed("political.power.reroll.result", RerollResult.OK.name(), techniqueName(drawn)), false);
+        return RerollResult.OK;
+    }
+
+    /** A random reroll that costs nothing (admin tool). */
+    public static RerollResult rerollFree(ServerPlayer player) {
+        String uuid = player.getUUID().toString();
+        PlayerPower p = state(uuid);
+        String drawn = Innate.draw(player.getRandom().nextDouble(), unavailable(uuid, p));
+        if (drawn == null) {
+            return RerollResult.NOTHING_TO_DRAW;
+        }
+        applyInnate(player, p, drawn);
+        return RerollResult.OK;
+    }
+
+    /** A chosen technique instead of a random one (a Technique Manual, or an admin). Costs nothing here. */
+    public static RerollResult rerollTo(ServerPlayer player, String techniqueId) {
+        String uuid = player.getUUID().toString();
+        PlayerPower p = state(uuid);
+        if (techniqueId == null || !Innate.pool().contains(techniqueId)) {
+            return RerollResult.UNKNOWN_TECHNIQUE;
+        }
+        if (techniqueId.equals(p.innate)) {
+            return RerollResult.SAME_TECHNIQUE;
+        }
+        if (unavailable(uuid, p).contains(techniqueId)) {
+            return RerollResult.NOTHING_TO_DRAW;
+        }
+        applyInnate(player, p, techniqueId);
+        return RerollResult.OK;
+    }
+
+    /** The player's technique wakes up. Returns false if it already was awake. */
+    public static boolean awaken(ServerPlayer player) {
         PlayerPower p = state(player.getUUID().toString());
-        p.school = school == null ? null : school.name();
-        syncGrants(player);
+        if (p.awakened) {
+            return false;
+        }
+        p.awakened = true;
+        dirty();
+        PowerVfx.title(player, Text.tr("political.power.awakened.title"),
+                p.innate == null ? Component.empty() : Text.tr("political.power.awakened.sub", techniqueName(p.innate)));
+        LOGGER.info("{} awakened {}", player.getUUID(), p.innate);
+        return true;
+    }
+
+    /** Sets how often the innate technique has been cast, which sets its mastery rank (admin tool). */
+    public static void setUses(String uuid, int casts) {
+        PlayerPower p = state(uuid);
+        if (p.innate != null) {
+            p.uses.put(p.innate, Math.max(0, casts));
+            dirty();
+        }
+    }
+
+    /** Puts a technique back to sleep (admin tool, for testing). */
+    public static void sleep(String uuid) {
+        state(uuid).awakened = false;
         dirty();
     }
 
-    public enum NodeResult { OK, UNKNOWN, NO_SCHOOL, WRONG_SCHOOL, ALREADY, PARENT_LOCKED, LEVEL_TOO_LOW, NOT_ENOUGH_SHARDS }
-
-    public static NodeResult unlockNode(ServerPlayer player, String nodeId) {
-        String uuid = player.getUUID().toString();
-        PlayerPower p = state(uuid);
-        SchoolTree.SchoolNode node = SchoolTree.getNode(nodeId);
-        if (node == null) {
-            return NodeResult.UNKNOWN;
-        }
-        if (p.school == null) {
-            return NodeResult.NO_SCHOOL;
-        }
-        if (!node.school().name().equals(p.school)) {
-            return NodeResult.WRONG_SCHOOL;
-        }
-        if (p.unlockedNodes.contains(nodeId)) {
-            return NodeResult.ALREADY;
-        }
-        if (node.parentId() != null && !p.unlockedNodes.contains(node.parentId())) {
-            return NodeResult.PARENT_LOCKED;
-        }
-        if (level(uuid) < node.levelRequired()) {
-            return NodeResult.LEVEL_TOO_LOW;
-        }
-        if (p.shards < node.shardCost()) {
-            return NodeResult.NOT_ENOUGH_SHARDS;
-        }
-        p.shards -= node.shardCost();
-        p.unlockedNodes.add(nodeId);
-        p.level = Math.max(p.level, level(uuid));
-        syncGrants(player);
+    public static void grantRerollCharge(ServerPlayer player) {
+        PlayerPower p = state(player.getUUID().toString());
+        int before = p.rerollCharges;
+        p.rerollCharges = Reroll.chargesAfterGrant(p.rerollCharges);
         dirty();
-        return NodeResult.OK;
+        if (p.rerollCharges > before) {
+            player.sendSystemMessage(Text.tr("political.power.reroll.charge", p.rerollCharges), false);
+        }
+    }
+
+    /**
+     * A mob died. If it is the boss that awakens techniques, or the boss that gives a reroll charge, every player near
+     * it benefits (the Ender Dragon fight is large, so near means within 160 blocks).
+     */
+    public static void onMobDeath(net.minecraft.world.entity.LivingEntity mob) {
+        if (!(mob.level() instanceof net.minecraft.server.level.ServerLevel world)) {
+            return;
+        }
+        String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).getPath();
+        boolean awakens = id.equals(PowerSettings.AWAKENING_BOSS.get());
+        boolean charges = id.equals(PowerSettings.REROLL_CHARGE_BOSS.get());
+        if (!awakens && !charges) {
+            return;
+        }
+        for (ServerPlayer player : world.players()) {
+            if (!player.isAlive() || player.distanceToSqr(mob) > 160.0 * 160.0) {
+                continue;
+            }
+            if (awakens) {
+                awaken(player);
+            }
+            if (charges) {
+                grantRerollCharge(player);
+            }
+        }
     }
 
     /** Arcane Shards from expeditions. The amount and the source are unchanged from before M2. */
@@ -521,32 +647,6 @@ public final class PowerService {
         p.level = Math.max(p.level, Progression.levelFor(p.shardsEarnedTotal));
         dirty();
         player.sendSystemMessage(Text.tr("political.power.shards.gained", amount), false);
-    }
-
-    /**
-     * Claims the unique techniques the tree now grants and tells the player about techniques they gained or could
-     * not get because someone else holds them.
-     */
-    static void syncGrants(ServerPlayer player) {
-        String uuid = player.getUUID().toString();
-        PlayerPower p = state(uuid);
-        MagicSchool school = school(uuid);
-        for (PowerCatalog.TechniqueDef def : PowerCatalog.techniques()) {
-            if (!granted(p, school, def) || !UniqueHolders.isUnique(def.id())) {
-                continue;
-            }
-            if (UniqueHolders.claim(data().uniqueHolders, def.id(), uuid) == UniqueHolders.Claim.TAKEN) {
-                player.sendSystemMessage(Text.tr("political.power.technique.taken", techniqueName(def.id())), false);
-            }
-        }
-        if (p.equipped == null) {
-            for (PowerCatalog.TechniqueDef def : PowerCatalog.techniques()) {
-                if (holds(uuid, def.id())) {
-                    equipQuietly(p, def.id());
-                    break;
-                }
-            }
-        }
     }
 
     // ── casting ─────────────────────────────────────────────────────────────────────────────
@@ -618,6 +718,8 @@ public final class PowerService {
         Component message = switch (rejected.reason()) {
             case ON_COOLDOWN -> Text.tr(rejected.reason().messageKey(), String.format("%.1f", rejected.detail() / 20.0));
             case INSUFFICIENT_RESOURCE -> Text.tr(rejected.reason().messageKey(), rejected.detail());
+            case NOT_UNLOCKED -> awakened(player.getUUID().toString()) ? Text.tr(rejected.reason().messageKey())
+                    : Text.trNamed("political.power.dormant", PowerSettings.AWAKENING_BOSS.get());
             default -> Text.tr(rejected.reason().messageKey());
         };
         player.sendSystemMessage(message, true);
@@ -670,7 +772,7 @@ public final class PowerService {
         rt.lastVowCheckTick = now;
         resource(uuid);
         p.level = Math.max(p.level, Progression.levelFor(p.shardsEarnedTotal));
-        syncGrants(player);
+        ensureInnate(player);
     }
 
     public static void onLogout(ServerPlayer player) {
@@ -740,22 +842,14 @@ public final class PowerService {
         return runtime(UUID.fromString(uuid)).cooldownRemaining(spec.id(), now);
     }
 
-    /** Share of every cooldown removed by vows and the school's tree. */
+    /** Share of every cooldown removed by mastery and vows. */
     static double cooldownReduction(String uuid) {
-        MagicSchool school = school(uuid);
-        double tree = school == null ? 0.0 : SchoolPassives.cooldownReduction(school, state(uuid).unlockedNodes);
-        return tree + vowsOf(uuid).cooldownReduction();
+        return Mastery.cooldownReduction(tier(uuid)) + vowsOf(uuid).cooldownReduction();
     }
 
-    /** Damage multiplier for techniques of the given technique: the school's tree bonus and the no-sprint vow. */
+    /** Damage multiplier of the player's techniques: mastery and the no-sprint vow. */
     static double techniqueDamageMultiplier(String uuid, String techniqueId) {
-        double multiplier = 1.0 + vowsOf(uuid).damageBonus();
-        MagicSchool school = school(uuid);
-        Optional<PowerCatalog.TechniqueDef> def = PowerCatalog.technique(techniqueId);
-        if (school != null && def.isPresent() && school.name().equals(def.get().schoolId())) {
-            multiplier += SchoolPassives.damageBonus(school, state(uuid).unlockedNodes);
-        }
-        return multiplier;
+        return 1.0 + vowsOf(uuid).damageBonus() + Mastery.damageBonus(tier(uuid));
     }
 
     /** Ticks since the player's last cast (for Black Flash). */

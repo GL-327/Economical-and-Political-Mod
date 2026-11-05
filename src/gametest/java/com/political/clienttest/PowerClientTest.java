@@ -65,19 +65,20 @@ public class PowerClientTest implements FabricClientGameTest {
         cmd("tp @s ~ 200 ~ 0 0");
         context.waitTicks(60);
         context.takeScreenshot("00-joined");
-        String wanted = System.getProperty("powertest.phases", "permission,setup,tree,grants,domain,combat,death,regression");
+        String wanted = System.getProperty("powertest.phases", "permission,setup,technique,grants,domain,combat,death,regression");
         try {
             for (String phase : wanted.split(",")) {
                 switch (phase.trim()) {
                     case "permission" -> phase("permission", this::permission);
                     case "setup" -> phase("setup", this::setup);
-                    case "tree" -> phase("school and tree through the screens", this::schoolAndTree);
+                    case "technique" -> phase("innate technique, awakening and reroll through the screens", this::technique);
                     case "grants" -> phase("grants and the techniques screen", this::grants);
                     case "domain" -> phase("Domain, and vows while it runs", this::domainAndVows);
                     case "combat" -> phase("Blue, Red, Cursed Blast, Reverse, Barrier", this::combat);
                     case "death" -> phase("death", this::death);
                     case "blackflash" -> phase("Black Flash", this::blackFlash);
                     case "regression" -> phase("older commands still answer", this::regression);
+                    case "menus" -> phase("every menu: in and back out", this::menus);
                     default -> throw new IllegalArgumentException("unknown phase " + phase);
                 }
             }
@@ -440,52 +441,65 @@ public class PowerClientTest implements FabricClientGameTest {
         ctx.takeScreenshot("01-platform");
     }
 
-    /** Script item 1: choose a school and buy the whole spine with real clicks. */
-    private void schoolAndTree() {
+    /** Script item 1: the technique rolled at spawn, asleep; a refused cast; a reroll; the awakening; mastery. */
+    private void technique() {
         check("the Powers hub opens from the menu", openHub());
         ctx.takeScreenshot("02-hub-fresh");
-        hover("Cursed Energy", false, "02b-hub-energy-tooltip");
-        hover("How to Cast", false, "02c-hub-how-to-cast-tooltip");
-        int mark = mark();
-        check("the school tile opens the school list", go("School", true, "School"));
-        ctx.takeScreenshot("03-school-list");
-        hover("Radiance", false, "03b-school-radiance-tooltip");
-        hover("Chronomancy", false, "03c-school-dormant-tooltip");
-        check("choosing a school asks for confirmation", go("Radiance", false, "Confirm"));
-        ctx.takeScreenshot("04-confirm");
-        clickSlot(11);
-        boolean chose = waitFor(mark, "You chose", false, 40);
-        check("the choice is confirmed (" + since(mark) + ")", chose);
+        List<String> yours = loreOf("Your Technique", true);
+        check("the hub names a technique and says it is asleep (" + yours + ")", yours.size() >= 2 && yours.contains("Asleep"));
+        check("the Awakening tile says how to wake it (" + loreOf("Awakening", true) + ")",
+                loreOf("Awakening", true).stream().anyMatch(l -> l.contains("Ender Dragon")));
+        hover("Your Technique", true, "02b-hub-your-technique-tooltip");
+        hover("Awakening", true, "02c-hub-awakening-tooltip");
+        hover("Mastery", true, "02d-hub-mastery-tooltip");
+        hover("Cursed Energy", false, "02e-hub-energy-tooltip");
+        closeScreen();
 
-        check("the school tile now opens the tree", openHub() && go("School", true, "School Tree"));
-        ctx.takeScreenshot("05-tree-empty");
-        hover("Next Step", false, "05b-tree-next-step-tooltip");
-        hover("Radiance Path 1", true, "05c-tree-node1-tooltip");
-        for (int i = 1; i <= 10; i++) {
-            mark = mark();
-            boolean asked = go("Radiance Path " + i, true, "Confirm");
-            if (asked) {
-                clickSlot(11);
-            }
-            boolean unlocked = asked && waitFor(mark, "Unlocked", false, 40);
-            check("buy node " + i + " (" + since(mark) + ")", unlocked);
-            if (i == 4) {
-                ctx.takeScreenshot("06-tree-midway");
-            }
-        }
-        ctx.takeScreenshot("07-tree-done");
-        hover("Radiance Path 10", true, "07b-tree-capstone-tooltip");
-        boolean tier4 = openHub() && loreOf("School", true).stream().anyMatch(l -> l.contains("Tier 4 of 4"));
-        check("the hub shows tier 4", tier4);
-        ctx.takeScreenshot("08-hub-tier4");
+        // a sleeping technique cannot be cast
+        int mark = mark();
+        cast();
+        boolean refused = saw(mark, "asleep", true);
+        check("a cast while the technique sleeps is refused (" + since(mark) + ")", refused);
+        ctx.takeScreenshot("03-asleep-cast");
+
+        // reroll with shards through the screens
+        String before = ctx.computeOnClient(client -> client.player.getName().getString());
+        check("the reroll screen opens", openHub() && go("Reroll", true, "Reroll"));
+        ctx.takeScreenshot("04-reroll");
+        hover("Reroll With Shards", true, "04b-reroll-shards-tooltip");
+        hover("Use a Reroll Charge", true, "04c-reroll-charge-tooltip");
+        hover("Technique Manual", true, "04d-reroll-manual-tooltip");
+        mark = mark();
+        check("a reroll asks for confirmation", go("Reroll With Shards", true, "Confirm"));
+        ctx.takeScreenshot("05-reroll-confirm");
+        clickSlot(11);
+        boolean rolled = waitFor(mark, "Your technique is now", false, 40);
+        check("the reroll gives a technique (" + since(mark) + ")", rolled);
+        mark = mark();
+        cmd("poweradmin info " + before);
+        waitFor(mark, before + ":", false, 40);
+        check("the reroll cost shards (" + since(mark) + ")", saw(mark, "190 shards", false) || saw(mark, "shards", false));
+
+        // awakening and mastery by an admin (the dragon itself cannot be fought in a test)
+        mark = mark();
+        cmd("poweradmin awaken " + before);
+        check("awaken (" + since(mark) + ")", waitFor(mark, "awakened", false, 40));
+        ctx.waitTicks(20);
+        ctx.takeScreenshot("06-awakened-title");
+        check("the hub says awakened", openHub() && loreOf("Your Technique", true).contains("Awakened"));
+        ctx.takeScreenshot("07-hub-awake");
+        closeScreen();
+        cmd("poweradmin mastery " + before + " 100");
+        check("the hub shows Master rank", openHub() && loreOf("Mastery", true).stream().anyMatch(l -> l.contains("Master")));
+        hover("Mastery", true, "07b-hub-mastery-master-tooltip");
         closeScreen();
     }
 
     private void grants() {
-        for (String technique : List.of("BLUE", "RED", "CURSED_BLAST")) {
+        for (String technique : List.of("BLUE", "RED", "CURSED_BLAST", "REVERSE", "BARRIER")) {
             int mark = mark();
             cmd("poweradmin grant PowerTester " + technique);
-            boolean granted = waitFor(mark, "Granted", false, 40);
+            boolean granted = waitFor(mark, "Granted", false, 40) || saw(mark, "already has", false);
             check("grant " + technique + " (" + since(mark) + ")", granted);
         }
         check("the techniques screen opens", openHub() && go("Techniques", true, "Techniques"));
@@ -689,6 +703,224 @@ public class PowerClientTest implements FabricClientGameTest {
             if (inContainer()) {
                 ctx.takeScreenshot("30-" + command);
                 closeScreen();
+            }
+        }
+    }
+
+
+    // ── the menu crawler ────────────────────────────────────────────────────────────────────
+
+    private static final int CRAWL_MAX_DEPTH = 5;
+    private static final int CRAWL_MAX_CLICKS = 2600;
+    private static final int CRAWL_MAX_SLOTS_PER_SCREEN = 45;
+
+    private final java.util.Set<String> crawlVisited = new java.util.HashSet<>();
+    private final List<String> crawlFindings = new ArrayList<>();
+    private final List<String> crawlEdges = new ArrayList<>();
+    private int crawlClicks;
+    private String crawlRoot = "menu";
+
+    /**
+     * Opens every menu reachable from the main menus by clicking every item, and at each new screen presses its back
+     * button. Back must lead to the screen the player came from; a screen with no way back, or a back button that goes
+     * somewhere else, is reported. Clicks that do things (buy, toggle, start) are clicked too: this is a throwaway
+     * development world. Development only.
+     */
+    private void menus() {
+        cmd("gamemode creative");
+        for (String root : List.of("menu", "civ", "stats", "bounty", "bazaar", "shop", "expedition", "hunt", "party", "guild", "trade",
+                "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view")) {
+            if (crawlClicks >= CRAWL_MAX_CLICKS) {
+                break;
+            }
+            crawlRoot = root;
+            cmd(root);
+            if (!waitForContainer2(120)) {
+                System.out.println("CLIENTTEST MENU root /" + root + " opens no screen");
+                closeAnyScreen();
+                continue;
+            }
+            String title = screenTitle();
+            System.out.println("CLIENTTEST MENU root /" + root + " -> '" + title + "'");
+            crawl(new ArrayList<>(), title, 0);
+            closeAnyScreen();
+        }
+        System.out.println("CLIENTTEST MENU visited " + crawlVisited.size() + " screens with " + crawlClicks + " clicks");
+        for (String edge : crawlEdges) {
+            System.out.println("CLIENTTEST MENU edge " + edge);
+        }
+        check("every menu reached has a way back (" + crawlFindings.size() + " problems)", crawlFindings.isEmpty());
+        for (String finding : crawlFindings) {
+            System.out.println("CLIENTTEST MENU PROBLEM " + finding);
+        }
+    }
+
+    private boolean waitForContainer2(int ticks) {
+        for (int i = 0; i < ticks; i++) {
+            if (inContainer()) {
+                ctx.waitTicks(4);
+                return true;
+            }
+            ctx.waitTick();
+        }
+        return inContainer();
+    }
+
+    /** Closes whatever screen is open (a menu, a sign editor, the chat). */
+    private void closeAnyScreen() {
+        ctx.runOnClient(client -> {
+            if (client.gui.screen() != null) {
+                client.setScreenAndShow(null);
+            }
+        });
+        ctx.waitTicks(3);
+    }
+
+    /** Waits until the screen changes from {@code title} (a different title, or no container), at most {@code ticks}. */
+    private String waitForScreenChange(String title, int ticks) {
+        for (int i = 0; i < ticks; i++) {
+            if (!inContainer()) {
+                return "<closed>";
+            }
+            String now = screenTitle();
+            if (!now.equals(title)) {
+                ctx.waitTicks(4);
+                return screenTitle();
+            }
+            ctx.waitTick();
+        }
+        return inContainer() ? screenTitle() : "<closed>";
+    }
+
+    private record Item(int slot, String name) {
+    }
+
+    private List<Item> items() {
+        return ctx.computeOnClient(client -> {
+            List<Item> out = new ArrayList<>();
+            if (!(client.gui.screen() instanceof AbstractContainerScreen<?> screen)) {
+                return out;
+            }
+            AbstractContainerMenu menu = screen.getMenu();
+            for (int i = 0; i < menu.slots.size(); i++) {
+                Slot slot = menu.slots.get(i);
+                if (slot.container == client.player.getInventory()) {
+                    continue;
+                }
+                String name = plain(slot.getItem());
+                if (!name.isBlank()) {
+                    out.add(new Item(i, name));
+                }
+            }
+            return out;
+        });
+    }
+
+    private static boolean isBack(String name) {
+        String n = name.toLowerCase(Locale.ROOT);
+        return n.contains("back") || n.startsWith("return") || n.contains("\u25c0") || n.contains("\u2190") || n.contains("previous menu") || n.contains("main menu");
+    }
+
+    private static boolean isPager(String name) {
+        String n = name.toLowerCase(Locale.ROOT);
+        return n.contains("next") || n.contains("previous") || n.startsWith("page");
+    }
+
+    private static boolean isClose(String name) {
+        String n = name.toLowerCase(Locale.ROOT);
+        return n.contains("close") || n.contains("exit") || n.equals("cancel") || n.contains("\u2715");
+    }
+
+    /** Opens the root again and clicks along the recorded path; false if a step did not lead to a screen. */
+    private boolean replay(List<Integer> path, String expectTitle) {
+        closeAnyScreen();
+        cmd(crawlRoot);
+        if (!waitForContainer2(120)) {
+            return false;
+        }
+        for (int slot : path) {
+            if (!inContainer()) {
+                return false;
+            }
+            String before = screenTitle();
+            ctx.runOnClient(client -> {
+                AbstractContainerMenu menu = ((AbstractContainerScreen<?>) client.gui.screen()).getMenu();
+                client.gameMode.handleContainerInput(menu.containerId, slot, 0, ContainerInput.PICKUP, client.player);
+            });
+            ctx.waitTicks(6);
+            waitForScreenChange(before, 40);
+        }
+        return inContainer() && screenTitle().equals(expectTitle);
+    }
+
+    private void crawl(List<Integer> path, String title, int depth) {
+        if (!crawlVisited.add(title)) {
+            return;
+        }
+        ctx.takeScreenshot("menu-" + String.format("%03d", crawlVisited.size()) + "-" + title.replaceAll("[^A-Za-z0-9]+", "_"));
+        List<Item> candidates = items();
+        int tried = 0;
+        for (Item item : candidates) {
+            if (crawlClicks >= CRAWL_MAX_CLICKS || tried >= CRAWL_MAX_SLOTS_PER_SCREEN) {
+                break;
+            }
+            if (isClose(item.name()) || (depth > 0 && isBack(item.name())) || isPager(item.name())) {
+                continue;
+            }
+            tried++;
+            if (!inContainer() || !screenTitle().equals(title)) {
+                if (!replay(path, title)) {
+                    crawlFindings.add("could not get back to '" + title + "' to try '" + item.name() + "'");
+                    return;
+                }
+            }
+            crawlClicks++;
+            ctx.runOnClient(client -> {
+                AbstractContainerMenu menu = ((AbstractContainerScreen<?>) client.gui.screen()).getMenu();
+                client.gameMode.handleContainerInput(menu.containerId, item.slot(), 0, ContainerInput.PICKUP, client.player);
+            });
+            ctx.waitTicks(6);
+            String after = waitForScreenChange(title, 24);
+            if (after.equals(title)) {
+                continue; // an action or a refresh, not a new screen
+            }
+            if (after.equals("<closed>")) {
+                closeAnyScreen();
+                continue;
+            }
+            crawlEdges.add("'" + title + "' --[" + item.name() + "]--> '" + after + "'");
+            // the way back
+            List<Item> there = items();
+            Item back = null;
+            for (Item candidate : there) {
+                if (isBack(candidate.name())) {
+                    back = candidate;
+                    break;
+                }
+            }
+            if (back == null) {
+                crawlFindings.add("'" + after + "' (opened from '" + title + "' via '" + item.name() + "') has no back button");
+            } else {
+                Item backItem = back;
+                ctx.runOnClient(client -> {
+                    AbstractContainerMenu menu = ((AbstractContainerScreen<?>) client.gui.screen()).getMenu();
+                    client.gameMode.handleContainerInput(menu.containerId, backItem.slot(), 0, ContainerInput.PICKUP, client.player);
+                });
+                ctx.waitTicks(6);
+                String where = waitForScreenChange(after, 40);
+                if (!where.equals(title)) {
+                    crawlFindings.add("Back on '" + after + "' (opened from '" + title + "' via '" + item.name() + "') goes to '" + where
+                            + "' instead of '" + title + "'");
+                }
+            }
+            if (depth + 1 < CRAWL_MAX_DEPTH && !crawlVisited.contains(after)) {
+                List<Integer> deeper = new ArrayList<>(path);
+                deeper.add(item.slot());
+                if (replay(deeper, after)) {
+                    crawl(deeper, after, depth + 1);
+                } else {
+                    crawlFindings.add("could not re-enter '" + after + "' from '" + title + "' via '" + item.name() + "' to look inside it");
+                }
             }
         }
     }

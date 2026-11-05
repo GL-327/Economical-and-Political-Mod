@@ -29,6 +29,7 @@ stops the server. Settings are read at startup.
 
 | Setting | Type | Default | Allowed | What it does |
 | --- | --- | --- | --- | --- |
+| `power.awakening.boss` | choice | `ender_dragon` | ender_dragon, wither, warden, none | The boss whose defeat awakens a player's technique. Until then the technique sleeps and cannot be used. Players near the boss when it dies are awakened. 'none' awakens everyone from the start. |
 | `power.barrier.blocks_fall_damage` | boolean | `true` | true or false | Whether the Barrier also blocks fall damage. |
 | `power.barrier.blocks_void_damage` | boolean | `false` | true or false | Whether the Barrier blocks void damage. Off: falling out of the world still kills, as nothing in the game can prevent it. |
 | `power.barrier.cooldown_ticks` | int | `300` | 0 to 72000 | Cooldown of the Barrier, in ticks. |
@@ -59,6 +60,8 @@ stops the server. Settings are read at startup.
 | `power.domain.min_separation` | double | `24.0` | 0.0 to 512.0 | A Domain cannot be cast if another one in the same dimension is this close or closer, in blocks (exactly this far is refused). |
 | `power.domain.radius` | double | `12.0` | 1.0 to 128.0 | Radius of a Domain around its caster, in blocks. |
 | `power.enabled` | boolean | `true` | true or false | Master switch for the power system. When off, no technique can be cast (the cast is refused with SYSTEM_DISABLED). |
+| `power.mastery.cooldown_per_rank` | double | `0.03` | 0.0 to 0.3 | Share of every cooldown taken off for every mastery rank above Novice (0.03 is 3 percent per rank). |
+| `power.mastery.damage_per_rank` | double | `0.05` | 0.0 to 1.0 | Extra technique damage for every mastery rank above Novice (0.05 is +5 percent per rank). |
 | `power.progression.shards_per_level` | int | `3` | 1 to 1000 | Arcane shards earned in total for each power level (level = 1 + shards earned / this, at most 50). School tree nodes need a level. Shards still only come from expedition rewards, so this changes how fast levels follow, not how many shards exist. |
 | `power.red.cooldown_ticks` | int | `100` | 0 to 72000 | Cooldown of Red, in ticks. |
 | `power.red.cost` | int | `20` | 0 to 10000 | Resource cost of Red, which pushes a target away from the caster. |
@@ -66,6 +69,12 @@ stops the server. Settings are read at startup.
 | `power.red.lift` | double | `0.4` | 0.0 to 5.0 | Upward speed Red adds to the target. |
 | `power.red.push_per_tick` | double | `1.4` | 0.0 to 5.0 | Horizontal speed given to the target away from the caster, in blocks per tick. |
 | `power.red.range` | double | `8.0` | 1.0 to 128.0 | How far away Red can pick its target, in blocks. |
+| `power.reroll.awakened_multiplier` | double | `2.0` | 1.0 to 100.0 | The price of a shard reroll is multiplied by this once the technique is awakened. |
+| `power.reroll.charge_boss` | choice | `wither` | wither, warden, ender_dragon, none | The boss that gives a free reroll charge to the players near it when it dies, up to the maximum below. 'none' turns this source off. |
+| `power.reroll.max_charges` | int | `3` | 0 to 100 | Most free reroll charges a player can hold. |
+| `power.reroll.shard_base` | int | `10` | 0 to 10000 | Arcane Shards a first random reroll costs (before the awakened multiplier). |
+| `power.reroll.shard_max` | int | `100` | 1 to 100000 | The price of a shard reroll never goes above this. |
+| `power.reroll.shard_step` | int | `5` | 0 to 10000 | How much more every earlier reroll adds to the price. |
 | `power.resource.base_max` | int | `100` | 1 to 100000 | Maximum of the cursed resource (the mana pool) for a player with no school tier, before bonuses from stats, vows and gear. |
 | `power.resource.death_keep_fraction` | double | `0.5` | 0.0 to 1.0 | Fraction of the current resource kept when the player dies (0.5 halves it). |
 | `power.resource.max_per_tier` | int | `25` | 0 to 10000 | How much the maximum grows for every school tier the player has reached (tier 0 to 4). |

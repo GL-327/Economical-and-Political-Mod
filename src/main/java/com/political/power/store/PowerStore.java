@@ -26,7 +26,13 @@ import org.slf4j.LoggerFactory;
  */
 public final class PowerStore {
 
-    public static final int SCHEMA_VERSION = 1;
+    /**
+     * Schema 2 added the innate technique (see PlayerPower). A version 1 file needs no rewriting: the new fields are
+     * optional, and a player without an innate technique is given one when they next join (grandfathering what they
+     * already had, see {@code PowerService.onJoin}). The step exists so the file is marked version 2 on the next save and
+     * the version 1 file is kept as {@code power.json.v1.bak}.
+     */
+    public static final int SCHEMA_VERSION = 2;
     private static final Logger LOGGER = LoggerFactory.getLogger(PowerStore.class);
 
     private static final String[] LEGACY_FILES = {"techniques.json", "magic_data.json", "magic_schools.json"};
@@ -45,6 +51,7 @@ public final class PowerStore {
         Path file = worldRoot.resolve("power.json");
         VersionedStore<PowerData> store = VersionedStore
                 .builder("power", file, SCHEMA_VERSION, PowerData.CODEC, PowerData::new)
+                .migration(1, root -> root)
                 .keepBackup()
                 .build();
         VersionedStore.Outcome outcome = store.load();

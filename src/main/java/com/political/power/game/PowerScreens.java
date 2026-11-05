@@ -1,18 +1,15 @@
 package com.political.power.game;
 
-import com.political.SchoolTree;
 import com.political.core.gui.Elements;
 import com.political.core.gui.Icon;
 import com.political.core.gui.Palette;
 import com.political.core.gui.Screen;
 import com.political.core.gui.UiSound;
 import com.political.core.text.Text;
-import com.political.magic.MagicSchool;
 import com.political.power.PowerSettings;
-import com.political.power.formula.Progression;
-import com.political.power.formula.SchoolPassives;
-import com.political.power.formula.Tiers;
-import com.political.power.formula.TreeAdvice;
+import com.political.power.formula.Innate;
+import com.political.power.formula.Mastery;
+import com.political.power.formula.Reroll;
 import com.political.power.formula.Vow;
 import com.political.power.formula.VowSet;
 import com.political.power.model.AbilityKind;
@@ -57,10 +54,6 @@ public final class PowerScreens {
         return String.valueOf(Math.round(fraction * 100.0));
     }
 
-    private static Component schoolName(MagicSchool school) {
-        return Text.plain(school.symbol + " " + school.displayName).withStyle(school.color);
-    }
-
     /** A list entry or tile with a name, lore under a blank line, an optional glow and an optional click. */
     private static GuiElement entry(Item icon, Component name, Palette color, boolean glow, Runnable onClick, Component prompt,
                                     List<Component> lore) {
@@ -88,41 +81,35 @@ public final class PowerScreens {
     public static void open(ServerPlayer player) {
         String uuid = uuid(player);
         PlayerPower p = PowerService.state(uuid);
-        MagicSchool school = PowerService.school(uuid);
-        int level = PowerService.level(uuid);
+        boolean awake = PowerService.awakened(uuid);
         int tier = PowerService.tier(uuid);
 
         Screen screen = Screen.chest(player, ROWS, Text.tr("political.power.gui.title")).frame(Screen.Edge.NORMAL)
                 .header(Items.ENCHANTED_BOOK, Text.tr("political.power.gui.title"),
-                        Text.tr("political.power.gui.level", level), Text.tr("political.power.gui.shards", p.shards));
+                        Text.tr(awake ? "political.power.gui.state.awake" : "political.power.gui.state.asleep"),
+                        Text.tr("political.power.gui.shards", p.shards));
 
         // Where to go
-        screen.set(19, school == null
-                ? Elements.tile(Items.ENCHANTING_TABLE, Text.tr("political.power.gui.school"), Palette.ACCENT,
-                        () -> openSchools(player), Text.tr("political.power.gui.school.none"))
-                : Elements.tile(Items.ENCHANTING_TABLE, Text.tr("political.power.gui.school"), Palette.ACCENT,
-                        () -> openTree(player),
-                        schoolName(school), Text.tr("political.power.gui.tier", tier, Tiers.MAX_TIER)));
-        screen.set(21, Elements.tile(Items.ENCHANTED_BOOK, Text.tr("political.power.gui.techniques"), Palette.ACCENT,
-                () -> openTechniques(player, 0), techniqueSummary(uuid, p)));
-        screen.set(23, Elements.tile(Items.BOOKSHELF, Text.tr("political.power.gui.tree"), Palette.ACCENT,
-                () -> {
-                    if (school == null) {
-                        openSchools(player);
-                    } else {
-                        openTree(player);
-                    }
-                }, Text.tr("political.power.gui.tree.about")));
-        screen.set(25, Elements.tile(Items.WRITABLE_BOOK, Text.tr("political.power.gui.vows"), Palette.ACCENT,
+        screen.set(20, yourTechniqueTile(player, uuid, p, awake));
+        screen.set(22, awake
+                ? Elements.info(Items.BEACON, Text.tr("political.power.gui.awakening"), Palette.GOOD, Text.tr("political.power.gui.awakening.done"))
+                : Elements.info(Items.DRAGON_EGG, Text.tr("political.power.gui.awakening"), Palette.WARN,
+                        Text.trNamed("political.power.awaken.how", PowerSettings.AWAKENING_BOSS.get()), Text.tr("political.power.gui.awakening.why")));
+        screen.set(24, Elements.tile(Items.AMETHYST_SHARD, Text.tr("political.power.gui.reroll"), Palette.ACCENT,
+                () -> openReroll(player), Text.tr("political.power.gui.reroll.about"),
+                Text.tr("political.power.gui.reroll.charges", p.rerollCharges)));
+        screen.set(28, Elements.info(Items.EXPERIENCE_BOTTLE, Text.tr("political.power.gui.mastery"), Palette.BODY, masteryLines(uuid, p, tier)));
+        screen.set(30, Elements.tile(Items.BOOKSHELF, Text.tr("political.power.gui.techniques"), Palette.ACCENT,
+                () -> openTechniques(player, 0), Text.tr("political.power.gui.techniques.about")));
+        screen.set(32, Elements.tile(Items.WRITABLE_BOOK, Text.tr("political.power.gui.vows"), Palette.ACCENT,
                 () -> openVows(player), Text.tr("political.power.gui.vows.about"),
                 Text.tr("political.power.gui.vows.active", PowerService.vowsOf(uuid).active().size(), PowerSettings.VOW_MAX_ACTIVE.get())));
-
-        // Where you stand
-        screen.set(28, levelTile(p, level));
-        screen.set(31, Elements.progress(Items.LAPIS_LAZULI, Text.tr("political.power.gui.energy"), Palette.ACCENT,
-                energyFraction(uuid), Text.tr("political.power.gui.energy.amount", (int) PowerService.resource(uuid), (int) PowerService.maxResource(uuid))));
         screen.set(34, Elements.info(Items.PAPER, Text.tr("political.power.gui.cast"), Palette.WARN,
                 Text.tr("political.power.gui.cast.how"), Text.tr("political.power.gui.cast.what")));
+
+        // Where you stand
+        screen.set(40, Elements.progress(Items.LAPIS_LAZULI, Text.tr("political.power.gui.energy"), Palette.ACCENT,
+                energyFraction(uuid), Text.tr("political.power.gui.energy.amount", (int) PowerService.resource(uuid), (int) PowerService.maxResource(uuid))));
 
         screen.footer(null).open();
     }
@@ -132,29 +119,79 @@ public final class PowerScreens {
         return max <= 0 ? 0.0 : Math.max(0.0, Math.min(1.0, PowerService.resource(uuid) / max));
     }
 
-    private static Component[] techniqueSummary(String uuid, PlayerPower p) {
-        if (p.equipped == null) {
-            return new Component[]{Text.tr("political.power.gui.techniques.none")};
+    private static GuiElement yourTechniqueTile(ServerPlayer player, String uuid, PlayerPower p, boolean awake) {
+        if (p.innate == null) {
+            return Elements.info(Items.BOOK, Text.tr("political.power.gui.yours"), Palette.FAINT, Text.tr("political.power.gui.yours.none"));
         }
-        AbilitySpec selected = PowerService.selected(uuid);
+        Component name = PowerService.techniqueName(p.innate);
         List<Component> lines = new ArrayList<>();
-        lines.add(Text.tr("political.power.gui.techniques.equipped", PowerService.techniqueName(p.equipped)));
-        if (selected != null) {
+        lines.add(name);
+        lines.add(Text.tr(awake ? "political.power.gui.state.awake" : "political.power.gui.state.asleep"));
+        AbilitySpec selected = PowerService.selected(uuid);
+        if (selected != null && p.innate.equals(p.equipped)) {
             lines.add(Text.tr("political.power.gui.techniques.selected", abilityName(selected)));
         }
+        if (awake) {
+            return Elements.tile(Items.ENCHANTED_BOOK, Text.tr("political.power.gui.yours"), Palette.TITLE, () -> openAbilities(player),
+                    lines.toArray(new Component[0]));
+        }
+        return Elements.info(Items.ENCHANTED_BOOK, Text.tr("political.power.gui.yours"), Palette.TITLE, lines.toArray(new Component[0]));
+    }
+
+    private static Component[] masteryLines(String uuid, PlayerPower p, int tier) {
+        List<Component> lines = new ArrayList<>();
+        if (p.innate == null || tier == 0) {
+            lines.add(Text.tr("political.power.gui.mastery.asleep"));
+            return lines.toArray(new Component[0]);
+        }
+        int uses = p.uses.getOrDefault(p.innate, 0);
+        lines.add(Text.plain(Mastery.rank(uses).display + "  (" + uses + ")"));
+        int next = Mastery.usesToNextRank(uses);
+        lines.add(next < 0 ? Text.tr("political.power.gui.mastery.max") : Text.tr("political.power.gui.mastery.next", next));
+        if (tier >= 2) {
+            lines.add(Text.tr("political.power.gui.mastery.bonus", percent(Mastery.damageBonus(tier)), percent(Mastery.cooldownReduction(tier))));
+        }
+        lines.add(Text.tr(Mastery.domainUnlocked(tier) ? "political.power.gui.mastery.domain.open" : "political.power.gui.mastery.domain.locked"));
         return lines.toArray(new Component[0]);
     }
 
-    private static GuiElement levelTile(PlayerPower p, int level) {
-        List<Component> lines = new ArrayList<>();
-        lines.add(Text.tr("political.power.gui.level.earned", p.shardsEarnedTotal));
-        lines.add(Text.tr("political.power.gui.shards", p.shards));
-        if (level < Progression.MAX_LEVEL) {
-            lines.add(Text.tr("political.power.gui.level.next", Progression.shardsForLevel(level + 1)));
-        } else {
-            lines.add(Text.tr("political.power.gui.level.max"));
-        }
-        return Elements.info(Items.EXPERIENCE_BOTTLE, Text.tr("political.power.gui.level", level), Palette.BODY, lines.toArray(new Component[0]));
+    // ── reroll ──────────────────────────────────────────────────────────────────────────────
+
+    public static void openReroll(ServerPlayer player) {
+        String uuid = uuid(player);
+        PlayerPower p = PowerService.state(uuid);
+        int cost = PowerService.rerollShardCost(uuid);
+        Screen screen = Screen.chest(player, ROWS, Text.tr("political.power.gui.reroll")).frame(Screen.Edge.DANGER)
+                .header(Items.AMETHYST_SHARD, Text.tr("political.power.gui.reroll"), Text.tr("political.power.gui.reroll.warning"));
+
+        boolean canPay = p.shards >= cost;
+        screen.set(20, entry(Items.AMETHYST_SHARD, Text.tr("political.power.gui.reroll.shards"), canPay ? Palette.TITLE : Palette.FAINT, false,
+                canPay ? () -> confirmReroll(player, false) : null, Text.tr("political.power.gui.reroll.click"),
+                List.of(Text.tr("political.power.gui.reroll.cost", cost), Text.tr("political.power.gui.reroll.have", p.shards),
+                        Text.tr("political.power.gui.reroll.random"))));
+        boolean hasCharge = p.rerollCharges > 0;
+        screen.set(22, entry(Items.NETHER_STAR, Text.tr("political.power.gui.reroll.charge"), hasCharge ? Palette.TITLE : Palette.FAINT, false,
+                hasCharge ? () -> confirmReroll(player, true) : null, Text.tr("political.power.gui.reroll.click"),
+                List.of(Text.tr("political.power.gui.reroll.charges", p.rerollCharges),
+                        Text.trNamed("political.power.reroll.earn", PowerSettings.REROLL_CHARGE_BOSS.get()),
+                        Text.tr("political.power.gui.reroll.random"))));
+        screen.set(24, Elements.info(Items.WRITTEN_BOOK, Text.tr("political.power.gui.reroll.manual"), Palette.BODY,
+                Text.tr("political.power.gui.reroll.manual.how"), Text.tr("political.power.gui.reroll.manual.what")));
+        screen.footer(() -> open(player)).open();
+    }
+
+    private static void confirmReroll(ServerPlayer player, boolean withCharge) {
+        Screen.confirm(player, Text.tr("political.power.gui.reroll.confirm"), Text.tr("political.power.gui.reroll.consequence"),
+                () -> {
+                    PowerService.RerollResult result = withCharge ? PowerService.rerollWithCharge(player) : PowerService.rerollWithShards(player);
+                    if (result != PowerService.RerollResult.OK) {
+                        String keep = PowerService.state(uuid(player)).innate;
+                        player.sendSystemMessage(Text.trNamed("political.power.reroll.result", result.name(),
+                                keep == null ? Text.plain("-") : PowerService.techniqueName(keep)), false);
+                    }
+                    (result == PowerService.RerollResult.OK ? UiSound.SUCCESS : UiSound.DENIED).play(player);
+                    open(player);
+                }, () -> openReroll(player));
     }
 
     // ── techniques and abilities ────────────────────────────────────────────────────────────
@@ -167,7 +204,7 @@ public final class PowerScreens {
             entries.add(techniqueEntry(player, uuid, p, def, page));
         }
         Screen.chest(player, ROWS, Text.tr("political.power.gui.techniques")).frame(Screen.Edge.NORMAL)
-                .header(Items.ENCHANTED_BOOK, Text.tr("political.power.gui.techniques"), Text.tr("political.power.gui.techniques.about"))
+                .header(Items.ENCHANTED_BOOK, Text.tr("political.power.gui.techniques"), Text.tr("political.power.gui.techniques.list"))
                 .list(entries, page, next -> openTechniques(player, next))
                 .footer(() -> open(player))
                 .open();
@@ -212,14 +249,9 @@ public final class PowerScreens {
         }, Text.tr("political.power.gui.techniques.click.equip"), lore);
     }
 
-    /** Where a technique the player does not hold comes from. */
+    /** Why a technique the player does not hold is not theirs. */
     private static Component whereFrom(PowerCatalog.TechniqueDef def) {
-        if (def.schoolId() == null) {
-            return Text.tr("political.power.gui.from.capstone");
-        }
-        MagicSchool school = MagicSchool.byName(def.schoolId());
-        Component from = Text.tr("political.power.gui.from.school", school == null ? Text.plain(def.schoolId()) : schoolName(school), def.unlockNode());
-        return def.legacy() ? Text.tr("political.power.gui.from.school_or_manual", from) : from;
+        return Text.tr(PowerCatalog.DOMAIN.equals(def.id()) ? "political.power.gui.from.mastery" : "political.power.gui.from.roll");
     }
 
     private static Component abilityName(AbilitySpec spec) {
@@ -288,6 +320,10 @@ public final class PowerScreens {
         if (remaining > 0 && unlocked) {
             lore.add(Elements.lore(Text.tr("political.power.gui.abilities.ready_in", seconds(remaining)), Palette.WARN));
         }
+        if (!unlocked && !PowerService.awakened(uuid)) {
+            lore.add(Elements.lore(Text.tr("political.power.gui.abilities.asleep"), Palette.BAD));
+            return entry(Icon.OFF.item(), name, Palette.FAINT, false, null, null, lore);
+        }
         if (!unlocked) {
             Technique.MasteryRank needed = Technique.MasteryRank.values()[Math.min(PowerCatalog.rankIndexOf(spec), Technique.MasteryRank.values().length - 1)];
             lore.add(Elements.lore(Text.tr("political.power.gui.abilities.locked", needed.display), Palette.BAD));
@@ -301,145 +337,6 @@ public final class PowerScreens {
             (PowerService.selectAbility(uuid, spec.id()) ? UiSound.SUCCESS : UiSound.DENIED).play(player);
             openAbilities(player);
         }, Text.tr("political.power.gui.abilities.click"), lore);
-    }
-
-    // ── school ──────────────────────────────────────────────────────────────────────────────
-
-    public static void openSchools(ServerPlayer player) {
-        String uuid = uuid(player);
-        MagicSchool chosen = PowerService.school(uuid);
-        if (chosen != null) {
-            openTree(player);
-            return;
-        }
-        List<GuiElement> entries = new ArrayList<>();
-        for (MagicSchool school : MagicSchool.values()) {
-            entries.add(schoolEntry(player, school));
-        }
-        Screen.chest(player, ROWS, Text.tr("political.power.gui.school")).frame(Screen.Edge.INFO)
-                .header(Items.ENCHANTING_TABLE, Text.tr("political.power.gui.school"), Text.tr("political.power.gui.school.choose"))
-                .list(entries, 0, page -> openSchools(player))
-                .footer(() -> open(player))
-                .open();
-    }
-
-    private static GuiElement schoolEntry(ServerPlayer player, MagicSchool school) {
-        List<Component> lore = new ArrayList<>();
-        lore.add(Text.plain(school.description));
-        lore.add(Component.empty());
-        boolean selectable = PowerCatalog.selectableSchools().contains(school.name());
-        List<PowerCatalog.TechniqueDef> grants = PowerCatalog.techniquesOf(school.name());
-        for (PowerCatalog.TechniqueDef def : grants) {
-            lore.add(Elements.lore(Text.tr("political.power.gui.school.grants", PowerService.techniqueName(def.id()), def.unlockNode()), Palette.BODY));
-        }
-        lore.add(Elements.lore(Text.tr("political.power.gui.school.grants", Text.tr("political.power.technique.domain"), Tiers.CAPSTONE_NODE), Palette.BODY));
-        if (!selectable) {
-            lore.add(Component.empty());
-            lore.add(Elements.lore(Text.tr("political.power.gui.school.dormant"), Palette.BAD));
-            return entry(Icon.OFF.item(), schoolName(school), Palette.FAINT, false, null, null, lore);
-        }
-        return entry(Items.ENCHANTING_TABLE, schoolName(school), Palette.TITLE, false, () -> Screen.confirm(player,
-                Text.tr("political.power.gui.school.confirm", schoolName(school)), Text.tr("political.power.gui.school.consequence"),
-                () -> {
-                    PowerService.SchoolResult result = PowerService.chooseSchool(player, school);
-                    player.sendSystemMessage(Text.trNamed("political.power.school.result", result.name(), schoolName(school)), false);
-                    (result == PowerService.SchoolResult.OK ? UiSound.SUCCESS : UiSound.DENIED).play(player);
-                    open(player);
-                }, () -> openSchools(player)), Text.tr("political.power.gui.school.click"), lore);
-    }
-
-    // ── tree ────────────────────────────────────────────────────────────────────────────────
-
-    public static void openTree(ServerPlayer player) {
-        String uuid = uuid(player);
-        MagicSchool school = PowerService.school(uuid);
-        if (school == null) {
-            openSchools(player);
-            return;
-        }
-        PlayerPower p = PowerService.state(uuid);
-        int level = PowerService.level(uuid);
-        int tier = PowerService.tier(uuid);
-        TreeAdvice.NextStep next = TreeAdvice.nextSpine(school, p.unlockedNodes, level, p.shards);
-
-        List<GuiElement> entries = new ArrayList<>();
-        for (SchoolTree.SchoolNode node : SchoolTree.nodesFor(school)) {
-            entries.add(nodeEntry(player, node, p, level));
-        }
-        Component nextLine = next == null
-                ? Text.tr("political.power.gui.tree.complete")
-                : Text.tr("political.power.gui.tree.next", Text.plain(next.node().name()), next.node().shardCost());
-        Screen screen = Screen.chest(player, ROWS, Text.tr("political.power.gui.tree")).frame(Screen.Edge.INFO)
-                .header(Items.BOOKSHELF, schoolName(school), Text.tr("political.power.gui.tier", tier, Tiers.MAX_TIER), nextLine)
-                .list(entries, 0, page -> openTree(player))
-                .footer(() -> open(player));
-        screen.set(29, Elements.info(Items.EXPERIENCE_BOTTLE, Text.tr("political.power.gui.tree.you"), Palette.BODY,
-                Text.tr("political.power.gui.level", level), Text.tr("political.power.gui.shards", p.shards)));
-        screen.set(31, nextStepTile(next, p.shards, level));
-        screen.set(33, Elements.info(Items.NETHER_STAR, Text.tr("political.power.gui.tree.bonus"), Palette.BODY,
-                Text.tr("political.power.gui.tree.bonus.damage", percent(SchoolPassives.damageBonus(school, p.unlockedNodes))),
-                Text.tr("political.power.gui.tree.bonus.energy", SchoolPassives.resourceBonus(school, p.unlockedNodes)),
-                Text.tr("political.power.gui.tree.bonus.cooldown", percent(SchoolPassives.cooldownReduction(school, p.unlockedNodes)))));
-        screen.open();
-    }
-
-    private static GuiElement nextStepTile(TreeAdvice.NextStep next, int shards, int level) {
-        if (next == null) {
-            return Elements.info(Items.NETHER_STAR, Text.tr("political.power.gui.tree.next.title"), Palette.GOOD, Text.tr("political.power.gui.tree.complete"));
-        }
-        List<Component> lines = new ArrayList<>();
-        lines.add(Text.plain(next.node().name()));
-        lines.add(Text.tr("political.power.gui.tree.cost", next.node().shardCost(), next.node().levelRequired()));
-        lines.add(Text.tr("political.power.gui.tier.after", next.tierAfter(), Tiers.MAX_TIER));
-        for (String id : next.unlocks()) {
-            lines.add(Text.tr("political.power.gui.tree.grants", PowerService.techniqueName(id)));
-        }
-        lines.add(statusLine(next.status(), next.shardsMissing(), next.levelsMissing(), next.node(), level));
-        return Elements.info(Items.COMPASS, Text.tr("political.power.gui.tree.next.title"), Palette.WARN, lines.toArray(new Component[0]));
-    }
-
-    private static Component statusLine(TreeAdvice.Status status, int shardsMissing, int levelsMissing, SchoolTree.SchoolNode node, int level) {
-        return switch (status) {
-            case UNLOCKED -> Text.tr("political.power.gui.tree.status.unlocked");
-            case READY -> Text.tr("political.power.gui.tree.status.ready");
-            case NEEDS_SHARDS -> Text.tr("political.power.gui.tree.status.needs_shards", shardsMissing);
-            case NEEDS_LEVEL -> Text.tr("political.power.gui.tree.status.needs_level", node.levelRequired(), level);
-            case PARENT_LOCKED -> Text.tr("political.power.gui.tree.status.parent_locked");
-        };
-    }
-
-    private static GuiElement nodeEntry(ServerPlayer player, SchoolTree.SchoolNode node, PlayerPower p, int level) {
-        TreeAdvice.Status status = TreeAdvice.status(node, p.unlockedNodes, level, p.shards);
-        int spine = TreeAdvice.spineNumber(node);
-        List<Component> lore = new ArrayList<>();
-        lore.add(Text.plain(node.description()));
-        lore.add(Component.empty());
-        lore.add(Elements.lore(Text.tr("political.power.gui.tree.cost", node.shardCost(), node.levelRequired()), Palette.BODY));
-        if (spine > 0) {
-            lore.add(Elements.lore(Text.tr("political.power.gui.tree.spine", spine, Tiers.tier(spine)), Palette.BODY));
-            for (String id : TreeAdvice.unlocksAt(node.school(), spine)) {
-                lore.add(Elements.lore(Text.tr("political.power.gui.tree.grants", PowerService.techniqueName(id)), Palette.GOOD));
-            }
-        } else {
-            lore.add(Elements.lore(Text.tr("political.power.gui.tree.side"), Palette.BODY));
-        }
-        lore.add(Elements.lore(statusLine(status, Math.max(0, node.shardCost() - p.shards), 0, node, level),
-                status == TreeAdvice.Status.UNLOCKED || status == TreeAdvice.Status.READY ? Palette.GOOD : Palette.BAD));
-        Component name = Text.plain(node.name());
-        return switch (status) {
-            case UNLOCKED -> entry(node.capstone() ? Items.NETHER_STAR : Icon.ON.item(), name, Palette.GOOD, true, null, null, lore);
-            case READY -> entry(node.capstone() ? Items.NETHER_STAR : Items.AMETHYST_SHARD, name, Palette.TITLE, false,
-                    () -> Screen.confirm(player, Text.tr("political.power.gui.tree.confirm", name),
-                            Text.tr("political.power.gui.tree.consequence", node.shardCost()),
-                            () -> {
-                                PowerService.NodeResult result = PowerService.unlockNode(player, node.id());
-                                player.sendSystemMessage(Text.trNamed("political.power.node.result", result.name(), name), false);
-                                (result == PowerService.NodeResult.OK ? UiSound.SUCCESS : UiSound.DENIED).play(player);
-                                openTree(player);
-                            }, () -> openTree(player)),
-                    Text.tr("political.power.gui.tree.click"), lore);
-            default -> entry(Icon.OFF.item(), name, Palette.FAINT, false, null, null, lore);
-        };
     }
 
     // ── vows ────────────────────────────────────────────────────────────────────────────────

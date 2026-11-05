@@ -10,7 +10,7 @@
 # build/run/clientGameTest/screenshots. The result lines start with CLIENTTEST in the log it prints at the end.
 set -u
 cd "$(dirname "$0")/.."
-PHASES="${1:-permission,setup,tree,grants,domain,combat,death,regression}"
+PHASES="${1:-permission,setup,technique,grants,domain,combat,death,regression}"
 WORK="$(mktemp -d)"
 CMDS="$WORK/commands.txt"
 SERVER_LOG="$WORK/server.log"

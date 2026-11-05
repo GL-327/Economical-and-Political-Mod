@@ -1,12 +1,12 @@
 package com.political.power.game;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.political.core.text.Text;
-import com.political.magic.MagicSchool;
 import com.political.power.model.PlayerPower;
 import com.political.power.model.PowerCatalog;
 import java.util.Locale;
@@ -31,15 +31,6 @@ public final class PowerCommands {
 
     private static final SuggestionProvider<CommandSourceStack> TECHNIQUES = (context, builder) -> SharedSuggestionProvider.suggest(
             PowerCatalog.techniques().stream().map(def -> def.id().toLowerCase(Locale.ROOT)), builder);
-
-    private static final SuggestionProvider<CommandSourceStack> SCHOOLS = (context, builder) -> {
-        java.util.List<String> names = new java.util.ArrayList<>();
-        names.add("none");
-        for (String id : PowerCatalog.selectableSchools()) {
-            names.add(id.toLowerCase(Locale.ROOT));
-        }
-        return SharedSuggestionProvider.suggest(names, builder);
-    };
 
     private PowerCommands() {
     }
@@ -69,11 +60,25 @@ public final class PowerCommands {
                                 .then(Commands.argument("technique", StringArgumentType.word())
                                         .suggests(TECHNIQUES)
                                         .executes(PowerCommands::revoke))))
-                .then(Commands.literal("school")
+                .then(Commands.literal("awaken")
                         .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("school", StringArgumentType.word())
-                                        .suggests(SCHOOLS)
-                                        .executes(PowerCommands::school))))
+                                .executes(PowerCommands::awaken)))
+                .then(Commands.literal("sleep")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(PowerCommands::sleep)))
+                .then(Commands.literal("reroll")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(PowerCommands::reroll)
+                                .then(Commands.argument("technique", StringArgumentType.word())
+                                        .suggests(TECHNIQUES)
+                                        .executes(PowerCommands::rerollTo))))
+                .then(Commands.literal("mastery")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .then(Commands.argument("casts", IntegerArgumentType.integer(0, 100_000))
+                                        .executes(PowerCommands::mastery))))
+                .then(Commands.literal("charge")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(PowerCommands::charge)))
                 .then(Commands.literal("reset")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .then(Commands.literal("confirm")
@@ -100,10 +105,11 @@ public final class PowerCommands {
         ServerPlayer target = EntityArgument.getPlayer(context, "player");
         String uuid = target.getUUID().toString();
         PlayerPower p = PowerService.state(uuid);
-        MagicSchool school = PowerService.school(uuid);
+        String innate = p.innate;
         reply(context, Text.tr("political.power.admin.info.head", Text.plain(target.getName().getString()),
-                school == null ? Text.tr("political.power.admin.no_school") : Text.plain(school.displayName),
-                PowerService.tier(uuid), PowerService.level(uuid), p.shards));
+                innate == null ? Text.plain("-") : PowerService.techniqueName(innate),
+                Text.tr(PowerService.awakened(uuid) ? "political.power.gui.state.awake" : "political.power.gui.state.asleep"),
+                PowerService.tier(uuid), p.shards));
         for (PowerCatalog.TechniqueDef def : PowerService.heldTechniques(uuid)) {
             reply(context, Text.plain("  ").append(PowerService.techniqueName(def.id()))
                     .append(Text.tr(p.learned.contains(def.id()) ? "political.power.admin.info.learned" : "political.power.admin.info.tree")));
@@ -139,20 +145,52 @@ public final class PowerCommands {
         return had ? 1 : 0;
     }
 
-    private static int school(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int awaken(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer target = EntityArgument.getPlayer(context, "player");
-        String name = StringArgumentType.getString(context, "school");
-        MagicSchool school = null;
-        if (!"none".equalsIgnoreCase(name)) {
-            school = MagicSchool.byName(name);
-            if (school == null || !PowerCatalog.selectableSchools().contains(school.name())) {
-                return refuse(context, Text.tr("political.power.admin.unknown_school"));
-            }
+        boolean changed = PowerService.awaken(target);
+        LOGGER.info("{} awakened {} by command: {}", context.getSource().getTextName(), target.getName().getString(), changed);
+        return reply(context, Text.tr(changed ? "political.power.admin.awaken.done" : "political.power.admin.awaken.already"));
+    }
+
+    private static int sleep(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(context, "player");
+        PowerService.sleep(target.getUUID().toString());
+        LOGGER.info("{} put the technique of {} to sleep by command", context.getSource().getTextName(), target.getName().getString());
+        return reply(context, Text.tr("political.power.admin.sleep.done"));
+    }
+
+    private static int reroll(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(context, "player");
+        PowerService.RerollResult result = PowerService.rerollFree(target);
+        LOGGER.info("{} rerolled {} by command: {}", context.getSource().getTextName(), target.getName().getString(), result);
+        String innate = PowerService.state(target.getUUID().toString()).innate;
+        return reply(context, Text.trNamed("political.power.reroll.result", result.name(), innate == null ? Text.plain("-") : PowerService.techniqueName(innate)));
+    }
+
+    private static int rerollTo(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(context, "player");
+        String id = techniqueId(context);
+        if (id == null) {
+            return refuse(context, Text.tr("political.power.admin.unknown_technique"));
         }
-        PowerService.setSchool(target, school);
-        LOGGER.info("{} set the school of {} to {} by command", context.getSource().getTextName(), target.getName().getString(), school);
-        return reply(context, Text.tr("political.power.admin.school.done",
-                school == null ? Text.tr("political.power.admin.no_school") : Text.plain(school.displayName)));
+        PowerService.RerollResult result = PowerService.rerollTo(target, id);
+        LOGGER.info("{} set the technique of {} to {} by command: {}", context.getSource().getTextName(), target.getName().getString(), id, result);
+        return reply(context, Text.trNamed("political.power.reroll.result", result.name(), PowerService.techniqueName(id)));
+    }
+
+    private static int mastery(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(context, "player");
+        int casts = IntegerArgumentType.getInteger(context, "casts");
+        PowerService.setUses(target.getUUID().toString(), casts);
+        LOGGER.info("{} set the casts of {} to {} by command", context.getSource().getTextName(), target.getName().getString(), casts);
+        return reply(context, Text.tr("political.power.admin.mastery.done", casts));
+    }
+
+    private static int charge(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(context, "player");
+        PowerService.grantRerollCharge(target);
+        LOGGER.info("{} gave a reroll charge to {} by command", context.getSource().getTextName(), target.getName().getString());
+        return reply(context, Text.tr("political.power.admin.charge.done"));
     }
 
     private static int reset(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

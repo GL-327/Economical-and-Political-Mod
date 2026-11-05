@@ -6,7 +6,6 @@ import com.political.core.gui.Icon;
 import com.political.core.gui.Palette;
 import com.political.core.gui.Screen;
 import com.political.core.text.Text;
-import com.political.magic.MagicSchool;
 import com.political.power.model.PlayerPower;
 import com.political.power.model.PowerCatalog;
 import eu.pb4.sgui.api.elements.GuiElement;
@@ -23,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The administrator's screens for the power system: who has what, grant and revoke a technique, set a school, and
+ * The administrator's screens for the power system: who has what, grant and revoke a technique, awaken, reroll, and
  * reset a player. Every screen and every click checks {@link PowerPermissions#isAdmin} again, because a screen can
  * stay open after the permission is taken away. Every change is logged with the administrator's name.
  */
@@ -67,9 +66,10 @@ public final class PowerAdminScreens {
         return b.build();
     }
 
-    private static Component schoolName(MagicSchool school) {
-        return school == null ? Text.tr("political.power.admin.no_school")
-                : Text.plain(school.symbol + " " + school.displayName).withStyle(school.color);
+    /** The innate technique of a player, or a dash. */
+    private static Component innateName(String uuid) {
+        String id = PowerService.state(uuid).innate;
+        return id == null ? Text.plain("-") : PowerService.techniqueName(id);
     }
 
     // ── players ─────────────────────────────────────────────────────────────────────────────
@@ -83,8 +83,8 @@ public final class PowerAdminScreens {
             String uuid = target.getUUID().toString();
             PlayerPower p = PowerService.state(uuid);
             List<Component> lore = new ArrayList<>();
-            lore.add(Text.tr("political.power.admin.school", schoolName(PowerService.school(uuid))));
-            lore.add(Text.tr("political.power.gui.level", PowerService.level(uuid)));
+            lore.add(Text.tr("political.power.admin.innate", innateName(uuid)));
+            lore.add(Text.tr(PowerService.awakened(uuid) ? "political.power.gui.state.awake" : "political.power.gui.state.asleep"));
             lore.add(Text.tr("political.power.gui.shards", p.shards));
             lore.add(p.equipped == null ? Text.tr("political.power.gui.techniques.none")
                     : Text.tr("political.power.gui.techniques.equipped", PowerService.techniqueName(p.equipped)));
@@ -141,9 +141,10 @@ public final class PowerAdminScreens {
             held.add(Text.tr("political.power.gui.techniques.none"));
         }
         List<Component> info = new ArrayList<>();
-        info.add(Text.tr("political.power.admin.school", schoolName(PowerService.school(uuid))));
+        info.add(Text.tr("political.power.admin.innate", innateName(uuid)));
+        info.add(Text.tr(PowerService.awakened(uuid) ? "political.power.gui.state.awake" : "political.power.gui.state.asleep"));
         info.add(Text.tr("political.power.gui.tier", PowerService.tier(uuid), com.political.power.formula.Tiers.MAX_TIER));
-        info.add(Text.tr("political.power.gui.level", PowerService.level(uuid)));
+        info.add(Text.tr("political.power.admin.rerolls", p.rerolls, p.rerollCharges));
         info.add(Text.tr("political.power.gui.shards", p.shards));
         info.add(Text.tr("political.power.gui.energy.amount", (int) PowerService.resource(uuid), (int) PowerService.maxResource(uuid)));
         info.addAll(held);
@@ -156,8 +157,12 @@ public final class PowerAdminScreens {
                 () -> openGrant(admin, uuid, 0), Text.tr("political.power.admin.grant.about")));
         screen.set(24, Elements.tile(Items.BARRIER, Text.tr("political.power.admin.revoke"), Palette.BAD,
                 () -> openRevoke(admin, uuid), Text.tr("political.power.admin.revoke.about")));
-        screen.set(29, Elements.tile(Items.ENCHANTING_TABLE, Text.tr("political.power.admin.set_school"), Palette.WARN,
-                () -> openSchools(admin, uuid), Text.tr("political.power.admin.set_school.about")));
+        screen.set(29, Elements.tile(Items.BEACON, Text.tr("political.power.admin.awaken"), Palette.WARN,
+                () -> awaken(admin, uuid), Text.tr("political.power.admin.awaken.about")));
+        screen.set(38, Elements.tile(Items.EXPERIENCE_BOTTLE, Text.tr("political.power.admin.mastery"), Palette.WARN,
+                () -> master(admin, uuid), Text.tr("political.power.admin.mastery.about")));
+        screen.set(31, Elements.tile(Items.AMETHYST_SHARD, Text.tr("political.power.admin.reroll"), Palette.WARN,
+                () -> confirmReroll(admin, uuid), Text.tr("political.power.admin.reroll.about")));
         screen.set(33, Elements.tile(Items.TNT, Text.tr("political.power.admin.reset"), Palette.BAD,
                 () -> confirmReset(admin, uuid), Text.tr("political.power.admin.reset.about")));
         screen.open();
@@ -235,43 +240,43 @@ public final class PowerAdminScreens {
         openPlayer(admin, uuid);
     }
 
-    static void openSchools(ServerPlayer admin, String uuid) {
+    private static void awaken(ServerPlayer admin, String uuid) {
         if (!allowed(admin)) {
             return;
         }
-        List<GuiElement> entries = new ArrayList<>();
-        entries.add(entry(Items.BARRIER, Text.tr("political.power.admin.no_school"), Palette.BAD, false,
-                () -> confirmSchool(admin, uuid, null), Text.tr("political.power.admin.click.school"), List.of()));
-        for (MagicSchool school : MagicSchool.values()) {
-            boolean selectable = PowerCatalog.selectableSchools().contains(school.name());
-            entries.add(selectable
-                    ? entry(Items.ENCHANTING_TABLE, schoolName(school), Palette.TITLE, false,
-                            () -> confirmSchool(admin, uuid, school), Text.tr("political.power.admin.click.school"), List.of())
-                    : entry(Icon.OFF.item(), schoolName(school), Palette.FAINT, false, null, null,
-                            List.of(Text.tr("political.power.gui.school.dormant"))));
+        ServerPlayer target = online(uuid);
+        if (target != null) {
+            boolean changed = PowerService.awaken(target);
+            admin.sendSystemMessage(Text.tr(changed ? "political.power.admin.awaken.done" : "political.power.admin.awaken.already"), false);
+            LOGGER.info("{} awakened {}: {}", admin.getName().getString(), target.getName().getString(), changed);
         }
-        Screen.chest(admin, ROWS, Text.tr("political.power.admin.set_school")).frame(Screen.Edge.DANGER)
-                .header(Items.ENCHANTING_TABLE, Text.tr("political.power.admin.set_school"), Text.tr("political.power.admin.set_school.about"))
-                .list(entries, 0, next -> openSchools(admin, uuid))
-                .footer(() -> openPlayer(admin, uuid))
-                .open();
+        openPlayer(admin, uuid);
     }
 
-    private static void confirmSchool(ServerPlayer admin, String uuid, MagicSchool school) {
-        Screen.confirm(admin, Text.tr("political.power.admin.school.confirm", schoolName(school)),
-                Text.tr("political.power.admin.school.consequence"),
+    private static void master(ServerPlayer admin, String uuid) {
+        if (!allowed(admin)) {
+            return;
+        }
+        PowerService.setUses(uuid, 100);
+        admin.sendSystemMessage(Text.tr("political.power.admin.mastery.done", 100), false);
+        LOGGER.info("{} set the casts of {} to 100", admin.getName().getString(), uuid);
+        openPlayer(admin, uuid);
+    }
+
+    private static void confirmReroll(ServerPlayer admin, String uuid) {
+        Screen.confirm(admin, Text.tr("political.power.admin.reroll.confirm"), Text.tr("political.power.admin.reroll.consequence"),
                 () -> {
                     if (!allowed(admin)) {
                         return;
                     }
                     ServerPlayer target = online(uuid);
                     if (target != null) {
-                        PowerService.setSchool(target, school);
-                        admin.sendSystemMessage(Text.tr("political.power.admin.school.done", schoolName(school)), false);
-                        LOGGER.info("{} set the school of {} to {}", admin.getName().getString(), target.getName().getString(), school);
+                        PowerService.RerollResult result = PowerService.rerollFree(target);
+                        admin.sendSystemMessage(Text.trNamed("political.power.reroll.result", result.name(), PowerService.techniqueName(PowerService.state(uuid).innate)), false);
+                        LOGGER.info("{} rerolled {} for free", admin.getName().getString(), target.getName().getString());
                     }
                     openPlayer(admin, uuid);
-                }, () -> openSchools(admin, uuid));
+                }, () -> openPlayer(admin, uuid));
     }
 
     private static void confirmReset(ServerPlayer admin, String uuid) {

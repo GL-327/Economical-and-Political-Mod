@@ -428,7 +428,7 @@ public final class PlayerStatsManager {
         StringBuilder bar = new StringBuilder();
         bar.append("§c❤ ").append(hp).append("/").append(maxHp);
         bar.append("   §a❈ ").append(defense).append(" Defense");
-        bar.append("   §b✎ ").append(mana).append("/").append(maxMana).append(" Mana");
+        bar.append("   §b✎ ").append(mana).append("/").append(maxMana).append(" Energy");
         player.sendSystemMessage(Component.literal(bar.toString()), true);
     }
 

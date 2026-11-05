@@ -4,10 +4,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.political.core.Clock;
-import com.political.magic.MagicSchool;
 import com.political.power.PowerSettings;
 import com.political.power.cast.CastDecision;
 import com.political.power.cast.CastPipeline;
+import com.political.power.formula.Innate;
+import com.political.power.formula.Reroll;
 import com.political.power.formula.Tiers;
 import com.political.power.formula.Vow;
 import com.political.power.formula.VowSet;
@@ -181,24 +182,23 @@ public final class PowerSmoke {
         if (write) {
             PowerService.reset(uuid);
             PowerService.onJoin(fake);
+            check("a technique was drawn at join", PowerService.state(uuid).innate != null);
+            check("awaken", PowerService.awaken(fake));
+            check("choose Blue (a manual)", PowerService.rerollTo(fake, PowerCatalog.BLUE) == PowerService.RerollResult.OK);
+            PowerService.state(uuid).uses.put(PowerCatalog.BLUE, 20);
             PowerService.addShards(fake, 60);
-            check("choose Radiance", PowerService.chooseSchool(fake, MagicSchool.RADIANCE) == PowerService.SchoolResult.OK);
-            for (int i = 1; i <= 4; i++) {
-                check("unlock rad" + i, PowerService.unlockNode(fake, "rad" + i) == PowerService.NodeResult.OK);
-            }
-            check("learn Blue", PowerService.learn(fake, PowerCatalog.BLUE) == PowerService.LearnResult.OK);
-            check("equip Blue", PowerService.equip(fake, PowerCatalog.BLUE));
+            PowerService.grantRerollCharge(fake);
             check("take a vow", PowerService.acceptVow(fake, Vow.NO_SPRINT) == VowSet.AcceptResult.ACCEPTED);
             PowerService.setResource(uuid, 33.0);
-            LOGGER.info("Power smoke: state written for {} (school RADIANCE, nodes rad1 to rad4, Blue equipped, vow no_sprint, resource 33)", uuid);
+            LOGGER.info("Power smoke: state written for {} (Blue, awakened, 20 uses, 60 shards, 1 charge, vow no_sprint, resource 33)", uuid);
             return;
         }
-        check("the school came back", PowerService.school(uuid) == MagicSchool.RADIANCE);
-        check("tier 2 came back (node 4)", PowerService.tier(uuid) == 2);
-        check("the four nodes came back", PowerService.state(uuid).unlockedNodes.containsAll(List.of("rad1", "rad2", "rad3", "rad4")));
-        check("the shards left came back", PowerService.state(uuid).shards == 60 - (4 + 6 + 8 + 10));
-        check("the shards earned came back", PowerService.state(uuid).shardsEarnedTotal == 60);
-        check("Blue is learned and equipped", PowerService.holds(uuid, PowerCatalog.BLUE) && PowerCatalog.BLUE.equals(PowerService.state(uuid).equipped));
+        check("the innate technique came back", PowerCatalog.BLUE.equals(PowerService.state(uuid).innate));
+        check("it is still awake", PowerService.awakened(uuid));
+        check("tier 2 came back (20 uses is Adept)", PowerService.tier(uuid) == 2);
+        check("the shards came back", PowerService.state(uuid).shards == 60 && PowerService.state(uuid).shardsEarnedTotal == 60);
+        check("the reroll charge came back", PowerService.state(uuid).rerollCharges == 1 && PowerService.state(uuid).rerolls == 1);
+        check("Blue is equipped", PowerCatalog.BLUE.equals(PowerService.state(uuid).equipped));
         check("the resource came back", PowerService.resource(uuid) == 33.0);
         PowerService.onJoin(fake);
         check("the vow is active again after joining", PowerService.vowsOf(uuid).isActive(Vow.NO_SPRINT));
@@ -264,7 +264,9 @@ public final class PowerSmoke {
         int quarantineBefore = PowerService.quarantineSize();
         PowerService.reset(uuid);
         check("reset keeps a copy", PowerService.quarantineSize() == quarantineBefore + 1);
-        check("reset leaves no school", PowerService.school(uuid) == null);
+        check("reset leaves no technique until the next join", PowerService.state(uuid).innate == null);
+        PowerService.onJoin(fake);
+        check("a new one is drawn at the next join", PowerService.state(uuid).innate != null);
         screens(fake);
 
         PowerService.onLogout(fake);
@@ -273,24 +275,51 @@ public final class PowerSmoke {
         PowerService.reset(otherUuid);
     }
 
-    /** Script item 1 as far as a server goes: shards, school, the whole spine, and what the tree grants. */
+    /** Script item 1 as far as a server goes: the technique rolled at join, awakening, mastery, rerolls. */
     private void progression(FakePlayer fake, String uuid) {
-        PowerService.addShards(fake, 200);
-        check("level 50 from 200 shards", PowerService.level(uuid) == 50);
-        check("choose Radiance", PowerService.chooseSchool(fake, MagicSchool.RADIANCE) == PowerService.SchoolResult.OK);
-        check("a second choice is refused", PowerService.chooseSchool(fake, MagicSchool.PYROMANCY) == PowerService.SchoolResult.ALREADY_CHOSEN);
-        check("a dormant school is refused", PowerService.chooseSchool(fake, MagicSchool.CHRONOMANCY) != PowerService.SchoolResult.OK);
-        check("node 2 before node 1 is refused", PowerService.unlockNode(fake, "rad2") == PowerService.NodeResult.PARENT_LOCKED);
-        for (int i = 1; i <= 10; i++) {
-            PowerService.NodeResult r = PowerService.unlockNode(fake, "rad" + i);
-            check("unlock rad" + i + " (" + r + ")", r == PowerService.NodeResult.OK);
-        }
-        check("tier 4 after the capstone", PowerService.tier(uuid) == Tiers.MAX_TIER);
-        check("holds Reverse", PowerService.holds(uuid, PowerCatalog.REVERSE));
+        String first = PowerService.state(uuid).innate;
+        check("a technique was drawn at join (" + first + ")", first != null && Innate.pool().contains(first));
+        check("the drawn technique is equipped", first != null && first.equals(PowerService.state(uuid).equipped));
+        check("it sleeps at first", !PowerService.awakened(uuid) && PowerService.tier(uuid) == 0);
+        CastDecision asleep = decision(fake);
+        check("a sleeping technique cannot be cast (" + asleep + ")", asleep instanceof CastDecision.Rejected r && r.reason() == FailureReason.NOT_UNLOCKED);
+        check("awaken", PowerService.awaken(fake));
+        check("awakening twice does nothing", !PowerService.awaken(fake));
+        check("awake means tier 1", PowerService.tier(uuid) == 1);
+
+        // a technique chosen by a manual, then mastered
+        check("choose Barrier (a manual)", PowerService.rerollTo(fake, PowerCatalog.BARRIER) == PowerService.RerollResult.OK
+                || PowerCatalog.BARRIER.equals(first));
+        check("the same technique again is refused", PowerService.rerollTo(fake, PowerCatalog.BARRIER) == PowerService.RerollResult.SAME_TECHNIQUE);
+        check("mastery starts again", PowerService.tier(uuid) == 1);
+        check("Domain is locked below Master", !PowerService.holds(uuid, PowerCatalog.DOMAIN));
+        PowerService.state(uuid).uses.put(PowerCatalog.BARRIER, 100);
+        check("tier 4 at Master", PowerService.tier(uuid) == Tiers.MAX_TIER);
         check("holds Barrier", PowerService.holds(uuid, PowerCatalog.BARRIER));
-        check("holds Domain", PowerService.holds(uuid, PowerCatalog.DOMAIN));
+        check("Domain unlocks at Master", PowerService.holds(uuid, PowerCatalog.DOMAIN));
         check("does not hold Blue", !PowerService.holds(uuid, PowerCatalog.BLUE));
-        check("shards were spent", PowerService.state(uuid).shards == 200 - 138);
+
+        // rerolls: shards, then a charge
+        PowerService.state(uuid).shards = 0;
+        check("a shard reroll without shards is refused", PowerService.rerollWithShards(fake) == PowerService.RerollResult.NOT_ENOUGH_SHARDS);
+        PowerService.addShards(fake, 200);
+        int cost = PowerService.rerollShardCost(uuid);
+        check("the awakened price is " + cost, cost == Reroll.shardCost(PowerService.state(uuid).rerolls, true));
+        int shardsBefore = PowerService.state(uuid).shards;
+        check("a shard reroll works", PowerService.rerollWithShards(fake) == PowerService.RerollResult.OK);
+        check("it cost " + cost + " shards", PowerService.state(uuid).shards == shardsBefore - cost);
+        check("it gave a different technique", !PowerCatalog.BARRIER.equals(PowerService.state(uuid).innate));
+        check("mastery starts again after a reroll", PowerService.tier(uuid) == 1);
+        check("a reroll without a charge is refused", PowerService.rerollWithCharge(fake) == PowerService.RerollResult.NO_CHARGE);
+        PowerService.grantRerollCharge(fake);
+        check("a reroll with a charge works", PowerService.rerollWithCharge(fake) == PowerService.RerollResult.OK
+                && PowerService.state(uuid).rerollCharges == 0);
+        check("the reroll count is 3", PowerService.state(uuid).rerolls == 3);
+        // back to the technique the rest of the check uses, mastered
+        PowerService.rerollTo(fake, PowerCatalog.BARRIER);
+        PowerService.state(uuid).uses.put(PowerCatalog.BARRIER, 100);
+        check("tier 4 again", PowerService.tier(uuid) == Tiers.MAX_TIER);
+        PowerService.learn(fake, PowerCatalog.REVERSE);
     }
 
     private void barrierAndResource(FakePlayer fake, String uuid) {
@@ -450,6 +479,7 @@ public final class PowerSmoke {
         PowerService.learn(other, PowerCatalog.BLUE);
         PowerService.learn(other, PowerCatalog.BARRIER);
         PowerService.learn(other, PowerCatalog.DOMAIN);
+        PowerService.awaken(other);
 
         // item 10: with PvP off the first player cannot cast at the second; with PvP on the cast is valid. A fake
         // player is not in the world on its own, so it is added for the length of the check.
@@ -477,6 +507,30 @@ public final class PowerSmoke {
         double mine = PowerService.resource(uuid);
         PowerService.setResource(otherUuid, 1.0);
         check("the second player's pool is their own", PowerService.resource(otherUuid) == 1.0 && PowerService.resource(uuid) == mine);
+
+        // the bosses: the one that awakens and the one that gives a reroll charge, for players near it
+        PowerService.sleep(otherUuid);
+        check("a technique stays asleep until its boss falls", !PowerService.awakened(otherUuid));
+        Entity dragon = EntityTypes.ENDER_DRAGON.create(world, EntitySpawnReason.COMMAND);
+        if (dragon instanceof net.minecraft.world.entity.LivingEntity boss) {
+            boss.snapTo(x + 5.0, 300.0, z, 0.0f, 0.0f);
+            PowerService.onMobDeath(boss);
+            check("the Ender Dragon's death awakens a player near it", PowerService.awakened(otherUuid));
+        } else {
+            check("an Ender Dragon can be created", false);
+        }
+        int charges = PowerService.state(otherUuid).rerollCharges;
+        Entity wither = EntityTypes.WITHER.create(world, EntitySpawnReason.COMMAND);
+        if (wither instanceof net.minecraft.world.entity.LivingEntity boss) {
+            boss.snapTo(x + 5.0, 300.0, z, 0.0f, 0.0f);
+            PowerService.onMobDeath(boss);
+            check("the Wither's death gives a reroll charge", PowerService.state(otherUuid).rerollCharges == charges + 1);
+            boss.snapTo(x + 500.0, 300.0, z, 0.0f, 0.0f);
+            PowerService.onMobDeath(boss);
+            check("a boss far away gives nothing", PowerService.state(otherUuid).rerollCharges == charges + 1 + 1 - 1 || PowerService.state(otherUuid).rerollCharges == charges + 1);
+        } else {
+            check("a Wither can be created", false);
+        }
 
         // item 11: the Domain
         advance(PowerSettings.GLOBAL_COOLDOWN_TICKS.get() + 1L);
@@ -583,7 +637,8 @@ public final class PowerSmoke {
         CommandDispatcher<CommandSourceStack> dispatcher = server.getCommands().getDispatcher();
         CommandSourceStack console = server.createCommandSourceStack();
         String[] commands = {"poweradmin", "poweradmin info Bob", "poweradmin grant Bob BLUE", "poweradmin revoke Bob BLUE",
-                "poweradmin school Bob radiance", "poweradmin reset Bob confirm"};
+                "poweradmin awaken Bob", "poweradmin sleep Bob", "poweradmin reroll Bob", "poweradmin reroll Bob BLUE", "poweradmin charge Bob", "poweradmin mastery Bob 100",
+                "poweradmin reset Bob confirm"};
 
         adminGranted = false;
         CommandSourceStack plain = fake.createCommandSourceStack();
@@ -630,14 +685,12 @@ public final class PowerSmoke {
         run("hub of " + name, () -> PowerScreens.open(player));
         run("techniques of " + name, () -> PowerScreens.openTechniques(player, 0));
         run("abilities of " + name, () -> PowerScreens.openAbilities(player));
-        run("schools of " + name, () -> PowerScreens.openSchools(player));
-        run("tree of " + name, () -> PowerScreens.openTree(player));
+        run("reroll of " + name, () -> PowerScreens.openReroll(player));
         run("vows of " + name, () -> PowerScreens.openVows(player));
         run("admin list", () -> PowerAdminScreens.open(player, 0));
         run("admin player", () -> PowerAdminScreens.showPlayer(player, player));
         run("admin grant", () -> PowerAdminScreens.openGrant(player, id, 0));
         run("admin revoke", () -> PowerAdminScreens.openRevoke(player, id));
-        run("admin schools", () -> PowerAdminScreens.openSchools(player, id));
     }
 
     private void run(String screen, Runnable open) {

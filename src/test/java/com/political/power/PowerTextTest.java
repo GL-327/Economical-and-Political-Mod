@@ -65,14 +65,22 @@ class PowerTextTest {
         for (VowSet.AcceptResult r : VowSet.AcceptResult.values()) {
             has("political.power.vow.result." + lower(r));
         }
-        for (PowerService.NodeResult r : PowerService.NodeResult.values()) {
-            has("political.power.node.result." + lower(r));
-        }
-        for (PowerService.SchoolResult r : PowerService.SchoolResult.values()) {
-            has("political.power.school.result." + lower(r));
-        }
         for (PowerService.LearnResult r : PowerService.LearnResult.values()) {
             has("political.power.learn.result." + lower(r));
+        }
+        for (PowerService.RerollResult r : PowerService.RerollResult.values()) {
+            has("political.power.reroll.result." + lower(r));
+        }
+    }
+
+    @Test
+    void everyBossChoiceHasItsTexts() {
+        for (String boss : PowerSettings.AWAKENING_BOSS.choices()) {
+            has("political.power.awaken.how." + boss);
+            has("political.power.dormant." + boss);
+        }
+        for (String boss : PowerSettings.REROLL_CHARGE_BOSS.choices()) {
+            has("political.power.reroll.earn." + boss);
         }
     }
 
@@ -81,7 +89,8 @@ class PowerTextTest {
         // the screens always pass one argument, so every template must have a place for it
         for (String key : Text.keys()) {
             if (key.startsWith("political.power.node.result.") || key.startsWith("political.power.school.result.")
-                    || key.startsWith("political.power.vow.result.") || key.startsWith("political.power.learn.result.")) {
+                    || key.startsWith("political.power.vow.result.") || key.startsWith("political.power.learn.result.")
+                    || key.startsWith("political.power.reroll.result.")) {
                 assertEquals(1, Text.english(key).split("%s", -1).length - 1, key + " needs exactly one %s");
             }
         }
