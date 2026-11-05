@@ -22,6 +22,8 @@
   "political.gui.stepper.now": "Now: %s",
   "political.gui.stepper.right": "Right click: -%s",
   "political.gui.stepper.shift": "Hold shift for ten times as much",
+  "political.ledger.player": "%s has %s coins. Recent transactions:",
+  "political.ledger.title": "Coin ledger since the server started: %s recent transactions, %s refused debits. Net coins by reason:",
   "political.power.ability.about.barrier": "Blocks incoming damage for a moment. It does not stop the void.",
   "political.power.ability.about.blue": "Pulls the target toward you.",
   "political.power.ability.about.cursed_blast": "A ray of cursed energy that hurts the target.",

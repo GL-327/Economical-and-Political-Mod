@@ -1,5 +1,26 @@
 # Power system design (M2)
 
+> **Design change of 2026-11-05 (owner request): techniques are rolled, schools are gone.** Magic (the 12 schools, the
+> school tree, the spells) is replaced. Everything below that talks about schools, tree nodes and school tiers describes
+> the first version and no longer applies; the pipeline, formulas, vows, Barrier, Domain and persistence below do.
+>
+> - Every player is given one technique at random when they first join (the innate technique). The odds are weights
+>   in `formula/Innate`: the eight older techniques 8 each, Blue, Red and Cursed Blast 4, Barrier 3, Reverse 2. The Domain is
+>   never drawn.
+> - The technique is asleep until the configured boss falls (`power.awakening.boss`, default the Ender Dragon). Players
+>   within 160 blocks of it are awakened. A sleeping technique cannot be cast ("Your technique is asleep"). The value
+>   `none` awakens everyone from the start.
+> - Once awake, mastery ranks (Novice, Adept 15 casts, Expert 45, Master 100) set the tier 1 to 4. The tier sets the energy
+>   pool and the Black Flash gate as before; each rank above Novice adds damage and takes off cooldown
+>   (`power.mastery.*`); the Domain unlocks at Master.
+> - Rerolls (restart mastery, keep the awakening): Arcane Shards (price 10, +5 per earlier reroll, doubled once awake,
+>   capped at 100: `power.reroll.*`), a reroll charge (one per boss kill, default the Wither, at most 3), or a Technique Manual
+>   (chooses the technique and is used up). Rerolls never land on the current technique or on a unique technique
+>   somebody else holds.
+> - Players from before keep the technique they had equipped (or learned, or their school granted) and count as awakened.
+>   The old school, nodes and learned techniques stay in `power.json` (schema 2), unused.
+> - Admin: `/poweradmin awaken|sleep|reroll [technique]|charge|mastery <player> [casts]`, the same on the admin screen.
+
 One power system. Schools are the structure, techniques are the unit of power, and every cast goes through
 one validation pipeline. This page records what the code did before M2 (found by reading it), the
 decisions taken, and how the new package `com.political.power` is laid out. `HANDOFF.md` keeps the live

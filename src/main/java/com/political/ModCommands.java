@@ -52,6 +52,7 @@ final class ModCommands {
         registrar.module("ContractGui", ContractGui::register);
         registrar.module("NpcSpawnCommands", NpcSpawnCommands::register);
         registrar.module("PowerCommands", com.political.power.game.PowerCommands::register);
+        registrar.module("LedgerCommands", com.political.economy.LedgerCommands::register);
         // Everything else
         registrar.module("CommandRegistry", CommandRegistry::registerAll);
 

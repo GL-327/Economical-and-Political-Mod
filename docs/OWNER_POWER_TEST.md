@@ -13,6 +13,22 @@ client game test): it joins the dev server, presses the real keys, clicks the re
 received (action bar, chat) and takes screenshots. See "Real client run" below for what it covers. It still runs the dev
 client with Fabric API (not a launcher install), and it cannot judge how anything looks: that stays with the owner.
 
+## Update of 2026-11-05: techniques are rolled
+
+The first version of this script chose a school and bought a tree. That system is replaced (docs/POWER_DESIGN.md): you
+are given a random technique when you first join, it sleeps until the Ender Dragon falls, and you master it by using it.
+Read the items below with these changes:
+
+- Item 1: open the Powers hub (`/menu`, Skills & Magic, Techniques). "Your Technique" names what you were given and
+  says Asleep. A cast says "Your technique is asleep". Open Reroll and reroll with Arcane Shards (you need shards: test
+  server only, set `shards` in `power.json` or earn them from expeditions). To wake it without the dragon:
+  `/poweradmin awaken <you>` (or the admin screen). To see the real thing, defeat the Ender Dragon.
+- Items 2 to 5: use `/poweradmin grant <you> BLUE` (and RED, CURSED_BLAST, REVERSE, BARRIER) to have those techniques as well,
+  equip them in the Techniques screen, then cast with sneak + F as before.
+- Item 11 (Domain): it unlocks at Master. `/poweradmin mastery <you> 100` gets you there at once.
+- Also test: a reroll (Reroll screen) restarts mastery; `/poweradmin reroll <you>` is free; killing a Wither near you gives one
+  reroll charge (up to 3); a Technique Manual used on a right click chooses that technique.
+
 ## Setup (test server only)
 
 1. Start the server, join with a vanilla 26.3 client, and make yourself an operator (`op <name>` in the console).

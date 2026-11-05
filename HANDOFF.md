@@ -1,5 +1,5 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-05 10:00 UTC  |  Session: 2  |  Device: Windows
+Last updated: 2026-11-05 14:00 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
 M2.8 is still the owner's, but most of the script has now been played by a real client (see M2.8 below). What is left for the owner: items 8 (log out and in, restart), 10 and 11 with a second player, 13 (regression), and judging how it looks (screenshots are in `build/run/clientGameTest/screenshots` after `scripts/power-client-test.sh`; the owner's own client is the final word). M2 is not done, and M3 must not start, until the owner marks the script PASS.
@@ -106,6 +106,8 @@ Handlers of UseItemCallback, UseEntityCallback, UseBlockCallback, AttackEntityCa
 - Snapshot target for M9: 26.4-snapshot-6, re-check when M9 starts. OWNER (same delegation).
 - Player-join JIT test (old OWNER QUESTION 7): cannot be done by the agent. JVM flags stay in runServer/runClient/serverInt. DEFAULT.
 - Not changed: LICENSE file.
+- TECHNIQUES ARE ROLLED (owner request, 2026-11-05; the numbers are DEFAULTs the owner has not approved, rule 4.4): schools, the tree and spells are replaced by one random innate technique per player, asleep until a boss falls, rerollable, mastered by casting. See docs/POWER_DESIGN.md (design change box). Config: `power.awakening.boss` (ender_dragon, wither, warden, none), `power.reroll.*`, `power.mastery.*`. Odds are weights in code (`formula/Innate`). The magic and school code (MagicManager spells, SchoolTree, SchoolTreeGui, SchoolPassives, TreeAdvice, MagicGui) is now unreachable and stays in the tree until the owner approves deleting it (rule 4.7); only the mana accessors, the shard method and the old technique entry points forward to the power service. power.json is schema 2 (identity migration, `power.json.v1.bak` kept).
+- CLOSE TO VANILLA (owner request, 2026-11-05): config switches `features.*` (world_boss, nemesis, incursions, great_hunt, wandering_spirits), all off by default; the services are not registered when off. Mob scaling, the skyblock stat and skill systems, slayers, economy, politics and the custom tools, armor and weapons have no switch and stay on. Nothing was deleted.
 - POWER (M2), all DEFAULT, recorded in docs/POWER_DESIGN.md and below. One system: schools are the structure, techniques are the unit, the 15-step `CastPipeline` is the only way to cast.
   - Legacy abilities: the 32 older abilities keep their effects (`LegacyEffects`) behind the pipeline, so they get the same cost, cooldown, range and rate limit as the new ones. Their damage uses the plain `magic()` damage type as before, so kill credit does not change.
   - Magic level is derived from Arcane Shards earned in total (`power.progression.shards_per_level`, max level 50) because the magic XP path was dead code. Shards still come only from where they came from before (expedition rewards through `SchoolTreeManager.addShards`).
@@ -121,6 +123,7 @@ Handlers of UseItemCallback, UseEntityCallback, UseBlockCallback, AttackEntityCa
   - Dynamic text keys (`political.power.ability.<id>`, `.vow.<name>`, `.technique.<id>`) go through `Text.trNamed(family, id)`; `PowerTextTest` lists every id and checks the key exists.
 
 ## OWNER QUESTIONS (open)
+0. (2026-11-05) The rolled technique system needs your numbers (rule 4.4, none approved): the odds (older techniques 8, Blue/Red/Cursed Blast 4, Barrier 3, Reverse 2), mastery ranks and bonuses (+5 percent damage and -3 percent cooldown per rank above Novice), reroll prices (10 shards, +5 each, doubled once awake, cap 100), reroll charge boss (Wither, max 3), awakening boss (Ender Dragon). All are defaults you can change in the config (the odds in code). The old question 7 (dormant schools) no longer applies.
 1. Can you test one player join on `./gradlew runServer` (JVM flags on) and, separately, with the flags off? Only a join can show whether the JIT crash you saw is still real. — not blocking
 2. Several owner docs describe systems that are not in the current tree; they are archived, not deleted. Delete them for good later? — not blocking
 3. Power system (M2): default is one system with schools as the structure (10.2), built and running on the dev server. Confirm, or choose one of the alternatives. — not blocking
@@ -167,6 +170,7 @@ Handlers of UseItemCallback, UseEntityCallback, UseBlockCallback, AttackEntityCa
 - GitHub Actions status: `gh` is not authenticated on this machine (HTTP 401), so no CI run was checked.
 
 ## BEHAVIOR CHANGES
+- 2026-11-05: techniques are rolled at first join instead of learned or bought through schools; they sleep until the Ender Dragon falls (default); schools, the school tree and the Mana HUD word changed (the status bar says Energy). Existing players keep what they had and count as awakened. The world boss, nemesis, incursions, Great Hunt and wandering spirits no longer run unless switched on in the config.
 - fabric.mod.json `description` text only (M0).
 - M2: sneak plus the swap-hands key (F) casts the selected ability (the old empty-hand right click never reached the server, so before M2 only `/technique cast` worked) through one validation pipeline: a global cooldown (10 ticks), a rate limit (8 casts per 20 ticks), a range limit, a valid target and enough resource. The older techniques now spend the shared resource (maximum 100 plus 25 per school tier) instead of a private energy pool (80 plus 20 per rank) and obey the same limits; before, they only had per-ability cooldowns.
 - M2: Arcane Shards (expedition rewards) now count toward a power level, spell mana is the power resource, school tree nodes give damage, resource and cooldown passives; the magic spells themselves (33) remain uncastable, as before.
@@ -251,3 +255,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-04 13:00 UTC Session 2: found by reading the 26.3 client code that the empty-hand right click gesture never reaches the server (so the pre-M2 sneak cast never worked); the cast input is now sneak + swap-hands key (SwapHandsCastMixin, tested through a fake player's packet listener); smoke run 162 checks, mixin audit 29 targets, docs updated.
 - 2026-11-04 14:00 UTC Session 2: the owner asked me to test in the game; computer use was not available in this session, so a Fabric client game test plays the owner's script with a real Minecraft client against the dev server: 62 checks pass (items 1 to 7, 9, 11 caster side, 12 with chance 1.0); `scripts/power-client-test.sh` and `docs/OWNER_POWER_TEST.md` updated. M2.8 still waits for the owner (items 8, 10, 11 second player, 13, and the look).
 - 2026-11-05 10:00 UTC Session 2: UI sounds on power screen actions; a regression phase in the real-client test (18 older commands open without errors, 22 checks); master fast-forwarded to modern/m2-power at the owner's request. Next: open the owner's game on the dev server for the owner's own test of M2.8.
+- 2026-11-05 14:00 UTC Session 2: owner asked for all milestones, a menu audit, rolled techniques replacing magic and a closer to vanilla server. Done so far: feature switches for custom mobs (a1659e8); rolled techniques (9f9c2d6: 212 unit tests, 178 server smoke checks, 77 real-client checks); M3 ledger started.

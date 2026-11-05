@@ -154,19 +154,45 @@ public class DataManager {
         return data.playerCoins.getOrDefault(uuid, 0L);
     }
 
-    public static void setCoins(String uuid, long amount) {
-        data.playerCoins.put(uuid, Math.max(0L, amount));
+    /**
+     * Every coin balance change goes through this ledger (M3): it checks funds, caps the balance, and records who asked
+     * and why. The balances stay in {@code data.playerCoins}, so the saved format is unchanged.
+     */
+    public static final com.political.core.economy.Ledger LEDGER = new com.political.core.economy.Ledger(new com.political.core.economy.Ledger.Balances() {
+        @Override
+        public long get(String account) {
+            return data == null ? 0L : data.playerCoins.getOrDefault(account, 0L);
+        }
+
+        @Override
+        public void put(String account, long value) {
+            data.playerCoins.put(account, value);
+        }
+    });
+
+    /** The class that asked for a balance change, for the ledger (the first caller outside the money classes). */
+    private static String asker() {
+        return StackWalker.getInstance().walk(frames -> frames.map(StackWalker.StackFrame::getClassName)
+                .filter(name -> !name.equals("com.political.DataManager") && !name.startsWith("com.political.economy.CoinManager")
+                        && !name.startsWith("com.political.core.economy"))
+                .findFirst().orElse("unknown"));
     }
 
+    public static void setCoins(String uuid, long amount) {
+        LEDGER.set(uuid, amount, com.political.core.economy.Reasons.UNSPECIFIED, asker());
+    }
+
+    /** Adds coins. A negative amount takes coins away but never below zero, as before the ledger. */
     public static void addCoins(String uuid, long amount) {
-        setCoins(uuid, getCoins(uuid) + amount);
+        if (amount >= 0) {
+            LEDGER.credit(uuid, amount, com.political.core.economy.Reasons.UNSPECIFIED, asker());
+        } else {
+            LEDGER.set(uuid, getCoins(uuid) + amount, com.political.core.economy.Reasons.UNSPECIFIED, asker());
+        }
     }
 
     public static boolean removeCoins(String uuid, long amount) {
-        long current = getCoins(uuid);
-        if (current < amount) return false;
-        setCoins(uuid, (long) current - amount);
-        return true;
+        return LEDGER.debit(uuid, amount, com.political.core.economy.Reasons.SPEND, asker());
     }
 
     private static long asLong(Long value) {
