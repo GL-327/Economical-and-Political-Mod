@@ -365,7 +365,8 @@ public class BountyGui {
                     .setName(Component.literal("Tier " + tier + " — " + type.bossName).withStyle(tierColors[t - 1], ChatFormatting.BOLD))
                     .addLoreLine(Component.literal("Kills req: " + cfg.killsRequired).withStyle(ChatFormatting.GRAY))
                     .addLoreLine(Component.literal("Click to view drops").withStyle(ChatFormatting.YELLOW))
-                    .setCallback((idx, clicktype, containerInput, slotGui) -> openDropTableGui(player, type, tier))
+                    .setCallback((idx, clicktype, containerInput, slotGui) -> openDropTableGui(player, type, tier,
+                            () -> openDropRatesTierSelect(player, type)))
                     .build());
         }
 
@@ -380,7 +381,13 @@ public class BountyGui {
     // ============================================================
     // DROP TABLE GUI - Shows boss loot and drop chances
     // ============================================================
+    /** Opened from the contract screen (right-click on a tier): Back returns to that screen. */
     public static void openDropTableGui(ServerPlayer player, SlayerManager.SlayerType type, int tier) {
+        openDropTableGui(player, type, tier, () -> openBountyTypeMenu(player, type));
+    }
+
+    /** {@code back} is the screen that opened this one (the contract screen or the drop-rates tier picker). */
+    public static void openDropTableGui(ServerPlayer player, SlayerManager.SlayerType type, int tier, Runnable back) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("☠ " + type.bossName + " T" + tier + " Drops"));
 
@@ -523,7 +530,7 @@ public class BountyGui {
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Component.literal("← Back to Tiers")
                         .withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, clicktype, containerInput, slotGui) -> openBountyTypeMenu(player, type))
+                .setCallback((idx, clicktype, containerInput, slotGui) -> back.run())
                 .build());
 
         // Start bounty button
