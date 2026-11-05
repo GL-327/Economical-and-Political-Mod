@@ -10,7 +10,7 @@
 # build/run/clientGameTest/screenshots. The result lines start with CLIENTTEST in the log it prints at the end.
 set -u
 cd "$(dirname "$0")/.."
-PHASES="${1:-permission,setup,tree,grants,domain,combat,death}"
+PHASES="${1:-permission,setup,tree,grants,domain,combat,death,regression}"
 WORK="$(mktemp -d)"
 CMDS="$WORK/commands.txt"
 SERVER_LOG="$WORK/server.log"
@@ -76,5 +76,7 @@ unset JAVA_TOOL_OPTIONS
 stop_server
 
 grep "CLIENTTEST" "$CLIENT_LOG" | sed 's/^.*CLIENTTEST/CLIENTTEST/' | grep -v "CLIENTTEST screen"
+echo "--- errors the dev server logged during the run (the Windows system info warnings at startup are not the mod's) ---"
+grep -E "/(ERROR|WARN)\]|Exception" "$SERVER_LOG" | grep -vE "oshi|Win32|Hkey|Perflib|system info|Process (Loads|Virtual|Resident)|OFFLINE|offline|authenticate|hackers|online-mode|Can't keep up|Tick service" | head -40
 echo "client test exit status: $STATUS (0 means every check passed); logs: $WORK"
 exit "$STATUS"

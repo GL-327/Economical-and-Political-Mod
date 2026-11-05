@@ -92,6 +92,7 @@ lines start with `CLIENTTEST`. 62 checks passed on 2026-11-04 with Minecraft 26.
 | 10 | Not covered: needs a second player. |
 | 11 | The caster's side: the title "Domain Expansion / PowerTester opens a Domain", the action bar "-150", 150 energy spent, the "Domain Ended" title after the duration. Not covered: a second player inside. |
 | 12 | With chance 1.0, a punch right after a Barrier cast showed "BLACK FLASH!" and did 2.4 damage. |
+| 13 | Only opening: as an operator it ran `/stats`, `/statbar`, `/coins`, `/bounty`, `/bazaar`, `/civ`, `/relics`, `/titles`, `/settlement`, `/shop`, `/expedition`, `/hunt`, `/party`, `/guild`, `/trade`, `/auction`, `/war` and `/vote`, and looked for an error message and for errors in the server log. It did not play an election, a settlement registration, an expedition run or a bounty. |
 
 Also seen on screenshots: every screen draws, tooltips show the lore lines, the cursed energy bar, the school tooltip
 with where each technique comes from, the tree's "Next Step" panel with its cost, and the titles.

@@ -65,7 +65,7 @@ public class PowerClientTest implements FabricClientGameTest {
         cmd("tp @s ~ 200 ~ 0 0");
         context.waitTicks(60);
         context.takeScreenshot("00-joined");
-        String wanted = System.getProperty("powertest.phases", "permission,setup,tree,grants,domain,combat,death");
+        String wanted = System.getProperty("powertest.phases", "permission,setup,tree,grants,domain,combat,death,regression");
         try {
             for (String phase : wanted.split(",")) {
                 switch (phase.trim()) {
@@ -77,6 +77,7 @@ public class PowerClientTest implements FabricClientGameTest {
                     case "combat" -> phase("Blue, Red, Cursed Blast, Reverse, Barrier", this::combat);
                     case "death" -> phase("death", this::death);
                     case "blackflash" -> phase("Black Flash", this::blackFlash);
+                    case "regression" -> phase("older commands still answer", this::regression);
                     default -> throw new IllegalArgumentException("unknown phase " + phase);
                 }
             }
@@ -666,6 +667,30 @@ public class PowerClientTest implements FabricClientGameTest {
         boolean again = saw(mark, "Barrier", true) && !saw(mark, "On cooldown", true);
         check("the Barrier cooldown is gone after death (" + since(mark) + ")", again);
         ctx.takeScreenshot("22-after-respawn");
+    }
+
+    /**
+     * Script item 13, as far as opening goes: the older systems (stats, relics, bounties, bazaar, settlements,
+     * expeditions and more) still answer their commands after the power change. It opens each one and looks for an error
+     * message; it does not play their normal cases (an election, a settlement registration, an expedition run).
+     */
+    private void regression() {
+        cmd("gamemode creative");
+        for (String command : List.of("stats", "statbar", "coins", "bounty", "bazaar", "civ", "relics", "titles", "settlement", "shop",
+                "expedition", "hunt", "party", "guild", "trade", "auction", "war", "vote")) {
+            int mark = mark();
+            cmd(command);
+            for (int i = 0; i < 60 && !inContainer() && messages.size() == mark; i++) {
+                ctx.waitTick();
+            }
+            ctx.waitTicks(10);
+            boolean broken = saw(mark, "unexpected error", null) || saw(mark, "Unknown or incomplete", null);
+            check("/" + command + " answers without an error (" + (inContainer() ? "screen '" + screenTitle() + "'" : since(mark)) + ")", !broken);
+            if (inContainer()) {
+                ctx.takeScreenshot("30-" + command);
+                closeScreen();
+            }
+        }
     }
 
     /** Script item 12: the server runs with power.black_flash.chance 1.0; a punch right after a cast is a Black Flash. */

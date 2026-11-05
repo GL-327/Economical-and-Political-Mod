@@ -5,6 +5,7 @@ import com.political.core.gui.Elements;
 import com.political.core.gui.Icon;
 import com.political.core.gui.Palette;
 import com.political.core.gui.Screen;
+import com.political.core.gui.UiSound;
 import com.political.core.text.Text;
 import com.political.magic.MagicSchool;
 import com.political.power.PowerSettings;
@@ -203,6 +204,9 @@ public final class PowerScreens {
         return entry(Items.ENCHANTED_BOOK, name, Palette.TITLE, false, () -> {
             if (PowerService.equip(player, def.id())) {
                 player.sendSystemMessage(Text.tr("political.power.equip.done", name), false);
+                UiSound.SUCCESS.play(player);
+            } else {
+                UiSound.DENIED.play(player);
             }
             openTechniques(player, page);
         }, Text.tr("political.power.gui.techniques.click.equip"), lore);
@@ -294,7 +298,7 @@ public final class PowerScreens {
             return entry(abilityIcon(spec.kind()), name, Palette.GOOD, true, null, null, lore);
         }
         return entry(abilityIcon(spec.kind()), name, Palette.TITLE, false, () -> {
-            PowerService.selectAbility(uuid, spec.id());
+            (PowerService.selectAbility(uuid, spec.id()) ? UiSound.SUCCESS : UiSound.DENIED).play(player);
             openAbilities(player);
         }, Text.tr("political.power.gui.abilities.click"), lore);
     }
@@ -339,6 +343,7 @@ public final class PowerScreens {
                 () -> {
                     PowerService.SchoolResult result = PowerService.chooseSchool(player, school);
                     player.sendSystemMessage(Text.trNamed("political.power.school.result", result.name(), schoolName(school)), false);
+                    (result == PowerService.SchoolResult.OK ? UiSound.SUCCESS : UiSound.DENIED).play(player);
                     open(player);
                 }, () -> openSchools(player)), Text.tr("political.power.gui.school.click"), lore);
     }
@@ -429,6 +434,7 @@ public final class PowerScreens {
                             () -> {
                                 PowerService.NodeResult result = PowerService.unlockNode(player, node.id());
                                 player.sendSystemMessage(Text.trNamed("political.power.node.result", result.name(), name), false);
+                                (result == PowerService.NodeResult.OK ? UiSound.SUCCESS : UiSound.DENIED).play(player);
                                 openTree(player);
                             }, () -> openTree(player)),
                     Text.tr("political.power.gui.tree.click"), lore);
@@ -486,6 +492,7 @@ public final class PowerScreens {
                 () -> {
                     VowSet.AcceptResult result = PowerService.acceptVow(player, vow);
                     player.sendSystemMessage(Text.trNamed("political.power.vow.result", result.name(), name), false);
+                    (result == VowSet.AcceptResult.ACCEPTED ? UiSound.SUCCESS : UiSound.DENIED).play(player);
                     openVows(player);
                 }, () -> openVows(player)), Text.tr("political.power.gui.vows.click"), lore);
     }
