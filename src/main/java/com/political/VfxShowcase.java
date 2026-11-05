@@ -72,7 +72,7 @@ public final class VfxShowcase {
                     .build());
         }
 
-        gui.setSlot(31, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(31, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 

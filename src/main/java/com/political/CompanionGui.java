@@ -131,7 +131,7 @@ public final class CompanionGui {
                 .setName(Component.literal("Next →").withStyle(ChatFormatting.YELLOW))
                 .setCallback((a, b, c, d) -> open(player, fp + 1, ff)).build());
 
-        gui.setSlot(48, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(48, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 

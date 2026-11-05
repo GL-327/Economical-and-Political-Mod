@@ -527,7 +527,9 @@ public class PowerClientTest implements FabricClientGameTest {
         int[] after = energy();
         check("the Domain cost about 150 energy (" + before[0] + " to " + after[0] + ")", before[0] - after[0] >= 150 - 12 && before[0] - after[0] <= 150 + 4);
 
-        // item 6: the armor vow
+        // item 6: the armor vow. The dev world is reused between runs, so a piece of armor left by an earlier crawl would
+        // keep the vow from being accepted: start from an empty inventory.
+        cmd("clear @s");
         cmd("item replace entity @s armor.head with iron_helmet");
         mark = mark();
         check("the vow screen opens", openHub() && go("Binding Vows", true, "Binding Vows"));
@@ -742,7 +744,11 @@ public class PowerClientTest implements FabricClientGameTest {
 
     private void menus(List<String> roots) {
         cmd("gamemode creative");
+        String only = System.getProperty("powertest.roots"); // a comma separated list of command roots, to crawl fewer
         for (String root : roots) {
+            if (only != null && !List.of(only.split(",")).contains(root)) {
+                continue;
+            }
             if (crawlClicks >= CRAWL_MAX_CLICKS) {
                 break;
             }

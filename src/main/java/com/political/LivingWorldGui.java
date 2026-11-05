@@ -117,7 +117,7 @@ public final class LivingWorldGui {
         gui.setSlot(49, new GuiElementBuilder(Items.NETHER_STAR)
                 .setName(Component.literal("← Civilization Hub").withStyle(ChatFormatting.YELLOW))
                 .addLoreLine(Component.literal("§7Back to the master menu."))
-                .setCallback((a, b, c, d) -> CivilizationHubGui.open(player))
+                .setCallback((a, b, c, d) -> com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player)).run())
                 .build());
 
         gui.open();

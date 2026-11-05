@@ -97,7 +97,7 @@ public final class ReforgeGui {
                 .setCallback((a, b, c, d) -> openPool(player, 0))
                 .build());
 
-        gui.setSlot(49, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(49, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 

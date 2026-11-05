@@ -85,7 +85,7 @@ public final class ModernShowcaseGui {
         ModernGuiTheme.footer(gui, 54, "Open the hub for every system");
         gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
                 .setName(Component.literal("← Back to Hub").withStyle(ChatFormatting.YELLOW))
-                .setCallback((a, b, c, d) -> CivilizationHubGui.open(player))
+                .setCallback((a, b, c, d) -> com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player)).run())
                 .build());
 
         gui.open();

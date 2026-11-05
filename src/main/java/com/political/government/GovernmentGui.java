@@ -104,7 +104,7 @@ public final class GovernmentGui {
                 .setCallback((a, b, c, d) -> WarGui.openFrom(player, () -> open(player)))
                 .build());
 
-        gui.setSlot(45, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(45, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 

@@ -64,6 +64,13 @@ public class RecipesGui {
     }
     
     // Push category to stack when navigating to a category page
+    /** The bounty sets list; a recipe opened from it goes Back to this list, not to the Special Armor category that shares its stack entry. */
+    private static void openBountySets(ServerPlayer player) {
+        CustomItemsGui.openBountySetsPage(player, 0,
+                (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openBountySets),
+                RecipesGui::openMainMenu);
+    }
+
     public static void pushCategory(CustomItemsGui.Category cat) {
         categoryStack.push(cat);
     }
@@ -118,9 +125,7 @@ public class RecipesGui {
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("T1 & T2 Armor + Swords").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> { pushCategory(CustomItemsGui.Category.SPECIAL_ARMOR); CustomItemsGui.openBountySetsPage(player, 0,
-                        (p, item) -> CustomItemsGui.showItemInfo(p, item, RecipesGui::openMainMenuFromCategory),
-                        RecipesGui::openMainMenu); })
+                .setCallback((idx, type, containerInput, slotGui) -> { pushCategory(CustomItemsGui.Category.SPECIAL_ARMOR); openBountySets(player); })
                 .build());
 
         gui.setSlot(14, new GuiElementBuilder(Items.NETHERITE_HELMET)

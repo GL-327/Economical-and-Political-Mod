@@ -103,7 +103,7 @@ public final class SettlementEconomyGui {
         appeal.addLoreLine(Component.literal("§8spread beat stacking one valuable block."));
         gui.setSlot(33, appeal.build());
 
-        gui.setSlot(45, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(45, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.setSlot(49, new GuiElementBuilder(Items.BOOK)
                 .setName(Component.literal("Settlement Panel").withStyle(ChatFormatting.YELLOW))
                 .addLoreLine(Component.literal("§7Tier requirements and registration."))

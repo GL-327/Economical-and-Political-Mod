@@ -136,7 +136,7 @@ public final class ExpeditionGui {
 
         gui.setSlot(53, new GuiElementBuilder(Items.OAK_DOOR)
                 .setName(Component.literal("Back to Civilization").withStyle(ChatFormatting.GRAY))
-                .setCallback((a, b, c, d) -> CivilizationHubGui.open(player))
+                .setCallback((a, b, c, d) -> com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player)).run())
                 .build());
 
         gui.open();

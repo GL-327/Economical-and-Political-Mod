@@ -138,7 +138,7 @@ public final class TradeGui {
                         : "§aReady to raid"))
                 .build());
 
-        gui.setSlot(45, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(45, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 

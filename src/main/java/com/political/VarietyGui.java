@@ -79,7 +79,7 @@ public final class VarietyGui {
                 .addLoreLine(Component.literal("§8Everything here is temporary and cannot be farmed."))
                 .build());
 
-        gui.setSlot(40, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(40, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 }

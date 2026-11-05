@@ -54,6 +54,25 @@ public final class MenuTrail {
         STATES.remove(player);
     }
 
+    /**
+     * For a Back button that was wired to one fixed menu (the hub) whatever opened the screen: at click time it returns to the menu the
+     * player actually came from (the top of their trail), and only when there is none (the screen was opened from a command) does it
+     * run {@code fallback}, the old fixed target.
+     */
+    public static Runnable backOr(ServerPlayer player, Runnable fallback) {
+        return () -> {
+            State state = STATES.get(player.getUUID());
+            SimpleGui parent = state == null ? null : state.trail.peek();
+            boolean usable = parent != null && parent.getPlayer() == player && !player.hasDisconnected()
+                    && SguiUtils.getCurrentGui(player) != parent;
+            if (usable) {
+                parent.open();
+            } else {
+                fallback.run();
+            }
+        };
+    }
+
     /** Called (by {@code MenuClickMixin}) before a click in a menu is handled: remembers whether the slot is a Back button. */
     public static void onClick(ServerPlayer player, int slot) {
         if (!(SguiUtils.getCurrentGui(player) instanceof SimpleGui gui) || slot < 0 || slot >= gui.getVirtualSize()) {

@@ -5,6 +5,7 @@
 #
 #   scripts/power-client-test.sh                       all phases
 #   scripts/power-client-test.sh permission,setup      only these phases (see PowerClientTest for the names)
+#   POWERTEST_ROOTS=menu,civ scripts/power-client-test.sh setup,menus   the menu crawl, only from these command roots
 #
 # It needs a desktop (the client opens a window), Java 25, python and about seven minutes. Screenshots go to
 # build/run/clientGameTest/screenshots. The result lines start with CLIENTTEST in the log it prints at the end.
@@ -80,7 +81,7 @@ fi
 echo "op PowerTester" >> "$CMDS"
 sleep 3
 
-export JAVA_TOOL_OPTIONS="-Dpowertest.commands=$CMDS -Dpowertest.phases=$PHASES"
+export JAVA_TOOL_OPTIONS="-Dpowertest.commands=$CMDS -Dpowertest.phases=$PHASES${POWERTEST_ROOTS:+ -Dpowertest.roots=$POWERTEST_ROOTS}"
 ./gradlew runClientGameTest --console=plain > "$CLIENT_LOG" 2>&1
 STATUS=$?
 unset JAVA_TOOL_OPTIONS

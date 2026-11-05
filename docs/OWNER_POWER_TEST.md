@@ -29,6 +29,14 @@ Read the items below with these changes:
 - Also test: a reroll (Reroll screen) restarts mastery; `/poweradmin reroll <you>` is free; killing a Wither near you gives one
   reroll charge (up to 3); a Technique Manual used on a right click chooses that technique.
 
+## What to try in the menus (2026-11-05)
+Back should always return to the menu you came from. Open each of these, go two or three screens deep, press Back each time, and say which one lands wrong:
+1. `/menu` then Civilization, then Government, then Chair Panel (if you are chair) and back out; `/civ` then Techniques (Powers), Recipes, Guilds & Orders, War Room, Bestiary, Seasons, The Great Hunt.
+2. `/bounty`, a bounty type, right-click a tier (drop table), Back; the Drop Rates button, a tier, Back (it must return to the tier list).
+3. `/admin` (operator console): each tab, then each tile (Economy: Tax, Auction house, Stock market, Crypto, Underground auction, Shops; Moderation: Chest access history, Anti cheat, Player buffs; Politics: Elections, Government, Parties, High council, Impeachment, Perks; Content: Collections, Crates, Titles, Custom items). Back must return to the tab. In the inventory viewer the Back is now top left, because the bottom row is the hotbar.
+4. A confirmation dialog (Leave party, Save everything now) has Confirm and Cancel and no Back; Cancel returns where you were.
+Known gaps (they are in HANDOFF.md KNOWN ISSUES): the recipe browser's Back from a bounty set item, the Guilds & Orders screen has no Back when opened from the hub, and the admin "Remote chests" tile opens the anti-cheat panel.
+
 ## Setup (test server only)
 
 1. Start the server, join with a vanilla 26.3 client, and make yourself an operator (`op <name>` in the console).

@@ -109,7 +109,7 @@ public final class ContractGui {
                 .addLoreLine(Component.literal("§8playing will always earn you more."))
                 .build());
 
-        gui.setSlot(48, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(48, WarGui.back(com.political.core.gui.MenuTrail.backOr(player, () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 
