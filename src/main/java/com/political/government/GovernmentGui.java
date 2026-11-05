@@ -73,7 +73,7 @@ public final class GovernmentGui {
                 .setName(Component.literal("Taxation").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Rate, debts and collection."))
                 .addLoreLine(Component.literal("§8Settlements remit a share of income here."))
-                .setCallback((a, b, c, d) -> TaxGui.open(player))
+                .setCallback((a, b, c, d) -> TaxGui.openFrom(player, () -> open(player)))
                 .build());
 
         // Settlement-level politics

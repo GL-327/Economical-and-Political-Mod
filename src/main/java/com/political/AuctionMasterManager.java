@@ -63,7 +63,7 @@ public class AuctionMasterManager {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            AuctionHouseGui.open(serverPlayer);
+            AuctionHouseGui.openFrom(serverPlayer, null);
             return InteractionResult.SUCCESS;
         }
 

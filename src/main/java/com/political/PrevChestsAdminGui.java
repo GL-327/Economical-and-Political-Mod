@@ -14,7 +14,18 @@ public final class PrevChestsAdminGui {
 
     private static final int PER_PAGE = 21;
 
+    /** Where Back leads from the first page: the menu that opened it, remembered per admin. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opened from a command or from the invsee screen: Back goes to the invsee screen. */
     public static void open(ServerPlayer admin, ServerPlayer watchedPlayer) {
+        FROM.set(admin.getUUID(), null);
+        open(admin, watchedPlayer, 0);
+    }
+
+    /** Opened from a parent menu: Back returns there. */
+    public static void openFrom(ServerPlayer admin, ServerPlayer watchedPlayer, Runnable back) {
+        FROM.set(admin.getUUID(), back);
         open(admin, watchedPlayer, 0);
     }
 
@@ -71,9 +82,16 @@ public final class PrevChestsAdminGui {
                 .setName(Component.literal("Close").withStyle(ChatFormatting.RED))
                 .setCallback((a, b, c, __slotGui) -> admin.closeContainer())
                 .build());
+        Runnable parent = FROM.get(admin.getUUID());
         gui.setSlot(48, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("Back to Invsee").withStyle(ChatFormatting.YELLOW))
-                .setCallback((a, b, c, __slotGui) -> AdminInvseeGui.openMainMenu(admin, watchedPlayer))
+                .setName(Component.literal(parent != null ? "← Back" : "Back to Invsee").withStyle(ChatFormatting.YELLOW))
+                .setCallback((a, b, c, __slotGui) -> {
+                    if (parent != null) {
+                        parent.run();
+                    } else {
+                        AdminInvseeGui.openMainMenu(admin, watchedPlayer);
+                    }
+                })
                 .build());
 
         gui.open();

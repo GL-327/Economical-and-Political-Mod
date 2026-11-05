@@ -905,7 +905,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    AuctionHouseGui.open(player);
+                    AuctionHouseGui.openFrom(player, null);
                     return 1;
                 })
                 .then(Commands.literal("sell")
@@ -2007,7 +2007,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    TaxGui.open(player);
+                    TaxGui.openFrom(player, null);
                     return 1;
                 }));
     }
@@ -2196,25 +2196,25 @@ public class CommandRegistry {
         dispatcher.register(Commands.literal("CivilAC")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(ctx -> {
-                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrException());
+                    CivilAntiCheatGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("civilac")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(ctx -> {
-                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrException());
+                    CivilAntiCheatGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("CivilAntiCheat")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(ctx -> {
-                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrException());
+                    CivilAntiCheatGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("civilanticheat")
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(ctx -> {
-                    CivilAntiCheatGui.open(ctx.getSource().getPlayerOrException());
+                    CivilAntiCheatGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         // /view accepts both "/view <player> prevchests" and "/view prevchests <player>". They were two
@@ -2858,7 +2858,7 @@ public class CommandRegistry {
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    PlayerBuffAdminGui.openPlayerSelect(player);
+                    PlayerBuffAdminGui.openPlayerSelectFrom(player, null);
                     return 1;
                 }));
     }

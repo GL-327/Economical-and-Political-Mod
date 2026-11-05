@@ -449,19 +449,19 @@ public final class AdminPanel {
                 }, "Trims oversized stacks on sight"));
 
         gui.setSlot(21, GuiKit.tile(Items.CHEST, "Chest access history", ChatFormatting.GOLD,
-                () -> PrevChestsAdminGui.open(player, player),
+                () -> PrevChestsAdminGui.openFrom(player, player, () -> openModeration(player)),
                 "Who opened what and when"));
 
         gui.setSlot(22, GuiKit.tile(Items.SHIELD, "Anti cheat panel", ChatFormatting.AQUA,
-                () -> CivilAntiCheatGui.open(player),
+                () -> CivilAntiCheatGui.openFrom(player, () -> openModeration(player)),
                 "Full detection settings"));
 
         gui.setSlot(23, GuiKit.tile(Items.ENDER_CHEST, "Remote chests", ChatFormatting.LIGHT_PURPLE,
-                () -> CivilAntiCheatGui.open(player),
+                () -> CivilAntiCheatGui.openFrom(player, () -> openModeration(player)),
                 "Open any container remotely"));
 
         gui.setSlot(24, GuiKit.tile(Items.PLAYER_HEAD, "Player buffs", ChatFormatting.GREEN,
-                () -> PlayerBuffAdminGui.openPlayerSelect(player),
+                () -> PlayerBuffAdminGui.openPlayerSelectFrom(player, () -> openModeration(player)),
                 "Grant or strip buffs"));
 
         GuiKit.footer(gui, SIZE, player, () -> open(player));
@@ -492,10 +492,10 @@ public final class AdminPanel {
                 }, "Flat coins per day"));
 
         gui.setSlot(21, GuiKit.tile(Items.GOLD_INGOT, "Tax panel", ChatFormatting.GOLD,
-                () -> TaxGui.open(player), "Rates, debtors and collection"));
+                () -> TaxGui.openFrom(player, () -> openEconomy(player)), "Rates, debtors and collection"));
 
         gui.setSlot(22, GuiKit.tile(Items.ITEM_FRAME, "Auction house", ChatFormatting.AQUA,
-                () -> AuctionHouseGui.open(player), "Live listings and history"));
+                () -> AuctionHouseGui.openFrom(player, () -> openEconomy(player)), "Live listings and history"));
 
         gui.setSlot(23, GuiKit.tile(Items.ENDER_EYE, "Underground auction", ChatFormatting.DARK_PURPLE,
                 () -> UndergroundAuctionGui.open(player), "The quiet market"));

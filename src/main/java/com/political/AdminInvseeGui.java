@@ -299,7 +299,7 @@ public final class AdminInvseeGui {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, admin, false);
         gui.setTitle(Component.literal("Inventory — ").withStyle(ChatFormatting.GOLD).append(target.getDisplayName()));
         Runnable redraw = () -> drawPlayerInventory(gui, admin, target);
-        gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+        gui.setSlot(0, new GuiElementBuilder(Items.ARROW)
                 .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((i, t, containerInput, slotGui) -> openMainMenu(admin, target))
                 .build());
@@ -310,7 +310,7 @@ public final class AdminInvseeGui {
     private static void drawPlayerInventory(SimpleGui gui, ServerPlayer admin, ServerPlayer target) {
         var filler = new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build();
         for (int i = 0; i < 54; i++) {
-            if (i == 53) continue;
+            if (i == 0) continue; // Back; the ninth hotbar slot is 53 and used to cover it
             gui.setSlot(i, filler);
         }
         for (int inv = 0; inv < 36; inv++) {

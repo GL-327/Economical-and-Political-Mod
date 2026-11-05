@@ -86,10 +86,10 @@ public final class AdminDirectoryGui {
         add("Operator", "Admin", p -> AdminGui.open(p));
         add("Operator", "Boss Config", p -> BossConfigGui.openMainMenu(p));
         add("Operator", "Bounty Config", p -> BountyConfigGui.open(p));
-        add("Operator", "Civil Anti Cheat", p -> CivilAntiCheatGui.open(p));
+        add("Operator", "Civil Anti Cheat", (p, back) -> CivilAntiCheatGui.openFrom(p, back));
         add("Operator", "Crypto Admin", p -> CryptoAdminGui.openMainMenu(p));
         add("Operator", "Item Model", (p, back) -> ItemModelGui.openFrom(p, back));
-        add("Operator", "Player Buff Admin", p -> PlayerBuffAdminGui.openPlayerSelect(p));
+        add("Operator", "Player Buff Admin", (p, back) -> PlayerBuffAdminGui.openPlayerSelectFrom(p, back));
         add("Operator", "Recipe Editor", p -> RecipeEditorGui.openMainMenu(p));
         add("Operator", "Report", p -> ReportGui.openMainMenu(p));
         add("Operator", "Set Price", p -> SetPriceGui.openMainMenu(p));
@@ -122,7 +122,7 @@ public final class AdminDirectoryGui {
         add("Politics", "War", p -> WarGui.open(p));
 
         // Economy
-        add("Economy", "Auction House", p -> AuctionHouseGui.open(p));
+        add("Economy", "Auction House", (p, back) -> AuctionHouseGui.openFrom(p, back));
         add("Economy", "Bank", p -> BankGui.open(p));
         add("Economy", "Bazaar", (p, back) -> BazaarGui.openFrom(p, back));
         add("Economy", "Commission", p -> CommissionGui.open(p));
@@ -187,7 +187,7 @@ public final class AdminDirectoryGui {
         add("Other", "Civil Craft", p -> CivilCraftGui.open(p));
         add("Other", "Menu", p -> MenuGui.openMainMenu(p));
         add("Other", "Modern Showcase", p -> ModernShowcaseGui.open(p));
-        add("Other", "Tax", p -> TaxGui.open(p));
+        add("Other", "Tax", (p, back) -> TaxGui.openFrom(p, back));
 
     }
 

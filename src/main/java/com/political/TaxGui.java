@@ -12,6 +12,15 @@ import net.minecraft.ChatFormatting;
 
 public class TaxGui {
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Tax Payment"));
@@ -110,6 +119,10 @@ public class TaxGui {
                     .build());
         }
 
+        Runnable backTo = FROM.get(player.getUUID());
+        if (backTo != null) {
+            gui.setSlot(18, GuiKit.back(backTo));
+        }
         gui.open();
     }
 }

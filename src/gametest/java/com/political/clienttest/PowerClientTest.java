@@ -845,6 +845,13 @@ public class PowerClientTest implements FabricClientGameTest {
         return false;
     }
 
+    /** Titles like "Auctions - Weapons" and "Auctions - Armor" are tabs of one screen. */
+    private static boolean sameFamily(String a, String b) {
+        int i = a.indexOf(" - ");
+        int j = b.indexOf(" - ");
+        return i > 0 && j > 0 && a.substring(0, i).equals(b.substring(0, j));
+    }
+
     private static boolean isClose(String name) {
         String n = name.toLowerCase(Locale.ROOT);
         return n.contains("close") || n.contains("exit") || n.equals("cancel") || n.contains("\u2715");
@@ -887,6 +894,9 @@ public class PowerClientTest implements FabricClientGameTest {
             if (isClose(item.name()) || (depth > 0 && isBack(item.name())) || isPager(item.name()) || isDangerous(item.name())) {
                 continue;
             }
+            if (title.equals("Confirm") && item.name().toLowerCase(Locale.ROOT).contains("cancel")) {
+                continue; // a dialog's Cancel is its way back, tried when the dialog was entered
+            }
             tried++;
             if (!inContainer() || !screenTitle().equals(title)) {
                 if (!replay(path, title)) {
@@ -906,6 +916,11 @@ public class PowerClientTest implements FabricClientGameTest {
             }
             if (after.equals("<closed>")) {
                 closeAnyScreen();
+                continue;
+            }
+            if (sameFamily(title, after)) {
+                // tabs of one screen ("Auctions - Weapons", "Auctions - Armor"): siblings, not parent and child
+                System.out.println("CLIENTTEST MENU tab '" + title + "' --[" + item.name() + "]--> '" + after + "'");
                 continue;
             }
             crawlEdges.add("'" + title + "' --[" + item.name() + "]--> '" + after + "'");

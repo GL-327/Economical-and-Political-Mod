@@ -144,6 +144,15 @@ public class AuctionHouseGui {
         openMainMenu(player);
     }
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        openMainMenu(player);
+    }
+
     public static void openMainMenu(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("Auction House"));
@@ -217,6 +226,10 @@ public class AuctionHouseGui {
                 .setCallback((index, type, containerInput, slotGui) -> openMyListings(player, 0))
                 .build());
 
+        Runnable backTo = FROM.get(player.getUUID());
+        if (backTo != null) {
+            gui.setSlot(18, com.political.GuiKit.back(backTo));
+        }
         gui.open();
     }
 

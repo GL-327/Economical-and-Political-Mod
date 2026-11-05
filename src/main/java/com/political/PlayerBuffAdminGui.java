@@ -21,6 +21,15 @@ public class PlayerBuffAdminGui {
     /**
      * Opens the player selection menu.
      */
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openPlayerSelectFrom(ServerPlayer admin, Runnable back) {
+        FROM.set(admin.getUUID(), back);
+        openPlayerSelect(admin);
+    }
+
     public static void openPlayerSelect(ServerPlayer admin) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, admin, false);
         gui.setTitle(Component.literal("✦ Player Buff Admin - Select Player"));
@@ -56,6 +65,10 @@ public class PlayerBuffAdminGui {
             }
         }
 
+        Runnable backTo = FROM.get(admin.getUUID());
+        if (backTo != null) {
+            gui.setSlot(45, GuiKit.back(backTo));
+        }
         gui.open();
     }
 

@@ -11,6 +11,15 @@ import net.minecraft.ChatFormatting;
 /** Admin GUI toggles for CivilAC. */
 public final class CivilAntiCheatGui {
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer admin, Runnable back) {
+        FROM.set(admin.getUUID(), back);
+        open(admin);
+    }
+
     public static void open(ServerPlayer admin) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, admin, false);
         gui.setTitle(Component.literal("Civil Anti-Cheat").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
@@ -31,6 +40,10 @@ public final class CivilAntiCheatGui {
                 .setCallback((a, b, c, __slotGui) -> admin.closeContainer())
                 .build());
 
+        Runnable backTo = FROM.get(admin.getUUID());
+        if (backTo != null) {
+            gui.setSlot(18, GuiKit.back(backTo));
+        }
         gui.open();
     }
 
