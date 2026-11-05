@@ -67,3 +67,6 @@ full_boot*.log
 logs/
 crash-reports/
 hs_err_pid*.log
+# the mod's own config package is source code, not a runtime config folder
+!src/main/java/**/config/
+!src/test/java/**/config/
