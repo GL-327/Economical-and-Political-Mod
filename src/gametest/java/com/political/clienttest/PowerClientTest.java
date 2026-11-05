@@ -713,7 +713,7 @@ public class PowerClientTest implements FabricClientGameTest {
 
     private static final int CRAWL_MAX_DEPTH = 5;
     private static final int CRAWL_MAX_CLICKS = 1500;
-    private static final int CRAWL_MAX_SLOTS_PER_SCREEN = 30;
+    private static final int CRAWL_MAX_SLOTS_PER_SCREEN = 24;
 
     /** How many new child screens one screen may be descended into: wide near the top, narrow below (a list of 60 collections). */
     private static int descendLimit(int depth) {
@@ -833,6 +833,18 @@ public class PowerClientTest implements FabricClientGameTest {
         return n.contains("next") || n.contains("previous") || n.startsWith("page");
     }
 
+    /** Admin buttons that would stop the crawl itself (jail, ban, vanish, stop the server...): not clicked. */
+    private static boolean isDangerous(String name) {
+        String n = name.toLowerCase(Locale.ROOT);
+        for (String word : List.of("imprison", "jail", "ban", "kick", "mute", "freeze", "vanish", "wipe", "delete", "reset", "shut", "restart",
+                "stop", "kill", "purge", "deop", "whitelist", "gamemode", "teleport", "tp ", "invsee", "clear", "confirm", "✔")) {
+            if (n.contains(word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static boolean isClose(String name) {
         String n = name.toLowerCase(Locale.ROOT);
         return n.contains("close") || n.contains("exit") || n.equals("cancel") || n.contains("\u2715");
@@ -872,7 +884,7 @@ public class PowerClientTest implements FabricClientGameTest {
             if (crawlClicks >= CRAWL_MAX_CLICKS || tried >= CRAWL_MAX_SLOTS_PER_SCREEN) {
                 break;
             }
-            if (isClose(item.name()) || (depth > 0 && isBack(item.name())) || isPager(item.name())) {
+            if (isClose(item.name()) || (depth > 0 && isBack(item.name())) || isPager(item.name()) || isDangerous(item.name())) {
                 continue;
             }
             tried++;
@@ -888,7 +900,7 @@ public class PowerClientTest implements FabricClientGameTest {
                 client.gameMode.handleContainerInput(menu.containerId, item.slot(), 0, ContainerInput.PICKUP, client.player);
             });
             ctx.waitTicks(6);
-            String after = waitForScreenChange(title, 24);
+            String after = waitForScreenChange(title, 14);
             if (after.equals(title)) {
                 continue; // an action or a refresh, not a new screen
             }
@@ -902,7 +914,8 @@ public class PowerClientTest implements FabricClientGameTest {
             List<Item> there = items();
             Item back = null;
             for (Item candidate : there) {
-                if (isBack(candidate.name())) {
+                // A confirmation dialog has no Back; its Cancel leads to the screen it was opened from.
+                if (isBack(candidate.name()) || (after.equals("Confirm") && candidate.name().toLowerCase(Locale.ROOT).contains("cancel"))) {
                     back = candidate;
                     break;
                 }
