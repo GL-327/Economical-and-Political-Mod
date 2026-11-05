@@ -1,8 +1,16 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-05 18:00 UTC  |  Session: 2  |  Device: Windows
+Last updated: 2026-11-05 19:00 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
+Start with the OWNER REQUEST below (a massive rework of the first screens of `/recipe`, `/setrecipe` and `/customitems`), then the testing list under WHAT NEEDS TESTING.
 The owner asked (2026-11-05) for all milestones to be worked without waiting. M3 to M9 now have a first pass on branch `modern/m3-economy` (see M3 TO M9 below); every number that matters is DEFAULT and unapproved. What is left for the owner: (a) the power test items 8 (log out and in, restart), 10 and 11 with a second player, 13, and judging how it looks; (b) the open owner questions, especially 0 (rolled technique numbers), 11 (dead menus) and 12 (coin sources without a cap); (c) the open menu findings in `docs/MENU_CRAWL.md`. Nothing here waits on a blocking question, but M2.8 and the balance numbers are still the owner's.
+
+## OWNER REQUEST: MASSIVE UI REWORK OF THREE MENUS (2026-11-05, NOT STARTED, do this next)
+The owner looked at the real screens and said the first screens of the three linked menus need a **massive rework to look much better**; more pages are welcome. They are:
+- `/recipe`: `recipe/RecipesGui.openMainMenu` (the "Recipe Browser", 1768 lines). Today it is a grid of single icons with no labels, counts or grouping, blank rows and stray empty slots, and one red barrier item (screenshot sent by the owner on 2026-11-05).
+- `/setrecipe`: `recipe/RecipeEditorGui.openRecipeList` (the recipe editor list, 1882 lines).
+- `/customitems`: `CustomItemsGui.open` (the root of every custom item by category, 1661 lines; its sub-pages reach the recipe browser too).
+What to do: rebuild the first (root and category) screens of all three on the layout module (`core.gui.Screen`, `Elements`, `Palette`, `Layout`, `STYLE.md`) so they share one look: a header with a title and a count, category tiles with a clear name and "N items" lore, paged lists with Previous/Next and a page indicator, a search entry, a consistent frame and footer (Back and Close). Split crowded screens over more pages rather than packing slots. Keep the recipe and item data, the recipe editing logic and every command as they are; this is a presentation rework. Navigation must keep the Back rules (`ReturnTo`, `BackSlot`, `MenuTrail`, `docs/MENU_CRAWL.md`), and the recipe browser must show a Back when opened from another menu (known gap). Not a balance or content change. Check it with the real-client crawler (`POWERTEST_ROOTS=... scripts/power-client-test.sh setup,menus`, screenshots in `build/run/clientGameTest/screenshots`), then the owner judges how it looks. This is the owner's first request for the next session and was recorded here before master was updated again.
 
 ## STATUS
 Milestone: M0 to M2 done except the owner's M2.8 test; M3 to M9 first pass done on `modern/m3-economy` (audits, ledger, state machine, damage stages, menu Back, snapshot attempt)   Branch: modern/m3-economy (master is fast-forwarded to it at the end of session 2)   Last commit: see the last HISTORY line
@@ -10,6 +18,26 @@ PUSH STATUS: pushed to origin after every task; history never rewritten. origin/
 BUILD STATUS: GREEN on Minecraft 26.3 (`./gradlew build --console=plain`, exit 0). A fresh clone of the pushed branch built and passed all tests (after the hidden config package incident, see KNOWN ISSUES).
 TEST STATUS: 237 unit tests, 0 failures (`./gradlew build`). Real client (Fabric client game test, `scripts/power-client-test.sh`, all eight phases, last run 2026-11-05 on the final code): 78 checks, 0 failed (permission, setup, technique, grants, Domain and vows, combat, death, regression, ledger file written at shutdown).
 MENU CRAWL: see the results section of `docs/MENU_CRAWL.md` (the crawls were run in pieces; the `/cc` crawl, 21 screens and 365 clicks, found no Back that landed on the wrong menu).
+
+## WHAT NEEDS TESTING
+Split by who can do it. "AI" means an agent in this repository with a desktop, Java 25 and python, using the scripts named; everything else needs a person.
+
+### An AI can run these (nothing needs the owner)
+1. Unit tests and build: `./gradlew build --console=plain` (237 tests; last run green). Also on a fresh clone of the branch (the hidden-config incident, KNOWN ISSUES).
+2. The whole real-client suite: `scripts/power-client-test.sh` (about 10 minutes, eight phases: permission, setup, technique, grants, Domain and vows, combat, death, regression, plus the ledger file at shutdown). Last run 78 checks, 0 failed. Re-run after any change to powers, damage, menus or commands.
+3. Menu crawl for Back behaviour: `POWERTEST_ROOTS=cc,menu,civ scripts/power-client-test.sh setup,menus` (player menus), `scripts/power-client-test.sh setup,adminmenus` (operator console, only partly crawled so far). Read `docs/MENU_CRAWL.md` first; the known open findings are listed there. After the UI rework above, crawl the three reworked menus and look at their screenshots.
+4. Power smoke run with fake players (`-Dpoliticalserver.powerSmoke=true`, see RESUME COMMANDS): 178 checks; also the restart check (`powerSmoke=write`, stop, `powerSmoke=read`), which covers power item 8 (state survives a restart).
+5. Boot checks: `-Dpoliticalserver.mixinAudit=true` boot (29+ mixin targets, the new `MenuClickMixin` among them), strict command registration, `ledger.json` written after a coin change.
+6. Not covered yet, an AI should add real-client or smoke tests for them: the slayer, nemesis, relic, wartime and party-perk damage stages (`damage.DamageStages`; the nemesis and world boss switches are off by default, turn them on in the test config); the stock market and bank paths after the ledger change; a second real client or fake player for power items 10 and 11 (Domain with a second player, binding vows); caps per coin source (`docs/ECONOMY_CAPS.md`) once the owner decides them; the admin console crawl to the end.
+7. Performance: take a longer run of the tick report (`docs/PERF_BASELINE.md` explains how); try two or more fake players and compare. `persistence-flush` costs 12 ms every 30 seconds, the one steady cost.
+8. The 26.4 snapshot branch: when polymer, sgui and server-translations publish 26.4 builds, redo `docs/SNAPSHOT_PORT.md`.
+
+### Only the owner can judge or decide
+1. How every screen looks and feels with a real mouse (the three menus above especially), and whether the new Back behaviour feels right in play (`docs/OWNER_POWER_TEST.md`, section "What to try in the menus"). Test `/cc` Back first.
+2. The balance numbers: technique odds, mastery ranks and bonuses, reroll prices, the awakening boss (owner question 0), coin caps (question 12). Every one is DEFAULT and unapproved.
+3. Power test items 8, 10, 11 and 13 with a real second player and a real restart (an AI covers the mechanics in 4 above, not the judgement).
+4. Deleting the six dead menu classes (question 11) and the archived owner docs (question 2).
+5. Whether the JIT crash is still real on `runServer` with the JVM flags (question 1): needs a join on the owner's machine.
 
 ## MILESTONE CHECKLIST
 - [x] M0.1 Clone repo, branch, HANDOFF.md — the working copy already is the real repo (origin = https://github.com/GL-327/Economical-and-Political-Mod, history intact). Branch modern/m0-baseline cut from master 3189016.
@@ -277,3 +305,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-05 14:00 UTC Session 2: owner asked for all milestones, a menu audit, rolled techniques replacing magic and a closer to vanilla server. Done so far: feature switches for custom mobs (a1659e8); rolled techniques (9f9c2d6: 212 unit tests, 178 server smoke checks, 77 real-client checks); M3 ledger started.
 - 2026-11-05 15:00 UTC Session 2: pushed branches did not compile from a clean clone (hidden core/config package); fixed, guarded by a test, master fast-forwarded to a green build. Back buttons: 13 screens had none, now `core.gui.ReturnTo` and `openFrom(player, parent)` lead back to the menu that opened them (admin tabs, admin directory, hub, crate); the crawler gained an admin root. M4: election phases are a state machine (ElectionPhaseTest). M3: coin source audit in docs/ECONOMY_CAPS.md. Next: read the crawl results, M5 damage pipeline stages, M9 snapshot attempt.
 - 2026-11-05 18:00 UTC Session 2: M3 to M9 first pass on modern/m3-economy (ledger, election phases, damage stages, audits, snapshot attempt, menu Back with ReturnTo, BackSlot and MenuTrail); real-client run: 78 checks pass on the final code; 237 unit tests; the menu crawl found dozens of wrong or missing Backs, most of them fixed, the rest are in docs/MENU_CRAWL.md and KNOWN ISSUES. Next: the owner tests in the game and answers owner questions 0, 11 and 12.
+- 2026-11-05 19:00 UTC Session 2: owner asked for the HANDOFF to carry a testing list (what an AI can test) and a request for a massive rework of the three linked menus (`/recipe`, `/setrecipe`, `/customitems`), recorded under OWNER REQUEST and WHAT NEEDS TESTING. Master had already been fast-forwarded to d2f8c15 earlier the same day; this note is pushed as a further fast-forward.
