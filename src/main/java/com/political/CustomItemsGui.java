@@ -1228,8 +1228,9 @@ public class CustomItemsGui {
         final int SETS_PER_PAGE = 4;
         ArmorSetDisplay[] sets = allSets;
         
-        int totalPages = (sets.length + SETS_PER_PAGE - 1) / SETS_PER_PAGE;
-        int clampedPage = Math.min(page, totalPages - 1);
+        // The block armor sets were removed with the cursor rewrite, so the list can be empty: at least one page, never a negative one.
+        int totalPages = Math.max(1, (sets.length + SETS_PER_PAGE - 1) / SETS_PER_PAGE);
+        int clampedPage = Math.max(0, Math.min(page, totalPages - 1));
 
         int startIdx = clampedPage * SETS_PER_PAGE;
         for (int i = 0; i < SETS_PER_PAGE && (startIdx + i) < sets.length; i++) {

@@ -68,3 +68,39 @@
   `/poweradmin`, both guarded by the permission `politicalserver:power.admin` (operators of level owners by default). A reset keeps a
   copy of the old state in `power.json`. See `docs/OWNER_POWER_TEST.md` for the owner's test script.
 - Effects: each power effect now has a short, medium and long variant; a Domain starting or ending shows a title; screens play the open sound.
+
+### Rolled techniques, closer to vanilla (2026-11-05)
+- Every player gets one random innate technique at first join (weights in `Innate`, every number a config key and unapproved). It is asleep until an
+  awakening boss dies (default: the Ender Dragon, players within 160 blocks). Mastery ranks (Novice, Adept, Expert, Master) come from casts and raise
+  damage and cut cooldown; a Domain needs Master. A technique can be rerolled with shards, a reroll charge or a manual; players from before are
+  awakened. Schools and the school tree no longer decide anything. `power.json` is schema 2 (a copy `power.json.v1.bak` is kept on migration).
+- Closer to the base game: world bosses, nemesis, incursions, the Great Hunt and wandering spirits are off by default (`features.*` switches, nothing
+  deleted). Mob scaling, the skyblock systems and custom tools, armour and weapons are unchanged.
+
+### M3 economy
+- `core.economy.Ledger` sits behind every coin balance change (`addCoins`, `removeCoins`, `setCoins`, transfers): saturating credits, atomic transfers,
+  a journal of 5000 transactions with the asking class, totals per reason. `/ledger` (owners) shows them. The saved coin format is unchanged.
+- `docs/ECONOMY_MAP.md` and `docs/ECONOMY_CAPS.md` (generated) list where coins change and which sources have no cap word. No amount was changed.
+- Stock market: shares traded are now counted (it returned 0).
+
+### M4 politics
+- The election system is an explicit state machine (`ElectionPhase`: disabled, paused, suspended, term, campaign) with a table of legal moves and tests;
+  the election tick runs under the same condition as before.
+
+### M5 combat
+- The damage hook is a list of named, ordered stages (`damage.DamageStages`, `core.damage.DamagePipeline`) in the same order as before; damage can no
+  longer come out negative or NaN. 8 pipeline tests; the real-client combat phase covers it.
+
+### M6 to M9
+- Audits (no behaviour change): `docs/CONTENT_AUDIT.md` (what spawns entities), `docs/UI_INVENTORY.md` (113 menu classes), `docs/UI_BACK_AUDIT.md`.
+- Snapshot attempt on branch `snapshot/26.4-snapshot-7`: compiles and passes tests after four renames; boot is blocked by Polymer (`docs/SNAPSHOT_PORT.md`).
+
+### Menus
+- Back now leads to the menu the player came from. `core.gui.ReturnTo` remembers the parent of a screen; thirteen screens that had no Back and a
+  dozen admin and politics screens take their parent from the menu that opens them. `core.gui.MenuTrail` watches each player's menus and gives any
+  menu that still has no Back one that re-opens the menu before it (the screen is shown as it was, buttons read the live state when clicked).
+- Fixed: the inventory viewer's Back sat on the ninth hotbar slot and was drawn over; bounty drop tables returned to the wrong screen; the gem armor
+  page threw an index error because its list is now empty.
+- A real-client crawler (`scripts/power-client-test.sh setup,menus,adminmenus`) opens every menu reachable from the main ones, presses Back and checks
+  where it lands; `MenuBackTargetsTest` checks the fixed Back wiring.
+- Fixed: `.gitignore` hid the `core/config` source package, so clean checkouts did not compile; a test now guards it.
