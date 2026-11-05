@@ -124,6 +124,15 @@ public class PerksGui {
         };
     }
 
+    /** Where Back leads from the perk picker: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the picker from a parent menu (Back returns there), or with {@code null} from a command. */
+    public static void openFrom(ServerPlayer player, boolean isChair, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player, isChair);
+    }
+
     public static void open(ServerPlayer player, boolean isChair) {
         if (!PerkManager.canChangePerks(isChair)) {
             player.sendSystemMessage(Component.literal("Perks have already been selected for this term!").withStyle(ChatFormatting.RED));
@@ -404,6 +413,7 @@ public class PerksGui {
                     .build());
         }
 
+        com.political.core.gui.BackSlot.add(gui, FROM.get(player.getUUID()));
         gui.open();
     }
 

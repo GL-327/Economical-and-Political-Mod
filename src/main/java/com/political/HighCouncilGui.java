@@ -20,6 +20,15 @@ public final class HighCouncilGui {
 
     private HighCouncilGui() {}
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command or the hub. */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("High Council").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
@@ -41,7 +50,7 @@ public final class HighCouncilGui {
                     .addLoreLine(Component.literal("§8Requires 250 sheltered beds, 200 citizens,"))
                     .addLoreLine(Component.literal("§82500 appeal, 10M treasury and a Wonder."))
                     .build());
-            gui.setSlot(45, WarGui.back(() -> CivilizationHubGui.open(player)));
+            gui.setSlot(45, WarGui.back(FROM.getOr(player.getUUID(), () -> CivilizationHubGui.open(player))));
             gui.open();
             return;
         }
@@ -125,7 +134,7 @@ public final class HighCouncilGui {
         }
         gui.setSlot(49, logBtn.build());
 
-        gui.setSlot(45, WarGui.back(() -> CivilizationHubGui.open(player)));
+        gui.setSlot(45, WarGui.back(FROM.getOr(player.getUUID(), () -> CivilizationHubGui.open(player))));
         gui.open();
     }
 }

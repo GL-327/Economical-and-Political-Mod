@@ -126,7 +126,7 @@ public class JudgeGui {
                     .addLoreLine(Component.literal("You have 2 perk points").withStyle(ChatFormatting.YELLOW))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Click to select").withStyle(ChatFormatting.GREEN))
-                    .setCallback((index, type, containerInput, slotGui) -> PerksGui.open(player, false))
+                    .setCallback((index, type, containerInput, slotGui) -> PerksGui.openFrom(player, false, () -> open(player)))
                     .glow().build());
         } else {
             gui.setSlot(40, new GuiElementBuilder(Items.BARRIER)

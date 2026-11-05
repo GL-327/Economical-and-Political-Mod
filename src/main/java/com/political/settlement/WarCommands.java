@@ -27,7 +27,7 @@ public final class WarCommands {
 
         dispatcher.register(Commands.literal("war")
                 .executes(ctx -> {
-                    WarGui.open(ctx.getSource().getPlayerOrException());
+                    WarGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 })
                 .then(Commands.literal("status").executes(ctx -> {

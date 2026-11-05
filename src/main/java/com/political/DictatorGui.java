@@ -40,7 +40,7 @@ public class DictatorGui {
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Select server perks").withStyle(ChatFormatting.GRAY))
                     .setCallback((index, type, containerInput, slotGui) -> {
-                        PerksGui.open(player, true);
+                        PerksGui.openFrom(player, true, () -> open(player));
                     })
                     .build());
         } else {

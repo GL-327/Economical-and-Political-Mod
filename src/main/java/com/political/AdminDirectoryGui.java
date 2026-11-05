@@ -110,8 +110,8 @@ public final class AdminDirectoryGui {
         add("Politics", "Dictator", p -> DictatorGui.open(p));
         add("Politics", "Government", p -> GovernmentGui.open(p));
         add("Politics", "Government Treasury", (p, back) -> GovernmentTreasuryGui.openFrom(p, back));
-        add("Politics", "High Council", p -> HighCouncilGui.open(p));
-        add("Politics", "Impeachment", p -> ImpeachmentGui.open(p));
+        add("Politics", "High Council", (p, back) -> HighCouncilGui.openFrom(p, back));
+        add("Politics", "Impeachment", (p, back) -> ImpeachmentGui.openFrom(p, back));
         add("Politics", "Judge", p -> JudgeGui.open(p));
         add("Politics", "Party Join", p -> PartyJoinGui.open(p));
         add("Politics", "Party Leader", p -> PartyLeaderGui.open(p));
@@ -119,7 +119,7 @@ public final class AdminDirectoryGui {
         add("Politics", "Ruler", p -> RulerGui.open(p));
         add("Politics", "Vice Chair", p -> ViceChairGui.open(p));
         add("Politics", "Vote", p -> VoteGui.open(p));
-        add("Politics", "War", p -> WarGui.open(p));
+        add("Politics", "War", (p, back) -> WarGui.openFrom(p, back));
 
         // Economy
         add("Economy", "Auction House", (p, back) -> AuctionHouseGui.openFrom(p, back));

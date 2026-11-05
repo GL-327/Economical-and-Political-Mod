@@ -95,7 +95,7 @@ public class ViceChairGui {
                     .addLoreLine(Component.literal("perk cooldowns!").withStyle(ChatFormatting.GREEN))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Click to select").withStyle(ChatFormatting.AQUA))
-                    .setCallback((index, type, containerInput, slotGui) -> PerksGui.open(player, false))
+                    .setCallback((index, type, containerInput, slotGui) -> PerksGui.openFrom(player, false, () -> open(player)))
                     .glow().build());
         } else {
             gui.setSlot(31, new GuiElementBuilder(Items.BARRIER)

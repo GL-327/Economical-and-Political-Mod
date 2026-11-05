@@ -1332,7 +1332,7 @@ public class CommandRegistry {
                             if (player == null) return 0;
 
                             if (ElectionManager.isImpeachmentActive()) {
-                                ImpeachmentGui.open(player);
+                                ImpeachmentGui.openFrom(player, null);
                             } else {
                                 player.sendSystemMessage(Component.literal("No active impeachment vote!").withStyle(ChatFormatting.RED));
                             }
@@ -1477,7 +1477,7 @@ public class CommandRegistry {
                         return 0;
                     }
 
-                    PerksGui.open(player, isChair);
+                    PerksGui.openFrom(player, isChair, null);
                     return 1;
                 }));
     }

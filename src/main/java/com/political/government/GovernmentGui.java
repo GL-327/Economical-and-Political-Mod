@@ -60,7 +60,7 @@ public final class GovernmentGui {
         gui.setSlot(23, new GuiElementBuilder(Items.EXPERIENCE_BOTTLE)
                 .setName(Component.literal("National Perks").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Server-wide effects chosen by leadership."))
-                .setCallback((a, b, c, d) -> PerksGui.open(player, uuid.equals(DataManager.getChair())))
+                .setCallback((a, b, c, d) -> PerksGui.openFrom(player, uuid.equals(DataManager.getChair()), () -> open(player)))
                 .build());
 
         gui.setSlot(24, new GuiElementBuilder(Items.EMERALD)
@@ -101,7 +101,7 @@ public final class GovernmentGui {
         gui.setSlot(40, new GuiElementBuilder(Items.NETHERITE_SWORD)
                 .setName(Component.literal("War Room").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Wars between rival realms."))
-                .setCallback((a, b, c, d) -> WarGui.open(player))
+                .setCallback((a, b, c, d) -> WarGui.openFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(45, WarGui.back(() -> CivilizationHubGui.open(player)));

@@ -161,7 +161,7 @@ public final class SettlementCommands {
 
         dispatcher.register(Commands.literal("council")
                 .executes(ctx -> {
-                    HighCouncilGui.open(ctx.getSource().getPlayerOrException());
+                    HighCouncilGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 })
                 .then(Commands.literal("status").executes(ctx -> {

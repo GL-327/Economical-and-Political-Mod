@@ -532,18 +532,18 @@ public final class AdminPanel {
                 "Offices, elections and the people behind them");
 
         gui.setSlot(19, GuiKit.tile(Items.BELL, "Elections", ChatFormatting.YELLOW,
-                () -> AdminGui.openPage(player, AdminGui.AdminPage.ELECTIONS),
+                () -> AdminGui.openPageFrom(player, AdminGui.AdminPage.ELECTIONS, () -> openPolitics(player)),
                 "Start, end and reset"));
 
         gui.setSlot(20, GuiKit.tile(Items.GOLDEN_HELMET, "Government", ChatFormatting.GOLD,
-                () -> AdminGui.openPage(player, AdminGui.AdminPage.GOVERNMENT),
+                () -> AdminGui.openPageFrom(player, AdminGui.AdminPage.GOVERNMENT, () -> openPolitics(player)),
                 "Chair, vice, judge and dictator"));
 
         gui.setSlot(21, GuiKit.tile(Items.BANNER.white(), "Parties", ChatFormatting.AQUA,
                 () -> PartyLeaderGui.open(player), "Membership and leadership"));
 
         gui.setSlot(22, GuiKit.tile(Items.END_CRYSTAL, "High council", ChatFormatting.LIGHT_PURPLE,
-                () -> HighCouncilGui.open(player), "The layer above the chair"));
+                () -> HighCouncilGui.openFrom(player, () -> openPolitics(player)), "The layer above the chair"));
 
         gui.setSlot(23, GuiKit.tile(Items.BANNER.black(), "Shadow government", ChatFormatting.DARK_GRAY,
                 () -> {
@@ -558,10 +558,10 @@ public final class AdminPanel {
                 }, "Who holds power without an election"));
 
         gui.setSlot(24, GuiKit.tile(Items.IRON_SWORD, "Impeachment", ChatFormatting.RED,
-                () -> ImpeachmentGui.open(player), "Motions against the chair"));
+                () -> ImpeachmentGui.openFrom(player, () -> openPolitics(player)), "Motions against the chair"));
 
         gui.setSlot(25, GuiKit.tile(Items.PAPER, "Perks", ChatFormatting.GREEN,
-                () -> PerksGui.open(player, true), "Office perks and resets"));
+                () -> PerksGui.openFrom(player, true, () -> openPolitics(player)), "Office perks and resets"));
 
         GuiKit.footer(gui, SIZE, player, () -> open(player));
         gui.open();
@@ -695,7 +695,7 @@ public final class AdminPanel {
                 "Declarations, motions and councils");
 
         gui.setSlot(22, GuiKit.tile(Items.NETHERITE_SWORD, "War panel", ChatFormatting.DARK_RED,
-                () -> WarGui.open(player),
+                () -> WarGui.openFrom(player, () -> openWars(player)),
                 "Active wars", "Motions and votes", "Council seats and weights"));
 
         gui.setSlot(20, GuiKit.info(Items.SHIELD, "How voting works", ChatFormatting.WHITE,

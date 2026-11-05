@@ -37,6 +37,12 @@ public final class ReturnTo {
         return back.get(player);
     }
 
+    /** The parent to return to, or {@code fallback} when the screen was not opened from a menu that passed one. */
+    public Runnable getOr(UUID player, Runnable fallback) {
+        Runnable parent = back.get(player);
+        return parent != null ? parent : fallback;
+    }
+
     /** Forgets a player in every menu family; called when they leave so nothing keeps their session alive. */
     public static void forgetEverywhere(UUID player) {
         for (ReturnTo family : ALL) {

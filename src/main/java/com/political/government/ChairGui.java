@@ -264,7 +264,7 @@ public class ChairGui {
                     .addLoreLine(Component.literal("You have 6 perk points").withStyle(ChatFormatting.YELLOW))
                     .addLoreLine(Component.literal(""))
                     .addLoreLine(Component.literal("Click to select").withStyle(ChatFormatting.GREEN))
-                    .setCallback((index, type, containerInput, slotGui) -> PerksGui.open(player, true))
+                    .setCallback((index, type, containerInput, slotGui) -> PerksGui.openFrom(player, true, () -> open(player)))
                     .glow().build());
         } else {
             gui.setSlot(34, new GuiElementBuilder(Items.BARRIER)

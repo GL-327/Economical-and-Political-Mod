@@ -89,14 +89,14 @@ public final class CivilizationHubGui {
                 .setName(Component.literal("High Council").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Prime Seat, ministries and edicts."))
                 .addLoreLine(Component.literal("§8Requires a UTOPIA settlement."))
-                .setCallback((a, b, c, d) -> HighCouncilGui.open(player))
+                .setCallback((a, b, c, d) -> HighCouncilGui.openFrom(player, null))
                 .build());
 
         gui.setSlot(16, new GuiElementBuilder(Items.NETHERITE_SWORD)
                 .setName(Component.literal("War Room").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Declare war, vote, sue for peace."))
                 .addLoreLine(Component.literal("§7See the council and the shadows."))
-                .setCallback((a, b, c, d) -> WarGui.open(player))
+                .setCallback((a, b, c, d) -> WarGui.openFrom(player, () -> open(player)))
                 .build());
 
         // ── Row 2: magic ──

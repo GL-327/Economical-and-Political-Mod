@@ -109,7 +109,7 @@ public class RulerGui {
                         if (isDictator) {
                             DictatorGui.open(player);
                         } else {
-                            PerksGui.open(player, true);
+                            PerksGui.openFrom(player, true, null);
                         }
                     })
                     .build());

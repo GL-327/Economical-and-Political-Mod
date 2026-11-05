@@ -168,6 +168,8 @@ final class TickRegistrations {
         });
 
         // Versioned stores (M1.6): write the dirty ones on a timer (default every 30 seconds). The shutdown hook flushes the rest.
+        // After every menu has had its say this tick: a menu with no Back of its own gets one (M7).
+        r.server("menu-trail", com.political.core.gui.MenuTrail::tick);
         r.server("persistence-flush", CoreSettings.PERSISTENCE_FLUSH_INTERVAL_TICKS.get(), s -> StoreRegistry.global().saveDirty());
         return d;
     }

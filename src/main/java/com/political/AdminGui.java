@@ -66,11 +66,30 @@ public class AdminGui {
         UNDERGROUND_AUCTION,
         CUSTOM_ITEMS
     }
+    /** Where Back leads from the page that was opened first: the menu that opened it (the console's tab), else this panel's main page. */
+    private static final com.political.core.gui.ReturnTo PAGE_FROM = new com.political.core.gui.ReturnTo();
+
+    /** The page each admin was last on, so a player picker goes Back to the page that opened it. */
+    private static final java.util.Map<java.util.UUID, AdminPage> LAST_PAGE = new java.util.concurrent.ConcurrentHashMap<>();
+
     public static void open(ServerPlayer player) {
         openPage(player, AdminPage.MAIN);
     }
 
+    /** Opens the panel's main page from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        PAGE_FROM.set(player.getUUID(), back);
+        openPage(player, AdminPage.MAIN);
+    }
+
+    /** Opens a page from a parent menu (Back returns there); the panel's own main page passes {@code null}. */
+    public static void openPageFrom(ServerPlayer player, AdminPage page, Runnable back) {
+        PAGE_FROM.set(player.getUUID(), back);
+        openPage(player, page);
+    }
+
     public static void openPage(ServerPlayer player, AdminPage page) {
+        LAST_PAGE.put(player.getUUID(), page);
         switch (page) {
             case MAIN -> openMainPage(player);
             case ELECTIONS -> openElectionsPage(player);
@@ -105,7 +124,7 @@ public class AdminGui {
                 .addLoreLine(Component.literal("• Reset impeachment").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(player, AdminPage.ELECTIONS))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPageFrom(player, AdminPage.ELECTIONS, () -> openMainPage(player)))
                 .build());
 
         gui.setSlot(12, new GuiElementBuilder(Items.GOLDEN_HELMET)
@@ -116,7 +135,7 @@ public class AdminGui {
                 .addLoreLine(Component.literal("• Reset perks").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(player, AdminPage.GOVERNMENT))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPageFrom(player, AdminPage.GOVERNMENT, () -> openMainPage(player)))
                 .build());
 
         gui.setSlot(14, new GuiElementBuilder(Items.PLAYER_HEAD)
@@ -127,7 +146,7 @@ public class AdminGui {
                 .addLoreLine(Component.literal("• Give credits").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(player, AdminPage.PLAYERS))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPageFrom(player, AdminPage.PLAYERS, () -> openMainPage(player)))
                 .build());
 
         gui.setSlot(16, new GuiElementBuilder(Items.GOLD_BLOCK)
@@ -138,7 +157,7 @@ public class AdminGui {
                 .addLoreLine(Component.literal("• Manage credits/coins").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(player, AdminPage.ECONOMY))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPageFrom(player, AdminPage.ECONOMY, () -> openMainPage(player)))
                 .build());
 
         gui.setSlot(28, new GuiElementBuilder(Items.COMPASS)
@@ -148,7 +167,7 @@ public class AdminGui {
                 .addLoreLine(Component.literal("• Manage NPCs").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(player, AdminPage.WORLD))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPageFrom(player, AdminPage.WORLD, () -> openMainPage(player)))
                 .build());
         gui.setSlot(22, new GuiElementBuilder(Items.IRON_SWORD)
                 .setName(Component.literal("⚔ Bounty Admin").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
@@ -188,7 +207,7 @@ public class AdminGui {
                 .addLoreLine(Component.literal("• Get auction items").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPage(player, AdminPage.UNDERGROUND_AUCTION))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openPageFrom(player, AdminPage.UNDERGROUND_AUCTION, () -> openMainPage(player)))
                 .build());
         gui.setSlot(32, new GuiElementBuilder(Items.COMPARATOR)
                 .setName(Component.literal("⚙ Game Settings").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
@@ -453,7 +472,7 @@ public class AdminGui {
                 .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
                 .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> {
                     undergroundAuctionItemPage = 0; // Reset page
-                    openPage(player, AdminPage.MAIN);
+                    PAGE_FROM.getOr(player.getUUID(), () -> openPage(player, AdminPage.MAIN)).run();
                 })
                 .build());
 
@@ -1514,7 +1533,8 @@ public class AdminGui {
     private static void addBackButton(SimpleGui gui, ServerPlayer player) {
         gui.setSlot(gui.getSize() - 5, new GuiElementBuilder(Items.ARROW)
                 .setName(Component.literal("← Back").withStyle(ChatFormatting.YELLOW))
-                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui) -> openMainPage(player))
+                .setCallback((int index, eu.pb4.sgui.api.ClickType type, net.minecraft.world.inventory.ContainerInput containerInput, eu.pb4.sgui.api.gui.SlotBasedGui slotGui)
+                        -> PAGE_FROM.getOr(player.getUUID(), () -> openMainPage(player)).run())
                 .build());
     }
 
@@ -1562,7 +1582,7 @@ public class AdminGui {
 
         gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
                 .setName(Component.literal("← Back").withStyle(ChatFormatting.GRAY))
-                .setCallback((index, type, containerInput, slotGui) -> open(admin))
+                .setCallback((index, type, containerInput, slotGui) -> openPage(admin, LAST_PAGE.getOrDefault(admin.getUUID(), AdminPage.MAIN)))
                 .build());
 
         gui.open();
