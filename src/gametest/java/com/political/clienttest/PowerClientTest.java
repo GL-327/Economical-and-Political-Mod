@@ -708,6 +708,14 @@ public class PowerClientTest implements FabricClientGameTest {
                 closeScreen();
             }
         }
+        // the coin ledger (M3): an admin grant is recorded, /ledger shows it, and ledger.json is written when the server stops
+        int mark = mark();
+        cmd("coins add @s 7");
+        ctx.waitTicks(10);
+        mark = mark();
+        cmd("ledger");
+        ctx.waitTicks(20);
+        check("/ledger shows the coin totals (" + since(mark) + ")", saw(mark, "Coin ledger", null));
     }
 
 

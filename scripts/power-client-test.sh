@@ -87,6 +87,9 @@ STATUS=$?
 unset JAVA_TOOL_OPTIONS
 stop_server
 
+if [[ ",$PHASES," == *",regression,"* || "$PHASES" == "" ]]; then
+  if [ -f run-verify/world/ledger.json ]; then echo "CLIENTTEST ok     ledger.json was written when the server stopped"; else echo "CLIENTTEST FAILED ledger.json was not written when the server stopped"; STATUS=1; fi
+fi
 grep "CLIENTTEST" "$CLIENT_LOG" | sed 's/^.*CLIENTTEST/CLIENTTEST/' | grep -v "CLIENTTEST screen"
 echo "--- errors the dev server logged during the run (the Windows system info warnings at startup are not the mod's) ---"
 grep -E "/(ERROR|WARN)\]|Exception" "$SERVER_LOG" | grep -vE "oshi|Win32|Hkey|Perflib|system info|Process (Loads|Virtual|Resident)|OFFLINE|offline|authenticate|hackers|online-mode|Can't keep up|Tick service" | head -40
