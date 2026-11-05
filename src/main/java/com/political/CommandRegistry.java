@@ -615,7 +615,7 @@ public class CommandRegistry {
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    StockAdminGui.openMainMenu(player);
+                    StockAdminGui.openMainMenuFrom(player, null);
                     return 1;
                 })
                 .then(Commands.literal("event")
@@ -697,7 +697,7 @@ public class CommandRegistry {
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    CryptoAdminGui.openMainMenu(player);
+                    CryptoAdminGui.openMainMenuFrom(player, null);
                     return 1;
                 })
                 .then(Commands.literal("give")
@@ -1096,7 +1096,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    ShopGui.openMainMenu(player);
+                    ShopGui.openMainMenuFrom(player, null);
                     return 1;
                 }));
 
@@ -1152,7 +1152,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    UndergroundAuctionGui.open(player);
+                    UndergroundAuctionGui.openFrom(player, null);
                     return 1;
                 }));
 
@@ -1161,7 +1161,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayer();
                     if (player == null) return 0;
-                    UndergroundAuctionGui.open(player);
+                    UndergroundAuctionGui.openFrom(player, null);
                     return 1;
                 }));
 

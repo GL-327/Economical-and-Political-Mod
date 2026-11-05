@@ -145,7 +145,7 @@ public class ChairGui {
                 .addLoreLine(Component.literal("Tax & levies split across parties").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Click to manage").withStyle(ChatFormatting.YELLOW))
-                .setCallback((index, type, containerInput, slotGui) -> GovernmentTreasuryGui.open(player))
+                .setCallback((index, type, containerInput, slotGui) -> GovernmentTreasuryGui.openFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(21, new GuiElementBuilder(Items.PLAYER_HEAD)

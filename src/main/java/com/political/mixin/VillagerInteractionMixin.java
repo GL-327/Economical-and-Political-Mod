@@ -32,7 +32,7 @@ public class VillagerInteractionMixin {
 
         // Check for Underground Auctioneer
         if (UndergroundAuctionManager.isAuctioneer(self)) {
-            com.political.economy.UndergroundAuctionGui.open(serverPlayer);
+            com.political.economy.UndergroundAuctionGui.openFrom(serverPlayer, null);
             cir.setReturnValue(InteractionResult.SUCCESS);
             return;
         }

@@ -87,13 +87,13 @@ public final class AdminDirectoryGui {
         add("Operator", "Boss Config", p -> BossConfigGui.openMainMenu(p));
         add("Operator", "Bounty Config", p -> BountyConfigGui.open(p));
         add("Operator", "Civil Anti Cheat", (p, back) -> CivilAntiCheatGui.openFrom(p, back));
-        add("Operator", "Crypto Admin", p -> CryptoAdminGui.openMainMenu(p));
+        add("Operator", "Crypto Admin", (p, back) -> CryptoAdminGui.openMainMenuFrom(p, back));
         add("Operator", "Item Model", (p, back) -> ItemModelGui.openFrom(p, back));
         add("Operator", "Player Buff Admin", (p, back) -> PlayerBuffAdminGui.openPlayerSelectFrom(p, back));
         add("Operator", "Recipe Editor", p -> RecipeEditorGui.openMainMenu(p));
         add("Operator", "Report", p -> ReportGui.openMainMenu(p));
         add("Operator", "Set Price", p -> SetPriceGui.openMainMenu(p));
-        add("Operator", "Stock Admin", p -> StockAdminGui.openMainMenu(p));
+        add("Operator", "Stock Admin", (p, back) -> StockAdminGui.openMainMenuFrom(p, back));
         add("Operator", "Texture Helper", p -> TextureHelperGui.openMainMenu(p));
 
         // Settlement
@@ -109,7 +109,7 @@ public final class AdminDirectoryGui {
         add("Politics", "Chair", p -> ChairGui.open(p));
         add("Politics", "Dictator", p -> DictatorGui.open(p));
         add("Politics", "Government", p -> GovernmentGui.open(p));
-        add("Politics", "Government Treasury", p -> GovernmentTreasuryGui.open(p));
+        add("Politics", "Government Treasury", (p, back) -> GovernmentTreasuryGui.openFrom(p, back));
         add("Politics", "High Council", p -> HighCouncilGui.open(p));
         add("Politics", "Impeachment", p -> ImpeachmentGui.open(p));
         add("Politics", "Judge", p -> JudgeGui.open(p));
@@ -130,12 +130,12 @@ public final class AdminDirectoryGui {
         add("Economy", "Credits Trade", p -> CreditsTradeGui.open(p));
         add("Economy", "Crypto Market", p -> CryptoMarketGui.openMainMenu(p));
         add("Economy", "Market", p -> MarketGui.open(p));
-        add("Economy", "Shop", p -> ShopGui.openMainMenu(p));
+        add("Economy", "Shop", (p, back) -> ShopGui.openMainMenuFrom(p, back));
         add("Economy", "Shop Item", p -> ShopItemGui.open(p));
         add("Economy", "Special Shop", p -> SpecialShopGui.openMainMenu(p));
         add("Economy", "Stock Market", p -> StockMarketGui.openMainMenu(p));
         add("Economy", "Trade", p -> TradeGui.open(p));
-        add("Economy", "Underground Auction", p -> UndergroundAuctionGui.open(p));
+        add("Economy", "Underground Auction", (p, back) -> UndergroundAuctionGui.openFrom(p, back));
 
         // Combat
         add("Combat", "Bestiary", p -> BestiaryGui.open(p));

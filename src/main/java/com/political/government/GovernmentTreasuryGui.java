@@ -22,6 +22,15 @@ import java.util.Locale;
  */
 public class GovernmentTreasuryGui {
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         String uuid = player.getUUID().toString();
         String partyId = PoliticalPartyManager.getPlayerPartyId(uuid);
@@ -98,6 +107,7 @@ public class GovernmentTreasuryGui {
                 .setCallback((index, type, containerInput, slotGui) -> player.closeContainer())
                 .build());
 
+        com.political.core.gui.BackSlot.add(gui, FROM.get(player.getUUID()));
         gui.open();
     }
 

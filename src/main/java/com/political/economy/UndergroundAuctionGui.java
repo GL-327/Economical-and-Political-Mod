@@ -32,6 +32,15 @@ public class UndergroundAuctionGui {
         });
     }
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command or a villager (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         // Close existing GUI if open
         SimpleGui existingGui = openGuis.remove(player.getUUID());
@@ -184,6 +193,7 @@ public class UndergroundAuctionGui {
                 .addLoreLine(Component.literal("This display updates automatically").withStyle(ChatFormatting.GRAY))
                 .glow()
                 .build());
+        com.political.core.gui.BackSlot.add(gui, FROM.get(player.getUUID()));
     }
 
     private static void openCustomBidGui(ServerPlayer player) {

@@ -36,7 +36,7 @@ public final class ModernShowcaseGui {
                 "Shop", ChatFormatting.GOLD,
                 "Buy and sell with VAT going to the treasury.",
                 "Chair sets the rate.",
-                () -> ShopGui.openMainMenu(player)));
+                () -> ShopGui.openMainMenuFrom(player, () -> open(player))));
 
         gui.setSlot(21, ModernGuiTheme.button(Items.ENCHANTED_BOOK,
                 "Techniques", ChatFormatting.LIGHT_PURPLE,

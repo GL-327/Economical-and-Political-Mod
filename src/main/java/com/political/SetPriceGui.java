@@ -86,7 +86,7 @@ public class SetPriceGui {
                 .setName(Component.literal("🏪 Open Shop").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("Open the player shop GUI").withStyle(ChatFormatting.GRAY))
-                .setCallback((index, type, containerInput, slotGui) -> ShopGui.openMainMenu(player))
+                .setCallback((index, type, containerInput, slotGui) -> ShopGui.openMainMenuFrom(player, null))
                 .build());
 
         // Reset all prices

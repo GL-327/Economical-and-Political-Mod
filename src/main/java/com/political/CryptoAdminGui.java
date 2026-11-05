@@ -16,6 +16,15 @@ import net.minecraft.ChatFormatting;
  */
 public class CryptoAdminGui {
 
+    /** Where Back leads from this screen: the menu that opened it, remembered per player. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openMainMenuFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        openMainMenu(player);
+    }
+
     public static void openMainMenu(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x3, player, false);
         gui.setTitle(Component.literal("🔮 Crypto Admin"));
@@ -82,6 +91,7 @@ public class CryptoAdminGui {
                 .setCallback((idx, type, containerInput, slotGui) -> player.closeContainer())
                 .build());
 
+        com.political.core.gui.BackSlot.add(gui, FROM.get(player.getUUID()));
         gui.open();
     }
 

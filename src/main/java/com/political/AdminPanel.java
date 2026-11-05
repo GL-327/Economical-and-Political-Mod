@@ -498,16 +498,16 @@ public final class AdminPanel {
                 () -> AuctionHouseGui.openFrom(player, () -> openEconomy(player)), "Live listings and history"));
 
         gui.setSlot(23, GuiKit.tile(Items.ENDER_EYE, "Underground auction", ChatFormatting.DARK_PURPLE,
-                () -> UndergroundAuctionGui.open(player), "The quiet market"));
+                () -> UndergroundAuctionGui.openFrom(player, () -> openEconomy(player)), "The quiet market"));
 
         gui.setSlot(24, GuiKit.tile(Items.DIAMOND, "Stock market", ChatFormatting.GREEN,
-                () -> StockAdminGui.openMainMenu(player), "Listings, prices and halts"));
+                () -> StockAdminGui.openMainMenuFrom(player, () -> openEconomy(player)), "Listings, prices and halts"));
 
         gui.setSlot(25, GuiKit.tile(Items.AMETHYST_SHARD, "Crypto", ChatFormatting.LIGHT_PURPLE,
-                () -> CryptoAdminGui.openMainMenu(player), "Coins, volatility and events"));
+                () -> CryptoAdminGui.openMainMenuFrom(player, () -> openEconomy(player)), "Coins, volatility and events"));
 
         gui.setSlot(28, GuiKit.tile(Items.CHEST, "Government treasury", ChatFormatting.YELLOW,
-                () -> GovernmentTreasuryGui.open(player), "Public money"));
+                () -> GovernmentTreasuryGui.openFrom(player, () -> openEconomy(player)), "Public money"));
 
         gui.setSlot(31, GuiKit.tile(Items.ARMOR_STAND, "Minions", ChatFormatting.GREEN,
                 () -> MinionGui.openFrom(player, () -> openEconomy(player)), "Placed workers and their output"));
@@ -516,7 +516,7 @@ public final class AdminPanel {
                 () -> BazaarGui.openFrom(player, () -> openEconomy(player)), "The material order book"));
 
         gui.setSlot(29, GuiKit.tile(Items.BARREL, "Shops", ChatFormatting.GOLD,
-                () -> ShopGui.openMainMenu(player), "Server and player shops"));
+                () -> ShopGui.openMainMenuFrom(player, () -> openEconomy(player)), "Server and player shops"));
 
         GuiKit.footer(gui, SIZE, player, () -> open(player));
         gui.open();

@@ -208,7 +208,7 @@ public final class CivilizationHubGui {
         gui.setSlot(43, new GuiElementBuilder(Items.GOLD_NUGGET)
                 .setName(Component.literal("Shop").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Buy and sell. VAT goes to the treasury."))
-                .setCallback((a, b, c, d) -> ShopGui.openMainMenu(player))
+                .setCallback((a, b, c, d) -> ShopGui.openMainMenuFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
