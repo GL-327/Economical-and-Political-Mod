@@ -24,7 +24,7 @@
   "political.gui.stepper.shift": "Hold shift for ten times as much",
   "political.ledger.player": "%s has %s coins. Recent transactions:",
   "political.damage.slayer_sword_level": "⚠ Requires %s Bounty Level %s!",
-  "political.ledger.title": "Coin ledger since the server started: %s recent transactions, %s refused debits. Net coins by reason:",
+  "political.ledger.title": "Coin ledger: %s transactions in this run's journal, %s refused debits in all. Net coins made (+) or destroyed (-) by reason, over the life of the world:",
   "political.power.ability.about.barrier": "Blocks incoming damage for a moment. It does not stop the void.",
   "political.power.ability.about.blue": "Pulls the target toward you.",
   "political.power.ability.about.cursed_blast": "A ray of cursed energy that hurts the target.",

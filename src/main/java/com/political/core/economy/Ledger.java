@@ -55,9 +55,31 @@ public final class Ledger {
     private final Deque<Entry> journal = new ArrayDeque<>();
     private final Map<String, Long> netByReason = new TreeMap<>();
     private long refusedDebits;
+    /** Told whenever the totals change, so a store can mark itself dirty; set once by {@code LedgerStore}. */
+    private Runnable onChange = () -> { };
 
     public Ledger(Balances balances) {
         this.balances = balances;
+    }
+
+    /** What survives a restart: the running totals. The journal is a per-run diagnostic and is not saved. */
+    public record Totals(Map<String, Long> netByReason, long refusedDebits) {
+    }
+
+    /** The totals now (a copy). */
+    public Totals totals() {
+        return new Totals(new TreeMap<>(netByReason), refusedDebits);
+    }
+
+    /** Replaces the totals with saved ones, at startup, before any transaction. Does not call the change listener. */
+    public void restoreTotals(Totals saved) {
+        netByReason.clear();
+        netByReason.putAll(saved.netByReason());
+        refusedDebits = Math.max(0L, saved.refusedDebits());
+    }
+
+    public void onChange(Runnable listener) {
+        this.onChange = listener == null ? () -> { } : listener;
     }
 
     public long balance(String account) {
@@ -84,6 +106,7 @@ public final class Ledger {
         long before = balance(account);
         if (before < amount) {
             refusedDebits++;
+            onChange.run();
             return false;
         }
         balances.put(account, before - amount);
@@ -128,6 +151,7 @@ public final class Ledger {
             case DEBIT -> -applied;
         };
         netByReason.merge(reason, signed, Long::sum);
+        onChange.run();
     }
 
     /** The newest {@code count} transactions, newest first. */
@@ -151,12 +175,12 @@ public final class Ledger {
         return out;
     }
 
-    /** Net coins created (positive) or destroyed (negative) by each reason since the server started. */
+    /** Net coins created (positive) or destroyed (negative) by each reason since the totals began (they survive restarts, see {@code LedgerStore}). */
     public Map<String, Long> netByReason() {
         return new LinkedHashMap<>(netByReason);
     }
 
-    /** How many debits were refused for lack of funds since the server started. */
+    /** How many debits were refused for lack of funds since the totals began. */
     public long refusedDebits() {
         return refusedDebits;
     }

@@ -231,6 +231,8 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             SlayerRecipes.registerRecipes();
             FishingManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             TechniqueManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
+            com.political.core.economy.LedgerStore.open(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT), DataManager.LEDGER)
+                    .register(com.political.core.persist.StoreRegistry.global());
             SettlementManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             HighCouncilManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));
             SettlementElectionManager.initialize(s.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT));

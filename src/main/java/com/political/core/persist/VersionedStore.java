@@ -76,6 +76,7 @@ public final class VersionedStore<T> {
     private final Supplier<T> defaults;
     private final NavigableMap<Integer, UnaryOperator<JsonElement>> migrations;
     private final boolean keepBackup;
+    private final Runnable beforeSave;
     private final LongSupplier wallClock;
 
     private T value;
@@ -93,6 +94,7 @@ public final class VersionedStore<T> {
         this.defaults = b.defaults;
         this.migrations = new TreeMap<>(b.migrations);
         this.keepBackup = b.keepBackup;
+        this.beforeSave = b.beforeSave;
         this.wallClock = b.wallClock;
     }
 
@@ -108,6 +110,7 @@ public final class VersionedStore<T> {
         private final Supplier<T> defaults;
         private final TreeMap<Integer, UnaryOperator<JsonElement>> migrations = new TreeMap<>();
         private boolean keepBackup;
+        private Runnable beforeSave = () -> { };
         private LongSupplier wallClock = Clock::wallMillis;
 
         private Builder(String name, Path file, int currentVersion, Codec<T> codec, Supplier<T> defaults) {
@@ -140,6 +143,15 @@ public final class VersionedStore<T> {
         /** Also keep the previous file as {@code <name>.bak} on every save. For small stores that matter a lot. */
         public Builder<T> keepBackup() {
             this.keepBackup = true;
+            return this;
+        }
+
+        /**
+         * Runs just before every write, on the thread that saves. For a store whose value is a view of live state (the coin ledger's
+         * totals): it copies the live state into the value with {@link VersionedStore#set}, so no change has to touch the store.
+         */
+        public Builder<T> beforeSave(Runnable hook) {
+            this.beforeSave = Objects.requireNonNull(hook, "hook");
             return this;
         }
 
@@ -334,6 +346,7 @@ public final class VersionedStore<T> {
             LOGGER.warn("Store {} ({}) is read only and was not saved.", name, file);
             return false;
         }
+        beforeSave.run();
         String json;
         try {
             JsonElement encoded = codec.encodeStart(JsonOps.INSTANCE, value).getOrThrow(IllegalStateException::new);

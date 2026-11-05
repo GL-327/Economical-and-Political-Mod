@@ -740,7 +740,7 @@ public class PowerClientTest implements FabricClientGameTest {
      * development world. Development only.
      */
     private static final List<String> PLAYER_ROOTS = List.of("menu", "civ", "stats", "bounty", "bazaar", "shop", "expedition", "hunt",
-            "party", "guild", "trade", "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view");
+            "party", "guild", "trade", "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view", "cc");
 
     private void menus(List<String> roots) {
         cmd("gamemode creative");
