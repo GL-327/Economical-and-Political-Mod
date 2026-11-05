@@ -106,6 +106,10 @@ public final class IncursionManager {
     /** Opens a rift where the player is standing, themed by what is around them. */
     public static boolean open(ServerPlayer player) {
         if (!(player.level() instanceof ServerLevel level)) return false;
+        if (!com.political.core.config.FeatureSettings.INCURSIONS.get()) {
+            player.sendSystemMessage(com.political.core.text.Text.tr("political.feature.off"));
+            return false;
+        }
         if (activeFor(player) != null) {
             player.sendSystemMessage(Component.literal("§cYou already have one open."));
             return false;

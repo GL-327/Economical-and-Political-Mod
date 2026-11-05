@@ -102,7 +102,9 @@ public class PoliticalServer implements DedicatedServerModInitializer {
         });
 
         CustomItemHandler.register();
-        LivingWorldEvents.register();
+        if (com.political.core.config.FeatureSettings.GREAT_HUNT.get()) {
+            LivingWorldEvents.register();
+        }
         CustomItemHandler.registerGoldOnlyRestrictions();
 
         // Magic creature death → award Magic XP to killer

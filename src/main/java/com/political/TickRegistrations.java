@@ -5,6 +5,7 @@ import com.political.bounty.SlayerArmorHandler;
 import com.political.bounty.SlayerManager;
 import com.political.bounty.T2ArmorAbilityHandler;
 import com.political.core.config.CoreSettings;
+import com.political.core.config.FeatureSettings;
 import com.political.core.persist.StoreRegistry;
 import com.political.core.tick.TickDispatcher;
 import com.political.core.tick.TickReporter;
@@ -63,10 +64,17 @@ final class TickRegistrations {
         // ── Server level, first group ───────────────────────────────────────
         r.server("death-penalty-reset", s -> DeathPenaltyManager.clearRecentDeaths());
         r.server("playtime-buff-sync", 1200, PoliticalServer::syncPlaytimeAndBuffChecks);
-        r.server("world-boss", WorldBossManager::tick);
+        if (FeatureSettings.WORLD_BOSS.get()) {
+            r.server("world-boss", WorldBossManager::tick);
+        }
         r.server("minions", MinionManager::tick);
-        r.server("nemesis", NemesisManager::tick);
-        r.server("incursions", IncursionManager::tick);
+        NemesisManager.enabled = FeatureSettings.NEMESIS.get();
+        if (FeatureSettings.NEMESIS.get()) {
+            r.server("nemesis", NemesisManager::tick);
+        }
+        if (FeatureSettings.INCURSIONS.get()) {
+            r.server("incursions", IncursionManager::tick);
+        }
         r.server("sieges", SiegeManager::tick);
         r.server("political-parties", PoliticalPartyManager::tick);
         r.server("party-crisis", PartyCrisisManager::tick);
@@ -138,10 +146,14 @@ final class TickRegistrations {
         r.server("guilds", GuildManager::tick);
         r.server("trade-routes", TradeRouteManager::tick);
         r.server("caravans", CaravanManager::tick);
-        r.server("living-world-events", LivingWorldEvents::tick);
+        if (FeatureSettings.GREAT_HUNT.get()) {
+            r.server("living-world-events", LivingWorldEvents::tick);
+        }
         r.server("settlement-events", SettlementEvents::tick);
         r.server("season-festivals", SeasonFestivals::tick);
-        r.server("world-modifiers", WorldModifiers::tick);
+        if (FeatureSettings.WANDERING_SPIRITS.get()) {
+            r.server("world-modifiers", WorldModifiers::tick);
+        }
         r.server("vfx", Vfx::tick);
         r.server("companions", CompanionManager::tick);
         r.server("contracts", ContractManager::tick);

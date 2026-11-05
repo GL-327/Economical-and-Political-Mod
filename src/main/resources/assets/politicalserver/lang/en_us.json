@@ -1,6 +1,7 @@
 {
   "political.error.generic": "Something went wrong. Please tell an admin.",
   "political.error.no_permission": "You are not allowed to do that.",
+  "political.feature.off": "That feature is switched off on this server.",
   "political.gui.back": "Back",
   "political.gui.cancel": "Cancel",
   "political.gui.cannot_undo": "This cannot be undone.",

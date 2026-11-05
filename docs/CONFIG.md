@@ -9,6 +9,16 @@ first time the mod starts. Each dot in a path below is one level of nesting, so 
 default; a number outside its range is clamped; unknown settings are logged and ignored. A broken file never
 stops the server. Settings are read at startup.
 
+## features
+
+| Setting | Type | Default | Allowed | What it does |
+| --- | --- | --- | --- | --- |
+| `features.great_hunt` | boolean | `false` | true or false | The Great Hunt and the other living world events that spawn named custom mobs. |
+| `features.incursions` | boolean | `false` | true or false | Incursions: rifts a player can open that spawn waves of custom mobs. |
+| `features.nemesis` | boolean | `false` | true or false | The nemesis system: a mob that kills a player becomes a named grudge that hunts them. |
+| `features.wandering_spirits` | boolean | `false` | true or false | World modifiers such as the Wandering Spirits, which add roaming custom mobs and weather style events. |
+| `features.world_boss` | boolean | `false` | true or false | Timed world bosses that spawn in the overworld on their own. Admins can still spawn one by hand. |
+
 ## persistence
 
 | Setting | Type | Default | Allowed | What it does |
