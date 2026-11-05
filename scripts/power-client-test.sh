@@ -31,6 +31,17 @@ if [ -z "$PY" ]; then
   exit 3
 fi
 
+# a dev folder that has never run gets the settings the test needs (a fresh server asks for a whitelist and stops a slow first tick)
+mkdir -p run-verify
+if [ ! -f run-verify/server.properties ]; then
+  printf 'white-list=false
+enforce-whitelist=false
+max-tick-time=-1
+online-mode=false
+server-port=25566
+' > run-verify/server.properties
+fi
+
 # a fresh power state for the test player (the offline UUID of the name), written while no server is running
 mkdir -p run-verify/world
 "$PY" - <<'PYEOF'
