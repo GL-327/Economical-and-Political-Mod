@@ -69,5 +69,6 @@ The reason of most callers is still `unspecified` (the asking class is recorded)
 | `com/political/stats/HealthScalingManager.java` | 1 | 0 | 0 | 0 | 0 |
 
 ## Caps and limits (rule 4.4)
-The audit of which income has a cap or cooldown is M3 work that is still open and is listed in HANDOFF.md. Nothing in this milestone changed an amount.
-
+[ECONOMY_CAPS.md](ECONOMY_CAPS.md) lists every place that gives coins with the method it is in and whether that method mentions a
+cooldown, cap or once-only guard (a text scan, regenerated with `python scripts/economy-audit.py`). It is a list for the owner to
+read, not a proof. Nothing in this milestone changed an amount or a limit.
