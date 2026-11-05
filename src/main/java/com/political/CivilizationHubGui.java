@@ -158,21 +158,21 @@ public final class CivilizationHubGui {
                 .setName(Component.literal("Seasons").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7The turning year and what it"))
                 .addLoreLine(Component.literal("§7does to your harvest."))
-                .setCallback((a, b, c, d) -> SeasonGui.open(player))
+                .setCallback((a, b, c, d) -> SeasonGui.openFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(33, new GuiElementBuilder(Items.WRITABLE_BOOK)
                 .setName(Component.literal("Bestiary").withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Everything you have hunted,"))
                 .addLoreLine(Component.literal("§7and what that knowledge is worth."))
-                .setCallback((a, b, c, d) -> BestiaryGui.open(player))
+                .setCallback((a, b, c, d) -> BestiaryGui.openFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(34, new GuiElementBuilder(Items.BOW)
                 .setName(Component.literal("The Great Hunt").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7A rare beast walks the world."))
                 .addLoreLine(Component.literal("§7First to fell it takes the trophy."))
-                .setCallback((a, b, c, d) -> HuntGui.open(player))
+                .setCallback((a, b, c, d) -> HuntGui.openFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(37, new GuiElementBuilder(Items.EMERALD)

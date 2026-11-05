@@ -34,6 +34,8 @@ public final class MenuTrail {
         GuiLike last;
         final Deque<SimpleGui> trail = new ArrayDeque<>();
         int sinceCheck;
+        /** The slot clicked this tick was a Back button: whatever menu comes next is a step back, not forward. */
+        boolean backClicked;
     }
 
     private static final Map<UUID, State> STATES = new HashMap<>();
@@ -52,6 +54,16 @@ public final class MenuTrail {
         STATES.remove(player);
     }
 
+    /** Called (by {@code MenuClickMixin}) before a click in a menu is handled: remembers whether the slot is a Back button. */
+    public static void onClick(ServerPlayer player, int slot) {
+        if (!(SguiUtils.getCurrentGui(player) instanceof SimpleGui gui) || slot < 0 || slot >= gui.getVirtualSize()) {
+            return;
+        }
+        var element = gui.getGuiElement(slot);
+        boolean back = element != null && isBackName(element.getItemStack().getHoverName().getString());
+        STATES.computeIfAbsent(player.getUUID(), id -> new State()).backClicked = back;
+    }
+
     private static void step(ServerPlayer player) {
         GuiLike current = SguiUtils.getCurrentGui(player);
         State state = STATES.get(player.getUUID());
@@ -62,6 +74,8 @@ public final class MenuTrail {
             state = new State();
             STATES.put(player.getUUID(), state);
         }
+        boolean wentBack = state.backClicked;
+        state.backClicked = false;
         if (current == state.last) {
             if (current instanceof SimpleGui gui && ++state.sinceCheck >= RECHECK_TICKS) {
                 state.sinceCheck = 0;
@@ -83,12 +97,16 @@ public final class MenuTrail {
             String fromKey = key(from);
             String key = key(gui);
             if (!fromKey.equals(key)) {
-                if (!cutTo(state.trail, key)) {
+                if (cutTo(state.trail, key)) {
+                    // back to a menu already on the trail: the trail is cut to below it
+                } else if (wentBack) {
+                    state.trail.clear(); // a Back to a menu that was not on the trail (opened by a command): it is a root
+                } else if (!isDialog(from)) {
                     state.trail.push(from);
                     while (state.trail.size() > MAX_DEPTH) {
                         state.trail.removeLast();
                     }
-                }
+                } // a dialog that was answered is replaced by the menu that follows; the trail stays as it was
             }
         }
         ensureBack(player, state, gui);
@@ -135,12 +153,17 @@ public final class MenuTrail {
             if (element == null) {
                 continue;
             }
-            String name = element.getItemStack().getHoverName().getString().toLowerCase(Locale.ROOT);
-            if (name.contains("back") || name.contains("←") || name.startsWith("return") || name.contains("previous menu")) {
+            if (isBackName(element.getItemStack().getHoverName().getString())) {
                 return true;
             }
         }
         return false;
+    }
+
+    /** A button name that leads back: it contains back or a left arrow, or starts with return, or names the previous menu. */
+    static boolean isBackName(String displayName) {
+        String name = displayName.toLowerCase(Locale.ROOT);
+        return name.contains("back") || name.contains("←") || name.startsWith("return") || name.contains("previous menu");
     }
 
     private static boolean isDialog(SimpleGui gui) {

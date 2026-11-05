@@ -795,7 +795,7 @@ public final class AdminPanel {
                 () -> BossConfigGui.openMainMenu(player), "Health, damage and phases"));
 
         gui.setSlot(24, GuiKit.tile(Items.BOOK, "Bestiary", ChatFormatting.GREEN,
-                () -> BestiaryGui.open(player), "What has been discovered"));
+                () -> BestiaryGui.openFrom(player, () -> openCombat(player)), "What has been discovered"));
 
         gui.setSlot(31, GuiKit.tile(Items.BANNER.red(), "Sieges", ChatFormatting.DARK_RED,
                 () -> SiegeGui.openAdmin(player),
@@ -888,7 +888,7 @@ public final class AdminPanel {
                 "Cherry and swamp villages", "Locate the nearest one"));
 
         gui.setSlot(25, GuiKit.tile(Items.WHEAT, "Seasons", ChatFormatting.GOLD,
-                () -> SeasonGui.open(player), "The seasonal cycle"));
+                () -> SeasonGui.openFrom(player, () -> openWorld(player)), "The seasonal cycle"));
 
         gui.setSlot(29, GuiKit.tile(Items.BEACON, "World events", ChatFormatting.LIGHT_PURPLE,
                 () -> LivingWorldGui.open(player), "What the world is doing on its own"));

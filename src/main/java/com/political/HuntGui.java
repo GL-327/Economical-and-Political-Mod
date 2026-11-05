@@ -25,6 +25,15 @@ public final class HuntGui {
     private static final int[] ROSTER_SLOTS = {28, 29, 30, 31, 32, 33, 34, 37};
     private static final int[] HISTORY_SLOTS = {19, 20, 21, 22, 23};
 
+    /** Where Back leads from this screen: the menu that opened it; the Living World when none passed one. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (Back goes to the Living World). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         MinecraftServer server = ((ServerLevel) player.level()).getServer();
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
@@ -229,7 +238,7 @@ public final class HuntGui {
                     .build());
         }
 
-        gui.setSlot(49, LivingWorldGui.back(() -> LivingWorldGui.open(player)));
+        gui.setSlot(49, LivingWorldGui.back(FROM.getOr(player.getUUID(), () -> LivingWorldGui.open(player))));
         gui.open();
     }
 

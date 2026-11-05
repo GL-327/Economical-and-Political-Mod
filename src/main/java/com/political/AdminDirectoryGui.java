@@ -138,10 +138,10 @@ public final class AdminDirectoryGui {
         add("Economy", "Underground Auction", (p, back) -> UndergroundAuctionGui.openFrom(p, back));
 
         // Combat
-        add("Combat", "Bestiary", p -> BestiaryGui.open(p));
+        add("Combat", "Bestiary", (p, back) -> BestiaryGui.openFrom(p, back));
         add("Combat", "Bounty", p -> BountyGui.openMainMenu(p));
         add("Combat", "Expedition", p -> ExpeditionGui.open(p));
-        add("Combat", "Hunt", p -> HuntGui.open(p));
+        add("Combat", "Hunt", (p, back) -> HuntGui.openFrom(p, back));
         add("Combat", "Hunts", p -> HuntsGui.openMainMenu(p));
         add("Combat", "Nemesis", (p, back) -> NemesisGui.openFrom(p, back));
         add("Combat", "World Boss", p -> WorldBossGui.openMainMenu(p));
@@ -180,7 +180,7 @@ public final class AdminDirectoryGui {
         add("World", "Atlas Map", p -> AtlasMapGui.open(p));
         add("World", "Fishing", p -> FishingGui.openMainMenu(p));
         add("World", "Living World", p -> LivingWorldGui.open(p));
-        add("World", "Season", p -> SeasonGui.open(p));
+        add("World", "Season", (p, back) -> SeasonGui.openFrom(p, back));
 
         // Other
         add("Other", "Changelog", p -> ChangelogGui.open(p));

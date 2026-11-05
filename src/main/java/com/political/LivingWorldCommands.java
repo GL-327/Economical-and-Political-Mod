@@ -35,7 +35,7 @@ public final class LivingWorldCommands {
         dispatcher.register(Commands.literal("season")
                 .executes(ctx -> {
                     ServerPlayer p = ctx.getSource().getPlayerOrException();
-                    SeasonGui.open(p);
+                    SeasonGui.openFrom(p, null);
                     return 1;
                 })
                 .then(Commands.literal("info")
@@ -110,7 +110,7 @@ public final class LivingWorldCommands {
         dispatcher.register(Commands.literal("bestiary")
                 .executes(ctx -> {
                     ServerPlayer p = ctx.getSource().getPlayerOrException();
-                    BestiaryGui.open(p);
+                    BestiaryGui.openFrom(p, null);
                     return 1;
                 })
                 .then(Commands.literal("info")

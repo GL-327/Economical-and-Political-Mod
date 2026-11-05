@@ -84,11 +84,11 @@ public final class LivingWorldEvents {
 
             switch (id) {
                 case LivingWorldItems.ID_ALMANAC -> {
-                    SeasonGui.open(sp);
+                    SeasonGui.openFrom(sp, null);
                     return InteractionResult.SUCCESS;
                 }
                 case LivingWorldItems.ID_CODEX -> {
-                    BestiaryGui.open(sp);
+                    BestiaryGui.openFrom(sp, null);
                     return InteractionResult.SUCCESS;
                 }
                 case LivingWorldItems.ID_HORN -> {
@@ -101,7 +101,7 @@ public final class LivingWorldEvents {
                         sp.sendSystemMessage(net.minecraft.network.chat.Component.literal(
                                 "§cThe hunt walks §7" + HuntManager.locationHint()), true);
                     }
-                    HuntGui.open(sp);
+                    HuntGui.openFrom(sp, null);
                     return InteractionResult.SUCCESS;
                 }
                 default -> {

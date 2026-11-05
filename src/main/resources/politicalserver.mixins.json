@@ -5,7 +5,8 @@
 	"mixins": [
 		"MiningSpeedMixin",
 		"PlayerDeathMixin",
-		"SwapHandsCastMixin"
+		"SwapHandsCastMixin",
+		"MenuClickMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

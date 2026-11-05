@@ -55,7 +55,7 @@ public final class LivingWorldGui {
                 .addLoreLine(Component.literal("§7Turns in: §f" + SeasonManager.formatRemaining()))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§eClick to open the Almanac"))
-                .setCallback((a, b, c, d) -> SeasonGui.open(player))
+                .setCallback((a, b, c, d) -> SeasonGui.openFrom(player, null))
                 .build());
 
         // ── Bestiary ──
@@ -72,7 +72,7 @@ public final class LivingWorldGui {
                         + Math.round(BestiaryManager.scholarBonus(uuid) * 100) + "%"))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§eClick to open the Bestiary"))
-                .setCallback((a, b, c, d) -> BestiaryGui.open(player))
+                .setCallback((a, b, c, d) -> BestiaryGui.openFrom(player, null))
                 .build());
 
         // ── Hunts ──
@@ -96,7 +96,7 @@ public final class LivingWorldGui {
                 + HuntManager.fmt(HuntManager.currentReward()) + " coins"));
         huntButton.addLoreLine(Component.literal(""));
         huntButton.addLoreLine(Component.literal("§eClick to open the Hunt Board"));
-        huntButton.setCallback((a, b, c, d) -> HuntGui.open(player));
+        huntButton.setCallback((a, b, c, d) -> HuntGui.openFrom(player, null));
         gui.setSlot(24, huntButton.build());
 
         // ── How to carry these around ──
