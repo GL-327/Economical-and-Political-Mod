@@ -426,6 +426,7 @@ public class StockMarket {
         // Track buy pressure for price impact
         int pressure = recentBuyPressure.getOrDefault(symbol, 0);
         recentBuyPressure.put(symbol, pressure + shares);
+        sharesTraded.merge(symbol, (long) shares, Long::sum);
         
         int totalGranted = shares + bonusShares;
         String bonusNote = bonusShares > 0 ? " (+" + bonusShares + " Stock Baron)" : "";
@@ -474,6 +475,7 @@ public class StockMarket {
         // Track sell pressure for price impact (negative = selling)
         int pressure = recentBuyPressure.getOrDefault(symbol, 0);
         recentBuyPressure.put(symbol, pressure - shares);
+        sharesTraded.merge(symbol, (long) shares, Long::sum);
         
         // Track trade count for INVESTOR buff
         incrementTradeCount(uuid);
@@ -1055,10 +1057,12 @@ public class StockMarket {
         return total;
     }
 
+    /** Shares bought and sold of a symbol since the server started (trades through buyStock and sellStock). */
     public static int getTotalSharesTraded(String symbol) {
-        // Track volume
-        return 0; // Placeholder - would need volume tracking
+        return (int) Math.min(Integer.MAX_VALUE, sharesTraded.getOrDefault(symbol, 0L));
     }
+
+    private static final Map<String, Long> sharesTraded = new HashMap<>();
 
     public static double getMarketVolatility() {
         double totalVol = 0;

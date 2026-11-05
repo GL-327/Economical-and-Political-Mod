@@ -83,13 +83,14 @@ public class ElectionManager {
         data.electionSystemPaused = electionSystemPaused;
     }
 
-    public static void tick(MinecraftServer server) {
-        if (!electionSystemEnabled || electionSystemPaused) {
-            return;
-        }
+    /** The phase the election system is in now (see {@link ElectionPhase}). */
+    public static ElectionPhase phase() {
+        return ElectionPhase.of(electionSystemEnabled, electionSystemPaused, DictatorManager.isDictatorActive(), electionActive);
+    }
 
-        // ADDED: Don't run elections during dictatorship
-        if (DictatorManager.isDictatorActive()) {
+    public static void tick(MinecraftServer server) {
+        // The clock runs only in a term or a campaign: not when the system is off, paused, or under a dictatorship.
+        if (!phase().runs()) {
             return;
         }
 
