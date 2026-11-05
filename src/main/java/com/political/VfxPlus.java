@@ -215,7 +215,7 @@ public final class VfxPlus {
                     Vfx.line(lvl, ParticleTypes.SNOWFLAKE, base, base.add(0, 1.1, 0), 0.3);
                 }
             }
-            if (f == 0) lvl.playSound(null, bp(centre), SoundEvents.GLASS_BREAK,
+            if (f == 0) lvl.playSound(null, bp(centre), SoundEvents.GLASS.breakSound().map(net.minecraft.core.Holder::value).orElse(SoundEvents.PLAYER_HURT_FREEZE),
                     net.minecraft.sounds.SoundSource.PLAYERS, 0.8f, 1.5f);
             return true;
         });

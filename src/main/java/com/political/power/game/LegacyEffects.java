@@ -177,7 +177,7 @@ final class LegacyEffects {
                 player.heal(4f);
             }
         }
-        world.playSound(null, player.blockPosition(), SoundEvents.AZALEA_PLACE, SoundSource.PLAYERS, 0.8f, 1.0f);
+        world.playSound(null, player.blockPosition(), SoundEvents.AZALEA.placeSound().map(net.minecraft.core.Holder::value).orElse(SoundEvents.PLAYER_HURT_FREEZE), SoundSource.PLAYERS, 0.8f, 1.0f);
     }
 
     private static void ironmarrow(ServerPlayer player, ServerLevel world, String id) {

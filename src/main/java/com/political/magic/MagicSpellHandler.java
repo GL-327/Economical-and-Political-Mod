@@ -208,10 +208,10 @@ public class MagicSpellHandler {
         for (double d = 0.0; d <= len; d += 0.45) {
             Vec3 p = start.add(dir.scale(d));
             world.sendParticles(ParticleTypes.SNOWFLAKE, p.x, p.y, p.z, 3, 0.06, 0.06, 0.06, 0.0);
-            world.sendParticles(ParticleTypes.ITEM_SNOWBALL, p.x, p.y, p.z, 1, 0.03, 0.03, 0.03, 0.0);
+            world.sendParticles(ParticleTypes.SNOWFLAKE, p.x, p.y, p.z, 1, 0.03, 0.03, 0.03, 0.0);
         }
         world.sendParticles(ParticleTypes.SNOWFLAKE, end.x, end.y, end.z, 18, 0.25, 0.25, 0.25, 0.02);
-        world.playSound(null, target.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.55f, 1.7f);
+        world.playSound(null, target.blockPosition(), SoundEvents.GLASS.breakSound().map(net.minecraft.core.Holder::value).orElse(SoundEvents.PLAYER_HURT_FREEZE), SoundSource.PLAYERS, 0.55f, 1.7f);
     }
 
     private record ParticleOptionsPack(net.minecraft.core.particles.ParticleOptions core,
@@ -223,7 +223,7 @@ public class MagicSpellHandler {
     private static ParticleOptionsPack spellParticlePack(MagicManager.Spell spell) {
         return switch (spell) {
             case FIREBALL, FLAME_WAVE, METEOR, NETHER_BOLT -> new ParticleOptionsPack(ParticleTypes.FLAME, ParticleTypes.LAVA, ParticleTypes.SMOKE, SoundEvents.BLAZE_SHOOT, 1.05f);
-            case ICE_SPIKE, ICE_LANCE, FROST_NOVA -> new ParticleOptionsPack(ParticleTypes.SNOWFLAKE, ParticleTypes.ITEM_SNOWBALL, ParticleTypes.END_ROD, SoundEvents.PLAYER_HURT_FREEZE, 1.2f);
+            case ICE_SPIKE, ICE_LANCE, FROST_NOVA -> new ParticleOptionsPack(ParticleTypes.SNOWFLAKE, ParticleTypes.SNOWFLAKE, ParticleTypes.END_ROD, SoundEvents.PLAYER_HURT_FREEZE, 1.2f);
             case LIGHTNING_STRIKE, CHAIN_SPARK, STORM_BOLT -> new ParticleOptionsPack(ParticleTypes.ELECTRIC_SPARK, ParticleTypes.END_ROD, ParticleTypes.CRIT, SoundEvents.LIGHTNING_BOLT_IMPACT, 1.3f);
             case SHADOW_STEP, PHANTOM_SHIFT, SHADOW_BOLT, VOID_GRASP -> new ParticleOptionsPack(ParticleTypes.PORTAL, ParticleTypes.SMOKE, ParticleTypes.REVERSE_PORTAL, SoundEvents.ENDERMAN_TELEPORT, 0.9f);
             case HEALING_WAVE, HOLY_BOLT, REGEN_AURA, LIFE_TAP -> new ParticleOptionsPack(ParticleTypes.HEART, ParticleTypes.HAPPY_VILLAGER, ParticleTypes.END_ROD, SoundEvents.AMETHYST_BLOCK_CHIME, 1.4f);
