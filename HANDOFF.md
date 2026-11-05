@@ -1,12 +1,12 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-04 14:00 UTC  |  Session: 2  |  Device: Windows
+Last updated: 2026-11-05 10:00 UTC  |  Session: 2  |  Device: Windows
 
 ## NEXT ACTION
 M2.8 is still the owner's, but most of the script has now been played by a real client (see M2.8 below). What is left for the owner: items 8 (log out and in, restart), 10 and 11 with a second player, 13 (regression), and judging how it looks (screenshots are in `build/run/clientGameTest/screenshots` after `scripts/power-client-test.sh`; the owner's own client is the final word). M2 is not done, and M3 must not start, until the owner marks the script PASS.
 
 ## STATUS
 Milestone: M2 waiting for the owner test (M2.1 to M2.7 done, M2.8 open; M1 done; M0 done except M0.7 partial)   Branch: modern/m2-power (cut from modern/m1-core at c5b0ca5)   Last commit: see the last HISTORY line
-PUSH STATUS: pushed to origin/modern/m2-power after every task; history never rewritten. Nothing is merged into master.
+PUSH STATUS: pushed to origin/modern/m2-power after every task; history never rewritten. On 2026-11-05, at the owner's request, origin/master was fast-forwarded to modern/m2-power (a plain push, no force; master was an ancestor), so master now holds M0, M1 and M2 up to M2.7 and the real-client test harness. M2.8 (the owner's own test) is still open; master contains unreleased work.
 BUILD STATUS: GREEN on Minecraft 26.3 (`./gradlew build --console=plain`, exit 0, about 20 s). Boot with `-Dpoliticalserver.mixinAudit=true`: 29 mixin target classes, audit passed, 195 command roots, no duplicates; power smoke run 162 checks passed.
 TEST STATUS: 181 tests, 181 passing, failures 0 (`./gradlew build`, build/test-results/test/*.xml): ModMetadataTest 5, ClockTest 3, RepoHygieneTest 1, SourcePolicyTest 2, WallClockPolicyTest 1, CommandRegistrarTest 8, ConfigReferenceTest 1, ConfigStoreTest 12, LayoutModuleTest 19, StyleGuideTest 1, VersionedStoreTest 14, TextPolicyTest 6, TickDispatcherTest 13, CastPipelineTest 25, FormulaTest 31, PowerStoreTest 15, PowerTextTest 5, ProgressionTest 11, TreeAdviceTest 8.
 
@@ -129,7 +129,7 @@ Handlers of UseItemCallback, UseEntityCallback, UseBlockCallback, AttackEntityCa
 6. Balance (rule 4.4): every power number (costs, cooldowns, ranges, damage, regeneration, Black Flash 5 percent and 2.5 times, Domain radius 12, vows) is the program's default and is a config key; only the owner approves them. A Reverse aimed at a mob is refused (players only) and heals self only with nothing in the crosshair; keep? — not blocking
 7. Five schools (Bloodbinding, Chronomancy, Resonance, Sporeweaving, Astralism) grant no technique and the 33 magic spells are uncastable: do you want techniques designed for them, or should they stay dormant? — not blocking
 8. The three pushed commits bc8bb47, 3dfa5b7 and 47912ef on `modern/m1-core` contain test log files with the local user name in temp paths (KNOWN ISSUES, privacy incident). Leave as is, or recreate the branch without them before it is merged? — not blocking, decide before any merge
-9. Nothing is merged into `master`: `modern/m0-baseline`, `modern/m1-core` and `modern/m2-power` are pushed and stacked on each other. When do you want them merged (the program does not say)? — not blocking
+9. DONE 2026-11-05 at your request: master was fast-forwarded to `modern/m2-power` (it contains `modern/m0-baseline` and `modern/m1-core`; no merge commit, no force). `backup/master-pre-cursor` and `main` are untouched. Note for your records: the three commits bc8bb47, 3dfa5b7 and 47912ef (question 8) are now part of master's history too; they were already public on `modern/m1-core`.
 10. GitHub Actions: `gh` is not authenticated here, so no CI run was checked. Does the workflow pass on the pushed branches? — not blocking
 
 ## VERIFIED
@@ -250,3 +250,4 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-04 12:00 UTC Session 2: M2.6 done: Powers hub, admin screens and /poweradmin with a permission node, reset that keeps a copy; docs/OWNER_POWER_TEST.md written; a development smoke run with fake players passes 159 checks on a real 26.3 server; build green with 181 tests. M2.8 (owner test with a vanilla client) is the only open M2 item.
 - 2026-11-04 13:00 UTC Session 2: found by reading the 26.3 client code that the empty-hand right click gesture never reaches the server (so the pre-M2 sneak cast never worked); the cast input is now sneak + swap-hands key (SwapHandsCastMixin, tested through a fake player's packet listener); smoke run 162 checks, mixin audit 29 targets, docs updated.
 - 2026-11-04 14:00 UTC Session 2: the owner asked me to test in the game; computer use was not available in this session, so a Fabric client game test plays the owner's script with a real Minecraft client against the dev server: 62 checks pass (items 1 to 7, 9, 11 caster side, 12 with chance 1.0); `scripts/power-client-test.sh` and `docs/OWNER_POWER_TEST.md` updated. M2.8 still waits for the owner (items 8, 10, 11 second player, 13, and the look).
+- 2026-11-05 10:00 UTC Session 2: UI sounds on power screen actions; a regression phase in the real-client test (18 older commands open without errors, 22 checks); master fast-forwarded to modern/m2-power at the owner's request; the owner's game and a dev server were opened for the owner's own test of M2.8.
