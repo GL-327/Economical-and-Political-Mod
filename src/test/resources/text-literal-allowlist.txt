@@ -226,7 +226,7 @@ com/political/magic/MagicSpellHandler.java | 9
 com/political/magic/MagicStaff.java | 18
 com/political/mixin/ArrowHeadshotMixin.java | 1
 com/political/mixin/BlockItemMixin.java | 2
-com/political/mixin/BountyDamageMixin.java | 2
+com/political/mixin/BountyDamageMixin.java | 1
 com/political/mixin/EnchantmentScreenHandlerMixin.java | 3
 com/political/mixin/ItemDyeMixin.java | 1
 com/political/mixin/LivingEntityMixin.java | 2

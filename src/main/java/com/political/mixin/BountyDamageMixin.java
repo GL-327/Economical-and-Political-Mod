@@ -71,116 +71,14 @@ public abstract class BountyDamageMixin {
         if (com.political.power.game.PowerDamage.inDomainStrike()) {
             return amount;
         }
-        float modifiedAmount = amount;
-
-        // === Player taking damage from slayer boss ===
+        // The rules and their order are in DamageStages (M5): a player taking damage, or a player dealing it.
         if (self instanceof ServerPlayer player) {
-            if (com.political.power.game.PowerDamage.absorbs(player, source)) {
-                return 0.0f;
-            }
-            if (CustomItemHandler.tryPhaseDodge(player, source, modifiedAmount)) {
-                return 0.0f;
-            }
-            if (source.getEntity() instanceof LivingEntity attacker) {
-                com.political.items.DragonPlateHandler.onWearerHit(player, attacker, modifiedAmount);
-            }
-            modifiedAmount *= com.political.RelicManager.onHurt(player, modifiedAmount);
-            if (source.getEntity() instanceof LivingEntity attacker) {
-                if (SlayerManager.isSlayerBoss(attacker.getUUID())) {
-                    SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(attacker.getUUID());
-                    if (bossType != null) {
-                        double reduction = SlayerManager.getLevelDamageReduction(player, bossType);
-                        modifiedAmount *= (1.0f - (float) reduction);
-                    }
-                }
-            }
-            // A nemesis hitting its victim brings all of its traits with it.
-            if (source.getEntity() instanceof LivingEntity nem
-                    && com.political.NemesisManager.isNemesis(nem)) {
-                modifiedAmount *= com.political.NemesisManager.onNemesisHit(nem, player, modifiedAmount);
-            }
-            // Grimoire: three of the Ward circle spends Focus as armour before defence applies.
-            modifiedAmount = com.political.WarrantArmour.onHurt(player, modifiedAmount);
-            // Skyblock-style Defense stat: dmg * 100 / (100 + defense)
-            return com.political.stats.PlayerStatsManager.applyIncomingDefense(player, source, modifiedAmount);
+            return com.political.damage.DamageStages.incoming(player, source, amount);
         }
-
-        // Damage order: vanilla amount → weapon uniques/slayer bonus (below) → PlayerStats (strength/crit/ferocity)
-        // Incoming players already applied defense: dmg * 100 / (100 + def).
-        if (!(source.getEntity() instanceof ServerPlayer player)) {
-            return modifiedAmount;
+        if (!(source.getEntity() instanceof ServerPlayer attacker)) {
+            return amount;
         }
-
-        // Apply level-based damage bonus against slayer bosses
-        if (SlayerManager.isSlayerBoss(self.getUUID())) {
-            SlayerManager.SlayerType bossType = SlayerManager.getBossSlayerType(self.getUUID());
-            if (bossType != null) {
-                double multiplier = SlayerManager.getLevelDamageMultiplier(player, bossType);
-                modifiedAmount *= (float) multiplier;
-            }
-            // Apply HUNTERS_INSTINCT perk damage bonus against any bounty boss
-            modifiedAmount *= com.political.government.PerkManager.getBountyBossDamageMultiplier();
-            
-            // SLAYER_ELITE buff: +10% bounty damage
-            double slayerEliteBonus = com.political.PlayerBuffManager.getBountyDamageBonus(player.getUUID().toString());
-            modifiedAmount *= (1.0f + (float) slayerEliteBonus);
-        }
-        
-        // UNDEAD_HUNTER buff: +15% damage to undead mobs
-        if (self.getType().getCategory() == net.minecraft.world.entity.MobCategory.MONSTER && 
-            (self instanceof net.minecraft.world.entity.monster.zombie.Zombie ||
-             self instanceof net.minecraft.world.entity.monster.skeleton.Skeleton ||
-             self instanceof net.minecraft.world.entity.monster.skeleton.WitherSkeleton ||
-             self instanceof net.minecraft.world.entity.monster.skeleton.Stray ||
-             self instanceof net.minecraft.world.entity.monster.zombie.Husk ||
-             self instanceof net.minecraft.world.entity.monster.zombie.Drowned ||
-             self instanceof net.minecraft.world.entity.monster.zombie.ZombifiedPiglin ||
-             self instanceof net.minecraft.world.entity.monster.Zoglin ||
-             self instanceof net.minecraft.world.entity.monster.Phantom)) {
-            double undeadBonus = com.political.PlayerBuffManager.getUndeadDamageBonus(player.getUUID().toString());
-            modifiedAmount *= (1.0f + (float) undeadBonus);
-        }
-
-        // Check slayer sword level requirement
-        ItemStack weapon = player.getMainHandItem();
-        if (SlayerItems.isSlayerSword(weapon)) {
-            SlayerManager.SlayerType swordType = SlayerItems.getSwordSlayerType(weapon);
-            if (swordType != null) {
-                int playerLevel = SlayerData.getSlayerLevel(player.getUUID().toString(), swordType);
-                int requiredLevel = SlayerItems.getSwordLevelRequirement(weapon);
-
-                if (playerLevel < requiredLevel) {
-                    player.sendSystemMessage(Component.literal("⚠ Requires " + swordType.displayName + " Bounty Level " + requiredLevel + "!")
-                            .withStyle(ChatFormatting.RED), true);
-                    return modifiedAmount;
-                }
-            }
-        }
-
-        modifiedAmount *= (float) FishingEventHandler.getSeaCreatureDamageMultiplier(player, self);
-
-        // Relics that fire when you land a strike.
-        com.political.RelicManager.onHit(player, self);
-
-        // A nemesis reacts to being struck, which is where its defensive traits live.
-        if (com.political.NemesisManager.isNemesis(self)) {
-            modifiedAmount *= com.political.NemesisManager.onNemesisHurt(player, self, modifiedAmount);
-        }
-
-        // Wartime: citizens of polities at war strike harder at one another.
-        if (self instanceof ServerPlayer victimPlayer) {
-            modifiedAmount *= com.political.settlement.WarManager.wartimeDamageMultiplier(player, victimPlayer);
-        }
-
-        if (source.is(DamageTypeTags.IS_PROJECTILE)) {
-            modifiedAmount *= com.political.party.PartyPerkEffects.projectileDamageBonusMultiplier(player.getUUID().toString());
-        } else {
-            modifiedAmount *= com.political.party.PartyPerkEffects.meleeDamageBonusMultiplier(player.getUUID().toString());
-        }
-
-        // Last stage: Black Flash and the Domain (power system).
-        return com.political.power.game.PowerDamage.outgoing(player, self, source,
-                CustomItemHandler.calculateSlayerDamage(player, self, modifiedAmount));
+        return com.political.damage.DamageStages.outgoing(attacker, self, source, amount);
     }
 
     @Inject(method = "die", at = @At("HEAD"))

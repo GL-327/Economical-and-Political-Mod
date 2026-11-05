@@ -23,6 +23,7 @@
   "political.gui.stepper.right": "Right click: -%s",
   "political.gui.stepper.shift": "Hold shift for ten times as much",
   "political.ledger.player": "%s has %s coins. Recent transactions:",
+  "political.damage.slayer_sword_level": "⚠ Requires %s Bounty Level %s!",
   "political.ledger.title": "Coin ledger since the server started: %s recent transactions, %s refused debits. Net coins by reason:",
   "political.power.ability.about.barrier": "Blocks incoming damage for a moment. It does not stop the void.",
   "political.power.ability.about.blue": "Pulls the target toward you.",
