@@ -727,7 +727,7 @@ public final class AdminPanel {
                 () -> RecipesGui.openMainMenu(player), "Browse and hand out"));
 
         gui.setSlot(21, GuiKit.tile(Items.END_CRYSTAL, "Version X catalog", ChatFormatting.AQUA,
-                () -> ExpansionCatalogGui.openMenu(player), "The seven gear lines"));
+                () -> ExpansionCatalogGui.openMenuFrom(player, () -> openContent(player)), "The seven gear lines"));
 
         gui.setSlot(22, GuiKit.tile(Items.ANVIL, "Reforge", ChatFormatting.WHITE,
                 () -> ReforgeGui.open(player), "Forty one reforges"));

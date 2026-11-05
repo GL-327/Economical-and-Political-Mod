@@ -17,6 +17,15 @@ public final class PlayerStatsGui {
 
     private PlayerStatsGui() {}
 
+    /** Where Back leads: the menu that opened the stat sheet. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the sheet from a parent menu (Back returns there), or with {@code null} when there is none. */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x5, player, false);
         gui.setTitle(Component.literal("Your Stats").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
@@ -82,7 +91,10 @@ public final class PlayerStatsGui {
                 })
                 .build());
 
-        gui.setSlot(36, WarGui.back(() -> MenuGui.openMainMenu(player)));
+        Runnable back = FROM.get(player.getUUID());
+        if (back != null) {
+            gui.setSlot(36, WarGui.back(back));
+        }
         gui.open();
     }
 

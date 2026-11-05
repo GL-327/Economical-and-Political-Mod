@@ -440,7 +440,10 @@ public final class PlayerStatsManager {
         dispatcher.register(Commands.literal("stats")
                 .executes(ctx -> {
                     // GUI first — the chat sheet stays available as /stats text.
-                    PlayerStatsGui.open(ctx.getSource().getPlayerOrException());
+                    {
+                        ServerPlayer asker = ctx.getSource().getPlayerOrException();
+                        PlayerStatsGui.openFrom(asker, () -> com.political.MenuGui.openMainMenu(asker));
+                    }
                     return 1;
                 })
                 .then(Commands.literal("text").executes(ctx -> {

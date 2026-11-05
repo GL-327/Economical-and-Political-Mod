@@ -52,6 +52,15 @@ public final class ExpansionCatalogGui {
                     n -> n.contains("technique manual") || n.contains("emberheart") || n.contains("glacier soul"))
     );
 
+    /** Where Back leads from the catalog's first page: the menu that opened it. */
+    private static final com.political.core.gui.ReturnTo FROM = new com.political.core.gui.ReturnTo();
+
+    /** Opens the catalog from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openMenuFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        openMenu(player);
+    }
+
     public static void openMenu(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("New Content Catalog").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
@@ -81,7 +90,10 @@ public final class ExpansionCatalogGui {
                     .build());
         }
 
-        gui.setSlot(49, WarGui.back(() -> CivilizationHubGui.open(player)));
+        Runnable back = FROM.get(player.getUUID());
+        if (back != null) {
+            gui.setSlot(49, WarGui.back(back));
+        }
         gui.open();
     }
 

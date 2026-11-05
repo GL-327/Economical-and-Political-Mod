@@ -156,7 +156,7 @@ public final class AdminDirectoryGui {
         add("Progress", "Collection", (p, back) -> CollectionGui.openFrom(p, back));
         add("Progress", "Mastery", p -> MasteryGui.openMainMenu(p));
         add("Progress", "Player Buff", p -> PlayerBuffGui.openMainMenu(p));
-        add("Progress", "Player Stats", p -> PlayerStatsGui.open(p));
+        add("Progress", "Player Stats", (p, back) -> PlayerStatsGui.openFrom(p, back));
         add("Progress", "Progression Tree", p -> ProgressionTreeGui.openMainMenu(p));
         add("Progress", "Skills", p -> SkillsGui.openMainMenu(p));
         add("Progress", "Title", (p, back) -> TitleGui.openFrom(p, back));
@@ -166,7 +166,7 @@ public final class AdminDirectoryGui {
         add("Content", "Companion", p -> CompanionGui.open(p));
         add("Content", "Contract", p -> ContractGui.open(p));
         add("Content", "Custom Items", p -> CustomItemsGui.open(p));
-        add("Content", "Expansion Catalog", p -> ExpansionCatalogGui.openMenu(p));
+        add("Content", "Expansion Catalog", (p, back) -> ExpansionCatalogGui.openMenuFrom(p, back));
         add("Content", "Fletching Table", p -> FletchingTableGui.openGui(p));
         add("Content", "Minion", (p, back) -> MinionGui.openFrom(p, back));
         add("Content", "Recipes", p -> RecipesGui.openMainMenu(p));

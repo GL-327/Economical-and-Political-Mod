@@ -493,7 +493,7 @@ public class CustomItemsGui {
                 .addLoreLine(Component.literal("Guilds, expeditions, relics, trade").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("and technique manuals").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> ExpansionCatalogGui.openMenu(player))
+                .setCallback((idx, type, containerInput, slotGui) -> ExpansionCatalogGui.openMenuFrom(player, () -> open(player)))
                 .build());
 
         // Row 1: Armor categories - spread across more slots
