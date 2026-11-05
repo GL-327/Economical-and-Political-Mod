@@ -148,10 +148,12 @@ public final class CustomItemLore {
                 out.add(Component.literal("…").withStyle(ChatFormatting.DARK_GRAY));
                 return out;
             }
+            // a line that fits and needs no trimming keeps its own parts and colours (a white label with a coloured value stays that way)
+            boolean unchanged = s.length() <= maxLineChars && s.equals(line.getString());
             if (s.length() > maxLineChars) {
                 s = s.substring(0, maxLineChars - 1) + "…";
             }
-            out.add(Component.literal(s).withStyle(line.getStyle()));
+            out.add(unchanged ? line : Component.literal(s).withStyle(line.getStyle()));
         }
         return out;
     }

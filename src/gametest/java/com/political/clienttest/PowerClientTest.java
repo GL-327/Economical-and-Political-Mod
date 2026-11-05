@@ -79,6 +79,7 @@ public class PowerClientTest implements FabricClientGameTest {
                     case "blackflash" -> phase("Black Flash", this::blackFlash);
                     case "regression" -> phase("older commands still answer", this::regression);
                     case "menus" -> phase("every menu: in and back out", () -> menus(PLAYER_ROOTS));
+                    case "armourtip" -> phase("an armour piece's tooltip", this::armourTip);
                     case "adminmenus" -> phase("every admin menu: in and back out", () -> menus(List.of("admin")));
                     default -> throw new IllegalArgumentException("unknown phase " + phase);
                 }
@@ -299,6 +300,41 @@ public class PowerClientTest implements FabricClientGameTest {
         ctx.getInput().setCursorPos(at[0], at[1]);
         ctx.waitTicks(4);
         ctx.takeScreenshot(screenshot);
+    }
+
+    /** Opens a bounty armour piece from the recipe browser, prints its lore lines with the colour of each part, screenshots the hover. */
+    private void armourTip() {
+        cmd("gamemode creative");
+        cmd("recipe");
+        check("the recipe browser opens", waitForContainer2(120));
+        boolean sets = go("Bounty Sets", false, "⚔ Bounty Sets (T1 & T2)");
+        check("the bounty sets list opens", sets);
+        int slot = slotNamed("Chestplate", false);
+        check("a chestplate is listed", slot >= 0);
+        if (slot < 0) {
+            return;
+        }
+        List<String> lines = ctx.computeOnClient(client -> {
+            AbstractContainerMenu menu = ((AbstractContainerScreen<?>) client.gui.screen()).getMenu();
+            ItemLore lore = menu.slots.get(slot).getItem().get(DataComponents.LORE);
+            List<String> out = new ArrayList<>();
+            if (lore != null) {
+                for (Component line : lore.lines()) {
+                    StringBuilder sb = new StringBuilder(line.getString()).append("   <");
+                    line.visit((style, text) -> {
+                        sb.append(style.getColor() == null ? "-" : style.getColor().serialize()).append(' ');
+                        return java.util.Optional.empty();
+                    }, net.minecraft.network.chat.Style.EMPTY);
+                    out.add(sb.append('>').toString());
+                }
+            }
+            return out;
+        });
+        for (String line : lines) {
+            System.out.println("CLIENTTEST TIP " + line);
+        }
+        hover("Chestplate", false, "40-armour-tooltip");
+        check("the stat lines are in the STATS block, not repeated lower down", lines.stream().filter(l -> l.contains("Defense:")).count() == 1);
     }
 
     private void closeScreen() {

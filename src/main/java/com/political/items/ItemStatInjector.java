@@ -5,6 +5,7 @@ import com.political.CustomItemLore;
 
 import com.political.bounty.SlayerItems;
 import com.political.stats.PlayerStatsManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -54,6 +55,20 @@ public final class ItemStatInjector {
         List<Component> stats = buildStatLines(cat, tier, seed);
         if (stats.isEmpty()) return baseLines;
 
+        // An armour piece that already has its own STATS block (Armor, Toughness, Health) gets the generated lines inside that
+        // block, in the same style, and keeps all of its lore. Cutting the lore at the line limit used to drop the piece buff text
+        // and the level requirement and left the generated lines hanging under the PIECE BUFF header.
+        if (cat == Category.ARMOR) {
+            List<Component> merged = mergeIntoStatsBlock(baseLines, stats);
+            if (merged != null) {
+                merged.add(Component.literal(""));
+                merged.add(Component.literal(flavor(id, cat, seed)));
+                merged.add(Component.literal(RULE));
+                merged.add(Component.literal(rarityLine(cat, tier)));
+                return merged;
+            }
+        }
+
         List<Component> out = new ArrayList<>();
         // Keep the descriptive lore compact so the stat block stays readable.
         int kept = 0;
@@ -96,6 +111,51 @@ public final class ItemStatInjector {
         return colour + "§l" + rarity + " " + kind;
     }
 
+    /** One stat line in the style of an armour piece's own STATS block: a white symbol and label, a coloured value. */
+    static Component statLine(String symbolAndLabel, ChatFormatting valueColour, String value) {
+        return Component.literal(symbolAndLabel + ": ").withStyle(ChatFormatting.WHITE)
+                .append(Component.literal(value).withStyle(valueColour));
+    }
+
+    /**
+     * Puts {@code stats} inside the lore's STATS block (the lines after a header containing "STATS" up to the next header), before the
+     * block's own Health line if it has one, else at the end of the block. Returns a new list with every original line kept, or null
+     * when the lore has no STATS block.
+     */
+    static List<Component> mergeIntoStatsBlock(List<Component> baseLines, List<Component> stats) {
+        int header = -1;
+        for (int i = 0; i < baseLines.size(); i++) {
+            String text = baseLines.get(i).getString().replaceAll("§.", "");
+            if (text.contains("STATS") && (text.contains("━") || text.contains("-") || text.contains("="))) {
+                header = i;
+                break;
+            }
+        }
+        if (header < 0) {
+            return null;
+        }
+        int end = baseLines.size();
+        for (int i = header + 1; i < baseLines.size(); i++) {
+            String text = baseLines.get(i).getString().replaceAll("§.", "");
+            if (text.contains("━") || text.isBlank()) {
+                end = i;
+                break;
+            }
+        }
+        int at = end;
+        for (int i = header + 1; i < end; i++) {
+            if (baseLines.get(i).getString().replaceAll("§.", "").toLowerCase(Locale.ROOT).contains("health:")) {
+                at = i;
+                break;
+            }
+        }
+        List<Component> out = new ArrayList<>(baseLines.size() + stats.size() + 4);
+        out.addAll(baseLines.subList(0, at));
+        out.addAll(stats);
+        out.addAll(baseLines.subList(at, baseLines.size()));
+        return out;
+    }
+
     // ════════════════════════════════════════════════════════════
     // STAT DERIVATION
     // ════════════════════════════════════════════════════════════
@@ -107,32 +167,32 @@ public final class ItemStatInjector {
                 int strength = mult5(10 + tier * 5, 5, seed, 2);
                 int critChance = clamp(mult5(5 + tier * 2, 4, seed, 3), 5, 40);
                 int critDamage = mult5(20 + tier * 10, 6, seed, 4);
-                lines.add(Component.literal("§7⚔ Damage: §c+" + damage));
-                lines.add(Component.literal("§7❁ Strength: §c+" + strength));
-                lines.add(Component.literal("§7☣ Crit Chance: §9+" + critChance + "%"));
-                lines.add(Component.literal("§7☠ Crit Damage: §9+" + critDamage + "%"));
+                lines.add(statLine("⚔ Damage", ChatFormatting.RED, "+" + damage));
+                lines.add(statLine("❁ Strength", ChatFormatting.RED, "+" + strength));
+                lines.add(statLine("☣ Crit Chance", ChatFormatting.BLUE, "+" + critChance + "%"));
+                lines.add(statLine("☠ Crit Damage", ChatFormatting.BLUE, "+" + critDamage + "%"));
             }
             case ARMOR -> {
                 int defense = mult5(10 + tier * 10, 6, seed, 1);
                 int health = mult5(10 + tier * 5, 5, seed, 2);
                 int strength = mult5(tier * 3, 4, seed, 3);            // may roll 0
-                lines.add(Component.literal("§7❈ Defense: §a+" + defense));
-                lines.add(Component.literal("§7❤ Health: §c+" + health));
+                lines.add(statLine("❈ Defense", ChatFormatting.GREEN, "+" + defense));
+                lines.add(statLine("❤ Health", ChatFormatting.RED, "+" + health));
                 if (strength > 0) {
-                    lines.add(Component.literal("§7❁ Strength: §c+" + strength));
+                    lines.add(statLine("❁ Strength", ChatFormatting.RED, "+" + strength));
                 }
             }
             case TOOL -> {
                 int strength = mult5(5 + tier * 3, 4, seed, 1);
                 int health = mult5(5 + tier * 2, 3, seed, 2);
-                lines.add(Component.literal("§7❁ Strength: §c+" + strength));
-                lines.add(Component.literal("§7❤ Health: §c+" + health));
+                lines.add(statLine("❁ Strength", ChatFormatting.RED, "+" + strength));
+                lines.add(statLine("❤ Health", ChatFormatting.RED, "+" + health));
             }
             case MISC -> {
                 int strength = mult5(5 + tier * 2, 4, seed, 1);
                 int health = mult5(5 + tier * 2, 3, seed, 2);
-                lines.add(Component.literal("§7❁ Strength: §c+" + strength));
-                lines.add(Component.literal("§7❤ Health: §c+" + health));
+                lines.add(statLine("❁ Strength", ChatFormatting.RED, "+" + strength));
+                lines.add(statLine("❤ Health", ChatFormatting.RED, "+" + health));
             }
         }
         return lines;

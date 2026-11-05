@@ -218,7 +218,7 @@ com/political/items/CustomItemHandler.java | 223
 com/political/items/CustomItemManager.java | 14
 com/political/items/DragonChestplates.java | 138
 com/political/items/GemGear.java | 195
-com/political/items/ItemStatInjector.java | 16
+com/political/items/ItemStatInjector.java | 11
 com/political/items/LegendaryTools.java | 8
 com/political/magic/MagicGui.java | 148
 com/political/magic/MagicManager.java | 7
