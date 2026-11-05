@@ -1,5 +1,6 @@
 package com.political;
 
+import com.political.core.gui.ReturnTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.pb4.sgui.api.elements.GuiElement;
@@ -28,6 +29,15 @@ public final class RareDropGui {
     private RareDropGui() {}
 
     private static final int SIZE = 54;
+
+    /** Where Back leads from this screen's first page: the menu that opened it, remembered per player. */
+    private static final ReturnTo FROM = new ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player, 0);
+    }
 
     public static void open(ServerPlayer player, int page) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
@@ -77,7 +87,7 @@ public final class RareDropGui {
                 "It tops out under double on purpose. A drop",
                 "you can grind to one in fifty is not rare."));
 
-        GuiKit.footer(gui, SIZE, player, null);
+        GuiKit.footer(gui, SIZE, player, FROM.get(player.getUUID()));
         gui.open();
     }
 

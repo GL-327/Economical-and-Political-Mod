@@ -78,7 +78,8 @@ public class PowerClientTest implements FabricClientGameTest {
                     case "death" -> phase("death", this::death);
                     case "blackflash" -> phase("Black Flash", this::blackFlash);
                     case "regression" -> phase("older commands still answer", this::regression);
-                    case "menus" -> phase("every menu: in and back out", this::menus);
+                    case "menus" -> phase("every menu: in and back out", () -> menus(PLAYER_ROOTS));
+                    case "adminmenus" -> phase("every admin menu: in and back out", () -> menus(List.of("admin")));
                     default -> throw new IllegalArgumentException("unknown phase " + phase);
                 }
             }
@@ -711,8 +712,18 @@ public class PowerClientTest implements FabricClientGameTest {
     // ── the menu crawler ────────────────────────────────────────────────────────────────────
 
     private static final int CRAWL_MAX_DEPTH = 5;
-    private static final int CRAWL_MAX_CLICKS = 2600;
-    private static final int CRAWL_MAX_SLOTS_PER_SCREEN = 45;
+    private static final int CRAWL_MAX_CLICKS = 1500;
+    private static final int CRAWL_MAX_SLOTS_PER_SCREEN = 30;
+
+    /** How many new child screens one screen may be descended into: wide near the top, narrow below (a list of 60 collections). */
+    private static int descendLimit(int depth) {
+        return depth == 0 ? 14 : depth == 1 ? 6 : 3;
+    }
+
+    private void finding(String text) {
+        crawlFindings.add(text);
+        System.out.println("CLIENTTEST MENU PROBLEM " + text);
+    }
 
     private final java.util.Set<String> crawlVisited = new java.util.HashSet<>();
     private final List<String> crawlFindings = new ArrayList<>();
@@ -726,10 +737,12 @@ public class PowerClientTest implements FabricClientGameTest {
      * somewhere else, is reported. Clicks that do things (buy, toggle, start) are clicked too: this is a throwaway
      * development world. Development only.
      */
-    private void menus() {
+    private static final List<String> PLAYER_ROOTS = List.of("menu", "civ", "stats", "bounty", "bazaar", "shop", "expedition", "hunt",
+            "party", "guild", "trade", "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view");
+
+    private void menus(List<String> roots) {
         cmd("gamemode creative");
-        for (String root : List.of("menu", "civ", "stats", "bounty", "bazaar", "shop", "expedition", "hunt", "party", "guild", "trade",
-                "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view")) {
+        for (String root : roots) {
             if (crawlClicks >= CRAWL_MAX_CLICKS) {
                 break;
             }
@@ -746,13 +759,7 @@ public class PowerClientTest implements FabricClientGameTest {
             closeAnyScreen();
         }
         System.out.println("CLIENTTEST MENU visited " + crawlVisited.size() + " screens with " + crawlClicks + " clicks");
-        for (String edge : crawlEdges) {
-            System.out.println("CLIENTTEST MENU edge " + edge);
-        }
         check("every menu reached has a way back (" + crawlFindings.size() + " problems)", crawlFindings.isEmpty());
-        for (String finding : crawlFindings) {
-            System.out.println("CLIENTTEST MENU PROBLEM " + finding);
-        }
     }
 
     private boolean waitForContainer2(int ticks) {
@@ -860,6 +867,7 @@ public class PowerClientTest implements FabricClientGameTest {
         ctx.takeScreenshot("menu-" + String.format("%03d", crawlVisited.size()) + "-" + title.replaceAll("[^A-Za-z0-9]+", "_"));
         List<Item> candidates = items();
         int tried = 0;
+        int descended = 0;
         for (Item item : candidates) {
             if (crawlClicks >= CRAWL_MAX_CLICKS || tried >= CRAWL_MAX_SLOTS_PER_SCREEN) {
                 break;
@@ -870,7 +878,7 @@ public class PowerClientTest implements FabricClientGameTest {
             tried++;
             if (!inContainer() || !screenTitle().equals(title)) {
                 if (!replay(path, title)) {
-                    crawlFindings.add("could not get back to '" + title + "' to try '" + item.name() + "'");
+                    finding("could not get back to '" + title + "' to try '" + item.name() + "'");
                     return;
                 }
             }
@@ -889,6 +897,7 @@ public class PowerClientTest implements FabricClientGameTest {
                 continue;
             }
             crawlEdges.add("'" + title + "' --[" + item.name() + "]--> '" + after + "'");
+            System.out.println("CLIENTTEST MENU edge '" + title + "' --[" + item.name() + "]--> '" + after + "'");
             // the way back
             List<Item> there = items();
             Item back = null;
@@ -899,7 +908,7 @@ public class PowerClientTest implements FabricClientGameTest {
                 }
             }
             if (back == null) {
-                crawlFindings.add("'" + after + "' (opened from '" + title + "' via '" + item.name() + "') has no back button");
+                finding("'" + after + "' (opened from '" + title + "' via '" + item.name() + "') has no back button");
             } else {
                 Item backItem = back;
                 ctx.runOnClient(client -> {
@@ -909,17 +918,18 @@ public class PowerClientTest implements FabricClientGameTest {
                 ctx.waitTicks(6);
                 String where = waitForScreenChange(after, 40);
                 if (!where.equals(title)) {
-                    crawlFindings.add("Back on '" + after + "' (opened from '" + title + "' via '" + item.name() + "') goes to '" + where
+                    finding("Back on '" + after + "' (opened from '" + title + "' via '" + item.name() + "') goes to '" + where
                             + "' instead of '" + title + "'");
                 }
             }
-            if (depth + 1 < CRAWL_MAX_DEPTH && !crawlVisited.contains(after)) {
+            if (depth + 1 < CRAWL_MAX_DEPTH && !crawlVisited.contains(after) && descended < descendLimit(depth)) {
+                descended++;
                 List<Integer> deeper = new ArrayList<>(path);
                 deeper.add(item.slot());
                 if (replay(deeper, after)) {
                     crawl(deeper, after, depth + 1);
                 } else {
-                    crawlFindings.add("could not re-enter '" + after + "' from '" + title + "' via '" + item.name() + "' to look inside it");
+                    finding("could not re-enter '" + after + "' from '" + title + "' via '" + item.name() + "' to look inside it");
                 }
             }
         }

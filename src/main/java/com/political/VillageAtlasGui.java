@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.gui.ReturnTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.political.settlement.Settlement;
@@ -47,6 +48,15 @@ public final class VillageAtlasGui {
                     "Forty two pieces. Swamp has no vanilla village either.")
     };
 
+    /** Where Back leads from this screen's first page: the menu that opened it, remembered per player. */
+    private static final ReturnTo FROM = new ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
+
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Custom Villages")
@@ -92,10 +102,10 @@ public final class VillageAtlasGui {
                 "the problem is the mod rather than the seed."));
 
         gui.setSlot(42, GuiKit.tile(Items.BEACON, "Settlement tiers", ChatFormatting.LIGHT_PURPLE,
-                () -> SettlementProgressGui.openList(player),
+                () -> SettlementProgressGui.openListFrom(player, () -> open(player)),
                 "Your own settlements and what is blocking them"));
 
-        GuiKit.footer(gui, SIZE, player, null);
+        GuiKit.footer(gui, SIZE, player, FROM.get(player.getUUID()));
         gui.open();
     }
 

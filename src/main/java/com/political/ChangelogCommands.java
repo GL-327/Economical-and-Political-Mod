@@ -19,7 +19,7 @@ public final class ChangelogCommands {
         for (String alias : new String[]{"raredrops", "drops"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        RareDropGui.open(ctx.getSource().getPlayerOrException(), 0);
+                        RareDropGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
@@ -27,7 +27,7 @@ public final class ChangelogCommands {
         for (String alias : new String[]{"materials", "mats", "refined"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        MaterialGui.open(ctx.getSource().getPlayerOrException());
+                        MaterialGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
@@ -43,7 +43,7 @@ public final class ChangelogCommands {
         for (String alias : new String[]{"titles", "title"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        TitleGui.open(ctx.getSource().getPlayerOrException());
+                        TitleGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
@@ -59,7 +59,7 @@ public final class ChangelogCommands {
         for (String alias : new String[]{"itemmodels", "models"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        ItemModelGui.open(ctx.getSource().getPlayerOrException());
+                        ItemModelGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
@@ -67,7 +67,7 @@ public final class ChangelogCommands {
         for (String alias : new String[]{"villages", "customvillages"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        VillageAtlasGui.open(ctx.getSource().getPlayerOrException());
+                        VillageAtlasGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
@@ -75,76 +75,76 @@ public final class ChangelogCommands {
         for (String alias : new String[]{"crates", "crate", "cases", "gamble"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        CrateGui.open(ctx.getSource().getPlayerOrException());
+                        CrateGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
         for (String alias : new String[]{"progress", "tier", "settlementprogress"}) {
             dispatcher.register(Commands.literal(alias)
                     .executes(ctx -> {
-                        SettlementProgressGui.openList(ctx.getSource().getPlayerOrException());
+                        SettlementProgressGui.openListFrom(ctx.getSource().getPlayerOrException(), null);
                         return 1;
                     }));
         }
 
         dispatcher.register(Commands.literal("sieges")
                 .executes(ctx -> {
-                    SiegeGui.open(ctx.getSource().getPlayerOrException());
+                    SiegeGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
 
         dispatcher.register(Commands.literal("incursion")
                 .executes(ctx -> {
-                    IncursionGui.open(ctx.getSource().getPlayerOrException());
+                    IncursionGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("incursions")
                 .executes(ctx -> {
-                    IncursionGui.open(ctx.getSource().getPlayerOrException());
+                    IncursionGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
 
         dispatcher.register(Commands.literal("grudges")
                 .executes(ctx -> {
-                    NemesisGui.open(ctx.getSource().getPlayerOrException());
+                    NemesisGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("nemesis")
                 .executes(ctx -> {
-                    NemesisGui.open(ctx.getSource().getPlayerOrException());
+                    NemesisGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
 
         dispatcher.register(Commands.literal("minions")
                 .executes(ctx -> {
-                    MinionGui.open(ctx.getSource().getPlayerOrException());
+                    MinionGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("minion")
                 .executes(ctx -> {
-                    MinionGui.open(ctx.getSource().getPlayerOrException());
+                    MinionGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
 
         dispatcher.register(Commands.literal("bazaar")
                 .executes(ctx -> {
-                    BazaarGui.open(ctx.getSource().getPlayerOrException());
+                    BazaarGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("bz")
                 .executes(ctx -> {
-                    BazaarGui.open(ctx.getSource().getPlayerOrException());
+                    BazaarGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
 
         dispatcher.register(Commands.literal("collections")
                 .executes(ctx -> {
-                    CollectionGui.open(ctx.getSource().getPlayerOrException());
+                    CollectionGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
         dispatcher.register(Commands.literal("collection")
                 .executes(ctx -> {
-                    CollectionGui.open(ctx.getSource().getPlayerOrException());
+                    CollectionGui.openFrom(ctx.getSource().getPlayerOrException(), null);
                     return 1;
                 }));
 

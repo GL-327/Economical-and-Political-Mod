@@ -1,6 +1,7 @@
 package com.political;
 
 
+import com.political.core.gui.ReturnTo;
 import com.political.settlement.Settlement;
 import com.political.settlement.SettlementManager;
 import com.political.settlement.SettlementTier;
@@ -29,6 +30,15 @@ public final class SiegeGui {
     private SiegeGui() {}
 
     private static final int SIZE = 54;
+
+    /** Where Back leads from this screen's first page: the menu that opened it, remembered per player. */
+    private static final ReturnTo FROM = new ReturnTo();
+
+    /** Opens the screen from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Runnable back) {
+        FROM.set(player.getUUID(), back);
+        open(player);
+    }
 
     public static void open(ServerPlayer player) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
@@ -86,7 +96,7 @@ public final class SiegeGui {
                 "",
                 "Stand on it yourself and the clock stops."));
 
-        GuiKit.footer(gui, SIZE, player, null);
+        GuiKit.footer(gui, SIZE, player, FROM.get(player.getUUID()));
         gui.open();
     }
 

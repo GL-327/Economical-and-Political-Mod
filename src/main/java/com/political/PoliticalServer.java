@@ -156,6 +156,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             PlayerStatsManager.onPlayerDisconnect(player.getUUID());
             CompanionManager.onLogout(player);
             com.political.power.game.PowerService.onLogout(player);
+            com.political.core.gui.ReturnTo.forgetEverywhere(player.getUUID());
         });
 
         // Power system: a Domain ends when its caster changes dimension; vows are rechecked when equipment changes.

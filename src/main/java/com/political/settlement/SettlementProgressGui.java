@@ -1,4 +1,5 @@
 package com.political.settlement;
+import com.political.core.gui.ReturnTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.political.CitizenManager;
@@ -41,6 +42,22 @@ public final class SettlementProgressGui {
     private SettlementProgressGui() {}
 
     private static final int SIZE = 54;
+
+    /** Where Back leads from one settlement's page, and from the list of settlements: the menu that opened it. */
+    private static final ReturnTo DETAIL_FROM = new ReturnTo();
+    private static final ReturnTo LIST_FROM = new ReturnTo();
+
+    /** Opens a settlement's page from a parent menu (Back returns there), or with {@code null} from a command (no Back). */
+    public static void openFrom(ServerPlayer player, Settlement s, Runnable back) {
+        DETAIL_FROM.set(player.getUUID(), back);
+        open(player, s);
+    }
+
+    /** Opens the list of settlements from a parent menu, or with {@code null} from a command. */
+    public static void openListFrom(ServerPlayer player, Runnable back) {
+        LIST_FROM.set(player.getUUID(), back);
+        openList(player);
+    }
 
     public static void open(ServerPlayer player, Settlement s) {
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
@@ -184,7 +201,7 @@ public final class SettlementProgressGui {
                 () -> SettlementEconomyGui.open(player, s),
                 "Jobs, yield and happiness"));
 
-        GuiKit.footer(gui, SIZE, player, null);
+        GuiKit.footer(gui, SIZE, player, DETAIL_FROM.get(player.getUUID()));
         gui.open();
     }
 
@@ -258,7 +275,7 @@ public final class SettlementProgressGui {
             SettlementTier n = nextOf(t);
             String blocker = SettlementEconomy.growthBlocker(s);
             entries.add(GuiKit.action(Items.CAMPFIRE, s.name, t.color,
-                    () -> open(player, s),
+                    () -> openFrom(player, s, () -> openList(player)),
                     t.displayName,
                     n == t ? "At the highest tier" : "Working toward " + n.displayName,
                     "Population " + s.population + ", beds " + s.beds + ", appeal " + s.appeal,
@@ -266,7 +283,7 @@ public final class SettlementProgressGui {
         }
 
         GuiKit.paint(gui, entries, 0, GuiKit.LIST_SLOTS.length);
-        GuiKit.footer(gui, SIZE, player, null);
+        GuiKit.footer(gui, SIZE, player, LIST_FROM.get(player.getUUID()));
         gui.open();
     }
 }

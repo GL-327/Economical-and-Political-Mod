@@ -153,7 +153,7 @@ public final class AdminPanel {
                 "Both have search. Neither can go stale."));
 
         gui.setSlot(33, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
-                () -> TitleGui.open(player), Title.values().length + " titles"));
+                () -> TitleGui.openFrom(player, () -> open(player)), Title.values().length + " titles"));
 
         gui.setSlot(34, GuiKit.tile(Items.PAPER, "Requisition board", ChatFormatting.GOLD,
                 () -> CommissionGui.open(player),
@@ -510,10 +510,10 @@ public final class AdminPanel {
                 () -> GovernmentTreasuryGui.open(player), "Public money"));
 
         gui.setSlot(31, GuiKit.tile(Items.ARMOR_STAND, "Minions", ChatFormatting.GREEN,
-                () -> MinionGui.open(player), "Placed workers and their output"));
+                () -> MinionGui.openFrom(player, () -> openEconomy(player)), "Placed workers and their output"));
 
         gui.setSlot(30, GuiKit.tile(Items.GOLD_INGOT, "Bazaar", ChatFormatting.YELLOW,
-                () -> BazaarGui.open(player), "The material order book"));
+                () -> BazaarGui.openFrom(player, () -> openEconomy(player)), "The material order book"));
 
         gui.setSlot(29, GuiKit.tile(Items.BARREL, "Shops", ChatFormatting.GOLD,
                 () -> ShopGui.openMainMenu(player), "Server and player shops"));
@@ -671,7 +671,7 @@ public final class AdminPanel {
                 }, "Puts you at its centre"));
 
         gui.setSlot(25, GuiKit.tile(Items.BEACON, "Tier progress", ChatFormatting.LIGHT_PURPLE,
-                () -> SettlementProgressGui.open(player, s),
+                () -> SettlementProgressGui.openFrom(player, s, () -> openSettlementCard(player, s)),
                 "Exactly what is blocking the next tier"));
 
         gui.setSlot(24, GuiKit.tile(Items.GOLD_INGOT, "Settlement economy", ChatFormatting.GOLD,
@@ -742,7 +742,7 @@ public final class AdminPanel {
                 () -> ContractGui.open(player), "The rotating board"));
 
         gui.setSlot(29, GuiKit.tile(Items.NAME_TAG, "Titles", ChatFormatting.GOLD,
-                () -> TitleGui.open(player),
+                () -> TitleGui.openFrom(player, () -> openContent(player)),
                 Title.values().length + " titles",
                 "Earned from every other system"));
 
@@ -752,20 +752,20 @@ public final class AdminPanel {
                 "Hand in goods, they are consumed"));
 
         gui.setSlot(32, GuiKit.tile(Items.ENDER_CHEST, "Crates", ChatFormatting.GOLD,
-                () -> CrateGui.open(player),
+                () -> CrateGui.openFrom(player, () -> openContent(player)),
                 "Five crates, published odds", "Bought with in game coins only"));
 
         gui.setSlot(28, GuiKit.tile(Items.RAW_IRON, "Refined materials", ChatFormatting.AQUA,
-                () -> MaterialGui.open(player),
+                () -> MaterialGui.openFrom(player, () -> openContent(player)),
                 RefinedMaterial.values().length + " materials, five steps each",
                 RefinedMaterial.totalItems() + " items with full recipe chains"));
 
         gui.setSlot(30, GuiKit.tile(Items.BOOKSHELF, "Collections", ChatFormatting.GOLD,
-                () -> CollectionGui.open(player),
+                () -> CollectionGui.openFrom(player, () -> openContent(player)),
                 "Sixty collections, nine tiers each", "Permanent stat bonuses"));
 
         gui.setSlot(33, GuiKit.tile(Items.ITEM_FRAME, "Item models", ChatFormatting.LIGHT_PURPLE,
-                () -> ItemModelGui.open(player),
+                () -> ItemModelGui.openFrom(player, () -> openContent(player)),
                 PolymerBridge.knownModels() + " items have custom art",
                 "Polymer serves the pack that defines them"));
 
@@ -803,17 +803,17 @@ public final class AdminPanel {
                 "Send an army at a settlement"));
 
         gui.setSlot(30, GuiKit.tile(Items.END_CRYSTAL, "Incursions", ChatFormatting.DARK_PURPLE,
-                () -> IncursionGui.open(player),
+                () -> IncursionGui.openFrom(player, () -> openCombat(player)),
                 IncursionManager.count() + " running",
                 "Rifts themed by the biome they open in"));
 
         gui.setSlot(25, GuiKit.tile(Items.WITHER_SKELETON_SKULL, "Nemeses", ChatFormatting.DARK_RED,
-                () -> NemesisGui.open(player),
+                () -> NemesisGui.openFrom(player, () -> openCombat(player)),
                 NemesisManager.total() + " grudges on this server",
                 "Mobs that killed a player and came back"));
 
         gui.setSlot(31, GuiKit.tile(Items.NETHER_STAR, "Rare drops", ChatFormatting.GOLD,
-                () -> RareDropGui.open(player, 0),
+                () -> RareDropGui.openFrom(player, () -> openCombat(player)),
                 RareDrop.values().length + " drop only items",
                 "Published odds, per mob"));
 
@@ -884,7 +884,7 @@ public final class AdminPanel {
                 () -> AtlasMapGui.open(player), "The live world map"));
 
         gui.setSlot(31, GuiKit.tile(Items.CHERRY_SAPLING, "Custom villages", ChatFormatting.GREEN,
-                () -> VillageAtlasGui.open(player),
+                () -> VillageAtlasGui.openFrom(player, () -> openWorld(player)),
                 "Cherry and swamp villages", "Locate the nearest one"));
 
         gui.setSlot(25, GuiKit.tile(Items.WHEAT, "Seasons", ChatFormatting.GOLD,

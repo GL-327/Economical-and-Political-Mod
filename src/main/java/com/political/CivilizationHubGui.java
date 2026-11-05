@@ -190,7 +190,7 @@ public final class CivilizationHubGui {
         gui.setSlot(39, new GuiElementBuilder(Items.CHEST)
                 .setName(Component.literal("Bazaar").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Instant buy and sell orders."))
-                .setCallback((a, b, c, d) -> com.political.economy.BazaarGui.open(player))
+                .setCallback((a, b, c, d) -> com.political.economy.BazaarGui.openFrom(player, () -> open(player)))
                 .build());
 
         gui.setSlot(41, new GuiElementBuilder(Items.CLOCK)
@@ -260,7 +260,7 @@ public final class CivilizationHubGui {
 
                 .addLoreLine(Component.literal("§eClick to open"))
 
-                .setCallback((a, b, c, d) -> CollectionGui.open(player))
+                .setCallback((a, b, c, d) -> CollectionGui.openFrom(player, () -> open(player)))
 
                 .build());
 

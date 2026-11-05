@@ -59,16 +59,26 @@ public final class AdminDirectoryGui {
 
     private static final int SIZE = 54;
 
-    private record Entry(String label, Opener opener) {}
+    /** An entry opens either with no parent (its own Back decides) or from this directory, which it should lead back to. */
+    private record Entry(String label, Opener opener, BackOpener fromOpener) {}
 
     private interface Opener {
         void open(ServerPlayer player);
     }
 
+    private interface BackOpener {
+        void open(ServerPlayer player, Runnable back);
+    }
+
     private static final Map<String, List<Entry>> GROUPS = new LinkedHashMap<>();
 
     private static void add(String group, String label, Opener opener) {
-        GROUPS.computeIfAbsent(group, k -> new ArrayList<>()).add(new Entry(label, opener));
+        GROUPS.computeIfAbsent(group, k -> new ArrayList<>()).add(new Entry(label, opener, null));
+    }
+
+    /** An entry whose screen can be told where Back leads: the directory page that lists it. */
+    private static void add(String group, String label, BackOpener opener) {
+        GROUPS.computeIfAbsent(group, k -> new ArrayList<>()).add(new Entry(label, null, opener));
     }
 
     static {
@@ -78,7 +88,7 @@ public final class AdminDirectoryGui {
         add("Operator", "Bounty Config", p -> BountyConfigGui.open(p));
         add("Operator", "Civil Anti Cheat", p -> CivilAntiCheatGui.open(p));
         add("Operator", "Crypto Admin", p -> CryptoAdminGui.openMainMenu(p));
-        add("Operator", "Item Model", p -> ItemModelGui.open(p));
+        add("Operator", "Item Model", (p, back) -> ItemModelGui.openFrom(p, back));
         add("Operator", "Player Buff Admin", p -> PlayerBuffAdminGui.openPlayerSelect(p));
         add("Operator", "Recipe Editor", p -> RecipeEditorGui.openMainMenu(p));
         add("Operator", "Report", p -> ReportGui.openMainMenu(p));
@@ -89,11 +99,11 @@ public final class AdminDirectoryGui {
         // Settlement
         add("Settlement", "Civilization Hub", p -> CivilizationHubGui.open(p));
         add("Settlement", "Guild", p -> GuildGui.open(p));
-        add("Settlement", "Incursion", p -> IncursionGui.open(p));
+        add("Settlement", "Incursion", (p, back) -> IncursionGui.openFrom(p, back));
         add("Settlement", "Settlement Event", p -> SettlementEventGui.open(p));
-        add("Settlement", "Settlement Progress", p -> SettlementProgressGui.openList(p));
-        add("Settlement", "Siege", p -> SiegeGui.open(p));
-        add("Settlement", "Village Atlas", p -> VillageAtlasGui.open(p));
+        add("Settlement", "Settlement Progress", (p, back) -> SettlementProgressGui.openListFrom(p, back));
+        add("Settlement", "Siege", (p, back) -> SiegeGui.openFrom(p, back));
+        add("Settlement", "Village Atlas", (p, back) -> VillageAtlasGui.openFrom(p, back));
 
         // Politics
         add("Politics", "Chair", p -> ChairGui.open(p));
@@ -114,9 +124,9 @@ public final class AdminDirectoryGui {
         // Economy
         add("Economy", "Auction House", p -> AuctionHouseGui.open(p));
         add("Economy", "Bank", p -> BankGui.open(p));
-        add("Economy", "Bazaar", p -> BazaarGui.open(p));
+        add("Economy", "Bazaar", (p, back) -> BazaarGui.openFrom(p, back));
         add("Economy", "Commission", p -> CommissionGui.open(p));
-        add("Economy", "Crate", p -> CrateGui.open(p));
+        add("Economy", "Crate", (p, back) -> CrateGui.openFrom(p, back));
         add("Economy", "Credits Trade", p -> CreditsTradeGui.open(p));
         add("Economy", "Crypto Market", p -> CryptoMarketGui.openMainMenu(p));
         add("Economy", "Market", p -> MarketGui.open(p));
@@ -133,7 +143,7 @@ public final class AdminDirectoryGui {
         add("Combat", "Expedition", p -> ExpeditionGui.open(p));
         add("Combat", "Hunt", p -> HuntGui.open(p));
         add("Combat", "Hunts", p -> HuntsGui.openMainMenu(p));
-        add("Combat", "Nemesis", p -> NemesisGui.open(p));
+        add("Combat", "Nemesis", (p, back) -> NemesisGui.openFrom(p, back));
         add("Combat", "World Boss", p -> WorldBossGui.openMainMenu(p));
 
         add("Combat", "Technique", p -> com.political.power.game.PowerAdminScreens.open(p, 0));
@@ -143,13 +153,13 @@ public final class AdminDirectoryGui {
         add("Progress", "Ascension Hearts", p -> AscensionHeartsGui.openTreePicker(p));
         add("Progress", "Checkpoint", p -> CheckpointGui.openMain(p));
         add("Progress", "Class", p -> ClassGui.openMainMenu(p));
-        add("Progress", "Collection", p -> CollectionGui.open(p));
+        add("Progress", "Collection", (p, back) -> CollectionGui.openFrom(p, back));
         add("Progress", "Mastery", p -> MasteryGui.openMainMenu(p));
         add("Progress", "Player Buff", p -> PlayerBuffGui.openMainMenu(p));
         add("Progress", "Player Stats", p -> PlayerStatsGui.open(p));
         add("Progress", "Progression Tree", p -> ProgressionTreeGui.openMainMenu(p));
         add("Progress", "Skills", p -> SkillsGui.openMainMenu(p));
-        add("Progress", "Title", p -> TitleGui.open(p));
+        add("Progress", "Title", (p, back) -> TitleGui.openFrom(p, back));
         add("Progress", "Upgrades", p -> UpgradesGui.openMainGui(p));
 
         // Content
@@ -158,7 +168,7 @@ public final class AdminDirectoryGui {
         add("Content", "Custom Items", p -> CustomItemsGui.open(p));
         add("Content", "Expansion Catalog", p -> ExpansionCatalogGui.openMenu(p));
         add("Content", "Fletching Table", p -> FletchingTableGui.openGui(p));
-        add("Content", "Minion", p -> MinionGui.open(p));
+        add("Content", "Minion", (p, back) -> MinionGui.openFrom(p, back));
         add("Content", "Recipes", p -> RecipesGui.openMainMenu(p));
         add("Content", "Reforge", p -> ReforgeGui.open(p));
         add("Content", "Relic", p -> RelicGui.open(p));
@@ -233,7 +243,11 @@ public final class AdminDirectoryGui {
             entries.add(GuiKit.action(iconFor(group), en.label(), ChatFormatting.WHITE,
                     () -> {
                         try {
-                            en.opener().open(player);
+                            if (en.fromOpener() != null) {
+                                en.fromOpener().open(player, () -> openGroup(player, group, page));
+                            } else {
+                                en.opener().open(player);
+                            }
                         } catch (Exception ex) {
                             LOGGER.warn("AdminDirectoryGui.openGroup: ignored an error", ex);
                             // Some screens need context an operator may not have, a settlement or
