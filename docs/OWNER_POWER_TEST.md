@@ -35,7 +35,8 @@ Back should always return to the menu you came from. Open each of these, go two 
 2. `/bounty`, a bounty type, right-click a tier (drop table), Back; the Drop Rates button, a tier, Back (it must return to the tier list).
 3. `/admin` (operator console): each tab, then each tile (Economy: Tax, Auction house, Stock market, Crypto, Underground auction, Shops; Moderation: Chest access history, Anti cheat, Player buffs; Politics: Elections, Government, Parties, High council, Impeachment, Perks; Content: Collections, Crates, Titles, Custom items). Back must return to the tab. In the inventory viewer the Back is now top left, because the bottom row is the hotbar.
 4. A confirmation dialog (Leave party, Save everything now) has Confirm and Cancel and no Back; Cancel returns where you were.
-Known gaps (they are in HANDOFF.md KNOWN ISSUES): the recipe browser's Back from a bounty set item, the Guilds & Orders screen has no Back when opened from the hub, and the admin "Remote chests" tile opens the anti-cheat panel.
+Also try `/cc` (the command menu): open `/shop`, `/customitems`, `/pbuff` or `/checkpoint` from it and press Back; it must return to `/cc`, not to the civilization hub.
+Known gaps (they are in HANDOFF.md KNOWN ISSUES): the recipe browser shows no Back when opened from other menus, the Guilds & Orders screen has no Back when opened from the hub, and the admin "Remote chests" tile opens the anti-cheat panel.
 
 ## Setup (test server only)
 
