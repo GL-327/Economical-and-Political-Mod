@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,6 +47,7 @@ public class RecipeConfigManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeConfigManager.class);
 
 
+    private static final Map<String, String> GENERATED_THIS_BOOT = new java.util.HashMap<>();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     /** Live recipe JSON is the game config dir so loom boots do not rewrite the git stub. */
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("political");
@@ -98,15 +100,11 @@ public class RecipeConfigManager {
 
     private static void writeRecipeJsonRoot(JsonObject root) throws IOException {
         sortRecipesByName(root);
-        Files.createDirectories(CONFIG_FILE.getParent());
-        try (Writer writer = Files.newBufferedWriter(CONFIG_FILE)) {
-            GSON.toJson(root, writer);
-        }
+        RecipeJsonFiles.write(CONFIG_FILE, GSON.toJson(root));
     }
 
     /**
-     * Drops leftover combinatorial recipe dumps without parsing them. A 26MB file of thousands
-     * of deleted-item recipes was costing ~36s on boot and logging failed crafts for extra dragons.
+     * Reports oversized legacy recipe catalogs. Their contents are preserved for the owner.
      */
     public static void pruneSlopRecipeFile() {
         pruneIfHuge(CONFIG_FILE);
@@ -115,20 +113,9 @@ public class RecipeConfigManager {
 
     private static void pruneIfHuge(Path path) {
         try {
-            if (path == null || !Files.exists(path)) return;
-            long bytes = Files.size(path);
-            if (bytes <= SLOP_RECIPE_FILE_BYTES) return;
-            JsonObject root = new JsonObject();
-            root.add("recipes", new JsonArray());
-            Files.createDirectories(path.getParent());
-            try (Writer writer = Files.newBufferedWriter(path)) {
-                GSON.toJson(root, writer);
-            }
-            LOGGER.info("Pruned slop recipe file ({} bytes → empty) at {}", bytes, path.toAbsolutePath());
-            invalidateRecipeCache();
-        } catch (Exception e) {
-            LOGGER.error("Failed to prune {}", path, e);
-        }
+            if (path != null && Files.exists(path) && Files.size(path) > SLOP_RECIPE_FILE_BYTES)
+                LOGGER.warn("Large recipe file preserved without pruning: {}", path);
+        } catch (IOException e) { LOGGER.error("Could not inspect recipe file {}", path, e); }
     }
 
     /** Custom recipes added via /setrecipe (override defaults). */
@@ -384,86 +371,23 @@ public class RecipeConfigManager {
     /** Bulk upsert for server bootstrap: writes JSON once, no log spam, does not auto-register. */
     public static void upsertCustomRecipesSilent(List<SlayerRecipes.Recipe> recipes) {
         if (recipes == null || recipes.isEmpty()) return;
-
         try {
-            // Load existing recipes from disk
-            Map<String, JsonObject> existingRecipes = new java.util.HashMap<>();
+            JsonObject existing;
             if (Files.exists(CONFIG_FILE)) {
-                String jsonString = Files.readString(CONFIG_FILE);
-                JsonObject existing = GSON.fromJson(jsonString, JsonObject.class);
-                if (existing != null && existing.has("recipes")) {
-                    JsonArray arr = existing.getAsJsonArray("recipes");
-                    for (var elem : arr) {
-                        JsonObject obj = elem.getAsJsonObject();
-                        if (obj.has("name")) {
-                            existingRecipes.put(obj.get("name").getAsString(), obj);
-                        }
-                    }
+                existing = JsonParser.parseString(Files.readString(CONFIG_FILE)).getAsJsonObject();
+                if (!existing.has("recipes") || !existing.get("recipes").isJsonArray()) {
+                    LOGGER.error("Malformed recipe catalog preserved; defaults were not written");
+                    return;
                 }
+            } else {
+                existing = new JsonObject();
+                existing.add("recipes", new JsonArray());
             }
-
-            // Determine all custom outputs we are going to replace.
-            java.util.Set<String> newOutputIds = new java.util.HashSet<>();
-            for (SlayerRecipes.Recipe r : recipes) {
-                String outId = SlayerItems.getCustomItemId(r.result);
-                if (outId != null && !outId.isBlank()) newOutputIds.add(outId);
-            }
-
-            // Remove any existing recipe whose output custom id matches.
-            for (java.util.Iterator<Map.Entry<String, JsonObject>> it = existingRecipes.entrySet().iterator(); it.hasNext();) {
-                Map.Entry<String, JsonObject> entry = it.next();
-                JsonObject recipeObj = entry.getValue();
-                if (!recipeObj.has("result")) continue;
-
-                try {
-                    ItemStack existingResult = deserializeStack(recipeObj.get("result"));
-                    String existingOutputId = SlayerItems.getCustomItemId(existingResult);
-                    if (existingOutputId != null && newOutputIds.contains(existingOutputId)) {
-                        it.remove();
-                        continue;
-                    }
-                } catch (Exception ignored) {
-                    LOGGER.debug("RecipeConfigManager.upsertCustomRecipesSilent: ignored an error", ignored);
-                    // Fallback below for malformed entries.
-                }
-
-                // Fallback string-based match for legacy malformed entries.
-                try {
-                    JsonObject resultObj = recipeObj.getAsJsonObject("result");
-                    if (resultObj != null && resultObj.has("nbt")) {
-                        String nbt = resultObj.get("nbt").getAsString();
-                        for (String oid : newOutputIds) {
-                            if (nbt.contains("custom_item_id\":\"" + oid + "\"") || nbt.contains("custom_id\":\"" + oid + "\"")) {
-                                it.remove();
-                                break;
-                            }
-                        }
-                    }
-                } catch (Exception ignored) {
-                    LOGGER.debug("RecipeConfigManager.upsertCustomRecipesSilent: ignored an error", ignored);
-                    // ignore malformed recipe object
-                }
-            }
-
-            // Add all new/updated recipes
-            for (SlayerRecipes.Recipe r : recipes) {
-                existingRecipes.put(r.name, serialize(r));
-            }
-
-            // Save back to file once
-            JsonArray recipesArr = new JsonArray();
-            for (JsonObject obj : existingRecipes.values()) recipesArr.add(obj);
-
-            JsonObject root = new JsonObject();
-            root.add("recipes", recipesArr);
-
-            writeRecipeJsonRoot(root);
+            List<JsonObject> generated = new ArrayList<>();
+            for (SlayerRecipes.Recipe recipe : recipes) if (recipe != null) generated.add(serialize(recipe));
+            writeRecipeJsonRoot(RecipeJsonDefaults.merge(existing, generated, GENERATED_THIS_BOOT));
             invalidateRecipeCache();
-
-        } catch (Exception e) {
-            // Bootstrap should never hard-crash the server because of recipe file I/O.
-            LOGGER.error("Bulk upsert failed", e);
-        }
+        } catch (Exception e) { LOGGER.error("Bulk recipe default update failed; existing data preserved", e); }
     }
 
     /** Overwrites the recipe file with exactly this list (no merge with leftover JSON). */
@@ -740,17 +664,24 @@ public class RecipeConfigManager {
             
             SlayerManager.SlayerType slayerType = null;
             if (!slayerStr.isEmpty()) {
-                try { slayerType = SlayerManager.SlayerType.valueOf(slayerStr); } catch (Exception ignored) { LOGGER.debug("RecipeConfigManager.deserialize: ignored an error", ignored); }
+                slayerType = SlayerManager.SlayerType.valueOf(slayerStr);
             }
 
             JsonArray gridArr = obj.getAsJsonArray("ingredients");
+            if (gridArr == null || gridArr.size() != 9) throw new IllegalArgumentException("Expected nine ingredient cells");
             ItemStack[] grid = new ItemStack[9];
-            for (int i = 0; i < 9 && i < gridArr.size(); i++) {
-                grid[i] = deserializeIngredient(gridArr.get(i));
-            }
+            boolean any = false;
             for (int i = 0; i < 9; i++) {
-                if (grid[i] == null) grid[i] = ItemStack.EMPTY;
+                var raw = gridArr.get(i);
+                boolean empty = raw == null || raw.isJsonNull() || (raw.isJsonPrimitive() && raw.getAsString().isEmpty());
+                if (!empty && raw.isJsonObject() && raw.getAsJsonObject().has("count")
+                        && raw.getAsJsonObject().get("count").getAsInt() <= 0)
+                    throw new IllegalArgumentException("Nonpositive ingredient count in cell " + i);
+                grid[i] = deserializeIngredient(raw);
+                if (!empty && grid[i].isEmpty()) throw new IllegalArgumentException("Unresolved ingredient in cell " + i);
+                any |= !grid[i].isEmpty();
             }
+            if (!any) throw new IllegalArgumentException("Recipe has no ingredients");
 
             // Deserialize locked slots
             boolean[] lockedSlots = new boolean[9];
@@ -763,7 +694,7 @@ public class RecipeConfigManager {
 
             return new SlayerRecipes.Recipe(name, result, grid, lockedSlots, slayerType, level);
         } catch (Exception e) {
-            LOGGER.debug("RecipeConfigManager.deserialize: ignored an error", e);
+            LOGGER.error("Recipe {} was not registered; saved entry preserved", obj.get("name"), e);
             return null;
         }
     }

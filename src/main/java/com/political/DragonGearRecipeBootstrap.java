@@ -57,9 +57,9 @@ public final class DragonGearRecipeBootstrap {
         boolean[] locked = lockedAll();
 
         ItemStack[] ing = new ItemStack[] {
-                s(themeBlock), s(Items.NETHER_STAR), s(themeBlock),
-                s(Items.DIAMOND), coreT3, s(Items.DIAMOND),
-                s(themeBlock), s(Items.NETHERITE_CHESTPLATE), s(themeBlock)
+                s(themeBlock), coreT3, s(themeBlock),
+                s(Items.DIAMOND), s(Items.NETHERITE_CHESTPLATE), s(Items.DIAMOND),
+                s(themeBlock), s(Items.NETHER_STAR), s(themeBlock)
         };
 
         // Use stable recipe names; output custom id drives replacement.

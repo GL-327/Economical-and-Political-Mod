@@ -759,7 +759,7 @@ public class CustomItemsGui {
     private static void showSearchResults(ServerPlayer player, String searchTerm) {
         List<ItemStack> items = new ArrayList<>();
         for (Category cat : Category.values()) items.addAll(getItemsForCategory(cat));
-        openFiltered(player, items, searchTerm, 0, CustomItemsGui::giveItem, CustomItemsGui::open);
+        openFiltered(player, com.political.recipe.RecipeItems.unique(items), searchTerm, 0, CustomItemsGui::giveItem, CustomItemsGui::open);
     }
 
     public static void openToolSetsPage(ServerPlayer player, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
@@ -1389,57 +1389,12 @@ public class CustomItemsGui {
     }
 
     private static boolean checkCanCraft(ServerPlayer player, SlayerRecipes.Recipe recipe) {
-        if (recipe == null || recipe.ingredients == null) return false;
-        
-        for (ItemStack ingredient : recipe.ingredients) {
-            if (ingredient == null || ingredient.isEmpty()) continue;
-            
-            int needed = ingredient.getCount();
-            int found = 0;
-            
-            // Check player inventory using getInventory() method
-            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-                ItemStack invItem = player.getInventory().getItem(i);
-                if (invItem != null && !invItem.isEmpty() && invItem.getItem() == ingredient.getItem()) {
-                    found += invItem.getCount();
-                }
-            }
-            
-            if (found < needed) return false;
-        }
-        return true;
+        return com.political.recipe.RecipeInventory.canCraft(player, recipe);
     }
 
     private static boolean instantCraft(ServerPlayer player, SlayerRecipes.Recipe recipe, ItemStack resultItem) {
-        if (!checkCanCraft(player, recipe)) return false;
-        
-        // Remove ingredients from player inventory
-        for (ItemStack ingredient : recipe.ingredients) {
-            if (ingredient == null || ingredient.isEmpty()) continue;
-            
-            int needed = ingredient.getCount();
-            
-            // Remove from inventory
-            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-                ItemStack invItem = player.getInventory().getItem(i);
-                if (invItem != null && !invItem.isEmpty() && invItem.getItem() == ingredient.getItem()) {
-                    if (invItem.getCount() <= needed) {
-                        needed -= invItem.getCount();
-                        player.getInventory().setItem(i, ItemStack.EMPTY);
-                    } else {
-                        invItem.shrink(needed);
-                        needed = 0;
-                    }
-                    if (needed == 0) break;
-                }
-            }
-        }
-        
-        // Give result to player
-        ItemStack result = resultItem.copy();
-        player.addItem(result);
+        if (!com.political.recipe.RecipeInventory.craft(player, recipe)) return false;
         PoliticalPartyManager.progressPartyCommission(player, "CRAFT_ITEMS", 1);
-        
         return true;
     }
 

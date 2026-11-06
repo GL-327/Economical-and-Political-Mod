@@ -208,18 +208,7 @@ public class RecipeGenerator {
     
     /** 3×3 pattern tags: {@code block}, {@code core}, {@code ""} (empty). */
     public static String[] getArmorPattern(String piece) {
-        return switch (piece) {
-            // Vanilla armor patterns with core in center (slot 4)
-            // Helmet: X X X / X . X / . . .
-            case "helmet" -> new String[]{"block", "block", "block", "block", "core", "block", "", "", ""};
-            // Chestplate: X . X / X . X / X X X
-            case "chestplate" -> new String[]{"block", "", "block", "block", "core", "block", "block", "block", "block"};
-            // Leggings: X X X / X . X / X . X
-            case "leggings" -> new String[]{"block", "block", "block", "block", "core", "block", "block", "", "block"};
-            // Boots: . . . / X . X / X . X
-            case "boots" -> new String[]{"", "", "", "block", "core", "block", "block", "", "block"};
-            default -> new String[]{"", "", "", "", "", "", "", "", ""};
-        };
+        return GearPatterns.armor(piece);
     }
     
     private static JsonObject createBlockIngredient(String blockId) {
@@ -425,14 +414,7 @@ public class RecipeGenerator {
     
     /** 3×3 pattern tags: {@code block}, {@code core}, {@code stick}, {@code ""}. */
     public static String[] getToolPattern(String tool) {
-        return switch (tool) {
-            case "sword" -> new String[]{"", "block", "", "", "core", "", "", "stick", ""};
-            case "pickaxe" -> new String[]{"block", "block", "block", "", "core", "", "", "stick", ""};
-            case "axe" -> new String[]{"block", "block", "", "", "core", "", "", "stick", ""};
-            case "shovel" -> new String[]{"", "", "", "", "core", "", "", "stick", ""};
-            case "hoe" -> new String[]{"block", "block", "", "", "core", "", "", "stick", ""};
-            default -> new String[]{"", "", "", "", "", "", "", "", ""};
-        };
+        return GearPatterns.tool(tool);
     }
     
     private static JsonObject createStickIngredient() {

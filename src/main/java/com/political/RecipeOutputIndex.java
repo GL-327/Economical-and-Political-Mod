@@ -23,6 +23,7 @@ public final class RecipeOutputIndex {
         for (SlayerRecipes.Recipe r : RecipeConfigManager.getRecipes()) {
             if (r == null || r.result == null || r.result.isEmpty()) continue;
             if (!RecipeConfigManager.isRecipeEnabled(r.name)) continue;
+            if (out.stream().anyMatch(existing -> com.political.recipe.RecipeItems.sameRecipe(existing, r))) continue;
             if (ItemStack.isSameItemSameComponents(r.result, output)) {
                 out.add(r);
                 continue;

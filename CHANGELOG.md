@@ -9,6 +9,13 @@
 - Recipe browser entry points remember their actual parent; details return to the actual set/list page, and commands clear prior menu trail state.
 - Search results are paged; complete item lore is retained. Added pure layout/search/translation tests and real-client checks/screenshots for the main menus and preserved grouped rows.
 
+### Recipe corrections requested after M10
+- Gave Vein Shard and Blood Fragment distinct five-shard cross/X recipes, fixing their shapeless overlap and the Vein recipe's incorrect sixth ingredient.
+- Replaced colliding manual, trinket and overall-tier recipes with distinct patterns; trinket ingredient totals and the 160-lapis costs are retained.
+- Corrected armor/tool silhouettes and completed bounty/gem set recipes. Strong custom recipes require crafting cores; higher overall/bounty tiers consume the previous piece. New/default costs are recorded as unapproved in HANDOFF.md.
+- Menu crafting now aggregates repeated ingredients, distinguishes custom IDs/core tiers, enforces slayer gates and delivers the saved output count with overflow protection.
+- Preserve saved recipe edits and alternates during bootstrap; back up and atomically write repairs, retain oversized catalogs and reject unresolved ingredient cells. Search cards and identical recipe alternatives are deduplicated without deleting saved recipes.
+
 ### M0 hygiene and baseline
 - Stopped tracking `.claude/settings.local.json` (it holds machine specific paths). The local file is untouched.
   `.claude/*.local.json` is now in `.gitignore`.

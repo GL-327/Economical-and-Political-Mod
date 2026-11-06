@@ -108,8 +108,21 @@ public final class SkyblockTrinkets {
         }
     }
 
-    /** Varied 3x3 grids (vanilla mats) — cycles for 30 items. */
+    /** Five distinct symmetric arrangements per material group, with unchanged total costs. */
     private static ItemStack[] recipeGrid(int index) {
+        ItemStack[] base = baseRecipeGrid(index);
+        Map<String, ItemStack> stacks = new java.util.HashMap<>();
+        List<String> keys = new ArrayList<>();
+        for (ItemStack stack : base) {
+            String key = stack.isEmpty() ? "" : com.political.recipe.RecipeInventory.key(stack);
+            keys.add(key);
+            stacks.put(key, stack);
+        }
+        return com.political.recipe.SymmetricLayouts.variant(keys, index / 6).stream()
+                .map(key -> stacks.get(key).copy()).toArray(ItemStack[]::new);
+    }
+
+    private static ItemStack[] baseRecipeGrid(int index) {
         ItemStack E = ItemStack.EMPTY;
         ItemStack g = new ItemStack(Items.GOLD_NUGGET);
         ItemStack p = new ItemStack(Items.PRISMARINE_SHARD);

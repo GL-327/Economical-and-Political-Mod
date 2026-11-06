@@ -254,6 +254,7 @@ public class PoliticalServer implements DedicatedServerModInitializer {
             com.political.core.text.TextSelfCheck.run();
             com.political.core.gui.GuiSelfCheck.run();
             LOGGER.info("PoliticalServer data loaded");
+            com.political.recipe.RecipeSmoke.runIfRequested(s);
             if (com.political.power.game.PowerSmoke.requested()) {
                 com.political.power.game.PowerSmoke.schedule();
             }

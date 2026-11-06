@@ -238,7 +238,7 @@ com/political/party/PartyLeaderGui.java | 50
 com/political/party/PoliticalPartyManager.java | 79
 com/political/recipe/RecipeConfigManager.java | 1
 com/political/recipe/RecipeEditorGui.java | 132
-com/political/recipe/RecipesGui.java | 204
+com/political/recipe/RecipesGui.java | 200
 com/political/settlement/SettlementCommands.java | 30
 com/political/settlement/SettlementEconomy.java | 11
 com/political/settlement/SettlementEconomyGui.java | 31

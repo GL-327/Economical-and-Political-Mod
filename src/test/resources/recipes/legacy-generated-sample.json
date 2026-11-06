@@ -1,0 +1,58 @@
+{
+  "name": "Ascension Master Core (9 Essences)",
+  "requiredSlayer": "",
+  "requiredLevel": 0,
+  "result": {
+    "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_master_core\",custom_item_id:\"asc_master_core\"},\"minecraft:custom_name\":{color:\"gold\",italic:0b,text:\"§6§lAscension Master Core\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Endgame craft component\"},{color:\"gray\",italic:0b,text:\"§8Grants passive grind bonuses when held §8(WIP dis…\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+5\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+5\"}],text:\"❤ Health: \"},\"\",'§8\"Few hands are worthy of its edge.\"',\"§8§m                              §r\",\"§f§lCOMMON ITEM\"]},count:1,id:\"minecraft:heart_of_the_sea\"}",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    },
+    {
+      "nbt": "{components:{\"minecraft:custom_data\":{custom_id:\"asc_rngesus_essence\",custom_item_id:\"asc_rngesus_essence\"},\"minecraft:custom_name\":{color:\"dark_purple\",italic:0b,text:\"§5§lRNGesus Essence\"},\"minecraft:lore\":[{color:\"gray\",italic:0b,text:\"§7Ultra-rare trophy material\"},{color:\"gray\",italic:0b,text:\"§8Bragging rights & apex crafts\"},\"\",{color:\"white\",extra:[{color:\"red\",text:\"+25\"}],text:\"❁ Strength: \"},{color:\"white\",extra:[{color:\"red\",text:\"+20\"}],text:\"❤ Health: \"},\"\",'§8\"Whispers of old battles cling to it.\"',\"§8§m                              §r\",\"§a§lUNCOMMON ITEM\"]},count:1,id:\"minecraft:dragon_breath\"}",
+      "count": 1
+    }
+  ],
+  "lockedSlots": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ]
+}

@@ -357,5 +357,8 @@
   "political.catalog.category.bounty_sets": "Bounty Sets",
   "political.catalog.category.boss_trophies": "World Boss Trophies",
   "political.catalog.category.skill_tomes": "Skill Tomes",
-  "political.catalog.category.power_items": "Power Items"
+  "political.catalog.category.power_items": "Power Items",
+  "political.recipe.requirements": "You do not meet this recipe's level requirements.",
+  "political.recipe.missing_ingredients": "Not enough matching ingredients for this recipe.",
+  "political.recipe.crafted": "Crafted successfully."
 }

@@ -4,6 +4,7 @@ package com.political;
 import com.political.items.CustomItemManager;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.SlayerRecipes;
+import com.political.recipe.GearRecipes;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -25,22 +26,16 @@ public final class AscensionBootstrap {
 
         if (shard != null && vein != null) {
             ItemStack[] g = new ItemStack[9];
-            for (int i = 0; i < 9; i++) {
-                g[i] = i < 5 ? shard.createStack(1) : ItemStack.EMPTY;
-            }
-            g[5] = shard.createStack(1);
-            boolean[] u = new boolean[9];
-            out.add(new SlayerRecipes.Recipe("Vein Shard (5 Sector Shards)", vein.createStack(1), g, u, null, 0));
+            java.util.Arrays.fill(g, ItemStack.EMPTY);
+            for (int i : new int[]{1, 3, 4, 5, 7}) g[i] = shard.createStack(1);
+            out.add(new SlayerRecipes.Recipe("Vein Shard (5 Sector Shards)", vein.createStack(1), g, GearRecipes.locked(), null, 0));
         }
 
         if (shard != null && blood != null) {
             ItemStack[] g = new ItemStack[9];
-            for (int i = 0; i < 4; i++) {
-                g[i] = shard.createStack(1);
-            }
-            g[4] = shard.createStack(1);
-            boolean[] u = new boolean[9];
-            out.add(new SlayerRecipes.Recipe("Blood Fragment (5 Sector Shards)", blood.createStack(1), g, u, null, 0));
+            java.util.Arrays.fill(g, ItemStack.EMPTY);
+            for (int i : new int[]{0, 2, 4, 6, 8}) g[i] = shard.createStack(1);
+            out.add(new SlayerRecipes.Recipe("Blood Fragment (5 Sector Shards)", blood.createStack(1), g, GearRecipes.locked(), null, 0));
         }
 
         if (vein != null && blood != null && star != null) {

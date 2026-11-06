@@ -1269,74 +1269,16 @@ public class RecipesGui {
     // HELPER: Try to autocraft an item from player inventory
     // ============================================================
     private static void tryAutocraft(ServerPlayer player, SlayerRecipes.Recipe recipe, ItemStack result, int variantIndex) {
-        if (recipe == null || recipe.ingredients == null) {
-            player.sendSystemMessage(Component.literal("§cNo recipe available for autocrafting."), false);
-            return;
-        }
-
-        // Enforce the same requiredSlayer/requiredLevel gate the grid-crafting path uses,
-        // otherwise /recipe → Autocraft bypasses level requirements entirely.
         if (!BountyCraftingHandler.meetsRecipeGate(player, recipe)) {
-            String reqType = recipe.requiredSlayer != null
-                    ? recipe.requiredSlayer.name().toLowerCase() : "slayer";
-            player.sendSystemMessage(Component.literal(
-                    "§cYou need " + reqType + " slayer level " + recipe.requiredLevel
-                    + " to craft this."), false);
+            player.sendSystemMessage(Text.tr("political.recipe.requirements"), false);
             return;
         }
-
-        // Check if player has all required ingredients
-        java.util.Map<String, Integer> required = new java.util.HashMap<>();
-        for (ItemStack ing : recipe.ingredients) {
-            if (ing == null || ing.isEmpty()) continue;
-            String key = getIngredientKey(ing);
-            required.merge(key, ing.getCount(), Integer::sum);
+        if (!RecipeInventory.craft(player, recipe)) {
+            player.sendSystemMessage(Text.tr("political.recipe.missing_ingredients"), false);
+            showItemInfo(player, result, variantIndex);
+            return;
         }
-
-        // Count available items in player inventory
-        java.util.Map<String, Integer> available = new java.util.HashMap<>();
-        java.util.Map<String, java.util.List<Integer>> slotMap = new java.util.HashMap<>();
-        
-        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            ItemStack stack = player.getInventory().getItem(i);
-            if (stack.isEmpty()) continue;
-            String key = getIngredientKey(stack);
-            available.merge(key, stack.getCount(), Integer::sum);
-            slotMap.computeIfAbsent(key, k -> new java.util.ArrayList<>()).add(i);
-        }
-
-        // Check if all requirements are met
-        for (java.util.Map.Entry<String, Integer> req : required.entrySet()) {
-            int have = available.getOrDefault(req.getKey(), 0);
-            if (have < req.getValue()) {
-                player.sendSystemMessage(Component.literal("§cMissing materials for autocrafting!"), false);
-                showItemInfo(player, result, variantIndex);
-                return;
-            }
-        }
-
-        // Consume ingredients
-        for (java.util.Map.Entry<String, Integer> req : required.entrySet()) {
-            int toRemove = req.getValue();
-            java.util.List<Integer> slots = slotMap.get(req.getKey());
-            if (slots == null) continue;
-            
-            for (int slot : slots) {
-                if (toRemove <= 0) break;
-                ItemStack stack = player.getInventory().getItem(slot);
-                int canRemove = Math.min(toRemove, stack.getCount());
-                stack.shrink(canRemove);
-                toRemove -= canRemove;
-            }
-        }
-
-        // Give result to player
-        ItemStack crafted = result.copy();
-        if (!player.addItem(crafted)) {
-            player.drop(crafted, false, Prediction.SERVER_ONLY);
-        }
-
-        player.sendSystemMessage(Component.literal("§a§l✓ Autocrafted successfully!"), false);
+        player.sendSystemMessage(Text.tr("political.recipe.crafted"), false);
         showItemInfo(player, result, variantIndex);
     }
 
@@ -1415,7 +1357,7 @@ public class RecipesGui {
                     && CatalogModel.matches(recipe.result.getHoverName().getString(), searchTerm)) results.add(recipe.result);
         }
         CustomItemsGui.openItemList(player, Text.tr("political.catalog.results"), Items.SPYGLASS,
-                results, 0, null, RecipesGui::openMainMenu, (item, back) -> showItemInfoFrom(player, item, back));
+                RecipeItems.unique(results), 0, null, RecipesGui::openMainMenu, (item, back) -> showItemInfoFrom(player, item, back));
     }
 
     // ============================================================
@@ -1434,7 +1376,7 @@ public class RecipesGui {
             return (aId == null ? a.name : aId).compareToIgnoreCase(bId == null ? b.name : bId);
         });
         CustomItemsGui.openItemList(player, Text.tr("political.catalog.all"), Items.BOOK,
-                all.stream().map(recipe -> recipe.result).toList(), page, null, RecipesGui::openMainMenu,
+                RecipeItems.unique(all.stream().map(recipe -> recipe.result).toList()), page, null, RecipesGui::openMainMenu,
                 (item, back) -> showItemInfoFrom(player, item, back));
     }
 

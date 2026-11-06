@@ -777,7 +777,7 @@ public class RecipeEditorGui {
     private static void showSearchResults(ServerPlayer player, String searchTerm) {
         List<ItemStack> items = new ArrayList<>();
         for (Category cat : Category.values()) items.addAll(getItemsForCategory(cat));
-        openEditorSearch(player, items, searchTerm, () -> openMainMenu(player));
+        openEditorSearch(player, RecipeItems.unique(items), searchTerm, () -> openMainMenu(player));
     }
 
     private static void openBountySetsPage(ServerPlayer player, int page) {
