@@ -2,13 +2,12 @@
 
 ## Unreleased
 
-### M10 catalog presentation
-- Rebuilt `/recipe`, `/setrecipe` and `/customitems` on the shared screen module, with matching category cards, named count plates, headers, frames and fixed footer controls.
-- Split categories into pages of eight and item/search lists into pages of twenty; search no longer truncates matches after one screen. Empty categories have a labelled empty state instead of placeholder pages.
-- Recipe browser entry points now remember their actual parent. Recipe and editor Back restore the list page, and command roots have no parent. Item/recipe data, editing actions, permissions and balance are unchanged.
-- Preserved full item tooltips, standardized linked recipe-detail footers, and reused category/count snapshots for page turns. Direct commands clear prior menu trail state.
-- Added real-client catalog screenshots and checks for paging, search and exact return pages; the crawler follows catalog pages and closes menus on the server before replay.
-- Added pure layout, page coverage, search and category-translation tests. The legacy specialized grid methods remain available; nothing was deleted.
+### M10 main menu presentation
+- Rebuilt the main pages of `/recipe`, `/setrecipe` and `/customitems` on the shared screen module, with paged category cards, named count plates, headers, search and fixed footer controls.
+- Preserved the original inner category views: material/icon, spacer, sword and armor-set rows, tier rows, tool sets and mob-drop sections. Restored these after owner feedback rejecting flattened set lists.
+- Filled the retained gem armor row renderer's empty display array using existing Emerald/Lapis swords and armor; recipe/item definitions and balance are unchanged.
+- Recipe browser entry points remember their actual parent; details return to the actual set/list page, and commands clear prior menu trail state.
+- Search results are paged; complete item lore is retained. Added pure layout/search/translation tests and real-client checks/screenshots for the main menus and preserved grouped rows.
 
 ### M0 hygiene and baseline
 - Stopped tracking `.claude/settings.local.json` (it holds machine specific paths). The local file is untouched.

@@ -94,11 +94,10 @@ public class RecipesGui {
         List<CatalogUi.Tile> tiles = new ArrayList<>();
         for (CustomItemsGui.Category cat : CustomItemsGui.catalogCategories()) {
             tiles.add(new CatalogUi.Tile(CustomItemsGui.categoryIcon(cat), CustomItemsGui.categoryTitle(cat),
-                    CustomItemsGui.getItemsForCategory(cat).size(), () -> openCategory(player, cat, 0)));
+                    CustomItemsGui.catalogItemCount(cat), () -> openCategory(player, cat, 0)));
         }
         tiles.add(2, new CatalogUi.Tile(Items.NETHER_STAR, Text.tr("political.catalog.bounty_sets"), CustomItemsGui.bountyItems().size(),
-                () -> CustomItemsGui.openItemList(player, Text.tr("political.catalog.bounty_sets"), Items.NETHER_STAR,
-                        CustomItemsGui.bountyItems(), 0, null, RecipesGui::openMainMenu)));
+                () -> CustomItemsGui.openBountySetsPage(player, 0, RecipesGui::showGroupedItem, RecipesGui::openMainMenu)));
         showRoot(player, page, List.copyOf(tiles));
     }
 
@@ -112,8 +111,23 @@ public class RecipesGui {
     }
 
     private static void openCategory(ServerPlayer player, CustomItemsGui.Category cat, int page) {
-        CustomItemsGui.openItemList(player, CustomItemsGui.categoryTitle(cat), CustomItemsGui.categoryIcon(cat),
-                CustomItemsGui.getItemsForCategory(cat), page, null, RecipesGui::openMainMenu);
+        if (cat == CustomItemsGui.Category.CUSTOM_ARMOR) {
+            CustomItemsGui.openGemBlockGearPage(player, page, RecipesGui::showGroupedItem, RecipesGui::openMainMenu);
+        } else if (cat == CustomItemsGui.Category.CUSTOM_TOOLS) {
+            CustomItemsGui.openToolSetsPage(player, page, RecipesGui::showGroupedItem, RecipesGui::openMainMenu);
+        } else if (cat == CustomItemsGui.Category.MOB_DROPS) {
+            CustomItemsGui.openMobDropsHub(player, RecipesGui::showGroupedItem, RecipesGui::openMainMenu);
+        } else {
+            CustomItemsGui.openCategoryPage(player, cat, page, RecipesGui::showGroupedItem, RecipesGui::openMainMenu);
+        }
+    }
+
+    private static void showGroupedItem(ServerPlayer player, ItemStack item) {
+        var current = eu.pb4.sgui.api.SguiUtils.getCurrentGui(player);
+        CustomItemsGui.showItemInfo(player, item, p -> {
+            if (current instanceof SimpleGui source) source.open();
+            else openMainMenu(p);
+        });
     }
 
     // Helper class for bounty set display

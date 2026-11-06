@@ -494,9 +494,22 @@ public class RecipeEditorGui {
         java.util.List<CatalogUi.Tile> tiles = new ArrayList<>();
         for (Category cat : catalogCategories()) {
             tiles.add(new CatalogUi.Tile(cat.icon, categoryTitle(cat),
-                    getItemsForCategory(cat).size(), () -> openCategoryPage(player, cat, 0)));
+                    (cat == Category.GEM_BLOCK_GEAR ? CustomItemsGui.catalogItemCount(CustomItemsGui.Category.CUSTOM_ARMOR) : getItemsForCategory(cat).size()),
+                    () -> openCatalogCategory(player, cat)));
         }
         showRoot(player, page, List.copyOf(tiles));
+    }
+
+    private static void openCatalogCategory(ServerPlayer player, Category cat) {
+        if (cat == Category.BOUNTY_SETS) openBountySetsPage(player, 0);
+        else if (cat == Category.MOB_DROPS) openMobDropsHub(player);
+        else if (cat == Category.CUSTOM_TOOLS) {
+            CustomItemsGui.openToolSetsPage(player, 0, (p, item) -> {
+                var current = eu.pb4.sgui.api.SguiUtils.getCurrentGui(p);
+                if (current instanceof SimpleGui source) LIST_RETURN.set(p.getUUID(), () -> source.open());
+                openRecipeEditor(p, item, SlayerRecipes.getRecipeForOutput(item), Category.CUSTOM_TOOLS);
+            }, RecipeEditorGui::openMainMenu);
+        } else openCategoryPage(player, cat, 0);
     }
 
     private static void showRoot(ServerPlayer player, int page, List<CatalogUi.Tile> tiles) {
@@ -768,6 +781,7 @@ public class RecipeEditorGui {
     }
 
     private static void openBountySetsPage(ServerPlayer player, int page) {
+        LIST_RETURN.set(player.getUUID(), () -> openBountySetsPage(player, page));
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Bounty sets — editor").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
 
@@ -929,23 +943,50 @@ public class RecipeEditorGui {
     // ──────────────────────────────────────────────────────────────
 
     public static void openCategoryPage(ServerPlayer player, Category cat, int page) {
-        openEditorList(player, categoryTitle(cat),
-                cat.icon, getItemsForCategory(cat), cat, page, () -> openMainMenu(player));
-    }
+        // Special handling for GEM_BLOCK_GEAR - armor sets in rows
+        if (cat == Category.GEM_BLOCK_GEAR) {
+            openGemBlockGearPage(player, page);
+            return;
+        }
 
-    private static void openEditorList(ServerPlayer player, Component title, Item icon, List<ItemStack> items,
-                                       Category cat, int page, Runnable back) {
-        int clampedPage = Pager.clamp(page, Pager.pageCount(items.size(), CatalogModel.ITEMS_PER_PAGE));
-        Runnable reopen = () -> openEditorList(player, title, icon, items, cat, clampedPage, back);
-        LIST_RETURN.set(player.getUUID(), reopen);
+        LIST_RETURN.set(player.getUUID(), () -> openCategoryPage(player, cat, page));
         List<SlayerRecipes.Recipe> existingRecipes = RecipeConfigManager.getRecipes();
-        Screen screen = CatalogUi.items(player, title, icon, Text.tr("political.catalog.edit"), items.size(), clampedPage,
-                next -> openEditorList(player, title, icon, items, cat, next, back),
-                () -> CatalogUi.search(player, query -> openEditorSearch(player, items, query, reopen), reopen), back);
-        int start = clampedPage * CatalogModel.ITEMS_PER_PAGE;
-        int[] slots = CatalogModel.itemSlots();
-        for (int shown = 0; shown < slots.length && start + shown < items.size(); shown++) {
-            ItemStack item = items.get(start + shown);
+        List<ItemStack> items = getItemsForCategory(cat);
+
+        boolean sparse = RecipeCatalogUi.sparseMinTwoPagesEditor(cat);
+        int totalPages = RecipeCatalogUi.totalPages(items.size(), sparse);
+        int clampedPage = Math.min(page, totalPages - 1);
+
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        gui.setTitle(Text.plain(cat.label).withStyle(cat.colour, ChatFormatting.BOLD));
+
+        if (cat == Category.BLOCK_WEAPONS) {
+            for (int i = 0; i < 54; i++) {
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Text.plain("")).build());
+            }
+        } else {
+            RecipeGuiTheme.fillCategoryItemGrid(gui, cat == Category.SPECIAL_ITEMS);
+        }
+
+        boolean[] used = new boolean[54];
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(cat.icon)
+                .setName(Text.plain(cat.label).withStyle(cat.colour, ChatFormatting.BOLD))
+                .addLoreLine(Text.plain(""))
+                .addLoreLine(Text.plain("Click an item to edit its recipe").withStyle(ChatFormatting.GRAY))
+                .glow().build());
+        used[4] = true;
+
+        // Item slots (7 per row, rows 1-4, columns 1-7)
+        int start = clampedPage * RecipeCatalogUi.ITEM_SLOTS_PER_PAGE;
+        int shown = 0;
+        for (int idx = start; idx < items.size() && shown < RecipeCatalogUi.ITEM_SLOTS_PER_PAGE; idx++) {
+            ItemStack item = items.get(idx);
+            int row = shown / 7;
+            int col = shown % 7 + 1;
+            int slot = (row + 1) * 9 + col;
+
             Component displayName = item.get(DataComponents.CUSTOM_NAME);
             String customId = SlayerItems.getCustomItemId(item);
 
@@ -971,18 +1012,123 @@ public class RecipeEditorGui {
             ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
             GuiElementBuilder elem = new GuiElementBuilder(displayStack)
                     .setName(displayName != null ? displayName
-                            : Text.plain(customId != null ? customId : item.getHoverName().getString()))
+                            : Text.plain(customId != null ? customId : "Unknown"))
                     .addLoreLine(Text.plain(""));
             if (finalHasRecipe) {
                 elem.addLoreLine(recipeEnabled
-                        ? Text.tr("political.catalog.enabled").withStyle(Palette.GOOD.style())
-                        : Text.tr("political.catalog.disabled").withStyle(Palette.BAD.style()));
-                elem.addLoreLine(Text.tr("political.catalog.toggle").withStyle(Palette.MUTED.style()));
+                        ? Text.plain("✔ Recipe ENABLED").withStyle(ChatFormatting.GREEN)
+                        : Text.plain("✘ Recipe DISABLED").withStyle(ChatFormatting.RED));
+                elem.addLoreLine(Text.plain("Left-click: edit  |  Right-click: toggle").withStyle(ChatFormatting.GRAY));
+            } else {
+                elem.addLoreLine(Text.plain("➕ No recipe — click to create").withStyle(ChatFormatting.YELLOW));
+            }
+            final int finalPage = clampedPage;
+            elem.setCallback((s, t, a, __slotGui) -> {
+                if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
+                    boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
+                    String status = nowEnabled ? "ENABLED" : "DISABLED";
+                    player.sendSystemMessage(Text.plain("Recipe '" + finalRecipeName + "' is now " + status).withStyle(nowEnabled ? ChatFormatting.GREEN : ChatFormatting.RED), false);
+                    openCategoryPage(player, cat, finalPage);
+                } else {
+                    openRecipeEditor(player, finalItem, finalRecipe, cat);
+                }
+            });
+            gui.setSlot(slot, elem.build());
+            used[slot] = true;
+            shown++;
+        }
+
+        boolean lastPageComingSoon = sparse && clampedPage == totalPages - 1;
+        RecipeCatalogUi.fillEmptyGridSlots(gui, used, lastPageComingSoon);
+
+        // ← Back to main menu
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.plain("← Back to Categories").withStyle(ChatFormatting.YELLOW))
+                .setCallback((s, t, a, __slotGui) -> openMainMenu(player)).build());
+
+        // Pagination
+        if (clampedPage > 0) {
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.plain("← Previous Page").withStyle(ChatFormatting.YELLOW))
+                    .addLoreLine(Text.plain("Page " + clampedPage + " / " + totalPages))
+                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, prev)).build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int next = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.plain("Next Page →").withStyle(ChatFormatting.YELLOW))
+                    .addLoreLine(Text.plain("Page " + (clampedPage + 2) + " / " + totalPages))
+                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, next)).build());
+        }
+
+        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.plain("Page " + (clampedPage + 1) + " / " + totalPages))
+                .build());
+
+        gui.open();
+    }
+
+    /** Search and the old tool/bounty set lists opened the indexed recipe on either click, without a toggle. */
+    static boolean usesIndexedRecipeLookup(String category) {
+        return category == null || category.equals("CUSTOM_TOOLS") || category.equals("BOUNTY_SETS");
+    }
+
+    private static void openEditorList(ServerPlayer player, Component title, Item icon, List<ItemStack> items,
+                                       Category cat, int page, Runnable back) {
+        int clampedPage = Pager.clamp(page, Pager.pageCount(items.size(), CatalogModel.ITEMS_PER_PAGE));
+        Runnable reopen = () -> openEditorList(player, title, icon, items, cat, clampedPage, back);
+        LIST_RETURN.set(player.getUUID(), reopen);
+        List<SlayerRecipes.Recipe> existingRecipes = RecipeConfigManager.getRecipes();
+        boolean indexed = usesIndexedRecipeLookup(cat == null ? null : cat.name());
+        Screen screen = CatalogUi.items(player, title, icon, Text.tr("political.catalog.edit"), items.size(), clampedPage,
+                next -> openEditorList(player, title, icon, items, cat, next, back),
+                () -> CatalogUi.search(player, query -> openEditorSearch(player, items, query, reopen), reopen), back);
+        int start = clampedPage * CatalogModel.ITEMS_PER_PAGE;
+        int[] slots = CatalogModel.itemSlots();
+        for (int shown = 0; shown < slots.length && start + shown < items.size(); shown++) {
+            ItemStack item = items.get(start + shown);
+            Component displayName = item.get(DataComponents.CUSTOM_NAME);
+            String customId = SlayerItems.getCustomItemId(item);
+
+            // Check for existing recipe
+            SlayerRecipes.Recipe existingRecipe = indexed ? SlayerRecipes.getRecipeForOutput(item) : null;
+            boolean hasRecipe = existingRecipe != null;
+            if (!indexed && customId != null) {
+                for (SlayerRecipes.Recipe r : existingRecipes) {
+                    if (customId.equals(SlayerItems.getCustomItemId(r.result))) {
+                        hasRecipe = true;
+                        existingRecipe = r;
+                        break;
+                    }
+                }
+            }
+
+            final ItemStack finalItem = item;
+            final SlayerRecipes.Recipe finalRecipe = existingRecipe;
+            final String finalRecipeName = existingRecipe != null ? existingRecipe.name : null;
+            final boolean finalHasRecipe = hasRecipe;
+            final boolean recipeEnabled = finalRecipeName != null && RecipeConfigManager.isRecipeEnabled(finalRecipeName);
+
+            ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
+            GuiElementBuilder elem = new GuiElementBuilder(displayStack)
+                    .setName(displayName != null ? displayName
+                            : Text.plain(customId != null ? customId : item.getHoverName().getString()))
+                    .addLoreLine(Text.plain(""));
+            if (finalHasRecipe) {
+                if (indexed) {
+                    elem.addLoreLine(Text.tr("political.catalog.edit").withStyle(Palette.WARN.style()));
+                } else {
+                    elem.addLoreLine(recipeEnabled
+                            ? Text.tr("political.catalog.enabled").withStyle(Palette.GOOD.style())
+                            : Text.tr("political.catalog.disabled").withStyle(Palette.BAD.style()));
+                    elem.addLoreLine(Text.tr("political.catalog.toggle").withStyle(Palette.MUTED.style()));
+                }
             } else {
                 elem.addLoreLine(Text.tr("political.catalog.create").withStyle(Palette.WARN.style()));
             }
             elem.setCallback((s, t, a, __slotGui) -> {
-                if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
+                if (!indexed && finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
                     boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
                     Component status = Text.tr(nowEnabled ? "political.catalog.enabled" : "political.catalog.disabled");
                     player.sendSystemMessage(Text.tr("political.catalog.toggled", Text.plain(finalRecipeName), status).withStyle(nowEnabled ? ChatFormatting.GREEN : ChatFormatting.RED), false);
@@ -1008,6 +1154,7 @@ public class RecipeEditorGui {
     // ──────────────────────────────────────────────────────────────
 
     private static void openGemBlockGearPage(ServerPlayer player, int page) {
+        LIST_RETURN.set(player.getUUID(), () -> openGemBlockGearPage(player, page));
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal("Gem & block armor — editor").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 
@@ -1027,121 +1174,10 @@ public class RecipeEditorGui {
 
         // Define armor sets: Block Item, Sword, Armor pieces
         ArmorSetDisplay[] sets = {
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            // 36+ NEW BLOCK ARMOR SETS
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            // MATERIAL ITEM ARMOR SETS
-            
-            
-            
-            
-            
-            
-            // STONE/MUD ARMOR SETS
-            
-            
-            
-            
-            
-            
-            
-            // COPPER/NETHERITE/FROGLIGHT ARMOR SETS
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            // NUGGET ARMOR SETS
-            
-            
-            // LOG ARMOR SETS
-            
-            
-            
-            
-            
-            
-            
-            
+            new ArmorSetDisplay(Items.EMERALD, GemGear.createEmeraldSword(), GemGear.createEmeraldHelmet(),
+                    GemGear.createEmeraldChestplate(), GemGear.createEmeraldLeggings(), GemGear.createEmeraldBoots()),
+            new ArmorSetDisplay(Items.LAPIS_LAZULI, GemGear.createLapisSword(), GemGear.createLapisHelmet(),
+                    GemGear.createLapisChestplate(), GemGear.createLapisLeggings(), GemGear.createLapisBoots())
         };
 
         List<SlayerRecipes.Recipe> existingRecipes = RecipeConfigManager.getRecipes();

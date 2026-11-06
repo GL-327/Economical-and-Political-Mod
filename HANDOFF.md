@@ -2,19 +2,19 @@
 Last updated: 2026-11-06  |  Session: 3  |  Device: Windows
 
 ## NEXT ACTION
-Finish the M10 validation below: build, full real-client suite plus `catalogs`, crawl `recipe,setrecipe,customitems`, and review screenshots. Then the owner judges the new look. Keep working on `modern/m10-menu-rework`; do not push master.
+OWNER CORRECTION (2026-11-06): rework the MAIN pages only. Preserve the existing inner category layouts, especially material/icon, spacer, sword and grouped armor/tool rows. Verify the restored grouped screens in all three menus, then finish the remaining M10 validation. Then the owner judges the new look. Keep working on `modern/m10-menu-rework`; do not push master.
 The owner asked (2026-11-05) for all milestones to be worked without waiting. M3 to M9 now have a first pass on branch `modern/m3-economy` (see M3 TO M9 below); every number that matters is DEFAULT and unapproved. What is left for the owner: (a) the power test items 8 (log out and in, restart), 10 and 11 with a second player, 13, and judging how it looks; (b) the open owner questions, especially 0 (rolled technique numbers), 11 (dead menus) and 12 (coin sources without a cap); (c) the open menu findings in `docs/MENU_CRAWL.md`. Nothing here waits on a blocking question, but M2.8 and the balance numbers are still the owner's.
 
-## M10 MENU REWORK (2026-11-06, implementation complete; validation in progress)
-- Branch `modern/m10-menu-rework`, cut from fetched `origin/master` at `53f4498`.
-- Shared `core.gui.CatalogUi` / `CatalogModel` on `Screen`, `Elements`, `Palette` and `Layout`: eight paired category cards per page (icon plus named count plate), twenty items per page, cyan frame, gold header with count, search and standard Back / Previous / Page / Next / Close positions. All three roots and their category/search lists use it. No recipe/item factories, saved formats, balance numbers or permission requirements changed.
-- Explicit `openFrom(player, parent)` on browser/custom-item entry points; commands pass null, menus pass their own screen. Root/category/search page callbacks remember the source; recipe details and editor Back restore the list page. The `/cc` custom-items shortcut retains the command's owner-level permission check.
-- Existing specialized set/grid display methods and the old category-stack API are retained as legacy code; the new roots use the shared paged lists instead. No owner file, class or world was deleted.
-- VERIFIED: `gradlew.bat build --console=plain` and `compileGametestJava` on Java 25; 249 unit tests, 0 failures (seven new catalog tests).
-- VERIFIED: focused real client `setup,catalogs,armourtip`: 67 checks, 0 failures. All three roots, all root pages, search past twenty results, list/detail Back, actual `/menu` and `/civ` parents, and command-root trail reset passed. Root screenshots for all three reviewed: cyan frame, dark interior, two rows of four category icons with named count plates beneath, aligned footer. Hovered category clearly shows its name and exact count. Armor tooltip retains the full STATS/piece-buff/requirement lore; its top extends beyond the small 480px test window, so a larger-window capture is still useful.
-- Paging now reuses the catalog's tile/count snapshot instead of reconstructing every item on every page turn. Opening the command again takes a fresh snapshot. Category/item factories were compared against `53f4498`: both custom-items and editor factories are unchanged.
-- NOT VERIFIED: final full real-client suite, updated crawler, fresh-clone build. Early client failures led to fixed detail footer positions and explicit page-update waits; non-operator permission checks now inspect the filtered client command tree, and the death check waits for feedback. These power-test observation fixes still need the full rerun.
-- Owner review: card/nameplate pairing, hover counts and readability, the smaller item grid, search, and Back from `/menu`, `/civ` and `/cc`.
+## M10 MENU REWORK (2026-11-06, owner correction being verified)
+- Branch `modern/m10-menu-rework`, cut from fetched `origin/master` at `53f4498`; commits `e426b4e` and `9efd448` were pushed. Master is unchanged.
+- The owner rejected flattening the inner set/category pages: only the main category pages should receive the redesign. Original material/icon + spacer + sword + armor rows, tier rows and tool sets must remain.
+- Main pages retain the shared paged category cards, counts, search and frame. Category entry points now route back to the retained original renderers: gem armor, bounty sets, tool sets and mob-drop hub; ordinary category pages are restored from the starting commit. Recipe and editor Back retain the actual set/list source page.
+- The old gem set renderer had an empty array. Its Emerald/Lapis rows now use the existing swords and armor factories; no item definitions, recipes, stats, prices or saved formats were changed. Root count is the ten displayed sword/armor pieces. Gem tools remain in the existing search data.
+- VERIFIED on the earlier, rejected flattened version: 249 unit tests and a focused client run of 67 checks, 0 failures. Those results do NOT verify this restoration.
+- VERIFIED: build and client-test compilation; 252 unit tests, 0 failures. Three new tests preserve the old edit-only versus toggle actions.
+- IN PROGRESS: updated `catalogs` client checks that assert the material/spacer/sword/armor and tool row positions in all three menus, with screenshots.
+- NOT VERIFIED on the restored version: grouped layouts in a real client, full suite, crawler and clean-checkout build. Previous crawler attempts were aborted while fixing incomplete content snapshots; no passing crawl is claimed.
+- Keep the original recipe/item factories, commands and permissions. Do not flatten set layouts again. No owner file, class or world was deleted.
 
 ## OWNER REQUEST: MASSIVE UI REWORK OF THREE MENUS (2026-11-05, implemented in M10 above)
 The owner looked at the real screens and said the first screens of the three linked menus need a **massive rework to look much better**; more pages are welcome. They are:
@@ -322,3 +322,5 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-06 Session 3, M10 step 1: rebuilt the three catalog roots and category/search lists on core.gui; explicit parent navigation and pure layout/search tests added. Verification in progress; next run the client suite, crawler and inspect screenshots.
 
 - 2026-11-06 Session 3, M10 step 2: fixed linked detail footer, preserved complete item lore, reused root tiles for paging and cleared stale trail state for explicit commands. Build green, 249 unit tests; focused client run 67 checks, 0 failed; three root screenshots reviewed. Next: new-root crawler, final full suite and fresh checkout build.
+
+- 2026-11-06 Session 3, owner correction: the owner liked the grouped inner armor/tool pages and wanted the main pages changed. Restored original category dispatch and row renderers, retained exact parent navigation, added actual Emerald/Lapis rows from existing items where the retained renderer had an empty array. Build and restored-layout client checks in progress.

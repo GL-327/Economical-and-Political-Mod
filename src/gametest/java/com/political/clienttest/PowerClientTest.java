@@ -308,7 +308,7 @@ public class PowerClientTest implements FabricClientGameTest {
         cmd("gamemode creative");
         cmd("recipe");
         check("the recipe browser opens", waitForContainer2(120));
-        boolean sets = go("Bounty Sets", false, "Bounty Sets");
+        boolean sets = go("Bounty Sets", false, "⚔ Bounty Sets (T1 & T2)");
         check("the bounty sets list opens", sets);
         int slot = slotNamed("Chestplate", false);
         check("a chestplate is listed", slot >= 0);
@@ -879,6 +879,30 @@ public class PowerClientTest implements FabricClientGameTest {
 
     private String menuKey(String title) { return title + "|" + pageLabel(); }
 
+    /** A new chest title can arrive before its item payload. Wait before taking the candidate snapshot. */
+    private boolean waitForMenuContents() {
+        String previous = "";
+        int stable = 0;
+        for (int tick = 0; tick < 120; tick++) {
+            List<Item> content = items();
+            String now = content.toString();
+            stable = now.equals(previous) ? stable + 1 : 0;
+            previous = now;
+            boolean ready = ctx.computeOnClient(client -> {
+                if (!(client.gui.screen() instanceof AbstractContainerScreen<?> screen)) return false;
+                var menu = screen.getMenu();
+                int size = menu.slots.size() - 36;
+                return size > 4 && !menu.slots.get(4).getItem().isEmpty()
+                        && (!menu.slots.get(size - 1).getItem().isEmpty()
+                        || content.stream().anyMatch(item -> item.slot() >= size - 9)
+                        || screen.getTitle().getString().toLowerCase(Locale.ROOT).contains("confirm"));
+            });
+            if (ready && !content.isEmpty() && stable >= 4) return true;
+            ctx.waitTick();
+        }
+        return false;
+    }
+
     private boolean turnPage(int slot) {
         String before = pageLabel();
         clickSlot(slot);
@@ -893,82 +917,119 @@ public class PowerClientTest implements FabricClientGameTest {
         for (int family = 0; family < commands.length; family++) {
             closeAnyScreen();
             cmd(commands[family]);
-            check("/" + commands[family] + " opens its catalog", waitForTitle(titles[family], 120));
+            check("/" + commands[family] + " opens its main page", waitForTitle(titles[family], 120));
+            waitForMenuContents();
             check("command root has no Back", slotNamed("Back", true) < 0);
-            check("Close and Search occupy the shared footer", slotNamed("Close", true) == 53 && slotNamed("Search Items", true) == 47);
-            check("header counts categories", loreOf(titles[family], true).stream().anyMatch(line -> line.contains("categories")));
+            check("main page has shared Close and Search", slotNamed("Close", true) == 53 && slotNamed("Search Items", true) == 47);
+            check("main header counts categories", loreOf(titles[family], true).stream().anyMatch(line -> line.contains("categories")));
             ctx.getInput().setCursorPos(0, 0);
             ctx.takeScreenshot("catalog-" + commands[family] + "-root");
-            hover(items().stream().filter(item -> item.slot() == 10).findFirst().orElseThrow().name(), true,
-                    "catalog-" + commands[family] + "-count");
             int pages = 1;
             while (slotNamed("Next", true) >= 0 && pages < 10) {
-                boolean changed = turnPage(50);
-                check(commands[family] + " advances the category page", changed);
-                if (!changed) throw new IllegalStateException("pager did not advance: " + screenTitle());
-                ctx.takeScreenshot("catalog-" + commands[family] + "-page-" + (++pages));
+                check("main category page advances", turnPage(50));
+                pages++;
             }
-            check(commands[family] + " splits categories over more pages", pages > 1);
-            String lastPage = pageLabel();
-            Item category = items().stream().filter(item -> item.slot() == 10).findFirst().orElseThrow();
-            clickSlot(category.slot());
-            check("category has Back and Close in fixed positions", slotNamed("Back", true) == 45 && slotNamed("Close", true) == 53);
-            ctx.takeScreenshot("catalog-" + commands[family] + "-category");
-            check("category Back restores its source page", go("Back", true, titles[family]) && pageLabel().equals(lastPage));
-            // Exercise an output and its actual return path from the first category.
-            while (slotNamed("Previous", true) >= 0) {
-                if (!turnPage(48)) throw new IllegalStateException("previous page did not open");
-            }
+            check("categories have multiple main pages", pages > 1);
+            String last = pageLabel();
             clickSlot(10);
-            String categoryTitle = screenTitle();
-            String categoryPage = pageLabel();
-            clickSlot(11);
-            if (family < 2) {
-                check("output opens a recipe screen", inContainer() && screenTitle().contains(family == 0 ? "Recipe" : "Edit Recipe"));
-                check("recipe Back restores its list", go("Back", true, categoryTitle) && pageLabel().equals(categoryPage));
-            } else {
-                check("grant keeps the item list open", screenTitle().equals(categoryTitle));
+            waitForScreenChange(titles[family], 120);
+            waitForMenuContents();
+            check("category Back restores its main page", backTo(titles[family]) && pageLabel().equals(last));
+            while (slotNamed("Previous", true) >= 0) {
+                if (!turnPage(48)) throw new IllegalStateException("previous main page did not open");
             }
-            go("Back", true, titles[family]);
+            // The owner's original grouped rows: material, spacer, sword, helmet, chest, legs, boots.
+            clickSlot(10);
+            waitForScreenChange(titles[family], 120);
+            waitForMenuContents();
+            String gemTitle = screenTitle();
+            check("gem armor retains material, spacer, sword and full armor row", equipmentRow(9, true));
+            check("lapis retains its separate full armor row", equipmentRow(18, true));
+            ctx.getInput().setCursorPos(0, 0);
+            ctx.takeScreenshot("catalog-" + commands[family] + "-grouped-armor");
+            clickSlot(13);
+            if (family < 2) {
+                waitForScreenChange(gemTitle, 120);
+                check("armor detail Back returns to grouped armor", backTo(gemTitle) && equipmentRow(9, true));
+            } else check("grant leaves grouped armor open", screenTitle().equals(gemTitle));
+            check("grouped armor returns to main", backTo(titles[family]));
+            clickSlot(14);
+            waitForScreenChange(titles[family], 120);
+            waitForMenuContents();
+            check("bounty T1 retains icon, spacer, sword and armor", equipmentRow(9, true));
+            check("bounty T2 retains its own grouped row", equipmentRow(18, true));
+            ctx.takeScreenshot("catalog-" + commands[family] + "-grouped-bounty");
+            check("bounty sets return to main", backTo(titles[family]));
+            clickSlot(30);
+            waitForScreenChange(titles[family], 120);
+            waitForMenuContents();
+            check("tools retain icon, spacer and four tools", equipmentRow(9, false));
+            ctx.takeScreenshot("catalog-" + commands[family] + "-grouped-tools");
+            check("tool sets return to main", backTo(titles[family]));
             clickSlot(47);
             ctx.waitForScreen(net.minecraft.client.gui.screens.inventory.SignEditScreen.class);
             ctx.getInput().typeChars("a");
             ctx.clickScreenButton("gui.done");
             check("search opens results", waitForTitle("Search Results", 120));
-            check("search has more than one page of matches", slotNamed("Next", true) == 50);
-            check("search reaches matches beyond the first twenty", turnPage(50));
-            String resultsPage = pageLabel();
-            ctx.takeScreenshot("catalog-" + commands[family] + "-search-page-2");
+            waitForMenuContents();
+            check("search reaches matches beyond twenty", slotNamed("Next", true) == 50 && turnPage(50));
+            String resultPage = pageLabel();
             if (family < 2) {
                 clickSlot(11);
-                check("search recipe Back restores result page", go("Back", true, "Search Results") && pageLabel().equals(resultsPage));
+                waitForScreenChange("Search Results", 120);
+                check("search detail Back restores its page", backTo("Search Results") && pageLabel().equals(resultPage));
             }
-            check("search Back returns to catalog", go("Back", true, titles[family]));
+            check("search returns to main", backTo(titles[family]));
             clickSlot(53);
-            check("Close dismisses the catalog", !inContainer());
+            check("Close dismisses the main menu", !inContainer());
         }
         for (String source : List.of("menu", "civ")) {
             closeAnyScreen();
             cmd(source);
             waitForContainer2(120);
+            waitForMenuContents();
             String parent = screenTitle();
             int recipe = slotNamed(source.equals("menu") ? "Quick shortcuts" : "Recipes", true);
             check("source offers recipe browser", recipe >= 0);
             if (recipe >= 0) {
                 clickSlot(recipe);
-                check("menu entry opens browser with Back", waitForTitle("Recipe Browser", 120) && slotNamed("Back", true) == 45);
-                clickSlot(45);
-                check("browser Back returns to actual " + source + " source", screenTitle().equals(parent));
+                check("menu opens browser with Back", waitForTitle("Recipe Browser", 120) && slotNamed("Back", true) == 45);
+                check("browser returns to actual " + source + " source", backTo(parent));
             }
         }
         for (int family = 0; family < commands.length; family++) {
             cmd("menu");
             waitForContainer2(120);
-            cmd(commands[family]); // intentionally replace a menu before its close could be sampled by MenuTrail
-            check("a direct /" + commands[family] + " clears the previous menu parent",
-                    waitForTitle(titles[family], 120) && slotNamed("Back", true) < 0);
+            cmd(commands[family]);
+            check("direct /" + commands[family] + " clears the previous parent", waitForTitle(titles[family], 120) && slotNamed("Back", true) < 0);
         }
         closeAnyScreen();
+    }
+
+    private boolean backTo(String title) {
+        waitForMenuContents();
+        Item back = items().stream().filter(item -> isBack(item.name())).findFirst().orElse(null);
+        if (back == null) return false;
+        clickSlot(back.slot());
+        boolean opened = waitForTitle(title, 120);
+        if (opened) waitForMenuContents();
+        return opened;
+    }
+
+    private boolean equipmentRow(int base, boolean armor) {
+        return ctx.computeOnClient(client -> {
+            if (!(client.gui.screen() instanceof AbstractContainerScreen<?> screen)) return false;
+            var slots = screen.getMenu().slots;
+            if (slots.get(base).getItem().isEmpty() || !plain(slots.get(base + 1).getItem()).isBlank()) return false;
+            String[] expected = armor ? new String[]{"_sword", "_helmet", "_chestplate", "_leggings", "_boots"}
+                    : new String[]{"_pickaxe", "_axe", "_shovel", "_hoe"};
+            for (int i = 0; i < expected.length; i++) {
+                var item = slots.get(base + 2 + i).getItem();
+                String id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item.getItem()).getPath();
+                if (!id.endsWith(expected[i])) return false;
+            }
+            return true;
+        });
     }
 
     private List<Item> items() {
@@ -1033,10 +1094,12 @@ public class PowerClientTest implements FabricClientGameTest {
         if (!waitForContainer2(120)) {
             return false;
         }
+        if (!waitForMenuContents()) return false;
         for (int slot : path) {
             if (!inContainer()) {
                 return false;
             }
+            for (int i = 0; i < 120 && items().stream().noneMatch(item -> item.slot() == slot); i++) ctx.waitTick();
             String before = screenTitle();
             String beforeKey = menuKey(before);
             ctx.runOnClient(client -> {
@@ -1045,11 +1108,16 @@ public class PowerClientTest implements FabricClientGameTest {
             });
             ctx.waitTicks(6);
             if (inContainer() && menuKey(screenTitle()).equals(beforeKey)) waitForScreenChange(before, 40);
+            if (!waitForMenuContents()) return false;
         }
         return inContainer() && screenTitle().equals(expectTitle);
     }
 
     private void crawl(List<Integer> path, String title, int depth) {
+        if (!waitForMenuContents()) {
+            finding("menu contents did not arrive for '" + title + "'");
+            return;
+        }
         String visitKey = menuKey(title);
         if (!crawlVisited.add(visitKey)) {
             return;
@@ -1098,16 +1166,19 @@ public class PowerClientTest implements FabricClientGameTest {
             System.out.println("CLIENTTEST MENU edge '" + title + "' --[" + item.name() + "]--> '" + after + "'");
             String afterKey = menuKey(after);
             // the way back
-            List<Item> there = items();
             Item back = null;
-            for (Item candidate : there) {
-                // A confirmation dialog has no Back; its Cancel leads to the screen it was opened from.
-                if (isBack(candidate.name()) || (after.equals("Confirm") && candidate.name().toLowerCase(Locale.ROOT).contains("cancel"))) {
-                    back = candidate;
-                    break;
+            // Open-screen and content packets are distinct; a title alone does not mean its controls have arrived.
+            for (int wait = 0; wait < 120 && back == null; wait++) {
+                for (Item candidate : items()) {
+                    if (isBack(candidate.name()) || (after.equals("Confirm") && candidate.name().toLowerCase(Locale.ROOT).contains("cancel"))) {
+                        back = candidate;
+                        break;
+                    }
                 }
+                if (back == null) ctx.waitTick();
             }
             if (back == null) {
+                dump("missing Back after waiting for content");
                 finding("'" + after + "' (opened from '" + title + "' via '" + item.name() + "') has no back button");
             } else {
                 Item backItem = back;
@@ -1117,6 +1188,10 @@ public class PowerClientTest implements FabricClientGameTest {
                 });
                 ctx.waitTicks(6);
                 String where = waitForScreenChange(after, 40);
+                if (inContainer()) {
+                    waitForMenuContents();
+                    where = screenTitle();
+                }
                 if (!menuKey(where).equals(visitKey)) {
                     finding("Back on '" + after + "' (opened from '" + title + "' via '" + item.name() + "') goes to '" + where
                             + "' instead of '" + title + "'");

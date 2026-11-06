@@ -505,12 +505,20 @@ public class CustomItemsGui {
         java.util.List<CatalogUi.Tile> tiles = new ArrayList<>();
         for (Category cat : catalogCategories()) {
             tiles.add(new CatalogUi.Tile(cat.icon, categoryTitle(cat),
-                    getItemsForCategory(cat).size(), () -> openCategoryPage(player, cat, 0)));
+                    catalogItemCount(cat), () -> openCatalogCategory(player, cat)));
         }
         tiles.add(2, new CatalogUi.Tile(Items.NETHER_STAR, Text.tr("political.catalog.bounty_sets"), bountyItems().size(),
-                () -> openItemList(player, Text.tr("political.catalog.bounty_sets"), Items.NETHER_STAR,
-                        bountyItems(), 0, CustomItemsGui::giveItem, CustomItemsGui::open)));
+                () -> openBountySetsPage(player, 0, CustomItemsGui::giveItem, CustomItemsGui::open)));
         showRoot(player, page, List.copyOf(tiles));
+    }
+
+    private static void openCatalogCategory(ServerPlayer player, Category cat) {
+        if (cat == Category.MOB_DROPS) openMobDropsHub(player);
+        else openCategoryPage(player, cat, 0);
+    }
+
+    public static int catalogItemCount(Category cat) {
+        return cat == Category.CUSTOM_ARMOR ? gemArmorSets().length * 5 : getItemsForCategory(cat).size();
     }
 
     private static void showRoot(ServerPlayer player, int page, List<CatalogUi.Tile> tiles) {
@@ -988,17 +996,7 @@ public class CustomItemsGui {
                 .glow().build());
 
         // Define armor sets: Block Item, Sword, Armor pieces
-        ArmorSetDisplay[] allSets = {
-            // 36+ NEW BLOCK ARMOR SETS
-            // MATERIAL ITEM ARMOR SETS
-            // WOOD ARMOR SETS (Complete collection)
-            // STRIPPED LOG ARMOR SETS
-            // STONE/MUD ARMOR SETS
-            // COPPER/NETHERITE/FROGLIGHT ARMOR SETS
-            // NUGGET ARMOR SETS
-            // LOG ARMOR SETS
-            // NEW 25 MATERIAL ARMOR SETS
-        };
+        ArmorSetDisplay[] allSets = gemArmorSets();
 
         final int SETS_PER_PAGE = 4;
         ArmorSetDisplay[] sets = allSets;
@@ -1079,6 +1077,15 @@ public class CustomItemsGui {
         gui.open();
     }
 
+    private static ArmorSetDisplay[] gemArmorSets() {
+        return new ArmorSetDisplay[] {
+            new ArmorSetDisplay(Items.EMERALD, GemGear.createEmeraldSword(), GemGear.createEmeraldHelmet(),
+                    GemGear.createEmeraldChestplate(), GemGear.createEmeraldLeggings(), GemGear.createEmeraldBoots()),
+            new ArmorSetDisplay(Items.LAPIS_LAZULI, GemGear.createLapisSword(), GemGear.createLapisHelmet(),
+                    GemGear.createLapisChestplate(), GemGear.createLapisLeggings(), GemGear.createLapisBoots())
+        };
+    }
+
     // Helper class for armor set display
     private record ArmorSetDisplay(net.minecraft.world.item.Item blockItem, ItemStack sword, ItemStack helmet,
                                     ItemStack chestplate, ItemStack leggings, ItemStack boots) {}
@@ -1092,8 +1099,99 @@ public class CustomItemsGui {
     }
 
     public static void openCategoryPage(ServerPlayer player, Category cat, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
-        openItemList(player, categoryTitle(cat), cat.icon,
-                getItemsForCategory(cat), page, onItemClick, onBack);
+        if (cat == Category.CUSTOM_ARMOR) {
+            openGemBlockGearPage(player, page, onItemClick, onBack);
+            return;
+        }
+        if (cat == Category.CUSTOM_TOOLS) {
+            openToolSetsPage(player, page, onItemClick, onBack);
+            return;
+        }
+
+        List<ItemStack> items = getItemsForCategory(cat);
+
+        boolean sparse = RecipeCatalogUi.sparseMinTwoPagesCustom(cat);
+        int totalPages = RecipeCatalogUi.totalPages(items.size(), sparse);
+        int clampedPage = Math.min(page, totalPages - 1);
+
+        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
+        boolean skyblockSpecial = cat == Category.SPECIAL_ITEMS;
+        gui.setTitle(Text.plain(skyblockSpecial ? "Skyblock-style trinkets" : cat.label)
+                .withStyle(skyblockSpecial ? ChatFormatting.GOLD : cat.colour, ChatFormatting.BOLD));
+
+        if (cat == Category.REFLECT_BLOCK_WEAPONS) {
+            for (int i = 0; i < 54; i++) {
+                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Text.plain("")).build());
+            }
+        } else {
+            RecipeGuiTheme.fillCategoryItemGrid(gui, skyblockSpecial);
+        }
+
+        boolean[] used = new boolean[54];
+
+        // Header
+        gui.setSlot(4, new GuiElementBuilder(cat.icon)
+                .setName(Text.plain(cat.label).withStyle(cat.colour, ChatFormatting.BOLD))
+                .addLoreLine(Text.plain(""))
+                .addLoreLine(Text.plain(skyblockSpecial
+                        ? "Consumables & misc — right-click effects. Recipes in /recipe."
+                        : "Click an item to view recipe").withStyle(ChatFormatting.GRAY))
+                .glow().build());
+        used[4] = true;
+
+        // Item slots (7 per row, rows 1-4, columns 1-7)
+        int start = clampedPage * RecipeCatalogUi.ITEM_SLOTS_PER_PAGE;
+        int shown = 0;
+        for (int idx = start; idx < items.size() && shown < RecipeCatalogUi.ITEM_SLOTS_PER_PAGE; idx++) {
+            ItemStack item = items.get(idx);
+            int row = shown / 7;
+            int col = shown % 7 + 1;
+            int slot = (row + 1) * 9 + col;
+
+            Component displayName = item.get(DataComponents.CUSTOM_NAME);
+
+            final ItemStack finalItem = item;
+            ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
+            GuiElementBuilder elem = new GuiElementBuilder(displayStack)
+                    .setName(displayName != null ? displayName
+                            : Text.plain(item.getItem().toString()))
+                    .addLoreLine(Text.plain(""))
+                    .addLoreLine(Text.plain("✨ Click to get item").withStyle(ChatFormatting.YELLOW))
+                    .setCallback((s, t, a, __slotGui) -> onItemClick.onClick(player, finalItem));
+            gui.setSlot(slot, elem.build());
+            used[slot] = true;
+            shown++;
+        }
+
+        boolean lastPageComingSoon = sparse && clampedPage == totalPages - 1;
+        RecipeCatalogUi.fillEmptyGridSlots(gui, used, lastPageComingSoon);
+
+        // ← Back to main menu
+        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
+                .setName(Text.plain("← Back to Categories").withStyle(ChatFormatting.YELLOW))
+                .setCallback((s, t, a, __slotGui) -> onBack.open(player)).build());
+
+        // Pagination
+        if (clampedPage > 0) {
+            final int prev = clampedPage - 1;
+            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.plain("← Previous Page").withStyle(ChatFormatting.YELLOW))
+                    .addLoreLine(Text.plain("Page " + clampedPage + " / " + totalPages))
+                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, prev, onItemClick, onBack)).build());
+        }
+        if (clampedPage < totalPages - 1) {
+            final int next = clampedPage + 1;
+            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
+                    .setName(Text.plain("Next Page →").withStyle(ChatFormatting.YELLOW))
+                    .addLoreLine(Text.plain("Page " + (clampedPage + 2) + " / " + totalPages))
+                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, next, onItemClick, onBack)).build());
+        }
+
+        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
+                .setName(Text.plain("Page " + (clampedPage + 1) + " / " + totalPages))
+                .build());
+
+        gui.open();
     }
 
     public static void openItemList(ServerPlayer player, Component title, net.minecraft.world.item.Item icon,
