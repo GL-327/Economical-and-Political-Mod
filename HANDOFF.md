@@ -1,15 +1,15 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-06 16:23 UTC  |  Session: 4  |  Device: Windows
+Last updated: 2026-11-06 16:33 UTC  |  Session: 4  |  Device: Windows
 
 ## NEXT ACTION
-Load the verified feature-branch snapshot for owner testing, record the pending M2 power-test result, then follow the M2 acceptance gate before further M3 work; the next non-dependent check is the controlled M0.7 JVM-flag comparison.
+Perform the isolated `build.gradle` M0.7 JVM-flag/player-join comparison while retaining production workarounds, and record the owner’s pending M2 power-test PASS/FAIL before further M3 economy work.
 
 ## STATUS
-Milestone: M2 acceptance follow-up; M3–M9 have partial first passes, not completion. Branch: `codex/finish-remaining` (isolated checkout from `190c9ba`).
-PUSH STATUS: `a1d3ba9`, `551811b`, `2c59d61` pushed to `origin/codex/finish-remaining`; verified startup optimization is being committed/pushed. Original UI/recipe branch remains through `190c9ba`.
-BUILD STATUS: GREEN: `gradlew.bat build compileGametestJava --console=plain`, exit 0, on the combined ownership/recovery/startup fixes. Baseline clean-checkout build at `44d70fa` also passed.
+Milestone: M2 acceptance follow-up; M3–M9 have partial first passes, not completion. Branch: `codex/finish-remaining` in the PRIMARY checkout (originally isolated from `190c9ba`); retained verification checkout is detached at `76428b6`.
+PUSH STATUS: `a1d3ba9`, `551811b`, `2c59d61`, `76428b6` pushed to `origin/codex/finish-remaining`; this final owner-launch handoff is being committed/pushed. Original UI/recipe branch remains through `190c9ba`.
+BUILD STATUS: GREEN: `gradlew.bat build compileGametestJava --console=plain`, exit 0, on the combined ownership/recovery/startup fixes in the isolated checkout; the primary checkout also passed all 270 tests before its latest client launch (`gradlew.bat build runClient`). Baseline clean-checkout build at `44d70fa` also passed.
 TEST STATUS: 270 unit tests, 211 full power server checks, 14 unique two-player checks, 305 recipe checks, and 4/18 restart checks pass; baseline real-client suite passed 164 checks before these recovery/optional-ownership/startup changes. Latest full client UI suite was not rerun.
-Owner test session: the updated server/client are open as the existing test account on `localhost:25566`; a screenshot confirms the player joined, with full health and energy. The client exited cleanly at 14:14; the server remains available and pauses when empty. Do not reopen/control the client over the owner's actions unless asked. Further source work is isolated in `build/remaining-worktree`; verification uses its separate `run-verify` world on port 25567. No live/test-account reset was performed during launch.
+Owner test session: VERIFIED updated server snapshot `76428b6` is running on `localhost:25566`; Minecraft joined as the existing test account and the multiplayer window was inspected. Primary checkout is on `codex/finish-remaining`. Before loading the update, the previous server stopped cleanly and its world/config/root files were copied into `build/owner-live/76428b6/before-load`. No test-account reset was performed. The server uses immutable copied classes/resources under `build/owner-live/76428b6`, so future primary builds cannot change its running code. Developer smoke properties are explicitly off. Its console file is `build/owner-latest-commands.txt`; append commands only after the current server log contains `PoliticalServer data loaded`. Keep it running for the owner, and do not run the destructive/resetting automated client harness against it. Isolated test world/checkout remains under `build/remaining-worktree` on port 25567; it was not deleted.
 
 ## MILESTONE CHECKLIST
 - [x] M0 hygiene, metadata, baseline and stable toolchain: existing history; CC0-1.0, author GL-327, Minecraft 26.3, Java 25, Gradle 9.8.2, Loom 1.19.3. No version bump is requested now.
@@ -46,7 +46,7 @@ Owner test session: the updated server/client are open as the existing test acco
 ## DECISIONS MADE (mark each one DEFAULT or OWNER)
 - OWNER: the pasted modernization program is the scope; finish the current code in bounded verified increments, not a clean-slate rebuild of stale archived designs.
 - OWNER: rolled techniques, server-only vanilla-client compatibility, existing saves, stable economy, preserved inner equipment layouts, redesigned three catalog main pages.
-- OWNER: open the current mod for testing while work continues. Stable test session remains on the prior verified branch; source changes go into an isolated feature checkout.
+- OWNER: open the current mod for testing while work continues. Latest verified code now runs from an immutable snapshot; primary checkout is the verified feature branch, and the older isolated checkout/worlds are retained.
 - OWNER: no exhaustive menu crawl unless requested again; inspect known routes and targeted tests instead.
 - OWNER (earlier explicit delegation): license CC0-1.0 and author GL-327 are resolved. Do not reopen these old questions.
 - DEFAULT/unapproved: existing balance/config values and the recipe/core tiers from M10 remain unapproved for balance. No new economy/reward/stat value is changed in this session.
@@ -60,7 +60,7 @@ Owner test session: the updated server/client are open as the existing test acco
 - JVM flags: retain until the prescribed comparison provides evidence; no removal based on a few unrelated successful boots.
 
 ## VERIFIED
-- Owner client launch: `gradlew.bat runClient --console=plain --args="--username <existing-test-account> --quickPlayMultiplayer localhost:25566"`; server log records login and screenshot shows multiplayer gameplay. Server launched with `gradlew.bat runServerVerify --console=plain`. These launch tasks remain running for the owner.
+- Initial owner client launch: `gradlew.bat runClient --console=plain --args="--username <existing-test-account> --quickPlayMultiplayer localhost:25566"`; server log records login and screenshot shows multiplayer gameplay. Server launched with `gradlew.bat runServerVerify --console=plain`. Initial client exited cleanly; the updated owner server/client are now running as described above.
 - Baseline build/test: `gradlew.bat build compileGametestJava --console=plain`, exit 0; 263 unit tests. Baseline complete client script: 164 checks, exit 0; recipe smoke: 305 checks, original backup intact, repeated boot byte-identical.
 - Isolated current power verification: existing compiled 26.3 server launched with `-Dpoliticalserver.powerSmoke=true -Dpoliticalserver.mixinAudit=true -Dpoliticalserver.commandsStrict=true`, separate world/port; process exit 0, 178 checks pass, mixin audit passes 29 targets. Developer test logs stay in ignored `build/` and must not be committed. Fresh isolated `powerSmoke=write` and `powerSmoke=read` boots pass 4 and 18 checks respectively, both exit 0; schema-2 state, innate/equipped technique, mastery, shards, charge, resource and restored vow survive, while cooldowns clear.
 - Source audit proves the old HANDOFF capability-missing claims were obsolete; current evidence is above.
@@ -71,11 +71,11 @@ Owner test session: the updated server/client are open as the existing test acco
 ## NOT VERIFIED
 - The whole modernization program is not complete: open items are explicitly unchecked above.
 - Latest default-config server acceptance passes all 211 and recipe acceptance all 305 after optimization; latest write/read boots also pass 4/18. The 14-check uniqueness fixture passes. Latest full real-client suite is not rerun after the server-only recovery/ownership/startup changes. Expanded 211-check command execution and restart write/read mechanics are VERIFIED; a real second launcher client/owner login cycle is still not claimed.
-- Owner play acceptance, arbitrary older edited catalogs, new balance values, a launcher-installed stock vanilla client, full normal-case regression, real-world migrations, full content lifecycle/load tests and M9 compatibility.
+- Owner play acceptance (question pending in chat), arbitrary older edited catalogs, new balance values, a launcher-installed stock vanilla client, full normal-case regression, real-world migrations, full content lifecycle/load tests and M9 compatibility.
 - Remote CI status has not been checked; local builds are not a claim about GitHub Actions.
 
 ## BEHAVIOR CHANGES
-- VERIFIED: reset recovery records append a unique suffix when their existing key is already used. This prevents loss of earlier recovery copies; no active player state, balance value or saved schema changes. Unique-ownership correction also preserves existing innate/mastery entitlements when an overlapping admin grant is removed; the admin message now says innate technique/mastery rather than school tree. The owner test build remains `190c9ba` until a verified update is installed.
+- VERIFIED: reset recovery records append a unique suffix when their existing key is already used. This prevents loss of earlier recovery copies; no active player state, balance value or saved schema changes. Unique-ownership correction also preserves existing innate/mastery entitlements when an overlapping admin grant is removed; the admin message now says innate technique/mastery rather than school tree. The verified update is installed for testing as snapshot `76428b6`.
 - Startup correction only defers fingerprint work until the exact-name/output/provider checks need it; no merge ownership or saved-content rule changed.
 - Historical M10: root catalog redesign with grouped inner rows retained; recipe pattern/collision/core fixes and exact menu crafting. See CHANGELOG.md and earlier HISTORY.
 
@@ -105,7 +105,7 @@ Owner test session: the updated server/client are open as the existing test acco
 - S3: Windows OSHI/Perflib startup warnings are environmental; distinguish them from a mod exception. JVM workarounds remain.
 
 ## RESUME COMMANDS
-Run build/compile tasks serially; work in the feature checkout and leave the owner's running session alone. Never run the automated client harness against port 25566 while the owner is testing: it resets the test account and stops its server.
+Run build/compile tasks serially in the primary feature checkout. The owner server runs immutable copied classes; leave it running while developing. Never change/delete its snapshot or test world. The retained old verification checkout is detached; create/use an appropriate feature checkout for further isolated test servers. Never run the automated client harness against port 25566 while the owner is testing: it resets the test account and stops its server.
 Windows (PowerShell, from the feature checkout):
 ```powershell
 $jdk25=Get-ChildItem -LiteralPath (Join-Path $env:ProgramFiles 'Java') -Directory -Filter 'jdk-25*' | Sort-Object Name -Descending | Select-Object -First 1
@@ -171,3 +171,5 @@ Use an isolated copied/test world with an unused port for additional verificatio
 - Verified ownership increment: final build/compileGametestJava exits 0 with 269 unit tests; unique fixture passes 14/14 after the 7/14 failing reproduction. The existing default-config 211-check run will be repeated after the measured startup optimization.
 
 - 2026-11-06 16:23 UTC Session 4: removed unconditional per-default/per-record hashing; the same 359-record idempotent merge measured 57,032.804 ms -> 831.384 ms with identical fingerprint. Combined build passes 270 unit tests; isolated full server passes 211 power and 305 recipe checks, then write/read 4/18 pass; saved recipe bytes unchanged and 29-target mixin audit passes. Owner M2 result remains pending, so further M3 work is gated by the supplied program.
+
+- 2026-11-06 16:33 UTC Session 4: final power/recipe/restart verification passed, snapshot `76428b6` copied immutably, previous owner test server stopped and world/config backed up, latest snapshot started with smoke modes off, primary checkout moved to `codex/finish-remaining` without deleting the retained verification checkout, primary build passed 270 tests, and updated Minecraft client reconnected. Owner M2 acceptance is still pending; M0.7 is the next non-dependent task.
