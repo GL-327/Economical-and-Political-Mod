@@ -7,7 +7,7 @@ The mod has about 113 chest menus. A player expects that opening a menu and pres
 Minecraft client (Fabric client game test, `src/gametest/java/com/political/clienttest/PowerClientTest.java`), join as an operator and:
 
 1. open each root (`/menu`, `/civ`, `/stats`, `/bounty`, `/bazaar`, `/shop`, `/expedition`, `/hunt`, `/party`, `/guild`, `/trade`, `/auction`, `/war`, `/titles`,
-   `/relics`, `/settlement`, `/technique`, `/credits`, `/view`; `/admin` for the console);
+   `/relics`, `/settlement`, `/technique`, `/credits`, `/view`, `/recipe`, `/setrecipe`, `/customitems`; `/admin` for the console);
 2. click every item on the screen (at most 24 per screen, 14 children descended into at the top, 6 below, 3 deeper; at most 1500 clicks);
 3. each time a click opens a different screen, press that screen's Back and check that it lands on the screen it came from, then go on into that screen.
 
@@ -55,3 +55,23 @@ Crawls that were run (each a real client clicking everything it can reach, evide
 Still open (also in HANDOFF.md KNOWN ISSUES): the Guilds & Orders screen from the civilization hub has no Back; the recipe browser has no Back when opened from other menus and
 `MenuTrail` finds no free slot on its bottom row; the catalog section screens (`New Content Catalog` and its sections) report no Back or a Back to a sibling; the admin console was
 not crawled to the end; the crawler can leave a menu without closing it, which can leave an old entry on that player's trail until they close a menu.
+
+## M10 catalog rework (2026-11-06; client validation in progress)
+
+The recipe browser, recipe editor and custom-items roots/category/search lists now use `core.gui.CatalogUi`.
+They have eight paired category cards or twenty items per page, labelled counts and a shared footer.
+Menu callers use `openFrom(player, parent)`; commands pass null. Browser/editor detail Back restores the list page.
+Legacy specialized display methods remain in the sources, but the new roots use the shared catalog lists.
+
+Validation commands:
+- `scripts/power-client-test.sh` now includes the `catalogs` phase after the existing power/regression suite.
+- `POWERTEST_ROOTS=recipe,setrecipe,customitems scripts/power-client-test.sh setup,menus` crawls the new roots.
+- Screenshots named `catalog-*` and `menu-*` are written under `build/run/clientGameTest/screenshots`.
+
+The crawler now includes the page counter in a screen's identity and follows the standard Next control as a sibling page.
+It also sends the container-close packet before replaying a command; the old client-only screen close could leave stale server navigation.
+The `catalogs` phase checks parentless commands, category-page return, result-page return, search beyond twenty results,
+fixed footer controls, and the browser's actual `/menu` and `/civ` parents. It captures clean root, hovered count, category
+and search screenshots for all three families. It never saves, deletes or toggles a recipe.
+
+VERIFIED: 249 unit tests, 0 failures; static Back audit has 0 hits. NOT VERIFIED: final real-client and crawler results and visual review.

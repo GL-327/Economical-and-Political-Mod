@@ -65,7 +65,7 @@ public class PowerClientTest implements FabricClientGameTest {
         cmd("tp @s ~ 200 ~ 0 0");
         context.waitTicks(60);
         context.takeScreenshot("00-joined");
-        String wanted = System.getProperty("powertest.phases", "permission,setup,technique,grants,domain,combat,death,regression");
+        String wanted = System.getProperty("powertest.phases", "permission,setup,technique,grants,domain,combat,death,regression,catalogs");
         try {
             for (String phase : wanted.split(",")) {
                 switch (phase.trim()) {
@@ -79,6 +79,7 @@ public class PowerClientTest implements FabricClientGameTest {
                     case "blackflash" -> phase("Black Flash", this::blackFlash);
                     case "regression" -> phase("older commands still answer", this::regression);
                     case "menus" -> phase("every menu: in and back out", () -> menus(PLAYER_ROOTS));
+                    case "catalogs" -> phase("catalog layout, paging and Back", this::catalogs);
                     case "armourtip" -> phase("an armour piece's tooltip", this::armourTip);
                     case "adminmenus" -> phase("every admin menu: in and back out", () -> menus(List.of("admin")));
                     default -> throw new IllegalArgumentException("unknown phase " + phase);
@@ -105,7 +106,7 @@ public class PowerClientTest implements FabricClientGameTest {
         System.out.println("CLIENTTEST phase: " + name);
         try {
             body.run();
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | AssertionError e) {
             failures.add("phase '" + name + "' threw " + e);
             e.printStackTrace();
         }
@@ -307,7 +308,7 @@ public class PowerClientTest implements FabricClientGameTest {
         cmd("gamemode creative");
         cmd("recipe");
         check("the recipe browser opens", waitForContainer2(120));
-        boolean sets = go("Bounty Sets", false, "⚔ Bounty Sets (T1 & T2)");
+        boolean sets = go("Bounty Sets", false, "Bounty Sets");
         check("the bounty sets list opens", sets);
         int slot = slotNamed("Chestplate", false);
         check("a chestplate is listed", slot >= 0);
@@ -333,7 +334,11 @@ public class PowerClientTest implements FabricClientGameTest {
         for (String line : lines) {
             System.out.println("CLIENTTEST TIP " + line);
         }
+        int[] oldSize = ctx.computeOnClient(client -> new int[]{client.getWindow().getWidth(), client.getWindow().getHeight()});
+        ctx.getInput().resizeWindow(1280, 900);
+        ctx.waitTicks(10);
         hover("Chestplate", false, "40-armour-tooltip");
+        ctx.getInput().resizeWindow(oldSize[0], oldSize[1]);
         check("the stat lines are in the STATS block, not repeated lower down", lines.stream().filter(l -> l.contains("Defense:")).count() == 1);
     }
 
@@ -441,10 +446,11 @@ public class PowerClientTest implements FabricClientGameTest {
     private void permission() {
         consoleCommand("deop PowerTester");
         ctx.waitTicks(80);
+        boolean hidden = ctx.computeOnClient(client -> client.player.connection.getCommands().getRoot().getChild("poweradmin") == null);
         int mark = mark();
         cmd("poweradmin");
-        boolean refused = waitFor(mark, "Unknown or incomplete", null, 60);
-        check("a non-operator gets no /poweradmin (" + since(mark) + ")", refused);
+        ctx.waitTicks(60);
+        check("a non-operator has no /poweradmin command or admin screen", hidden && !inContainer());
 
         consoleCommand("op PowerTester");
         ctx.waitTicks(80);
@@ -717,7 +723,7 @@ public class PowerClientTest implements FabricClientGameTest {
                 afterDeath[0] >= expected - 2 && afterDeath[0] <= expected + 35);
         mark = mark();
         cast();
-        boolean again = saw(mark, "Barrier", true) && !saw(mark, "On cooldown", true);
+        boolean again = waitFor(mark, "Barrier", true, 60) && !saw(mark, "On cooldown", true);
         check("the Barrier cooldown is gone after death (" + since(mark) + ")", again);
         ctx.takeScreenshot("22-after-respawn");
     }
@@ -758,7 +764,7 @@ public class PowerClientTest implements FabricClientGameTest {
     // ── the menu crawler ────────────────────────────────────────────────────────────────────
 
     private static final int CRAWL_MAX_DEPTH = 5;
-    private static final int CRAWL_MAX_CLICKS = 1500;
+    private static final int CRAWL_MAX_CLICKS = Integer.getInteger("powertest.crawl.maxClicks", 1500);
     private static final int CRAWL_MAX_SLOTS_PER_SCREEN = 24;
 
     /** How many new child screens one screen may be descended into: wide near the top, narrow below (a list of 60 collections). */
@@ -784,11 +790,14 @@ public class PowerClientTest implements FabricClientGameTest {
      * development world. Development only.
      */
     private static final List<String> PLAYER_ROOTS = List.of("menu", "civ", "stats", "bounty", "bazaar", "shop", "expedition", "hunt",
-            "party", "guild", "trade", "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view", "cc");
+            "party", "guild", "trade", "auction", "war", "titles", "relics", "settlement", "technique", "credits", "view", "cc",
+            "recipe", "setrecipe", "customitems");
 
     private void menus(List<String> roots) {
         cmd("gamemode creative");
         String only = System.getProperty("powertest.roots"); // a comma separated list of command roots, to crawl fewer
+        int requested = (int) roots.stream().filter(root -> only == null || List.of(only.split(",")).contains(root)).count();
+        int attempted = 0;
         for (String root : roots) {
             if (only != null && !List.of(only.split(",")).contains(root)) {
                 continue;
@@ -797,9 +806,11 @@ public class PowerClientTest implements FabricClientGameTest {
                 break;
             }
             crawlRoot = root;
+            attempted++;
             cmd(root);
             if (!waitForContainer2(120)) {
                 System.out.println("CLIENTTEST MENU root /" + root + " opens no screen");
+                finding("requested root /" + root + " did not open a screen");
                 closeAnyScreen();
                 continue;
             }
@@ -809,6 +820,8 @@ public class PowerClientTest implements FabricClientGameTest {
             closeAnyScreen();
         }
         System.out.println("CLIENTTEST MENU visited " + crawlVisited.size() + " screens with " + crawlClicks + " clicks");
+        check("all requested crawl roots were attempted", requested > 0 && attempted == requested);
+        if (crawlClicks >= CRAWL_MAX_CLICKS) finding("click budget reached; this crawl is incomplete");
         check("every menu reached has a way back (" + crawlFindings.size() + " problems)", crawlFindings.isEmpty());
     }
 
@@ -827,8 +840,14 @@ public class PowerClientTest implements FabricClientGameTest {
     private void closeAnyScreen() {
         ctx.runOnClient(client -> {
             if (client.gui.screen() != null) {
-                client.setScreenAndShow(null);
+                if (client.gui.screen() instanceof AbstractContainerScreen<?>) client.player.closeContainer();
+                else client.gui.screen().onClose();
             }
+        });
+        ctx.waitTicks(3);
+        // Closing a sign can reopen its catalog on the server. Close that container as well before the next command.
+        ctx.runOnClient(client -> {
+            if (client.gui.screen() instanceof AbstractContainerScreen<?>) client.player.closeContainer();
         });
         ctx.waitTicks(3);
     }
@@ -850,6 +869,106 @@ public class PowerClientTest implements FabricClientGameTest {
     }
 
     private record Item(int slot, String name) {
+    }
+
+    /** The page counter is part of a catalog's identity, even though paging keeps its window title. */
+    private String pageLabel() {
+        for (Item item : items()) if (item.name().startsWith("Page ")) return item.name();
+        return "";
+    }
+
+    private String menuKey(String title) { return title + "|" + pageLabel(); }
+
+    private boolean turnPage(int slot) {
+        String before = pageLabel();
+        clickSlot(slot);
+        for (int i = 0; i < 120 && (!inContainer() || pageLabel().isEmpty() || pageLabel().equals(before)); i++) ctx.waitTick();
+        return inContainer() && !pageLabel().isEmpty() && !pageLabel().equals(before);
+    }
+
+    /** Read-only presentation checks; never saves, deletes or toggles a recipe. */
+    private void catalogs() {
+        String[] commands = {"recipe", "setrecipe", "customitems"};
+        String[] titles = {"Recipe Browser", "Recipe Editor", "Custom Items"};
+        for (int family = 0; family < commands.length; family++) {
+            closeAnyScreen();
+            cmd(commands[family]);
+            check("/" + commands[family] + " opens its catalog", waitForTitle(titles[family], 120));
+            check("command root has no Back", slotNamed("Back", true) < 0);
+            check("Close and Search occupy the shared footer", slotNamed("Close", true) == 53 && slotNamed("Search Items", true) == 47);
+            check("header counts categories", loreOf(titles[family], true).stream().anyMatch(line -> line.contains("categories")));
+            ctx.getInput().setCursorPos(0, 0);
+            ctx.takeScreenshot("catalog-" + commands[family] + "-root");
+            hover(items().stream().filter(item -> item.slot() == 10).findFirst().orElseThrow().name(), true,
+                    "catalog-" + commands[family] + "-count");
+            int pages = 1;
+            while (slotNamed("Next", true) >= 0 && pages < 10) {
+                boolean changed = turnPage(50);
+                check(commands[family] + " advances the category page", changed);
+                if (!changed) throw new IllegalStateException("pager did not advance: " + screenTitle());
+                ctx.takeScreenshot("catalog-" + commands[family] + "-page-" + (++pages));
+            }
+            check(commands[family] + " splits categories over more pages", pages > 1);
+            String lastPage = pageLabel();
+            Item category = items().stream().filter(item -> item.slot() == 10).findFirst().orElseThrow();
+            clickSlot(category.slot());
+            check("category has Back and Close in fixed positions", slotNamed("Back", true) == 45 && slotNamed("Close", true) == 53);
+            ctx.takeScreenshot("catalog-" + commands[family] + "-category");
+            check("category Back restores its source page", go("Back", true, titles[family]) && pageLabel().equals(lastPage));
+            // Exercise an output and its actual return path from the first category.
+            while (slotNamed("Previous", true) >= 0) {
+                if (!turnPage(48)) throw new IllegalStateException("previous page did not open");
+            }
+            clickSlot(10);
+            String categoryTitle = screenTitle();
+            String categoryPage = pageLabel();
+            clickSlot(11);
+            if (family < 2) {
+                check("output opens a recipe screen", inContainer() && screenTitle().contains(family == 0 ? "Recipe" : "Edit Recipe"));
+                check("recipe Back restores its list", go("Back", true, categoryTitle) && pageLabel().equals(categoryPage));
+            } else {
+                check("grant keeps the item list open", screenTitle().equals(categoryTitle));
+            }
+            go("Back", true, titles[family]);
+            clickSlot(47);
+            ctx.waitForScreen(net.minecraft.client.gui.screens.inventory.SignEditScreen.class);
+            ctx.getInput().typeChars("a");
+            ctx.clickScreenButton("gui.done");
+            check("search opens results", waitForTitle("Search Results", 120));
+            check("search has more than one page of matches", slotNamed("Next", true) == 50);
+            check("search reaches matches beyond the first twenty", turnPage(50));
+            String resultsPage = pageLabel();
+            ctx.takeScreenshot("catalog-" + commands[family] + "-search-page-2");
+            if (family < 2) {
+                clickSlot(11);
+                check("search recipe Back restores result page", go("Back", true, "Search Results") && pageLabel().equals(resultsPage));
+            }
+            check("search Back returns to catalog", go("Back", true, titles[family]));
+            clickSlot(53);
+            check("Close dismisses the catalog", !inContainer());
+        }
+        for (String source : List.of("menu", "civ")) {
+            closeAnyScreen();
+            cmd(source);
+            waitForContainer2(120);
+            String parent = screenTitle();
+            int recipe = slotNamed(source.equals("menu") ? "Quick shortcuts" : "Recipes", true);
+            check("source offers recipe browser", recipe >= 0);
+            if (recipe >= 0) {
+                clickSlot(recipe);
+                check("menu entry opens browser with Back", waitForTitle("Recipe Browser", 120) && slotNamed("Back", true) == 45);
+                clickSlot(45);
+                check("browser Back returns to actual " + source + " source", screenTitle().equals(parent));
+            }
+        }
+        for (int family = 0; family < commands.length; family++) {
+            cmd("menu");
+            waitForContainer2(120);
+            cmd(commands[family]); // intentionally replace a menu before its close could be sampled by MenuTrail
+            check("a direct /" + commands[family] + " clears the previous menu parent",
+                    waitForTitle(titles[family], 120) && slotNamed("Back", true) < 0);
+        }
+        closeAnyScreen();
     }
 
     private List<Item> items() {
@@ -887,7 +1006,7 @@ public class PowerClientTest implements FabricClientGameTest {
     private static boolean isDangerous(String name) {
         String n = name.toLowerCase(Locale.ROOT);
         for (String word : List.of("imprison", "jail", "ban", "kick", "mute", "freeze", "vanish", "wipe", "delete", "reset", "shut", "restart",
-                "stop", "kill", "purge", "deop", "whitelist", "gamemode", "teleport", "tp ", "invsee", "clear", "confirm", "✔")) {
+                "stop", "kill", "purge", "deop", "whitelist", "gamemode", "teleport", "tp ", "invsee", "clear", "confirm", "save recipe", "✔")) {
             if (n.contains(word)) {
                 return true;
             }
@@ -919,18 +1038,20 @@ public class PowerClientTest implements FabricClientGameTest {
                 return false;
             }
             String before = screenTitle();
+            String beforeKey = menuKey(before);
             ctx.runOnClient(client -> {
                 AbstractContainerMenu menu = ((AbstractContainerScreen<?>) client.gui.screen()).getMenu();
                 client.gameMode.handleContainerInput(menu.containerId, slot, 0, ContainerInput.PICKUP, client.player);
             });
             ctx.waitTicks(6);
-            waitForScreenChange(before, 40);
+            if (inContainer() && menuKey(screenTitle()).equals(beforeKey)) waitForScreenChange(before, 40);
         }
         return inContainer() && screenTitle().equals(expectTitle);
     }
 
     private void crawl(List<Integer> path, String title, int depth) {
-        if (!crawlVisited.add(title)) {
+        String visitKey = menuKey(title);
+        if (!crawlVisited.add(visitKey)) {
             return;
         }
         ctx.takeScreenshot("menu-" + String.format("%03d", crawlVisited.size()) + "-" + title.replaceAll("[^A-Za-z0-9]+", "_"));
@@ -948,7 +1069,7 @@ public class PowerClientTest implements FabricClientGameTest {
                 continue; // a dialog's Cancel is its way back, tried when the dialog was entered
             }
             tried++;
-            if (!inContainer() || !screenTitle().equals(title)) {
+            if (!inContainer() || !menuKey(screenTitle()).equals(visitKey)) {
                 if (!replay(path, title)) {
                     finding("could not get back to '" + title + "' to try '" + item.name() + "'");
                     return;
@@ -975,6 +1096,7 @@ public class PowerClientTest implements FabricClientGameTest {
             }
             crawlEdges.add("'" + title + "' --[" + item.name() + "]--> '" + after + "'");
             System.out.println("CLIENTTEST MENU edge '" + title + "' --[" + item.name() + "]--> '" + after + "'");
+            String afterKey = menuKey(after);
             // the way back
             List<Item> there = items();
             Item back = null;
@@ -995,12 +1117,12 @@ public class PowerClientTest implements FabricClientGameTest {
                 });
                 ctx.waitTicks(6);
                 String where = waitForScreenChange(after, 40);
-                if (!where.equals(title)) {
+                if (!menuKey(where).equals(visitKey)) {
                     finding("Back on '" + after + "' (opened from '" + title + "' via '" + item.name() + "') goes to '" + where
                             + "' instead of '" + title + "'");
                 }
             }
-            if (depth + 1 < CRAWL_MAX_DEPTH && !crawlVisited.contains(after) && descended < descendLimit(depth)) {
+            if (depth + 1 < CRAWL_MAX_DEPTH && !crawlVisited.contains(afterKey) && descended < descendLimit(depth)) {
                 descended++;
                 List<Integer> deeper = new ArrayList<>(path);
                 deeper.add(item.slot());
@@ -1009,6 +1131,15 @@ public class PowerClientTest implements FabricClientGameTest {
                 } else {
                     finding("could not re-enter '" + after + "' from '" + title + "' via '" + item.name() + "' to look inside it");
                 }
+            }
+        }
+        // A pager changes content, not the parent. Crawl all standard catalog pages with their replay path.
+        if (crawlClicks < CRAWL_MAX_CLICKS && replay(path, title) && menuKey(title).equals(visitKey)
+                && slotNamed("Next", true) == 50) {
+            if (turnPage(50)) {
+                List<Integer> nextPage = new ArrayList<>(path);
+                nextPage.add(50);
+                crawl(nextPage, title, depth);
             }
         }
     }

@@ -316,7 +316,7 @@
   "political.catalog.disabled": "Recipe disabled",
   "political.catalog.toggle": "Left: edit / Right: toggle",
   "political.catalog.create": "No recipe: click to create",
-  "political.catalog.toggled": "Recipe %s is now %s",
+  "political.catalog.toggled": "%s: %s",
   "political.catalog.bounty_sets": "Bounty Sets",
   "political.catalog.new_content": "New Content",
   "political.catalog.view_hint": "Choose an item to view its recipe",

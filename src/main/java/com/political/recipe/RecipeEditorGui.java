@@ -472,6 +472,8 @@ public class RecipeEditorGui {
     }
 
     public static void openFrom(ServerPlayer player, Runnable parent) {
+        // A command is an explicit root even if its packet follows a menu close in the same server tick.
+        if (parent == null) com.political.core.gui.MenuTrail.forget(player.getUUID());
         PARENT.set(player.getUUID(), parent);
         openRoot(player, 0);
     }
@@ -489,14 +491,18 @@ public class RecipeEditorGui {
     }
 
     private static void openRoot(ServerPlayer player, int page) {
-        ROOT_PAGE.set(player.getUUID(), () -> openRoot(player, page));
         java.util.List<CatalogUi.Tile> tiles = new ArrayList<>();
         for (Category cat : catalogCategories()) {
             tiles.add(new CatalogUi.Tile(cat.icon, categoryTitle(cat),
                     getItemsForCategory(cat).size(), () -> openCategoryPage(player, cat, 0)));
         }
+        showRoot(player, page, List.copyOf(tiles));
+    }
+
+    private static void showRoot(ServerPlayer player, int page, List<CatalogUi.Tile> tiles) {
+        ROOT_PAGE.set(player.getUUID(), () -> showRoot(player, page, tiles));
         CatalogUi.categories(player, Text.tr("political.catalog.editor"), Text.tr("political.catalog.edit_hint"),
-                tiles, page, next -> openRoot(player, next), () -> openSearchGui(player), PARENT.get(player.getUUID())).open();
+                tiles, page, next -> showRoot(player, next, tiles), () -> openSearchGui(player), PARENT.get(player.getUUID())).open();
     }
 
     private static void openMobDropsHub(ServerPlayer player) {

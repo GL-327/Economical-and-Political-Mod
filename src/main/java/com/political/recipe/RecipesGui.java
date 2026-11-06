@@ -49,6 +49,8 @@ public class RecipesGui {
     private static final ReturnTo DETAIL_RETURN = new ReturnTo();
 
     public static void openFrom(ServerPlayer player, Runnable parent) {
+        // A command is an explicit root even if its packet follows a menu close in the same server tick.
+        if (parent == null) com.political.core.gui.MenuTrail.forget(player.getUUID());
         PARENT.set(player.getUUID(), parent);
         openRoot(player, 0);
     }
@@ -89,7 +91,6 @@ public class RecipesGui {
     }
 
     private static void openRoot(ServerPlayer player, int page) {
-        ROOT_PAGE.set(player.getUUID(), () -> openRoot(player, page));
         List<CatalogUi.Tile> tiles = new ArrayList<>();
         for (CustomItemsGui.Category cat : CustomItemsGui.catalogCategories()) {
             tiles.add(new CatalogUi.Tile(CustomItemsGui.categoryIcon(cat), CustomItemsGui.categoryTitle(cat),
@@ -98,8 +99,13 @@ public class RecipesGui {
         tiles.add(2, new CatalogUi.Tile(Items.NETHER_STAR, Text.tr("political.catalog.bounty_sets"), CustomItemsGui.bountyItems().size(),
                 () -> CustomItemsGui.openItemList(player, Text.tr("political.catalog.bounty_sets"), Items.NETHER_STAR,
                         CustomItemsGui.bountyItems(), 0, null, RecipesGui::openMainMenu)));
+        showRoot(player, page, List.copyOf(tiles));
+    }
+
+    private static void showRoot(ServerPlayer player, int page, List<CatalogUi.Tile> tiles) {
+        ROOT_PAGE.set(player.getUUID(), () -> showRoot(player, page, tiles));
         Screen screen = CatalogUi.categories(player, Text.tr("political.catalog.browser"), Text.tr("political.catalog.browse_hint"),
-                tiles, page, next -> openRoot(player, next), () -> openSearchGui(player), PARENT.get(player.getUUID()));
+                tiles, page, next -> showRoot(player, next, tiles), () -> openSearchGui(player), PARENT.get(player.getUUID()));
         screen.set(51, Elements.tile(Items.BOOK, Text.tr("political.catalog.all"), Palette.ACCENT,
                 () -> openAllRecipesPage(player, 0), Text.tr("political.catalog.items", RecipeConfigManager.getRecipes().size())));
         screen.open();

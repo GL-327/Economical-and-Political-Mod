@@ -57,7 +57,7 @@ com/political/CryptoMarketGui.java | 367
 com/political/CustomArrows.java | 11
 com/political/CustomEnchantmentManager.java | 1
 com/political/CustomItemLore.java | 4
-com/political/CustomItemsGui.java | 119
+com/political/CustomItemsGui.java | 118
 com/political/DailyRewards.java | 29
 com/political/DanielsPickaxe.java | 44
 com/political/DataManager.java | 5

@@ -11,7 +11,7 @@
 # build/run/clientGameTest/screenshots. The result lines start with CLIENTTEST in the log it prints at the end.
 set -u
 cd "$(dirname "$0")/.."
-PHASES="${1:-permission,setup,technique,grants,domain,combat,death,regression}"
+PHASES="${1:-permission,setup,technique,grants,domain,combat,death,regression,catalogs}"
 WORK="$(mktemp -d)"
 CMDS="$WORK/commands.txt"
 SERVER_LOG="$WORK/server.log"
@@ -61,8 +61,11 @@ if [ $? -ne 0 ]; then
 fi
 
 stop_server() {
-  echo stop >> "$CMDS"
-  sleep 15
+  # A server that has not finished loading must never be told to save/stop partway through loading data.
+  if [ "$ready" = 1 ]; then
+    echo stop >> "$CMDS"
+    sleep 15
+  fi
   kill "$TAIL_PID" 2>/dev/null
 }
 
@@ -81,7 +84,10 @@ fi
 echo "op PowerTester" >> "$CMDS"
 sleep 3
 
-export JAVA_TOOL_OPTIONS="-Dpowertest.commands=$CMDS -Dpowertest.phases=$PHASES${POWERTEST_ROOTS:+ -Dpowertest.roots=$POWERTEST_ROOTS}"
+JAVA_CMDS="$CMDS"
+if command -v cygpath >/dev/null 2>&1; then JAVA_CMDS="$(cygpath -m "$CMDS")"; fi
+echo "Dev server loaded; starting client phases: $PHASES (logs: $WORK)"
+export JAVA_TOOL_OPTIONS="-Dpowertest.commands=$JAVA_CMDS -Dpowertest.phases=$PHASES${POWERTEST_ROOTS:+ -Dpowertest.roots=$POWERTEST_ROOTS}${POWERTEST_CLICKS:+ -Dpowertest.crawl.maxClicks=$POWERTEST_CLICKS}"
 ./gradlew runClientGameTest --console=plain > "$CLIENT_LOG" 2>&1
 STATUS=$?
 unset JAVA_TOOL_OPTIONS

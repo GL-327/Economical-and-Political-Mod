@@ -488,6 +488,8 @@ public class CustomItemsGui {
     }
 
     public static void openFrom(ServerPlayer player, Runnable parent) {
+        // A command is an explicit root even if its packet follows a menu close in the same server tick.
+        if (parent == null) com.political.core.gui.MenuTrail.forget(player.getUUID());
         PARENT.set(player.getUUID(), parent);
         openRoot(player, 0);
     }
@@ -500,7 +502,6 @@ public class CustomItemsGui {
     }
 
     private static void openRoot(ServerPlayer player, int page) {
-        ROOT_PAGE.set(player.getUUID(), () -> openRoot(player, page));
         java.util.List<CatalogUi.Tile> tiles = new ArrayList<>();
         for (Category cat : catalogCategories()) {
             tiles.add(new CatalogUi.Tile(cat.icon, categoryTitle(cat),
@@ -509,8 +510,13 @@ public class CustomItemsGui {
         tiles.add(2, new CatalogUi.Tile(Items.NETHER_STAR, Text.tr("political.catalog.bounty_sets"), bountyItems().size(),
                 () -> openItemList(player, Text.tr("political.catalog.bounty_sets"), Items.NETHER_STAR,
                         bountyItems(), 0, CustomItemsGui::giveItem, CustomItemsGui::open)));
+        showRoot(player, page, List.copyOf(tiles));
+    }
+
+    private static void showRoot(ServerPlayer player, int page, List<CatalogUi.Tile> tiles) {
+        ROOT_PAGE.set(player.getUUID(), () -> showRoot(player, page, tiles));
         Screen screen = CatalogUi.categories(player, Text.tr("political.catalog.custom"), Text.tr("political.catalog.grant_hint"),
-                tiles, page, next -> openRoot(player, next), () -> openSearchGui(player), PARENT.get(player.getUUID()));
+                tiles, page, next -> showRoot(player, next, tiles), () -> openSearchGui(player), PARENT.get(player.getUUID()));
         screen.set(51, Elements.tile(Items.END_CRYSTAL, Text.tr("political.catalog.new_content"), Palette.ACCENT,
                 () -> ExpansionCatalogGui.openMenuFrom(player, () -> open(player))));
         screen.open();
@@ -1278,11 +1284,8 @@ public class CustomItemsGui {
                     .build());
         }
 
-        // Back button
-        gui.setSlot(49, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("← Back to Menu").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> onBack.open(player))
-                .build());
+        gui.setSlot(45, Elements.back(() -> onBack.open(player)));
+        gui.setSlot(53, Elements.close(player));
 
         gui.open();
     }

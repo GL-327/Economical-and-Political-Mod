@@ -1,6 +1,5 @@
 package com.political.core.gui;
 
-import com.political.CustomItemLore;
 import com.political.core.text.Text;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
@@ -65,7 +64,7 @@ public final class CatalogUi {
     }
 
     public static GuiElement item(ItemStack item, Component prompt, Runnable click) {
-        return new GuiElementBuilder(CustomItemLore.forSelectPageIcon(item))
+        return new GuiElementBuilder(item.copy())
                 .setName(Elements.name(item.getHoverName(), Palette.BODY))
                 .addLoreLine(Component.empty()).addLoreLine(Elements.lore(prompt, Palette.WARN))
                 .setCallback((a, b, c, d) -> click.run()).build();
