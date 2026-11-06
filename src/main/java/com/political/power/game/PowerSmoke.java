@@ -77,10 +77,11 @@ public final class PowerSmoke {
         return value != null && !value.equalsIgnoreCase("false");
     }
 
-    /** {@code write} and {@code read} are the two halves of the restart check; anything else is the full run. */
+    /** {@code write}/{@code read} check restart state; {@code unique} checks optional one-holder rules. */
     private static String mode() {
         String value = System.getProperty(PROPERTY, "true");
-        return value.equalsIgnoreCase("write") || value.equalsIgnoreCase("read") ? value.toLowerCase(java.util.Locale.ROOT) : "full";
+        return value.equalsIgnoreCase("write") || value.equalsIgnoreCase("read") || value.equalsIgnoreCase("unique")
+                ? value.toLowerCase(java.util.Locale.ROOT) : "full";
     }
 
     /**
@@ -187,7 +188,9 @@ public final class PowerSmoke {
             PowerService.onJoin(fake);
             check("a technique was drawn at join", PowerService.state(uuid).innate != null);
             check("awaken", PowerService.awaken(fake));
-            check("choose Blue (a manual)", PowerService.rerollTo(fake, PowerCatalog.BLUE) == PowerService.RerollResult.OK);
+            PowerService.RerollResult chosen = PowerService.rerollTo(fake, PowerCatalog.BLUE);
+            check("choose Blue (a manual)", chosen == PowerService.RerollResult.OK || chosen == PowerService.RerollResult.SAME_TECHNIQUE);
+            PowerService.state(uuid).rerolls = 1; // fixed restart fixture, independent of the randomly drawn first technique
             PowerService.state(uuid).uses.put(PowerCatalog.BLUE, 20);
             PowerService.addShards(fake, 60);
             PowerService.grantRerollCharge(fake);
@@ -213,6 +216,10 @@ public final class PowerSmoke {
 
     private void everything(MinecraftServer server) {
         String mode = mode();
+        if (mode.equals("unique")) {
+            uniqueGrants(server);
+            return;
+        }
         if (!mode.equals("full")) {
             restart(server, mode.equals("write"));
             return;
@@ -276,6 +283,46 @@ public final class PowerSmoke {
         PowerService.onLogout(other);
         PowerService.reset(uuid);
         PowerService.reset(otherUuid);
+    }
+
+    /** Optional uniqueness fixture: neither an innate entitlement nor Master Domain is an overlapping admin grant. */
+    private void uniqueGrants(MinecraftServer server) {
+        check("unique fixture enables Blue and Domain", PowerSettings.UNIQUE_BLUE.get() && PowerSettings.UNIQUE_DOMAIN.get());
+        if (!PowerSettings.UNIQUE_BLUE.get() || !PowerSettings.UNIQUE_DOMAIN.get()) return;
+        FakePlayer first = FakePlayer.get(server.overworld());
+        FakePlayer second = FakePlayer.get(server.overworld(), new GameProfile(SECOND, "[PowerSmokeB]"));
+        String owner = first.getUUID().toString(), other = second.getUUID().toString();
+        PowerService.reset(owner);
+        PowerService.reset(other);
+        PowerService.onJoin(first);
+        PowerService.rerollTo(first, PowerCatalog.BLUE);
+        PowerService.onJoin(second);
+        try {
+            check("first player owns unique innate Blue", PowerService.holds(owner, PowerCatalog.BLUE));
+            check("admin grant can overlap the innate technique", PowerService.learn(first, PowerCatalog.BLUE) == PowerService.LearnResult.OK);
+            check("revoke removes the overlapping admin grant", PowerService.revoke(owner, PowerCatalog.BLUE));
+            check("revoking a grant retains innate ownership", PowerService.holds(owner, PowerCatalog.BLUE));
+            check("revoking an absent grant is harmless", !PowerService.revoke(owner, PowerCatalog.BLUE)
+                    && PowerService.holds(owner, PowerCatalog.BLUE));
+            check("another player cannot claim the retained innate technique", PowerService.learn(second, PowerCatalog.BLUE) == PowerService.LearnResult.TAKEN);
+
+            PowerService.awaken(first);
+            PowerService.setUses(owner, 100);
+            check("Master can receive the unique Domain grant", PowerService.learn(first, PowerCatalog.DOMAIN) == PowerService.LearnResult.OK);
+            check("revoke removes the overlapping Domain grant", PowerService.revoke(owner, PowerCatalog.DOMAIN));
+            check("revoking a grant retains Master Domain ownership", PowerService.holds(owner, PowerCatalog.DOMAIN));
+            check("another player cannot claim the retained Domain", PowerService.learn(second, PowerCatalog.DOMAIN) == PowerService.LearnResult.TAKEN);
+
+            PowerService.reset(owner);
+            check("reset frees Blue for a different player", PowerService.learn(second, PowerCatalog.BLUE) == PowerService.LearnResult.OK);
+            check("reset frees Domain for a different player", PowerService.learn(second, PowerCatalog.DOMAIN) == PowerService.LearnResult.OK);
+            check("new holder owns both released techniques", PowerService.holds(other, PowerCatalog.BLUE) && PowerService.holds(other, PowerCatalog.DOMAIN));
+        } finally {
+            PowerService.onLogout(first);
+            PowerService.onLogout(second);
+            PowerService.reset(owner);
+            PowerService.reset(other);
+        }
     }
 
     /** Script item 1 as far as a server goes: the technique rolled at join, awakening, mastery, rerolls. */

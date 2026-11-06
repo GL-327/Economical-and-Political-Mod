@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Unique-technique ownership (M2 acceptance)
+- Revoking an overlapping admin grant preserves ownership still earned through the innate technique or Master Domain; a full reset still frees the technique.
+- Added configurable two-player acceptance and unique-holder unit tests. Production uniqueness defaults are unchanged; isolated fixture flags are restored after testing.
+- Updated the revoke feedback to match rolled-technique/mastery progression, and made the restart fixture independent of its initial random draw.
+
 ### Power recovery hardening (M2 acceptance)
 - Preserve every recovery copy when repeated admin resets share a timestamp; existing quarantine records and schema 2 remain compatible.
 - Execute all power-admin command handlers in the isolated server acceptance test, verify non-admin rejection leaves persisted player state unchanged, and check repeated reset recovery.

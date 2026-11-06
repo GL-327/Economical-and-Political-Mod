@@ -298,11 +298,12 @@ public final class PowerService {
         return LearnResult.OK;
     }
 
-    /** Takes a technique away from a player, as an admin; frees a unique technique. */
+    /** Removes an admin grant; retains a unique reservation still granted by the innate technique or mastery. */
     public static boolean revoke(String uuid, String techniqueId) {
         PlayerPower p = state(uuid);
         boolean had = p.learned.remove(techniqueId);
-        UniqueHolders.release(data().uniqueHolders, techniqueId, uuid);
+        boolean stillGranted = PowerCatalog.technique(techniqueId).map(def -> granted(uuid, p, def)).orElse(false);
+        if (!stillGranted) UniqueHolders.release(data().uniqueHolders, techniqueId, uuid);
         if (techniqueId.equals(p.equipped) && !holds(uuid, techniqueId)) {
             p.equipped = null;
             p.selectedAbility = null;

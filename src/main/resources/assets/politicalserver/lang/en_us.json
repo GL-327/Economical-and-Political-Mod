@@ -82,7 +82,7 @@
   "political.power.admin.revoke.confirm": "Revoke %s?",
   "political.power.admin.revoke.consequence": "Techniques from the school tree stay.",
   "political.power.admin.revoke.nothing": "The player had not learned %s.",
-  "political.power.admin.revoke.still": "They still hold %s through the school tree.",
+  "political.power.admin.revoke.still": "They still hold %s through their innate technique or mastery.",
   "political.power.admin.revoked": "Revoked %s.",
   "political.power.admin.school": "School: %s",
   "political.power.admin.school.confirm": "Set the school to %s?",

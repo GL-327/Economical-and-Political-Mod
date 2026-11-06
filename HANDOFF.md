@@ -2,13 +2,13 @@
 Last updated: 2026-11-06 15:35 UTC  |  Session: 4  |  Device: Windows
 
 ## NEXT ACTION
-Add an isolated two-player test for `PowerService.revoke` with a unique innate technique, then verify holder reservation survives removal of an overlapping admin grant before closing the remaining M2 acceptance gaps.
+Remove the measured repeated-fingerprinting cost in `RecipeJsonDefaults.merge`, preserve exact owner-override/provider rules, and verify identical catalog output plus the full isolated acceptance suite.
 
 ## STATUS
 Milestone: M2 acceptance follow-up; M3–M9 have partial first passes, not completion. Branch: `codex/finish-remaining` (isolated checkout from `190c9ba`).
-PUSH STATUS: reconciliation pushed as `a1d3ba9` on `origin/codex/finish-remaining`; reset archive fix and expanded command acceptance are verified and being committed/pushed. Prior UI/recipe branch is pushed through `190c9ba`.
-BUILD STATUS: GREEN baseline `190c9ba`: `gradlew.bat build compileGametestJava --console=plain`, exit 0; clean-checkout build at `44d70fa` also exit 0. Follow-up archive fix: `gradlew.bat build compileGametestJava --console=plain`, exit 0, 266 unit tests pass.
-TEST STATUS: baseline 263 unit tests and 164 real-client checks, 0 failures; this session isolated server full power smoke 178 checks, 0 failures, exit 0. Fresh restart verification also passes: write 4 checks, read 18 checks; both process exits 0.
+PUSH STATUS: reconciliation pushed as `a1d3ba9` on `origin/codex/finish-remaining`; reset archive fix and expanded command acceptance pushed as `551811b`; the verified ownership increment is being committed/pushed. Prior UI/recipe branch is pushed through `190c9ba`.
+BUILD STATUS: GREEN baseline `190c9ba`: `gradlew.bat build compileGametestJava --console=plain`, exit 0; clean-checkout build at `44d70fa` also exit 0. Current ownership-fix build: `gradlew.bat build compileGametestJava --console=plain`, exit 0, 269 unit tests pass. Archive-fix build passed all 266 tests before the additional unique-holder tests.
+TEST STATUS: current 269 unit tests and baseline 164 real-client checks, 0 failures; this session isolated server full power smoke 178 checks, 0 failures, exit 0. Fresh restart verification also passes: write 4 checks, read 18 checks; both process exits 0.
 Owner test session: the updated server/client are open as the existing test account on `localhost:25566`; a screenshot confirms the player joined, with full health and energy. The client exited cleanly at 14:14; the server remains available and pauses when empty. Do not reopen/control the client over the owner's actions unless asked. Further source work is isolated in `build/remaining-worktree`; verification uses its separate `run-verify` world on port 25567. No live/test-account reset was performed during launch.
 
 ## MILESTONE CHECKLIST
@@ -17,7 +17,7 @@ Owner test session: the updated server/client are open as the existing test acco
 - [x] M1 logging/error policy, classified clocks, tick dispatcher, command registrar, config, translation layer, layout module and versioned store exist with unit coverage. Earlier acceptance evidence is in HISTORY.
 - [ ] M1.6 adoption: only selected stores are versioned; migrating every remaining legacy store is not done. M1.9 text conversion and M1.10 old-screen adoption continue system by system.
 - [x] M2 power implementation: one service/pool, rolled techniques, validation/effect plans/rollback, mastery, Blue/Red/blast/Reverse/Barrier/Black Flash/Domain/vows, compatible adapters, GUI/admin paths and schema-2 migrations exist. Capability evidence below replaces the stale pre-M2 missing/stub list.
-- [ ] M2.8 acceptance: baseline full client suite passes; new isolated 178-check smoke passes with two fake players and mixin/strict-command audit. Fresh restart verification passes (4 write, 18 read checks). Actual command execution reaches all handlers; the first 211-check run reproduced a reset recovery collision, and after the fix all 211 pass. Unique innate/admin-grant overlap is the next acceptance case. Owner gameplay judgement and the normal election/settlement/expedition regression scenarios remain pending. Do not claim the entire program finished or silently treat these as passed.
+- [ ] M2.8 acceptance: baseline full client suite passes; new isolated 178-check smoke passes with two fake players and mixin/strict-command audit. Fresh restart verification passes (4 write, 18 read checks). Actual command execution reaches all handlers; the first 211-check run reproduced a reset recovery collision, and after the fix all 211 pass. Unique innate/admin-grant overlap reproduced a second bug (7/14 before); the fix passes all 14 with both unique flags enabled only in the isolated fixture. That config is restored byte-for-byte afterward. Owner gameplay judgement and the normal election/settlement/expedition regression scenarios remain pending. Do not claim the entire program finished or silently treat these as passed.
 - [ ] M3 economy: ledger and persisted totals exist. Remaining: characterization tests for every named hot path; audit every balance mutation/atomic transfer; migrate remaining callers; owner-approved income caps/cooldowns; characterize stock-sale int truncation/multiplier before any change. Balance values require owner approval.
 - [ ] M4 politics/settlements: ElectionPhase exists. Remaining: failing tests/fixes for non-op Judge access and documented political issues; offices/council/edicts/settlements/citizens/parties/war state models; UUID audit; lossless versioned migrations with real-world fixtures.
 - [ ] M5 combat/items: ordered pipeline exists. Remaining: real integration coverage of slayer/nemesis/relic/war/party stages and recursion; per-item lore parse cache; move flagship definitions to data one at a time with ID checks; verify companion/reforge/relic claims; marker lifecycle limits. Diagnose unloaded custom-arrow mixin and inactive merchant-price hook without inventing balance values.
@@ -28,7 +28,7 @@ Owner test session: the updated server/client are open as the existing test acco
 - [x] M10 root menus and follow-up recipes: `e426b4e`, `9efd448`, `02a2fd0`, `44d70fa`, `190c9ba` pushed on `modern/m10-menu-rework`. 359 recipes resolve, 305 recipe smoke checks and 164 full client checks pass; original grouped layouts/screenshots verified; exact default repairs preserve overrides/backups and are idempotent across restart.
 
 ## POWER CAPABILITY STATUS (M2 onward)
-- C1 Implemented (unique innate/admin-grant overlap still under acceptance review): roll on join/reroll/manual/awakening `src/main/java/com/political/power/game/PowerService.java:464`; server-enforced configurable unique holders `src/main/java/com/political/power/formula/UniqueHolders.java:36`. OWNER override: rolled techniques replace the old school-selection progression.
+- C1 Implemented and unique innate/admin-grant overlap VERIFIED in a two-player fixture (14 checks): roll on join/reroll/manual/awakening `src/main/java/com/political/power/game/PowerService.java:464`; server-enforced configurable unique holders `src/main/java/com/political/power/formula/UniqueHolders.java:36`. OWNER override: rolled techniques replace the old school-selection progression.
 - C2 Implemented: one capped resource pool `src/main/java/com/political/power/formula/ResourcePool.java:18`; tick regeneration/delay and death halving `src/main/java/com/political/power/game/PowerService.java:785`.
 - C3 Implemented: Blue impulse, line of sight, configured cost/range/cooldown `src/main/java/com/political/power/game/PowerEffects.java:44`; covered by unit, server and client checks.
 - C4 Implemented: Red impulse/wall rejection and configured values `src/main/java/com/political/power/game/PowerEffects.java:53`; covered by unit, server and client checks.
@@ -68,33 +68,35 @@ Owner test session: the updated server/client are open as the existing test acco
 
 ## NOT VERIFIED
 - The whole modernization program is not complete: open items are explicitly unchecked above.
-- Unique innate/admin-grant overlap is not verified yet. Expanded 211-check command execution and restart write/read mechanics are VERIFIED; a real second launcher client/owner login cycle is still not claimed.
+- Latest default-config full acceptance will be rerun after startup optimization. The unique overlap fixture passes all 14; its prior 7 failures are corrected. Expanded 211-check command execution and restart write/read mechanics are VERIFIED; a real second launcher client/owner login cycle is still not claimed.
 - Owner play acceptance, arbitrary older edited catalogs, new balance values, a launcher-installed stock vanilla client, full normal-case regression, real-world migrations, full content lifecycle/load tests and M9 compatibility.
 - Remote CI status has not been checked; local builds are not a claim about GitHub Actions.
 
 ## BEHAVIOR CHANGES
-- VERIFIED: reset recovery records append a unique suffix when their existing key is already used. This prevents loss of earlier recovery copies; no active player state, balance value or saved schema changes. The owner test build remains `190c9ba` until a verified update is installed.
+- VERIFIED: reset recovery records append a unique suffix when their existing key is already used. This prevents loss of earlier recovery copies; no active player state, balance value or saved schema changes. Unique-ownership correction also preserves existing innate/mastery entitlements when an overlapping admin grant is removed; the admin message now says innate technique/mastery rather than school tree. The owner test build remains `190c9ba` until a verified update is installed.
 - Historical M10: root catalog redesign with grouped inner rows retained; recipe pattern/collision/core fixes and exact menu crafting. See CHANGELOG.md and earlier HISTORY.
 
 ## EARN-RATE CHANGES
-- None in this task. No balance number, price, reward, stat, cap or income multiplier is changed.
+- None. No balance number, price, reward, stat, cap, production uniqueness default or income multiplier is changed. Temporary uniqueness flags are isolated test fixtures and restored exactly.
 - Historical recipe DEFAULT/unapproved choices: completed bounty/gem ingredient counts, crafting-core recipes/tiers, stronger unique core requirements, thematic manuals, previous-tier overall upgrades and charter core. Trinket totals and 160-lapis totals are retained. Item stats/prices/slayer gates were unchanged.
 
 ## MIGRATIONS
 - Existing `power.json` schema 2 imports old technique/magic/school files and upgrades schema 1; `PowerStoreTest` covers fixtures/backups/quarantine. No saved format changes in this task.
 - Recipe saved shape is unchanged; internal versioned fingerprints repair exact known generated defaults while preserving edits/alternates/root metadata. Atomic write keeps `.before-m10-recipes.bak`; 296 original records match the manifest. Future default revisions must retain earlier known fingerprints in the manifest/loader.
 - Archive correction keeps schema 2 and its existing opaque string-map shape. The first reset keeps its old key; collisions append a suffix. Legacy and suffixed keys both reload without conversion (`PowerArchivesTest`). No existing record is rewritten or removed.
+- Ownership correction does not change the save shape/schema; it avoids releasing an entitlement that still exists.
 - Other legacy world/config stores are not all migrated. Every future migration needs a schema, step, fixture and preserved original; lossy mapping requires owner input.
 
 ## KNOWN ISSUES
 - S1 FIXED: `PowerService.reset` overwrote an earlier recovery copy when two resets shared a timestamp. Reproduced as the sole failure in a 211-check run; collision-safe append now passes all 211 checks and the new unit/save-reload tests. Historical data already overwritten by old code cannot be reconstructed automatically.
+- S2 FIXED: revoking an overlapping admin grant released unique innate and Master-Domain reservations. A two-player fixture failed 7/14 before; now all 14 pass. An absent grant is harmless, and full reset releases the reserved techniques. Test flags were restored exactly; production defaults were not changed.
 - S2: remaining M3–M9 work was previously marked with checked first-pass milestones and stale pre-M2 capability claims. Reconciled here; checkboxes now describe completion rather than the existence of an audit.
 - S2: `/judge` root currently requires owner-level permission, preventing an appointed non-op Judge from opening it; add a failing role/permission test before fixing.
 - S2: Remote chests tile routes to anti-cheat; Guilds/Catalog parent gaps remain. The recipe browser parent gap was fixed by M10; do not list it as open again.
 - S2: StockMarket casts sale proceeds to int and uses a multiplied credit path; characterize before any change. Coin mutation/cap audit is incomplete.
 - S2: MerchantOffer price hook targets a method absent from 26.3 and its constructor multiplier can run repeatedly; custom-arrow tagging mixin is absent from both configs. Diagnose with matching-version sources and integration checks; do not invent balance changes.
 - S2: only selected persistence stores use the versioned layer; world migrations need fixtures. Text conversion and old-screen layout adoption are incomplete.
-- S3: startup performs synchronous recipe/bootstrap writes and can stall the server thread. Existing per-service budgets are placeholders; no long-run/root cause claim yet.
+- S3, measured and next to fix: an unchanged 359-record recipe merge took 57,032.804 ms under the existing C1 JIT setting; it rehashes every record for each incoming default. Benchmark asserts idempotent output and records its fingerprint. Startup also performs synchronous bootstrap writes; total stall/soak work is not yet complete. Existing per-service budgets are placeholders; no long-run/root cause claim yet.
 - S3: vanilla equipment attribute block remains below lore; generated stat values and repeated health contributions require owner balance review, not a silent change.
 - S3: archived design docs describe removed Backrooms/Delves/block armor; they are not a code specification. Old school/spell classes are retained after the rolled-technique decision.
 - S3: Windows OSHI/Perflib startup warnings are environmental; distinguish them from a mod exception. JVM workarounds remain.
@@ -160,3 +162,7 @@ Use an isolated copied/test world with an unused port for additional verificatio
 - 2026-11-06 15:35 UTC Session 4: owner supplied the full modernization program and requested continued completion plus a playable test session. Opened the verified server/client, isolated follow-up work on `codex/finish-remaining`, reconciled stale M2 capability/milestone claims, and reran full power smoke (178 checks, exit 0) plus 29-target mixin and strict-command audit in a separate world. Fresh restart write/read checks also pass (4 and 18, exit 0); actual admin-command execution checks are next; no balance/save/source change in this reconciliation step.
 
 - 2026-11-06 15:55 UTC Session 4: expanded power acceptance executes all admin handlers, rejects non-admin execution without state mutation, reproduced same-timestamp recovery overwrite (1/211 failed), fixed it with collision-safe append, passed 266 unit tests and all 211 real-server checks. Save schema 2 is unchanged and legacy/suffixed keys round-trip. Next: unique innate/admin-grant ownership overlap; no economy/balance change.
+
+- 2026-11-06 16:12 UTC Session 4: two-player unique-technique fixture reproduced revoke/innate/Master-Domain reservation loss (7/14 failed), entitlement-preserving revoke now passes all 14; 269 unit tests pass. Default config unchanged and fixture config restored exactly. Restart fixture no longer depends on randomly drawing a non-Blue technique. Measured an unchanged 359-record merge at 57,032.804 ms with an idempotence/fingerprint assertion; that startup regression is next.
+
+- Verified ownership increment: final build/compileGametestJava exits 0 with 269 unit tests; unique fixture passes 14/14 after the 7/14 failing reproduction. The existing default-config 211-check run will be repeated after the measured startup optimization.
