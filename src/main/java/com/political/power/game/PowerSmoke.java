@@ -3,6 +3,8 @@ package com.political.power.game;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.JsonOps;
 import com.political.core.Clock;
 import com.political.power.PowerSettings;
 import com.political.power.cast.CastDecision;
@@ -15,6 +17,7 @@ import com.political.power.formula.VowSet;
 import com.political.power.model.AbilitySpec;
 import com.political.power.model.FailureReason;
 import com.political.power.model.PowerCatalog;
+import com.political.power.model.PlayerPower;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -263,7 +266,7 @@ public final class PowerSmoke {
         // an administrator can reset; the old state is kept
         int quarantineBefore = PowerService.quarantineSize();
         PowerService.reset(uuid);
-        check("reset keeps a copy", PowerService.quarantineSize() == quarantineBefore + 1);
+        check("successive resets at one timestamp each keep a recovery copy", PowerService.quarantineSize() == quarantineBefore + 1);
         check("reset leaves no technique until the next join", PowerService.state(uuid).innate == null);
         PowerService.onJoin(fake);
         check("a new one is drawn at the next join", PowerService.state(uuid).innate != null);
@@ -652,7 +655,76 @@ public final class PowerSmoke {
         for (String command : commands) {
             check("a player with the permission can use '" + command + "'", fullyParses(dispatcher, fake.createCommandSourceStack(), command));
         }
+        executeAdminCommands(server, dispatcher, fake, uuid);
         screens(fake);
+    }
+
+    /** Execute handlers against a real fake-player target; parsing alone cannot prove argument resolution or effects. */
+    private void executeAdminCommands(MinecraftServer server, CommandDispatcher<CommandSourceStack> dispatcher,
+                                      FakePlayer fake, String uuid) {
+        CommandSourceStack plain = fake.createCommandSourceStack();
+        String[] denied = {"poweradmin", "poweradmin info @s", "poweradmin grant @s BLUE", "poweradmin revoke @s BLUE",
+                "poweradmin awaken @s", "poweradmin sleep @s", "poweradmin reroll @s", "poweradmin reroll @s BLUE",
+                "poweradmin charge @s", "poweradmin mastery @s 100", "poweradmin reset @s confirm"};
+        adminGranted = false;
+        var before = PlayerPower.CODEC.encodeStart(JsonOps.INSTANCE, PowerService.state(uuid)).getOrThrow();
+        for (String command : denied) {
+            boolean refused = false;
+            try { dispatcher.execute(command, plain); }
+            catch (CommandSyntaxException expected) { refused = true; }
+            check("non-admin execution refused: " + command, refused);
+        }
+        check("denied commands leave every persisted player field unchanged",
+                before.equals(PlayerPower.CODEC.encodeStart(JsonOps.INSTANCE, PowerService.state(uuid)).getOrThrow()));
+
+        // Console permissions with an entity allow @s to target this isolated fake player, without a real login.
+        CommandSourceStack operator = server.createCommandSourceStack().withEntity(fake);
+        command(dispatcher, operator, "poweradmin info @s");
+        command(dispatcher, operator, "poweradmin sleep @s");
+        check("executed sleep changes the target", !PowerService.awakened(uuid));
+        command(dispatcher, operator, "poweradmin awaken @s");
+        check("executed awaken changes the target", PowerService.awakened(uuid));
+
+        adminGranted = true;
+        // A mod permission node does not grant vanilla selector permission. Use the operator source for @s effects;
+        // node-based admission was checked separately above, and the GUI still checks the fake player's node.
+        CommandSourceStack permitted = operator;
+        command(dispatcher, permitted, "poweradmin");
+        command(dispatcher, permitted, "poweradmin grant @s BLUE");
+        check("executed grant changes learned techniques", PowerService.state(uuid).learned.contains(PowerCatalog.BLUE));
+        command(dispatcher, permitted, "poweradmin revoke @s BLUE");
+        check("executed revoke removes the admin grant", !PowerService.state(uuid).learned.contains(PowerCatalog.BLUE));
+
+        String forced = PowerCatalog.BLUE.equals(PowerService.state(uuid).innate) ? PowerCatalog.RED : PowerCatalog.BLUE;
+        int rerolls = PowerService.state(uuid).rerolls;
+        command(dispatcher, permitted, "poweradmin reroll @s " + forced);
+        check("executed chosen reroll changes the target", forced.equals(PowerService.state(uuid).innate)
+                && PowerService.state(uuid).rerolls == rerolls + 1);
+        command(dispatcher, permitted, "poweradmin mastery @s 100");
+        check("executed mastery sets the target's uses", PowerService.state(uuid).uses.getOrDefault(forced, 0) == 100);
+
+        PowerService.state(uuid).rerollCharges = 0; // isolated test precondition, so a capped account cannot mask the command
+        command(dispatcher, permitted, "poweradmin charge @s");
+        check("executed charge gives the target one charge", PowerService.state(uuid).rerollCharges == 1);
+        command(dispatcher, permitted, "poweradmin reroll @s");
+        check("executed random reroll changes the target", !forced.equals(PowerService.state(uuid).innate));
+
+        int quarantined = PowerService.quarantineSize();
+        command(dispatcher, permitted, "poweradmin reset @s confirm");
+        check("executed reset preserves the old target state", PowerService.quarantineSize() == quarantined + 1);
+        PlayerPower reset = PowerService.state(uuid);
+        check("executed reset clears the target's progression", reset.innate == null && reset.learned.isEmpty()
+                && reset.rerollCharges == 0 && reset.shards == 0);
+    }
+
+    private void command(CommandDispatcher<CommandSourceStack> dispatcher, CommandSourceStack source, String command) {
+        checks++;
+        try {
+            if (dispatcher.execute(command, source) != 1) failures.add("admin command returned failure: " + command);
+        } catch (CommandSyntaxException e) {
+            failures.add("admin command threw: " + command + ": " + e.getMessage());
+            LOGGER.error("Power smoke admin command {} failed", command, e);
+        }
     }
 
     // ── helpers ─────────────────────────────────────────────────────────────────────────────

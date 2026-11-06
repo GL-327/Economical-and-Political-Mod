@@ -25,6 +25,7 @@ import com.political.power.model.PlayerPower;
 import com.political.power.model.PowerCatalog;
 import com.political.power.model.PowerData;
 import com.political.power.store.PowerStore;
+import com.political.power.store.PowerArchives;
 import com.political.stats.PlayerStatsManager;
 import com.political.technique.Technique;
 import java.nio.file.Path;
@@ -391,7 +392,7 @@ public final class PowerService {
 
     /**
      * Admin reset: the player starts over (no school, nodes, techniques, shards, vows or resource). The old state is
-     * first written to the quarantine as text under {@code <uuid>.reset.<time>}, so an admin's mistake can be undone
+     * first written to the quarantine as text under {@code <uuid>.reset.<time>} (with a suffix on collision), so an admin's mistake can be undone
      * by hand from power.json; unique techniques the player held are freed. Throws, changing nothing, if the old
      * state cannot be written down.
      */
@@ -402,7 +403,7 @@ public final class PowerService {
             String archived = PlayerPower.CODEC.encodeStart(JsonOps.INSTANCE, old)
                     .getOrThrow(message -> new IllegalStateException("cannot archive the power state of " + uuid + ": " + message))
                     .toString();
-            d.quarantine.put(uuid + ".reset." + Clock.wallMillis(), archived);
+            PowerArchives.archiveReset(d.quarantine, uuid, Clock.wallMillis(), archived);
             d.players.remove(uuid);
         }
         for (PowerCatalog.TechniqueDef def : PowerCatalog.techniques()) {

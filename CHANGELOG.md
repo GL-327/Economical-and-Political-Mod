@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Power recovery hardening (M2 acceptance)
+- Preserve every recovery copy when repeated admin resets share a timestamp; existing quarantine records and schema 2 remain compatible.
+- Execute all power-admin command handlers in the isolated server acceptance test, verify non-admin rejection leaves persisted player state unchanged, and check repeated reset recovery.
+- Added collision and save/reload regression tests: 266 unit tests and 211 real-server power checks pass.
+
 ### M10 main menu presentation
 - Rebuilt the main pages of `/recipe`, `/setrecipe` and `/customitems` on the shared screen module, with paged category cards, named count plates, headers, search and fixed footer controls.
 - Preserved the original inner category views: material/icon, spacer, sword and armor-set rows, tier rows, tool sets and mob-drop sections. Restored these after owner feedback rejecting flattened set lists.
