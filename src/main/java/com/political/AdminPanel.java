@@ -721,10 +721,10 @@ public final class AdminPanel {
                 "Items, recipes and the gear lines");
 
         gui.setSlot(19, GuiKit.tile(Items.CHEST, "Custom items", ChatFormatting.GREEN,
-                () -> CustomItemsGui.open(player), "Every item, by category"));
+                () -> CustomItemsGui.openFrom(player, () -> gui.open()), "Every item, by category"));
 
         gui.setSlot(20, GuiKit.tile(Items.CRAFTING_TABLE, "Recipes", ChatFormatting.GOLD,
-                () -> RecipesGui.openMainMenu(player), "Browse and hand out"));
+                () -> RecipesGui.openFrom(player, () -> gui.open()), "Browse and hand out"));
 
         gui.setSlot(21, GuiKit.tile(Items.END_CRYSTAL, "Version X catalog", ChatFormatting.AQUA,
                 () -> ExpansionCatalogGui.openMenuFrom(player, () -> openContent(player)), "The seven gear lines"));

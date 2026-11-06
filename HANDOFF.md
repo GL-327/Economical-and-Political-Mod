@@ -1,11 +1,20 @@
 # HANDOFF — Political Server modernization
-Last updated: 2026-11-05 19:00 UTC  |  Session: 2  |  Device: Windows
+Last updated: 2026-11-06  |  Session: 3  |  Device: Windows
 
 ## NEXT ACTION
-Start with the OWNER REQUEST below (a massive rework of the first screens of `/recipe`, `/setrecipe` and `/customitems`), then the testing list under WHAT NEEDS TESTING.
+Finish the M10 validation below: build, full real-client suite plus `catalogs`, crawl `recipe,setrecipe,customitems`, and review screenshots. Then the owner judges the new look. Keep working on `modern/m10-menu-rework`; do not push master.
 The owner asked (2026-11-05) for all milestones to be worked without waiting. M3 to M9 now have a first pass on branch `modern/m3-economy` (see M3 TO M9 below); every number that matters is DEFAULT and unapproved. What is left for the owner: (a) the power test items 8 (log out and in, restart), 10 and 11 with a second player, 13, and judging how it looks; (b) the open owner questions, especially 0 (rolled technique numbers), 11 (dead menus) and 12 (coin sources without a cap); (c) the open menu findings in `docs/MENU_CRAWL.md`. Nothing here waits on a blocking question, but M2.8 and the balance numbers are still the owner's.
 
-## OWNER REQUEST: MASSIVE UI REWORK OF THREE MENUS (2026-11-05, NOT STARTED, do this next)
+## M10 MENU REWORK (2026-11-06, implementation complete; validation in progress)
+- Branch `modern/m10-menu-rework`, cut from fetched `origin/master` at `53f4498`.
+- Shared `core.gui.CatalogUi` / `CatalogModel` on `Screen`, `Elements`, `Palette` and `Layout`: eight paired category cards per page (icon plus named count plate), twenty items per page, cyan frame, gold header with count, search and standard Back / Previous / Page / Next / Close positions. All three roots and their category/search lists use it. No recipe/item factories, saved formats, balance numbers or permission requirements changed.
+- Explicit `openFrom(player, parent)` on browser/custom-item entry points; commands pass null, menus pass their own screen. Root/category/search page callbacks remember the source; recipe details and editor Back restore the list page. The `/cc` custom-items shortcut retains the command's owner-level permission check.
+- Existing specialized set/grid display methods and the old category-stack API are retained as legacy code; the new roots use the shared paged lists instead. No owner file, class or world was deleted.
+- VERIFIED: `gradlew.bat build --console=plain` and `compileGametestJava` on Java 25; 249 unit tests, 0 failures (seven new catalog tests).
+- NOT VERIFIED: full real-client suite, new `catalogs` phase, updated crawler, screenshots, fresh-clone build. Real-client suite is running.
+- Owner review: card/nameplate pairing, hover counts and readability, the smaller item grid, search, and Back from `/menu`, `/civ` and `/cc`.
+
+## OWNER REQUEST: MASSIVE UI REWORK OF THREE MENUS (2026-11-05, implemented in M10 above)
 The owner looked at the real screens and said the first screens of the three linked menus need a **massive rework to look much better**; more pages are welcome. They are:
 - `/recipe`: `recipe/RecipesGui.openMainMenu` (the "Recipe Browser", 1768 lines). Today it is a grid of single icons with no labels, counts or grouping, blank rows and stray empty slots, and one red barrier item (screenshot sent by the owner on 2026-11-05).
 - `/setrecipe`: `recipe/RecipeEditorGui.openRecipeList` (the recipe editor list, 1882 lines).
@@ -307,3 +316,5 @@ Run one Gradle task at a time. Verify-boot rules learned in session 1:
 - 2026-11-05 15:00 UTC Session 2: pushed branches did not compile from a clean clone (hidden core/config package); fixed, guarded by a test, master fast-forwarded to a green build. Back buttons: 13 screens had none, now `core.gui.ReturnTo` and `openFrom(player, parent)` lead back to the menu that opened them (admin tabs, admin directory, hub, crate); the crawler gained an admin root. M4: election phases are a state machine (ElectionPhaseTest). M3: coin source audit in docs/ECONOMY_CAPS.md. Next: read the crawl results, M5 damage pipeline stages, M9 snapshot attempt.
 - 2026-11-05 18:00 UTC Session 2: M3 to M9 first pass on modern/m3-economy (ledger, election phases, damage stages, audits, snapshot attempt, menu Back with ReturnTo, BackSlot and MenuTrail); real-client run: 78 checks pass on the final code; 237 unit tests; the menu crawl found dozens of wrong or missing Backs, most of them fixed, the rest are in docs/MENU_CRAWL.md and KNOWN ISSUES. Next: the owner tests in the game and answers owner questions 0, 11 and 12.
 - 2026-11-05 19:00 UTC Session 2: owner asked for the HANDOFF to carry a testing list (what an AI can test) and a request for a massive rework of the three linked menus (`/recipe`, `/setrecipe`, `/customitems`), recorded under OWNER REQUEST and WHAT NEEDS TESTING. Master had already been fast-forwarded to d2f8c15 earlier the same day; this note is pushed as a further fast-forward.
+
+- 2026-11-06 Session 3, M10 step 1: rebuilt the three catalog roots and category/search lists on core.gui; explicit parent navigation and pure layout/search tests added. Verification in progress; next run the client suite, crawler and inspect screenshots.

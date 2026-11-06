@@ -22,6 +22,14 @@ import com.political.items.GemGear;
 import com.political.items.LegendaryTools;
 import com.political.magic.MagicStaff;
 import eu.pb4.sgui.api.ClickType;
+import com.political.core.gui.CatalogUi;
+import com.political.core.gui.CatalogModel;
+import com.political.core.gui.Screen;
+import com.political.core.gui.Elements;
+import com.political.core.gui.Palette;
+import com.political.core.gui.Pager;
+import com.political.core.gui.ReturnTo;
+import com.political.core.text.Text;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.core.component.DataComponents;
@@ -55,6 +63,10 @@ public class RecipeEditorGui {
     private static final int SLOT_LOCK      = 35;
     private static final int SLOT_BACK      = 45;
     private static final int SLOT_HEADER    = 4;
+
+    private static final ReturnTo PARENT = new ReturnTo();
+    private static final ReturnTo ROOT_PAGE = new ReturnTo();
+    private static final ReturnTo LIST_RETURN = new ReturnTo();
 
     // ── Category definitions ─────────────────────────────────────
     public enum Category {
@@ -455,174 +467,36 @@ public class RecipeEditorGui {
 
     /** Entry point — opens the main category selection menu. */
     public static void openMainMenu(ServerPlayer player) {
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Set recipe").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        Runnable previous = ROOT_PAGE.get(player.getUUID());
+        if (previous != null) previous.run(); else openRoot(player, 0);
+    }
 
-        RecipeGuiTheme.fillDoubleChestCatalog(gui);
+    public static void openFrom(ServerPlayer player, Runnable parent) {
+        PARENT.set(player.getUUID(), parent);
+        openRoot(player, 0);
+    }
 
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.KNOWLEDGE_BOOK)
-                .setName(Component.literal("Recipe editor").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Choose a category — same shell as /recipe").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("Click an output to edit or create its recipe").withStyle(ChatFormatting.DARK_GRAY))
-                .glow().build());
+    private static Component categoryTitle(Category cat) {
+        String key = "political.catalog.category." + cat.name().toLowerCase(java.util.Locale.ROOT);
+        return Text.tr(key);
+    }
 
-        gui.setSlot(1, new GuiElementBuilder(Items.SPYGLASS)
-                .setName(Component.literal("🔍 Search Recipes").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Search items by name").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("Opens editor on click").withStyle(ChatFormatting.GREEN))
-                .setCallback((idx, type, containerInput, slotGui) -> openSearchGui(player))
-                .build());
+    public static List<Category> catalogCategories() {
+        List<Category> categories = new ArrayList<>(List.of(Category.GEM_BLOCK_GEAR, Category.DRAGON_CHESTPLATES, Category.BOUNTY_SETS,
+                Category.SPECIAL_ARMOR, Category.GOLD_ARMOR, Category.CUSTOM_TOOLS, Category.SPECIAL_ITEMS, Category.PIGLIN));
+        for (Category cat : Category.values()) if (!categories.contains(cat)) categories.add(cat);
+        return categories;
+    }
 
-        // Place category buttons matching /recipe layout
-        // Row 1: Armor categories (slots 9-14)
-        gui.setSlot(10, new GuiElementBuilder(Category.GEM_BLOCK_GEAR.icon)
-                .setName(Component.literal(Category.GEM_BLOCK_GEAR.label).withStyle(Category.GEM_BLOCK_GEAR.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.GEM_BLOCK_GEAR, 0))
-                .build());
-
-        gui.setSlot(20, new GuiElementBuilder(Category.DRAGON_CHESTPLATES.icon)
-                .setName(Component.literal(Category.DRAGON_CHESTPLATES.label).withStyle(Category.DRAGON_CHESTPLATES.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Dragon plates & cores").withStyle(ChatFormatting.GRAY))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.DRAGON_CHESTPLATES, 0))
-                .build());
-
-        gui.setSlot(12, new GuiElementBuilder(Category.BOUNTY_SETS.icon)
-                .setName(Component.literal(Category.BOUNTY_SETS.label).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("T1 & T2 Armor + Swords").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openBountySetsPage(player, 0))
-                .build());
-
-        gui.setSlot(14, new GuiElementBuilder(Category.SPECIAL_ARMOR.icon)
-                .setName(Component.literal(Category.SPECIAL_ARMOR.label).withStyle(Category.SPECIAL_ARMOR.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.SPECIAL_ARMOR, 0))
-                .build());
-
-        gui.setSlot(16, new GuiElementBuilder(Category.GOLD_ARMOR.icon)
-                .setName(Component.literal(Category.GOLD_ARMOR.label).withStyle(Category.GOLD_ARMOR.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.GOLD_ARMOR, 0))
-                .build());
-
-        gui.setSlot(28, new GuiElementBuilder(Category.PIGLIN.icon)
-                .setName(Component.literal(Category.PIGLIN.label).withStyle(Category.PIGLIN.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.PIGLIN, 0))
-                .build());
-
-        // Row 2: Weapons and Tools (slots 18-23)
-        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
-                .setName(Component.literal("⛏ Tool Sets").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Block + Legendary tools").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> CustomItemsGui.openToolSetsPage(player, 0,
-                        (p, item) -> {
-                            SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(item);
-                            openRecipeEditor(p, item, r, Category.CUSTOM_TOOLS);
-                        },
-                        RecipeEditorGui::openMainMenu))
-                .build());
-
-        gui.setSlot(24, new GuiElementBuilder(Category.SPECIAL_ITEMS.icon)
-                .setName(Component.literal(Category.SPECIAL_ITEMS.label).withStyle(Category.SPECIAL_ITEMS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.SPECIAL_ITEMS, 0))
-                .build());
-
-        // Row 3: Materials and Tokens (slots 27-32)
-        gui.setSlot(30, new GuiElementBuilder(Category.MATERIALS.icon)
-                .setName(Component.literal(Category.MATERIALS.label).withStyle(Category.MATERIALS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.MATERIALS, 0))
-                .build());
-
-        gui.setSlot(34, new GuiElementBuilder(Category.MOB_DROPS.icon)
-                .setName(Component.literal(Category.MOB_DROPS.label).withStyle(Category.MOB_DROPS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Bounty, World Boss & Enhanced drops").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("💀 Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openMobDropsHub(player))
-                .build());
-
-        // Row 4: Additional categories (slots 36-38)
-        gui.setSlot(38, new GuiElementBuilder(Category.ATTRIBUTE_TOKENS.icon)
-                .setName(Component.literal(Category.ATTRIBUTE_TOKENS.label).withStyle(Category.ATTRIBUTE_TOKENS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.ATTRIBUTE_TOKENS, 0))
-                .build());
-
-        gui.setSlot(40, new GuiElementBuilder(Category.WEAPON_ATTRIBUTES.icon)
-                .setName(Component.literal(Category.WEAPON_ATTRIBUTES.label).withStyle(Category.WEAPON_ATTRIBUTES.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.WEAPON_ATTRIBUTES, 0))
-                .build());
-
-        gui.setSlot(42, new GuiElementBuilder(Category.HPEBM.icon)
-                .setName(Component.literal(Category.HPEBM.label).withStyle(Category.HPEBM.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.HPEBM, 0))
-                .build());
-
-        gui.setSlot(36, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
-                .setName(Component.literal(Category.CUSTOM_ARROWS.label).withStyle(Category.CUSTOM_ARROWS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
-                .build());
-
-        gui.setSlot(46, new GuiElementBuilder(Category.ASCENSION_MATERIALS.icon)
-                .setName(Component.literal(Category.ASCENSION_MATERIALS.label).withStyle(Category.ASCENSION_MATERIALS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.ASCENSION_MATERIALS, 0))
-                .build());
-
-        gui.setSlot(48, new GuiElementBuilder(Category.ASCENSION_RELICS.icon)
-                .setName(Component.literal(Category.ASCENSION_RELICS.label).withStyle(Category.ASCENSION_RELICS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("✨ Click to browse items").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.ASCENSION_RELICS, 0))
-                .build());
-
-        gui.setSlot(44, new GuiElementBuilder(Items.FISHING_ROD)
-                .setName(Component.literal("🎣 Fishing Rods").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Custom fishing rods").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.FISHING_RODS, 0))
-                .build());
-
-        gui.setSlot(53, new GuiElementBuilder(Items.BLAZE_ROD)
-                .setName(Component.literal("✦ Magic Staves").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Magic staff weapons").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openCategoryPage(player, Category.MAGIC_STAVES, 0))
-                .build());
-
-        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Component.literal("Close").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
-                .setCallback((slot, type, containerInput, slotGui) -> player.closeContainer())
-                .build());
-
-        gui.open();
+    private static void openRoot(ServerPlayer player, int page) {
+        ROOT_PAGE.set(player.getUUID(), () -> openRoot(player, page));
+        java.util.List<CatalogUi.Tile> tiles = new ArrayList<>();
+        for (Category cat : catalogCategories()) {
+            tiles.add(new CatalogUi.Tile(cat.icon, categoryTitle(cat),
+                    getItemsForCategory(cat).size(), () -> openCategoryPage(player, cat, 0)));
+        }
+        CatalogUi.categories(player, Text.tr("political.catalog.editor"), Text.tr("political.catalog.edit_hint"),
+                tiles, page, next -> openRoot(player, next), () -> openSearchGui(player), PARENT.get(player.getUUID())).open();
     }
 
     private static void openMobDropsHub(ServerPlayer player) {
@@ -777,6 +651,7 @@ public class RecipeEditorGui {
         final int ITEMS_PER_PAGE = 28;
         int totalPages = Math.max(1, (items.size() + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE);
         int clampedPage = Math.min(page, totalPages - 1);
+        final int finalPage = clampedPage;
 
         SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
         gui.setTitle(Component.literal(title).withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
@@ -834,7 +709,6 @@ public class RecipeEditorGui {
             } else {
                 elem.addLoreLine(Component.literal("➕ No recipe — click to create").withStyle(ChatFormatting.YELLOW));
             }
-            final int finalPage = clampedPage;
             elem.setCallback((s, t, a, __slotGui) -> {
                 if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
                     boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
@@ -878,97 +752,13 @@ public class RecipeEditorGui {
     }
 
     private static void openSearchGui(ServerPlayer player) {
-        eu.pb4.sgui.api.gui.SignGui signGui = new eu.pb4.sgui.api.gui.SignGui(player) {
-            @Override
-            public void onManualClose() {
-                String searchTerm = this.getLine(0).getString().trim();
-                if (!searchTerm.isEmpty()) {
-                    showSearchResults(player, searchTerm);
-                } else {
-                    openMainMenu(player);
-                }
-            }
-        };
-        signGui.setLine(0, Component.literal(""));
-        signGui.setLine(1, Component.literal("^^^^^^^^^^^^^^").withStyle(ChatFormatting.YELLOW));
-        signGui.setLine(2, Component.literal("Search items").withStyle(ChatFormatting.AQUA));
-        signGui.setLine(3, Component.literal("(partial ok)").withStyle(ChatFormatting.GRAY));
-        signGui.open();
+        CatalogUi.search(player, query -> showSearchResults(player, query), () -> openMainMenu(player));
     }
 
     private static void showSearchResults(ServerPlayer player, String searchTerm) {
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Search: " + searchTerm).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
-
-        RecipeGuiTheme.fillCategoryItemGrid(gui, false);
-
-        boolean[] used = new boolean[54];
-
-        gui.setSlot(4, new GuiElementBuilder(Items.SPYGLASS)
-                .setName(Component.literal("🔍 Search Results").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Search: \"" + searchTerm + "\"").withStyle(ChatFormatting.YELLOW))
-                .glow().build());
-        used[4] = true;
-
-        java.util.List<ItemStack> results = new java.util.ArrayList<>();
-        String searchLower = searchTerm.toLowerCase();
-
-        for (Category cat : Category.values()) {
-            for (ItemStack item : getItemsForCategory(cat)) {
-                if (item == null || item.isEmpty()) continue;
-                Component nameText = item.get(DataComponents.CUSTOM_NAME);
-                String itemName = nameText != null ? nameText.getString().toLowerCase() : item.getItem().toString().toLowerCase();
-                if (itemName.contains(searchLower)) {
-                    results.add(item);
-                }
-            }
-        }
-
-        int shown = 0;
-        for (ItemStack item : results) {
-            if (shown >= 28) break;
-            int row = shown / 7;
-            int col = shown % 7 + 1;
-            int slot = (row + 1) * 9 + col;
-
-            Component displayName = item.get(DataComponents.CUSTOM_NAME);
-            ItemStack clickItem = item;
-            ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
-            gui.setSlot(slot, new GuiElementBuilder(displayStack)
-                    .setName(displayName != null ? displayName : Component.literal(item.getItem().toString()))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("✨ Click to edit recipe").withStyle(ChatFormatting.YELLOW))
-                    .setCallback((s, t, a, __slotGui) -> {
-                        SlayerRecipes.Recipe r = SlayerRecipes.getRecipeForOutput(clickItem);
-                        openRecipeEditor(player, clickItem, r, null);
-                    })
-                    .build());
-            used[slot] = true;
-            shown++;
-        }
-
-        RecipeCatalogUi.fillEmptyGridSlots(gui, used, false);
-
-        if (shown == 0) {
-            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
-                    .setName(Component.literal("No results found").withStyle(ChatFormatting.RED))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("Try a different search term").withStyle(ChatFormatting.GRAY))
-                    .build());
-        }
-
-        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("← Back to Menu").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> openMainMenu(player))
-                .build());
-
-        gui.setSlot(46, new GuiElementBuilder(Items.SPYGLASS)
-                .setName(Component.literal("🔍 Search Again").withStyle(ChatFormatting.AQUA))
-                .setCallback((slot, type, containerInput, slotGui) -> openSearchGui(player))
-                .build());
-
-        gui.open();
+        List<ItemStack> items = new ArrayList<>();
+        for (Category cat : Category.values()) items.addAll(getItemsForCategory(cat));
+        openEditorSearch(player, items, searchTerm, () -> openMainMenu(player));
     }
 
     private static void openBountySetsPage(ServerPlayer player, int page) {
@@ -1005,6 +795,7 @@ public class RecipeEditorGui {
         int setsPerPage = 2;
         int totalPages = Math.max(1, (sets.size() + setsPerPage - 1) / setsPerPage);
         int clampedPage = Math.min(page, totalPages - 1);
+        final int finalPage = clampedPage;
         int startIdx = clampedPage * setsPerPage;
         int endIdx = Math.min(startIdx + setsPerPage, sets.size());
 
@@ -1132,49 +923,23 @@ public class RecipeEditorGui {
     // ──────────────────────────────────────────────────────────────
 
     public static void openCategoryPage(ServerPlayer player, Category cat, int page) {
-        // Special handling for GEM_BLOCK_GEAR - armor sets in rows
-        if (cat == Category.GEM_BLOCK_GEAR) {
-            openGemBlockGearPage(player, page);
-            return;
-        }
+        openEditorList(player, categoryTitle(cat),
+                cat.icon, getItemsForCategory(cat), cat, page, () -> openMainMenu(player));
+    }
 
+    private static void openEditorList(ServerPlayer player, Component title, Item icon, List<ItemStack> items,
+                                       Category cat, int page, Runnable back) {
+        int clampedPage = Pager.clamp(page, Pager.pageCount(items.size(), CatalogModel.ITEMS_PER_PAGE));
+        Runnable reopen = () -> openEditorList(player, title, icon, items, cat, clampedPage, back);
+        LIST_RETURN.set(player.getUUID(), reopen);
         List<SlayerRecipes.Recipe> existingRecipes = RecipeConfigManager.getRecipes();
-        List<ItemStack> items = getItemsForCategory(cat);
-
-        boolean sparse = RecipeCatalogUi.sparseMinTwoPagesEditor(cat);
-        int totalPages = RecipeCatalogUi.totalPages(items.size(), sparse);
-        int clampedPage = Math.min(page, totalPages - 1);
-
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal(cat.label).withStyle(cat.colour, ChatFormatting.BOLD));
-
-        if (cat == Category.BLOCK_WEAPONS) {
-            for (int i = 0; i < 54; i++) {
-                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
-            }
-        } else {
-            RecipeGuiTheme.fillCategoryItemGrid(gui, cat == Category.SPECIAL_ITEMS);
-        }
-
-        boolean[] used = new boolean[54];
-
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(cat.icon)
-                .setName(Component.literal(cat.label).withStyle(cat.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Click an item to edit its recipe").withStyle(ChatFormatting.GRAY))
-                .glow().build());
-        used[4] = true;
-
-        // Item slots (7 per row, rows 1-4, columns 1-7)
-        int start = clampedPage * RecipeCatalogUi.ITEM_SLOTS_PER_PAGE;
-        int shown = 0;
-        for (int idx = start; idx < items.size() && shown < RecipeCatalogUi.ITEM_SLOTS_PER_PAGE; idx++) {
-            ItemStack item = items.get(idx);
-            int row = shown / 7;
-            int col = shown % 7 + 1;
-            int slot = (row + 1) * 9 + col;
-
+        Screen screen = CatalogUi.items(player, title, icon, Text.tr("political.catalog.edit"), items.size(), clampedPage,
+                next -> openEditorList(player, title, icon, items, cat, next, back),
+                () -> CatalogUi.search(player, query -> openEditorSearch(player, items, query, reopen), reopen), back);
+        int start = clampedPage * CatalogModel.ITEMS_PER_PAGE;
+        int[] slots = CatalogModel.itemSlots();
+        for (int shown = 0; shown < slots.length && start + shown < items.size(); shown++) {
+            ItemStack item = items.get(start + shown);
             Component displayName = item.get(DataComponents.CUSTOM_NAME);
             String customId = SlayerItems.getCustomItemId(item);
 
@@ -1200,61 +965,35 @@ public class RecipeEditorGui {
             ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
             GuiElementBuilder elem = new GuiElementBuilder(displayStack)
                     .setName(displayName != null ? displayName
-                            : Component.literal(customId != null ? customId : "Unknown"))
-                    .addLoreLine(Component.literal(""));
+                            : Text.plain(customId != null ? customId : item.getHoverName().getString()))
+                    .addLoreLine(Text.plain(""));
             if (finalHasRecipe) {
                 elem.addLoreLine(recipeEnabled
-                        ? Component.literal("✔ Recipe ENABLED").withStyle(ChatFormatting.GREEN)
-                        : Component.literal("✘ Recipe DISABLED").withStyle(ChatFormatting.RED));
-                elem.addLoreLine(Component.literal("Left-click: edit  |  Right-click: toggle").withStyle(ChatFormatting.GRAY));
+                        ? Text.tr("political.catalog.enabled").withStyle(Palette.GOOD.style())
+                        : Text.tr("political.catalog.disabled").withStyle(Palette.BAD.style()));
+                elem.addLoreLine(Text.tr("political.catalog.toggle").withStyle(Palette.MUTED.style()));
             } else {
-                elem.addLoreLine(Component.literal("➕ No recipe — click to create").withStyle(ChatFormatting.YELLOW));
+                elem.addLoreLine(Text.tr("political.catalog.create").withStyle(Palette.WARN.style()));
             }
-            final int finalPage = clampedPage;
             elem.setCallback((s, t, a, __slotGui) -> {
                 if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
                     boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
-                    String status = nowEnabled ? "ENABLED" : "DISABLED";
-                    player.sendSystemMessage(Component.literal("Recipe '" + finalRecipeName + "' is now " + status).withStyle(nowEnabled ? ChatFormatting.GREEN : ChatFormatting.RED), false);
-                    openCategoryPage(player, cat, finalPage);
+                    Component status = Text.tr(nowEnabled ? "political.catalog.enabled" : "political.catalog.disabled");
+                    player.sendSystemMessage(Text.tr("political.catalog.toggled", Text.plain(finalRecipeName), status).withStyle(nowEnabled ? ChatFormatting.GREEN : ChatFormatting.RED), false);
+                    reopen.run();
                 } else {
                     openRecipeEditor(player, finalItem, finalRecipe, cat);
                 }
             });
-            gui.setSlot(slot, elem.build());
-            used[slot] = true;
-            shown++;
+            screen.set(slots[shown], elem.build());
         }
+        screen.open();
+    }
 
-        boolean lastPageComingSoon = sparse && clampedPage == totalPages - 1;
-        RecipeCatalogUi.fillEmptyGridSlots(gui, used, lastPageComingSoon);
-
-        // ← Back to main menu
-        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("← Back to Categories").withStyle(ChatFormatting.YELLOW))
-                .setCallback((s, t, a, __slotGui) -> openMainMenu(player)).build());
-
-        // Pagination
-        if (clampedPage > 0) {
-            final int prev = clampedPage - 1;
-            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
-                    .setName(Component.literal("← Previous Page").withStyle(ChatFormatting.YELLOW))
-                    .addLoreLine(Component.literal("Page " + clampedPage + " / " + totalPages))
-                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, prev)).build());
-        }
-        if (clampedPage < totalPages - 1) {
-            final int next = clampedPage + 1;
-            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
-                    .setName(Component.literal("Next Page →").withStyle(ChatFormatting.YELLOW))
-                    .addLoreLine(Component.literal("Page " + (clampedPage + 2) + " / " + totalPages))
-                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, next)).build());
-        }
-
-        gui.setSlot(49, new GuiElementBuilder(Items.PAPER)
-                .setName(Component.literal("Page " + (clampedPage + 1) + " / " + totalPages))
-                .build());
-
-        gui.open();
+    private static void openEditorSearch(ServerPlayer player, List<ItemStack> source, String query, Runnable back) {
+        List<ItemStack> matches = source.stream().filter(item -> !item.isEmpty()
+                && CatalogModel.matches(item.getHoverName().getString(), query)).toList();
+        openEditorList(player, Text.tr("political.catalog.results"), Items.SPYGLASS, matches, null, 0, back);
     }
 
     // ──────────────────────────────────────────────────────────────
@@ -1404,6 +1143,7 @@ public class RecipeEditorGui {
         final int SETS_PER_PAGE = 4;
         int totalPages = (sets.length + SETS_PER_PAGE - 1) / SETS_PER_PAGE;
         int clampedPage = Math.min(page, totalPages - 1);
+        final int finalPage = clampedPage;
 
         int startIdx = clampedPage * SETS_PER_PAGE;
         for (int i = 0; i < SETS_PER_PAGE && (startIdx + i) < sets.length; i++) {
@@ -1463,8 +1203,7 @@ public class RecipeEditorGui {
                 } else {
                     elem.addLoreLine(Component.literal("➕ No recipe — click to create").withStyle(ChatFormatting.YELLOW));
                 }
-                final int finalPage = clampedPage;
-                elem.setCallback((s, t, a, __slotGui) -> {
+                    elem.setCallback((s, t, a, __slotGui) -> {
                     if (finalHasRecipe && t == eu.pb4.sgui.api.ClickType.MOUSE_RIGHT) {
                         boolean nowEnabled = RecipeConfigManager.toggleRecipe(finalRecipeName);
                         String status = nowEnabled ? "ENABLED" : "DISABLED";
@@ -1623,8 +1362,7 @@ public class RecipeEditorGui {
                 }
                 if (index == SLOT_BACK) {
                     player.closeContainer();
-                    if (backCat != null) openCategoryPage(player, backCat, 0);
-                    else openMainMenu(player);
+                    LIST_RETURN.getOr(player.getUUID(), () -> openMainMenu(player)).run();
                     return true;
                 }
                 return super.onAnyClick(index, type, action);
@@ -1681,11 +1419,7 @@ public class RecipeEditorGui {
                         RecipeConfigManager.removeCustomRecipe(existing.name);
                         player.sendSystemMessage(Component.literal("§cRemoved recipe §f" + existing.name), false);
                         player.closeContainer();
-                        if (backCat != null) {
-                            openCategoryPage(player, backCat, 0);
-                        } else {
-                            openMainMenu(player);
-                        }
+                        LIST_RETURN.getOr(player.getUUID(), () -> openMainMenu(player)).run();
                     })
                     .build());
         }
@@ -1822,7 +1556,7 @@ public class RecipeEditorGui {
 
     /** Retained for backward-compat — now opens the main menu (page is ignored). */
     public static void openRecipeList(ServerPlayer player, int page) {
-        openMainMenu(player);
+        openRoot(player, page);
     }
 
     // ──────────────────────────────────────────────────────────────

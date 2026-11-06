@@ -189,7 +189,7 @@ public final class HuntGui {
                             "§7gold blocks between, a netherite helmet in the centre."));
                     player.sendSystemMessage(Component.literal(
                             "§8Browse it in the Recipes menu for the exact grid."));
-                    RecipesGui.openMainMenu(player);
+                    RecipesGui.openFrom(player, () -> gui.open());
                 })
                 .build());
 

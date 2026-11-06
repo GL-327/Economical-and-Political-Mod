@@ -123,7 +123,7 @@ public final class CivilizationHubGui {
         gui.setSlot(24, new GuiElementBuilder(Items.CRAFTING_TABLE)
                 .setName(Component.literal("Recipes").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("§7Browse every custom recipe."))
-                .setCallback((a, b, c, d) -> RecipesGui.openMainMenu(player))
+                .setCallback((a, b, c, d) -> RecipesGui.openFrom(player, () -> gui.open()))
                 .build());
 
         gui.setSlot(25, new GuiElementBuilder(Items.NETHER_STAR)

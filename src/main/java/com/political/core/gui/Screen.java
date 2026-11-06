@@ -120,6 +120,13 @@ public final class Screen {
         for (int i = 0; i < perPage && start + i < entries.size(); i++) {
             gui.setSlot(slots[i], entries.get(start + i));
         }
+        return pager(entries.size(), perPage, current, openPage);
+    }
+
+    /** Standard footer paging controls, also used by catalogs with a more spacious content grid. */
+    public Screen pager(int entryCount, int perPage, int page, IntConsumer openPage) {
+        int pages = Pager.pageCount(entryCount, perPage);
+        int current = Pager.clamp(page, pages);
         if (Pager.hasPrevious(current)) {
             gui.setSlot(Layout.previousPageSlot(size), new GuiElementBuilder(Icon.PREVIOUS.item())
                     .setName(Elements.name(Text.tr("political.gui.previous"), Palette.WARN))
@@ -127,7 +134,7 @@ public final class Screen {
         }
         gui.setSlot(Layout.pageInfoSlot(size), Elements.info(Icon.PAGE.item(),
                 Text.tr("political.gui.page", current + 1, pages), Palette.BODY,
-                Text.tr("political.gui.entries", entries.size())));
+                Text.tr("political.gui.entries", entryCount)));
         if (Pager.hasNext(current, pages)) {
             gui.setSlot(Layout.nextPageSlot(size), new GuiElementBuilder(Icon.NEXT.item())
                     .setName(Elements.name(Text.tr("political.gui.next"), Palette.WARN))

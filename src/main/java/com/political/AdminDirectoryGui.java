@@ -165,11 +165,11 @@ public final class AdminDirectoryGui {
         // Content
         add("Content", "Companion", p -> CompanionGui.open(p));
         add("Content", "Contract", p -> ContractGui.open(p));
-        add("Content", "Custom Items", p -> CustomItemsGui.open(p));
+        add("Content", "Custom Items", (p, back) -> CustomItemsGui.openFrom(p, back));
         add("Content", "Expansion Catalog", (p, back) -> ExpansionCatalogGui.openMenuFrom(p, back));
         add("Content", "Fletching Table", p -> FletchingTableGui.openGui(p));
         add("Content", "Minion", (p, back) -> MinionGui.openFrom(p, back));
-        add("Content", "Recipes", p -> RecipesGui.openMainMenu(p));
+        add("Content", "Recipes", (p, back) -> RecipesGui.openFrom(p, back));
         add("Content", "Reforge", p -> ReforgeGui.open(p));
         add("Content", "Relic", p -> RelicGui.open(p));
         add("Content", "T2 Crafting", p -> T2CraftingGui.open(p));

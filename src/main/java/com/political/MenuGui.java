@@ -87,7 +87,7 @@ public class MenuGui {
                 .setName(Component.literal("Quick shortcuts").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .addLoreLine(Component.literal("/recipe  /bounty  /shop  /bank").withStyle(ChatFormatting.DARK_GRAY))
                 .addLoreLine(Component.literal("Click: open /recipe browser").withStyle(ChatFormatting.YELLOW))
-                .setCallback((a, b, c, d) -> RecipesGui.openMainMenu(player))
+                .setCallback((a, b, c, d) -> RecipesGui.openFrom(player, () -> gui.open()))
                 .build());
 
         gui.setSlot(31, new GuiElementBuilder(Items.COMPASS)

@@ -12,6 +12,14 @@ import com.political.party.PoliticalPartyManager;
 import com.political.recipe.RecipeConfigManager;
 import com.political.recipe.RecipesGui;
 import com.political.recipe.SlayerRecipes;
+import com.political.core.gui.CatalogUi;
+import com.political.core.gui.CatalogModel;
+import com.political.core.gui.Screen;
+import com.political.core.gui.Elements;
+import com.political.core.gui.Palette;
+import com.political.core.gui.Pager;
+import com.political.core.gui.ReturnTo;
+import com.political.core.text.Text;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.core.component.DataComponents;
@@ -38,6 +46,9 @@ public class CustomItemsGui {
     public interface BackHandler {
         void open(ServerPlayer player);
     }
+
+    private static final ReturnTo PARENT = new ReturnTo();
+    private static final ReturnTo ROOT_PAGE = new ReturnTo();
 
     // ── Category definitions ─────────────────────────────────────
     public enum Category {
@@ -82,6 +93,13 @@ public class CustomItemsGui {
         }
     }
 
+    public static Component categoryTitle(Category cat) {
+        String key = "political.catalog.category." + cat.name().toLowerCase(java.util.Locale.ROOT);
+        return Text.tr(key);
+    }
+
+    public static net.minecraft.world.item.Item categoryIcon(Category cat) { return cat.icon; }
+
     // Helper method to give item to player
     private static void giveItem(ServerPlayer player, ItemStack item) {
         if (player.addItem(item.copy())) {
@@ -96,7 +114,7 @@ public class CustomItemsGui {
     }
 
     /** Returns all items belonging to a given category. */
-    private static List<ItemStack> getItemsForCategory(Category cat) {
+    public static List<ItemStack> getItemsForCategory(Category cat) {
         List<ItemStack> items = new ArrayList<>();
         switch (cat) {
             case CUSTOM_ARMOR -> {
@@ -465,205 +483,37 @@ public class CustomItemsGui {
 
     /** Entry point — opens the main category selection menu. */
     public static void open(ServerPlayer player) {
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Custom Items").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        Runnable previous = ROOT_PAGE.get(player.getUUID());
+        if (previous != null) previous.run(); else openRoot(player, 0);
+    }
 
-        RecipeGuiTheme.fillDoubleChestCatalog(gui);
+    public static void openFrom(ServerPlayer player, Runnable parent) {
+        PARENT.set(player.getUUID(), parent);
+        openRoot(player, 0);
+    }
 
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Component.literal("Custom Items").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Admin: grant items by category").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("Matches the /recipe browser layout").withStyle(ChatFormatting.DARK_GRAY))
-                .glow().build());
+    public static List<Category> catalogCategories() {
+        List<Category> categories = new ArrayList<>(List.of(Category.CUSTOM_ARMOR, Category.DRAGON_CHESTPLATES,
+                Category.SPECIAL_ARMOR, Category.GOLD_ARMOR, Category.CUSTOM_TOOLS, Category.SPECIAL_ITEMS, Category.PIGLIN));
+        for (Category cat : Category.values()) if (!categories.contains(cat)) categories.add(cat);
+        return categories;
+    }
 
-        gui.setSlot(1, new GuiElementBuilder(Items.SPYGLASS)
-                .setName(Component.literal("🔍 Search Items").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Search items by name").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("Supports partial matches").withStyle(ChatFormatting.GREEN))
-                .setCallback((idx, type, containerInput, slotGui) -> openSearchGui(player))
-                .build());
-
-        // Second page of sections: everything added from V4 through Version X.
-        gui.setSlot(7, new GuiElementBuilder(Items.END_CRYSTAL)
-                .setName(Component.literal("✦ New Content (V4 to Version X)").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Guilds, expeditions, relics, trade").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("and technique manuals").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> ExpansionCatalogGui.openMenuFrom(player, () -> open(player)))
-                .build());
-
-        // Row 1: Armor categories - spread across more slots
-        gui.setSlot(10, new GuiElementBuilder(Items.EMERALD)
-                .setName(Component.literal("💎 Custom Armor").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Emerald, Lapis armors").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.CUSTOM_ARMOR, 0))
-                .build());
-
-        gui.setSlot(20, new GuiElementBuilder(Items.DRAGON_HEAD)
-                .setName(Component.literal("🐉 Dragon chestplates").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("The original eight dragon plates").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("Dragon crafting cores (T1–T3)").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.DRAGON_CHESTPLATES, 0))
-                .build());
-
-        gui.setSlot(12, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Component.literal("⚔ Bounty Sets").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("T1 & T2 Armor + Swords").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openBountySetsPage(player, 0,
-                        (p, item) -> giveItem(p, item),
-                        CustomItemsGui::open))
-                .build());
-
-        gui.setSlot(14, new GuiElementBuilder(Items.NETHERITE_HELMET)
-                .setName(Component.literal("🛡 Special Armor").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Legendary armor").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.SPECIAL_ARMOR, 0))
-                .build());
-
-        gui.setSlot(16, new GuiElementBuilder(Items.GOLDEN_CHESTPLATE)
-                .setName(Component.literal("👑 Gold Armor").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Gold armor tiers").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.GOLD_ARMOR, 0))
-                .build());
-
-        gui.setSlot(28, new GuiElementBuilder(Items.GOLDEN_HELMET)
-                .setName(Component.literal("👑 Piglin Items").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Piglin-themed items").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.PIGLIN, 0))
-                .build());
-
-        // Row 2: Weapons and Tools
-        gui.setSlot(22, new GuiElementBuilder(Items.NETHERITE_PICKAXE)
-                .setName(Component.literal("⛏ Tool Sets").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Block + Legendary tools").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openToolSetsPage(player, 0,
-                        (p, item) -> giveItem(p, item),
-                        CustomItemsGui::open))
-                .build());
-
-        gui.setSlot(23, new GuiElementBuilder(Items.WITHER_SKELETON_SKULL)
-                .setName(Component.literal("🎁 Boss Drops").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Rare boss drop items").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("💀 Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.BOSS_DROPS, 0))
-                .build());
-
-        gui.setSlot(24, new GuiElementBuilder(Items.STICK)
-                .setName(Component.literal("🎁 Special Items").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Special unique items").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.SPECIAL_ITEMS, 0))
-                .build());
-
-        // Row 3: Materials and Tokens
-        gui.setSlot(30, new GuiElementBuilder(Items.SLIME_BALL)
-                .setName(Component.literal("📦 Materials").withStyle(ChatFormatting.GRAY, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Cores & chunks").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.MATERIALS, 0))
-                .build());
-
-        // Row 4: Additional categories
-        gui.setSlot(38, new GuiElementBuilder(Items.PAPER)
-                .setName(Component.literal("✧ Armor Tokens").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Armor attributes").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.ATTRIBUTE_TOKENS, 0))
-                .build());
-
-        gui.setSlot(40, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Component.literal("⚔ Weapon Tokens").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Weapon attributes").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.WEAPON_ATTRIBUTES, 0))
-                .build());
-
-        gui.setSlot(42, new GuiElementBuilder(Items.BLAZE_ROD)
-                .setName(Component.literal("⚡ HPEBM Weapons").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Energy beam weapons").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.HPEBM, 0))
-                .build());
-
-        gui.setSlot(44, new GuiElementBuilder(Items.NETHER_STAR)
-                .setName(Component.literal("⭐ Manager Items").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Skill Tomes, Tokens, misc").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.MANAGER_ITEMS, 0))
-                .build());
-
-        gui.setSlot(34, new GuiElementBuilder(Category.MOB_DROPS.icon)
-                .setName(Component.literal(Category.MOB_DROPS.label).withStyle(Category.MOB_DROPS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Bounty, World Boss & Enhanced drops").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("💀 Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openMobDropsHub(player))
-                .build());
-
-        gui.setSlot(36, new GuiElementBuilder(Category.CUSTOM_ARROWS.icon)
-                .setName(Component.literal(Category.CUSTOM_ARROWS.label).withStyle(Category.CUSTOM_ARROWS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("All custom arrow types").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.CUSTOM_ARROWS, 0))
-                .build());
-
-        gui.setSlot(46, new GuiElementBuilder(Category.ASCENSION_MATERIALS.icon)
-                .setName(Component.literal(Category.ASCENSION_MATERIALS.label).withStyle(Category.ASCENSION_MATERIALS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Shards & fragments for ascension").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.ASCENSION_MATERIALS, 0))
-                .build());
-
-        gui.setSlot(48, new GuiElementBuilder(Category.ASCENSION_RELICS.icon)
-                .setName(Component.literal(Category.ASCENSION_RELICS.label).withStyle(Category.ASCENSION_RELICS.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Rare relics for ascension").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.ASCENSION_RELICS, 0))
-                .build());
-
-        gui.setSlot(50, new GuiElementBuilder(Items.FISHING_ROD)
-                .setName(Component.literal("🎣 Fishing Rods").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("All custom fishing rods").withStyle(ChatFormatting.GRAY))
-                .addLoreLine(Component.literal("✨ Click to browse").withStyle(ChatFormatting.YELLOW))
-                .setCallback((idx, type, containerInput, slotGui) -> openCategoryPage(player, Category.FISHING_RODS, 0))
-                .build());
-
-        // Close button
-        gui.setSlot(49, new GuiElementBuilder(Items.BARRIER)
-                .setName(Component.literal("Close").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
-                .setCallback((slot, clicktype, containerInput, slotGui) -> gui.close())
-                .build());
-
-        gui.open();
+    private static void openRoot(ServerPlayer player, int page) {
+        ROOT_PAGE.set(player.getUUID(), () -> openRoot(player, page));
+        java.util.List<CatalogUi.Tile> tiles = new ArrayList<>();
+        for (Category cat : catalogCategories()) {
+            tiles.add(new CatalogUi.Tile(cat.icon, categoryTitle(cat),
+                    getItemsForCategory(cat).size(), () -> openCategoryPage(player, cat, 0)));
+        }
+        tiles.add(2, new CatalogUi.Tile(Items.NETHER_STAR, Text.tr("political.catalog.bounty_sets"), bountyItems().size(),
+                () -> openItemList(player, Text.tr("political.catalog.bounty_sets"), Items.NETHER_STAR,
+                        bountyItems(), 0, CustomItemsGui::giveItem, CustomItemsGui::open)));
+        Screen screen = CatalogUi.categories(player, Text.tr("political.catalog.custom"), Text.tr("political.catalog.grant_hint"),
+                tiles, page, next -> openRoot(player, next), () -> openSearchGui(player), PARENT.get(player.getUUID()));
+        screen.set(51, Elements.tile(Items.END_CRYSTAL, Text.tr("political.catalog.new_content"), Palette.ACCENT,
+                () -> ExpansionCatalogGui.openMenuFrom(player, () -> open(player))));
+        screen.open();
     }
 
     private static void openMobDropsHub(ServerPlayer player) {
@@ -889,94 +739,13 @@ public class CustomItemsGui {
     }
 
     private static void openSearchGui(ServerPlayer player) {
-        eu.pb4.sgui.api.gui.SignGui signGui = new eu.pb4.sgui.api.gui.SignGui(player) {
-            @Override
-            public void onManualClose() {
-                String searchTerm = this.getLine(0).getString().trim();
-                if (!searchTerm.isEmpty()) {
-                    showSearchResults(player, searchTerm);
-                } else {
-                    CustomItemsGui.open(player);
-                }
-            }
-        };
-        signGui.setLine(0, Component.literal(""));
-        signGui.setLine(1, Component.literal("^^^^^^^^^^^^^^").withStyle(ChatFormatting.YELLOW));
-        signGui.setLine(2, Component.literal("Search items").withStyle(ChatFormatting.AQUA));
-        signGui.setLine(3, Component.literal("(partial ok)").withStyle(ChatFormatting.GRAY));
-        signGui.open();
+        CatalogUi.search(player, query -> showSearchResults(player, query), () -> open(player));
     }
 
     private static void showSearchResults(ServerPlayer player, String searchTerm) {
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        gui.setTitle(Component.literal("Search: " + searchTerm).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
-
-        RecipeGuiTheme.fillCategoryItemGrid(gui, false);
-
-        boolean[] used = new boolean[54];
-
-        gui.setSlot(4, new GuiElementBuilder(Items.SPYGLASS)
-                .setName(Component.literal("Search results").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal("Search: \"" + searchTerm + "\"").withStyle(ChatFormatting.YELLOW))
-                .glow().build());
-        used[4] = true;
-
-        List<ItemStack> results = new ArrayList<>();
-        String searchLower = searchTerm.toLowerCase();
-
-        for (Category cat : Category.values()) {
-            for (ItemStack item : getItemsForCategory(cat)) {
-                if (item == null || item.isEmpty()) continue;
-                Component nameText = item.get(DataComponents.CUSTOM_NAME);
-                String itemName = nameText != null ? nameText.getString().toLowerCase() : item.getItem().toString().toLowerCase();
-                if (itemName.contains(searchLower)) {
-                    results.add(item);
-                }
-            }
-        }
-
-        int shown = 0;
-        for (ItemStack item : results) {
-            if (shown >= 28) break;
-            int row = shown / 7;
-            int col = shown % 7 + 1;
-            int slot = (row + 1) * 9 + col;
-
-            Component displayName = item.get(DataComponents.CUSTOM_NAME);
-            ItemStack clickItem = item;
-            ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
-            gui.setSlot(slot, new GuiElementBuilder(displayStack)
-                    .setName(displayName != null ? displayName : Component.literal(item.getItem().toString()))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("✨ Click to get item").withStyle(ChatFormatting.YELLOW))
-                    .setCallback((s, t, a, __slotGui) -> giveItem(player, clickItem))
-                    .build());
-            used[slot] = true;
-            shown++;
-        }
-
-        RecipeCatalogUi.fillEmptyGridSlots(gui, used, false);
-
-        if (shown == 0) {
-            gui.setSlot(22, new GuiElementBuilder(Items.BARRIER)
-                    .setName(Component.literal("No results found").withStyle(ChatFormatting.RED))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("Try a different search term").withStyle(ChatFormatting.GRAY))
-                    .build());
-        }
-
-        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("← Back to Menu").withStyle(ChatFormatting.YELLOW))
-                .setCallback((slot, type, containerInput, slotGui) -> open(player))
-                .build());
-
-        gui.setSlot(46, new GuiElementBuilder(Items.SPYGLASS)
-                .setName(Component.literal("🔍 Search Again").withStyle(ChatFormatting.AQUA))
-                .setCallback((slot, type, containerInput, slotGui) -> openSearchGui(player))
-                .build());
-
-        gui.open();
+        List<ItemStack> items = new ArrayList<>();
+        for (Category cat : Category.values()) items.addAll(getItemsForCategory(cat));
+        openFiltered(player, items, searchTerm, 0, CustomItemsGui::giveItem, CustomItemsGui::open);
     }
 
     public static void openToolSetsPage(ServerPlayer player, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
@@ -1317,99 +1086,57 @@ public class CustomItemsGui {
     }
 
     public static void openCategoryPage(ServerPlayer player, Category cat, int page, BountyItemClickHandler onItemClick, BackHandler onBack) {
-        if (cat == Category.CUSTOM_ARMOR) {
-            openGemBlockGearPage(player, page, onItemClick, onBack);
-            return;
+        openItemList(player, categoryTitle(cat), cat.icon,
+                getItemsForCategory(cat), page, onItemClick, onBack);
+    }
+
+    public static void openItemList(ServerPlayer player, Component title, net.minecraft.world.item.Item icon,
+                                   List<ItemStack> items, int page, BountyItemClickHandler click, BackHandler back) {
+        openItemList(player, title, icon, items, page, click, back, null);
+    }
+
+    /** The detail callback receives the current page's Back; grant and existing browser actions stay unchanged. */
+    public static void openItemList(ServerPlayer player, Component title, net.minecraft.world.item.Item icon,
+                                   List<ItemStack> items, int page, BountyItemClickHandler click, BackHandler back,
+                                   java.util.function.BiConsumer<ItemStack, Runnable> detail) {
+        int current = Pager.clamp(page, Pager.pageCount(items.size(), CatalogModel.ITEMS_PER_PAGE));
+        Runnable reopen = () -> openItemList(player, title, icon, items, current, click, back, detail);
+        Screen screen = CatalogUi.items(player, title, icon,
+                Text.tr(click == null ? "political.catalog.view_hint" : "political.catalog.grant"), items.size(), current,
+                next -> openItemList(player, title, icon, items, next, click, back, detail),
+                () -> CatalogUi.search(player, query -> openFiltered(player, items, query, 0, click, p -> reopen.run(), detail), reopen),
+                () -> back.open(player));
+        int start = current * CatalogModel.ITEMS_PER_PAGE;
+        int[] slots = CatalogModel.itemSlots();
+        for (int i = 0; i < slots.length && start + i < items.size(); i++) {
+            ItemStack item = items.get(start + i);
+            screen.set(slots[i], CatalogUi.item(item, Text.tr(click == null ? "political.catalog.recipe" : "political.catalog.grant"), () -> {
+                if (detail != null) detail.accept(item, reopen);
+                else if (click == null) showItemInfo(player, item, p -> reopen.run());
+                else click.onClick(player, item);
+            }));
         }
-        if (cat == Category.CUSTOM_TOOLS) {
-            openToolSetsPage(player, page, onItemClick, onBack);
-            return;
-        }
+        screen.open();
+    }
 
-        List<ItemStack> items = getItemsForCategory(cat);
+    private static void openFiltered(ServerPlayer player, List<ItemStack> source, String query, int page,
+                                     BountyItemClickHandler click, BackHandler back) {
+        openFiltered(player, source, query, page, click, back, null);
+    }
 
-        boolean sparse = RecipeCatalogUi.sparseMinTwoPagesCustom(cat);
-        int totalPages = RecipeCatalogUi.totalPages(items.size(), sparse);
-        int clampedPage = Math.min(page, totalPages - 1);
+    private static void openFiltered(ServerPlayer player, List<ItemStack> source, String query, int page,
+                                     BountyItemClickHandler click, BackHandler back,
+                                     java.util.function.BiConsumer<ItemStack, Runnable> detail) {
+        List<ItemStack> matches = source.stream().filter(item -> !item.isEmpty()
+                && CatalogModel.matches(item.getHoverName().getString(), query)).toList();
+        openItemList(player, Text.tr("political.catalog.results"), Items.SPYGLASS, matches, page, click, back, detail);
+    }
 
-        SimpleGui gui = new SimpleGui(MenuType.GENERIC_9x6, player, false);
-        boolean skyblockSpecial = cat == Category.SPECIAL_ITEMS;
-        gui.setTitle(Component.literal(skyblockSpecial ? "Skyblock-style trinkets" : cat.label)
-                .withStyle(skyblockSpecial ? ChatFormatting.GOLD : cat.colour, ChatFormatting.BOLD));
-
-        if (cat == Category.REFLECT_BLOCK_WEAPONS) {
-            for (int i = 0; i < 54; i++) {
-                gui.setSlot(i, new GuiElementBuilder(Items.STAINED_GLASS_PANE.black()).setName(Component.literal("")).build());
-            }
-        } else {
-            RecipeGuiTheme.fillCategoryItemGrid(gui, skyblockSpecial);
-        }
-
-        boolean[] used = new boolean[54];
-
-        // Header
-        gui.setSlot(4, new GuiElementBuilder(cat.icon)
-                .setName(Component.literal(cat.label).withStyle(cat.colour, ChatFormatting.BOLD))
-                .addLoreLine(Component.literal(""))
-                .addLoreLine(Component.literal(skyblockSpecial
-                        ? "Consumables & misc — right-click effects. Recipes in /recipe."
-                        : "Click an item to view recipe").withStyle(ChatFormatting.GRAY))
-                .glow().build());
-        used[4] = true;
-
-        // Item slots (7 per row, rows 1-4, columns 1-7)
-        int start = clampedPage * RecipeCatalogUi.ITEM_SLOTS_PER_PAGE;
-        int shown = 0;
-        for (int idx = start; idx < items.size() && shown < RecipeCatalogUi.ITEM_SLOTS_PER_PAGE; idx++) {
-            ItemStack item = items.get(idx);
-            int row = shown / 7;
-            int col = shown % 7 + 1;
-            int slot = (row + 1) * 9 + col;
-
-            Component displayName = item.get(DataComponents.CUSTOM_NAME);
-
-            final ItemStack finalItem = item;
-            ItemStack displayStack = CustomItemLore.forSelectPageIcon(item);
-            GuiElementBuilder elem = new GuiElementBuilder(displayStack)
-                    .setName(displayName != null ? displayName
-                            : Component.literal(item.getItem().toString()))
-                    .addLoreLine(Component.literal(""))
-                    .addLoreLine(Component.literal("✨ Click to get item").withStyle(ChatFormatting.YELLOW))
-                    .setCallback((s, t, a, __slotGui) -> onItemClick.onClick(player, finalItem));
-            gui.setSlot(slot, elem.build());
-            used[slot] = true;
-            shown++;
-        }
-
-        boolean lastPageComingSoon = sparse && clampedPage == totalPages - 1;
-        RecipeCatalogUi.fillEmptyGridSlots(gui, used, lastPageComingSoon);
-
-        // ← Back to main menu
-        gui.setSlot(45, new GuiElementBuilder(Items.ARROW)
-                .setName(Component.literal("← Back to Categories").withStyle(ChatFormatting.YELLOW))
-                .setCallback((s, t, a, __slotGui) -> onBack.open(player)).build());
-
-        // Pagination
-        if (clampedPage > 0) {
-            final int prev = clampedPage - 1;
-            gui.setSlot(46, new GuiElementBuilder(Items.ARROW)
-                    .setName(Component.literal("← Previous Page").withStyle(ChatFormatting.YELLOW))
-                    .addLoreLine(Component.literal("Page " + clampedPage + " / " + totalPages))
-                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, prev, onItemClick, onBack)).build());
-        }
-        if (clampedPage < totalPages - 1) {
-            final int next = clampedPage + 1;
-            gui.setSlot(53, new GuiElementBuilder(Items.ARROW)
-                    .setName(Component.literal("Next Page →").withStyle(ChatFormatting.YELLOW))
-                    .addLoreLine(Component.literal("Page " + (clampedPage + 2) + " / " + totalPages))
-                    .setCallback((s, t, a, __slotGui) -> openCategoryPage(player, cat, next, onItemClick, onBack)).build());
-        }
-
-        gui.setSlot(50, new GuiElementBuilder(Items.PAPER)
-                .setName(Component.literal("Page " + (clampedPage + 1) + " / " + totalPages))
-                .build());
-
-        gui.open();
+    public static List<ItemStack> bountyItems() {
+        List<ItemStack> items = new ArrayList<>();
+        for (Category cat : List.of(Category.SWORDS_T1, Category.ARMOR_T1, Category.SWORDS_T2, Category.ARMOR_T2))
+            items.addAll(getItemsForCategory(cat));
+        return items;
     }
 
     // ──────────────────────────────────────────────────────────────

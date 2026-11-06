@@ -57,7 +57,7 @@ com/political/CryptoMarketGui.java | 367
 com/political/CustomArrows.java | 11
 com/political/CustomEnchantmentManager.java | 1
 com/political/CustomItemLore.java | 4
-com/political/CustomItemsGui.java | 241
+com/political/CustomItemsGui.java | 119
 com/political/DailyRewards.java | 29
 com/political/DanielsPickaxe.java | 44
 com/political/DataManager.java | 5
@@ -237,8 +237,8 @@ com/political/party/PartyJoinGui.java | 226
 com/political/party/PartyLeaderGui.java | 50
 com/political/party/PoliticalPartyManager.java | 79
 com/political/recipe/RecipeConfigManager.java | 1
-com/political/recipe/RecipeEditorGui.java | 235
-com/political/recipe/RecipesGui.java | 312
+com/political/recipe/RecipeEditorGui.java | 132
+com/political/recipe/RecipesGui.java | 204
 com/political/settlement/SettlementCommands.java | 30
 com/political/settlement/SettlementEconomy.java | 11
 com/political/settlement/SettlementEconomyGui.java | 31

@@ -237,7 +237,7 @@ public class CommandRegistry {
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
                     try {
-                        RecipeEditorGui.openRecipeList(player);
+                        RecipeEditorGui.openFrom(player, null);
                     } catch (Exception e) {
                         LOGGER.error("/setrecipe failed to open the recipe list for player {}", player.getUUID(), e);
                         player.sendSystemMessage(Component.literal("An unexpected error occurred: " + e.getClass().getSimpleName() + ": " + e.getMessage()).withStyle(ChatFormatting.RED), false);
@@ -261,7 +261,7 @@ public class CommandRegistry {
                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS)) // Admin only
                 .executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    CustomItemsGui.open(player);
+                    CustomItemsGui.openFrom(player, null);
                     return 1;
                 }));
 
@@ -295,7 +295,7 @@ public class CommandRegistry {
                     ServerPlayer player = context.getSource().getPlayerOrException();
                     RecipeConfigManager.logRecipeFileStatusForRecipeCommand();
                     try {
-                        RecipesGui.openMainMenu(player);
+                        RecipesGui.openFrom(player, null);
                         player.sendSystemMessage(Component.literal("✓ Recipe browser opened — use the book for the full JSON index.").withStyle(ChatFormatting.GREEN), false);
                     } catch (Exception e) {
                         player.sendSystemMessage(Component.literal("Error: " + e.getMessage()).withStyle(ChatFormatting.RED), false);
@@ -307,14 +307,14 @@ public class CommandRegistry {
                         .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();
-                            RecipeEditorGui.openRecipeList(player);
+                            RecipeEditorGui.openFrom(player, null);
                             return 1;
                         }))
                 .then(Commands.literal("list")
                         .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();
-                            RecipeEditorGui.openRecipeList(player);
+                            RecipeEditorGui.openFrom(player, null);
                             return 1;
                         }))
                 .then(Commands.literal("view")

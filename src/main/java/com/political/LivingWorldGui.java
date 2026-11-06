@@ -111,7 +111,7 @@ public final class LivingWorldGui {
                 .addLoreLine(Component.literal("§7• §fHunter's Horn §8— goat horn + gold"))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§eClick to browse every recipe"))
-                .setCallback((a, b, c, d) -> RecipesGui.openMainMenu(player))
+                .setCallback((a, b, c, d) -> RecipesGui.openFrom(player, () -> gui.open()))
                 .build());
 
         gui.setSlot(49, new GuiElementBuilder(Items.NETHER_STAR)

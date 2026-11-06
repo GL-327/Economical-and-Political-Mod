@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### M10 catalog presentation
+- Rebuilt `/recipe`, `/setrecipe` and `/customitems` on the shared screen module, with matching category cards, named count plates, headers, frames and fixed footer controls.
+- Split categories into pages of eight and item/search lists into pages of twenty; search no longer truncates matches after one screen. Empty categories have a labelled empty state instead of placeholder pages.
+- Recipe browser entry points now remember their actual parent. Recipe and editor Back restore the list page, and command roots have no parent. Item/recipe data, editing actions, permissions and balance are unchanged.
+- Added pure layout, page coverage, search and category-translation tests. The legacy specialized grid methods remain available; nothing was deleted.
+
 ### M0 hygiene and baseline
 - Stopped tracking `.claude/settings.local.json` (it holds machine specific paths). The local file is untouched.
   `.claude/*.local.json` is now in `.gitignore`.

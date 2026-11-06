@@ -120,7 +120,7 @@ public final class GuildGui {
                 .addLoreLine(Component.literal("§8Paper  Ink    Paper"))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("§eClick to open the recipe browser"))
-                .setCallback((a, b, c, d) -> RecipesGui.openMainMenu(player))
+                .setCallback((a, b, c, d) -> RecipesGui.openFrom(player, () -> gui.open()))
                 .build());
     }
 

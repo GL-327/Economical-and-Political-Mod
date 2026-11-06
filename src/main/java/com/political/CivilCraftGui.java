@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.Commands;
 
 public class CivilCraftGui {
     private static final Logger LOGGER = LoggerFactory.getLogger(CivilCraftGui.class);
@@ -103,7 +104,13 @@ public class CivilCraftGui {
                 .addLoreLine(Component.literal("View custom items").withStyle(ChatFormatting.GRAY))
                 .addLoreLine(Component.literal(""))
                 .addLoreLine(Component.literal("▶ Click to open").withStyle(ChatFormatting.YELLOW))
-                .setCallback((i, t, containerInput, slotGui) -> executeCommand(player, "customitems"))
+                .setCallback((i, t, containerInput, slotGui) -> {
+                    if (Commands.hasPermission(Commands.LEVEL_OWNERS).test(player.createCommandSourceStack())) {
+                        CustomItemsGui.openFrom(player, () -> gui.open());
+                    } else {
+                        executeCommand(player, "customitems");
+                    }
+                })
                 .build());
 
         // Gap at 24
