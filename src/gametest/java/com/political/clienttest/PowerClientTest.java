@@ -450,7 +450,8 @@ public class PowerClientTest implements FabricClientGameTest {
         int mark = mark();
         cmd("poweradmin");
         ctx.waitTicks(60);
-        check("a non-operator has no /poweradmin command or admin screen", hidden && !inContainer());
+        boolean refused = hidden || saw(mark, "Unknown or incomplete", false) || saw(mark, "permission", false);
+        check("a non-operator cannot use /poweradmin or open its screen", refused && !inContainer());
 
         consoleCommand("op PowerTester");
         ctx.waitTicks(80);
@@ -670,6 +671,10 @@ public class PowerClientTest implements FabricClientGameTest {
         // item 5: Reverse on self at low health
         ctx.waitTicks(100);
         cmd("kill @e[type=zombie]");
+        // Earlier combat can leave the reused test player below 12 HP. Start the controlled hit at full health.
+        cmd("effect give @s instant_health 1 10 true");
+        ctx.waitTicks(20);
+        check("Reverse damage setup starts alive at full health", myHealth() >= 20.0f);
         cmd("damage @s 12 minecraft:generic");
         cmd("tp @s ~ ~ ~ 0 -90");
         ctx.waitTicks(40);
@@ -693,7 +698,7 @@ public class PowerClientTest implements FabricClientGameTest {
         cmd("damage @s 4 minecraft:generic");
         ctx.waitTicks(6);
         float b1 = myHealth();
-        check("the Barrier absorbs a hit (" + b0 + " to " + b1 + ", " + since(mark) + ")", b1 >= b0 - 0.2f);
+        check("the Barrier absorbs a hit (" + b0 + " to " + b1 + ", " + since(mark) + ")", b0 > 0 && b1 >= b0 - 0.2f);
         ctx.waitTicks(50);
         cmd("damage @s 2 minecraft:generic");
         ctx.waitTicks(6);
@@ -877,7 +882,22 @@ public class PowerClientTest implements FabricClientGameTest {
         return "";
     }
 
-    private String menuKey(String title) { return title + "|" + pageLabel(); }
+    private String bodyState() {
+        int footer = ctx.computeOnClient(client -> client.gui.screen() instanceof AbstractContainerScreen<?> screen
+                ? screen.getMenu().slots.size() - 45 : 0);
+        return items().stream().filter(item -> item.slot() >= 9 && item.slot() < footer).toList().toString();
+    }
+
+    private String pageState() { return pageLabel() + "|" + bodyState(); }
+
+    private String menuKey(String title) {
+        String page = pageLabel();
+        if (!page.isEmpty()) return title + "|" + page;
+        int footer = ctx.computeOnClient(client -> client.gui.screen() instanceof AbstractContainerScreen<?> screen
+                ? screen.getMenu().slots.size() - 45 : Integer.MAX_VALUE);
+        boolean paged = items().stream().anyMatch(item -> item.slot() >= footer && isPager(item.name()));
+        return title + "|" + (paged ? bodyState() : "");
+    }
 
     /** A new chest title can arrive before its item payload. Wait before taking the candidate snapshot. */
     private boolean waitForMenuContents() {
@@ -904,10 +924,16 @@ public class PowerClientTest implements FabricClientGameTest {
     }
 
     private boolean turnPage(int slot) {
-        String before = pageLabel();
+        String before = pageState();
         clickSlot(slot);
-        for (int i = 0; i < 120 && (!inContainer() || pageLabel().isEmpty() || pageLabel().equals(before)); i++) ctx.waitTick();
-        return inContainer() && !pageLabel().isEmpty() && !pageLabel().equals(before);
+        for (int i = 0; i < 120; i++) {
+            if (inContainer() && !bodyState().equals("[]") && !pageState().equals(before)) {
+                waitForMenuContents();
+                return !pageState().equals(before);
+            }
+            ctx.waitTick();
+        }
+        return false;
     }
 
     /** Read-only presentation checks; never saves, deletes or toggles a recipe. */
@@ -958,12 +984,25 @@ public class PowerClientTest implements FabricClientGameTest {
             waitForMenuContents();
             check("bounty T1 retains icon, spacer, sword and armor", equipmentRow(9, true));
             check("bounty T2 retains its own grouped row", equipmentRow(18, true));
+            ctx.getInput().setCursorPos(0, 0);
+            ctx.waitTicks(4);
             ctx.takeScreenshot("catalog-" + commands[family] + "-grouped-bounty");
+            int nextSets = slotNamed("Next", false);
+            if (nextSets >= 0 && family < 2) {
+                String bountyTitle = screenTitle();
+                check("bounty grouped pages advance", turnPage(nextSets));
+                String setPage = pageState();
+                clickSlot(13);
+                waitForScreenChange(bountyTitle, 120);
+                check("detail Back preserves the grouped set page", backTo(bountyTitle) && pageState().equals(setPage));
+            }
             check("bounty sets return to main", backTo(titles[family]));
             clickSlot(30);
             waitForScreenChange(titles[family], 120);
             waitForMenuContents();
             check("tools retain icon, spacer and four tools", equipmentRow(9, false));
+            ctx.getInput().setCursorPos(0, 0);
+            ctx.waitTicks(4);
             ctx.takeScreenshot("catalog-" + commands[family] + "-grouped-tools");
             check("tool sets return to main", backTo(titles[family]));
             clickSlot(47);
@@ -1208,12 +1247,14 @@ public class PowerClientTest implements FabricClientGameTest {
                 }
             }
         }
-        // A pager changes content, not the parent. Crawl all standard catalog pages with their replay path.
-        if (crawlClicks < CRAWL_MAX_CLICKS && replay(path, title) && menuKey(title).equals(visitKey)
-                && slotNamed("Next", true) == 50) {
-            if (turnPage(50)) {
+        // Main-page and original set-row pagers use different footer slots. Both are sibling pages.
+        if (crawlClicks < CRAWL_MAX_CLICKS && replay(path, title) && menuKey(title).equals(visitKey)) {
+            int footer = ctx.computeOnClient(client -> ((AbstractContainerScreen<?>) client.gui.screen()).getMenu().slots.size() - 45);
+            Item next = items().stream().filter(item -> item.slot() >= footer
+                    && item.name().replaceAll("§[0-9a-fk-orA-FK-OR]", "").toLowerCase(Locale.ROOT).startsWith("next")).findFirst().orElse(null);
+            if (next != null && turnPage(next.slot())) {
                 List<Integer> nextPage = new ArrayList<>(path);
-                nextPage.add(50);
+                nextPage.add(next.slot());
                 crawl(nextPage, title, depth);
             }
         }

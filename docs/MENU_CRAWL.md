@@ -56,22 +56,27 @@ Still open (also in HANDOFF.md KNOWN ISSUES): the Guilds & Orders screen from th
 `MenuTrail` finds no free slot on its bottom row; the catalog section screens (`New Content Catalog` and its sections) report no Back or a Back to a sibling; the admin console was
 not crawled to the end; the crawler can leave a menu without closing it, which can leave an old entry on that player's trail until they close a menu.
 
-## M10 catalog rework (2026-11-06; client validation in progress)
+## M10 main-page rework and preserved set layouts (2026-11-06)
 
-The recipe browser, recipe editor and custom-items roots/category/search lists now use `core.gui.CatalogUi`.
-They have eight paired category cards or twenty items per page, labelled counts and a shared footer.
-Menu callers use `openFrom(player, parent)`; commands pass null. Browser/editor detail Back restores the list page.
-Legacy specialized display methods remain in the sources, but the new roots use the shared catalog lists.
+The owner clarified that only the main pages should be redesigned. The inner category layouts must retain
+material/icon, spacer, sword and grouped armor rows, tier rows, tool sets and mob-drop sections. These original
+renderers are active again; ordinary category grids are restored from the starting commit. The retained gem
+renderer's empty array now contains the existing Emerald and Lapis swords/armor, with no item/recipe definition changes.
 
-Validation commands:
-- `scripts/power-client-test.sh` now includes the `catalogs` phase after the existing power/regression suite.
-- `POWERTEST_ROOTS=recipe,setrecipe,customitems scripts/power-client-test.sh setup,menus` crawls the new roots.
-- Screenshots named `catalog-*` and `menu-*` are written under `build/run/clientGameTest/screenshots`.
+The three main pages use `core.gui.CatalogUi`: eight paired category cards, exact counts, search and fixed footer controls.
+`openFrom(player, parent)` remembers the actual source; commands pass null and clear prior trail state.
+Recipe detail Back captures the actual grouped screen, and editor Back restores the corresponding set/list page.
 
-The crawler now includes the page counter in a screen's identity and follows the standard Next control as a sibling page.
-It also sends the container-close packet before replaying a command; the old client-only screen close could leave stale server navigation.
-The `catalogs` phase checks parentless commands, category-page return, result-page return, search beyond twenty results,
-fixed footer controls, and the browser's actual `/menu` and `/civ` parents. It captures clean root, hovered count, category
-and search screenshots for all three families. It never saves, deletes or toggles a recipe.
+Validation:
+- `scripts/power-client-test.sh` includes `catalogs`, checking the main pages and the exact grouped equipment rows.
+- `scripts/power-client-test.sh setup,catalogs,armourtip` on the restored version: VERIFIED, 83 checks, 0 failures. The final combined full run passes 164 checks, 0 failures, including the extra grouped-page Back checks.
+- Screenshots `catalog-*-grouped-armor`, `catalog-*-grouped-bounty`, and `catalog-*-grouped-tools` are under `build/run/clientGameTest/screenshots`.
+- Reviewed: gem and bounty rows have the material/icon in the first column, a spacer, sword and four armor pieces; bounty tiers occupy separate rows. Clean tool captures were also reviewed: each row shows the material icon, spacer, then pickaxe, axe, shovel and hoe; no tooltip obscures the layout.
+- `POWERTEST_CLICKS=10000 POWERTEST_ROOTS=recipe,setrecipe,customitems scripts/power-client-test.sh setup,menus` is the broad crawl command. NOT VERIFIED on the restored version: the owner explicitly stopped exhaustive menu testing and prioritized recipe corrections.
 
-VERIFIED: 249 unit tests, 0 failures; static Back audit has 0 hits. NOT VERIFIED: final real-client and crawler results and visual review.
+Crawler changes: page counters participate in screen identity; main and original set-row footer pagers are followed as siblings.
+The test closes containers on the server before replaying commands, waits for menu contents before snapshotting candidates,
+and waits for Back controls before reporting them missing. Aborted earlier crawls are not passing evidence.
+Recipe saves are skipped. A budget cutoff and an unattempted requested root fail the run.
+
+Current build with recipe corrections: VERIFIED, 263 unit tests, 0 failures. Clean-checkout build at pushed recipe commit `44d70fa`: VERIFIED, 263 tests pass and client-test compilation passes. Final full client run: VERIFIED, 164 checks, 0 failures. The harness restores health before the controlled healing-test hit and accepts explicit server rejection of a permission-gated command even if the client command tree is stale. Exhaustive crawling remains stopped at owner request.

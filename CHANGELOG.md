@@ -16,6 +16,8 @@
 - Menu crafting now aggregates repeated ingredients, distinguishes custom IDs/core tiers, enforces slayer gates and delivers the saved output count with overflow protection.
 - Preserve saved recipe edits and alternates during bootstrap; back up and atomically write repairs, retain oversized catalogs and reject unresolved ingredient cells. Search cards and identical recipe alternatives are deduplicated without deleting saved recipes.
 
+- Verified with 263 unit tests, 305 real-server recipe checks and 164 full real-client checks. Client checks retain grouped-page state and reset health before controlled damage; command permission tests accept explicit server rejection.
+
 ### M0 hygiene and baseline
 - Stopped tracking `.claude/settings.local.json` (it holds machine specific paths). The local file is untouched.
   `.claude/*.local.json` is now in `.gitignore`.
