@@ -49,7 +49,8 @@ public final class RecipeJsonDefaults {
     }
 
     static boolean knownLegacy(JsonObject recipe) {
-        return recipe.has("name") && fingerprint(recipe).equals(LEGACY.get(recipe.get("name").getAsString()));
+        String expected = recipe.has("name") ? LEGACY.get(recipe.get("name").getAsString()) : null;
+        return expected != null && expected.equals(fingerprint(recipe));
     }
 
     private static String output(JsonObject recipe) {
@@ -76,14 +77,15 @@ public final class RecipeJsonDefaults {
                 if (!entry.isJsonObject() || !entry.getAsJsonObject().has("name")) { kept.add(entry); continue; }
                 JsonObject existing = entry.getAsJsonObject();
                 String oldName = existing.get("name").getAsString();
-                String oldHash = fingerprint(existing);
                 if (oldName.equals(name)) {
                     found = true;
-                    if (existing.equals(incoming) || knownLegacy(existing) || oldHash.equals(generatedThisBoot.get(oldName))) {
+                    if (existing.equals(incoming) || knownLegacy(existing)
+                            || (generatedThisBoot.containsKey(oldName) && fingerprint(existing).equals(generatedThisBoot.get(oldName)))) {
                         kept.add(incoming.deepCopy());
                         generatedThisBoot.put(name, fingerprint(incoming));
                     } else kept.add(existing); // owner override: do not overwrite it
-                } else if (!key.isEmpty() && key.equals(output(existing)) && oldHash.equals(generatedThisBoot.get(oldName))) {
+                } else if (!key.isEmpty() && key.equals(output(existing)) && generatedThisBoot.containsKey(oldName)
+                        && fingerprint(existing).equals(generatedThisBoot.get(oldName))) {
                     // An earlier provider in this boot produced this default; the later provider takes precedence.
                 } else kept.add(existing); // including distinct owner-named variants of this output
             }

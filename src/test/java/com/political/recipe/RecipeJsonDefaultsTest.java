@@ -60,4 +60,15 @@ class RecipeJsonDefaultsTest {
         assertEquals(second, RecipeJsonDefaults.merge(second, List.of(recipe("last provider", "core")), new HashMap<>()));
         assertEquals(initial.getAsJsonArray("recipes").size(), 1, "Input is not mutated");
     }
+
+    @Test void ownerEditToAnEarlierGeneratedRecordIsRetainedByTheNextProvider() {
+        Map<String, String> owned = new HashMap<>();
+        var first = RecipeJsonDefaults.merge(root(), List.of(recipe("first provider", "core")), owned);
+        var edited = first.getAsJsonArray("recipes").get(0).getAsJsonObject();
+        edited.addProperty("owner-note", "changed after the first provider");
+        var merged = RecipeJsonDefaults.merge(first, List.of(recipe("later provider", "core")), owned);
+        assertEquals(2, merged.getAsJsonArray("recipes").size());
+        assertEquals(edited, merged.getAsJsonArray("recipes").get(0));
+        assertEquals("retain this", merged.get("owner-note").getAsString());
+    }
 }

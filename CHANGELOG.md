@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Recipe startup performance
+- Avoid hashing every saved recipe for every incoming default; fingerprint only the records needed by the existing ownership/override checks.
+- Retain owner-edited records, alternate recipes, provider precedence and unchanged saved content. Added a regression for an owner edit to a record produced by an earlier provider.
+- Combined verification: 270 unit tests, 211 power checks, 305 recipe checks and the 4/18 restart checks pass. The same 359-record merge benchmark improved from about 57 seconds to 0.83 seconds with identical output.
+
 ### Unique-technique ownership (M2 acceptance)
 - Revoking an overlapping admin grant preserves ownership still earned through the innate technique or Master Domain; a full reset still frees the technique.
 - Added configurable two-player acceptance and unique-holder unit tests. Production uniqueness defaults are unchanged; isolated fixture flags are restored after testing.
